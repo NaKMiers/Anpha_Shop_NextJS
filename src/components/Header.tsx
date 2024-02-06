@@ -7,13 +7,17 @@ import { useEffect, useRef, useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
+interface HeaderProps {
+  isStatic?: boolean
+}
+
 const user = {
   avatar: '/images/avatar.jpg',
   admin: true,
   fullname: 'Pi Pi',
 }
 
-function Header() {
+function Header({ isStatic }: HeaderProps) {
   const [isShow, setIsShow] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -49,7 +53,9 @@ function Header() {
 
   return (
     <header
-      className={`fixed bg-dark-100 w-full text-light shadow-medium-light transition-all duration-300 ${
+      className={`${
+        isStatic ? 'static' : 'fixed z-50'
+      } bg-dark-100 w-full text-light shadow-medium-light transition-all duration-300 ${
         isShow ? 'top-0' : 'top-[-100%]'
       }`}>
       {/* Main Header */}

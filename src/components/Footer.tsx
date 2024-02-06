@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 function Footer() {
   return (
-    <div className='bg-dark-100 text-light max-w-1200 m-auto mb-10 shadow-medium rounded-medium'>
+    <div className='bg-dark-100 text-light max-w-1200 m-auto mb-10 shadow-medium rounded-medium mt-36'>
       <div className='p-21 '>
         <div className='flex items-center justify-between gap-2'>
           <Link href='/' className='flex items-center'>

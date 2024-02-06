@@ -21,6 +21,7 @@ const config: Config = {
       },
       spacing: {
         21: '21px',
+        '21/2': '10.5px',
       },
       maxWidth: {
         1200: '1200px',

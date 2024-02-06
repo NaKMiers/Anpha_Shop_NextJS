@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='vi'>
-      <body className='background-app'>
+      <body className='background-app px-21'>
         <Header />
         <StoreProvider>{children}</StoreProvider>
         <Footer />
