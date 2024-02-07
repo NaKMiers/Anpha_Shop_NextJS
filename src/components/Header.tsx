@@ -54,7 +54,7 @@ function Header({ isStatic }: HeaderProps) {
   return (
     <header
       className={`${
-        isStatic ? 'static' : 'fixed z-50'
+        isStatic ? 'static' : 'fixed z-50 left-0 top-0'
       } bg-dark-100 w-full text-light shadow-medium-light transition-all duration-300 ${
         isShow ? 'top-0' : 'top-[-100%]'
       }`}>

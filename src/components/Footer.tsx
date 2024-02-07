@@ -53,7 +53,7 @@ function Footer() {
               </div>
             ))}
           </div>
-          <ul className='flex justify-between space-x-21 w-full md:w-auto text-gray-300'>
+          <ul className='flex justify-between mt-21 md:mt-0 space-x-21 w-full md:w-auto text-gray-300'>
             <div>
               <div className='text-gray-500 text-[12px] font-semibold'>TÀI KHOẢN</div>
               <ul className='tracking-wide text-base'>
