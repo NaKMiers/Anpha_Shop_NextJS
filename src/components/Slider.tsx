@@ -13,7 +13,6 @@ interface SliderProps {
 function Slider({ time, hideControls, children, className }: SliderProps) {
   const [slide, setSlide] = useState(1)
   const childrenAmount = Children.count(children)
-  console.log(childrenAmount)
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
   // previous slide

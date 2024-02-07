@@ -1,29 +1,62 @@
+'use client'
 import AspectRatio from '@mui/joy/AspectRatio'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Divider from '@mui/joy/Divider'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useCallback, useRef, useState } from 'react'
 
 function Footer() {
+  const [isDragging, setIsDragging] = useState(false)
+  const slideTrackRef = useRef<HTMLDivElement>(null)
+
+  const handleDraging = useCallback(
+    (e: React.MouseEvent) => {
+      if (isDragging && slideTrackRef.current) {
+        console.log(slideTrackRef.current.scrollLeft)
+        slideTrackRef.current.scrollLeft -= e.movementX
+      }
+    },
+    [isDragging]
+  )
+
   return (
     <div className='bg-dark-100 text-light max-w-1200 m-auto mb-10 shadow-medium rounded-medium mt-36'>
       <div className='p-21 '>
         <div className='flex items-center justify-between gap-2'>
           <Link href='/' className='flex items-center'>
-            <Image src='/images/logo.jpg' width={40} height={40} alt='logo' />
+            <Image
+              className='hover:shadow-medium-light common-transition rounded-full'
+              src='/images/logo.jpg'
+              width={40}
+              height={40}
+              alt='logo'
+            />
             <span className='text-2xl font-bold'>.AnphaShop</span>
           </Link>
 
-          <div className='flex gap-2'>
-            <a href='https://zalo.me/0899320427' target='_blank' rel='noreferrer'>
-              <Image src='/images/zalo.jpg' width={32} height={32} alt='zalo' />
+          <div className='flex gap-3'>
+            <a
+              href='https://zalo.me/0899320427'
+              target='_blank'
+              rel='noreferrer'
+              className='hover:scale-110 common-transition hover:shadow-medium-light'>
+              <Image src='/images/zalo.jpg' width={30} height={30} alt='zalo' />
             </a>
-            <a href='https://www.messenger.com/t/170660996137305' target='_blank' rel='noreferrer'>
-              <Image src='/images/messenger.jpg' width={32} height={32} alt='zalo' />
+            <a
+              href='https://www.messenger.com/t/170660996137305'
+              target='_blank'
+              rel='noreferrer'
+              className='hover:scale-110 common-transition hover:shadow-medium-light'>
+              <Image src='/images/messenger.jpg' width={30} height={30} alt='zalo' />
             </a>
-            <a href='https://www.instagram.com/anpha.shop' target='_blank' rel='noreferrer'>
-              <Image src='/images/instagram.jpg' width={32} height={32} alt='zalo' />
+            <a
+              href='https://www.instagram.com/anpha.shop'
+              target='_blank'
+              rel='noreferrer'
+              className='hover:scale-110 common-transition hover:shadow-medium-light'>
+              <Image src='/images/instagram.jpg' width={30} height={30} alt='zalo' />
             </a>
           </div>
         </div>
@@ -31,9 +64,19 @@ function Footer() {
         <Divider sx={{ my: 2 }} />
 
         <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
-          <div className='flex overflow-x-scroll flex-1 no-scrollbar md:mr-5 -mx-1 snap-x relative'>
+          {/* Slider */}
+          <div
+            className={`flex overflow-x-scroll flex-1 no-scrollbar md:mr-5 -mx-1 relative select-none cursor-pointer ${
+              !isDragging ? 'snap-x' : ''
+            }`}
+            ref={slideTrackRef}
+            onMouseDown={() => setIsDragging(true)}
+            onMouseMove={handleDraging}
+            onMouseUp={() => setIsDragging(false)}>
             {[1, 2, 3, 4, 5, 6].map(item => (
-              <div key={item} className='max-w-[235px] shrink-0 px-2 snap-start'>
+              <div
+                key={item}
+                className={`max-w-[235px] shrink-0 px-2  ${!isDragging ? 'snap-start' : ''}`}>
                 <Card variant='soft'>
                   <AspectRatio ratio='16/9'>
                     <Image
@@ -53,11 +96,15 @@ function Footer() {
               </div>
             ))}
           </div>
-          <ul className='flex justify-between mt-21 md:mt-0 space-x-21 w-full md:w-auto text-gray-300'>
+
+          {/* Links & Features*/}
+          <ul className='flex flex-col md:flex-row gap-21 w-full md:w-auto justify-between mt-21 md:mt-0 text-gray-300'>
             <div>
               <div className='text-gray-500 text-[12px] font-semibold'>TÀI KHOẢN</div>
-              <ul className='tracking-wide text-base'>
-                <Link href='/user' className='flex items-center gap-2 text-nowrap'>
+              <ul className='tracking-wide text-sm'>
+                <Link
+                  href='/user'
+                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
                     <path
                       className='fill-primary'
@@ -66,7 +113,9 @@ function Footer() {
                   </svg>
                   <p className=''>Thông tin tài khoản</p>
                 </Link>
-                <Link href='/user/recharge' className='flex items-center gap-2 text-nowrap'>
+                <Link
+                  href='/user/recharge'
+                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
                     <path
                       className='fill-primary'
@@ -75,7 +124,9 @@ function Footer() {
                   </svg>
                   <p className=''>Nạp tiền</p>
                 </Link>
-                <Link href='/cart' className='flex items-center gap-2 text-nowrap'>
+                <Link
+                  href='/cart'
+                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
                     <path
                       className='fill-primary'
@@ -84,7 +135,9 @@ function Footer() {
                   </svg>
                   <p className=''>Giỏ hàng</p>
                 </Link>
-                <Link href='/user/order-history' className='flex items-center gap-2 text-nowrap'>
+                <Link
+                  href='/user/order-history'
+                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
                     <path
                       className='fill-primary'
@@ -93,7 +146,9 @@ function Footer() {
                   </svg>
                   <p className=''>Lịch sử mua hàng</p>
                 </Link>
-                <Link href='/user/order-history' className='flex items-center gap-2 text-nowrap'>
+                <Link
+                  href='/user/order-history'
+                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' width='15' viewBox='0 0 448 512'>
                     <path
                       className='fill-yellow-400'
@@ -107,8 +162,8 @@ function Footer() {
 
             <div>
               <div className='text-gray-500 text-[12px] font-semibold'>NỔI BẬT</div>
-              <ul>
-                <div className='flex items-center gap-1 text-nowrap'>
+              <ul className='tracking-wide text-sm'>
+                <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
                     <path
                       className='fill-green-400'
@@ -117,7 +172,7 @@ function Footer() {
                   </svg>
                   <p className=''>Đầy dủ tính năng</p>
                 </div>
-                <div className='flex items-center gap-1 text-nowrap'>
+                <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
                     <path
                       className='fill-green-400'
@@ -126,7 +181,7 @@ function Footer() {
                   </svg>
                   <p className=''>Rẻ nhất thị trường</p>
                 </div>
-                <div className='flex items-center gap-1 text-nowrap'>
+                <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
                     <path
                       className='fill-green-400'
@@ -135,7 +190,7 @@ function Footer() {
                   </svg>
                   <p className=''>Thanh toán lập tức</p>
                 </div>
-                <div className='flex items-center gap-1 text-nowrap'>
+                <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
                     <path
                       className='fill-green-400'
@@ -151,11 +206,11 @@ function Footer() {
 
         <Divider sx={{ my: 2 }} />
 
-        <div className='flex items-center justify-between gap-5 text-center'>
-          <p className='text-[14px]'>
+        <div className='flex flex-wrap items-center justify-center md:justify-between gap-x-5 gap-y-1 text-center'>
+          <p className='text-[14px] transition-all duration-300 hover:tracking-wide'>
             © <span className='text-primary font-semibold'>Anpha.shop</span>. All rights reserved
           </p>
-          <p className='text-[14px]'>
+          <p className='text-[14px] transition-all duration-300 hover:tracking-wide'>
             <span className='text-primary font-semibold'>Developed by</span> Nguyen Anh Khoa
           </p>
         </div>

@@ -1,13 +1,10 @@
 import Image from 'next/image'
-import Heading from './Heading'
 
 function ChooseMe() {
   return (
     <div className='max-w-1200 m-auto'>
-      <Heading title='Tại sao chọn tôi' />
-
-      <div className='flex flex-wrap justify-between -mx-21'>
-        <div className='p-21 w-1/2 md:w-1/3 lg:w-1/4'>
+      <div className='px-21/2 sm:px-0 flex flex-wrap justify-between -mx-21'>
+        <div className='p-21/2 sm:p-21 w-1/2 md:w-1/3 lg:w-1/4 transition-all duration-300 hover:-translate-y-2'>
           <div className='rounded-small shadow-medium overflow-hidden bg-white'>
             <div className='aspect-square p-3'>
               <Image src='/images/choose-me-1.jpg' width={300} height={300} alt='Đa dạng sản phẩm' />
@@ -19,7 +16,7 @@ function ChooseMe() {
           </div>
         </div>
 
-        <div className='p-21 w-1/2 md:w-1/3 lg:w-1/4'>
+        <div className='p-21/2 sm:p-21 w-1/2 md:w-1/3 lg:w-1/4 transition-all duration-300 hover:-translate-y-2'>
           <div className='rounded-small shadow-medium overflow-hidden bg-white'>
             <div className='aspect-square p-3'>
               <Image src='/images/choose-me-2.jpg' width={300} height={300} alt='Rẻ nhất thị trường' />
@@ -31,7 +28,7 @@ function ChooseMe() {
           </div>
         </div>
 
-        <div className='p-21 w-1/2 md:w-1/3 lg:w-1/4'>
+        <div className='p-21/2 sm:p-21 w-1/2 md:w-1/3 lg:w-1/4 transition-all duration-300 hover:-translate-y-2'>
           <div className='rounded-small shadow-medium overflow-hidden bg-white'>
             <div className='aspect-square p-3'>
               <Image
@@ -49,7 +46,7 @@ function ChooseMe() {
           </div>
         </div>
 
-        <div className='p-21 w-1/2 md:w-1/3 lg:w-1/4'>
+        <div className='p-21/2 sm:p-21 w-1/2 md:w-1/3 lg:w-1/4 transition-all duration-300 hover:-translate-y-2'>
           <div className='rounded-small shadow-medium overflow-hidden bg-white'>
             <div className='aspect-square p-3'>
               <Image src='/images/choose-me-4.jpg' width={300} height={300} alt='Bảo hành uy tín' />

@@ -23,6 +23,26 @@ function GroupProducts({}: GroupProductsProps) {
     [isDragging, isExpaned]
   )
 
+  // prev slide
+  const handlePrev = useCallback(() => {
+    if (slideTrackRef.current) {
+      slideTrackRef.current.scrollTo({
+        left: slideTrackRef.current.scrollLeft - slideTrackRef.current.children[0].clientWidth,
+        behavior: 'smooth',
+      })
+    }
+  }, [])
+
+  // next slide
+  const handleNext = useCallback(() => {
+    if (slideTrackRef.current) {
+      slideTrackRef.current.scrollTo({
+        left: slideTrackRef.current.scrollLeft + slideTrackRef.current.children[0].clientWidth,
+        behavior: 'smooth',
+      })
+    }
+  }, [])
+
   // expaned group
   useEffect(() => {
     const handleResize = () => {
@@ -62,10 +82,14 @@ function GroupProducts({}: GroupProductsProps) {
 
       {!isExpaned && (
         <>
-          <button className='flex items-center justify-center absolute -left-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'>
+          <button
+            className='flex items-center justify-center absolute -left-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
+            onClick={handlePrev}>
             <FaChevronLeft size={18} color='#333' className='group-hover:scale-125 common-transition' />
           </button>
-          <button className='flex items-center justify-center absolute -right-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'>
+          <button
+            className='flex items-center justify-center absolute -right-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
+            onClick={handleNext}>
             <FaChevronRight size={18} color='#333' className='group-hover:scale-125 common-transition' />
           </button>
         </>

@@ -1,7 +1,8 @@
 import About from '@/components/About'
 import Banner from '@/components/Banner'
-import BestSeller from '@/components/BestSeller'
 import ChooseMe from '@/components/ChooseMe'
+import GroupProducts from '@/components/GroupProducts'
+import Heading from '@/components/Heading'
 
 function Home() {
   return (
@@ -10,14 +11,32 @@ function Home() {
 
       <div className='pt-28' />
 
+      <Heading title='Về Anpha Shop' />
       <About />
 
       <div className='pt-28' />
 
-      <BestSeller />
+      <Heading title='Top #10' />
+      <div className='max-w-1200 mx-auto'>
+        <GroupProducts />
+      </div>
 
       <div className='pt-28' />
 
+      <Heading title='Sản phẩm' />
+      <div className='max-w-1200 mx-auto'>
+        <GroupProducts />
+        <div className='pt-20' />
+        <GroupProducts />
+        <div className='pt-20' />
+        <GroupProducts />
+        <div className='pt-20' />
+        <GroupProducts />
+      </div>
+
+      <div className='pt-28' />
+
+      <Heading title='Tại sao chọn tôi' />
       <ChooseMe />
     </div>
   )

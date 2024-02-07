@@ -6,7 +6,7 @@ interface HeadingProps {
 function Heading({ title, className }: HeadingProps) {
   return (
     <h2
-      className={`flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full after:bg-white text-nowrap ${className}`}>
+      className={`max-w-1200 mx-auto flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full after:bg-white text-nowrap ${className}`}>
       {title}
     </h2>
   )
