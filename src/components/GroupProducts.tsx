@@ -85,12 +85,12 @@ function GroupProducts({}: GroupProductsProps) {
           <button
             className='flex items-center justify-center absolute -left-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
             onClick={handlePrev}>
-            <FaChevronLeft size={18} color='#333' className='group-hover:scale-125 common-transition' />
+            <FaChevronLeft size={18} className='group-hover:scale-125 common-transition text-dark' />
           </button>
           <button
             className='flex items-center justify-center absolute -right-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
             onClick={handleNext}>
-            <FaChevronRight size={18} color='#333' className='group-hover:scale-125 common-transition' />
+            <FaChevronRight size={18} className='group-hover:scale-125 common-transition text-dark' />
           </button>
         </>
       )}

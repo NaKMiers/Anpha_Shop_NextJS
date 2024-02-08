@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import './globals.scss'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { Toaster } from 'react-hot-toast'
+import ContactFloating from '@/components/ContactFloating'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -17,10 +19,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='vi'>
-      <body className='background-app px-21'>
-        <Header />
+      <body className='px-21'>
+        <div className='background-app fixed w-screen h-screen top-0 left-0 -z-10' />
+        <Toaster
+          toastOptions={{
+            style: {
+              background: '#333',
+              color: '#fff',
+            },
+          }}
+        />
 
+        <Header />
         <StoreProvider>{children}</StoreProvider>
+
+        <ContactFloating />
+
         <Footer />
       </body>
     </html>

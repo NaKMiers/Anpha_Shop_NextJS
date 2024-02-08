@@ -3,7 +3,7 @@ import Slider from './Slider'
 
 function About() {
   return (
-    <div className='max-w-1200 mx-auto'>
+    <section className='max-w-1200 mx-auto'>
       <Slider time={5000000} className='bg-white bg-opacity-90 rounded-medium shadow-medium'>
         <div className='flex gap-y-4 flex-wrap h-full p-21'>
           <div className='w-full md:w-2/3 rounded-lg overflow-hidden aspect-video'>
@@ -68,7 +68,7 @@ function About() {
           </div>
         </div>
       </Slider>
-    </div>
+    </section>
   )
 }
 

@@ -4,7 +4,7 @@ import ChooseMe from '@/components/ChooseMe'
 import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
 
-function Home() {
+function HomePage() {
   return (
     <div className='min-h-screen'>
       <Banner />
@@ -17,14 +17,14 @@ function Home() {
       <div className='pt-28' />
 
       <Heading title='Top #10' />
-      <div className='max-w-1200 mx-auto'>
+      <section className='max-w-1200 mx-auto'>
         <GroupProducts />
-      </div>
+      </section>
 
       <div className='pt-28' />
 
       <Heading title='Sản phẩm' />
-      <div className='max-w-1200 mx-auto'>
+      <section className='max-w-1200 mx-auto'>
         <GroupProducts />
         <div className='pt-20' />
         <GroupProducts />
@@ -32,7 +32,7 @@ function Home() {
         <GroupProducts />
         <div className='pt-20' />
         <GroupProducts />
-      </div>
+      </section>
 
       <div className='pt-28' />
 
@@ -42,4 +42,4 @@ function Home() {
   )
 }
 
-export default Home
+export default HomePage

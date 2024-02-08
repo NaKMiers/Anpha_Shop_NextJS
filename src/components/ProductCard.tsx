@@ -17,16 +17,16 @@ function ProductCard() {
       </div>
       <Price className='mb-1' />
       <div className='flex items-center font-body tracking-wide'>
-        <FaCircleCheck size={16} color='#003e70' />
+        <FaCircleCheck size={16} className='text-darker' />
         <span className='font-bold text-darker ml-1'>Đã bán:</span>
         <span className='text-red-500 ml-1'>202</span>
       </div>
       <div className='flex items-center justify-end md:justify-start gap-2 mt-1'>
         <button className='bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider hover:bg-primary common-transition'>
-          Mua ngay
+          MUA NGAY
         </button>
-        <button className='bg-primary p-2 rounded-md'>
-          <FaCartPlus size={18} color='#fff' />
+        <button className='bg-primary px-2 py-[6px] rounded-md group hover:bg-secondary common-transition'>
+          <FaCartPlus size={18} className='text-white group-hover:scale-110 common-transition' />
         </button>
       </div>
     </div>

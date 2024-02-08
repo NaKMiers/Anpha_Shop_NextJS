@@ -6,6 +6,9 @@ import Divider from '@mui/joy/Divider'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useRef, useState } from 'react'
+import { FaSignOutAlt } from 'react-icons/fa'
+import { FaCheck, FaChevronRight } from 'react-icons/fa6'
+import { PiSignOutBold } from 'react-icons/pi'
 
 function Footer() {
   const [isDragging, setIsDragging] = useState(false)
@@ -23,19 +26,23 @@ function Footer() {
 
   return (
     <div className='bg-dark-100 text-light max-w-1200 m-auto mb-10 shadow-medium rounded-medium mt-36'>
-      <div className='p-21 '>
-        <div className='flex items-center justify-between gap-2'>
+      <div className='p-21'>
+        {/* Top */}
+        <div className='flex items-center justify-between gap-2 group'>
           <Link href='/' className='flex items-center'>
             <Image
-              className='hover:shadow-medium-light common-transition rounded-full'
+              className='group-hover:shadow-medium-light common-transition rounded-full'
               src='/images/logo.jpg'
               width={40}
               height={40}
               alt='logo'
             />
-            <span className='text-2xl font-bold'>.AnphaShop</span>
+            <span className='text-2xl font-bold group-hover:tracking-wide transition-all duration-300'>
+              .AnphaShop
+            </span>
           </Link>
 
+          {/* Social Contacts */}
           <div className='flex gap-3'>
             <a
               href='https://zalo.me/0899320427'
@@ -48,7 +55,7 @@ function Footer() {
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='hover:scale-110 common-transition hover:shadow-medium-light'>
+              className='hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
               <Image src='/images/messenger.jpg' width={30} height={30} alt='zalo' />
             </a>
             <a
@@ -63,6 +70,7 @@ function Footer() {
 
         <Divider sx={{ my: 2 }} />
 
+        {/* Center */}
         <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
           {/* Slider */}
           <div
@@ -104,57 +112,32 @@ function Footer() {
               <ul className='tracking-wide text-sm'>
                 <Link
                   href='/user'
-                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
-                    <path
-                      className='fill-primary'
-                      d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                    />
-                  </svg>
+                  className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                  <FaChevronRight size={14} className='text-primary' />
                   <p className=''>Thông tin tài khoản</p>
                 </Link>
                 <Link
                   href='/user/recharge'
-                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
-                    <path
-                      className='fill-primary'
-                      d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                    />
-                  </svg>
+                  className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                  <FaChevronRight size={14} className='text-primary' />
                   <p className=''>Nạp tiền</p>
                 </Link>
                 <Link
                   href='/cart'
-                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
-                    <path
-                      className='fill-primary'
-                      d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                    />
-                  </svg>
+                  className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                  <FaChevronRight size={14} className='text-primary' />
                   <p className=''>Giỏ hàng</p>
                 </Link>
                 <Link
                   href='/user/order-history'
-                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' viewBox='0 0 320 512'>
-                    <path
-                      className='fill-primary'
-                      d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                    />
-                  </svg>
+                  className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                  <FaChevronRight size={14} className='text-primary' />
                   <p className=''>Lịch sử mua hàng</p>
                 </Link>
                 <Link
                   href='/user/order-history'
-                  className='flex items-center gap-2 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' width='15' viewBox='0 0 448 512'>
-                    <path
-                      className='fill-yellow-400'
-                      d='M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z'
-                    />
-                  </svg>
+                  className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                  <PiSignOutBold size={15} className='ml-1 text-yellow-400' />
                   <p className=''>Logout</p>
                 </Link>
               </ul>
@@ -164,39 +147,19 @@ function Footer() {
               <div className='text-gray-500 text-[12px] font-semibold'>NỔI BẬT</div>
               <ul className='tracking-wide text-sm'>
                 <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
-                    <path
-                      className='fill-green-400'
-                      d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'
-                    />
-                  </svg>
+                  <FaCheck size={14} className='text-green-400' />
                   <p className=''>Đầy dủ tính năng</p>
                 </div>
                 <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
-                    <path
-                      className='fill-green-400'
-                      d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'
-                    />
-                  </svg>
+                  <FaCheck size={14} className='text-green-400' />
                   <p className=''>Rẻ nhất thị trường</p>
                 </div>
                 <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
-                    <path
-                      className='fill-green-400'
-                      d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'
-                    />
-                  </svg>
+                  <FaCheck size={14} className='text-green-400' />
                   <p className=''>Thanh toán lập tức</p>
                 </div>
                 <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
-                  <svg xmlns='http://www.w3.org/2000/svg' height='13' width='20' viewBox='0 0 448 512'>
-                    <path
-                      className='fill-green-400'
-                      d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'
-                    />
-                  </svg>
+                  <FaCheck size={14} className='text-green-400' />
                   <p className=''>Bảo hành uy tín</p>
                 </div>
               </ul>
@@ -206,6 +169,7 @@ function Footer() {
 
         <Divider sx={{ my: 2 }} />
 
+        {/* Bottom */}
         <div className='flex flex-wrap items-center justify-center md:justify-between gap-x-5 gap-y-1 text-center'>
           <p className='text-[14px] transition-all duration-300 hover:tracking-wide'>
             © <span className='text-primary font-semibold'>Anpha.shop</span>. All rights reserved
