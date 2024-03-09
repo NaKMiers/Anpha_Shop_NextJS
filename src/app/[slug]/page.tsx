@@ -1,11 +1,12 @@
 import ChooseMe from '@/components/ChooseMe'
+import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
 import Slider from '@/components/Slider'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FaCartPlus, FaCircleCheck, FaCopy, FaMinus, FaPlus, FaTags } from 'react-icons/fa6'
+import { FaCartPlus, FaCircleCheck, FaMinus, FaPlus, FaTags } from 'react-icons/fa6'
 import { TbPackages } from 'react-icons/tb'
 
 export const metadata: Metadata = {
@@ -106,7 +107,15 @@ function ProductPage({ params }: { params: { slug: string } }) {
         </div>
       </section>
 
-      <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium mt-9'>
+      <div className='pt-9' />
+
+      <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
+        <GroupProducts hideTop />
+      </section>
+
+      <div className='pt-9' />
+
+      <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
         <div className='flex flex-wrap w-full -mx-21/2'>
           <div className='w-full px-21/2 mb-12'>
             <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>

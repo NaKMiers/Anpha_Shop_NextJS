@@ -1,10 +1,17 @@
 'use client'
+import { redPathnameList } from '@/constansts'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { FaChevronUp } from 'react-icons/fa6'
 
 function ContactFloating() {
+  const pathname = usePathname()
   const [isShow, setIsShow] = useState(false)
+
+  if (redPathnameList.some(path => pathname.startsWith(path))) {
+    return null
+  }
 
   return (
     <div

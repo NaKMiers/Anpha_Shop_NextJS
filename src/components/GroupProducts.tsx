@@ -6,9 +6,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import ProductCard from './ProductCard'
 
-interface GroupProductsProps {}
+interface GroupProductsProps {
+  hideTop?: boolean
+}
 
-function GroupProducts({}: GroupProductsProps) {
+function GroupProducts({ hideTop }: GroupProductsProps) {
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -59,26 +61,28 @@ function GroupProducts({}: GroupProductsProps) {
 
   return (
     <div className='relative'>
-      {/* Ears */}
-      <div className='flex justify-between px-6'>
-        <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
-          <div className='aspect-square items-center w-6 h-6'>
-            <Image src='/images/netflix-icon.jpg' width={200} height={200} alt='netflix' />
+      {/* Top Ears */}
+      {!hideTop && (
+        <div className='flex justify-between px-6'>
+          <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
+            <div className='aspect-square items-center w-6 h-6'>
+              <Image src='/images/netflix-icon.jpg' width={200} height={200} alt='netflix' />
+            </div>
+            <span className='font-semibold'>Netflix</span>
           </div>
-          <span className='font-semibold'>Netflix</span>
+          <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
+            {isMedium ? (
+              <button className='text-sky-600' onClick={() => setIsExpaned(prev => !prev)}>
+                {isExpaned ? 'Thu lại' : 'Tất cả'}
+              </button>
+            ) : (
+              <Link href='/category/?ctg=netflix' className='underline text-sky-600'>
+                Tất cả
+              </Link>
+            )}
+          </div>
         </div>
-        <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
-          {isMedium ? (
-            <button className='text-sky-600' onClick={() => setIsExpaned(prev => !prev)}>
-              {isExpaned ? 'Thu lại' : 'Tất cả'}
-            </button>
-          ) : (
-            <Link href='/category/?ctg=netflix' className='underline text-sky-600'>
-              Tất cả
-            </Link>
-          )}
-        </div>
-      </div>
+      )}
 
       {!isExpaned && (
         <>

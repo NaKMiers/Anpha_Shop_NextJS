@@ -1,0 +1,60 @@
+import React from 'react'
+import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
+
+interface InputProps {
+  label: string
+  icon: React.ElementType
+  className?: string
+
+  id: string
+  type?: string
+  disabled?: boolean
+  required?: boolean
+  register: UseFormRegister<FieldValues>
+  errors: FieldErrors
+}
+
+function Input({
+  id,
+  type = 'text',
+  disabled,
+  required,
+  register,
+  errors,
+  label,
+  icon: Icon,
+  className,
+}: InputProps) {
+  return (
+    <div className={`flex ${className}`}>
+      <span
+        className={`inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 ${
+          errors[id] ? 'border-rose-400 bg-rose-100' : 'border-slate-200 bg-slate-100'
+        }`}>
+        <Icon size={20} className='text-primary' />
+      </span>
+      <div
+        className={`relative w-full border-[2px] border-l-0 rounded-tr-lg rounded-br-lg ${
+          errors[id] ? 'border-rose-400' : 'border-slate-200'
+        }`}>
+        <input
+          id={id}
+          className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+          placeholder=' '
+          disabled={disabled}
+          type={type}
+          {...register(id, { required })}
+        />
+        <label
+          htmlFor='floating_outlined'
+          className={`absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 ${
+            errors[id] ? 'text-rose-400' : 'text-dark'
+          }`}>
+          {label}
+        </label>
+      </div>
+    </div>
+  )
+}
+
+export default Input

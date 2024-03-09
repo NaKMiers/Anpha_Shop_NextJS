@@ -1,16 +1,19 @@
 'use client'
+import { redPathnameList } from '@/constansts'
 import AspectRatio from '@mui/joy/AspectRatio'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Divider from '@mui/joy/Divider'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useCallback, useRef, useState } from 'react'
-import { FaSignOutAlt } from 'react-icons/fa'
 import { FaCheck, FaChevronRight } from 'react-icons/fa6'
 import { PiSignOutBold } from 'react-icons/pi'
 
 function Footer() {
+  const pathname = usePathname()
+
   const [isDragging, setIsDragging] = useState(false)
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
@@ -23,6 +26,10 @@ function Footer() {
     },
     [isDragging]
   )
+
+  if (redPathnameList.some(path => pathname.startsWith(path))) {
+    return null
+  }
 
   return (
     <div className='bg-dark-100 text-light max-w-1200 m-auto mb-10 shadow-medium rounded-medium mt-36'>

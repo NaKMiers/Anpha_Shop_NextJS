@@ -11,6 +11,8 @@ import { IoChevronDown } from 'react-icons/io5'
 import { BsFillLightningChargeFill } from 'react-icons/bs'
 import { HiLightningBolt } from 'react-icons/hi'
 import { FaHistory, FaShoppingBag, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa'
+import { usePathname, useRouter } from 'next/navigation'
+import { redPathnameList } from '@/constansts'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -23,6 +25,8 @@ const user = {
 }
 
 function Header({ isStatic }: HeaderProps) {
+  const pathname = usePathname()
+
   const [isShow, setIsShow] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -54,6 +58,10 @@ function Header({ isStatic }: HeaderProps) {
   // close menu
   const handleCloseMenu = () => {
     setAnchorEl(null)
+  }
+
+  if (redPathnameList.some(path => pathname.startsWith(path))) {
+    return null
   }
 
   return (
