@@ -31,7 +31,7 @@ function Input({
         className={`inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 ${
           errors[id] ? 'border-rose-400 bg-rose-100' : 'border-slate-200 bg-slate-100'
         }`}>
-        <Icon size={20} className='text-primary' />
+        <Icon size={19} className='text-secondary' />
       </span>
       <div
         className={`relative w-full border-[2px] border-l-0 rounded-tr-lg rounded-br-lg ${
