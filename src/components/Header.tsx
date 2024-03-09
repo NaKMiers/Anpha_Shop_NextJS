@@ -67,7 +67,9 @@ function Header({ isStatic }: HeaderProps) {
       <div className='flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* Brand */}
         <div className='flex items-center '>
-          <Link href='/' className='shrink-0 rounded-full common-transition hover:shadow-medium-light'>
+          <Link
+            href='/'
+            className='hidden sm:block shrink-0 rounded-full common-transition hover:shadow-medium-light'>
             <Image src='/images/logo.jpg' width={40} height={40} alt='logo' />
           </Link>
           <Link href='/' className='text-2xl font-bold'>

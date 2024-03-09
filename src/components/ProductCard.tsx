@@ -12,7 +12,7 @@ function ProductCard() {
       <h3 className='font-body text-[18px] text-dark tracking-wide leading-[22px] my-2'>
         Netflix Premium (Gói Share 1 Tháng) - Chia sẻ Niềm Vui Xem Phim Siêu Nét
       </h3>
-      <div className='absolute -top-2 -left-2 rounded-tl-lg bg-yellow-400 p-1 max-w-10 text-light font-semibold font-body text-center text-[13px] leading-4 before:absolute before:left-0 before:bottom-1 before:translate-y-full before:border-l-[44px] before:border-l-yellow-400 before:border-b-[16px] before:border-b-transparent after:absolute after:right-0 after:bottom-1 after:translate-y-full after:border-r-[44px] after:border-r-yellow-400 after:border-b-[16px] after:border-b-transparent'>
+      <div className='absolute -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-light font-semibold font-body text-center text-[13px] leading-4'>
         Giảm 83%
       </div>
       <Price className='mb-1' />

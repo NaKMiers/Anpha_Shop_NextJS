@@ -200,7 +200,7 @@ function Banner() {
 
           {/* Menu Absolute */}
           <div
-            className={`absolute top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 p-21 flex flex-col md:flex-row justify-evenly items-center md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden`}
+            className={`lg:hidden absolute top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 p-21 flex flex-col md:flex-row justify-evenly items-center md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden`}
             style={{ transform: !isMenuOpen ? 'translate(calc(100% - 32px), calc(-100% + 32px))' : '' }}>
             <button
               className='absolute w-8 h-8 flex items-center justify-center top-0 right-0 shadow-md rounded-bl-lg p-[6px] bg-white'
@@ -223,8 +223,10 @@ function Banner() {
             </button>
 
             {/* Tag */}
-            <ul className='max-w-[300px] w-full bg-white p-2 pb-6 rounded-medium shadow-small overflow-y-scroll'>
-              <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Tags</h5>
+            <ul className='relative max-w-[300px] w-full bg-white p-2 pb-6 rounded-medium shadow-small overflow-y-scroll'>
+              <h5 className='bg-slate-200 rounded-bl-lg rounded-br-lg ml-2 sticky top-0 text-[20px] font-semibold text-center text-dark'>
+                Tags
+              </h5>
 
               {tags.map(tag => (
                 <li
@@ -241,8 +243,10 @@ function Banner() {
             </ul>
 
             {/* Category */}
-            <ul className='max-w-[300px] w-full bg-white p-2 pb-6 rounded-medium shadow-small overflow-y-scroll'>
-              <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Categories</h5>
+            <ul className='relative max-w-[300px] w-full bg-white p-2 pb-6 rounded-medium shadow-small overflow-y-scroll'>
+              <h5 className='bg-slate-200 rounded-bl-lg rounded-br-lg ml-2 sticky top-0 text-[20px] font-semibold text-center text-dark'>
+                Categories
+              </h5>
 
               <li className='rounded-extra-small text-dark hover:bg-primary common-transition'>
                 <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>

@@ -71,6 +71,22 @@
   }
 }
 
+.input-range {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #25dbe6;
+    cursor: pointer;
+  }
+}
+
 .underline {
   @include underline--after(var(--background-light));
 }
