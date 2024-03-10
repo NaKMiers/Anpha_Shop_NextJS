@@ -40,7 +40,7 @@ function LoginPage() {
 
   return (
     <div className='relative w-full min-h-screen'>
-      <div className='bg-white max-w-[500px] w-full py-21 px-8 rounded-medium shadow-medium absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+      <div className='bg-white pb-10 max-w-[500px] w-full py-21 px-8 rounded-medium shadow-medium absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <h1 className='text-secondary text-[40px] font-semibold tracking-wide font-body mb-4'>
           Đăng nhập
         </h1>
@@ -59,7 +59,7 @@ function LoginPage() {
 
         <Input
           id='password'
-          label='Password'
+          label='Mật khẩu'
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -69,7 +69,7 @@ function LoginPage() {
           className='mb-5'
         />
 
-        <div className='flex justify-end mb-4 -mt-3'>
+        <div className='flex justify-end mb-3 -mt-3'>
           <a href='/auth/forgot-password' className='text-dark'>
             Quên mật khẩu?
           </a>

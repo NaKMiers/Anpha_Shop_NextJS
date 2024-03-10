@@ -102,9 +102,9 @@ function GroupProducts({ hideTop }: GroupProductsProps) {
       {/* Slider */}
       <div className='flex flex-wrap px-21/2 bg-white bg-opacity-90 rounded-medium shadow-medium'>
         <div
-          className={`flex ${
-            isExpaned ? 'flex-wrap gap-y-21' : 'cursor-pointer'
-          } w-full py-21 overflow-x-auto ${!isDragging ? 'snap-x' : ''}`}
+          className={`flex ${isExpaned ? 'flex-wrap gap-y-21' : ''} w-full py-21 overflow-x-auto ${
+            !isDragging ? 'snap-x' : ''
+          }`}
           ref={slideTrackRef}
           onMouseDown={() => setIsDragging(true)}
           onMouseMove={handleDraging}
