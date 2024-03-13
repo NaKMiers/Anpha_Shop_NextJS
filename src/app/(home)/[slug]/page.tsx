@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 function ProductPage({ params }: { params: { slug: string } }) {
   return (
     <div className='pt-9'>
-      <section className='max-w-1200 mx-auto bg-white p-8 flex flex-col gap-21 md:flex-row rounded-medium shadow-medium'>
+      <section className='bg-white p-8 flex flex-col gap-21 md:flex-row rounded-medium shadow-medium'>
         {/* Thumbnails */}
         <div className='w-full md:w-[45%] md:max-w-[500px]'>
           <div className='aspect-video shadow-xl rounded-md'>

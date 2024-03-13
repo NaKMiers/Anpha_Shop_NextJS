@@ -2,8 +2,9 @@
 
 import { adminLinks } from '@/constansts'
 import Image from 'next/image'
-import React, { useState } from 'react'
-import { FaBars, FaPlus } from 'react-icons/fa'
+import Link from 'next/link'
+import { useState } from 'react'
+import { FaPlus } from 'react-icons/fa'
 import { FaBarsStaggered } from 'react-icons/fa6'
 
 function AdminMenu() {
@@ -34,18 +35,18 @@ function AdminMenu() {
       <ul>
         {adminLinks.map((item: any) => (
           <li className='flex items-center gap-2' key={item.title}>
-            <a
+            <Link
               className='flex flex-grow items-center gap-2 group rounded-lg p-2 common-transition hover:bg-secondary'
               href={item.links[0].href}>
               <item.icon size={18} className='' />
               {item.links[0].title}
-            </a>
+            </Link>
             {item.links[1] && (
-              <a
+              <Link
                 className='group flex-shrink-0 rounded-full border-2 border-white p-[2px] hover:scale-110 common-transition hover:border-primary'
                 href={item.links[1].href}>
                 <FaPlus size={12} className='group-hover:text-primary common-transition' />
-              </a>
+              </Link>
             )}
           </li>
         ))}

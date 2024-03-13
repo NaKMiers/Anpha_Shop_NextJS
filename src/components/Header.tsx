@@ -1,18 +1,16 @@
 'use client'
 
 import { formatPrice } from '@/utils/formatNumber'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+import { FaHistory, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
-import { IoChevronDown } from 'react-icons/io5'
-import { BsFillLightningChargeFill } from 'react-icons/bs'
 import { HiLightningBolt } from 'react-icons/hi'
-import { FaHistory, FaShoppingBag, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa'
-import { usePathname, useRouter } from 'next/navigation'
-import { redPathnameList } from '@/constansts'
+import { IoChevronDown } from 'react-icons/io5'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -25,8 +23,6 @@ const user = {
 }
 
 function Header({ isStatic }: HeaderProps) {
-  const pathname = usePathname()
-
   const [isShow, setIsShow] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -60,10 +56,6 @@ function Header({ isStatic }: HeaderProps) {
     setAnchorEl(null)
   }
 
-  if (redPathnameList.some(path => pathname.startsWith(path))) {
-    return null
-  }
-
   return (
     <header
       className={`${
@@ -85,9 +77,14 @@ function Header({ isStatic }: HeaderProps) {
           </Link>
           <Link
             href='/user/recharge'
-            className='ml-3 bg-primary px-3 py-[6px] rounded-extra-small flex items-center gap-1'>
-            <span className='font-bold font-body text-[18px] tracking-[0.02em]'>Nạp</span>
-            <HiLightningBolt size={20} className='animate-bounce' />
+            className='ml-3 bg-primary px-3 py-[6px] rounded-extra-small flex items-center gap-1 group hover:bg-secondary common-transition'>
+            <span className='font-bold font-body text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
+              Nạp
+            </span>
+            <HiLightningBolt
+              size={20}
+              className='animate-bounce group-hover:text-white common-transition'
+            />
           </Link>
         </div>
 

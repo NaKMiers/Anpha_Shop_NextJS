@@ -5,7 +5,7 @@ import ProductCard from '@/components/ProductCard'
 
 function CategoryPage() {
   return (
-    <div className='max-w-1200 mx-auto pt-24'>
+    <div className='pt-24'>
       <Meta />
       <div className='pt-11' />
 

@@ -1,7 +1,6 @@
 import Heading from '@/components/Heading'
 import { adminLinks } from '@/constansts'
 import Link from 'next/link'
-import React from 'react'
 
 function AdminPage() {
   return (
