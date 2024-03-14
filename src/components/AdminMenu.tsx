@@ -12,7 +12,7 @@ function AdminMenu() {
 
   return (
     <div
-      className={`fixed top-[20%] right-0 p-4 bg-dark-100 text-light rounded-tl-medium rounded-bl-medium shadow-primary shadow-md max-w-[300px] w-full common-transition ${
+      className={`fixed top-[20%] z-20 right-0 p-4 bg-dark-100 text-light rounded-tl-medium rounded-bl-medium shadow-primary shadow-md max-w-[300px] w-full common-transition ${
         open ? 'translate-x-0' : 'translate-x-full'
       }`}>
       <button

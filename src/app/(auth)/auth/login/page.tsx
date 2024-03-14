@@ -8,8 +8,10 @@ import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
 import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 function LoginPage() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
   // Form
@@ -17,6 +19,7 @@ function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FieldValues>({
     defaultValues: {
       usernameOrEmail: '',
@@ -26,14 +29,23 @@ function LoginPage() {
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     setIsLoading(true)
+
     try {
-      // login logic here
+      // send request to server
       const res = await axios.post('/api/auth/login', data)
-      console.log(res)
+      const { user, message } = res.data
+
+      // show success message
+      toast.success(message)
+
+      // redirect to home page
+      router.push('/')
     } catch (err: any) {
-      toast.error(err.response.data.message)
-      console.log(err.response.data)
+      // show error message
+      setError('usernameOrEmail', { type: 'manual' })
+      setError('password', { type: 'manual' })
     } finally {
+      // reset loading state
       setIsLoading(false)
     }
   }
@@ -70,7 +82,7 @@ function LoginPage() {
         />
 
         <div className='flex justify-end mb-3 -mt-3'>
-          <a href='/auth/forgot-password' className='text-dark'>
+          <a href='/auth/forgot-password' className='text-dark hover:underline'>
             Quên mật khẩu?
           </a>
         </div>

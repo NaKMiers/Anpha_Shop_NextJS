@@ -11,6 +11,8 @@ import { FaHistory, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
+import { MdOutlineLogout } from 'react-icons/md'
+import { TbLogout } from 'react-icons/tb'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -24,8 +26,7 @@ const user = {
 
 function Header({ isStatic }: HeaderProps) {
   const [isShow, setIsShow] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+  const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
 
   // handle show and hide header on scroll
@@ -33,11 +34,20 @@ function Header({ isStatic }: HeaderProps) {
     const handleScroll = () => {
       let scrollTop = window.scrollY
 
+      // scroll down
       if (scrollTop >= 21) {
-        scrollTop > lastScrollTop.current ? setIsShow(true) : setIsShow(false)
+        // scroll top
+        if (scrollTop > lastScrollTop.current) {
+          setIsShow(true)
+        } else {
+          setIsShow(false)
+          setIsOpenMenu(false)
+        }
+
         lastScrollTop.current = scrollTop
       } else {
         setIsShow(false)
+        setIsOpenMenu(false)
       }
     }
 
@@ -49,12 +59,10 @@ function Header({ isStatic }: HeaderProps) {
 
   // open menu
   const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget)
+    setIsOpenMenu(!isOpenMenu)
   }
   // close menu
-  const handleCloseMenu = () => {
-    setAnchorEl(null)
-  }
+  const handleCloseMenu = () => {}
 
   return (
     <header
@@ -64,7 +72,7 @@ function Header({ isStatic }: HeaderProps) {
         isShow ? 'top-0' : 'top-[-100%]'
       }`}>
       {/* Main Header */}
-      <div className='flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
+      <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* Brand */}
         <div className='flex items-center '>
           <Link
@@ -125,64 +133,72 @@ function Header({ isStatic }: HeaderProps) {
           </button>
         </div>
 
-        {/* Dropdown Menu */}
-        <Menu className='mt-2' id='basic-menu' anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
-          <Link href='/' className='flex items-center gap-2 px-4  min-w-[250px] mt-1'>
+        {/* Menu */}
+        <ul
+          className={`${
+            isOpenMenu ? 'max-w-full w-[300px] max-h-[350px] p-3' : 'max-h-0 p-0 max-w-0 w-0'
+          } overflow-hidden transition-all duration-300 absolute top-[60px] right-21 z-30 rounded-medium shadow-sky-400 shadow-md bg-dark-100`}>
+          <li className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
             <Image
-              className='hover:shadow-md common-transition rounded-full'
+              className='aspect-square rounded-full'
               src='/images/logo.jpg'
-              width={40}
               height={40}
+              width={40}
               alt='avatar'
             />
-            <span className='font-semibold text-[22px] font-bod'>{user.fullname}</span>
-          </Link>
+            <span className='font-semibold text-xl'>Nguyen Pi Pi</span>
+          </li>
 
-          <div className='flex items-center gap-1 px-4 mt-2 text-[16px]'>
-            <span className='font-bold'>Số dư: </span>
-            <div className='font-body font-semibold hover:underline underline-offset-2'>
-              {formatPrice(2140980)}
-            </div>
+          <li className='flex items-center gap-1 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <span className='font-semibold'>Số dư: </span>
+            <span>{formatPrice(3062922)}</span>
             <Link
-              href='/user/recharge'
-              className='group rounded-full w-[18px] h-[18px] flex items-center justify-center border-dark p-[2px] border-2'>
-              <FaPlus size={16} className='group-hover:scale-110 common-transition' />
+              className='group flex-shrink-0 rounded-full ml-1 border-2 border-primary p-[2px] hover:scale-110 common-transition'
+              href='/user/recharge'>
+              <FaPlus size={14} className='text-primary common-transition' />
             </Link>
-          </div>
+          </li>
 
-          <hr className='mt-2' />
-
-          <MenuItem className='group flex gap-2' onClick={handleCloseMenu}>
-            <FaUser size={18} className='group-hover:scale-110 common-transition' />
-            <span className='font-body'>Thông tin tài khoản</span>
-          </MenuItem>
-          <MenuItem className='group flex gap-2' onClick={handleCloseMenu}>
-            <FaShoppingCart size={18} className='group-hover:scale-110 common-transition' />
-            <span className='font-body'>Giỏ hàng</span>
-            <span className='ml-auto bg-primary rounded-full text-center px-2 py-[2px] text-[10px] font-bold'>
-              6
+          <Link
+            href='/'
+            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <FaUser size={18} className='' />
+            <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
+          </Link>
+          <Link
+            href='/'
+            className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <FaCartShopping size={18} className='' />
+            <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
+            <span className='absolute top-1/2 right-0 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
+              9
             </span>
-          </MenuItem>
-          <MenuItem className='group flex gap-2' onClick={handleCloseMenu}>
-            <FaHistory size={18} className='group-hover:scale-110 common-transition' />
-            <span className='font-body'>Lịch sử mua hàng</span>
-          </MenuItem>
-          <MenuItem className='group flex gap-2' onClick={handleCloseMenu}>
-            <FaPhone size={18} className='group-hover:scale-110 common-transition' />
-            <span className='font-body'>Liên hệ</span>
-          </MenuItem>
-          {user.admin && (
-            <MenuItem className='group flex gap-2' onClick={handleCloseMenu}>
-              <FaUserSecret size={18} className='group-hover:scale-110 common-transition' />
-              <span className='font-body'>Admin</span>
-            </MenuItem>
-          )}
-          <MenuItem className='group flex gap-2' onClick={handleCloseMenu}>
-            <FaSignOutAlt size={18} className='group-hover:scale-110 common-transition' />
-
-            <span className='font-body text-yellow-400'>Đăng xuất</span>
-          </MenuItem>
-        </Menu>
+          </Link>
+          <Link
+            href='/'
+            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <FaHistory size={18} className='' />
+            <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
+          </Link>
+          <Link
+            href='/'
+            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <FaPhone size={18} className='' />
+            <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
+          </Link>
+          <Link
+            href='/'
+            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <FaUserSecret size={18} className='' />
+            <span className='font-body tracking-wide text-[15px] text-primary'>Admin/Order</span>
+          </Link>
+          <Link
+            href='/'
+            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <TbLogout size={18} className='' />
+            <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
+          </Link>
+        </ul>
       </div>
     </header>
   )

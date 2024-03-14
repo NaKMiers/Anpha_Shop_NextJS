@@ -3,6 +3,7 @@
 import Input from '@/components/Input'
 import axios from 'axios'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -11,6 +12,7 @@ import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 
 function ResgiterPage() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
   // Form
@@ -28,13 +30,20 @@ function ResgiterPage() {
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     setIsLoading(true)
     try {
-      // login logic here
-      const res = await axios.post('/api/auth/login', data)
-      console.log(res)
+      // register logic here
+      const res = await axios.post('/api/auth/register', data)
+      const { user, message } = res.data
+
+      // show success message
+      toast.success(message)
+
+      // redirect to home page
+      router.push('/')
     } catch (err: any) {
+      // show error message
       toast.error(err.response.data.message)
-      console.log(err.response.data)
     } finally {
+      // reset loading state
       setIsLoading(false)
     }
   }

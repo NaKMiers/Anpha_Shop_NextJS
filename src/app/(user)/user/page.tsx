@@ -59,14 +59,14 @@ function UserPage() {
               <p className='font-semibold'>Số dư tài khoản</p>
               <div className='flex items-center gap-2 justify-center sm:justify-normal'>
                 <p className='text-green-500'>{formatPrice(203033222)}</p>
-                <a
+                <Link
                   className='group flex-shrink-0 rounded-full border-2 border-primary hover:border-secondary p-[2px] hover:scale-110 common-transition'
                   href='/user/recharge'>
                   <FaPlus
                     size={10}
                     className='text-primary common-transition group-hover:text-secondary'
                   />
-                </a>
+                </Link>
               </div>
             </div>
 

@@ -17,9 +17,10 @@ export async function POST(request: Request) {
     // check if user is already exist in database
     const existingUser: any = await UserModel.findOne({ $or: [{ email }, { username }] }).lean()
 
+    // check if user is already exist in database
     if (existingUser) {
       return NextResponse.json(
-        { message: 'Tài khoản đã tồn tại, vui lòng nhập email hoặc username khác' },
+        { message: 'Tài khoản đã tồn tại, vui lòng nhập Email hoặc Username khác' },
         { status: 401 }
       )
     }
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
     const { password: hiddenPassword, ...otherDetails } = userRegistered
 
     // return home page
-    return NextResponse.json({ user: otherDetails }, { status: 200 })
+    return NextResponse.json({ user: otherDetails, message: 'Đăng ký thành công' }, { status: 200 })
   } catch (err) {
     return NextResponse.json(err, { status: 500 })
   }

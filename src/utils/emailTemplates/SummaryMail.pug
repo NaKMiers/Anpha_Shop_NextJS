@@ -1,0 +1,58 @@
+body(style='font-family: Arial')
+   div(style='padding-top: 40px;')
+   div(style='max-width: 1200px; margin: 0 auto; width: 100%; text-align: center')
+      h1 Báo cáo thu nhập tháng: #{new Date().getMonth() + 1}
+
+      h3 Tên: 
+         span(style='color: blueviolet;')= `${collaborator.firstname} ${collaborator.lastname}`
+      h3 Tiền hoa hồng: 
+         span(style='color: orange')= Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(collaborator.commission.value)
+      h3 Số lượng voucher trong tháng: 
+         span(style='color: green;')= vouchers.length
+      h3 Thu nhập trong tháng: 
+         span(style='color: tomato;')= Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(income)
+
+      table(cellspacing='0' cellpadding='8' style='width: 100%; background: #eee; border-radius: 16px; padding: 21px; font-size: 20px;')
+         thead
+            tr 
+               th(style='border: 1px solid #333;') Voucher
+               th(style='border: 1px solid #333;') Tạm tính
+         tbody(style='text-align: center')
+            each voucher in vouchers
+               tr
+                  td(style='border: 1px solid #333;')= voucher.code
+                  td(style='border: 1px solid #333;')= Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(voucher.accumulated)
+            tr 
+               td(colspan=2 style='border: 1px solid #333;')
+                  b Tổng: 
+                  b= Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(income)
+
+      div(style='padding-top: 40px;')
+
+      div(style='padding-top: 20px;')
+         div(style='margin: 0; padding: 0;')
+            a(
+               href=process.env.ZALO target="_blank" rel='noreferrer'
+               style='padding-top: 0;'
+            ) 
+               img(src="https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Zalo-Arc.jpg" alt="zalo" style='width: 32px; object-fit: cover;')
+            a(
+               href=process.env.MESSENGER target="_blank" rel='noreferrer'
+               style='padding-top: 0;'
+            ) 
+               img(src="https://tiemtraannhien.vn/wp-content/uploads/2023/04/messenger-icon-free-png.webp" alt="messenger" style='width: 32px; object-fit: cover;')
+
+         div(style='padding-top: 20px;')
+
+         div(style='margin-top: calc(-1 * var(--bs-gutter-y)); margin-right: calc(-.5 * var(--bs-gutter-x)); margin-left: calc(-.5 * var(--bs-gutter-x)); justify-content: space-between; margin: 0; padding: 0; padding-top: 8px;')
+            div(style='width: auto; padding: 0;')
+               svg(xmlns='http://www.w3.org/2000/svg' height='1em' viewbox='0 0 512 512' style='margin-right: 4px;')
+                  path(style='fill: #01dbe5;' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM199.4 312.6c31.2 31.2 81.9 31.2 113.1 0c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9c-50 50-131 50-181 0s-50-131 0-181s131-50 181 0c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0c-31.2-31.2-81.9-31.2-113.1 0s-31.2 81.9 0 113.1z')
+               span(style='color: #01dbe5; font-weight: 600; margin-right: 4px;') Anpha.shop 
+               span(style='margin-right: 2px;') All right reserved
+
+            div(style='width: auto; padding: 0;')
+               span(style='color: #01dbe5; font-weight: 600; margin-right: 2px;') Developed By 
+               span Nguyen Anh Khoa
+
+      div(style='padding-top: 100px;')

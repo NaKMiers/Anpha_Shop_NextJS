@@ -32,7 +32,7 @@ export default function AdminLayout({
 
         <AdminMenu />
 
-        {children}
+        <main className='px-21 py-20'>{children}</main>
       </body>
     </html>
   )

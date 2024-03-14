@@ -1,15 +1,16 @@
 'use client'
 
 import Input from '@/components/Input'
-import Image from 'next/image'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
-import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
-import axios from 'axios'
+import { FaCircleNotch } from 'react-icons/fa6'
 
 function LoginPage() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
   // Form
@@ -17,20 +18,42 @@ function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FieldValues>({
     defaultValues: {
-      usernameOrEmail: '',
-      password: '',
+      newPassword: '',
+      reNewPassword: '',
     },
   })
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     setIsLoading(true)
+
     try {
+      // check if new password and re-new password are match
+      if (data.newPassword !== data.reNewPassword) {
+        setError('reNewPassword', { type: 'manual', message: 'Mật khẩu không khớp' }) // add this line
+        return
+      }
+
+      // get email and token from query
+      const url = new URL(window.location.href)
+      const email = url.searchParams.get('email')
+      const token = url.searchParams.get('token')
+
+      // send request to server
+      const res = await axios.patch(`/api/auth/reset-password?email=${email}&token=${token}`, data)
+
+      // show success message
+      toast.success(res.data.message)
+
+      // redirect to login page
+      router.push('/auth/login')
     } catch (err: any) {
+      // show error message
       toast.error(err.response.data.message)
-      console.log(err.response.data)
     } finally {
+      // reset loading state
       setIsLoading(false)
     }
   }
@@ -43,7 +66,7 @@ function LoginPage() {
         </h1>
 
         <Input
-          id='oldPassword'
+          id='newPassword'
           label='Mật khẩu cũ'
           disabled={isLoading}
           register={register}
@@ -55,8 +78,8 @@ function LoginPage() {
         />
 
         <Input
-          id='newPassword'
-          label='Mật khẩu mới'
+          id='reNewPassword'
+          label='Nhập lại mật khẩu mới'
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -67,7 +90,7 @@ function LoginPage() {
         />
 
         <div className='flex justify-end mb-3 -mt-3'>
-          <a href='/auth/login' className='text-dark'>
+          <a href='/auth/login' className='text-dark underline hover:text-sky-600 common-transitio'>
             Quay lại đăng nhập
           </a>
         </div>

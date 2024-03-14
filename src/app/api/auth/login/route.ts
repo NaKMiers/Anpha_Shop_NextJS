@@ -8,7 +8,7 @@ connectDatabase()
 
 // [POST]: /auth/login
 export async function POST(request: Request) {
-  console.log('Login')
+  console.log('login')
   try {
     // get data from request body
     const { usernameOrEmail, password } = await request.json()
@@ -23,6 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Tài khoản hoặc mật khẩu không đúng' }, { status: 401 })
     }
 
+    // check if user is not local
     if (user.authType !== 'local') {
       return NextResponse.json(
         { message: 'Tài khoản này được xác thực bởi ' + user.authType },
@@ -32,14 +33,15 @@ export async function POST(request: Request) {
 
     // check password
     const isValidPassword = await brcypt.compare(password, user.password)
-
     if (!isValidPassword) {
-      return NextResponse.json({ message: 'Sai mật khẩu' }, { status: 401 })
+      return NextResponse.json({ message: 'Tài khoản hoặc mật khẩu không đúng' }, { status: 401 })
     }
+
     // exclude password from user who have just logined
     const { password: hiddenPassword, ...otherDetails } = user
 
-    return NextResponse.json({ user: otherDetails }, { status: 200 })
+    // return response
+    return NextResponse.json({ user: otherDetails, message: 'Đăng nhập thành công' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json(err, { status: 500 })
   }

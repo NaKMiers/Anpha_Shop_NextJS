@@ -17,6 +17,12 @@ const UserSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      validate: {
+        validator: function (value: string) {
+          return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)
+        },
+        message: 'Email không hợp lệ',
+      },
     },
     password: {
       type: String,
@@ -27,7 +33,7 @@ const UserSchema = new Schema(
         validator: function (value: string) {
           return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(value)
         },
-        message: 'Invalid password',
+        message: 'Mật khẩu không hợp lệ',
       },
     },
     balance: {
