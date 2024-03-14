@@ -2,6 +2,7 @@
 
 import Input from '@/components/Input'
 import axios from 'axios'
+import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -136,7 +137,9 @@ function ResgiterPage() {
         <div className='pt-4' />
 
         <div className='flex items-center justify-center gap-4'>
-          <button className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'>
+          <button
+            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'
+            onClick={() => signIn('google', { callbackUrl: '/' })}>
             <Image
               className='group-hover:scale-110 common-transition'
               src='/images/google.jpg'

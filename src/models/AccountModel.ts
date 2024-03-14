@@ -1,0 +1,68 @@
+import mongoose from 'mongoose'
+const Schema = mongoose.Schema
+
+const AccountSchema = new Schema(
+  {
+    type: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'product',
+      required: true,
+    },
+    info: {
+      type: String,
+      required: true,
+    },
+    usingUser: {
+      type: String, // email
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      // automatically deactivates if expire time and renewal time are exceeded
+    },
+    begin: {
+      type: Date,
+    },
+    expire: {
+      type: Date,
+    },
+    renew: {
+      type: Date,
+      required: true,
+    },
+    times: {
+      type: {
+        days: {
+          type: Number,
+          default: 0,
+          min: 0,
+        },
+        hours: {
+          type: Number,
+          default: 0,
+          min: 0,
+        },
+        minutes: {
+          type: Number,
+          default: 0,
+          min: 0,
+        },
+        seconds: {
+          type: Number,
+          default: 0,
+          min: 0,
+        },
+      },
+      default: {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      },
+    },
+  },
+  { timestamps: true }
+)
+
+const AccountModel = mongoose.model('account', AccountSchema)
+export default AccountModel

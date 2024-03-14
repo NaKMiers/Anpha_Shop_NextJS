@@ -1,17 +1,14 @@
 'use client'
 
 import { formatPrice } from '@/utils/formatNumber'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { FaHistory, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa'
+import { FaHistory } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
-import { MdOutlineLogout } from 'react-icons/md'
 import { TbLogout } from 'react-icons/tb'
 
 interface HeaderProps {
@@ -25,6 +22,9 @@ const user = {
 }
 
 function Header({ isStatic }: HeaderProps) {
+  const { data: session } = useSession()
+  const curUser: any = session?.user
+
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
@@ -64,6 +64,8 @@ function Header({ isStatic }: HeaderProps) {
   // close menu
   const handleCloseMenu = () => {}
 
+  console.log()
+
   return (
     <header
       className={`${
@@ -78,7 +80,13 @@ function Header({ isStatic }: HeaderProps) {
           <Link
             href='/'
             className='hidden sm:block shrink-0 rounded-full common-transition hover:shadow-medium-light'>
-            <Image src='/images/logo.jpg' width={40} height={40} alt='logo' />
+            <Image
+              className='aspect-square rounded-full'
+              src='/images/logo.jpg'
+              width={40}
+              height={40}
+              alt='logo'
+            />
           </Link>
           <Link href='/' className='text-2xl font-bold'>
             .AnphaShop
@@ -111,7 +119,13 @@ function Header({ isStatic }: HeaderProps) {
 
           {user ? (
             <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
-              <Image src='/images/logo.jpg' width={40} height={40} alt='avatar' />
+              <Image
+                className='aspect-square rounded-full'
+                src={curUser?.avatar || process.env.DEFAULT_AVATAR!}
+                width={40}
+                height={40}
+                alt='avatar'
+              />
               <div className='text-[18px] font-body hover:underline underline-offset-2'>
                 {formatPrice(2140980)}
               </div>

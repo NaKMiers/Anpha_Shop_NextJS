@@ -2,15 +2,15 @@ import { user } from './../../../../libs/reducers/userReducer'
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
 import brcypt from 'bcrypt'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 // connect to database
 connectDatabase()
 
 // [POST]: /auth/login
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   console.log('register')
-  let { username, email, password } = await request.json()
+  let { username, email, password } = await req.json()
   email = email.toLowerCase()
 
   try {

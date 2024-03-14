@@ -1,17 +1,17 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
 import brcypt from 'bcrypt'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 // connect to database
 connectDatabase()
 
 // [POST]: /auth/login
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   console.log('login')
   try {
-    // get data from request body
-    const { usernameOrEmail, password } = await request.json()
+    // get data from req body
+    const { usernameOrEmail, password } = await req.json()
 
     // find user from database
     const user: any = await UserModel.findOne({

@@ -1,14 +1,15 @@
 'use client'
 
 import Input from '@/components/Input'
+import axios from 'axios'
+import { signIn } from 'next-auth/react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
 import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
 
 function LoginPage() {
   const router = useRouter()
@@ -120,7 +121,9 @@ function LoginPage() {
         <div className='pt-4' />
 
         <div className='flex items-center justify-center gap-4'>
-          <button className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'>
+          <button
+            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'
+            onClick={() => signIn('google', { callbackUrl: '/' })}>
             <Image
               className='group-hover:scale-110 common-transition'
               src='/images/google.jpg'
@@ -130,7 +133,9 @@ function LoginPage() {
             />
           </button>
 
-          <button className='p-2 rounded-full border-2 border-sky-300 group hover:bg-sky-300 common-transition'>
+          <button
+            className='p-2 rounded-full border-2 border-sky-300 group hover:bg-sky-300 common-transition'
+            onClick={() => signIn('facebook')}>
             <Image
               className='group-hover:scale-110 common-transition'
               src='/images/facebook.jpg'

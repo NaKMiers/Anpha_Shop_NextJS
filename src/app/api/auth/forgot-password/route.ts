@@ -1,6 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
 import { sendMail } from '@/utils/sendMail'
 
@@ -8,11 +8,11 @@ import { sendMail } from '@/utils/sendMail'
 connectDatabase()
 
 // [POST]: /auth/forgot-password
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   console.log('forgot password')
 
   // get email to send link to reset password
-  const { email } = await request.json()
+  const { email } = await req.json()
 
   try {
     // get user by email
