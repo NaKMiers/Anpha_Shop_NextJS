@@ -3,14 +3,16 @@ import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icon
 import Price from './Price'
 import { TbPackages } from 'react-icons/tb'
 import Link from 'next/link'
+import { formatPrice } from '@/utils/formatNumber'
 
 interface CartItemProps {
   isLocalCartItem?: boolean
   className?: string
   isCheckout?: boolean
+  isOrderDetailProduct?: boolean
 }
 
-function CartItem({ isLocalCartItem, isCheckout, className }: CartItemProps) {
+function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct }: CartItemProps) {
   return (
     <div
       className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 ${className} ${
@@ -48,14 +50,32 @@ function CartItem({ isLocalCartItem, isCheckout, className }: CartItemProps) {
           </h2>
         </Link>
 
-        {isLocalCartItem ? (
-          <div className='flex flex-col gap-3 text-xl font-body tracking-wide'>
+        {isOrderDetailProduct && (
+          <div className='flex justify-between'>
             <div className='flex items-center gap-1 text-[16px]'>
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
               <span className='text-green-500'>2</span>
             </div>
+
+            <div className='flex items-center gap-1 text-[16px]'>
+              <FaHashtag className='text-darker' size={16} />
+              <span className='text-darker font-bold text-nowrap'>Giá:</span>
+              <span className='text-green-500'>{formatPrice(699000)}</span>
+            </div>
           </div>
+        )}
+
+        {isLocalCartItem ? (
+          !isOrderDetailProduct && (
+            <div className='flex flex-col gap-3 text-xl font-body tracking-wide'>
+              <div className='flex items-center gap-1 text-[16px]'>
+                <FaHashtag className='text-darker' size={16} />
+                <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
+                <span className='text-green-500'>2</span>
+              </div>
+            </div>
+          )
         ) : (
           <>
             <Price />
