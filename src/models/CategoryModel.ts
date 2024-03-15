@@ -32,3 +32,10 @@ CategorySchema.pre('save', function (next) {
 
 const CategoryModel = mongoose.model('category', CategorySchema)
 export default CategoryModel
+
+export interface ICategory {
+  _id: string
+  title: string
+  slug: string
+  productQuantity: number
+}

@@ -72,14 +72,6 @@ const UserSchema = new Schema(
       enum: ['local', 'google', 'facebook'],
       default: 'local',
     },
-    authGoogleId: {
-      type: String,
-      default: null,
-    },
-    authFacebookId: {
-      type: String,
-      default: null,
-    },
     commission: {
       type: {
         type: String,
@@ -122,3 +114,28 @@ UserSchema.pre('save', async function (next) {
 
 const UserModel = mongoose.models.user || mongoose.model('user', UserSchema)
 export default UserModel
+
+export interface IUser {
+  _id: string
+  username?: string
+  email: string
+  password?: string
+  balance: number
+  accumulated: number
+  role: 'admin' | 'user' | 'editor' | 'collaborator'
+  avatar: string
+  firstname?: string
+  lastname?: string
+  birthday?: string
+  phone?: string
+  address?: string
+  job?: string
+  authType: 'local' | 'google' | 'facebook'
+  commission?: {
+    type: 'percentage' | 'fixed'
+    value: string
+  }
+  totalIncome?: number
+  createdAt: string
+  updatedAt: string
+}

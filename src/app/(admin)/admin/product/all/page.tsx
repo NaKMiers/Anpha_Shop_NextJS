@@ -1,6 +1,5 @@
 'use client'
 
-import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import { formatPrice } from '@/utils/formatNumber'
 import { Menu, MenuItem } from '@mui/material'
@@ -8,17 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import {
-  FaArrowLeft,
-  FaCaretDown,
-  FaCheckSquare,
-  FaEdit,
-  FaEyeSlash,
-  FaFilter,
-  FaPlus,
-  FaSearch,
-  FaTrash,
-} from 'react-icons/fa'
+import { FaArrowLeft, FaCaretDown, FaEyeSlash, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
 import { FaBoltLightning } from 'react-icons/fa6'
 import { MdEdit } from 'react-icons/md'
 

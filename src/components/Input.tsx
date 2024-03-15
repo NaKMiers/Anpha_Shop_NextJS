@@ -51,7 +51,7 @@ function Input({
           )}
         </span>
         <div
-          className={`relative w-full border-[2px] border-l-0 rounded-tr-lg rounded-br-lg ${
+          className={`relative w-full border-[2px] border-l-0 rounded-tr-lg rounded-br-lg bg-white ${
             errors[id] ? 'border-rose-400' : 'border-slate-200'
           }`}>
           <input
@@ -65,7 +65,7 @@ function Input({
           {/* label */}
           <label
             htmlFor={id}
-            className={`absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer ${
+            className={`absolute rounded-md text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer ${
               errors[id] ? 'text-rose-400' : 'text-dark'
             }`}>
             {label}

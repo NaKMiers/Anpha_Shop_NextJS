@@ -47,3 +47,14 @@ const FlashsaleSchema = new Schema(
 
 const FlashsaleModel = mongoose.model('flashsale', FlashsaleSchema)
 export default FlashsaleModel
+
+export interface IFlashsale {
+  _id: string
+  type: 'fixed-reduce' | 'fixed' | 'percentage'
+  value: string
+  begin: string
+  timeType: 'loop' | 'once'
+  duration?: number
+  expire?: string
+  productQuantity: number
+}

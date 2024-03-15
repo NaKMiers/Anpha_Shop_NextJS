@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 import { generateSlug } from '@/utils'
 const Schema = mongoose.Schema
 
@@ -86,3 +86,19 @@ ProductSchema.pre('save', function (next) {
 // create model from schema
 const ProductModel = mongoose.model('product', ProductSchema)
 export default ProductModel
+
+export interface IProduct {
+  _id: string
+  title: string
+  oldPrice?: number
+  price: number
+  description: string
+  flashsale?: string
+  tags: string[]
+  category: string
+  images: string[]
+  sold: number
+  stock: number
+  slug: string
+  active: boolean
+}

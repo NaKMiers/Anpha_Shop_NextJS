@@ -60,3 +60,15 @@ const OrderSchema = new Schema(
 
 const OrderModel = mongoose.model('order', OrderSchema)
 export default OrderModel
+
+export interface IOrder {
+  _id: string
+  code: string
+  userId: string
+  email: string
+  total: number
+  voucherApplied?: string
+  items: any[]
+  status: 'pending' | 'done' | 'cancel'
+  paymentMethod: string
+}

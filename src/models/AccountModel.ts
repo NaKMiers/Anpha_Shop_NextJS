@@ -66,3 +66,20 @@ const AccountSchema = new Schema(
 
 const AccountModel = mongoose.model('account', AccountSchema)
 export default AccountModel
+
+export interface IAccount {
+  _id: string
+  type: string
+  info: string
+  usingUser?: string
+  active: boolean
+  begin?: string
+  expire?: string
+  renew: string
+  times: {
+    days: number
+    hours: number
+    minutes: number
+    seconds: number
+  }
+}
