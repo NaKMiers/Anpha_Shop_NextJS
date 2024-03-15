@@ -1,7 +1,7 @@
 'use client'
 
 import { formatPrice } from '@/utils/formatNumber'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -15,15 +15,9 @@ interface HeaderProps {
   isStatic?: boolean
 }
 
-const user = {
-  avatar: '/images/avatar.jpg',
-  admin: true,
-  fullname: 'Pi Pi',
-}
-
 function Header({ isStatic }: HeaderProps) {
   const { data: session } = useSession()
-  const curUser: any = session?.user
+  const user: any = session?.user
 
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
@@ -105,8 +99,8 @@ function Header({ isStatic }: HeaderProps) {
         </div>
 
         {/* Nav for > sm */}
-        <div className='hidden md:flex items-center gap-3'>
-          <Link href='/huong-dan-mua-hang' className='text-[18px] font-body tracking-wide text-nowrap'>
+        <div className='hidden md:flex items-center gap-4'>
+          <Link href='/buying-introduction' className='text-[18px] font-body tracking-wide text-nowrap'>
             Hướng dẫn mua hàng
           </Link>
 
@@ -121,7 +115,7 @@ function Header({ isStatic }: HeaderProps) {
             <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
               <Image
                 className='aspect-square rounded-full'
-                src={curUser?.avatar || process.env.DEFAULT_AVATAR!}
+                src={user?.avatar || process.env.DEFAULT_AVATAR!}
                 width={40}
                 height={40}
                 alt='avatar'
@@ -134,7 +128,7 @@ function Header({ isStatic }: HeaderProps) {
           ) : (
             <Link
               href='/auth/login'
-              className='bg-secondary px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider'>
+              className='bg-secondary hover:bg-primary common-transition px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider cursor-pointer'>
               Đăng nhập
             </Link>
           )}
@@ -173,45 +167,57 @@ function Header({ isStatic }: HeaderProps) {
             </Link>
           </li>
 
-          <Link
-            href='/'
-            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-            <FaUser size={18} className='' />
-            <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
-          </Link>
-          <Link
-            href='/'
-            className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-            <FaCartShopping size={18} className='' />
-            <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
-            <span className='absolute top-1/2 right-0 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
-              9
-            </span>
-          </Link>
-          <Link
-            href='/'
-            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-            <FaHistory size={18} className='' />
-            <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
-          </Link>
-          <Link
-            href='/'
-            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-            <FaPhone size={18} className='' />
-            <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
-          </Link>
-          <Link
-            href='/'
-            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-            <FaUserSecret size={18} className='' />
-            <span className='font-body tracking-wide text-[15px] text-primary'>Admin/Order</span>
-          </Link>
-          <Link
-            href='/'
-            className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-            <TbLogout size={18} className='' />
-            <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
-          </Link>
+          <li>
+            <Link
+              href='/user'
+              className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+              <FaUser size={18} className='' />
+              <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href='/cart'
+              className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+              <FaCartShopping size={18} className='' />
+              <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
+              <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
+                9
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href='/order-history'
+              className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+              <FaHistory size={18} className='' />
+              <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href='/contact'
+              className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+              <FaPhone size={18} className='' />
+              <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href='/admin/order/all'
+              className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+              <FaUserSecret size={18} className='' />
+              <span className='font-body tracking-wide text-[15px] text-primary'>Admin/Order</span>
+            </Link>
+          </li>
+          <li>
+            <button
+              className='flex items-center w-full gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+              onClick={() => signOut()}>
+              <TbLogout size={18} className='' />
+              <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
+            </button>
+          </li>
         </ul>
       </div>
     </header>

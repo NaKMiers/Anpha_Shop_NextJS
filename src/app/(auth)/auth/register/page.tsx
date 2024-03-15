@@ -34,12 +34,24 @@ function ResgiterPage() {
       // register logic here
       const res = await axios.post('/api/auth/register', data)
       const { user, message } = res.data
+      console.log(res.data)
 
-      // show success message
-      toast.success(message)
+      // sign in user
+      const callback = await signIn('credentials', {
+        usernameOrEmail: user.username,
+        password: data.password,
+        redirect: false,
+      })
 
-      // redirect to home page
-      router.push('/')
+      if (callback?.error) {
+        toast.error(callback.error)
+      } else {
+        // show success message
+        toast.success(message)
+
+        // redirect to home page
+        router.push('/')
+      }
     } catch (err: any) {
       // show error message
       toast.error(err.response.data.message)

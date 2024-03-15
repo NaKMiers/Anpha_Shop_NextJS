@@ -278,29 +278,31 @@ function AllOrderPage() {
       <div className='bg-white rounded-medium shadow-medium p-21'>
         <table className='w-full text-center text-[14px]' cellPadding={4}>
           <thead className='border-b border-slate-300'>
-            <th className='w-12 text-start'>
-              <input type='checkbox' className='size-4' />
-            </th>
-            <th>Active</th>
-            <th>Type</th>
-            <th>Info</th>
-            <th>
-              <span>Begin</span>
-              <br />
-              <span>(d/m/y)</span>
-            </th>
-            <th>
-              <span>Begin</span>
-              <br />
-              <span>(d/m/y)</span>
-            </th>
-            <th>
-              <span>Begin</span>
-              <br />
-              <span>(d/m/y)</span>
-            </th>
-            <th>Using Users</th>
-            <th>-</th>
+            <tr>
+              <th className='w-12 text-start'>
+                <input type='checkbox' className='size-4' />
+              </th>
+              <th>Active</th>
+              <th>Type</th>
+              <th>Info</th>
+              <th>
+                <span>Begin</span>
+                <br />
+                <span>(d/m/y)</span>
+              </th>
+              <th>
+                <span>Begin</span>
+                <br />
+                <span>(d/m/y)</span>
+              </th>
+              <th>
+                <span>Begin</span>
+                <br />
+                <span>(d/m/y)</span>
+              </th>
+              <th>Using Users</th>
+              <th>-</th>
+            </tr>
           </thead>
 
           <tbody className='align-top'>

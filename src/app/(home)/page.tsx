@@ -6,14 +6,6 @@ import Heading from '@/components/Heading'
 import axios from 'axios'
 
 async function HomePage() {
-  try {
-    // get data from '/api/' using axios
-    const { data } = await axios.get('/api/')
-    console.log(data)
-  } catch (err: any) {
-    console.log(err)
-  }
-
   return (
     <div className='min-h-screen'>
       <Banner />

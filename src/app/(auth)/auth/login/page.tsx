@@ -1,7 +1,6 @@
 'use client'
 
 import Input from '@/components/Input'
-import axios from 'axios'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -33,18 +32,25 @@ function LoginPage() {
 
     try {
       // send request to server
-      const res = await axios.post('/api/auth/login', data)
-      const { user, message } = res.data
+      const res = await signIn('credentials', { ...data, redirect: false })
+      console.log(res)
 
-      // show success message
-      toast.success(message)
+      if (res?.ok) {
+        // show success message
+        toast.success('Đăng nhập thành công')
 
-      // redirect to home page
-      router.push('/')
+        // redirect to home page
+        router.push('/')
+      }
+
+      if (res?.error) {
+        // show error message
+        toast.error(res.error)
+        setError('usernameOrEmail', { type: 'manual' })
+        setError('password', { type: 'manual' })
+      }
     } catch (err: any) {
-      // show error message
-      setError('usernameOrEmail', { type: 'manual' })
-      setError('password', { type: 'manual' })
+      toast.error(err.response.data.message)
     } finally {
       // reset loading state
       setIsLoading(false)

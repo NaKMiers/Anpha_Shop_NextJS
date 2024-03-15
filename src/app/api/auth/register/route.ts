@@ -1,7 +1,6 @@
-import { user } from './../../../../libs/reducers/userReducer'
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
-import brcypt from 'bcrypt'
+import { signIn } from 'next-auth/react'
 import { NextRequest, NextResponse } from 'next/server'
 
 // connect to database
@@ -28,16 +27,14 @@ export async function POST(req: NextRequest) {
     const newUser = new UserModel({ username, email, password })
     await newUser.save()
 
-    // get the user has just registed from database
-    const userRegistered: any = await UserModel.findOne({
-      $or: [{ email: newUser.email }, { username: newUser.username }],
-    }).lean()
+    // get resgisted user
+    const registeredUser: any = await UserModel.findOne({ email }).lean()
 
-    // exclude password from userRegistered
-    const { password: hiddenPassword, ...otherDetails } = userRegistered
+    // exclude password from user object
+    const { password: _, ...user } = registeredUser
 
     // return home page
-    return NextResponse.json({ user: otherDetails, message: 'Đăng ký thành công' }, { status: 200 })
+    return NextResponse.json({ user, message: 'Đăng ký thành công' }, { status: 200 })
   } catch (err) {
     return NextResponse.json(err, { status: 500 })
   }

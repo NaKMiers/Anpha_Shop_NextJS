@@ -224,6 +224,7 @@ function AllOrderPage() {
             type='date'
             className='bg-white rounded-lg px-3 h-[40px] text-dark outline-none font-semibold cursor-pointer'
             value={new Date().toISOString().split('T')[0]}
+            onChange={() => {}}
           />
         </div>
         <button className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'>
@@ -242,20 +243,22 @@ function AllOrderPage() {
       <div className='bg-white rounded-medium shadow-medium p-21'>
         <table className='w-full text-center text-[14px]' cellPadding={4}>
           <thead className='border-b border-slate-300'>
-            <th>
-              <input type='checkbox' className='size-4' />
-            </th>
-            <th>Date(d/m/y)</th>
-            <th>Code</th>
-            <th>Status</th>
-            <th>Email</th>
-            <th>UserId</th>
-            <th>Total</th>
-            <th>Voucher</th>
-            <th>Quantity</th>
-            <th>Method</th>
-            <th>Last updated(d/m/y)</th>
-            <th>-</th>
+            <tr>
+              <th>
+                <input type='checkbox' className='size-4' />
+              </th>
+              <th>Date(d/m/y)</th>
+              <th>Code</th>
+              <th>Status</th>
+              <th>Email</th>
+              <th>UserId</th>
+              <th>Total</th>
+              <th>Voucher</th>
+              <th>Quantity</th>
+              <th>Method</th>
+              <th>Last updated(d/m/y)</th>
+              <th>-</th>
+            </tr>
           </thead>
 
           <tbody className='align-top'>
