@@ -36,7 +36,7 @@ function AdminMenu() {
         {adminLinks.map((item: any) => (
           <li className='flex items-center gap-2' key={item.title}>
             <Link
-              className='flex flex-grow items-center gap-2 group rounded-lg p-2 common-transition hover:bg-secondary'
+              className='flex flex-grow items-center gap-2 group rounded-lg p-2 common-transition hover:bg-secondary font-body tracking-wide'
               href={item.links[0].href}>
               <item.icon size={18} className='' />
               {item.links[0].title}

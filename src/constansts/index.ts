@@ -116,11 +116,11 @@ export const adminLinks = [
     links: [
       {
         title: 'All Flash Sales',
-        href: '/admin/flashsale/all',
+        href: '/admin/flash-sale/all',
       },
       {
         title: 'Add Flash Sale',
-        href: '/admin/flashsale/add',
+        href: '/admin/flash-sale/add',
       },
     ],
   },

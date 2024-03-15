@@ -7,20 +7,10 @@ import { Menu, MenuItem } from '@mui/material'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import {
-  FaArrowLeft,
-  FaCalendar,
-  FaCaretDown,
-  FaCheck,
-  FaCheckSquare,
-  FaFilter,
-  FaPlus,
-  FaSearch,
-} from 'react-icons/fa'
-import { FaX } from 'react-icons/fa6'
-import { IoMdCode } from 'react-icons/io'
+import { FaArrowLeft, FaCalendar, FaCaretDown, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
+import { MdEdit } from 'react-icons/md'
 
-function AllAccountsPage() {
+function AllVouchersPage() {
   const [isShowFilter, setIsShowFilter] = useState(false)
   const [price, setPrice] = useState(9000)
 
@@ -92,11 +82,11 @@ function AllAccountsPage() {
           Admin
         </Link>
         <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>
-          All Accounts
+          All Vouchers
         </div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/account/add'>
+          href='/admin/voucher/add'>
           <FaPlus />
           Add
         </Link>
@@ -109,16 +99,81 @@ function AllAccountsPage() {
       <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
           <div className='flex flex-col'>
+            <label>
+              <span className='font-bold'>Min Total: </span>
+              <span>{formatPrice(35000)}</span> - <span>{formatPrice(60000)}</span>
+            </label>
+            <input
+              className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              type='range'
+              min='9000'
+              max='2000000'
+              value={price}
+              onChange={e => setPrice(Number(e.target.value))}
+            />
+          </div>
+          <div className='flex flex-col'>
+            <label>
+              <span className='font-bold'>Max Reduce: </span>
+              <span>{formatPrice(10000)}</span> - <span>{formatPrice(15000)}</span>
+            </label>
+            <input
+              className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              type='range'
+              min='9000'
+              max='2000000'
+              value={price}
+              onChange={e => setPrice(Number(e.target.value))}
+            />
+          </div>
+          <div className='flex gap-2'>
             <Input
-              className='max-w-[450px]'
-              id='search'
-              label='Search'
+              id='beginFrom'
+              label='Begin From'
               disabled={false}
               register={register}
               errors={errors}
               required
-              type='text'
-              icon={FaSearch}
+              type='date'
+              icon={FaCalendar}
+              className='w-full'
+            />
+
+            <Input
+              id='beginTo'
+              label='Begin To'
+              disabled={false}
+              register={register}
+              errors={errors}
+              required
+              type='date'
+              icon={FaCalendar}
+              className='w-full'
+            />
+          </div>
+          <div className='flex gap-2'>
+            <Input
+              id='expireFrom'
+              label='Expire From'
+              disabled={false}
+              register={register}
+              errors={errors}
+              required
+              type='date'
+              icon={FaCalendar}
+              className='w-full'
+            />
+
+            <Input
+              id='expireTo'
+              label='Expire To'
+              disabled={false}
+              register={register}
+              errors={errors}
+              required
+              type='date'
+              icon={FaCalendar}
+              className='w-full'
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>
@@ -260,14 +315,14 @@ function AllAccountsPage() {
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
+            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
+              Mark
+            </button>
+            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
+              Unmark
+            </button>
             <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
               Delete
-            </button>
-            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
-              Activate
-            </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Deactivate
             </button>
           </div>
         </div>
@@ -275,74 +330,77 @@ function AllAccountsPage() {
 
       <div className='pt-9' />
 
-      <div className='bg-white rounded-medium shadow-medium p-21'>
-        <table className='w-full text-center text-[14px]' cellPadding={4}>
-          <thead className='border-b border-slate-300'>
-            <tr>
-              <th className='w-12 text-start'>
-                <input type='checkbox' className='size-4' />
-              </th>
-              <th>Active</th>
-              <th>Type</th>
-              <th>Info</th>
-              <th>
-                <span>Begin</span>
-                <br />
-                <span>(d/m/y)</span>
-              </th>
-              <th>
-                <span>Begin</span>
-                <br />
-                <span>(d/m/y)</span>
-              </th>
-              <th>
-                <span>Begin</span>
-                <br />
-                <span>(d/m/y)</span>
-              </th>
-              <th>Using Users</th>
-              <th>-</th>
-            </tr>
-          </thead>
+      <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div
+            className='relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg bg-white'
+            key={index}>
+            <div>
+              <div className='flex items-center gap-3'>
+                <p title='code' className='font-semibold text-secondary'>
+                  GUDJOB
+                </p>
+                <p title='percentage' className='font-semibold text-primary'>
+                  -10%
+                </p>
+                <p className='font-semibold text-slate-400' title='timesLeft'>
+                  1000
+                </p>
+              </div>
 
-          <tbody className='align-top'>
-            {Array.from({ length: 10 }).map((_, index) => (
-              <tr key={index}>
-                <td className='text-start'>
-                  <input type='checkbox' className='size-4 cursor-pointer' />
-                </td>
-                <td className='flex justify-center'>
-                  <FaCheckSquare size={18} className='text-green-500' />
-                  {/* <FaX size={18} className='text-red-500' /> */}
-                </td>
-                <td className='text-start'>
-                  Grammarly Premium (1 Tháng) - Đánh Bại Lỗi Ngữ Pháp Với Ưu Đãi Đặc Biệt
-                </td>
-                <td className='text-start'>
-                  ✅Email: bowczarski@springfieldcollege.edu ✅Password: Gram@123
-                </td>
-                <td>14/03/2024 14:38:02</td>
-                <td>21/03/2024 14:38:02</td>
-                <td>30/04/2024 21:38:00</td>
-                <td>nhatanhdiep@yahoo.com </td>
-                <td className='flex flex-col gap-2'>
-                  <Link href='/admin/order/' className='underline text-sky-400'>
-                    Edit
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-red-400'>
-                    Delete
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-red-400'>
-                    Deactive
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <div className='flex items-center gap-3'>
+                <p>
+                  <span className='font-semibold'>Min Total: </span>
+                  {formatPrice(50000)}
+                </p>
+                <p>
+                  <span className='font-semibold'>Max Reduce: </span>
+                  {formatPrice(15000)}
+                </p>
+              </div>
+
+              <div className='flex items-center gap-3'>
+                <p title='Begin (d/m/y)'>08/12/2023 13:23:00</p>
+                {' - '}
+                <p title='Expire (d/m/y)'>08/12/2023 13:23:00</p>
+              </div>
+
+              <p>
+                <span className='font-semibold'>Desc: </span>
+                <span>Giảm 10% cho đơn hàng tối thiểu 50.000 Giảm tối đa 20.000</span>
+              </p>
+
+              <p>
+                <span className='font-semibold'>Own: </span>Nguyen Pi Pi
+              </p>
+
+              <p>
+                <span className='font-semibold'>Used users: </span>
+                <span className='text-green-500'>diwas118151@gmail.com</span>
+              </p>
+
+              <p className='font-semibold'>
+                <span>Accumulated: </span>
+                <span className='text-rose-700'>{formatPrice(0)}</span>
+              </p>
+            </div>
+
+            <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+              <button className='block group'>
+                <FaCheck size={18} className='group-hover:scale-125 common-transition text-green-500' />
+              </button>
+              <Link href='/admin/product/:id/edit' className='block group'>
+                <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+              </Link>
+              <button className='block group'>
+                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
-export default AllAccountsPage
+export default AllVouchersPage
