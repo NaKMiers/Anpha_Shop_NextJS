@@ -1,6 +1,7 @@
 'use client'
 
 import Pagination from '@/components/Pagination'
+import TagItem from '@/components/admin/TagItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/loadingReducer'
 import { ITag } from '@/models/TagModel'
@@ -12,24 +13,19 @@ import toast from 'react-hot-toast'
 import { FaArrowLeft, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 
+type EditingValues = {
+  _id: string
+  title: string
+}
+
 function AllTagsPage() {
   const dispatch = useAppDispatch()
   const [tags, setTags] = useState<ITag[]>([])
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
-
-  // Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      orderCode: '',
-    },
-  })
+  const [editingTags, setEditingTags] = useState<string[]>([])
+  const [loadingTags, setLoadingTags] = useState<string[]>([])
+  const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // get all tags
   useEffect(() => {
@@ -50,6 +46,22 @@ function AllTagsPage() {
     }
     getAllTags()
   }, [dispatch])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedTags(prev => (prev.length === tags.length ? [] : tags.map(tag => tag._id)))
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [tags])
 
   // delete tag
   const handleDeleteTags = useCallback(async (ids: string[]) => {
@@ -92,7 +104,36 @@ function AllTagsPage() {
     }
   }, [])
 
-  const handleFilter = useCallback(() => {}, [])
+  // handle submit edit tag
+  const handleSaveEditingTags = useCallback(async (editingValues: any[]) => {
+    setLoadingTags(editingValues.map(t => t._id))
+
+    try {
+      // senred request to server
+      const res = await axios.put(`/api/admin/tag/edit`, { editingValues })
+      const { editedTags, message } = res.data
+
+      console.log('editedTags: ', editedTags)
+
+      // update tags from state
+      setTags(prev =>
+        prev.map(t =>
+          editedTags.map((t: ITag) => t._id).includes(t._id)
+            ? editedTags.find((cat: ITag) => cat._id === t._id)
+            : t
+        )
+      )
+      setEditingTags(prev => prev.filter(id => !editedTags.map((t: any) => t._id).includes(id)))
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    } finally {
+      setLoadingTags([])
+    }
+  }, [])
 
   return (
     <div className='w-full'>
@@ -128,8 +169,7 @@ function AllTagsPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>
@@ -137,9 +177,7 @@ function AllTagsPage() {
             Select
           </div>
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
@@ -151,6 +189,25 @@ function AllTagsPage() {
               onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
               {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
+            {editingTags.length ? (
+              <>
+                {/* Save Many Button */}
+                <button
+                  className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
+                  onClick={() => handleSaveEditingTags(editingValues)}>
+                  Save All
+                </button>
+                {/* Cancel Many Button */}
+                <button
+                  className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
+                  onClick={() => {
+                    setEditingTags([])
+                    setEditingValues([])
+                  }}>
+                  Cancel
+                </button>
+              </>
+            ) : null}
             <button
               className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
               onClick={() => handleFeatureTags(selectedTags, true)}>
@@ -176,54 +233,20 @@ function AllTagsPage() {
 
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>
         {tags.map(tag => (
-          <div
-            className={`flex flex-col p-4 rounded-lg shadow-lg text-dark cursor-pointer common-transition ${
-              selectedTags.includes(tag._id) ? 'bg-sky-100 scale-105' : 'bg-white'
-            }`}
-            key={tag.slug}
-            onClick={() =>
-              setSelectedTags(prev =>
-                prev.includes(tag._id) ? prev.filter(id => id !== tag._id) : [...prev, tag._id]
-              )
-            }>
-            <p className='font-semibold' title={tag.slug}>
-              {tag.title}
-            </p>
-            <p className='font-semibold mb-2'>
-              <span>Pr.Q:</span> <span className='text-primary'>{tag.productQuantity}</span>
-            </p>
-
-            <div className='flex self-end border border-dark rounded-lg px-3 py-2 gap-4'>
-              <Link
-                href='/admin/tag/:id/edit'
-                className='block group'
-                onClick={e => e.stopPropagation()}>
-                <MdEdit size={18} className='group-hover:scale-125 common-transition' />
-              </Link>
-              <button
-                className='block group'
-                onClick={e => {
-                  e.stopPropagation()
-                  handleDeleteTags([tag._id])
-                }}>
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-              <button
-                className='block group'
-                title='isFeatured'
-                onClick={e => {
-                  e.stopPropagation()
-                  handleFeatureTags([tag._id], !tag.isFeatured)
-                }}>
-                <FaCheck
-                  size={18}
-                  className={`group-hover:scale-125 common-transition ${
-                    tag.isFeatured ? 'text-green-500' : 'text-slate-300'
-                  }`}
-                />
-              </button>
-            </div>
-          </div>
+          <TagItem
+            data={tag}
+            loadingTags={loadingTags}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            editingTags={editingTags}
+            setEditingTags={setEditingTags}
+            editingValues={editingValues}
+            setEditingValues={setEditingValues}
+            handleSaveEditingTags={handleSaveEditingTags}
+            handleDeleteTags={handleDeleteTags}
+            handleFeatureTags={handleFeatureTags}
+            key={tag._id}
+          />
         ))}
       </div>
     </div>

@@ -1,24 +1,19 @@
 'use client'
 
-import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
-import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading, setPageLoading } from '@/libs/reducers/loadingReducer'
+import CategoryItem from '@/components/admin/CategoryItem'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/loadingReducer'
 import { ICategory } from '@/models/CategoryModel'
-import { Menu, MenuItem } from '@mui/material'
 import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaCaretDown, FaCheck, FaFilter, FaPlus, FaSave, FaTrash } from 'react-icons/fa'
-import { FaCircleUser } from 'react-icons/fa6'
-import { MdCancel, MdEdit, MdTextFormat } from 'react-icons/md'
-import { RiDonutChartFill } from 'react-icons/ri'
+import { FaArrowLeft, FaFilter, FaPlus } from 'react-icons/fa'
 
 type EditingValues = {
   _id: string
-  value: string
+  title: string
 }
 
 function AllCategoriesPage() {
@@ -28,20 +23,6 @@ function AllCategoriesPage() {
   const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [loadingCategories, setLoadingCategories] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
-
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
-
-  // Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      orderCode: '',
-    },
-  })
 
   // get all categories
   useEffect(() => {
@@ -62,6 +43,24 @@ function AllCategoriesPage() {
     }
     getAllTags()
   }, [dispatch])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedCategories(prev =>
+          prev.length === categories.length ? [] : categories.map(category => category._id)
+        )
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [categories])
 
   // delete category
   const handleDeleteCategories = useCallback(async (ids: string[]) => {
@@ -90,8 +89,6 @@ function AllCategoriesPage() {
     }
   }, [])
 
-  console.log(editingValues)
-
   // handle submit edit category
   const handleSaveEditingCategories = useCallback(async (editingValues: any[]) => {
     setLoadingCategories(editingValues.map(cate => cate._id))
@@ -101,17 +98,14 @@ function AllCategoriesPage() {
       const res = await axios.put(`/api/admin/category/edit`, { editingValues })
       const { editedCategories, message } = res.data
 
-      console.log(
-        'editedCategories: ',
-        editedCategories.map((cate: any) => cate._id)
-      )
+      console.log('editedCategories: ', editedCategories)
 
       // update categories from state
       setCategories(prev =>
         prev.map(cate =>
-          editedCategories.map((cate: any) => cate._id).includes(cate._id)
-            ? editedCategories.find((cat: any) => cat._id === cate._id)
-            : prev
+          editedCategories.map((cate: ICategory) => cate._id).includes(cate._id)
+            ? editedCategories.find((cat: ICategory) => cat._id === cate._id)
+            : cate
         )
       )
       setEditingCategories(prev =>
@@ -127,8 +121,6 @@ function AllCategoriesPage() {
       setLoadingCategories([])
     }
   }, [])
-
-  const handleFilter = useCallback(() => {}, [])
 
   return (
     <div className='w-full'>
@@ -166,8 +158,7 @@ function AllCategoriesPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>
@@ -175,9 +166,7 @@ function AllCategoriesPage() {
             Select
           </div>
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
@@ -200,7 +189,7 @@ function AllCategoriesPage() {
                 <button
                   className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
                   onClick={() => handleSaveEditingCategories(editingValues)}>
-                  Save
+                  Save All
                 </button>
                 {/* Cancel Many Button */}
                 <button
@@ -230,118 +219,19 @@ function AllCategoriesPage() {
       {/* Category List */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>
         {categories.map(category => (
-          <div
-            className={`flex flex-col p-4 rounded-lg shadow-lg text-dark cursor-pointer common-transition ${
-              selectedCategories.includes(category._id) ? 'bg-sky-100 scale-105' : 'bg-white'
-            }`}
-            onClick={() =>
-              setSelectedCategories(prev =>
-                prev.includes(category._id)
-                  ? prev.filter(id => id !== category._id)
-                  : [...prev, category._id]
-              )
-            }
-            key={category.slug}>
-            {editingCategories.includes(category._id) ? (
-              <input
-                className='w-full mb-2 rounded-lg py-2 px-4 text-dark outline-none border border-slate-300'
-                type='text'
-                value={editingValues.find(cate => cate._id === category._id)?.value}
-                onClick={e => e.stopPropagation()}
-                disabled={loadingCategories.includes(category._id)}
-                onChange={e =>
-                  setEditingValues(prev =>
-                    prev.map(cate =>
-                      cate._id === category._id
-                        ? { _id: category._id, value: e.target.value.trim() }
-                        : cate
-                    )
-                  )
-                }
-              />
-            ) : (
-              <p className='font-semibold' title={category.slug}>
-                {category.title}
-              </p>
-            )}
-
-            <p className='font-semibold mb-2'>
-              <span>Pr.Q:</span> <span className='text-primary'>{category.productQuantity}</span>
-            </p>
-
-            <div className='flex self-end border overflow-x-auto max-w-full border-dark rounded-lg px-3 py-2 gap-4'>
-              {/* Edit Button */}
-              {!editingCategories.includes(category._id) && (
-                <button
-                  className='block group'
-                  onClick={e => {
-                    e.stopPropagation()
-                    setEditingCategories(prev =>
-                      !prev.includes(category._id) ? [...prev, category._id] : prev
-                    )
-                    setEditingValues(prev =>
-                      !prev.some(cate => cate._id === category._id)
-                        ? [...prev, { _id: category._id, value: category.title }]
-                        : prev
-                    )
-                  }}>
-                  <MdEdit size={18} className='group-hover:scale-125 common-transition' />
-                </button>
-              )}
-              {/* Save Button */}
-              {editingCategories.includes(category._id) && (
-                <button
-                  className='block group'
-                  onClick={e => {
-                    e.stopPropagation()
-                    handleSaveEditingCategories([editingValues.find(cate => cate._id === category._id)])
-                  }}
-                  disabled={loadingCategories.includes(category._id)}>
-                  {loadingCategories.includes(category._id) ? (
-                    <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-                  ) : (
-                    <FaSave
-                      size={18}
-                      className='group-hover:scale-125 common-transition text-green-500'
-                    />
-                  )}
-                </button>
-              )}
-              {/* Cancel Button */}
-              {editingCategories.includes(category._id) && !loadingCategories.includes(category._id) && (
-                <button
-                  className='block group'
-                  onClick={e => {
-                    e.stopPropagation()
-                    setEditingCategories(prev =>
-                      prev.includes(category._id) ? prev.filter(id => id !== category._id) : prev
-                    )
-                    setEditingValues(prev => prev.filter(cate => cate._id !== category._id))
-                  }}>
-                  <MdCancel
-                    size={20}
-                    className='group-hover:scale-125 common-transition text-slate-300'
-                  />
-                </button>
-              )}
-              {/* Delete Button */}
-              {!editingCategories.includes(category._id) && (
-                <button
-                  className='block group'
-                  onClick={e => {
-                    e.stopPropagation()
-                    handleDeleteCategories([category._id])
-                  }}
-                  disabled={loadingCategories.includes(category._id)}>
-                  {loadingCategories.includes(category._id) ? (
-                    <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-                  ) : (
-                    <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
+          <CategoryItem
+            data={category}
+            loadingCategories={loadingCategories}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            editingCategories={editingCategories}
+            setEditingCategories={setEditingCategories}
+            editingValues={editingValues}
+            setEditingValues={setEditingValues}
+            handleSaveEditingCategories={handleSaveEditingCategories}
+            handleDeleteCategories={handleDeleteCategories}
+            key={category._id}
+          />
         ))}
       </div>
     </div>

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         message: `Tag ${updatedTags
           .map(tag => `"${tag.title}"`)
           .reverse()
-          .join(', ')} has been featured`,
+          .join(', ')} ${updatedTags.length > 1 ? 'have' : 'has'} been featured`,
       },
       { status: 200 }
     )

@@ -312,7 +312,7 @@ function AllUsersPage() {
               Delete
             </button>
             <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Remove flashsales
+              Remove Flashsales
             </button>
             <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
               Activate
@@ -342,7 +342,7 @@ function AllUsersPage() {
               />
 
               {/* Infomation */}
-              <div className='absolute -top-3 -left-2 text-yellow-300 bg-secondary px-2 py-px rounded-lg font-semibold'>
+              <div className='absolute -top-1 -left-2 text-xs text-yellow-300 bg-secondary px-2 py-px rounded-lg font-semibold'>
                 {user.role}
               </div>
               <p

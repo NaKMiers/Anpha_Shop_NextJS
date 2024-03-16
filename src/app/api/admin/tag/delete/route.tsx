@@ -27,7 +27,7 @@ export async function DELETE(req: NextRequest) {
         message: `Tag ${deletedTags
           .map(tag => `"${tag.title}"`)
           .reverse()
-          .join(', ')} has been deleted`,
+          .join(', ')} ${deletedTags.length > 1 ? 'have' : 'has'} been deleted`,
       },
       { status: 200 }
     )

@@ -1,25 +1,25 @@
 import { connectDatabase } from '@/config/databse'
-import CategoryModel from '@/models/CategoryModel'
+import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Connect to database
 connectDatabase()
 
-// [PUT]: /admin/categories/edit
+// [PUT]: /api/admin/tag/edit
 export async function PUT(req: NextRequest) {
-  console.log('- Edit Categories -')
+  console.log('- Edit Tags -')
 
-  // get category values to edit
+  // get tag values to edit
   const { editingValues } = await req.json()
   console.log(editingValues)
 
   try {
-    const editedCategories = []
+    const editedTags = []
 
     // Loop through each editing value
     for (let editValue of editingValues) {
-      // Update the category with the corresponding id
-      const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      // Update the tag with the corresponding id
+      const updatedTag = await TagModel.findByIdAndUpdate(
         editValue._id,
         {
           $set: {
@@ -28,12 +28,12 @@ export async function PUT(req: NextRequest) {
         },
         { new: true }
       )
-      editedCategories.push(updatedCategory)
+      editedTags.push(updatedTag)
     }
 
     return NextResponse.json({
-      editedCategories,
-      message: `Edited Categories: ${editedCategories.map(cate => cate.title).join(', ')}`,
+      editedTags,
+      message: `Edited Tags: ${editedTags.map(t => t.title).join(', ')}`,
     })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })

@@ -6,29 +6,29 @@ import { NextRequest, NextResponse } from 'next/server'
 // Connect to database
 connectDatabase()
 
-// [DELETE]: /admin/tag/delete
+// [DELETE]: /admin/category/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Categories - ')
 
-  // get tag id to delete
+  // get category id to delete
   const { ids } = await req.json()
   console.log(ids)
 
   try {
-    // get delete tags
+    // get delete categories
     const deletedCategories = await CategoryModel.find({ _id: { $in: ids } }).lean()
 
-    // delete tag from database
+    // delete category from database
     await CategoryModel.deleteMany({ _id: { $in: ids } })
 
     // return response
     return NextResponse.json(
       {
         deletedCategories,
-        message: `Tag ${deletedCategories
-          .map(tag => `"${tag.title}"`)
+        message: `Category ${deletedCategories
+          .map(cate => `"${cate.title}"`)
           .reverse()
-          .join(', ')} has been deleted`,
+          .join(', ')} ${deletedCategories.length > 1 ? 'have' : 'has'} been deleted`,
       },
       { status: 200 }
     )
