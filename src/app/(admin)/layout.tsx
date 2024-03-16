@@ -5,7 +5,7 @@ import '../globals.scss'
 import Header from '@/components/Header'
 import StoreProvider from '@/libs/StoreProvider'
 import { getServerSession } from 'next-auth'
-import Loading from '@/components/Loading'
+import PageLoading from '@/components/PageLoading'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -37,7 +37,7 @@ export default async function AdminLayout({
           <Header isStatic />
 
           <AdminMenu />
-          <Loading />
+          <PageLoading />
 
           <main className='px-21 py-20'>{children}</main>
         </StoreProvider>

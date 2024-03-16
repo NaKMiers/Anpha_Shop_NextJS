@@ -1,0 +1,42 @@
+import { connectDatabase } from '@/config/databse'
+import TagModel from '@/models/TagModel'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Connect to database
+connectDatabase()
+
+// [PATCH]: /admin/tag/feature
+export async function POST(req: NextRequest) {
+  console.log('- Feature Tags - ')
+
+  // get tag id to delete
+  const { ids, value } = await req.json()
+  console.log(ids)
+  console.log(value)
+
+  try {
+    // update tags from database
+    await TagModel.updateMany({ _id: { $in: ids } }, { $set: { isFeatured: value || false } })
+
+    // get updated tags
+    const updatedTags = await TagModel.find({ _id: { $in: ids } }).lean()
+
+    if (!updatedTags.length) {
+      throw new Error('No tag found')
+    }
+
+    // return response
+    return NextResponse.json(
+      {
+        updatedTags,
+        message: `Tag ${updatedTags
+          .map(tag => `"${tag.title}"`)
+          .reverse()
+          .join(', ')} has been featured`,
+      },
+      { status: 200 }
+    )
+  } catch (err: any) {
+    return NextResponse.json({ message: err.message }, { status: 500 })
+  }
+}

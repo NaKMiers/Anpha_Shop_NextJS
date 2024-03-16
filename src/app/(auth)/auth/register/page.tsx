@@ -55,6 +55,7 @@ function ResgiterPage() {
     } catch (err: any) {
       // show error message
       toast.error(err.response.data.message)
+      console.log(err)
     } finally {
       // reset loading state
       setIsLoading(false)

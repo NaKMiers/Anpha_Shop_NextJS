@@ -1,30 +1,21 @@
 'use client'
 
 import Input from '@/components/Input'
-import Pagination from '@/components/Pagination'
-import { Menu, MenuItem } from '@mui/material'
-import { set } from 'mongoose'
+import LoadingButton from '@/components/LoadingButton'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setLoading } from '@/libs/reducers/loadingReducer'
+import axios from 'axios'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import {
-  FaArrowAltCircleLeft,
-  FaArrowLeft,
-  FaCaretDown,
-  FaCheck,
-  FaFilter,
-  FaPlay,
-  FaPlus,
-  FaTrash,
-} from 'react-icons/fa'
-import { FaCircleUser } from 'react-icons/fa6'
-import { MdEdit } from 'react-icons/md'
-import { RiCharacterRecognitionFill, RiCharacterRecognitionLine } from 'react-icons/ri'
+import toast from 'react-hot-toast'
+import { FaArrowLeft, FaPlay } from 'react-icons/fa'
+import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
 function AddTagPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
-  const [isLoading, setIsLoading] = useState(false)
+  // store
+  const dispatch = useAppDispatch()
+  const isLoading = useAppSelector(state => state.loading.isLoading)
   const [isChecked, setIsChecked] = useState(false)
 
   // Form
@@ -32,64 +23,34 @@ function AddTagPage() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
-    setValue,
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      label: '',
+      title: '',
       isFeatured: false,
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
-
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
-
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
-
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
-
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
-
-  const handleFilter = useCallback(() => {}, [])
-
+  // add new tag
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    dispatch(setLoading(true))
+
     console.log(data)
+    try {
+      // add new tag login here
+      const res = await axios.post('/api/admin/tag/add', data)
+
+      // show success message
+      toast.success(res.data.message)
+
+      // clear form
+      reset()
+    } catch (err: any) {
+      toast.error(err.response.data.message)
+      console.log(err)
+    } finally {
+      dispatch(setLoading(false))
+    }
   }
 
   return (
@@ -104,7 +65,7 @@ function AddTagPage() {
         <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>Add Tag</div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/product/add'>
+          href='/admin/tag/all'>
           <FaArrowLeft />
           Back
         </Link>
@@ -114,8 +75,8 @@ function AddTagPage() {
 
       <div>
         <Input
-          id='label'
-          label='Label'
+          id='title'
+          label='Title'
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -130,8 +91,8 @@ function AddTagPage() {
             <FaPlay size={16} className='text-secondary' />
           </div>
           <label
-            className={`bg-white select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg text-green-500 ${
-              isChecked ? 'bg-green-500 text-white' : ''
+            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition ${
+              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
             }`}
             htmlFor='isFeatured'
             onClick={() => setIsChecked(!isChecked)}>
@@ -145,11 +106,12 @@ function AddTagPage() {
           />
         </div>
 
-        <button
+        <LoadingButton
+          className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'>
-          Add
-        </button>
+          text='Add'
+          isLoading={isLoading}
+        />
       </div>
     </div>
   )

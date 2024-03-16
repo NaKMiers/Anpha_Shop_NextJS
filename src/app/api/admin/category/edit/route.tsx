@@ -1,0 +1,40 @@
+import { connectDatabase } from '@/config/databse'
+import CategoryModel from '@/models/CategoryModel'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Connect to database
+connectDatabase()
+
+// [PUT]: /admin/categories/edit
+export async function PUT(req: NextRequest) {
+  console.log('- Edit Categories -')
+
+  // get category ids to edit
+  const { editingValues } = await req.json()
+  console.log(editingValues)
+
+  try {
+    const editedCategories = []
+
+    // Loop through each editing value
+    for (let editValue of editingValues) {
+      // Update the category with the corresponding id
+      const updatedCategory = await CategoryModel.findByIdAndUpdate(editValue._id, {
+        $set: {
+          title: editValue.value,
+        },
+      })
+      editedCategories.push(updatedCategory)
+    }
+
+    return NextResponse.json({
+      editedCategories,
+      message: `Edited Categories: ${editedCategories
+        .map(cate => cate.title)
+        .reverse()
+        .join(', ')}`,
+    })
+  } catch (err: any) {
+    return NextResponse.json({ message: err.message }, { status: 500 })
+  }
+}

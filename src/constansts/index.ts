@@ -48,10 +48,6 @@ export const adminLinks = [
         title: 'All Summaries',
         href: '/admin/summary/all',
       },
-      {
-        title: 'Add Summary',
-        href: '/admin/summary/add',
-      },
     ],
   },
   {

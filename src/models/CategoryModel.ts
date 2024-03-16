@@ -30,7 +30,7 @@ CategorySchema.pre('save', function (next) {
   next()
 })
 
-const CategoryModel = mongoose.model('category', CategorySchema)
+const CategoryModel = mongoose.models.category || mongoose.model('category', CategorySchema)
 export default CategoryModel
 
 export interface ICategory {

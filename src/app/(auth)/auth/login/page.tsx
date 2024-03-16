@@ -51,6 +51,7 @@ function LoginPage() {
       }
     } catch (err: any) {
       toast.error(err.response.data.message)
+      console.log(err)
     } finally {
       // reset loading state
       setIsLoading(false)

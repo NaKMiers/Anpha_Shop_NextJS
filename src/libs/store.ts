@@ -1,12 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './reducers/userReducer'
 import loadingReducer from './reducers/loadingReducer'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       loading: loadingReducer,
-      user: userReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
   })

@@ -24,7 +24,7 @@ const CartItemSchema = new Schema(
   }
 )
 
-const CartItemModel = mongoose.model('cartItem', CartItemSchema)
+const CartItemModel = mongoose.models.cartItem || mongoose.model('cartItem', CartItemSchema)
 export default CartItemModel
 
 export interface ICartItem {

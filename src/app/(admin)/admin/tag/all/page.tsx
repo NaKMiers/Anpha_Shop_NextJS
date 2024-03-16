@@ -1,14 +1,22 @@
 'use client'
 
 import Pagination from '@/components/Pagination'
-import { Menu, MenuItem } from '@mui/material'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { ITag } from '@/models/TagModel'
+import axios from 'axios'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCaretDown, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
+import toast from 'react-hot-toast'
+import { FaArrowLeft, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 
 function AllTagsPage() {
+  const dispatch = useAppDispatch()
+  const [tags, setTags] = useState<ITag[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+
   const [isShowFilter, setIsShowFilter] = useState(false)
   const [price, setPrice] = useState(9000)
 
@@ -23,50 +31,66 @@ function AllTagsPage() {
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // get all tags
+  useEffect(() => {
+    const getAllTags = async () => {
+      dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+      try {
+        // sent request to server
+        const res = await axios.get('/api/admin/tag/all')
+        const { tags } = res.data
+        setTags(tags)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        dispatch(setPageLoading(false))
+      }
+    }
+    getAllTags()
+  }, [dispatch])
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+  // delete tag
+  const handleDeleteTags = useCallback(async (ids: string[]) => {
+    try {
+      // senred request to server
+      const res = await axios.delete(`/api/admin/tag/delete`, { data: { ids } })
+      const { deletedTags, message } = res.data
 
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
+      // remove deleted tags from state
+      setTags(prev => prev.filter(tag => !deletedTags.map((tag: ITag) => tag._id).includes(tag._id)))
 
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    }
+  }, [])
+
+  // feature tag
+  const handleFeatureTags = useCallback(async (ids: string[], value: boolean) => {
+    try {
+      // senred request to server
+      const res = await axios.post(`/api/admin/tag/feature`, { ids, value })
+      const { updatedTags, message } = res.data
+      console.log(updatedTags, message)
+
+      // update tags from state
+      setTags(prev =>
+        prev.map(tag =>
+          updatedTags.map((tag: ITag) => tag._id).includes(tag._id) ? { ...tag, isFeatured: value } : tag
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    }
+  }, [])
 
   const handleFilter = useCallback(() => {}, [])
 
@@ -82,7 +106,7 @@ function AllTagsPage() {
         <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>All Tags</div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/product/add'>
+          href='/admin/tag/add'>
           <FaPlus />
           Add
         </Link>
@@ -109,133 +133,8 @@ function AllTagsPage() {
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Types
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Active
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu3}>
-              Using
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl3}
-              open={open3}
-              onClose={handleCloseMenu3}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu4}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl4}
-              open={open2}
-              onClose={handleCloseMenu4}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
+            {/* Select */}
+            Select
           </div>
           <div className='flex justify-end md:justify-start items-center'>
             <button
@@ -247,13 +146,26 @@ function AllTagsPage() {
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
-            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+              onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
+              {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
+            </button>
+            <button
+              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+              onClick={() => handleFeatureTags(selectedTags, true)}>
               Mark
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => handleFeatureTags(selectedTags, false)}>
               Unmark
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => {
+                handleDeleteTags(selectedTags)
+              }}>
               Delete
             </button>
           </div>
@@ -263,24 +175,52 @@ function AllTagsPage() {
       <div className='pt-9' />
 
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div className='flex flex-col p-4 rounded-lg shadow-lg bg-white' key={index}>
-            <p className='font-semibold' title='vinh-vien'>
-              Vĩnh Viễn
+        {tags.map(tag => (
+          <div
+            className={`flex flex-col p-4 rounded-lg shadow-lg text-dark cursor-pointer common-transition ${
+              selectedTags.includes(tag._id) ? 'bg-sky-100 scale-105' : 'bg-white'
+            }`}
+            key={tag.slug}
+            onClick={() =>
+              setSelectedTags(prev =>
+                prev.includes(tag._id) ? prev.filter(id => id !== tag._id) : [...prev, tag._id]
+              )
+            }>
+            <p className='font-semibold' title={tag.slug}>
+              {tag.title}
             </p>
             <p className='font-semibold mb-2'>
-              <span>Product Quantity:</span> <span className='text-primary'>1</span>
+              <span>Pr.Q:</span> <span className='text-primary'>{tag.productQuantity}</span>
             </p>
 
-            <div className='flex self-end border border-dark text-dark rounded-lg px-3 py-2 gap-4'>
-              <Link href='/admin/tag/:id/edit' className='block group'>
+            <div className='flex self-end border border-dark rounded-lg px-3 py-2 gap-4'>
+              <Link
+                href='/admin/tag/:id/edit'
+                className='block group'
+                onClick={e => e.stopPropagation()}>
                 <MdEdit size={18} className='group-hover:scale-125 common-transition' />
               </Link>
-              <button className='block group'>
+              <button
+                className='block group'
+                onClick={e => {
+                  e.stopPropagation()
+                  handleDeleteTags([tag._id])
+                }}>
                 <FaTrash size={18} className='group-hover:scale-125 common-transition' />
               </button>
-              <button className='block group'>
-                <FaCheck size={18} className='group-hover:scale-125 common-transition text-green-500' />
+              <button
+                className='block group'
+                title='isFeatured'
+                onClick={e => {
+                  e.stopPropagation()
+                  handleFeatureTags([tag._id], !tag.isFeatured)
+                }}>
+                <FaCheck
+                  size={18}
+                  className={`group-hover:scale-125 common-transition ${
+                    tag.isFeatured ? 'text-green-500' : 'text-slate-300'
+                  }`}
+                />
               </button>
             </div>
           </div>

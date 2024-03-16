@@ -34,7 +34,7 @@ TagSchema.pre('save', function (next) {
   next()
 })
 
-const TagModel = mongoose.model('tag', TagSchema)
+const TagModel = mongoose.models.tag || mongoose.model('tag', TagSchema)
 export default TagModel
 
 export interface ITag {

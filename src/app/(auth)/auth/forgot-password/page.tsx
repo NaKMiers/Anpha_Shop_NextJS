@@ -63,6 +63,7 @@ function ForgotPasswordPage() {
       // show error message
       const { message } = err.response.data
       setError('email', { type: 'manual', message: message })
+      console.log(err)
     } finally {
       // reset loading state
       setIsLoading(false)

@@ -64,7 +64,7 @@ const AccountSchema = new Schema(
   { timestamps: true }
 )
 
-const AccountModel = mongoose.model('account', AccountSchema)
+const AccountModel = mongoose.models.account || mongoose.model('account', AccountSchema)
 export default AccountModel
 
 export interface IAccount {

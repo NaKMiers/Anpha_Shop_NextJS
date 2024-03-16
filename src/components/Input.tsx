@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 interface InputProps {
   label: string
-  icon: React.ElementType
+  icon?: React.ElementType
   className?: string
 
   id: string
@@ -13,6 +13,8 @@ interface InputProps {
   required?: boolean
   register: UseFormRegister<FieldValues>
   errors: FieldErrors
+  options?: any[]
+  rows?: number
 }
 
 function Input({
@@ -24,6 +26,8 @@ function Input({
   errors,
   label,
   icon: Icon,
+  options,
+  rows,
   className,
 }: InputProps) {
   const [isShowPassword, setIsShowPassword] = useState(false)
@@ -35,33 +39,59 @@ function Input({
   return (
     <div className={`${className}`}>
       <div className={`flex`}>
-        <span
-          onClick={type === 'password' ? handleShowPassword : undefined}
-          className={`inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 ${
-            errors[id] ? 'border-rose-400 bg-rose-100' : 'border-slate-200 bg-slate-100'
-          } ${type === 'password' ? 'cursor-pointer' : ''}`}>
-          {type === 'password' ? (
-            isShowPassword ? (
-              <FaEye size={19} className='text-secondary' />
+        {Icon && (
+          <span
+            onClick={type === 'password' ? handleShowPassword : undefined}
+            className={`inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 ${
+              errors[id] ? 'border-rose-400 bg-rose-100' : 'border-slate-200 bg-slate-100'
+            } ${type === 'password' ? 'cursor-pointer' : ''}`}>
+            {type === 'password' ? (
+              isShowPassword ? (
+                <FaEye size={19} className='text-secondary' />
+              ) : (
+                <Icon size={19} className='text-secondary' />
+              )
             ) : (
               <Icon size={19} className='text-secondary' />
-            )
-          ) : (
-            <Icon size={19} className='text-secondary' />
-          )}
-        </span>
+            )}
+          </span>
+        )}
         <div
-          className={`relative w-full border-[2px] border-l-0 rounded-tr-lg rounded-br-lg bg-white ${
-            errors[id] ? 'border-rose-400' : 'border-slate-200'
-          }`}>
-          <input
-            id={id}
-            className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
-            placeholder=' '
-            disabled={disabled}
-            type={type === 'password' ? (isShowPassword ? 'text' : 'password') : type}
-            {...register(id, { required })}
-          />
+          className={`relative w-full border-[2px] border-l-0 bg-white ${
+            Icon ? 'rounded-tr-lg rounded-br-lg' : 'rounded-lg'
+          } ${errors[id] ? 'border-rose-400' : 'border-slate-200'}`}>
+          {type === 'textarea' ? (
+            <textarea
+              id={id}
+              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+              placeholder=' '
+              disabled={disabled}
+              rows={rows || 4}
+              {...register(id, { required })}
+            />
+          ) : type === 'select' ? (
+            <select
+              id={id}
+              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+              disabled={disabled}
+              {...register(id, { required })}>
+              {options?.map(option => (
+                <option key={option.label} value={option.value} selected={option.selected}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              id={id}
+              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+              placeholder=' '
+              disabled={disabled}
+              type={type === 'password' ? (isShowPassword ? 'text' : 'password') : type}
+              {...register(id, { required })}
+            />
+          )}
+
           {/* label */}
           <label
             htmlFor={id}

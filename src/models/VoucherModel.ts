@@ -72,7 +72,7 @@ VoucherSchema.pre('save', function (next) {
   next()
 })
 
-const VoucherModel = mongoose.model('voucher', VoucherSchema)
+const VoucherModel = mongoose.models.voucher || mongoose.model('voucher', VoucherSchema)
 export default VoucherModel
 
 export interface IVoucher {

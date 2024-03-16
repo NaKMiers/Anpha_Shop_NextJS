@@ -1,0 +1,37 @@
+import { connectDatabase } from '@/config/databse'
+import TagModel from '@/models/TagModel'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Connect to database
+connectDatabase()
+
+// [DELETE]: /admin/tag/delete
+export async function DELETE(req: NextRequest) {
+  console.log('- Delete Tags - ')
+
+  // get tag id to delete
+  const { ids } = await req.json()
+  console.log(ids)
+
+  try {
+    // get delete tags
+    const deletedTags = await TagModel.find({ _id: { $in: ids } }).lean()
+
+    // delete tag from database
+    await TagModel.deleteMany({ _id: { $in: ids } })
+
+    // return response
+    return NextResponse.json(
+      {
+        deletedTags,
+        message: `Tag ${deletedTags
+          .map(tag => `"${tag.title}"`)
+          .reverse()
+          .join(', ')} has been deleted`,
+      },
+      { status: 200 }
+    )
+  } catch (err: any) {
+    return NextResponse.json({ message: err.message }, { status: 500 })
+  }
+}

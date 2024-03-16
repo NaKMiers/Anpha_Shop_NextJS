@@ -7,7 +7,7 @@ connectDatabase()
 
 // [GET] /admin/user/all
 export async function GET() {
-  console.log('get all users')
+  console.log('- Get All Users -')
 
   try {
     // get all users from database

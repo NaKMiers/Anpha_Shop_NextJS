@@ -45,7 +45,7 @@ const FlashsaleSchema = new Schema(
   { timestamps: true }
 )
 
-const FlashsaleModel = mongoose.model('flashsale', FlashsaleSchema)
+const FlashsaleModel = mongoose.models.flashsale || mongoose.model('flashsale', FlashsaleSchema)
 export default FlashsaleModel
 
 export interface IFlashsale {

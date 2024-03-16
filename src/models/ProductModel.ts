@@ -84,7 +84,7 @@ ProductSchema.pre('save', function (next) {
 })
 
 // create model from schema
-const ProductModel = mongoose.model('product', ProductSchema)
+const ProductModel = mongoose.models.product || mongoose.model('product', ProductSchema)
 export default ProductModel
 
 export interface IProduct {
