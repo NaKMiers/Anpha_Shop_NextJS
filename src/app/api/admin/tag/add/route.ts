@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     await newTag.save()
 
     // stay current page
-    return NextResponse.json({ message: 'Tag has been created' }, { status: 201 })
+    return NextResponse.json({ message: `Tag "${newTag.title}" has been created` }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

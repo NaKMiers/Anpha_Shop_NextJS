@@ -1,111 +1,178 @@
 'use client'
 
 import Input from '@/components/Input'
-import Pagination from '@/components/Pagination'
-import { Menu, MenuItem } from '@mui/material'
-import { set } from 'mongoose'
+import LoadingButton from '@/components/LoadingButton'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setLoading } from '@/libs/reducers/loadingReducer'
+import { IUser } from '@/models/UserModel'
+import axios from 'axios'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
-  FaArrowAltCircleLeft,
   FaArrowCircleLeft,
   FaArrowLeft,
-  FaCaretDown,
-  FaCheck,
-  FaFilter,
   FaMinus,
-  FaPlus,
   FaQuoteRight,
-  FaTrash,
   FaUserEdit,
   FaWindowMaximize,
 } from 'react-icons/fa'
-import { FaPlay, FaPause } from 'react-icons/fa6'
+import { FaPause, FaPlay } from 'react-icons/fa6'
 
-import { FaCircleUser } from 'react-icons/fa6'
-import { MdEdit, MdNumbers } from 'react-icons/md'
-import { RiCharacterRecognitionFill, RiCharacterRecognitionLine } from 'react-icons/ri'
+import { MdNumbers } from 'react-icons/md'
+import { RiCharacterRecognitionLine, RiCheckboxMultipleBlankLine } from 'react-icons/ri'
+import { useDispatch } from 'react-redux'
 
 function AddVoucherPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
+  // store
+  const dispatch = useAppDispatch()
+  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const [isChecked, setIsChecked] = useState(true)
+
+  const [roleUsers, setRoleUsers] = useState<IUser[]>([])
 
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
+    setError,
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       code: '',
       description: '',
-      begin: '',
+      // default begin is today
+      begin: new Date().toISOString().split('T')[0],
       expire: '',
-      minTotal: '',
+      minTotal: 0,
       maxReduce: '',
-      type: 'percentage',
+      type: 'fixed-reduce',
       value: '',
-      timesLeft: '',
+      timesLeft: 1,
       owner: '',
-      isActive: false,
+      isActive: true,
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // get roleUsers, admins, editors
+  useEffect(() => {
+    const getRoleUsers = async () => {
+      try {
+        // send request to server to get role-users
+        const res = await axios.get('/api/admin/user/role-users')
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+        // set roleUsers to state
+        setRoleUsers(res.data.roleUsers)
+        setValue('owner', res.data.roleUsers.find((user: IUser) => user.role === 'admin')._id)
+      } catch (err: any) {
+        console.log(err)
+      }
+    }
+    getRoleUsers()
+  }, [setValue])
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+  // validate form
+  const handleValidate: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      let isValid = true
+      // code >= 5
+      if (data.code.length <= 5) {
+        setError('code', {
+          type: 'manual',
+          message: 'Code must be at least 5 characters',
+        })
+        isValid = false
+      }
 
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
+      // code < 10
+      if (data.code.length > 10) {
+        setError('code', {
+          type: 'manual',
+          message: 'Code must be at most 10 characters',
+        })
+        isValid = false
+      }
 
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
+      // begin < expire when expire is not empty
+      if (data.expire && data.begin > data.expire) {
+        setError('expire', {
+          type: 'manual',
+          message: 'Expire must be greater than begin',
+        })
+        isValid = false
+      }
 
-  const handleFilter = useCallback(() => {}, [])
+      // minTotal >= 0
+      if (data.minTotal < 0) {
+        setError('minTotal', {
+          type: 'manual',
+          message: 'Min total must be >= 0',
+        })
+        isValid = false
+      }
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
-  }
+      // maxReduce >= 0
+      if (data.maxReduce < 0) {
+        setError('maxReduce', {
+          type: 'manual',
+          message: 'Max reduce must be >= 0',
+        })
+        isValid = false
+      }
+
+      // timesLeft >= 0
+      if (data.timesLeft < 0) {
+        setError('timesLeft', {
+          type: 'manual',
+          message: 'Times left must be >= 0',
+        })
+        isValid = false
+      }
+
+      return isValid
+    },
+    [setError]
+  )
+
+  // handle send request to server to add voucher
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      // validate form
+      if (!handleValidate(data)) return
+
+      dispatch(setLoading(true))
+
+      try {
+        // send request to server to add voucher
+        const res = await axios.post('/api/admin/voucher/add', data)
+
+        // show success message
+        toast.success(res.data.message)
+
+        // reset form
+        reset()
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        dispatch(setLoading(false))
+      }
+    },
+    [handleValidate, reset, dispatch]
+  )
+
+  // Enter key to submit
+  useEffect(() => {
+    const handleEnter = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') handleSubmit(onSubmit)()
+    }
+
+    window.addEventListener('keydown', handleEnter)
+    return () => window.removeEventListener('keydown', handleEnter)
+  }, [handleSubmit, onSubmit])
 
   return (
     <div className='max-w-1200 mx-auto'>
@@ -130,18 +197,39 @@ function AddVoucherPage() {
       <div className='pt-5' />
 
       <div>
-        {/* Code */}
-        <Input
-          id='code'
-          label='Code'
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-          type='text'
-          icon={RiCharacterRecognitionLine}
-          className='mb-5'
-        />
+        <div className='b-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
+          {/* Code */}
+          <Input
+            id='code'
+            label='Code'
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+            type='text'
+            icon={RiCharacterRecognitionLine}
+          />
+
+          {/* Owner */}
+          <Input
+            id='owner'
+            label='Owner'
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+            type='select'
+            options={roleUsers.map(user => ({
+              value: user._id,
+              label: `${user.firstname} ${user.lastname} - (${
+                user.role.charAt(0).toUpperCase() + user.role.slice(1)
+              })`,
+              selected: user.role === 'admin',
+            }))}
+            icon={FaUserEdit}
+            className='mb-5'
+          />
+        </div>
 
         {/* Description */}
         <Input
@@ -150,7 +238,6 @@ function AddVoucherPage() {
           disabled={isLoading}
           register={register}
           errors={errors}
-          required
           type='textarea'
           icon={FaQuoteRight}
           className='mb-5'
@@ -165,7 +252,7 @@ function AddVoucherPage() {
             register={register}
             errors={errors}
             required
-            type='text'
+            type='date'
             icon={FaPlay}
           />
 
@@ -176,8 +263,7 @@ function AddVoucherPage() {
             disabled={isLoading}
             register={register}
             errors={errors}
-            required
-            type='text'
+            type='date'
             icon={FaPause}
           />
         </div>
@@ -195,7 +281,7 @@ function AddVoucherPage() {
             icon={FaMinus}
           />
 
-          {/* Expire */}
+          {/* Max Reduce */}
           <Input
             id='maxReduce'
             label='Max Reduce'
@@ -208,18 +294,45 @@ function AddVoucherPage() {
           />
         </div>
 
-        {/* Value */}
-        <Input
-          id='value'
-          label='Value'
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-          type='text'
-          icon={MdNumbers}
-          className='mb-5'
-        />
+        <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
+          {/* Type */}
+          <Input
+            id='type'
+            label='Type'
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            icon={RiCheckboxMultipleBlankLine}
+            type='select'
+            options={[
+              {
+                value: 'fixed-reduce',
+                label: 'Fixed Reduce',
+                selected: true,
+              },
+              {
+                value: 'percentage',
+                label: 'Percentage',
+              },
+              {
+                value: 'fixed',
+                label: 'Fixed',
+              },
+            ]}
+          />
+
+          {/* Value */}
+          <Input
+            id='value'
+            label='Value'
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+            type='text'
+            icon={MdNumbers}
+          />
+        </div>
 
         {/* Times Left */}
         <Input
@@ -231,31 +344,6 @@ function AddVoucherPage() {
           required
           type='number'
           icon={FaArrowCircleLeft}
-          className='mb-5'
-        />
-
-        {/* Owner */}
-        <Input
-          id='owner'
-          label='Owner'
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-          type='select'
-          options={[
-            {
-              value: 'asd@asd.asd',
-              label: 'Admin',
-              selected: false,
-            },
-            {
-              value: 'xxx@xxx.xxx',
-              label: 'User',
-              selected: false,
-            },
-          ]}
-          icon={FaUserEdit}
           className='mb-5'
         />
 
@@ -274,11 +362,12 @@ function AddVoucherPage() {
           <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
         </div>
 
-        <button
+        <LoadingButton
+          className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'>
-          Add
-        </button>
+          text='Add'
+          isLoading={isLoading}
+        />
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
+import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Connect to database
@@ -24,6 +25,7 @@ export async function PUT(req: NextRequest) {
         {
           $set: {
             title: editValue.title,
+            slug: generateSlug(editValue.title),
           },
         },
         { new: true }

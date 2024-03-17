@@ -25,7 +25,7 @@ export default async function UserLayout({
 
   return (
     <html lang='vi'>
-      <body className='text-dark'>
+      <body className='text-dark' suppressHydrationWarning={true}>
         <StoreProvider session={session}>
           <div className='background-app fixed w-screen h-screen top-0 left-0 -z-10' />
           <Toaster

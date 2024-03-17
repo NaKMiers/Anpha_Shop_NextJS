@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
     await newCategory.save()
 
     // stay current page
-    return NextResponse.json({ message: 'Category has been created' }, { status: 201 })
+    return NextResponse.json(
+      { message: `Category "${newCategory.title}" has been created` },
+      { status: 201 }
+    )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

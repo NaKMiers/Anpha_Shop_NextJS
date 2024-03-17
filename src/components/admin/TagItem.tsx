@@ -7,6 +7,8 @@ import { RiDonutChartFill } from 'react-icons/ri'
 
 interface TagItemProps {
   data: ITag
+  loadingTags: string[]
+  className?: string
 
   selectedTags: string[]
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>
@@ -17,13 +19,9 @@ interface TagItemProps {
   editingValues: { _id: string; title: string }[]
   setEditingValues: React.Dispatch<React.SetStateAction<{ _id: string; title: string }[]>>
 
-  loadingTags: string[]
-
   handleSaveEditingTags: (editingValues: { _id: string; value: string }[]) => void
   handleDeleteTags: (ids: string[]) => void
   handleFeatureTags: (ids: string[], isFeatured: boolean) => void
-
-  className?: string
 }
 
 function TagItem({
@@ -39,7 +37,7 @@ function TagItem({
   // values
   editingValues,
   setEditingValues,
-  // function
+  // functions
   handleSaveEditingTags,
   handleDeleteTags,
   handleFeatureTags,
@@ -48,7 +46,7 @@ function TagItem({
     <div
       className={`flex flex-col p-4 rounded-lg shadow-lg text-dark cursor-pointer common-transition ${
         selectedTags.includes(data._id) ? 'bg-sky-100 scale-105' : 'bg-white'
-      }`}
+      } ${className}`}
       key={data._id}
       onClick={() =>
         setSelectedTags(prev =>
@@ -56,6 +54,7 @@ function TagItem({
         )
       }>
       {editingTags.includes(data._id) ? (
+        // Tag Title Input
         <input
           className='w-full mb-2 rounded-lg py-2 px-4 text-dark outline-none border border-slate-300'
           type='text'
@@ -69,16 +68,41 @@ function TagItem({
           }
         />
       ) : (
+        // Tag Title
         <p className='font-semibold' title={data.slug}>
           {data.title}
         </p>
       )}
 
-      <p className='font-semibold mb-2'>
+      {/* Product Quantity */}
+      <p className='font-semibold mb-2' title={`Product Quantity: ${data.productQuantity}`}>
         <span>Pr.Q:</span> <span className='text-primary'>{data.productQuantity}</span>
       </p>
 
       <div className='flex self-end border border-dark rounded-lg px-3 py-2 gap-4'>
+        {/* Feature Button */}
+        {!editingTags.includes(data._id) && (
+          <button
+            className='block group'
+            title='isFeatured'
+            onClick={e => {
+              e.stopPropagation()
+              handleFeatureTags([data._id], !data.isFeatured)
+            }}
+            disabled={loadingTags.includes(data._id)}>
+            {loadingTags.includes(data._id) ? (
+              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+            ) : (
+              <FaCheck
+                size={18}
+                className={`group-hover:scale-125 common-transition ${
+                  data.isFeatured ? 'text-green-500' : 'text-slate-300'
+                }`}
+              />
+            )}
+          </button>
+        )}
+
         {/* Edit Button */}
         {!editingTags.includes(data._id) && (
           <button
@@ -95,6 +119,7 @@ function TagItem({
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
           </button>
         )}
+
         {/* Save Button */}
         {editingTags.includes(data._id) && (
           <button
@@ -111,6 +136,7 @@ function TagItem({
             )}
           </button>
         )}
+
         {/* Cancel Button */}
         {editingTags.includes(data._id) && !loadingTags.includes(data._id) && (
           <button
@@ -125,6 +151,7 @@ function TagItem({
             <MdCancel size={20} className='group-hover:scale-125 common-transition text-slate-300' />
           </button>
         )}
+
         {/* Delete Button */}
         {!editingTags.includes(data._id) && (
           <button
@@ -139,22 +166,6 @@ function TagItem({
             ) : (
               <FaTrash size={18} className='group-hover:scale-125 common-transition' />
             )}
-          </button>
-        )}
-        {!editingTags.includes(data._id) && (
-          <button
-            className='block group'
-            title='isFeatured'
-            onClick={e => {
-              e.stopPropagation()
-              handleFeatureTags([data._id], !data.isFeatured)
-            }}>
-            <FaCheck
-              size={18}
-              className={`group-hover:scale-125 common-transition ${
-                data.isFeatured ? 'text-green-500' : 'text-slate-300'
-              }`}
-            />
           </button>
         )}
       </div>

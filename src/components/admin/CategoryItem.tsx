@@ -6,6 +6,8 @@ import { RiDonutChartFill } from 'react-icons/ri'
 
 interface CategoryItemProps {
   data: ICategory
+  loadingCategories: string[]
+  className?: string
 
   selectedCategories: string[]
   setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>
@@ -16,12 +18,8 @@ interface CategoryItemProps {
   editingValues: { _id: string; title: string }[]
   setEditingValues: React.Dispatch<React.SetStateAction<{ _id: string; title: string }[]>>
 
-  loadingCategories: string[]
-
   handleSaveEditingCategories: (editingValues: { _id: string; value: string }[]) => void
   handleDeleteCategories: (ids: string[]) => void
-
-  className?: string
 }
 
 function CategoryItem({
@@ -37,7 +35,7 @@ function CategoryItem({
   // values
   editingValues,
   setEditingValues,
-  // function
+  // functions
   handleSaveEditingCategories,
   handleDeleteCategories,
 }: CategoryItemProps) {
@@ -53,6 +51,7 @@ function CategoryItem({
       }
       key={data._id}>
       {editingCategories.includes(data._id) ? (
+        // Category Title Input
         <input
           className='w-full mb-2 rounded-lg py-2 px-4 text-dark outline-none border border-slate-300'
           type='text'
@@ -68,12 +67,14 @@ function CategoryItem({
           }
         />
       ) : (
+        // Category Title
         <p className='font-semibold' title={data.slug}>
           {data.title}
         </p>
       )}
 
-      <p className='font-semibold mb-2'>
+      {/* Product Quantity */}
+      <p className='font-semibold mb-2' title={`Product Quantity: ${data.productQuantity}`}>
         <span>Pr.Q:</span> <span className='text-primary'>{data.productQuantity}</span>
       </p>
 
@@ -94,6 +95,7 @@ function CategoryItem({
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
           </button>
         )}
+
         {/* Save Button */}
         {editingCategories.includes(data._id) && (
           <button
@@ -110,6 +112,7 @@ function CategoryItem({
             )}
           </button>
         )}
+
         {/* Cancel Button */}
         {editingCategories.includes(data._id) && !loadingCategories.includes(data._id) && (
           <button
@@ -124,6 +127,7 @@ function CategoryItem({
             <MdCancel size={20} className='group-hover:scale-125 common-transition text-slate-300' />
           </button>
         )}
+
         {/* Delete Button */}
         {!editingCategories.includes(data._id) && (
           <button

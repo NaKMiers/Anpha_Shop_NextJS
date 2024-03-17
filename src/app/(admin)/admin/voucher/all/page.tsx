@@ -2,17 +2,29 @@
 
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
+import VoucherItem from '@/components/admin/VoucherItem'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { IVoucher } from '@/models/VoucherModel'
 import { formatPrice } from '@/utils/formatNumber'
-import { Menu, MenuItem } from '@mui/material'
+import { formatTime } from '@/utils/formatTime'
+import axios from 'axios'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCalendar, FaCaretDown, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
+import toast from 'react-hot-toast'
+import { FaArrowLeft, FaCalendar, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 
+export type VoucherWithOwner = IVoucher & { owner: { firstname: string; lastname: string } }
+
 function AllVouchersPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
+  // store
+  const dispatch = useAppDispatch()
+
+  const [vouchers, setVouchers] = useState<VoucherWithOwner[]>([])
+  const [selectedVouchers, setSelectedVouchers] = useState<string[]>([])
+  const [loadingVouchers, setLoadingVouchers] = useState<string[]>([])
 
   // Form
   const {
@@ -25,52 +37,93 @@ function AllVouchersPage() {
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // get all vouchers
+  useEffect(() => {
+    dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+    const getAllVouchers = async () => {
+      try {
+        const res = await axios.get('/api/admin/voucher/all')
+        setVouchers(res.data.vouchers)
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+        console.log(res.data)
+      } catch (err: any) {
+        console.log(err)
+      } finally {
+        dispatch(setPageLoading(false))
+      }
+    }
+    getAllVouchers()
+  }, [dispatch])
 
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedVouchers(prev =>
+          prev.length === vouchers.length ? [] : vouchers.map(voucher => voucher._id)
+        )
+      }
+    }
 
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
 
-  const handleFilter = useCallback(() => {}, [])
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [vouchers])
+
+  // activate voucher
+  const handleActivateVouchers = useCallback(async (ids: string[], value: boolean) => {
+    try {
+      // senred request to server
+      const res = await axios.post(`/api/admin/voucher/activate`, { ids, value })
+      const { updatedVouchers, message } = res.data
+      console.log(updatedVouchers, message)
+
+      // update vouchers from state
+      setVouchers(prev =>
+        prev.map(voucher =>
+          updatedVouchers.map((voucher: VoucherWithOwner) => voucher._id).includes(voucher._id)
+            ? { ...voucher, active: value }
+            : voucher
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    }
+  }, [])
+
+  // delete voucher
+  const handleDeleteVouchers = useCallback(async (ids: string[]) => {
+    setLoadingVouchers(ids)
+
+    try {
+      // senred request to server
+      const res = await axios.delete(`/api/admin/voucher/delete`, { data: { ids } })
+      const { deletedVouchers, message } = res.data
+
+      // remove deleted vouchers from state
+      setVouchers(prev =>
+        prev.filter(
+          voucher => !deletedVouchers.map((voucher: IVoucher) => voucher._id).includes(voucher._id)
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    } finally {
+      setLoadingVouchers([])
+    }
+  }, [])
 
   return (
     <div className='w-full'>
@@ -108,8 +161,8 @@ function AllVouchersPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={() => {}}
             />
           </div>
           <div className='flex flex-col'>
@@ -122,8 +175,8 @@ function AllVouchersPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={() => {}}
             />
           </div>
           <div className='flex gap-2'>
@@ -176,152 +229,41 @@ function AllVouchersPage() {
               className='w-full'
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Types
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Active
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu3}>
-              Using
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl3}
-              open={open3}
-              onClose={handleCloseMenu3}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu4}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl4}
-              open={open2}
-              onClose={handleCloseMenu4}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-          </div>
+          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
-            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
-              Mark
+            {/* Select All Button */}
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+              onClick={() =>
+                setSelectedVouchers(selectedVouchers.length > 0 ? [] : vouchers.map(tag => tag._id))
+              }>
+              {selectedVouchers.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Unmark
+            {/* Activate Many Button */}
+            <button
+              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+              onClick={() => handleActivateVouchers(selectedVouchers, true)}>
+              Activate
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
+            {/* Deactivate Many Button */}
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => handleActivateVouchers(selectedVouchers, false)}>
+              Deactivate
+            </button>
+            {/* Delete Many Button */}
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => {
+                handleDeleteVouchers(selectedVouchers)
+              }}>
               Delete
             </button>
           </div>
@@ -331,72 +273,16 @@ function AllVouchersPage() {
       <div className='pt-9' />
 
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div
-            className='relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg bg-white'
-            key={index}>
-            <div>
-              <div className='flex items-center gap-3'>
-                <p title='code' className='font-semibold text-secondary'>
-                  GUDJOB
-                </p>
-                <p title='percentage' className='font-semibold text-primary'>
-                  -10%
-                </p>
-                <p className='font-semibold text-slate-400' title='timesLeft'>
-                  1000
-                </p>
-              </div>
-
-              <div className='flex items-center gap-3'>
-                <p>
-                  <span className='font-semibold'>Min Total: </span>
-                  {formatPrice(50000)}
-                </p>
-                <p>
-                  <span className='font-semibold'>Max Reduce: </span>
-                  {formatPrice(15000)}
-                </p>
-              </div>
-
-              <div className='flex items-center gap-3'>
-                <p title='Begin (d/m/y)'>08/12/2023 13:23:00</p>
-                {' - '}
-                <p title='Expire (d/m/y)'>08/12/2023 13:23:00</p>
-              </div>
-
-              <p>
-                <span className='font-semibold'>Desc: </span>
-                <span>Giảm 10% cho đơn hàng tối thiểu 50.000 Giảm tối đa 20.000</span>
-              </p>
-
-              <p>
-                <span className='font-semibold'>Own: </span>Nguyen Pi Pi
-              </p>
-
-              <p>
-                <span className='font-semibold'>Used users: </span>
-                <span className='text-green-500'>diwas118151@gmail.com</span>
-              </p>
-
-              <p className='font-semibold'>
-                <span>Accumulated: </span>
-                <span className='text-rose-700'>{formatPrice(0)}</span>
-              </p>
-            </div>
-
-            <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-              <button className='block group'>
-                <FaCheck size={18} className='group-hover:scale-125 common-transition text-green-500' />
-              </button>
-              <Link href='/admin/product/:id/edit' className='block group'>
-                <MdEdit size={18} className='group-hover:scale-125 common-transition' />
-              </Link>
-              <button className='block group'>
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-            </div>
-          </div>
+        {vouchers.map(voucher => (
+          <VoucherItem
+            data={voucher}
+            loadingVouchers={loadingVouchers}
+            selectedVouchers={selectedVouchers}
+            setSelectedVouchers={setSelectedVouchers}
+            handleActivateVouchers={handleActivateVouchers}
+            handleDeleteVouchers={handleDeleteVouchers}
+            key={voucher._id}
+          />
         ))}
       </div>
     </div>

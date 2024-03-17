@@ -74,9 +74,10 @@ function Input({
               id={id}
               className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
               disabled={disabled}
-              {...register(id, { required })}>
-              {options?.map(option => (
-                <option key={option.label} value={option.value} selected={option.selected}>
+              {...register(id, { required })}
+              defaultValue={options?.find(option => option.selected)?.value}>
+              {options?.map((option, index) => (
+                <option key={index} value={option.value}>
                   {option.label}
                 </option>
               ))}

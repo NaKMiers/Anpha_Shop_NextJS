@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/loadingReducer'
 import axios from 'axios'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaArrowLeft, FaPlay } from 'react-icons/fa'
@@ -32,26 +32,39 @@ function AddTagPage() {
   })
 
   // add new tag
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    dispatch(setLoading(true))
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      dispatch(setLoading(true))
 
-    console.log(data)
-    try {
-      // add new tag login here
-      const res = await axios.post('/api/admin/tag/add', data)
+      console.log(data)
+      try {
+        // add new tag login here
+        const res = await axios.post('/api/admin/tag/add', data)
 
-      // show success message
-      toast.success(res.data.message)
+        // show success message
+        toast.success(res.data.message)
 
-      // clear form
-      reset()
-    } catch (err: any) {
-      toast.error(err.response.data.message)
-      console.log(err)
-    } finally {
-      dispatch(setLoading(false))
+        // clear form
+        reset()
+      } catch (err: any) {
+        toast.error(err.response.data.message)
+        console.log(err)
+      } finally {
+        dispatch(setLoading(false))
+      }
+    },
+    [dispatch, reset]
+  )
+
+  // Enter key to submit
+  useEffect(() => {
+    const handleEnter = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') handleSubmit(onSubmit)()
     }
-  }
+
+    window.addEventListener('keydown', handleEnter)
+    return () => window.removeEventListener('keydown', handleEnter)
+  }, [handleSubmit, onSubmit])
 
   return (
     <div className='max-w-1200 mx-auto'>

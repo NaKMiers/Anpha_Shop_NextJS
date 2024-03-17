@@ -17,11 +17,13 @@ type EditingValues = {
 }
 
 function AllCategoriesPage() {
+  // store
   const dispatch = useAppDispatch()
+
   const [categories, setCategories] = useState<ICategory[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [loadingCategories, setLoadingCategories] = useState<string[]>([])
+  const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // get all categories
@@ -183,25 +185,34 @@ function AllCategoriesPage() {
               }>
               {selectedCategories.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            {editingCategories.length ? (
+            {!!editingCategories.filter(id => selectedCategories.includes(id)).length && (
               <>
                 {/* Save Many Button */}
                 <button
                   className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
-                  onClick={() => handleSaveEditingCategories(editingValues)}>
+                  onClick={() =>
+                    handleSaveEditingCategories(
+                      editingValues.filter(value => selectedCategories.includes(value._id))
+                    )
+                  }>
                   Save All
                 </button>
                 {/* Cancel Many Button */}
                 <button
                   className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
                   onClick={() => {
-                    setEditingCategories([])
-                    setEditingValues([])
+                    // cancel editing values are selected
+                    setEditingCategories(
+                      editingCategories.filter(id => !selectedCategories.includes(id))
+                    )
+                    setEditingValues(
+                      editingValues.filter(value => !selectedCategories.includes(value._id))
+                    )
                   }}>
                   Cancel
                 </button>
               </>
-            ) : null}
+            )}
             {/* Delete Many Button */}
             <button
               className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'

@@ -21,6 +21,7 @@ function ResgiterPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FieldValues>({
     defaultValues: {
       usernameOrEmail: '',
@@ -29,6 +30,15 @@ function ResgiterPage() {
   })
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    // check if password and rePassword are the same
+    if (data.password !== data.rePassword) {
+      setError('rePassword', {
+        type: 'manual',
+        message: 'Mật khẩu không trùng khớp',
+      })
+      return
+    }
+
     setIsLoading(true)
     try {
       // register logic here

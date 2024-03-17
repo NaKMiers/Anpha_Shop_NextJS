@@ -9,7 +9,7 @@ connectDatabase()
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Tags - ')
 
-  // get tag id to delete
+  // get tag ids to delete
   const { ids } = await req.json()
   console.log(ids)
 

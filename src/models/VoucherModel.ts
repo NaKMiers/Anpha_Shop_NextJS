@@ -37,6 +37,7 @@ const VoucherSchema = new Schema(
     },
     timesLeft: {
       type: Number,
+      default: 1,
       min: 0,
     },
     value: {
@@ -47,6 +48,7 @@ const VoucherSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
+      required: true,
     },
     usedUsers: [
       {

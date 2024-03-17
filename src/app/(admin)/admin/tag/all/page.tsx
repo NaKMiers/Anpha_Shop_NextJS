@@ -184,40 +184,49 @@ function AllTagsPage() {
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
+            {/* Select All Button */}
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
               onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
               {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            {editingTags.length ? (
+            {!!editingTags.filter(id => selectedTags.includes(id)).length && (
               <>
                 {/* Save Many Button */}
                 <button
                   className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
-                  onClick={() => handleSaveEditingTags(editingValues)}>
+                  onClick={() =>
+                    handleSaveEditingTags(
+                      editingValues.filter(value => selectedTags.includes(value._id))
+                    )
+                  }>
                   Save All
                 </button>
                 {/* Cancel Many Button */}
                 <button
                   className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
                   onClick={() => {
-                    setEditingTags([])
-                    setEditingValues([])
+                    // cancel editing values are selected
+                    setEditingTags(editingTags.filter(id => !selectedTags.includes(id)))
+                    setEditingValues(editingValues.filter(value => !selectedTags.includes(value._id)))
                   }}>
                   Cancel
                 </button>
               </>
-            ) : null}
+            )}
+            {/* Mark Many Button */}
             <button
               className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
               onClick={() => handleFeatureTags(selectedTags, true)}>
               Mark
             </button>
+            {/* Unmark Many Button */}
             <button
               className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
               onClick={() => handleFeatureTags(selectedTags, false)}>
               Unmark
             </button>
+            {/* Delete Many Button */}
             <button
               className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
               onClick={() => {
