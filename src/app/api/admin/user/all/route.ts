@@ -11,7 +11,7 @@ export async function GET() {
 
   try {
     // get all users from database
-    const users = await UserModel.find({})
+    const users = await UserModel.find({}).sort({ createdAt: -1 }).lean()
 
     // return response
     return NextResponse.json({ users }, { status: 200 })

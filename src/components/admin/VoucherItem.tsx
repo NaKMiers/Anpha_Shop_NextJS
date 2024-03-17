@@ -33,7 +33,7 @@ function VoucherItem({
   return (
     <div
       className={`relative flex justify-between items-start gap-2 p-4 rounded-lg text-dark shadow-lg cursor-pointer common-transition ${
-        selectedVouchers.includes(data._id) ? 'bg-sky-100 -translate-y-1' : 'bg-white'
+        selectedVouchers.includes(data._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
       }  ${className}`}
       onClick={() =>
         setSelectedVouchers(prev =>
@@ -94,7 +94,7 @@ function VoucherItem({
 
         {/* Owner */}
         <p>
-          <span className='font-semibold'>Own: </span>
+          <span className='font-semibold'>Owner: </span>
           <span>{data.owner.firstname + ' ' + data.owner.lastname}</span>
         </p>
 
@@ -134,7 +134,11 @@ function VoucherItem({
         </button>
 
         {/* Edit Button Link */}
-        <Link href='/admin/product/:id/edit' className='block group'>
+        <Link
+          href={`/admin/voucher/${data.code}/edit`}
+          target='_blank'
+          className='block group'
+          onClick={e => e.stopPropagation()}>
           <MdEdit size={18} className='group-hover:scale-125 common-transition' />
         </Link>
 

@@ -11,8 +11,10 @@ export async function GET(req: NextRequest) {
 
   try {
     // get all vouchers from database
-    const vouchers = await VoucherModel.find().populate('owner', 'firstname lastname').lean()
-    console.log('voucher: ', vouchers)
+    const vouchers = await VoucherModel.find()
+      .populate('owner', 'firstname lastname')
+      .sort({ createdAt: -1 })
+      .lean()
 
     // return vouchers
     return NextResponse.json({ vouchers, message: 'Get all vouchers successfully' }, { status: 200 })
