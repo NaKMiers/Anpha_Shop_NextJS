@@ -9,7 +9,7 @@ import { ITag } from '@/models/TagModel'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Fragment, use, useCallback, useEffect, useInsertionEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaArrowLeft, FaFile, FaMoneyBillAlt } from 'react-icons/fa'
@@ -27,8 +27,8 @@ function AddVoucherPage() {
   const [tags, setTags] = useState<ITag[]>([])
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [categories, setCategories] = useState<ICategory[]>([])
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [isChecked, setIsChecked] = useState<boolean>(false)
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [isChecked, setIsChecked] = useState<boolean>(true)
 
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [files, setFiles] = useState<File[]>([])
@@ -41,11 +41,11 @@ function AddVoucherPage() {
     setError,
   } = useForm<FieldValues>({
     defaultValues: {
-      title: '',
-      price: '',
+      title: '123',
+      price: '123',
       oldPrice: '',
       description: '',
-      isActive: false,
+      isActive: true,
     },
   })
 
@@ -144,11 +144,12 @@ function AddVoucherPage() {
       formData.append('description', data.description)
       formData.append('isActive', data.isActive)
       formData.append('tags', JSON.stringify(selectedTags))
-      formData.append('categories', JSON.stringify(selectedCategories))
+      formData.append('category', selectedCategory)
       files.forEach(file => formData.append('images', file))
 
       const res = await axios.post('/api/admin/product/add', formData)
       console.log(res.data)
+      console.table(res.data.urls)
       toast.success(res.data.message)
     } catch (err: any) {
       console.log(err)
@@ -284,20 +285,14 @@ function AddVoucherPage() {
             {categories.map(category => (
               <Fragment key={category._id}>
                 <input
-                  onChange={e =>
-                    setSelectedCategories(prev =>
-                      e.target.checked
-                        ? [...prev, category._id]
-                        : prev.filter(cate => cate !== category._id)
-                    )
-                  }
+                  onChange={() => setSelectedCategory(category._id)}
                   hidden
                   type='checkbox'
                   id={category._id}
                 />
                 <label
                   className={`cursor-pointer select-none rounded-lg border border-sky-500 text-sky-500 py-[6px] px-3 common-transition ${
-                    selectedCategories.some(cate => cate === category._id) ? 'bg-sky-500 text-white' : ''
+                    selectedCategory === category._id ? 'bg-sky-500 text-white' : ''
                   }`}
                   htmlFor={category._id}>
                   {category.title}

@@ -1,19 +1,32 @@
 'use client'
 
 import Pagination from '@/components/Pagination'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
+import { ITag } from '@/models/TagModel'
 import { formatPrice } from '@/utils/formatNumber'
-import { Menu, MenuItem } from '@mui/material'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCaretDown, FaEyeSlash, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
+import toast from 'react-hot-toast'
+import { FaArrowLeft, FaEyeSlash, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
 import { FaBoltLightning } from 'react-icons/fa6'
 import { MdEdit } from 'react-icons/md'
 
+export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: ICategory }
+
 function AllProductsPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
+  // hook
+  const dispatch = useAppDispatch()
+  const isPageLoading = useAppSelector(state => state.loading.isPageLoading)
+
+  // states
+  const [products, setProducts] = useState<ProductWithTagsAndCategory[]>([])
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([])
 
   // Form
   const {
@@ -26,52 +39,27 @@ function AllProductsPage() {
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // get all product
+  useEffect(() => {
+    const getAllProducts = async () => {
+      dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+      try {
+        // send request to server to get all products
+        const res = await axios.get('/api/admin/product/all')
+        console.log(res)
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
-
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
-
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
-
-  const handleFilter = useCallback(() => {}, [])
+        // set products to state
+        setProducts(res.data.products)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        dispatch(setPageLoading(false))
+      }
+    }
+    getAllProducts()
+  }, [dispatch])
 
   return (
     <div className='w-full'>
@@ -102,7 +90,7 @@ function AllProductsPage() {
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Price: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -111,14 +99,14 @@ function AllProductsPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={() => {}}
             />
           </div>
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Sold: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -127,14 +115,14 @@ function AllProductsPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={() => {}}
             />
           </div>
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Stock: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -143,143 +131,13 @@ function AllProductsPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={() => {}}
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Types
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Active
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu3}>
-              Using
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl3}
-              open={open3}
-              onClose={handleCloseMenu3}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu4}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl4}
-              open={open2}
-              onClose={handleCloseMenu4}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-          </div>
+          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
@@ -305,68 +163,73 @@ function AllProductsPage() {
       <div className='pt-9' />
 
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {products.map(product => (
           <div
             className='relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg bg-white'
-            key={index}>
+            key={product._id}>
             <div>
               {/* Thumbnails */}
               <Link
                 href='/netflix'
                 className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden'>
                 <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
-                  <Image
-                    className='aspect-video flex-shrink-0 snap-start'
-                    src='/images/youtube-banner.jpg'
-                    height={200}
-                    width={200}
-                    alt='thumbnail'
-                  />
-                  <Image
-                    className='aspect-video flex-shrink-0 snap-start'
-                    src='/images/youtube-banner.jpg'
-                    height={200}
-                    width={200}
-                    alt='thumbnail'
-                  />
+                  {product.images.map((src, index) => (
+                    <Image
+                      key={index}
+                      className='aspect-video flex-shrink-0 snap-start'
+                      src={src}
+                      height={200}
+                      width={200}
+                      alt='thumbnail'
+                    />
+                  ))}
                 </div>
               </Link>
 
               {/* Infomation */}
-              <FaBoltLightning
-                className='absolute -top-1 -left-1 text-yellow-400 animate-bounce'
-                size={22}
-              />
+              {product.flashsale && (
+                <FaBoltLightning
+                  className='absolute -top-1 -left-1 text-yellow-400 animate-bounce'
+                  size={22}
+                />
+              )}
               <p
-                className='inline font-semibold text-[18px] leading-4 font-body tracking-wide'
-                title='netflix-premium-1-tuan-sieu-net-sieu-tien-loi'>
-                Netflix Premium (1 Tuần) - Siêu Nét, Siêu Tiện Lợi
+                className='inline font-semibold text-[18px] mr-2 leading-4 font-body tracking-wide'
+                title={product.title}>
+                {product.title}
               </p>
               <div className='inline-flex items-center flex-wrap gap-2'>
-                <p className='font-semibold text-xl text-primary'>{formatPrice(24000)}</p>
-                <p className='line-through text-slate-500 text-sm'>{formatPrice(260000)}</p>
+                <p className='font-semibold text-xl text-primary'>{formatPrice(product.price)}</p>
+                {product.oldPrice && (
+                  <p className='line-through text-slate-500 text-sm'>{formatPrice(product.oldPrice)}</p>
+                )}
               </div>
               <div className='inline-flex items-center gap-3'>
                 <p>
                   <span className='font-semibold'>Sold:</span>{' '}
-                  <span className='text-green-500'>431</span>
+                  <span className='text-green-500'>{product.sold}</span>
                 </p>
                 <p>
                   <span className='font-semibold'>Stock: </span>
-                  <span className='text-yellow-500'>12</span>
+                  <span className='text-yellow-500'>{product.stock}</span>
                 </p>
               </div>
               <p className='text-slate-500'>
-                <span className='text-dark font-semibold'>Tags:</span> <span>Giải trí</span>,{' '}
-                <span>Xem phim</span>
+                <span className='text-dark font-semibold'>Tags: </span>
+                {product.tags.map((tag: ITag) => (
+                  <span key={tag.slug} className='text-slate-400'>
+                    {tag.title}
+                  </span>
+                ))}
               </p>
               <p className='text-rose-600'>
-                <span className='font-semibold text-dark'>Category:</span> <span>Netflix</span>
+                <span className='font-semibold text-dark'>Category: </span>{' '}
+                <span>{product.category.title}</span>
               </p>
             </div>
 
             <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-              <Link href='/admin/product/:id/edit' className='block group'>
+              <Link href={`/admin/product/${product._id}/edit`} className='block group'>
                 <MdEdit size={18} className='group-hover:scale-125 common-transition' />
               </Link>
               <button className='block group'>
