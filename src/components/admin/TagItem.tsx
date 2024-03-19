@@ -90,16 +90,12 @@ function TagItem({
               handleFeatureTags([data._id], !data.isFeatured)
             }}
             disabled={loadingTags.includes(data._id)}>
-            {loadingTags.includes(data._id) ? (
-              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-            ) : (
-              <FaCheck
-                size={18}
-                className={`group-hover:scale-125 common-transition ${
-                  data.isFeatured ? 'text-green-500' : 'text-slate-300'
-                }`}
-              />
-            )}
+            <FaCheck
+              size={18}
+              className={`group-hover:scale-125 common-transition ${
+                data.isFeatured ? 'text-green-500' : 'text-slate-300'
+              }`}
+            />
           </button>
         )}
 

@@ -46,24 +46,6 @@ function AllCategoriesPage() {
     getAllTags()
   }, [dispatch])
 
-  // keyboard event
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
-        setSelectedCategories(prev =>
-          prev.length === categories.length ? [] : categories.map(category => category._id)
-        )
-      }
-    }
-
-    // Add the event listener
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [categories])
-
   // delete category
   const handleDeleteCategories = useCallback(async (ids: string[]) => {
     setLoadingCategories(ids)
@@ -123,6 +105,31 @@ function AllCategoriesPage() {
       setLoadingCategories([])
     }
   }, [])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Crtl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedCategories(prev =>
+          prev.length === categories.length ? [] : categories.map(category => category._id)
+        )
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default action
+        handleDeleteCategories(selectedCategories)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [categories, selectedCategories, handleDeleteCategories])
 
   return (
     <div className='w-full'>

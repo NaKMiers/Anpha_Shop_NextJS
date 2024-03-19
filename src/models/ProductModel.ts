@@ -78,7 +78,7 @@ const ProductSchema = new Schema(
 // pre-save hook to generate slug from title
 ProductSchema.pre('save', function (next) {
   if (this.isModified('title')) {
-    this.slug = generateSlug(this.title, this._id)
+    this.slug = generateSlug(this.title, this._id.toString())
   }
   next()
 })

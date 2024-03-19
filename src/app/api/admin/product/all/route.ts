@@ -25,8 +25,6 @@ export async function GET() {
       .populate('category')
       .lean()
 
-    console.log('Products:', products)
-
     // return all products
     return NextResponse.json({ products }, { status: 200 })
   } catch (err: any) {

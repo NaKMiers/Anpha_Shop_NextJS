@@ -2,9 +2,11 @@ import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { formatPrice } from '@/utils/formatNumber'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash, FaTrash } from 'react-icons/fa'
 import { FaBoltLightning } from 'react-icons/fa6'
 import { MdEdit } from 'react-icons/md'
@@ -33,9 +35,53 @@ function ProductItem({
   handleActivateProducts,
   handleDeleteProducts,
 }: ProductItemProps) {
+  const [fieldEditing, setFieldEditing] = useState<{ stock: boolean; sold: boolean }>({
+    stock: false,
+    sold: false,
+  })
+  const [fieldValue, setFieldValue] = useState<{ stock: number; sold: number }>({
+    stock: data.stock,
+    sold: data.sold,
+  })
+  const [fieldLoading, setFieldLoading] = useState<{ stock: boolean; sold: boolean }>({
+    stock: false,
+    sold: false,
+  })
+
+  // handle update product property
+  const handleUpdateProductProperty = useCallback(
+    async (id: string, field: 'stock' | 'sold') => {
+      if (fieldValue[field] === data[field]) return
+
+      setFieldLoading(prev => ({ ...prev, [field]: true }))
+
+      try {
+        const res = await axios.patch(`/api/admin/product/${id}/edit-property/${field}`, {
+          value: fieldValue[field],
+        })
+        const { newValue, message } = res.data
+        console.log(newValue)
+
+        // show success message
+        toast.success(message)
+
+        setFieldValue(prev => ({ ...prev, [field]: newValue }))
+        setFieldEditing(prev => ({ ...prev, [field]: false }))
+        data[field] = newValue
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        setFieldLoading(prev => ({ ...prev, [field]: false }))
+      }
+    },
+
+    [data, fieldValue]
+  )
+
   return (
     <div
-      className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
+      className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition overflow-auto ${
         selectedProducts.includes(data._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
       }  ${className}`}
       onClick={() =>
@@ -43,11 +89,11 @@ function ProductItem({
           prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
         )
       }>
-      <div>
+      <div className='flex-grow'>
         {/* Thumbnails */}
         <Link
           href='/netflix'
-          className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden'>
+          className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
           <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
             {data.images.map((src, index) => (
               <Image
@@ -63,41 +109,96 @@ function ProductItem({
         </Link>
 
         {/* Infomation */}
+        {/* Flash sale */}
         {data.flashsale && (
           <FaBoltLightning
             className='absolute -top-1 -left-1 text-yellow-400 animate-bounce'
             size={22}
           />
         )}
+
+        {/* Title */}
         <p
           className='inline font-semibold text-[18px] mr-2 leading-4 font-body tracking-wide'
           title={data.title}>
           {data.title}
         </p>
-        <div className='inline-flex items-center flex-wrap gap-2'>
+
+        {/* Price - Old Price */}
+        <div className='flex items-center flex-wrap gap-2'>
           <p className='font-semibold text-xl text-primary'>{formatPrice(data.price)}</p>
           {data.oldPrice && (
             <p className='line-through text-slate-500 text-sm'>{formatPrice(data.oldPrice)}</p>
           )}
         </div>
-        <div className='inline-flex items-center gap-3'>
-          <p>
-            <span className='font-semibold'>Sold:</span>{' '}
-            <span className='text-green-500'>{data.sold}</span>
-          </p>
-          <p>
-            <span className='font-semibold'>Stock: </span>
-            <span className='text-yellow-500'>{data.stock}</span>
-          </p>
+
+        <div className='flex w-full items-center gap-3'>
+          {/* Sold */}
+          <div
+            className='flex items-center gap-1 cursor-pointer select-none'
+            onDoubleClick={e => {
+              e.stopPropagation()
+              setFieldEditing(prev => ({ ...prev, sold: !prev.sold }))
+              handleUpdateProductProperty(data._id, 'sold')
+            }}
+            onClick={e => e.stopPropagation()}>
+            <span className='font-semibold'>
+              {fieldLoading.sold ? (
+                <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
+              ) : (
+                'Sold:'
+              )}
+            </span>{' '}
+            {fieldEditing.sold ? (
+              <input
+                className='max-w-[40px] px-1 rounded-md border border-green-500 text-green-500 outline-none text-ellipsis'
+                value={fieldValue.sold}
+                onChange={e => setFieldValue(prev => ({ ...prev, sold: +e.target.value }))}
+                disabled={fieldLoading.sold}
+                type='text'
+              />
+            ) : (
+              <span className='text-green-500'>{fieldValue.sold}</span>
+            )}
+          </div>
+
+          {/* Stock */}
+          <div
+            className='flex items-center gap-1 cursor-pointer select-none'
+            onDoubleClick={e => {
+              e.stopPropagation()
+              setFieldEditing(prev => ({ ...prev, stock: !prev.stock }))
+              handleUpdateProductProperty(data._id, 'stock')
+            }}
+            onClick={e => e.stopPropagation()}>
+            <span className='font-semibold'>
+              {fieldLoading.stock ? <RiDonutChartFill size={16} className='animate-spin' /> : 'Stock:'}
+            </span>{' '}
+            {fieldEditing.stock ? (
+              <input
+                className='max-w-[40px] px-1 rounded-md border border-yellow-500 text-yellow-500 outline-none text-ellipsis'
+                value={fieldValue.stock}
+                onChange={e => setFieldValue(prev => ({ ...prev, stock: +e.target.value }))}
+                disabled={fieldLoading.sold}
+                type='text'
+              />
+            ) : (
+              <span className='text-yellow-500'>{fieldValue.stock}</span>
+            )}
+          </div>
         </div>
+
+        {/* Tags */}
         <p className='text-slate-500'>
-          <span className='text-dark font-semibold'>Products: </span>
+          <span className='text-dark font-semibold'>Tags: </span>
           {data.tags.map((tag: ITag) => (
             <span key={tag.slug} className='text-slate-400'>
               {tag.title}
             </span>
           ))}
         </p>
+
+        {/* Category */}
         <p className='text-rose-600'>
           <span className='font-semibold text-dark'>Category: </span> <span>{data.category.title}</span>
         </p>

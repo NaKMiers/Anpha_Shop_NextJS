@@ -30,17 +30,6 @@ function AllProductsPage() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [loadingProducts, setLoadingProducts] = useState<string[]>([])
 
-  // Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      orderCode: '',
-    },
-  })
-
   // get all product
   useEffect(() => {
     const getAllProducts = async () => {
@@ -49,7 +38,6 @@ function AllProductsPage() {
       try {
         // send request to server to get all products
         const res = await axios.get('/api/admin/product/all')
-        console.log(res)
 
         // set products to state
         setProducts(res.data.products)
@@ -62,24 +50,6 @@ function AllProductsPage() {
     }
     getAllProducts()
   }, [dispatch])
-
-  // keyboard event
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
-        setSelectedProducts(prev =>
-          prev.length === products.length ? [] : products.map(product => product._id)
-        )
-      }
-    }
-
-    // Add the event listener
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [products])
 
   // activate product
   const handleActivateProducts = useCallback(async (ids: string[], value: boolean) => {
@@ -134,6 +104,31 @@ function AllProductsPage() {
       setLoadingProducts([])
     }
   }, [])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedProducts(prev =>
+          prev.length === products.length ? [] : products.map(product => product._id)
+        )
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default action
+        handleDeleteProducts(selectedProducts)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [products, selectedProducts, handleDeleteProducts])
 
   return (
     <div className='w-full'>

@@ -56,24 +56,6 @@ function AllVouchersPage() {
     getAllVouchers()
   }, [dispatch])
 
-  // keyboard event
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
-        setSelectedVouchers(prev =>
-          prev.length === vouchers.length ? [] : vouchers.map(voucher => voucher._id)
-        )
-      }
-    }
-
-    // Add the event listener
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [vouchers])
-
   // activate voucher
   const handleActivateVouchers = useCallback(async (ids: string[], value: boolean) => {
     try {
@@ -124,6 +106,31 @@ function AllVouchersPage() {
       setLoadingVouchers([])
     }
   }, [])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedVouchers(prev =>
+          prev.length === vouchers.length ? [] : vouchers.map(voucher => voucher._id)
+        )
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default aconti
+        handleDeleteVouchers(selectedVouchers)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [vouchers, selectedVouchers, handleDeleteVouchers])
 
   return (
     <div className='w-full'>

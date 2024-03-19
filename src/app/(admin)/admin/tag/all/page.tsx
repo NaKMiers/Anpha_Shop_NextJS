@@ -48,24 +48,10 @@ function AllTagsPage() {
     getAllTags()
   }, [dispatch])
 
-  // keyboard event
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
-        setSelectedTags(prev => (prev.length === tags.length ? [] : tags.map(tag => tag._id)))
-      }
-    }
-
-    // Add the event listener
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [tags])
-
   // delete tag
   const handleDeleteTags = useCallback(async (ids: string[]) => {
+    setLoadingTags(ids)
+
     try {
       // senred request to server
       const res = await axios.delete(`/api/admin/tag/delete`, { data: { ids } })
@@ -79,6 +65,8 @@ function AllTagsPage() {
     } catch (err: any) {
       console.log(err)
       toast.error(err.response.data.message)
+    } finally {
+      setLoadingTags([])
     }
   }, [])
 
@@ -135,6 +123,29 @@ function AllTagsPage() {
       setLoadingTags([])
     }
   }, [])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Crtl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedTags(prev => (prev.length === tags.length ? [] : tags.map(tag => tag._id)))
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default aconti
+        handleDeleteTags(selectedTags)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [tags, selectedTags, handleDeleteTags])
 
   return (
     <div className='w-full'>

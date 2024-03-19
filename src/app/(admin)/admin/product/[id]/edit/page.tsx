@@ -5,10 +5,12 @@ import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/loadingReducer'
 import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -18,18 +20,22 @@ import { FaPlay, FaX } from 'react-icons/fa6'
 import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
-function AddVoucherPage() {
+function AddProductPage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.loading.isLoading)
+  const { id } = useParams<{ id: string }>()
+  const router = useRouter()
 
   // states
+  const [product, setProduct] = useState<IProduct | null>(null)
   const [tags, setTags] = useState<ITag[]>([])
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [categories, setCategories] = useState<ICategory[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [isChecked, setIsChecked] = useState<boolean>(true)
 
+  const [originalImages, setOriginalImages] = useState<string[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [files, setFiles] = useState<File[]>([])
 
@@ -38,6 +44,7 @@ function AddVoucherPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
     setError,
     reset,
   } = useForm<FieldValues>({
@@ -49,6 +56,37 @@ function AddVoucherPage() {
       isActive: true,
     },
   })
+
+  // get product by id
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        // send request to server to get product
+        const res = await axios.get(`/api/product/${id}`)
+        const { product, message } = res.data
+
+        // set product to state
+        console.log(res.data)
+        setProduct(product)
+
+        // set value to form
+        setValue('title', product.title)
+        setValue('price', product.price)
+        setValue('oldPrice', product.oldPrice)
+        setValue('description', product.description)
+        setValue('isActive', product.active)
+        setIsChecked(product.active)
+
+        setSelectedTags(product.tags)
+        setSelectedCategory(product.category)
+        setOriginalImages(product.images)
+      } catch (err: any) {
+        console.log('err:', err)
+        toast.error(err.response.data.message)
+      }
+    }
+    getProduct()
+  }, [id, setValue])
 
   // get tags and categories
   useEffect(() => {
@@ -139,7 +177,7 @@ function AddVoucherPage() {
         isValid = false
       }
 
-      if (!files.length) {
+      if (!files.length && !originalImages.length) {
         toast.error('Please select at least 1 image')
         isValid = false
       }
@@ -148,7 +186,7 @@ function AddVoucherPage() {
 
       return isValid
     },
-    [setError, selectedCategory, selectedTags, files]
+    [setError, selectedCategory, selectedTags, files, originalImages]
   )
 
   // send data to server to create new product
@@ -170,20 +208,17 @@ function AddVoucherPage() {
       formData.append('isActive', data.isActive)
       formData.append('tags', JSON.stringify(selectedTags))
       formData.append('category', selectedCategory)
+      formData.append('originalImages', JSON.stringify(originalImages))
       files.forEach(file => formData.append('images', file))
 
-      const res = await axios.post('/api/admin/product/add', formData)
+      const res = await axios.put(`/api/admin/product/${id}/edit`, formData)
       console.log(res.data)
 
       // show success message
       toast.success(res.data.message)
 
-      // reset form
-      setFiles([])
-      imageUrls.forEach(url => URL.revokeObjectURL(url))
-      setImageUrls([])
-      setSelectedTags([])
-      reset()
+      // redirect to product page
+      router.push('/admin/product/all')
     } catch (err: any) {
       console.log(err)
       toast.error(err.response.data.message)
@@ -191,6 +226,8 @@ function AddVoucherPage() {
       dispatch(setLoading(false))
     }
   }
+
+  console.log(imageUrls)
 
   return (
     <div className='max-w-1200 mx-auto'>
@@ -266,6 +303,7 @@ function AddVoucherPage() {
           className='mb-5'
         />
 
+        {/* Active */}
         <div className='flex mb-4'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaPlay size={16} className='text-secondary' />
@@ -295,6 +333,7 @@ function AddVoucherPage() {
                     )
                   }
                   hidden
+                  checked={selectedTags.some(t => t === tag._id)}
                   type='checkbox'
                   id={tag._id}
                 />
@@ -320,6 +359,7 @@ function AddVoucherPage() {
                 <input
                   onChange={() => setSelectedCategory(category._id)}
                   hidden
+                  checked={selectedCategory === category._id}
                   type='checkbox'
                   id={category._id}
                 />
@@ -362,8 +402,19 @@ function AddVoucherPage() {
           </div>
         </div>
 
-        {!!imageUrls.length && (
+        {(!!imageUrls.length || !!originalImages.length) && (
           <div className='flex flex-wrap gap-3 rounded-lg bg-white p-3 mb-5'>
+            {originalImages.map(url => (
+              <div className='relative' key={url}>
+                <Image className='rounded-lg' src={url} height={250} width={250} alt='thumbnail' />
+
+                <button
+                  onClick={() => setOriginalImages(prev => prev.filter(i => i !== url))}
+                  className='absolute top-2 bg-slate-300 p-2 right-2 group hover:bg-dark-100 rounded-lg'>
+                  <FaX size={16} className='text-dark group-hover:text-light common-transition' />
+                </button>
+              </div>
+            ))}
             {imageUrls.map(url => (
               <div className='relative' key={url}>
                 <Image className='rounded-lg' src={url} height={250} width={250} alt='thumbnail' />
@@ -381,7 +432,7 @@ function AddVoucherPage() {
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          text='Add'
+          text='Save'
           isLoading={isLoading}
         />
       </div>
@@ -389,4 +440,4 @@ function AddVoucherPage() {
   )
 }
 
-export default AddVoucherPage
+export default AddProductPage
