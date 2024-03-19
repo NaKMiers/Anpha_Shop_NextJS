@@ -49,7 +49,7 @@ async function uploadFile(file: any, shape?: string) {
   const resizeBuffer = await sharp(buffer).resize(size).toBuffer()
 
   // const fileName = randomFileName()
-  const filename = 'test-' + file.name + '-' + new Date().getTime()
+  const filename = 'test-' + randomFileName()
 
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
@@ -68,8 +68,16 @@ async function uploadFile(file: any, shape?: string) {
 }
 
 async function deleteFile(key: string) {
+  console.log('key', key)
+
+  if (key.startsWith('http')) {
+    key = key.split(
+      `https://${process.env.AWS_BUCKET_NAME!}.s3.${process.env.AWS_BUCKET_REGION!}.amazonaws.com/`
+    )[1]
+  }
+
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.AWS_BUCKET_NAME!,
     Key: key,
   }
 

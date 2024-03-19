@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
+import '@/models/UserModel'
 
 // Connect to database
 connectDatabase()

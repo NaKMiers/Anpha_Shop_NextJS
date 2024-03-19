@@ -39,10 +39,11 @@ function AddVoucherPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      title: '123',
-      price: '123',
+      title: '',
+      price: '',
       oldPrice: '',
       description: '',
       isActive: true,
@@ -75,7 +76,7 @@ function AddVoucherPage() {
     getCategories()
   }, [])
 
-  // remove blob url when component unmount
+  // revoke blob url when component unmount
   useEffect(() => {
     return () => {
       imageUrls.forEach(url => URL.revokeObjectURL(url))
@@ -119,16 +120,35 @@ function AddVoucherPage() {
       // price >= 0
       if (data.price < 0) {
         setError('price', { type: 'manual', message: 'Price must be >= 0' })
+
         isValid = false
       }
 
+      if (data.oldPrice && data.oldPrice < 0) {
+        setError('oldPrice', { type: 'manual', message: 'Old price must be >= 0' })
+        isValid = false
+      }
+
+      if (!selectedTags.length) {
+        toast.error('Please select at least 1 tag')
+        isValid = false
+      }
+
+      if (!selectedCategory) {
+        toast.error('Please select category')
+        isValid = false
+      }
+
+      console.log(isValid)
+
       return isValid
     },
-    [setError]
+    [setError, selectedCategory, selectedTags]
   )
 
   // send data to server to create new product
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    console.log(data)
     if (!handleValidate(data)) return
 
     dispatch(setLoading(true))
@@ -149,8 +169,16 @@ function AddVoucherPage() {
 
       const res = await axios.post('/api/admin/product/add', formData)
       console.log(res.data)
-      console.table(res.data.urls)
+
+      // show success message
       toast.success(res.data.message)
+
+      // reset form
+      setFiles([])
+      imageUrls.forEach(url => URL.revokeObjectURL(url))
+      setImageUrls([])
+      setSelectedTags([])
+      reset()
     } catch (err: any) {
       console.log(err)
       toast.error(err.response.data.message)

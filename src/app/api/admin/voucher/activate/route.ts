@@ -7,7 +7,7 @@ connectDatabase()
 
 // [PATCH]: /admin/voucher/feature
 export async function POST(req: NextRequest) {
-  console.log('- Feature Vouchers - ')
+  console.log('- Activate Vouchers - ')
 
   // get voucher id to delete
   const { ids, value } = await req.json()

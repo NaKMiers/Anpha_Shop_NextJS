@@ -22,7 +22,6 @@ import { FaPause, FaPlay } from 'react-icons/fa6'
 
 import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine, RiCheckboxMultipleBlankLine } from 'react-icons/ri'
-import { useDispatch } from 'react-redux'
 
 function AddVoucherPage() {
   // store

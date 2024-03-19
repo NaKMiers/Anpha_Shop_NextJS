@@ -8,10 +8,8 @@ import { ITag } from '@/models/TagModel'
 import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
-import { MdEdit } from 'react-icons/md'
+import { FaArrowLeft, FaFilter, FaPlus } from 'react-icons/fa'
 
 type EditingValues = {
   _id: string
@@ -19,7 +17,10 @@ type EditingValues = {
 }
 
 function AllTagsPage() {
+  // hook
   const dispatch = useAppDispatch()
+
+  // states
   const [tags, setTags] = useState<ITag[]>([])
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 

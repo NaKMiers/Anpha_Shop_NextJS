@@ -242,22 +242,27 @@ function AllVouchersPage() {
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
               onClick={() =>
-                setSelectedVouchers(selectedVouchers.length > 0 ? [] : vouchers.map(tag => tag._id))
+                setSelectedVouchers(
+                  selectedVouchers.length > 0 ? [] : vouchers.map(voucher => voucher._id)
+                )
               }>
               {selectedVouchers.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
+
             {/* Activate Many Button */}
             <button
               className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
               onClick={() => handleActivateVouchers(selectedVouchers, true)}>
               Activate
             </button>
+
             {/* Deactivate Many Button */}
             <button
               className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
               onClick={() => handleActivateVouchers(selectedVouchers, false)}>
               Deactivate
             </button>
+
             {/* Delete Many Button */}
             <button
               className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'

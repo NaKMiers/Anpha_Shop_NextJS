@@ -1,8 +1,10 @@
 import { connectDatabase } from '@/config/databse'
-import CategoryModel from '@/models/CategoryModel'
+import CategoryModel, { ICategory } from '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import { shuffleArray } from '@/utils'
 import { NextResponse } from 'next/server'
+import '@/models/TagModel'
+import '@/models/FlashsaleModel'
 
 // Connect to database
 connectDatabase()
@@ -22,7 +24,7 @@ export async function GET() {
       .lean()
 
     // get all categories from database
-    let originalCategories = await CategoryModel.find().lean()
+    let originalCategories: ICategory[] = await CategoryModel.find().lean()
     const sequenceCategory = process.env.SEQUENCE_CATEGORIES!.split(' ')
     originalCategories = originalCategories.sort(
       (a, b) =>

@@ -1,6 +1,8 @@
 import { connectDatabase } from '@/config/databse'
 import ProductModel from '@/models/ProductModel'
 import { NextResponse } from 'next/server'
+import '@/models/TagModel'
+import '@/models/CategoryModel'
 
 // Connect to database
 connectDatabase()
@@ -17,11 +19,13 @@ export async function GET() {
 
   try {
     // get all products from database
-    const products = await ProductModel.find({})
+    const products = await ProductModel.find()
       .sort({ createdAt: -1 })
       .populate('tags')
       .populate('category')
       .lean()
+
+    console.log('Products:', products)
 
     // return all products
     return NextResponse.json({ products }, { status: 200 })

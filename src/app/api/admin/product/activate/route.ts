@@ -1,0 +1,44 @@
+import { connectDatabase } from '@/config/databse'
+import ProductModel from '@/models/ProductModel'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Connect to database
+connectDatabase()
+
+// [PATCH]: /admin/product/activate
+export async function POST(req: NextRequest) {
+  console.log('- Activate Products - ')
+
+  // get product id to delete
+  const { ids, value } = await req.json()
+  console.log(ids)
+  console.log(value)
+
+  try {
+    // update products from database
+    await ProductModel.updateMany({ _id: { $in: ids } }, { $set: { active: value || false } })
+
+    // get updated products
+    const updatedProducts = await ProductModel.find({ _id: { $in: ids } }).lean()
+
+    if (!updatedProducts.length) {
+      throw new Error('No product found')
+    }
+
+    // return response
+    return NextResponse.json(
+      {
+        updatedProducts,
+        message: `Product ${updatedProducts
+          .map(product => `"${product.title}"`)
+          .reverse()
+          .join(', ')} ${updatedProducts.length > 1 ? 'have' : 'has'} been ${
+          value ? 'activated' : 'deactivated'
+        }`,
+      },
+      { status: 200 }
+    )
+  } catch (err: any) {
+    return NextResponse.json({ message: err.message }, { status: 500 })
+  }
+}

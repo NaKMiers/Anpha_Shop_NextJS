@@ -1,6 +1,7 @@
 'use client'
 
 import Pagination from '@/components/Pagination'
+import ProductItem from '@/components/admin/ProductItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/loadingReducer'
 import { ICategory } from '@/models/CategoryModel'
@@ -10,7 +11,7 @@ import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaArrowLeft, FaEyeSlash, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
@@ -27,6 +28,7 @@ function AllProductsPage() {
   // states
   const [products, setProducts] = useState<ProductWithTagsAndCategory[]>([])
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
+  const [loadingProducts, setLoadingProducts] = useState<string[]>([])
 
   // Form
   const {
@@ -60,6 +62,78 @@ function AllProductsPage() {
     }
     getAllProducts()
   }, [dispatch])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedProducts(prev =>
+          prev.length === products.length ? [] : products.map(product => product._id)
+        )
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [products])
+
+  // activate product
+  const handleActivateProducts = useCallback(async (ids: string[], value: boolean) => {
+    try {
+      // senred request to server
+      const res = await axios.post(`/api/admin/product/activate`, { ids, value })
+      const { updatedProducts, message } = res.data
+      console.log(updatedProducts, message)
+
+      // update products from state
+      setProducts(prev =>
+        prev.map(product =>
+          updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
+            ? { ...product, active: value }
+            : product
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    }
+  }, [])
+
+  // delete product
+  const handleDeleteProducts = useCallback(async (ids: string[]) => {
+    setLoadingProducts(ids)
+
+    try {
+      // senred request to server
+      const res = await axios.delete(`/api/admin/product/delete`, { data: { ids } })
+      const { deletedProducts, message } = res.data
+
+      // remove deleted products from state
+      setProducts(prev =>
+        prev.filter(
+          product =>
+            !deletedProducts
+              .map((product: ProductWithTagsAndCategory) => product._id)
+              .includes(product._id)
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    } finally {
+      setLoadingProducts([])
+    }
+  }, [])
 
   return (
     <div className='w-full'>
@@ -144,18 +218,60 @@ function AllProductsPage() {
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Delete
+            {/* Select All Button */}
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+              onClick={() =>
+                setSelectedProducts(
+                  selectedProducts.length > 0 ? [] : products.map(product => product._id)
+                )
+              }>
+              {selectedProducts.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Remove flashsales
-            </button>
-            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
-              Activate
-            </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Deactivate
-            </button>
+
+            {/* Activate Many Button */}
+            {/* Only show activate button if at least 1 product is selected and at least 1 selected product is deactive */}
+            {!!selectedProducts.length &&
+              !selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
+                <button
+                  className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+                  onClick={() => handleActivateProducts(selectedProducts, true)}>
+                  Activate
+                </button>
+              )}
+
+            {/* Deactivate Many Button */}
+            {/* Only show deactivate button if at least 1 product is selected and at least 1 selected product is acitve */}
+            {!!selectedProducts.length &&
+              selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
+                <button
+                  className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                  onClick={() => handleActivateProducts(selectedProducts, false)}>
+                  Deactivate
+                </button>
+              )}
+
+            {/* Remove Flash Sale Many Button */}
+            {!!selectedProducts.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteProducts(selectedProducts)
+                }}>
+                Remove Flash Sale
+              </button>
+            )}
+
+            {/* Delete Many Button */}
+            {!!selectedProducts.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteProducts(selectedProducts)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -164,82 +280,17 @@ function AllProductsPage() {
 
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>
         {products.map(product => (
-          <div
-            className='relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg bg-white'
-            key={product._id}>
-            <div>
-              {/* Thumbnails */}
-              <Link
-                href='/netflix'
-                className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden'>
-                <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
-                  {product.images.map((src, index) => (
-                    <Image
-                      key={index}
-                      className='aspect-video flex-shrink-0 snap-start'
-                      src={src}
-                      height={200}
-                      width={200}
-                      alt='thumbnail'
-                    />
-                  ))}
-                </div>
-              </Link>
-
-              {/* Infomation */}
-              {product.flashsale && (
-                <FaBoltLightning
-                  className='absolute -top-1 -left-1 text-yellow-400 animate-bounce'
-                  size={22}
-                />
-              )}
-              <p
-                className='inline font-semibold text-[18px] mr-2 leading-4 font-body tracking-wide'
-                title={product.title}>
-                {product.title}
-              </p>
-              <div className='inline-flex items-center flex-wrap gap-2'>
-                <p className='font-semibold text-xl text-primary'>{formatPrice(product.price)}</p>
-                {product.oldPrice && (
-                  <p className='line-through text-slate-500 text-sm'>{formatPrice(product.oldPrice)}</p>
-                )}
-              </div>
-              <div className='inline-flex items-center gap-3'>
-                <p>
-                  <span className='font-semibold'>Sold:</span>{' '}
-                  <span className='text-green-500'>{product.sold}</span>
-                </p>
-                <p>
-                  <span className='font-semibold'>Stock: </span>
-                  <span className='text-yellow-500'>{product.stock}</span>
-                </p>
-              </div>
-              <p className='text-slate-500'>
-                <span className='text-dark font-semibold'>Tags: </span>
-                {product.tags.map((tag: ITag) => (
-                  <span key={tag.slug} className='text-slate-400'>
-                    {tag.title}
-                  </span>
-                ))}
-              </p>
-              <p className='text-rose-600'>
-                <span className='font-semibold text-dark'>Category: </span>{' '}
-                <span>{product.category.title}</span>
-              </p>
-            </div>
-
-            <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-              <Link href={`/admin/product/${product._id}/edit`} className='block group'>
-                <MdEdit size={18} className='group-hover:scale-125 common-transition' />
-              </Link>
-              <button className='block group'>
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-              <button className='block group'>
-                <FaEyeSlash size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-            </div>
-          </div>
+          <ProductItem
+            data={product}
+            loadingProducts={loadingProducts}
+            // selected
+            selectedProducts={selectedProducts}
+            setSelectedProducts={setSelectedProducts}
+            // functions
+            handleActivateProducts={handleActivateProducts}
+            handleDeleteProducts={handleDeleteProducts}
+            key={product._id}
+          />
         ))}
       </div>
     </div>
