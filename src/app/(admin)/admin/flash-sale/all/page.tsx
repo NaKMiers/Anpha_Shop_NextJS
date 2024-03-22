@@ -2,17 +2,34 @@
 
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
+import FlashSaleItem from '@/components/admin/FlashSaleItem'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { IFlashsale } from '@/models/FlashsaleModel'
+import { IProduct } from '@/models/ProductModel'
 import { formatPrice } from '@/utils/formatNumber'
+import { formatTime } from '@/utils/formatTime'
 import { Menu, MenuItem } from '@mui/material'
+import axios from 'axios'
+import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FaArrowLeft, FaCalendar, FaCaretDown, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 
+export type FlashSaleWithProducts = IFlashsale & { products: IProduct[] }
+
 function AllFlashSalesPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
+  // hook
+  const dispatch = useAppDispatch()
+  const isPageLoading = useAppSelector(state => state.loading.isPageLoading)
+
+  // states
+  const [flashSales, setFlashSales] = useState<FlashSaleWithProducts[]>([])
+  const [selectedFlashSales, setSelectedFlashSales] = useState<string[]>([])
+  const [loadingFlashSales, setLoadingFlashSales] = useState<string[]>([])
 
   // Form
   const {
@@ -25,52 +42,94 @@ function AllFlashSalesPage() {
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // get all flashsales
+  useEffect(() => {
+    const getAllFlashSales = async () => {
+      // set page loading
+      dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+      try {
+        // send request to server to get all flash sales
+        const res = await axios.get('/api/admin/flash-sale/all')
+        console.log('res-flash-sales:', res.data)
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+        // set flash sales to state
+        setFlashSales(res.data.flashSales)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
+    }
 
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
+    getAllFlashSales()
+  }, [dispatch])
 
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
+  // delete voucher
+  const handleDeleteFlashSales = useCallback(
+    async (ids: string[]) => {
+      setLoadingFlashSales(ids)
 
-  const handleFilter = useCallback(() => {}, [])
+      try {
+        console.log(ids)
+        // from selected flash sales, get product ids
+        const productIds = flashSales
+          .filter(flashSale => ids.includes(flashSale._id))
+          .reduce(
+            (acc, flashSale) => [...acc, ...flashSale.products.map(product => product._id)],
+            [] as string[]
+          )
+
+        // send request to server
+        const res = await axios.delete(`/api/admin/flash-sale/delete`, { data: { ids, productIds } })
+        const { deletedFlashSales, message } = res.data
+
+        // remove deleted vouchers from state
+        setFlashSales(prev =>
+          prev.filter(
+            flashSale =>
+              !deletedFlashSales.map((flashSale: IFlashsale) => flashSale._id).includes(flashSale._id)
+          )
+        )
+
+        // show success message
+        toast.success(message)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        setLoadingFlashSales([])
+      }
+    },
+    [flashSales]
+  )
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedFlashSales(prev =>
+          prev.length === flashSales.length ? [] : flashSales.map(voucher => voucher._id)
+        )
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default aconti
+        handleDeleteFlashSales(selectedFlashSales)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [flashSales, selectedFlashSales, handleDeleteFlashSales])
 
   return (
     <div className='w-full'>
@@ -86,7 +145,7 @@ function AllFlashSalesPage() {
         </div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/product/add'>
+          href='/admin/flash-sale/add'>
           <FaPlus />
           Add
         </Link>
@@ -148,197 +207,56 @@ function AllFlashSalesPage() {
               className='w-full'
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Types
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
 
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Active
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
+          {/* Select Filter */}
+          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
 
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu3}>
-              Using
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl3}
-              open={open3}
-              onClose={handleCloseMenu3}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu4}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl4}
-              open={open2}
-              onClose={handleCloseMenu4}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-          </div>
+          {/* Filter Button */}
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
-            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
-              Mark
+            {/* Select All Button */}
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+              onClick={() =>
+                setSelectedFlashSales(
+                  selectedFlashSales.length > 0 ? [] : flashSales.map(flashSale => flashSale._id)
+                )
+              }>
+              {selectedFlashSales.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Unmark
-            </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Delete
-            </button>
+
+            {/* Delete Many Button */}
+            {!!selectedFlashSales.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteFlashSales(selectedFlashSales)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       <div className='pt-9' />
 
-      <div className='grid grid-cols-2 lg:grid-cols-4 gap-21 '>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div className='flex flex-col p-4 rounded-lg shadow-lg bg-white' key={index}>
-            <div className='font-semibold' title='netflix'>
-              <span title='Value' className='font-semibold text-primary mr-2'>
-                {formatPrice(10000)}
-              </span>
-              <span title='Time Type'>loop</span>
-            </div>
-
-            <div className='font-semibold' title='netflix'>
-              <span className='mr-2' title='Type'>
-                fixed-reduce
-              </span>
-              <span className='font-semobold text-secondary' title='duration'>
-                120m
-              </span>
-            </div>
-
-            <div>
-              <span title='Begin (d/m/y)'>01/12/2023 16:33:00</span> {' - '}
-              <span title='Begin (d/m/y)'>01/12/2023 16:33:00</span>
-            </div>
-
-            <p className='font-semibold'>
-              <span>Product Quantity:</span> <span className='text-primary'>9</span>
-            </p>
-
-            <div className='flex self-end border border-dark text-dark rounded-lg px-3 py-2 gap-4'>
-              <Link href='/admin/tag/:id/edit' className='block group'>
-                <MdEdit size={18} className='group-hover:scale-125 common-transition' />
-              </Link>
-              <button className='block group'>
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-            </div>
-          </div>
+      <div className='grid items-start grid-cols-2 lg:grid-cols-3 gap-21 '>
+        {flashSales.map(flashSale => (
+          <FlashSaleItem
+            data={flashSale}
+            loadingFlashSales={loadingFlashSales}
+            selectedFlashSales={selectedFlashSales}
+            setSelectedFlashSales={setSelectedFlashSales}
+            handleDeleteFlashSales={handleDeleteFlashSales}
+            key={flashSale._id}
+          />
         ))}
       </div>
     </div>

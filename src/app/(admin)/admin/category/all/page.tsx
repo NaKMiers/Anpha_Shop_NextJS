@@ -20,6 +20,7 @@ function AllCategoriesPage() {
   // store
   const dispatch = useAppDispatch()
 
+  // states
   const [categories, setCategories] = useState<ICategory[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [loadingCategories, setLoadingCategories] = useState<string[]>([])
@@ -192,6 +193,7 @@ function AllCategoriesPage() {
               }>
               {selectedCategories.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
+
             {!!editingCategories.filter(id => selectedCategories.includes(id)).length && (
               <>
                 {/* Save Many Button */}
@@ -204,6 +206,7 @@ function AllCategoriesPage() {
                   }>
                   Save All
                 </button>
+
                 {/* Cancel Many Button */}
                 <button
                   className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
@@ -220,14 +223,17 @@ function AllCategoriesPage() {
                 </button>
               </>
             )}
+
             {/* Delete Many Button */}
-            <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-              onClick={() => {
-                handleDeleteCategories(selectedCategories)
-              }}>
-              Delete
-            </button>
+            {!!selectedCategories.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteCategories(selectedCategories)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>

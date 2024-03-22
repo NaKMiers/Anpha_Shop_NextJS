@@ -17,10 +17,7 @@ export async function GET() {
     // get all products to show in home page
     const products: any[] = await ProductModel.find({ active: true })
       .populate('tags')
-      .populate({
-        path: 'flashsale',
-        model: 'flashsale',
-      })
+      .populate('flashsale')
       .lean()
 
     // get all categories from database

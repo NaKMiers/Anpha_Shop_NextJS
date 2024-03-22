@@ -22,6 +22,7 @@ function AllVouchersPage() {
   // store
   const dispatch = useAppDispatch()
 
+  // states
   const [vouchers, setVouchers] = useState<VoucherWithOwner[]>([])
   const [selectedVouchers, setSelectedVouchers] = useState<string[]>([])
   const [loadingVouchers, setLoadingVouchers] = useState<string[]>([])
@@ -236,7 +237,11 @@ function AllVouchersPage() {
               className='w-full'
             />
           </div>
+
+          {/* Select Filter */}
           <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
+
+          {/* Filter Button */}
           <div className='flex justify-end md:justify-start items-center'>
             <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
@@ -257,33 +262,40 @@ function AllVouchersPage() {
             </button>
 
             {/* Activate Many Button */}
-            <button
-              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
-              onClick={() => handleActivateVouchers(selectedVouchers, true)}>
-              Activate
-            </button>
+            {selectedVouchers.some(id => !vouchers.find(voucher => voucher._id === id)?.active) && (
+              <button
+                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+                onClick={() => handleActivateVouchers(selectedVouchers, true)}>
+                Activate
+              </button>
+            )}
 
             {/* Deactivate Many Button */}
-            <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-              onClick={() => handleActivateVouchers(selectedVouchers, false)}>
-              Deactivate
-            </button>
+            {selectedVouchers.some(id => vouchers.find(voucher => voucher._id === id)?.active) && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => handleActivateVouchers(selectedVouchers, false)}>
+                Deactivate
+              </button>
+            )}
 
             {/* Delete Many Button */}
-            <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-              onClick={() => {
-                handleDeleteVouchers(selectedVouchers)
-              }}>
-              Delete
-            </button>
+            {!!selectedVouchers.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteVouchers(selectedVouchers)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       <div className='pt-9' />
 
+      {/* MAIN (LIST) */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>
         {vouchers.map(voucher => (
           <VoucherItem

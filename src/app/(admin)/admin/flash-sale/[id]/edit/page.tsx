@@ -9,6 +9,7 @@ import axios from 'axios'
 import { timeStamp } from 'console'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -23,8 +24,11 @@ function AddFlashSalePage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.loading.isLoading)
+  const { id } = useParams<{ id: string }>()
+  const router = useRouter()
 
   // states
+  const [flashSale, setFlashSale] = useState<IProduct | null>(null)
   const [products, setProducts] = useState<IProduct[]>([])
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [timeType, setTimeType] = useState<'loop' | 'once'>('loop')
@@ -34,8 +38,8 @@ function AddFlashSalePage() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
+    getValues,
     setError,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -47,6 +51,36 @@ function AddFlashSalePage() {
       duration: 120,
     },
   })
+
+  // get flash sale by id
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        // send request to server to get product
+        const res = await axios.get(`/api/flash-sale/${id}`)
+        const { flashSale, message } = res.data
+
+        // set product to state
+        console.log(res.data)
+        setFlashSale(flashSale)
+
+        // // set value to form
+        setValue('type', flashSale.type)
+        setValue('value', flashSale.value)
+        setValue('begin', new Date(flashSale.begin).toISOString().split('T')[0])
+        setValue('expire', new Date(flashSale.expire).toISOString().split('T')[0])
+        setValue('duration', flashSale.duration)
+        setValue('timeType', flashSale.timeType)
+        setTimeType(flashSale.timeType)
+
+        setSelectedProducts(flashSale.products.map((product: IProduct) => product._id))
+      } catch (err: any) {
+        console.log('err:', err)
+        toast.error(err.response.data.message)
+      }
+    }
+    getProduct()
+  }, [id, setValue])
 
   // get all products to apply
   useEffect(() => {
@@ -109,12 +143,14 @@ function AddFlashSalePage() {
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
 
+    console.log(data)
+
     // set loading
     dispatch(setLoading(true))
 
     try {
       // send request to server
-      const res = await axios.post('/api/admin/flash-sale/add', {
+      const res = await axios.put(`/api/admin/flash-sale/${id}/edit`, {
         ...data,
         appliedProducts: selectedProducts,
       })
@@ -140,7 +176,7 @@ function AddFlashSalePage() {
           Admin
         </Link>
         <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>
-          Add Flash Sale
+          Edit Flash Sale
         </div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
@@ -239,8 +275,7 @@ function AddFlashSalePage() {
             icon={RiCharacterRecognitionLine}
           />
 
-          {timeType === 'loop' ? (
-            // Duration
+          {timeType === 'loop' && (
             <Input
               id='duration'
               label='Duration'
@@ -251,8 +286,8 @@ function AddFlashSalePage() {
               type='number'
               icon={IoReload}
             />
-          ) : (
-            // Expire
+          )}
+          {timeType === 'once' && (
             <Input
               id='expire'
               label='Expire'
@@ -296,7 +331,7 @@ function AddFlashSalePage() {
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          text='Add'
+          text='Save'
           isLoading={isLoading}
         />
       </div>

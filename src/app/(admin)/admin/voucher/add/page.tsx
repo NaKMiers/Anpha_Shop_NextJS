@@ -28,7 +28,6 @@ function AddVoucherPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.loading.isLoading)
   const [isChecked, setIsChecked] = useState(true)
-
   const [roleUsers, setRoleUsers] = useState<IUser[]>([])
 
   // Form

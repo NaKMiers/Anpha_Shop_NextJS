@@ -184,10 +184,11 @@ function AllTagsPage() {
               value={9000}
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            {/* Select */}
-            Select
-          </div>
+
+          {/* Select Filter */}
+          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
+
+          {/* Filter Button */}
           <div className='flex justify-end md:justify-start items-center'>
             <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
@@ -202,6 +203,7 @@ function AllTagsPage() {
               onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
               {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
+
             {!!editingTags.filter(id => selectedTags.includes(id)).length && (
               <>
                 {/* Save Many Button */}
@@ -226,32 +228,44 @@ function AllTagsPage() {
                 </button>
               </>
             )}
+
             {/* Mark Many Button */}
-            <button
-              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
-              onClick={() => handleFeatureTags(selectedTags, true)}>
-              Mark
-            </button>
+            {!!selectedTags.length &&
+              selectedTags.some(id => !tags.find(tag => tag._id === id)?.isFeatured) && (
+                <button
+                  className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+                  onClick={() => handleFeatureTags(selectedTags, true)}>
+                  Mark
+                </button>
+              )}
+
             {/* Unmark Many Button */}
-            <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-              onClick={() => handleFeatureTags(selectedTags, false)}>
-              Unmark
-            </button>
+            {!!selectedTags.length &&
+              selectedTags.some(id => tags.find(tag => tag._id === id)?.isFeatured) && (
+                <button
+                  className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                  onClick={() => handleFeatureTags(selectedTags, false)}>
+                  Unmark
+                </button>
+              )}
+
             {/* Delete Many Button */}
-            <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-              onClick={() => {
-                handleDeleteTags(selectedTags)
-              }}>
-              Delete
-            </button>
+            {!!selectedTags.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteTags(selectedTags)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       <div className='pt-9' />
 
+      {/* MAIN (LIST) */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>
         {tags.map(tag => (
           <TagItem

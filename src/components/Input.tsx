@@ -11,6 +11,7 @@ interface InputProps {
   type?: string
   disabled?: boolean
   required?: boolean
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
   register: UseFormRegister<FieldValues>
   errors: FieldErrors
   options?: any[]
@@ -25,6 +26,7 @@ function Input({
   register,
   errors,
   label,
+  onChange,
   icon: Icon,
   options,
   rows,
@@ -75,6 +77,7 @@ function Input({
               className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
               disabled={disabled}
               {...register(id, { required })}
+              onChange={onChange}
               defaultValue={options?.find(option => option.selected)?.value}>
               {options?.map((option, index) => (
                 <option key={index} value={option.value}>

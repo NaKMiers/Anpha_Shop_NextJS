@@ -23,7 +23,6 @@ export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: IC
 function AllProductsPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isPageLoading = useAppSelector(state => state.loading.isPageLoading)
 
   // states
   const [products, setProducts] = useState<ProductWithTagsAndCategory[]>([])
@@ -227,7 +226,7 @@ function AllProductsPage() {
             {/* Activate Many Button */}
             {/* Only show activate button if at least 1 product is selected and at least 1 selected product is deactive */}
             {!!selectedProducts.length &&
-              !selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
+              selectedProducts.some(id => !products.find(product => product._id === id)?.active) && (
                 <button
                   className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
                   onClick={() => handleActivateProducts(selectedProducts, true)}>

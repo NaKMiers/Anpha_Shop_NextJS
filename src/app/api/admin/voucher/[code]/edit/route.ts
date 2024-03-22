@@ -13,7 +13,6 @@ export async function PUT(req: NextRequest, { params: { code } }: { params: { co
   console.log('- Edit Voucher -')
 
   // get data to edit
-  const asd = await req.json()
   const {
     code: newCode,
     desc,
@@ -26,9 +25,7 @@ export async function PUT(req: NextRequest, { params: { code } }: { params: { co
     timesLeft,
     owner,
     isActive,
-  } = asd
-
-  console.log('asd', asd)
+  } = await req.json()
 
   try {
     // update voucher
