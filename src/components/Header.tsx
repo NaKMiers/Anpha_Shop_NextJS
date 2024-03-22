@@ -17,7 +17,7 @@ interface HeaderProps {
 
 function Header({ isStatic }: HeaderProps) {
   const { data: session } = useSession()
-  const user: any = session?.user
+  const curUser: any = session?.user
 
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
@@ -55,10 +55,9 @@ function Header({ isStatic }: HeaderProps) {
   const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsOpenMenu(!isOpenMenu)
   }
+
   // close menu
   const handleCloseMenu = () => {}
-
-  console.log()
 
   return (
     <header
@@ -111,11 +110,11 @@ function Header({ isStatic }: HeaderProps) {
             </span>
           </Link>
 
-          {user ? (
+          {curUser ? (
             <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
               <Image
                 className='aspect-square rounded-full'
-                src={user?.avatar || process.env.DEFAULT_AVATAR!}
+                src={curUser?.avatar || process.env.DEFAULT_AVATAR!}
                 width={40}
                 height={40}
                 alt='avatar'
@@ -149,17 +148,21 @@ function Header({ isStatic }: HeaderProps) {
           <li className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
             <Image
               className='aspect-square rounded-full'
-              src='/images/logo.jpg'
+              src={curUser?.avatar || '/images/default-avatar.jpg'}
               height={40}
               width={40}
               alt='avatar'
             />
-            <span className='font-semibold text-xl'>Nguyen Pi Pi</span>
+            <span className='font-semibold text-xl'>
+              {curUser?.authType === 'local'
+                ? curUser?.username
+                : curUser?.firstname + ' ' + curUser?.lastname}
+            </span>
           </li>
 
           <li className='flex items-center gap-1 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
             <span className='font-semibold'>Số dư: </span>
-            <span>{formatPrice(3062922)}</span>
+            <span>{formatPrice(curUser?.balance)}</span>
             <Link
               className='group flex-shrink-0 rounded-full ml-1 border-2 border-primary p-[2px] hover:scale-110 common-transition'
               href='/user/recharge'>
@@ -202,14 +205,18 @@ function Header({ isStatic }: HeaderProps) {
               <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
             </Link>
           </li>
-          <li>
-            <Link
-              href='/admin/order/all'
-              className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-              <FaUserSecret size={18} className='' />
-              <span className='font-body tracking-wide text-[15px] text-primary'>Admin/Order</span>
-            </Link>
-          </li>
+          {curUser?.role !== 'user' && (
+            <li>
+              <Link
+                href='/admin'
+                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                <FaUserSecret size={18} />
+                <span className='font-body tracking-wide text-[15px] text-primary'>
+                  {curUser?.role.toUpperCase()}
+                </span>
+              </Link>
+            </li>
+          )}
           <li>
             <button
               className='flex items-center w-full gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'

@@ -16,6 +16,7 @@ interface InputProps {
   errors: FieldErrors
   options?: any[]
   rows?: number
+  onClick?: (e?: any) => void
 }
 
 function Input({
@@ -30,6 +31,7 @@ function Input({
   icon: Icon,
   options,
   rows,
+  onClick,
   className,
 }: InputProps) {
   const [isShowPassword, setIsShowPassword] = useState(false)
@@ -39,7 +41,7 @@ function Input({
   }, [])
 
   return (
-    <div className={`${className}`}>
+    <div className={`${className}`} onClick={onClick}>
       <div className={`flex`}>
         {Icon && (
           <span

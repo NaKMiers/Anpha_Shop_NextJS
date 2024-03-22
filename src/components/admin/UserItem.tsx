@@ -1,0 +1,252 @@
+import { IUser } from '@/models/UserModel'
+import { formatPrice } from '@/utils/formatNumber'
+import { formatTime } from '@/utils/formatTime'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import React, { useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import { FaPlus, FaPlusCircle, FaTrash } from 'react-icons/fa'
+import { GrUpgrade } from 'react-icons/gr'
+import { HiLightningBolt } from 'react-icons/hi'
+import { RiDonutChartFill } from 'react-icons/ri'
+import Input from '../Input'
+import LoadingButton from '../LoadingButton'
+import toast from 'react-hot-toast'
+import axios from 'axios'
+
+interface UserItemProps {
+  data: IUser
+  loadingUsers: string[]
+  className?: string
+
+  selectedUsers: string[]
+  setSelectedUsers: React.Dispatch<React.SetStateAction<string[]>>
+
+  handleDeleteUsers: (ids: string[]) => void
+}
+
+function UserItem({
+  data,
+  loadingUsers,
+  className,
+  // selected
+  selectedUsers,
+  setSelectedUsers,
+  // functions
+  handleDeleteUsers,
+}: UserItemProps) {
+  // hook
+  const { data: session } = useSession()
+  const curUser: any = session?.user
+  const isCurUser = data._id === curUser?._id
+
+  // states
+  const [isOpenRecharge, setIsOpenRecharge] = useState(false)
+  const [isLoadingRecharge, setIsLoadingRecharge] = useState(false)
+  const [userData, setUserData] = useState<IUser>(data)
+
+  // Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      recharge: '',
+    },
+  })
+
+  // submit recharge form
+  const onSubmit: SubmitHandler<FieldValues> = async formData => {
+    setIsLoadingRecharge(true)
+
+    console.log(formData)
+
+    try {
+      // send request to server
+      const res = await axios.patch(`/api/admin/user/${userData._id}/recharge`, {
+        amount: formData.recharge,
+      })
+      const { user, message } = res.data
+      console.log(res)
+
+      // update user data
+      setUserData(user)
+
+      // show success message
+      toast.success(message)
+
+      // reset
+      reset()
+      setIsOpenRecharge(false)
+    } catch (err: any) {
+      console.log(213213)
+      toast.error(err.response.userData.message)
+    } finally {
+      setIsLoadingRecharge(false)
+    }
+  }
+
+  return (
+    <div
+      className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg common-transition select-none  ${
+        selectedUsers.includes(userData._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
+      } ${!isCurUser ? 'cursor-pointer' : ''} ${className}`}
+      onClick={() =>
+        !isCurUser &&
+        setSelectedUsers(prev =>
+          prev.includes(userData._id) ? prev.filter(id => id !== userData._id) : [...prev, userData._id]
+        )
+      }>
+      <div>
+        {/* Avatar */}
+        <Image
+          className='aspect-square bg-dark-100 float-start mr-3 rounded-md shadow-lg'
+          src={userData.avatar}
+          height={68}
+          width={68}
+          alt='thumbnail'
+        />
+
+        {/* Infomation */}
+        <div className='absolute z-10 -top-2 -left-2 shadow-md text-xs text-yellow-300 bg-secondary px-2 py-[2px] select-none rounded-lg font-body'>
+          {userData.role}
+        </div>
+        <p
+          className='inline font-semibold text-[18px] leading-4 font-body tracking-wide text-secondary'
+          title={userData.email}>
+          {userData.email}
+        </p>
+        <div className='flex items-center gap-2'>
+          <p>
+            <span className='font-semibold'>Balance: </span>
+            <span className='text-green-500'>{formatPrice(userData.balance)}</span>
+          </p>
+          <button
+            className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'
+            onClick={e => e.stopPropagation()}>
+            <FaPlus size={10} className='group-hover:text-primary common-transition' />
+          </button>
+        </div>
+        <p>
+          <span className='font-semibold'>Accumulated: </span>
+          <span>{formatPrice(userData.accumulated)}</span>
+        </p>
+        {userData.username && (
+          <p>
+            <span className='font-semibold'>Username: </span>
+            <span>{userData.username}</span>
+          </p>
+        )}
+        {(userData.firstname || userData.lastname) && (
+          <p>
+            <span className='font-semibold'>Fullname: </span>
+            <span>{userData.firstname + ' ' + userData.lastname}</span>
+          </p>
+        )}
+        {userData.birthday && (
+          <p>
+            <span className='font-semibold'>Birthday: </span>
+            <span>{userData.birthday}</span>
+          </p>
+        )}
+        {userData.phone && (
+          <p>
+            <span className='font-semibold'>Phone: </span>
+            <span>{userData.phone}</span>
+          </p>
+        )}
+        {userData.address && (
+          <p>
+            <span className='font-semibold'>Address: </span>
+            <span>{userData.address}</span>
+          </p>
+        )}
+        {userData.job && (
+          <p>
+            <span className='font-semibold'>Job: </span>
+            <span>{userData.job}</span>
+          </p>
+        )}
+        <p>
+          <span className='font-semibold'>Created At: </span>
+          <span>{formatTime(userData.createdAt)}</span>
+        </p>
+        <p>
+          <span className='font-semibold'>Updated At: </span>
+          <span>{formatTime(userData.updatedAt)}</span>
+        </p>
+      </div>
+
+      {/* Recharge Modal */}
+      {isOpenRecharge && (
+        <div
+          className='absolute z-20 p-21 top-0 left-0 w-full h-full flex items-center justify-center gap-2 rounded-md bg-secondary bg-opacity-80'
+          onClick={e => {
+            e.stopPropagation()
+            setIsOpenRecharge(false)
+          }}>
+          <Input
+            id='recharge'
+            label='Recharge'
+            disabled={isLoadingRecharge}
+            register={register}
+            errors={errors}
+            required
+            type='number'
+            icon={HiLightningBolt}
+            className='w-full shadow-lg'
+            onClick={e => e.stopPropagation()}
+          />
+          <LoadingButton
+            className='px-4 h-[48px] shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+            text='Add'
+            onClick={e => {
+              e.stopPropagation()
+              console.log(213123)
+              handleSubmit(onSubmit)(e)
+            }}
+            isLoading={isLoadingRecharge}
+          />
+        </div>
+      )}
+
+      {!isCurUser && (
+        <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+          {/* Delete Button */}
+          <button
+            className='block group'
+            onClick={e => {
+              e.stopPropagation()
+              handleDeleteUsers([userData._id])
+            }}
+            disabled={loadingUsers.includes(userData._id)}>
+            {loadingUsers.includes(userData._id) ? (
+              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+            ) : (
+              <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+            )}
+          </button>
+
+          {/* Promote User Button */}
+          <button className='block group' onClick={e => e.stopPropagation()}>
+            <GrUpgrade size={18} className='group-hover:scale-125 common-transition' />
+          </button>
+
+          {/* Add Balance Button */}
+          <button
+            className='block group'
+            onClick={e => {
+              e.stopPropagation()
+              setIsOpenRecharge(true)
+            }}>
+            <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default UserItem

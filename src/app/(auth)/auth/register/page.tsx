@@ -39,7 +39,9 @@ function ResgiterPage() {
       return
     }
 
+    // start loading
     setIsLoading(true)
+
     try {
       // register logic here
       const res = await axios.post('/api/auth/register', data)
@@ -67,7 +69,7 @@ function ResgiterPage() {
       toast.error(err.response.data.message)
       console.log(err)
     } finally {
-      // reset loading state
+      // stop loading
       setIsLoading(false)
     }
   }

@@ -2,33 +2,32 @@
 
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
+import UserItem from '@/components/admin/UserItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/loadingReducer'
 import { IUser } from '@/models/UserModel'
 import { formatPrice } from '@/utils/formatNumber'
 import { formatTime } from '@/utils/formatTime'
-import { Menu, MenuItem } from '@mui/material'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import {
-  FaArrowLeft,
-  FaCaretDown,
-  FaFilter,
-  FaPlus,
-  FaPlusCircle,
-  FaSearch,
-  FaTrash,
-} from 'react-icons/fa'
+import toast from 'react-hot-toast'
+import { FaArrowLeft, FaFilter, FaPlus, FaPlusCircle, FaSearch, FaTrash } from 'react-icons/fa'
 import { GrUpgrade } from 'react-icons/gr'
 
 function AllUsersPage() {
+  // hook
+  const { data: session } = useSession()
+  const curUser: any = session?.user
   const dispatch = useAppDispatch()
+
+  // states
   const [users, setUsers] = useState<IUser[]>([])
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([])
+  const [loadingUsers, setLoadingUsers] = useState<string[]>([])
 
   // Form
   const {
@@ -59,52 +58,61 @@ function AllUsersPage() {
     getAllUsers()
   }, [dispatch])
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // delete user
+  const handleDeleteUsers = useCallback(async (ids: string[]) => {
+    setLoadingUsers(ids)
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+    try {
+      // senred request to server
+      const res = await axios.delete(`/api/admin/user/delete`, { data: { ids } })
+      const { deletedUsers, message } = res.data
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+      // remove deleted users from state
+      setUsers(prev =>
+        prev.filter(user => !deletedUsers.map((user: IUser) => user._id).includes(user._id))
+      )
 
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    } finally {
+      setLoadingUsers([])
+    }
+  }, [])
 
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
+  // handle select all users
+  const handleSelectAllUsers = useCallback(() => {
+    setSelectedUsers(
+      selectedUsers.length > 0
+        ? []
+        : users.filter(user => user._id !== curUser?._id).map(user => user._id)
+    )
+  }, [curUser?._id, users, selectedUsers.length])
 
-  const handleFilter = useCallback(() => {}, [])
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        handleSelectAllUsers()
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default aconti
+        handleDeleteUsers(selectedUsers)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [users, selectedUsers, handleDeleteUsers, handleSelectAllUsers])
 
   return (
     <div className='w-full'>
@@ -140,7 +148,7 @@ function AllUsersPage() {
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Balance: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -149,14 +157,14 @@ function AllUsersPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={e => {}}
             />
           </div>
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Accumulated: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -165,161 +173,36 @@ function AllUsersPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={e => {}}
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Types
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Active
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu3}>
-              Using
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl3}
-              open={open3}
-              onClose={handleCloseMenu3}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu4}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl4}
-              open={open2}
-              onClose={handleCloseMenu4}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-          </div>
+          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Delete
+            {/* Select All Button */}
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+              onClick={handleSelectAllUsers}>
+              {selectedUsers.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Remove Flashsales
-            </button>
-            <button className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'>
-              Activate
-            </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Deactivate
-            </button>
+
+            {/* Delete Many Button */}
+            {!!selectedUsers.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  handleDeleteUsers(selectedUsers)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -328,99 +211,16 @@ function AllUsersPage() {
 
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3 items-start'>
         {users.map(user => (
-          <div
-            className='relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg bg-white'
-            key={user._id}>
-            <div>
-              {/* Avatar */}
-              <Image
-                className='aspect-square float-start mr-3 rounded-md shadow-lg'
-                src={user.avatar}
-                height={68}
-                width={68}
-                alt='thumbnail'
-              />
-
-              {/* Infomation */}
-              <div className='absolute -top-1 -left-2 text-xs text-yellow-300 bg-secondary px-2 py-px rounded-lg font-semibold'>
-                {user.role}
-              </div>
-              <p
-                className='inline font-semibold text-[18px] leading-4 font-body tracking-wide text-secondary'
-                title={user.email}>
-                {user.email}
-              </p>
-              <div className='flex items-center gap-2'>
-                <p>
-                  <span className='font-semibold'>Balance: </span>
-                  <span className='text-green-500'>{formatPrice(user.balance)}</span>
-                </p>
-                <button className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'>
-                  <FaPlus size={10} className='group-hover:text-primary common-transition' />
-                </button>
-              </div>
-              <p>
-                <span className='font-semibold'>Accumulated: </span>
-                <span>{formatPrice(user.accumulated)}</span>
-              </p>
-              {user.username && (
-                <p>
-                  <span className='font-semibold'>Username: </span>
-                  <span>{user.username}</span>
-                </p>
-              )}
-              {(user.firstname || user.lastname) && (
-                <p>
-                  <span className='font-semibold'>Fullname: </span>
-                  <span>{user.firstname + ' ' + user.lastname}</span>
-                </p>
-              )}
-              {user.birthday && (
-                <p>
-                  <span className='font-semibold'>Birthday: </span>
-                  <span>{user.birthday}</span>
-                </p>
-              )}
-              {user.phone && (
-                <p>
-                  <span className='font-semibold'>Phone: </span>
-                  <span>{user.phone}</span>
-                </p>
-              )}
-              {user.address && (
-                <p>
-                  <span className='font-semibold'>Address: </span>
-                  <span>{user.address}</span>
-                </p>
-              )}
-              {user.job && (
-                <p>
-                  <span className='font-semibold'>Job: </span>
-                  <span>{user.job}</span>
-                </p>
-              )}
-              <p>
-                <span className='font-semibold'>Created At: </span>
-                <span>{formatTime(user.createdAt)}</span>
-              </p>
-              <p>
-                <span className='font-semibold'>Updated At: </span>
-                <span>{formatTime(user.updatedAt)}</span>
-              </p>
-            </div>
-
-            <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-              <button className='block group'>
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-              <button className='block group'>
-                <GrUpgrade size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-              <button className='block group'>
-                <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
-              </button>
-            </div>
-          </div>
+          <UserItem
+            data={user}
+            loadingUsers={loadingUsers}
+            // selected
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
+            // functions
+            handleDeleteUsers={handleDeleteUsers}
+            key={user._id}
+          />
         ))}
       </div>
     </div>
