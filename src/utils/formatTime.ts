@@ -4,3 +4,8 @@ export const formatTime = (time: string) => {
   // format time using "moment" library consist of day, month, year, hour, minute, second
   return moment(time).format('DD/MM/YYYY HH:mm:ss')
 }
+
+export const formatDate = (time: string) => {
+  // format time using "moment" library consist of day, month, year
+  return time && moment(time).format('DD/MM/YYYY')
+}

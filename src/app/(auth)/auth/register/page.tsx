@@ -5,7 +5,7 @@ import axios from 'axios'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -29,15 +29,56 @@ function ResgiterPage() {
     },
   })
 
+  // validate form
+  const handleValidate: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      let isValid = true
+
+      // username must be at least 6 characters
+      if (data.username.length < 6) {
+        setError('username', {
+          type: 'manual',
+          message: 'Username phải có ít nhất 6 ký tự',
+        })
+        isValid = false
+      }
+
+      // email must be valid
+      if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(data.email)) {
+        setError('email', {
+          type: 'manual',
+          message: 'Email không hợp lệ',
+        })
+        isValid = false
+      }
+
+      // password must be at least 6 characters and contain at least 1 lowercase, 1 uppercase, 1 number
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(data.password)) {
+        setError('password', {
+          type: 'manual',
+          message:
+            'Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hóa, 1 chữ thường, 1 chữ số',
+        })
+        isValid = false
+      }
+
+      // password and rePassword must be the same
+      if (data.password !== data.rePassword) {
+        setError('rePassword', {
+          type: 'manual',
+          message: 'Mật khẩu không trùng khớp',
+        })
+        isValid = false
+      }
+
+      return isValid
+    },
+    [setError]
+  )
+
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    // check if password and rePassword are the same
-    if (data.password !== data.rePassword) {
-      setError('rePassword', {
-        type: 'manual',
-        message: 'Mật khẩu không trùng khớp',
-      })
-      return
-    }
+    // validate form
+    if (!handleValidate(data)) return
 
     // start loading
     setIsLoading(true)

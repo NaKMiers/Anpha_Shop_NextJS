@@ -1,30 +1,41 @@
 'use client'
 
 import Input from '@/components/Input'
+import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading } from '@/libs/reducers/loadingReducer'
 import axios from 'axios'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FaArrowLeft, FaInfo } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa6'
 import { ImClock } from 'react-icons/im'
 
-import { MdAutorenew } from 'react-icons/md'
-import { RiCharacterRecognitionLine } from 'react-icons/ri'
+import { MdAutorenew, MdCategory } from 'react-icons/md'
+import { ProductWithTagsAndCategory } from '../../product/all/page'
+
+export type GroupTypes = {
+  [key: string]: ProductWithTagsAndCategory[]
+}
 
 function AddAccountPage() {
+  // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.loading.isLoading)
   const [isChecked, setIsChecked] = useState(false)
+
+  // states
+  const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
+  const [selectedType, setSelectedType] = useState<string>('')
+
+  console.log('selectedType: ', selectedType)
 
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FieldValues>({
     defaultValues: {
       type: '',
@@ -38,10 +49,54 @@ function AddAccountPage() {
     },
   })
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    dispatch(setLoading(true))
+  // get all types (products)
+  useEffect(() => {
+    const getAllTypes = async () => {
+      try {
+        // send request to server to get all products
+        const res = await axios.get('/api/admin/product/all')
+        const { products } = res.data
 
+        // group product be category.title
+        const groupTypes: GroupTypes = {}
+        products.forEach((product: ProductWithTagsAndCategory) => {
+          if (!groupTypes[product.category.title]) {
+            groupTypes[product.category.title] = []
+          }
+          groupTypes[product.category.title].push(product)
+        })
+
+        console.log('groupTypes: ', groupTypes)
+
+        Object.keys(groupTypes).map(group => {
+          console.log('group: ', group)
+        })
+        setGroupTypes(groupTypes)
+      } catch (err: any) {
+        console.log(err)
+      }
+    }
+    getAllTypes()
+  }, [])
+
+  // validate form
+  const handleValidate: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      let isValid = true
+
+      return isValid
+    },
+    [setError]
+  )
+
+  // send request to server to add product
+  const onSubmit: SubmitHandler<FieldValues> = async data => {
+    if (!handleValidate(data)) return
     console.log(data)
+
+    // // start loading
+    // dispatch(setLoading(true))
+
     // try {
     //   // add new tag login here
     //   const res = await axios.post('/api/admin/tag/add', data)
@@ -49,6 +104,9 @@ function AddAccountPage() {
     // } catch (err: any) {
     // console.log(err)
     //   toast.error(err.message)
+    // } finally {
+    //   // stop loading
+    //   dispatch(setLoading(false))
     // }
   }
 
@@ -76,34 +134,49 @@ function AddAccountPage() {
 
       <div>
         {/* Type */}
-        <Input
-          id='type'
-          label='Type'
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-          type='select'
-          options={[
-            {
-              label: '1',
-              value: '1',
-              selected: true,
-            },
-            {
-              label: '2',
-              value: '2',
-              selected: false,
-            },
-            {
-              label: '3',
-              value: '3',
-              selected: false,
-            },
-          ]}
-          icon={RiCharacterRecognitionLine}
-          className='mb-5'
-        />
+        <div className='mb-5'>
+          <div className={`flex`}>
+            <span
+              className={`inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 ${
+                errors.type ? 'border-rose-400 bg-rose-100' : 'border-slate-200 bg-slate-100'
+              }`}>
+              <MdCategory size={19} className='text-secondary' />
+            </span>
+            <div
+              className={`relative w-full border-[2px] border-l-0 bg-white rounded-tr-lg rounded-br-lg ${
+                errors.type ? 'border-rose-400' : 'border-slate-200'
+              }`}>
+              {/* <select
+                id='type'
+                className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+                disabled={isLoading}
+                {...register('type', { required: true })}
+                onChange={e => setSelectedType(e.target.value)}>
+                {Object.keys(groupTypes)?.map(group => (
+                  <optgroup label={group.category} key={group.category}>
+                    {group.products?.map(product => (
+                      <option value={product._id} key={product._id}>
+                        {product.title}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select> */}
+
+              {/* label */}
+              <label
+                htmlFor='type'
+                className={`absolute rounded-md text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer ${
+                  errors.type ? 'text-rose-400' : 'text-dark'
+                }`}>
+                Tye
+              </label>
+            </div>
+          </div>
+          {errors.type?.message && (
+            <span className='text-sm text-rose-400'>{errors.type?.message?.toString()}</span>
+          )}
+        </div>
 
         {/* Information */}
         <Input
@@ -192,9 +265,12 @@ function AddAccountPage() {
           <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
         </div>
 
-        <button
+        <LoadingButton
+          className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'></button>
+          text='Add'
+          isLoading={isLoading}
+        />
       </div>
     </div>
   )

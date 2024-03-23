@@ -120,7 +120,7 @@ function Header({ isStatic }: HeaderProps) {
                 alt='avatar'
               />
               <div className='text-[18px] font-body hover:underline underline-offset-2'>
-                {formatPrice(2140980)}
+                {formatPrice(curUser?.balance)}
               </div>
               <IoChevronDown size={22} className='common-transition hover:scale-125' />
             </div>

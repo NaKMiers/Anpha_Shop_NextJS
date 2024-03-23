@@ -31,7 +31,7 @@ const UserSchema = new Schema(
       },
       validate: {
         validator: function (value: string) {
-          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(value)
+          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(value)
         },
         message: 'Mật khẩu không hợp lệ',
       },

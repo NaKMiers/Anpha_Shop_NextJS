@@ -272,6 +272,7 @@ function AllProductsPage() {
 
       <div className='pt-9' />
 
+      {/* MAIN LIST */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>
         {products.map(product => (
           <ProductItem

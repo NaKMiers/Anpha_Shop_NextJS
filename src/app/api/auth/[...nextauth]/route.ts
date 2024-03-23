@@ -92,6 +92,7 @@ const handler = NextAuth({
 
       session.user = otherDetails
       token.role = user.role
+      token._id = user._id
 
       return session
     },

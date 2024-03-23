@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
 import { HiLightningBolt } from 'react-icons/hi'
 import { getServerSession } from 'next-auth'
+import { headers } from 'next/headers'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -22,6 +23,10 @@ export default async function UserLayout({
   children: React.ReactNode
 }>) {
   const session = await getServerSession()
+
+  // get pathname
+  const headersList = headers()
+  const pathname = headersList.get('x-url') || ''
 
   return (
     <html lang='vi'>
@@ -37,48 +42,56 @@ export default async function UserLayout({
             }}
           />
 
-          <Header />
+          <Header isStatic />
 
           <main className='px-21 max-w-1200 mx-auto'>
-            <div className='flex flex-wrap lg:flex-nowrap mt-20 gap-21'>
+            <div className='flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
               {/* Sidebar */}
               <ul className='h-full flex flex-row flex-shrink-0 justify-evenly lg:flex-col w-full lg:w-1/4 md:min-w-[265px] p-21 bg-white rounded-medium shadow-medium'>
                 <li>
                   <Link
-                    className='flex items-center gap-2 group hover:bg-secondary common-transition hover:rounded-lg px-4 py-4'
+                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
+                      pathname === '/user' ? 'bg-primary rounded-lg text-light' : ''
+                    }`}
                     href='/user'>
-                    <FaUser size={21} className='commont-transition group-hover:text-light' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition group-hover:text-light'>
+                    <FaUser size={21} className='commont-transition' />
+                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
                       Thông tin tài khoản
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className='flex items-center gap-2 group hover:bg-secondary common-transition hover:rounded-lg px-4 py-4'
-                    href='/user'>
-                    <FaHistory size={21} className='commont-transition group-hover:text-light' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition group-hover:text-light'>
+                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
+                      pathname === '/user/order-history' ? 'bg-primary rounded-lg text-light' : ''
+                    }`}
+                    href='/user/order-history'>
+                    <FaHistory size={21} className='commont-transition' />
+                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
                       Lịch sử mua hàng
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className='flex items-center gap-2 group hover:bg-secondary common-transition hover:rounded-lg px-4 py-4'
-                    href='/user'>
-                    <FaUserLock size={21} className='commont-transition group-hover:text-light' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition group-hover:text-light'>
+                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
+                      pathname === '/user/security' ? 'bg-primary rounded-lg text-light' : ''
+                    }`}
+                    href='/user/security'>
+                    <FaUserLock size={21} className='commont-transition' />
+                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
                       Mật khẩu - Bảo mật
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className='flex items-center gap-2 group hover:bg-secondary common-transition hover:rounded-lg px-4 py-4'
-                    href='/user'>
-                    <HiLightningBolt size={21} className='commont-transition group-hover:text-light' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition group-hover:text-light'>
+                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
+                      pathname === '/user/recharge' ? 'bg-primary rounded-lg text-light' : ''
+                    }`}
+                    href='/recharge'>
+                    <HiLightningBolt size={21} className='commont-transition' />
+                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
                       Nạp tiền vào tài khoản
                     </span>
                   </Link>

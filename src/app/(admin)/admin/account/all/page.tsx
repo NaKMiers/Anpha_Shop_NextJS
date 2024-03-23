@@ -3,7 +3,9 @@
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import { formatPrice } from '@/utils/formatNumber'
+import { formatTime } from '@/utils/formatTime'
 import { Menu, MenuItem } from '@mui/material'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
@@ -13,12 +15,15 @@ import {
   FaCaretDown,
   FaCheck,
   FaCheckSquare,
+  FaEye,
   FaFilter,
   FaPlus,
   FaSearch,
+  FaTrash,
 } from 'react-icons/fa'
-import { FaX } from 'react-icons/fa6'
+import { FaBoltLightning, FaX } from 'react-icons/fa6'
 import { IoMdCode } from 'react-icons/io'
+import { MdEdit } from 'react-icons/md'
 
 function AllAccountsPage() {
   const [isShowFilter, setIsShowFilter] = useState(false)
@@ -121,136 +126,11 @@ function AllAccountsPage() {
               icon={FaSearch}
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Types
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
 
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Active
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu3}>
-              Using
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl3}
-              open={open3}
-              onClose={handleCloseMenu3}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu3}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu4}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl4}
-              open={open2}
-              onClose={handleCloseMenu4}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu4}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-          </div>
+          {/* Select Filter */}
+          <div className='flex justify-end items-center flex-wrap gap-3'>{/* Select */}</div>
           <div className='flex justify-end md:justify-start items-center'>
+            {/* Filter Button */}
             <button
               className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
               onClick={handleFilter}>
@@ -275,71 +155,97 @@ function AllAccountsPage() {
 
       <div className='pt-9' />
 
-      <div className='bg-white rounded-medium shadow-medium p-21'>
-        <table className='w-full text-center text-[14px]' cellPadding={4}>
-          <thead className='border-b border-slate-300'>
-            <tr>
-              <th className='w-12 text-start'>
-                <input type='checkbox' className='size-4' />
-              </th>
-              <th>Active</th>
-              <th>Type</th>
-              <th>Info</th>
-              <th>
-                <span>Begin</span>
-                <br />
-                <span>(d/m/y)</span>
-              </th>
-              <th>
-                <span>Begin</span>
-                <br />
-                <span>(d/m/y)</span>
-              </th>
-              <th>
-                <span>Begin</span>
-                <br />
-                <span>(d/m/y)</span>
-              </th>
-              <th>Using Users</th>
-              <th>-</th>
-            </tr>
-          </thead>
+      {/* MAIN LIST */}
+      <div className='grid grid-cols-1 gap-21 lg:grid-cols-2'>
+        <div
+          className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition bg-white`}>
+          <div className='w-full'>
+            {/* Thumbnails */}
+            <Link
+              href='/netflix'
+              className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
+              <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
+                <Image
+                  className='aspect-video flex-shrink-0 snap-start'
+                  src='/images/spotify-banner.jpg'
+                  height={200}
+                  width={200}
+                  alt='thumbnail'
+                />
+              </div>
+            </Link>
 
-          <tbody className='align-top'>
-            {Array.from({ length: 10 }).map((_, index) => (
-              <tr key={index}>
-                <td className='text-start'>
-                  <input type='checkbox' className='size-4 cursor-pointer' />
-                </td>
-                <td className='flex justify-center'>
-                  <FaCheckSquare size={18} className='text-green-500' />
-                  {/* <FaX size={18} className='text-red-500' /> */}
-                </td>
-                <td className='text-start'>
-                  Grammarly Premium (1 Tháng) - Đánh Bại Lỗi Ngữ Pháp Với Ưu Đãi Đặc Biệt
-                </td>
-                <td className='text-start'>
-                  ✅Email: bowczarski@springfieldcollege.edu ✅Password: Gram@123
-                </td>
-                <td>14/03/2024 14:38:02</td>
-                <td>21/03/2024 14:38:02</td>
-                <td>30/04/2024 21:38:00</td>
-                <td>nhatanhdiep@yahoo.com </td>
-                <td className='flex flex-col gap-2'>
-                  <Link href='/admin/order/' className='underline text-sky-400'>
-                    Edit
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-red-400'>
-                    Delete
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-red-400'>
-                    Deactive
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <div className='absolute z-10 -top-2 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark bg-primary px-2 py-[2px] select-none rounded-lg font-body'>
+              nhatanhdiep@yahoo.com
+            </div>
+
+            {/* Type */}
+            <p
+              className='inline font-semibold text-[18px] mr-2 leading-4 font-body tracking-wide'
+              title='Type---'>
+              Grammarly Premium (1 Tháng) - Đánh Bại Lỗi Ngữ Pháp Với Ưu Đãi Đặc Biệt
+            </p>
+
+            {/* Begin */}
+            <p className='text-sm' title='Begin (d/m/y)'>
+              <span className='font-semibold'>Begin: </span>
+              <span>{formatTime(new Date().toString())}</span>
+            </p>
+
+            {/* Expire */}
+            <p className='text-sm' title='Expire (d/m/y)'>
+              <span className='font-semibold'>Expire: </span>
+              <span>{formatTime(new Date().toString())}</span>
+            </p>
+
+            {/* Renew */}
+            <p className='text-sm' title='Expire (d/m/y)'>
+              <span className='font-semibold'>Renew: </span>
+              <span>{formatTime(new Date().toString())}</span>
+            </p>
+
+            {/* Info */}
+            <p className='w-full mt-2 max-h-[200px] font-body tracking-wide overflow-auto'>
+              ✅Email: anphashop79@gmail.com ✅Password: 79anphas ✅Slot: A1 ✅Pin: 1179 - 😊 Quà tặng
+              ngẫu nhiên: bạn được tặng 3 kí tự ngẫu nhiên của 1 voucher, dành riêng cho khách hàng của
+              gói netflix 1 tuần (Hãy tiếp tục mua hàng để khai phá voucher bạn nhá 🫡) - 🌠 Voucher là:
+              KSV____ - ⚠️ Lưu ý: Tên profile sẽ do người bán đặt để tiện quản lí, nếu bạn đổi tên
+              profile, tài khoản của bạn sẽ bị thu hồi ❌ - 💀 Lưu ý: Đề phòng trường hợp những shop lừa
+              đảo khác giả vờ mua hàng sau đó bán lại. Tài khoản của bạn sẽ được đổi pass từ 6 - 15 ngày
+              1 lần, và pass mới sẽ được gửi qua mail cho bạn. Hãy kiểm tra mail khi không thể đăng nhập.
+              Xin chân thành cảm ơn🫡
+            </p>
+          </div>
+
+          <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+            {/* Edit Button Link */}
+            <Link
+              href={`/admin/product/:id/edit`}
+              target='_blank'
+              className='block group'
+              onClick={e => e.stopPropagation()}>
+              <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+            </Link>
+
+            {/* Delete Button */}
+            <button
+              className='block group'
+              onClick={e => {
+                e.stopPropagation()
+              }}>
+              <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+            </button>
+
+            {/* Active Button */}
+            <button
+              className='block group'
+              onClick={e => {
+                e.stopPropagation()
+              }}>
+              <FaCheck size={18} className='group-hover:scale-125 common-transition text-green-500' />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )

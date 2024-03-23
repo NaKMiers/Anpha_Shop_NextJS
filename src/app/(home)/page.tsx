@@ -3,7 +3,6 @@ import Banner from '@/components/Banner'
 import ChooseMe from '@/components/ChooseMe'
 import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
-import axios from 'axios'
 
 async function HomePage() {
   return (
