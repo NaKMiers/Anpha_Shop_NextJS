@@ -8,7 +8,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { FaPlus, FaPlusCircle, FaTrash } from 'react-icons/fa'
 import { GrUpgrade } from 'react-icons/gr'
 import { HiLightningBolt } from 'react-icons/hi'
-import { RiDonutChartFill } from 'react-icons/ri'
+import { RiCheckboxMultipleBlankLine, RiDonutChartFill } from 'react-icons/ri'
 import Input from '../Input'
 import LoadingButton from '../LoadingButton'
 import toast from 'react-hot-toast'
@@ -41,9 +41,11 @@ function UserItem({
   const isCurUser = data._id === curUser?._id
 
   // states
+  const [userData, setUserData] = useState<IUser>(data)
   const [isOpenRecharge, setIsOpenRecharge] = useState(false)
   const [isLoadingRecharge, setIsLoadingRecharge] = useState(false)
-  const [userData, setUserData] = useState<IUser>(data)
+  const [isOpenSetCollaborator, setIsOpenSetCollaborator] = useState(false)
+  const [isLoadingSetCollaborator, setIsLoadingSetCollaborator] = useState(false)
 
   // Form
   const {
@@ -54,11 +56,13 @@ function UserItem({
   } = useForm<FieldValues>({
     defaultValues: {
       recharge: '',
+      type: 'percentage',
+      ['value-' + data._id]: '10%',
     },
   })
 
   // submit recharge form
-  const onSubmit: SubmitHandler<FieldValues> = async formData => {
+  const onRechargeSubmit: SubmitHandler<FieldValues> = async formData => {
     setIsLoadingRecharge(true)
 
     console.log(formData)
@@ -88,6 +92,38 @@ function UserItem({
     }
   }
 
+  // submit collaborator form
+  const onSetCollaboratorSubmit: SubmitHandler<FieldValues> = async formData => {
+    setIsLoadingRecharge(true)
+
+    console.log(formData)
+
+    try {
+      // send request to server
+      const res = await axios.patch(`/api/admin/user/${userData._id}/set-collaborator`, {
+        type: formData.type,
+        value: formData['value-' + data._id],
+      })
+      const { user, message } = res.data
+      console.log(res)
+
+      // update user data
+      setUserData(user)
+
+      // show success message
+      toast.success(message)
+
+      // reset
+      reset()
+      setIsOpenSetCollaborator(false)
+    } catch (err: any) {
+      console.log(213213)
+      toast.error(err.response.userData.message)
+    } finally {
+      setIsOpenSetCollaborator(false)
+    }
+  }
+
   return (
     <div
       className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg common-transition select-none  ${
@@ -110,7 +146,7 @@ function UserItem({
         />
 
         {/* Infomation */}
-        <div className='absolute z-10 -top-2 -left-2 shadow-md text-xs text-yellow-300 bg-secondary px-2 py-[2px] select-none rounded-lg font-body'>
+        <div className='absolute z-30 -top-2 -left-2 shadow-md text-xs text-yellow-300 bg-secondary px-2 py-[2px] select-none rounded-lg font-body'>
           {userData.role}
         </div>
         <p
@@ -200,15 +236,70 @@ function UserItem({
             onClick={e => e.stopPropagation()}
           />
           <LoadingButton
-            className='px-4 h-[48px] shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+            className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
             text='Add'
             onClick={e => {
               e.stopPropagation()
-              console.log(213123)
-              handleSubmit(onSubmit)(e)
+              handleSubmit(onRechargeSubmit)(e)
             }}
             isLoading={isLoadingRecharge}
           />
+        </div>
+      )}
+
+      {/* Set Collaborator Modal */}
+      {isOpenSetCollaborator && (
+        <div
+          className='absolute z-20 p-21 top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 rounded-md bg-yellow-400 bg-opacity-80'
+          onClick={e => {
+            e.stopPropagation()
+            setIsOpenSetCollaborator(false)
+          }}>
+          {/* Type */}
+          <Input
+            id='type'
+            label='Type'
+            disabled={isLoadingSetCollaborator}
+            register={register}
+            errors={errors}
+            icon={RiCheckboxMultipleBlankLine}
+            type='select'
+            className='w-full'
+            onClick={e => e.stopPropagation()}
+            options={[
+              {
+                value: 'percentage',
+                label: 'Percentage',
+              },
+              {
+                value: 'fixed',
+                label: 'Fixed',
+              },
+            ]}
+          />
+          <div className='flex w-full gap-2 items-center'>
+            <Input
+              id={'value-' + data._id}
+              label='Commission'
+              disabled={isLoadingSetCollaborator}
+              register={register}
+              errors={errors}
+              required
+              type='text'
+              icon={HiLightningBolt}
+              className='w-full shadow-lg'
+              onClick={e => e.stopPropagation()}
+            />
+            <LoadingButton
+              className='px-4 h-[46px] shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+              text='Set'
+              onClick={e => {
+                e.stopPropagation()
+                handleSubmit(onSetCollaboratorSubmit)(e)
+              }}
+              isLoading={isLoadingSetCollaborator}
+            />
+          </div>
         </div>
       )}
 
@@ -230,8 +321,18 @@ function UserItem({
           </button>
 
           {/* Promote User Button */}
-          <button className='block group' onClick={e => e.stopPropagation()}>
-            <GrUpgrade size={18} className='group-hover:scale-125 common-transition' />
+          <button
+            className='block group'
+            onClick={e => {
+              e.stopPropagation()
+              userData.role === 'collaborator' ? alert('Downgrade') : setIsOpenSetCollaborator(true)
+            }}>
+            <GrUpgrade
+              size={18}
+              className={`group-hover:scale-125 common-transition ${
+                userData.role === 'collaborator' ? 'rotate-180 text-red-500' : ''
+              }`}
+            />
           </button>
 
           {/* Add Balance Button */}

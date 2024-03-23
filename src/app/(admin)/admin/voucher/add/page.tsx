@@ -77,7 +77,7 @@ function AddVoucherPage() {
     data => {
       let isValid = true
       // code >= 5
-      if (data.code.length <= 5) {
+      if (data.code.length < 5) {
         setError('code', {
           type: 'manual',
           message: 'Code must be at least 5 characters',

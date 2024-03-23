@@ -6,21 +6,26 @@ import { NextRequest, NextResponse } from 'next/server'
 // Connect to database
 connectDatabase()
 
-// [PATCH]: /admin/user/:id/recharge
+// [PATCH]: /admin/user/:id/set-collaborator
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
-  console.log('- Recharge - ')
+  console.log('- Set Collaborator - ')
 
-  // get value to recharge user
-  const { amount } = await req.json()
+  console.log('setCollaborator')
 
-  console.log('amount:', amount)
-  console.log('id:', id)
+  // get data to set collaborator
+  const asd = await req.json()
+  const { type, value } = asd
 
   try {
-    // find user by id
-    const user: IUser | null = await UserModel.findByIdAndUpdate(
+    // set collaborator
+    const user = await UserModel.findByIdAndUpdate(
       id,
-      { $inc: { balance: amount, accumulated: amount } },
+      {
+        $set: {
+          role: 'collaborator',
+          commission: { type, value: value.trim() },
+        },
+      },
       { new: true }
     )
 
@@ -33,7 +38,9 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     return NextResponse.json(
       {
         user,
-        message: `User ${user.username || user.email} has been added ${formatPrice(amount)} to balance`,
+        message: `User ${
+          user.username || user.email
+        } has been set as a collaborator with a commission of ${formatPrice(user.commission.value)}`,
       },
       { status: 200 }
     )

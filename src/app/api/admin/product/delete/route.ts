@@ -30,7 +30,7 @@ export async function DELETE(req: NextRequest) {
       _id: { $in: ids },
     })
 
-    // reduce product quantity filed in related categories, tags, and flashsales, and delete the images associated with each product
+    // decrease product quantity filed in related categories, tags, and flashsales, and delete the images associated with each product
     await Promise.all(
       products.map(async product => {
         // decrease related categories product quantity

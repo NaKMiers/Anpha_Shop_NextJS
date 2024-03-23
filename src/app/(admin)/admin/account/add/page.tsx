@@ -7,12 +7,14 @@ import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaInfo } from 'react-icons/fa'
+import { FaArrowLeft, FaCheck, FaCheckCircle, FaInfo } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa6'
 import { ImClock } from 'react-icons/im'
 
 import { MdAutorenew, MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
+import toast from 'react-hot-toast'
+import { setLoading } from '@/libs/reducers/loadingReducer'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -22,13 +24,9 @@ function AddAccountPage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.loading.isLoading)
-  const [isChecked, setIsChecked] = useState(false)
 
   // states
   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
-  const [selectedType, setSelectedType] = useState<string>('')
-
-  console.log('selectedType: ', selectedType)
 
   // Form
   const {
@@ -39,13 +37,13 @@ function AddAccountPage() {
   } = useForm<FieldValues>({
     defaultValues: {
       type: '',
-      information: '',
-      renew: '',
-      days: '',
+      info: '',
+      renew: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+      days: 1,
       hours: 0,
       minutes: 0,
       seconds: 0,
-      active: false,
+      active: true,
     },
   })
 
@@ -84,6 +82,30 @@ function AddAccountPage() {
     data => {
       let isValid = true
 
+      // day must be >= 0
+      if (data.days < 0) {
+        setError('days', { type: 'manual', message: 'Days must be >= 0' })
+        isValid = false
+      }
+
+      // hours must be >= 0 and <= 23
+      if (data.hours < 0 || data.hours > 23) {
+        setError('hours', { type: 'manual', message: 'Hours must be from 0 - 23' })
+        isValid = false
+      }
+
+      // minutes must be >= 0 and <= 59
+      if (data.minutes < 0 || data.minutes > 59) {
+        setError('minutes', { type: 'manual', message: 'Minutes must be from 0 - 59' })
+        isValid = false
+      }
+
+      // seconds must be >= 0 and <= 59
+      if (data.seconds < 0 || data.seconds > 59) {
+        setError('seconds', { type: 'manual', message: 'Seconds must be from 0 - 59' })
+        isValid = false
+      }
+
       return isValid
     },
     [setError]
@@ -94,20 +116,23 @@ function AddAccountPage() {
     if (!handleValidate(data)) return
     console.log(data)
 
-    // // start loading
-    // dispatch(setLoading(true))
+    // start loading
+    dispatch(setLoading(true))
 
-    // try {
-    //   // add new tag login here
-    //   const res = await axios.post('/api/admin/tag/add', data)
-    //   console.log(res.data)
-    // } catch (err: any) {
-    // console.log(err)
-    //   toast.error(err.message)
-    // } finally {
-    //   // stop loading
-    //   dispatch(setLoading(false))
-    // }
+    try {
+      // add new tag login here
+      const res = await axios.post('/api/admin/account/add', data)
+      console.log(res.data)
+
+      // show success message
+      toast.success(res.data.message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      dispatch(setLoading(false))
+    }
   }
 
   return (
@@ -146,22 +171,22 @@ function AddAccountPage() {
               className={`relative w-full border-[2px] border-l-0 bg-white rounded-tr-lg rounded-br-lg ${
                 errors.type ? 'border-rose-400' : 'border-slate-200'
               }`}>
-              {/* <select
+              <select
                 id='type'
                 className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
                 disabled={isLoading}
-                {...register('type', { required: true })}
-                onChange={e => setSelectedType(e.target.value)}>
-                {Object.keys(groupTypes)?.map(group => (
-                  <optgroup label={group.category} key={group.category}>
-                    {group.products?.map(product => (
+                {...register('type', { required: true })}>
+                <option value=''>Select Type</option>
+                {Object.keys(groupTypes)?.map(key => (
+                  <optgroup label={key} key={key}>
+                    {groupTypes[key].map(product => (
                       <option value={product._id} key={product._id}>
                         {product.title}
                       </option>
                     ))}
                   </optgroup>
                 ))}
-              </select> */}
+              </select>
 
               {/* label */}
               <label
@@ -178,10 +203,10 @@ function AddAccountPage() {
           )}
         </div>
 
-        {/* Information */}
+        {/* Info */}
         <Input
-          id='information'
-          label='Information'
+          id='info'
+          label='Info'
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -194,14 +219,14 @@ function AddAccountPage() {
 
         {/* Review Time */}
         <Input
-          id='begin'
-          label='Begin'
+          id='renew'
+          label='Renew'
           disabled={isLoading}
           register={register}
           errors={errors}
           required
-          type='text'
-          icon={MdAutorenew}
+          type='date'
+          icon={FaPlay}
           className='mb-5'
         />
 
@@ -252,17 +277,20 @@ function AddAccountPage() {
         {/* Active */}
         <div className='flex mb-5'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
-            <FaPlay size={16} className='text-secondary' />
+            <FaCheck size={16} className='text-secondary' />
           </div>
+          <input
+            className='peer'
+            type='checkbox'
+            id='active'
+            hidden
+            {...register('active', { required: false })}
+          />
           <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition  ${
-              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
-            }`}
-            htmlFor='isActive'
-            onClick={() => setIsChecked(!isChecked)}>
+            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition bg-white text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
+            htmlFor='active'>
             Active
           </label>
-          <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
         </div>
 
         <LoadingButton

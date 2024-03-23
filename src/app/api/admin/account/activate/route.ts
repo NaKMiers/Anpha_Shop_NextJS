@@ -1,0 +1,56 @@
+import { connectDatabase } from '@/config/databse'
+import AccountModel, { IAccount } from '@/models/AccountModel'
+import ProductModel from '@/models/ProductModel'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Connect to database
+connectDatabase()
+
+// [PATCH]: /admin/account/feature
+export async function POST(req: NextRequest) {
+  console.log('- Activate Accounts - ')
+
+  // get account id to delete
+  const { ids, value } = await req.json()
+  console.log(ids)
+  console.log(value)
+
+  try {
+    // update accounts from database
+    await AccountModel.updateMany({ _id: { $in: ids } }, { $set: { active: value || false } })
+
+    // get updated accounts
+    const accounts: IAccount[] = await AccountModel.find({ _id: { $in: ids } }).lean()
+
+    if (!accounts.length) {
+      throw new Error('No account found')
+    }
+
+    // decrease/increase stock of relative products
+    await Promise.all(
+      accounts.map(async account => {
+        await ProductModel.updateOne(
+          { _id: account.type },
+          {
+            $inc: {
+              stock: value ? 1 : -1,
+            },
+          }
+        )
+      })
+    )
+
+    // return response
+    return NextResponse.json(
+      {
+        updatedAccounts: accounts,
+        message: `${accounts.length} account${accounts.length > 1 ? 's' : ''} ${
+          accounts.length > 1 ? 'have' : 'has'
+        } been ${value ? 'activated' : 'deactivated'}`,
+      },
+      { status: 200 }
+    )
+  } catch (err: any) {
+    return NextResponse.json({ message: err.message }, { status: 500 })
+  }
+}

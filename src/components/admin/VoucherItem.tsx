@@ -95,7 +95,7 @@ function VoucherItem({
         {/* Owner */}
         <p>
           <span className='font-semibold'>Owner: </span>
-          <span>{data.owner.firstname + ' ' + data.owner.lastname}</span>
+          <span>{data.owner?.firstname + ' ' + data.owner?.lastname}</span>
         </p>
 
         {/* Used Users */}
