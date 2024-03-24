@@ -78,7 +78,7 @@ function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct
           )
         ) : (
           <>
-            <Price />
+            <Price price={9000} />
             <div className='flex items-center gap-1 mt-2 text-[16px]'>
               <TbPackages className='text-darker' size={22} />
               <span className='text-darker font-bold text-nowrap font-body tracking-wide'>Còn lại:</span>
