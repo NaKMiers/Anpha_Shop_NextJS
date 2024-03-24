@@ -11,7 +11,7 @@ import UserModel from '@/models/UserModel'
 connectDatabase()
 
 const handler = NextAuth({
-  secret: process.env.SESSION_SECRET!,
+  secret: process.env.NEXTAUTH_SECRET!,
   jwt: {
     secret: process.env.JWT_SECRET!,
   },
