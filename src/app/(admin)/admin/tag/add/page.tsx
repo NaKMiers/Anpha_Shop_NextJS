@@ -16,7 +16,6 @@ function AddTagPage() {
   // store
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.loading.isLoading)
-  const [isChecked, setIsChecked] = useState(false)
 
   // Form
   const {
@@ -103,20 +102,18 @@ function AddTagPage() {
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaPlay size={16} className='text-secondary' />
           </div>
-          <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition ${
-              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
-            }`}
-            htmlFor='isFeatured'
-            onClick={() => setIsChecked(!isChecked)}>
-            Featured
-          </label>
           <input
+            className='peer'
             type='checkbox'
             id='isFeatured'
             hidden
             {...register('isFeatured', { required: false })}
           />
+          <label
+            className='select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition bg-white text-green-500 peer-checked:bg-green-500 peer-checked:text-white'
+            htmlFor='isFeatured'>
+            Featured
+          </label>
         </div>
 
         <LoadingButton
