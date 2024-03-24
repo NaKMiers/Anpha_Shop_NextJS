@@ -7,12 +7,6 @@ import '@/models/CategoryModel'
 // Connect to database
 connectDatabase()
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
-
 // [GET]: /admin/product/all
 export async function GET() {
   console.log('- Get All Products -')
