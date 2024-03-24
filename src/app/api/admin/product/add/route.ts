@@ -3,6 +3,7 @@ import CategoryModel from '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import TagModel from '@/models/TagModel'
 import { uploadFile } from '@/utils/uploadFile'
+import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Connect to database
@@ -55,12 +56,18 @@ export async function POST(req: NextRequest) {
       $inc: { productQuantity: 1 },
     })
 
+    // Disconnect from MongoDB in case of error
+    await mongoose.disconnect()
+
     // return new product
     return NextResponse.json(
       { product: newProduct, message: `Product "${newProduct.title}" has been created` },
       { status: 201 }
     )
   } catch (err: any) {
+    // Disconnect from MongoDB in case of error
+    await mongoose.disconnect()
+
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
 }
