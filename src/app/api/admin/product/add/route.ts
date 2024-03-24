@@ -8,8 +8,6 @@ import { NextRequest, NextResponse } from 'next/server'
 // Connect to database
 connectDatabase()
 
-export { default } from 'next/config'
-
 // [POST]: /admin/product/add
 export async function POST(req: NextRequest) {
   console.log('- Add Product -')
