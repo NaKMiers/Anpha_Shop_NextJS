@@ -7,6 +7,8 @@ import '@/models/CategoryModel'
 // Connect to database
 connectDatabase()
 
+export { default } from 'next/config'
+
 // [GET]: /admin/product/all
 export async function GET() {
   console.log('- Get All Products -')
@@ -24,10 +26,4 @@ export async function GET() {
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
-}
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 }
