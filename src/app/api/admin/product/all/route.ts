@@ -25,3 +25,9 @@ export async function GET() {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
