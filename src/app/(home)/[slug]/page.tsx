@@ -1,11 +1,16 @@
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import ChooseMe from '@/components/ChooseMe'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
 import Slider from '@/components/Slider'
+import { IComment } from '@/models/CommentModel'
+import { ITag } from '@/models/TagModel'
+import axios from 'axios'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { FaCartPlus, FaCircleCheck, FaMinus, FaPlus, FaTags } from 'react-icons/fa6'
 import { TbPackages } from 'react-icons/tb'
 
@@ -15,7 +20,23 @@ export const metadata: Metadata = {
     'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
 }
 
-function ProductPage({ params }: { params: { slug: string } }) {
+async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
+  let product: FullyProduct | null = null
+  let relatedProducts: FullyProduct[] = []
+  let comments: IComment[] = []
+
+  try {
+    const res = await axios.get(`${process.env.APP_URL}/api/product/${slug}`)
+    product = res.data.product
+    relatedProducts = res.data.relatedProducts
+    comments = res.data.comments
+
+    console.log('res: ---', res.data)
+  } catch (err: any) {
+    // redirect home
+    redirect('/')
+  }
+
   return (
     <div className='pt-9'>
       <section className='bg-white p-8 flex flex-col gap-21 md:flex-row rounded-medium shadow-medium'>
@@ -23,53 +44,50 @@ function ProductPage({ params }: { params: { slug: string } }) {
         <div className='w-full md:w-[45%] md:max-w-[500px]'>
           <div className='aspect-video shadow-xl rounded-md'>
             <Slider>
-              <Image
-                className='w-full h-full object-cover'
-                src='/images/watching-netflix-banner.jpg'
-                width={1200}
-                height={768}
-                alt='product'
-              />
-              <Image
-                className='w-full h-full object-cover'
-                src='/images/watching-netflix-banner.jpg'
-                width={1200}
-                height={768}
-                alt='product'
-              />
+              {product?.images.map(src => (
+                <Image
+                  className='w-full h-full object-cover'
+                  src={src}
+                  width={1200}
+                  height={768}
+                  alt='product'
+                  key={src}
+                />
+              ))}
             </Slider>
           </div>
 
           {/* Link */}
-          <LinkBar
-            className='mt-21'
-            link='https://anpha.shop/netflix-premium-goi-share-1-thang-chia-se-niem-vui-xem-phim-sieu-net'
-          />
+          <LinkBar className='mt-21' link={`${process.env.APP_URL}/${slug}`} />
         </div>
 
         <div className='md:w-[55%]'>
           {/* Basic Product Info */}
-          <h1 className='text-[28px] text-dark font-semibold mb-3'>
-            Netflix Premium (Gói Share 1 Tháng) - Chia Sẻ Niềm Vui Xem Phim Siêu Nét
+          <h1 className='text-[28px] text-dark font-semibold mb-3' title={product?.title}>
+            {product?.title}
           </h1>
 
-          <Price />
+          <Price price={product?.price || 0} oldPrice={product?.oldPrice} />
 
           <div className='flex flex-col gap-3 text-xl font-body tracking-wide mt-5'>
             <div className='flex items-center gap-1'>
               <TbPackages className='w-7 text-darker' size={26} />
               <span className='text-darker font-bold text-nowrap'>Còn lại:</span>
-              <span className='text-green-500'>61</span>
+              <span className='text-green-500'>{product?.stock}</span>
             </div>
             <div className='flex items-center gap-1 flex-wrap'>
               <FaTags className='w-7 text-darker' size={20} />
               <span className='text-darker font-bold text-nowrap'>Thể loại:</span>
-              <span className='text-darker'>Giải trí, Dùng chung, Xem phim</span>
+              {product?.tags.map((tag: ITag, index) => (
+                <Link href={`/tags?ctg=${tag.slug}`} className='text-dark' key={tag.slug}>
+                  {tag.title + (index !== product!.tags.length - 1 ? ', ' : '')}
+                </Link>
+              ))}
             </div>
             <div className='flex items-center gap-1'>
               <FaCircleCheck className='w-7 text-darker' size={20} />
               <span className='text-darker font-bold text-nowrap'>Đã bán:</span>
-              <span className='text-primary'>202</span>
+              <span className='text-primary'>{product?.sold}</span>
             </div>
           </div>
 
@@ -110,7 +128,7 @@ function ProductPage({ params }: { params: { slug: string } }) {
       <div className='pt-9' />
 
       <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
-        <GroupProducts hideTop />
+        <GroupProducts products={relatedProducts} hideTop />
       </section>
 
       <div className='pt-9' />

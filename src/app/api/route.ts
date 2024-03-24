@@ -1,22 +1,27 @@
 import { connectDatabase } from '@/config/databse'
-import CategoryModel, { ICategory } from '@/models/CategoryModel'
-import ProductModel from '@/models/ProductModel'
-import { shuffleArray } from '@/utils'
 import { NextResponse } from 'next/server'
 import '@/models/TagModel'
+import '@/models/CategoryModel'
 import '@/models/FlashsaleModel'
 
 // Connect to database
 connectDatabase()
 
+import ProductModel from '@/models/ProductModel'
+import CategoryModel, { ICategory } from '@/models/CategoryModel'
+import { FullyProduct } from './product/[slug]/route'
+import { ITag } from '@/models/TagModel'
+import { shuffleArray } from '@/utils'
+
 // [GET]: /
 export async function GET() {
-  console.log('index')
+  console.log('- Get Home Page -')
 
   try {
     // get all products to show in home page
-    const products: any[] = await ProductModel.find({ active: true })
+    const products: FullyProduct[] = await ProductModel.find({ active: true })
       .populate('tags')
+      .populate('category')
       .populate('flashsale')
       .lean()
 
@@ -27,11 +32,10 @@ export async function GET() {
       (a, b) =>
         sequenceCategory.indexOf(a.title.toLowerCase()) - sequenceCategory.indexOf(b.title.toLowerCase())
     )
-
     // get all tags
-    const tags = Array.from(
+    const tags: ITag[] = Array.from(
       new Set(
-        products.reduce((tags, product) => {
+        products.reduce((tags: ITag[], product: FullyProduct) => {
           if (product.tags && product.tags.length > 0) {
             tags.push(...product.tags)
           }
@@ -39,12 +43,11 @@ export async function GET() {
         }, [])
       )
     )
-
     // create category list with corresponding products
-    const categories = originalCategories
+    const productsByCategoryGroups = originalCategories
       .map(category => {
         const productsByCtg = products
-          .filter(product => product.category && product.category.toString() === category._id.toString())
+          .filter(product => product.category._id.toString() === category._id.toString())
           .sort((a, b) => b.sold - a.sold)
 
         return {
@@ -53,34 +56,26 @@ export async function GET() {
         }
       })
       .filter(category => category.products.length) // remove category with empty product
-    // .sort((a, b) => b.products.length - a.products.length)
+      .sort((a, b) => b.products.length - a.products.length)
 
     // shuffle products to get random
     const shuffledProducts = shuffleArray([...products.filter(product => product.stock > 0)])
-    const bannerProducts = [
-      shuffledProducts.slice(0, 7),
-      shuffledProducts.slice(7, 14),
-      shuffledProducts.slice(14, 21),
-    ]
+    const carouselProducts = [...shuffledProducts.slice(0, 7), ...shuffledProducts.slice(7, 14)]
 
     // get best seller
-    const bestSellers = {
-      title: 'Sản phẩm bán chạy nhất',
-      isBestSeller: true,
-      products: products.sort((a, b) => b.sold - a.sold).slice(0, 10),
-    }
+    const bestSellerProducts = products.sort((a, b) => b.sold - a.sold).slice(0, 10)
 
     // get products are currently on flash sale
     const flashsaleProducts = products.filter(product => product.flashsale)
 
     return NextResponse.json(
       {
-        categories,
-        bestSellers,
-        allCates: originalCategories,
+        productsByCategoryGroups,
+        bestSellerProducts,
         flashsaleProducts,
+        categories: originalCategories,
         tags,
-        bannerProducts,
+        carouselProducts,
       },
       { status: 200 }
     )

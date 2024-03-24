@@ -1,19 +1,40 @@
 'use client'
+import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page'
 import AspectRatio from '@mui/joy/AspectRatio'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Divider from '@mui/joy/Divider'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaCheck, FaChevronRight } from 'react-icons/fa6'
 import { PiSignOutBold } from 'react-icons/pi'
 
 function Footer() {
+  // states
+  const [bestSellerProducts, setBestSellerProducts] = useState<ProductWithTagsAndCategory[]>([])
   const [isDragging, setIsDragging] = useState(false)
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
+  // get best seller products
+  useEffect(() => {
+    const getBestSellerProducts = async () => {
+      try {
+        // send request to server to get best seller products
+        const res = await axios.get('/api/product/best-seller')
+        console.log(res.data)
+
+        // set best seller products to state
+        setBestSellerProducts(res.data.products)
+      } catch (err: any) {
+        console.log(err.message)
+      }
+    }
+    getBestSellerProducts()
+  }, [])
+
+  // handle draging products
   const handleDraging = useCallback(
     (e: React.MouseEvent) => {
       if (isDragging && slideTrackRef.current) {
@@ -69,7 +90,6 @@ function Footer() {
         </div>
 
         <Divider sx={{ my: 2 }} />
-
         {/* Center */}
         <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
           {/* Slider */}
@@ -81,27 +101,27 @@ function Footer() {
             onMouseDown={() => setIsDragging(true)}
             onMouseMove={handleDraging}
             onMouseUp={() => setIsDragging(false)}>
-            {[1, 2, 3, 4, 5, 6].map(item => (
-              <div
-                key={item}
-                className={`max-w-[235px] shrink-0 px-2  ${!isDragging ? 'snap-start' : ''}`}>
-                <Card variant='soft'>
+            {bestSellerProducts.map((product, index) => (
+              <Link
+                href={`/${product.slug}`}
+                className={`block w-[235px] shrink-0 px-2 group ${!isDragging ? 'snap-start' : ''}`}
+                key={index}>
+                <Card
+                  className='group-hover:bg-primary common-transition text-dark hover:text-white'
+                  variant='soft'>
                   <AspectRatio ratio='16/9'>
-                    <Image
-                      src='/images/watching-netflix-banner.jpg'
-                      width={235}
-                      height={(235 * 9) / 16}
-                      alt='account'
-                    />
+                    <Image src={product.images[0]} width={235} height={(235 * 9) / 16} alt='account' />
                   </AspectRatio>
                   <CardContent>
-                    <p className='text-xs'>
-                      Netflix Premium (Gói Share 1 Tháng) - Chia Sẻ Niềm Vui Xem Phim Siêu Nét
+                    <p className='text-xs' title={product.title}>
+                      {product.title}
                     </p>
-                    <span className='text-gray-500 font-body text-xs font-semibold'>Netflix</span>
+                    <span className='text-gray-500 group-hover:text-secondary font-body text-xs font-semibold'>
+                      Netflix
+                    </span>
                   </CardContent>
                 </Card>
-              </div>
+              </Link>
             ))}
           </div>
 

@@ -5,12 +5,15 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import ProductCard from './ProductCard'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 
 interface GroupProductsProps {
+  products: FullyProduct[]
   hideTop?: boolean
+  className?: string
 }
 
-function GroupProducts({ hideTop }: GroupProductsProps) {
+function GroupProducts({ products, hideTop, className }: GroupProductsProps) {
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -60,7 +63,7 @@ function GroupProducts({ hideTop }: GroupProductsProps) {
   }, [])
 
   return (
-    <div className='relative'>
+    <div className={`relative ${className}`}>
       {/* Top Ears */}
       {!hideTop && (
         <div className='flex justify-between px-6'>
@@ -84,15 +87,16 @@ function GroupProducts({ hideTop }: GroupProductsProps) {
         </div>
       )}
 
+      {/* Next - Previous Buttons */}
       {!isExpaned && (
         <>
           <button
-            className='flex items-center justify-center absolute -left-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
+            className='flex items-center justify-center absolute -left-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
             onClick={handlePrev}>
             <FaChevronLeft size={18} className='group-hover:scale-125 common-transition text-dark' />
           </button>
           <button
-            className='flex items-center justify-center absolute -right-21 top-[45%] translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
+            className='flex items-center justify-center absolute -right-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
             onClick={handleNext}>
             <FaChevronRight size={18} className='group-hover:scale-125 common-transition text-dark' />
           </button>
@@ -109,13 +113,13 @@ function GroupProducts({ hideTop }: GroupProductsProps) {
           onMouseDown={() => setIsDragging(true)}
           onMouseMove={handleDraging}
           onMouseUp={() => setIsDragging(false)}>
-          {Array.from({ length: 10 }).map((_, index) => (
+          {products.map(product => (
             <div
-              key={index}
+              key={product._id}
               className={`flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-21/2 ${
                 !isDragging ? 'snap-start' : ''
               }`}>
-              <ProductCard />
+              <ProductCard className='' data={product} />
             </div>
           ))}
         </div>

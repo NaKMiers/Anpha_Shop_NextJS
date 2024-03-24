@@ -66,7 +66,7 @@ function EditVoucherPage() {
     const getVoucher = async () => {
       try {
         // send request to server to get voucher
-        const res = await axios.get(`/api/voucher/${code}`)
+        const res = await axios.get(`/api/admin/voucher/${code}`)
         const { voucher, message } = res.data
 
         // set voucher to state

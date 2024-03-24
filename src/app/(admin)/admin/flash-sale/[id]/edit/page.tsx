@@ -57,7 +57,7 @@ function AddFlashSalePage() {
     const getProduct = async () => {
       try {
         // send request to server to get product
-        const res = await axios.get(`/api/flash-sale/${id}`)
+        const res = await axios.get(`/api/admin/flash-sale/${id}`)
         const { flashSale, message } = res.data
 
         // set product to state

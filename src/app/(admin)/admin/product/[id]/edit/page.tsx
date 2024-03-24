@@ -62,7 +62,7 @@ function AddProductPage() {
     const getProduct = async () => {
       try {
         // send request to server to get product
-        const res = await axios.get(`/api/product/${id}`)
+        const res = await axios.get(`/api/admin/product/${id}`)
         const { product, message } = res.data
 
         // set product to state

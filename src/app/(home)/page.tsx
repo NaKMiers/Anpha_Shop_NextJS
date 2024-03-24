@@ -1,13 +1,44 @@
 import About from '@/components/About'
 import Banner from '@/components/Banner'
 import ChooseMe from '@/components/ChooseMe'
-import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
+import { ICategory } from '@/models/CategoryModel'
+import { ITag } from '@/models/TagModel'
+import axios from 'axios'
+import { FullyProduct } from '../api/product/[slug]/route'
+import GroupProducts from '@/components/GroupProducts'
+import { groupProductByCategory } from '@/utils'
 
 async function HomePage() {
+  let productsByCategoryGroups: any[] = []
+  let bestSellerProducts: FullyProduct[] = []
+  let flashsaleProducts: FullyProduct[] = []
+  let categories: ICategory[] = []
+  let tags: ITag[] = []
+  let carouselProducts: FullyProduct[] = []
+
+  try {
+    const res = await axios.get(`${process.env.APP_URL}/api`)
+
+    // For Banner
+    tags = res.data.tags
+    categories = res.data.categories
+    carouselProducts = res.data.carouselProducts
+
+    // For Top #10
+    bestSellerProducts = res.data.bestSellerProducts
+
+    // For Products
+    productsByCategoryGroups = res.data.productsByCategoryGroups
+
+    console.log(productsByCategoryGroups)
+  } catch (err: any) {
+    console.log(err.response.data)
+  }
+
   return (
     <div className='min-h-screen'>
-      <Banner />
+      <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
 
       <div className='pt-28' />
 
@@ -18,20 +49,21 @@ async function HomePage() {
 
       <Heading title='Top #10' />
       <section className='max-w-1200 mx-auto'>
-        <GroupProducts />
+        <GroupProducts products={bestSellerProducts} hideTop />
       </section>
 
       <div className='pt-28' />
 
       <Heading title='Sản phẩm' />
       <section className='max-w-1200 mx-auto'>
-        <GroupProducts />
-        <div className='pt-20' />
-        <GroupProducts />
-        <div className='pt-20' />
-        <GroupProducts />
-        <div className='pt-20' />
-        <GroupProducts />
+        {productsByCategoryGroups.map((group, index) => (
+          <GroupProducts
+            className={index !== productsByCategoryGroups.length - 1 ? 'mb-20' : ''}
+            products={group.products}
+            hideTop
+            key={group._id}
+          />
+        ))}
       </section>
 
       <div className='pt-28' />

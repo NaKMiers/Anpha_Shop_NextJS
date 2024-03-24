@@ -35,12 +35,14 @@ const ProductSchema = new Schema(
         {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'tag',
+          minlength: 1,
         },
       ],
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'category',
+      required: true,
     },
     images: {
       type: [

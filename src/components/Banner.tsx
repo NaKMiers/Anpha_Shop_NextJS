@@ -6,74 +6,18 @@ import { useState } from 'react'
 import { FaBoltLightning, FaCartShopping, FaChevronUp } from 'react-icons/fa6'
 import Header from './Header'
 import Slider from './Slider'
+import { ICategory } from '@/models/CategoryModel'
+import { ITag } from '@/models/TagModel'
+import { IProduct } from '@/models/ProductModel'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 
-const tags = [
-  {
-    label: 'Giải trí',
-    href: '/tag?tag=giai-tri',
-  },
-  {
-    label: 'Xem phim',
-    href: '/tag?tag=xem-phim',
-  },
-  {
-    label: 'Dùng chung',
-    href: '/tag?tag=dung-chung',
-  },
-  {
-    label: 'Nghe nhạc',
-    href: '/tag?tag=nghe-nhac',
-  },
-  {
-    label: 'Học tập',
-    href: '/tag?tag=hoc-tap',
-  },
-  {
-    label: 'Tiếng Anh',
-    href: '/tag?tag=tieng-anh',
-  },
-  {
-    label: 'Thiết kế',
-    href: '/tag?tag=thiet-ke',
-  },
-  {
-    label: 'Vĩnh viễn',
-    href: '/tag?tag=vinh-vien',
-  },
-  {
-    label: 'Trí tuệ nhân tạo',
-    href: '/tag?tag=tri-tue-nhan-tao',
-  },
-]
+interface BannerProps {
+  categories: ICategory[]
+  tags: ITag[]
+  carouselProducts: FullyProduct[]
+}
 
-const categories = [
-  {
-    label: 'Netflix',
-    href: '/category?ctg=netflix',
-  },
-  {
-    label: 'Spotify',
-    href: '/category?ctg=spotify',
-  },
-  {
-    label: 'ChatGPT',
-    href: '/category?ctg=chatgpt',
-  },
-  {
-    label: 'Grammarly',
-    href: '/category?ctg=grammarly',
-  },
-  {
-    label: 'Canva',
-    href: '/category?ctg=canva',
-  },
-  {
-    label: 'Youtube',
-    href: '/category?ctg=youtube',
-  },
-]
-
-function Banner() {
+function Banner({ carouselProducts, categories, tags }: BannerProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -97,15 +41,15 @@ function Banner() {
                 Tags
               </h5>
 
-              {tags.map(tag => (
+              {tags?.map(tag => (
                 <li
-                  key={tag.label}
+                  key={tag.title}
                   className='rounded-extra-small text-dark hover:bg-primary common-transition'>
-                  <Link className='flex items-center px-[10px] py-[6px]' href={tag.href}>
+                  <Link className='flex items-center px-[10px] py-[6px]' href={`/tag?tag=${tag.slug}`}>
                     <svg xmlns='http://www.w3.org/2000/svg' height='1.3em' viewBox='0 0 448 512'>
                       <path d='M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'></path>
                     </svg>
-                    <span className='ms-2'>{tag.label}</span>
+                    <span className='ms-2'>{tag.title}</span>
                   </Link>
                 </li>
               ))}
@@ -113,21 +57,42 @@ function Banner() {
 
             {/* Slider */}
             <Slider>
-              {[1, 2, 3].map(item => (
-                <Image
-                  key={item}
-                  src='/images/watching-netflix-banner.jpg'
-                  alt='netflix'
-                  width={1200}
-                  height={768}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              ))}
+              <Image
+                src='/images/capcut-banner.jpg'
+                alt='netflix'
+                width={1200}
+                height={768}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+              <Image
+                src='/images/netflix-banner.jpg'
+                alt='netflix'
+                width={1200}
+                height={768}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+              <Image
+                src='/images/grammarly-banner.jpg'
+                alt='netflix'
+                width={1200}
+                height={768}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
             </Slider>
 
             {/* Category */}
@@ -135,7 +100,9 @@ function Banner() {
               <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Categories</h5>
 
               <li className='rounded-extra-small text-dark hover:bg-primary common-transition'>
-                <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>
+                <Link
+                  className='flex items-center px-[10px] py-[6px] gap-2'
+                  href='/category?ctg=flashsale'>
                   <svg
                     className='animate-bounce'
                     xmlns='http://www.w3.org/2000/svg'
@@ -150,15 +117,17 @@ function Banner() {
                 </Link>
               </li>
 
-              {categories.map(category => (
+              {categories?.map(category => (
                 <li
-                  key={category.label}
+                  key={category.title}
                   className='rounded-extra-small text-dark hover:bg-primary common-transition'>
-                  <Link className='flex items-center px-[10px] py-[6px]' href={category.href}>
+                  <Link
+                    className='flex items-center px-[10px] py-[6px]'
+                    href={`/category?ctg=${category.slug}`}>
                     <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'>
                       <path d='M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z'></path>
                     </svg>
-                    <span className='ms-2'>{category.label}</span>
+                    <span className='ms-2'>{category.title}</span>
                   </Link>
                 </li>
               ))}
@@ -168,25 +137,27 @@ function Banner() {
           {/* Bottom */}
           <div className='relative rflow-x-scroll shrink-0'>
             <div className='flex items-center h-full -mx-21/2'>
-              {Array.from({ length: 10 }).map((_, index) => (
-                <div key={index} className='aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2'>
+              {carouselProducts?.map(product => (
+                <Link
+                  href={`/${product.slug}`}
+                  key={product._id}
+                  className='aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2'>
                   <div className='relative rounded-small overflow-hidden group'>
-                    <Image
-                      src='/images/watching-netflix-banner.jpg'
-                      width={1200}
-                      height={768}
-                      alt='account'
-                    />
+                    <Image src={product.images[0]} width={1200} height={768} alt='account' />
                     <div className='flex flex-col sm:gap-1 justify-center absolute w-full h-full top-0 left-0 bg-sky-500 bg-opacity-60 p-2 text-center translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
-                      <h5 className='text-white font-body text-sm'>
-                        Netflix Premium (Gói Share 6 Tháng) - Trải Nghiệm Phim Ảnh Chất Lượng Cao
+                      <h5 className='text-white font-body text-sm' title={product.title}>
+                        {product.title}
                       </h5>
-                      <p className='uppercase text-xs font-semibold text-slate-200'>- Netflix -</p>
+                      <p className='uppercase text-xs font-semibold text-slate-200'>
+                        - {product.category.title} -
+                      </p>
                       <p className='font-bold text-white text-sm'>
-                        Đã bán: <span className='font-semibold text-green-200'>62</span>
+                        Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>
                       </p>
                       <div className='flex items-center gap-2 h-[26px] justify-center'>
-                        <button className='bg-secondary px-[6px] h-full text-xs font-semibold rounded-md text-light tracking-wide hover:bg-primary common-transition'>
+                        <button
+                          className='bg-secondary px-[6px] h-full text-xs font-semibold rounded-md text-light tracking-wide hover:bg-primary common-transition'
+                          onClick={e => e.stopPropagation()}>
                           Mua ngay
                         </button>
                         <button className='bg-primary px-2 h-full font-semibold rounded-md text-light hover:bg-secondary common-transition'>
@@ -195,7 +166,7 @@ function Banner() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -230,15 +201,15 @@ function Banner() {
                 Tags
               </h5>
 
-              {tags.map(tag => (
+              {tags?.map(tag => (
                 <li
-                  key={tag.label}
+                  key={tag.title}
                   className='rounded-extra-small text-dark hover:bg-primary common-transition'>
-                  <Link className='flex items-center px-[10px] py-[6px]' href={tag.href}>
+                  <Link className='flex items-center px-[10px] py-[6px]' href={`/tag?tag=${tag.slug}`}>
                     <svg xmlns='http://www.w3.org/2000/svg' height='1.3em' viewBox='0 0 448 512'>
                       <path d='M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'></path>
                     </svg>
-                    <span className='ms-2'>{tag.label}</span>
+                    <span className='ms-2'>{tag.title}</span>
                   </Link>
                 </li>
               ))}
@@ -246,7 +217,7 @@ function Banner() {
 
             {/* Category */}
             <ul className='relative max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-medium shadow-small overflow-y-scroll'>
-              <h5 className='bg-sky-200 pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
+              <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
                 Categories
               </h5>
 
@@ -257,15 +228,17 @@ function Banner() {
                 </Link>
               </li>
 
-              {categories.map(category => (
+              {categories?.map(category => (
                 <li
-                  key={category.label}
+                  key={category.title}
                   className='rounded-extra-small text-dark hover:bg-primary common-transition'>
-                  <Link className='flex items-center px-[10px] py-[6px]' href={category.href}>
+                  <Link
+                    className='flex items-center px-[10px] py-[6px]'
+                    href={`/category?ctg=${category.slug}`}>
                     <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'>
                       <path d='M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z'></path>
                     </svg>
-                    <span className='ms-2'>{category.label}</span>
+                    <span className='ms-2'>{category.title}</span>
                   </Link>
                 </li>
               ))}

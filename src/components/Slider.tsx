@@ -1,6 +1,6 @@
 'use client'
 
-import { Children, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Children, useCallback, useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 interface SliderProps {
@@ -23,7 +23,9 @@ function Slider({ time, hideControls, children, className }: SliderProps) {
         behavior: 'smooth',
       })
     }
-  }, [])
+
+    setSlide(prev => (prev === 1 ? childrenAmount : prev - 1))
+  }, [childrenAmount])
 
   // next slide
   const handleNext = useCallback(() => {
@@ -33,7 +35,9 @@ function Slider({ time, hideControls, children, className }: SliderProps) {
         behavior: 'smooth',
       })
     }
-  }, [])
+
+    setSlide(prev => (prev === childrenAmount ? 1 : prev + 1))
+  }, [childrenAmount])
 
   const handleSlideIndicator = useCallback((slide: number) => {
     if (slideTrackRef.current) {
@@ -60,7 +64,7 @@ function Slider({ time, hideControls, children, className }: SliderProps) {
     <div className={`relative w-full h-full overflow-hidden rounded-lg ${className}`}>
       {/* Slide Track */}
       <div
-        className={`flex w-full h-full cursor-pointer overflow-x-scroll snap-x no-scrollbar`}
+        className={`flex w-full h-full cursor-pointer overflow-x-hidden snap-x no-scrollbar`}
         ref={slideTrackRef}>
         {Children.toArray(children).map((child, index) => (
           <div key={index} className='w-full h-full shrink-0 snap-start'>
@@ -70,7 +74,7 @@ function Slider({ time, hideControls, children, className }: SliderProps) {
       </div>
 
       {/* Next - Previous */}
-      {!hideControls && (
+      {!hideControls && childrenAmount >= 2 && (
         <>
           <button
             className='group absolute flex items-center justify-center hover:bg-slate-400 hover:bg-opacity-50  common-transition h-full w-12 left-0 top-0'
@@ -86,19 +90,21 @@ function Slider({ time, hideControls, children, className }: SliderProps) {
       )}
 
       {/* Indicators */}
-      <div className='absolute flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[8%]'>
-        {Array.from({ length: childrenAmount }).map((_, index) => {
-          return (
-            <button
-              key={index}
-              className={`w-[14px] h-[14px] rounded-full bg-white hover:bg-opacity-100 common-transition shadow-md ${
-                slide === index + 1 ? 'bg-opacity-100' : 'bg-opacity-50'
-              }`}
-              onClick={() => handleSlideIndicator(index + 1)}
-            />
-          )
-        })}
-      </div>
+      {childrenAmount >= 2 && (
+        <div className='absolute flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[8%]'>
+          {Array.from({ length: childrenAmount }).map((_, index) => {
+            return (
+              <button
+                key={index}
+                className={`w-[14px] h-[14px] rounded-full bg-white hover:bg-opacity-100 common-transition shadow-md ${
+                  slide === index + 1 ? 'bg-opacity-100' : 'bg-opacity-50'
+                }`}
+                onClick={() => handleSlideIndicator(index + 1)}
+              />
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
