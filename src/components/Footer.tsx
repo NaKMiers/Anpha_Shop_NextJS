@@ -14,7 +14,6 @@ import { PiSignOutBold } from 'react-icons/pi'
 function Footer() {
   // states
   const [bestSellerProducts, setBestSellerProducts] = useState<ProductWithTagsAndCategory[]>([])
-  const [isDragging, setIsDragging] = useState(false)
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
   // get best seller products
@@ -33,17 +32,6 @@ function Footer() {
     }
     getBestSellerProducts()
   }, [])
-
-  // handle draging products
-  const handleDraging = useCallback(
-    (e: React.MouseEvent) => {
-      if (isDragging && slideTrackRef.current) {
-        console.log(slideTrackRef.current.scrollLeft)
-        slideTrackRef.current.scrollLeft -= e.movementX
-      }
-    },
-    [isDragging]
-  )
 
   return (
     <div className='bg-dark-100 text-light max-w-1200 m-auto mb-10 shadow-medium rounded-medium mt-36'>
@@ -94,31 +82,28 @@ function Footer() {
         <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
           {/* Slider */}
           <div
-            className={`flex overflow-x-scroll flex-1 no-scrollbar md:mr-5 -mx-1 relative select-none cursor-pointer ${
-              !isDragging ? 'snap-x' : ''
-            }`}
-            ref={slideTrackRef}
-            onMouseDown={() => setIsDragging(true)}
-            onMouseMove={handleDraging}
-            onMouseUp={() => setIsDragging(false)}>
+            className='flex overflow-x-scroll flex-1 no-scrollbar md:mr-5 -mx-1 relative select-none cursor-pointer snap-x'
+            ref={slideTrackRef}>
             {bestSellerProducts.map((product, index) => (
               <Link
                 href={`/${product.slug}`}
-                className={`block w-[235px] shrink-0 px-2 group ${!isDragging ? 'snap-start' : ''}`}
+                className='block w-[235px] shrink-0 px-2 group snap-start group'
                 key={index}>
-                <Card
-                  className='group-hover:bg-primary common-transition text-dark hover:text-white'
-                  variant='soft'>
+                <Card className='text-dark' variant='soft'>
                   <AspectRatio ratio='16/9'>
-                    <Image src={product.images[0]} width={235} height={(235 * 9) / 16} alt='account' />
+                    <Image
+                      className='group-hover:scale-105 duration-500 transition ease-in-out'
+                      src={product.images[0]}
+                      width={235}
+                      height={(235 * 9) / 16}
+                      alt='account'
+                    />
                   </AspectRatio>
                   <CardContent>
                     <p className='text-xs' title={product.title}>
                       {product.title}
                     </p>
-                    <span className='text-gray-500 group-hover:text-secondary font-body text-xs font-semibold'>
-                      Netflix
-                    </span>
+                    <span className='text-gray-500 font-body text-xs font-semibold'>Netflix</span>
                   </CardContent>
                 </Card>
               </Link>
@@ -168,7 +153,7 @@ function Footer() {
               <ul className='tracking-wide text-sm'>
                 <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <FaCheck size={14} className='text-green-400' />
-                  <p className=''>Đầy dủ tính năng</p>
+                  <p className=''>Đầy đủ tính năng</p>
                 </div>
                 <div className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <FaCheck size={14} className='text-green-400' />

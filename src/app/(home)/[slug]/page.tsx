@@ -12,6 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { FaCartPlus, FaCircleCheck, FaMinus, FaPlus, FaTags } from 'react-icons/fa6'
+import { MdCategory } from 'react-icons/md'
 import { TbPackages } from 'react-icons/tb'
 
 export const metadata: Metadata = {
@@ -74,6 +75,15 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <TbPackages className='w-7 text-darker' size={26} />
               <span className='text-darker font-bold text-nowrap'>Còn lại:</span>
               <span className='text-green-500'>{product?.stock}</span>
+            </div>
+            <div className='flex items-center gap-1'>
+              <MdCategory className='w-7 text-darker' size={26} />
+              <span className='text-darker font-bold text-nowrap'>Danh mục:</span>
+              <Link
+                href={`/category?ctg=${product?.category.slug}`}
+                className='text-orange-500 hover:underline'>
+                {product?.category.title}
+              </Link>
             </div>
             <div className='flex items-center gap-1 flex-wrap'>
               <FaTags className='w-7 text-darker' size={20} />
