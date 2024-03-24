@@ -8,11 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // Connect to database
 connectDatabase()
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
+export { default } from 'next/config'
 
 // [POST]: /admin/product/add
 export async function POST(req: NextRequest) {

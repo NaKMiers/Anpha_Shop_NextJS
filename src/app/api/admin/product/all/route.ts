@@ -7,8 +7,6 @@ import '@/models/CategoryModel'
 // Connect to database
 connectDatabase()
 
-export { default } from 'next/config'
-
 // [GET]: /admin/product/all
 export async function GET() {
   console.log('- Get All Products -')
