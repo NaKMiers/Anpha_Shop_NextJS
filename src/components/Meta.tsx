@@ -5,7 +5,12 @@ import { Menu, MenuItem } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { FaCaretDown, FaFilter } from 'react-icons/fa6'
 
-function Meta() {
+interface MetaProps {
+  title?: string
+  classname?: string
+}
+
+function Meta({ title, classname }: MetaProps) {
   const [price, setPrice] = useState(9000)
 
   const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
@@ -35,8 +40,8 @@ function Meta() {
   const handleFilter = useCallback(() => {}, [])
 
   return (
-    <div className='p-21 bg-white rounded-medium shadow-medium text-dark overflow-auto'>
-      <h1 className='text-secondary text-3xl font-semibold tracking-wide mb-2'>Danh Mục - Netflix</h1>
+    <div className={`p-21 bg-white rounded-medium shadow-medium text-dark overflow-auto ${classname}`}>
+      <h1 className='text-secondary text-3xl font-semibold tracking-wide mb-2'>{title}</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
         <div className='flex flex-col'>
           <label>

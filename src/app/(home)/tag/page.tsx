@@ -1,18 +1,18 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
 import ProductCard from '@/components/ProductCard'
-import { ICategory } from '@/models/CategoryModel'
+import { ITag } from '@/models/TagModel'
 import axios from 'axios'
 
-async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
-  let categories: ICategory[] = []
+async function TagPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  let tags: ITag[] = []
   let products: FullyProduct[] = []
 
   try {
     // send request to get products
     console.log('searchParams: ', searchParams)
 
-    let url = `${process.env.APP_URL}/api/category?`
+    let url = `${process.env.APP_URL}/api/tag?`
     for (let key in searchParams) {
       // check if key is an array
       if (Array.isArray(searchParams[key])) {
@@ -32,14 +32,14 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
     console.log(res.data)
 
     products = res.data.products
-    categories = res.data.categories
+    tags = res.data.tags
   } catch (err: any) {
     console.log(err)
   }
 
   return (
     <div className='pt-24'>
-      <Meta title={`Danh Mục - ${categories.map(category => category.title).join(' - ')}`} />
+      <Meta title={`Tag - ${tags.map(tag => tag.title).join(' - ')}`} />
       <div className='pt-11' />
 
       {/* products */}
@@ -52,4 +52,4 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
   )
 }
 
-export default CategoryPage
+export default TagPage

@@ -103,7 +103,9 @@ function Footer() {
                     <p className='text-xs' title={product.title}>
                       {product.title}
                     </p>
-                    <span className='text-gray-500 font-body text-xs font-semibold'>Netflix</span>
+                    <span className='text-gray-500 font-body text-xs font-semibold'>
+                      {product.category.title}
+                    </span>
                   </CardContent>
                 </Card>
               </Link>
