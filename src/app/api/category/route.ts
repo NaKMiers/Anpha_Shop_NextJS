@@ -8,7 +8,6 @@ connectDatabase()
 
 export async function GET(req: NextRequest) {
   console.log('- Get Products By Categories -')
-
   // get query params
   const searchParams = req.nextUrl.searchParams
   const searchParamsObj: { [key: string]: string[] } = {}

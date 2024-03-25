@@ -1,14 +1,52 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { ICartItem } from '@/models/CartItemModel'
 import { formatPrice } from '@/utils/formatNumber'
+import axios from 'axios'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaPlusSquare } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 
 function CartPage() {
+  // hook
+  const dispatch = useAppDispatch()
+  const isPageLoading = useAppSelector(state => state.loading.isPageLoading)
+
+  // states
+  const [cart, setCart] = useState<FullyCartItem[]>([])
+  const [isShowVoucher, setIsShowVoucher] = useState(false)
   const [voucherValue, setVoucherValue] = useState('')
+
+  // get user's cart
+  useEffect(() => {
+    const getUserCart = async () => {
+      // start loading
+      dispatch(setPageLoading(true))
+
+      try {
+        // send request to get user's cart
+        const res = await axios.get('/api/cart')
+        const { cart } = res.data
+
+        // set cart to state
+        setCart(cart)
+
+        console.log(cart)
+      } catch (err: any) {
+        console.log(err.message)
+        toast.error(err.response.data.message)
+      } finally {
+        dispatch(setPageLoading(false))
+      }
+    }
+    getUserCart()
+  }, [dispatch])
 
   return (
     <div className='mt-20 grid grid-cols-1 md:grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
@@ -31,15 +69,14 @@ function CartPage() {
             <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
           </p>
 
-          {Array.from({ length: 3 }).map((_, index) => (
+          {/* {Array.from({ length: 2 }).map((_, index) => (
             <CartItem className={index != 0 ? 'mt-4' : ''} key={index} isLocalCartItem />
-          ))}
+          ))} */}
         </div>
 
         <div className='pt-4' />
 
         {/* Database cart items */}
-
         <div>
           <div className='flex items-center justify-end gap-2 pr-21'>
             <label htmlFor='selectAll' className='font-semibold cursor-pointer'>
@@ -50,8 +87,8 @@ function CartPage() {
 
           <div className='pt-4' />
 
-          {Array.from({ length: 3 }).map((_, index) => (
-            <CartItem className={index != 0 ? 'mt-5' : ''} key={index} />
+          {cart.map((cartItem, index) => (
+            <CartItem data={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
           ))}
         </div>
       </div>
@@ -62,20 +99,22 @@ function CartPage() {
           <p className='mb-2'>
             Bạn có voucher? (<button className='text-sky-600 hover:underline z-10'>ấn vào đây</button>)
           </p>
-          <div className='flex items-center gap-1 mb-2'>
-            <input
-              type='text'
-              className='border w-full outline-secondary text-secondary border-slate-300 rounded-lg py-2 px-4'
-              placeholder='Voucher'
-              value={voucherValue}
-              onChange={e => setVoucherValue(e.target.value.toUpperCase())}
-            />
-            <button className='rounded-lg border text-sky-600 border-sky-600 py-2 px-4 text-nowrap flex-shrink-0 hover:bg-sky-600 common-transition hover:text-light'>
-              Áp dụng
-            </button>
-          </div>
+          {isShowVoucher && (
+            <div className='flex items-center gap-1 mb-2'>
+              <input
+                type='text'
+                className='border w-full outline-secondary text-secondary border-slate-300 rounded-lg py-2 px-4'
+                placeholder='Voucher'
+                value={voucherValue}
+                onChange={e => setVoucherValue(e.target.value.toUpperCase())}
+              />
+              <button className='rounded-lg border text-sky-600 border-sky-600 py-2 px-4 text-nowrap flex-shrink-0 hover:bg-sky-600 common-transition hover:text-light'>
+                Áp dụng
+              </button>
+            </div>
+          )}
 
-          <p className='text-green-500 mb-2'>Bạn được -10000 vào tổng giá trị đơn hàng</p>
+          <p className='text-green-500 mb-2'>Bạn được {formatPrice(-10000)} vào tổng giá trị đơn hàng</p>
 
           <div className='flex items-center justify-between mb-2'>
             <span>Tổng tiền:</span>

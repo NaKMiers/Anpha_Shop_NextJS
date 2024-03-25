@@ -64,12 +64,8 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     })
       .sort({ likes: -1, createdAt: -1 })
       .limit(6)
-      .populate('userId')
+      .populate('user')
       .lean()
-    comments = comments.map(comment => ({
-      ...comment,
-      user: comment.userId,
-    }))
 
     return NextResponse.json({ product, relatedProducts, comments }, { status: 200 })
   } catch (err: any) {

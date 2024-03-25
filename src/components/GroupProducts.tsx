@@ -6,14 +6,16 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import ProductCard from './ProductCard'
 import { FullyProduct } from '@/app/api/product/[slug]/route'
+import { ICategory } from '@/models/CategoryModel'
 
 interface GroupProductsProps {
+  category?: ICategory
   products: FullyProduct[]
   hideTop?: boolean
   className?: string
 }
 
-function GroupProducts({ products, hideTop, className }: GroupProductsProps) {
+function GroupProducts({ category, products, hideTop, className }: GroupProductsProps) {
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -69,9 +71,9 @@ function GroupProducts({ products, hideTop, className }: GroupProductsProps) {
         <div className='flex justify-between px-6'>
           <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
             <div className='aspect-square items-center w-6 h-6'>
-              <Image src='/images/netflix-icon.jpg' width={200} height={200} alt='netflix' />
+              <Image src={`/images/${category?.slug}-icon.jpg`} width={200} height={200} alt='netflix' />
             </div>
-            <span className='font-semibold'>Netflix</span>
+            <span className='font-semibold'>{category?.title}</span>
           </div>
           <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
             {isMedium ? (
@@ -79,7 +81,7 @@ function GroupProducts({ products, hideTop, className }: GroupProductsProps) {
                 {isExpaned ? 'Thu lại' : 'Tất cả'}
               </button>
             ) : (
-              <Link href='/category/?ctg=netflix' className='underline text-sky-600'>
+              <Link href={`/category/?ctg=${category?.slug}`} className='underline text-sky-600'>
                 Tất cả
               </Link>
             )}

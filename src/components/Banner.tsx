@@ -1,15 +1,15 @@
 'use client'
 
+import { FullyProduct } from '@/app/api/product/[slug]/route'
+import { ICategory } from '@/models/CategoryModel'
+import { ITag } from '@/models/TagModel'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { FaBoltLightning, FaCartShopping, FaChevronUp } from 'react-icons/fa6'
+import { FaCartPlus } from 'react-icons/fa'
+import { FaBoltLightning, FaChevronUp } from 'react-icons/fa6'
 import Header from './Header'
 import Slider from './Slider'
-import { ICategory } from '@/models/CategoryModel'
-import { ITag } from '@/models/TagModel'
-import { IProduct } from '@/models/ProductModel'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 
 interface BannerProps {
   categories: ICategory[]
@@ -160,8 +160,10 @@ function Banner({ carouselProducts, categories, tags }: BannerProps) {
                           onClick={e => e.stopPropagation()}>
                           Mua ngay
                         </button>
-                        <button className='bg-primary px-2 h-full font-semibold rounded-md text-light hover:bg-secondary common-transition'>
-                          <FaCartShopping size={16} />
+                        <button
+                          className='bg-primary px-2 h-full font-semibold rounded-md text-light hover:bg-secondary common-transition'
+                          onClick={e => e.stopPropagation()}>
+                          <FaCartPlus size={16} />
                         </button>
                       </div>
                     </div>

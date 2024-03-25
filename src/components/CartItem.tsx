@@ -1,31 +1,62 @@
-import Image from 'next/image'
-import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
-import Price from './Price'
-import { TbPackages } from 'react-icons/tb'
-import Link from 'next/link'
+import { FullyCartItem } from '@/app/api/cart/route'
 import { formatPrice } from '@/utils/formatNumber'
+import Image from 'next/image'
+import Link from 'next/link'
+import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
+import { TbPackages } from 'react-icons/tb'
+import Price from './Price'
+import { useCallback } from 'react'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 interface CartItemProps {
+  data: FullyCartItem
   isLocalCartItem?: boolean
   className?: string
   isCheckout?: boolean
   isOrderDetailProduct?: boolean
 }
 
-function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct }: CartItemProps) {
+function CartItem({
+  data,
+  isLocalCartItem,
+  isCheckout,
+  className,
+  isOrderDetailProduct,
+}: CartItemProps) {
+  const handleDeleteCartItem = useCallback(async () => {
+    try {
+      const res = await axios.delete(`/api/cart/${data._id}`)
+      console.log(res.data)
+
+      // show toast success
+      toast.success(res.data.message)
+    } catch (err: any) {
+      console.log(err.message)
+      toast.error(err.response.data.message)
+    }
+  }, [])
+
   return (
     <div
       className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 ${className} ${
         isLocalCartItem ? '' : 'rounded-medium border border-slate-400 p-21'
       }`}>
-      <Link href='/netfix' className='min-w-[150px]'>
-        <Image
-          className='aspect-video rounded-lg'
-          src='/images/netflix-banner.jpg'
-          height={150}
-          width={150}
-          alt='thumbnail'
-        />
+      <Link
+        href={`/${data.product.slug}`}
+        className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'>
+        <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
+          {data.product.images.map(src => (
+            <Image
+              className='flex-shrink w-full snap-start'
+              src={src}
+              width={150}
+              height={150}
+              alt='netflix'
+              key={src}
+            />
+          ))}
+        </div>
       </Link>
 
       {isLocalCartItem && !isCheckout && (
@@ -43,10 +74,10 @@ function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct
 
       {!isLocalCartItem && <input type='checkbox' className='size-5 absolute top-21 right-21' />}
 
-      <div className={`relative h-full ${isLocalCartItem && !isCheckout ? 'pr-10' : ''}`}>
+      <div className={`relative w-full h-full ${isLocalCartItem && !isCheckout ? 'pr-10' : ''}`}>
         <Link href='/netflix'>
-          <h2 className={`text-[20px] tracking-wide mb-2 ${isLocalCartItem ? '' : 'pr-7'} leading-6`}>
-            Spotify Premium (1 Năm) - Trải Nghiệm Âm Nhạc Chất Lượng Cao Suốt Cả Năm
+          <h2 className={`text-[20px] tracking-wide mb-2 leading-6`} title={data.product.title}>
+            {data.product.title}
           </h2>
         </Link>
 
@@ -55,13 +86,13 @@ function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct
             <div className='flex items-center gap-1 text-[16px]'>
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
-              <span className='text-green-500'>2</span>
+              <span className='text-green-500'>{data.quantity}</span>
             </div>
 
             <div className='flex items-center gap-1 text-[16px]'>
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Giá:</span>
-              <span className='text-green-500'>{formatPrice(699000)}</span>
+              <span className='text-green-500'>{formatPrice(data.product.price)}</span>
             </div>
           </div>
         )}
@@ -72,7 +103,7 @@ function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct
               <div className='flex items-center gap-1 text-[16px]'>
                 <FaHashtag className='text-darker' size={16} />
                 <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
-                <span className='text-green-500'>2</span>
+                <span className='text-green-500'>{data.quantity}</span>
               </div>
             </div>
           )
@@ -82,7 +113,7 @@ function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct
             <div className='flex items-center gap-1 mt-2 text-[16px]'>
               <TbPackages className='text-darker' size={22} />
               <span className='text-darker font-bold text-nowrap font-body tracking-wide'>Còn lại:</span>
-              <span className='text-green-500'>61</span>
+              <span className='text-green-500'>{data.product.stock}</span>
             </div>
           </>
         )}
@@ -114,6 +145,7 @@ function CartItem({ isLocalCartItem, isCheckout, className, isOrderDetailProduct
             <FaTrashAlt
               size={21}
               className='text-secondary cursor-pointer hover:scale-110 common-transition'
+              onClick={handleDeleteCartItem}
             />
           </div>
         )}

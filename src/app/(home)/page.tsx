@@ -30,8 +30,6 @@ async function HomePage() {
 
     // For Products
     productsByCategoryGroups = res.data.productsByCategoryGroups
-
-    console.log(productsByCategoryGroups)
   } catch (err: any) {
     console.log(err.response.data)
   }
@@ -58,10 +56,10 @@ async function HomePage() {
       <section className='max-w-1200 mx-auto'>
         {productsByCategoryGroups.map((group, index) => (
           <GroupProducts
+            category={group.category}
             className={index !== productsByCategoryGroups.length - 1 ? 'mb-20' : ''}
             products={group.products}
-            hideTop
-            key={group._id}
+            key={group.category._id}
           />
         ))}
       </section>

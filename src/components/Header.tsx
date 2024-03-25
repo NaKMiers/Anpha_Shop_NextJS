@@ -1,10 +1,14 @@
 'use client'
 
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setCartLength } from '@/libs/reducers/cartReducer'
 import { formatPrice } from '@/utils/formatNumber'
+import axios from 'axios'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaHistory } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
@@ -16,12 +20,33 @@ interface HeaderProps {
 }
 
 function Header({ isStatic }: HeaderProps) {
+  // hook
+  const dispatch = useAppDispatch()
+  const cartLength = useAppSelector(state => state.cart.length)
   const { data: session } = useSession()
   const curUser: any = session?.user
 
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
+
+  // get user cart length
+  useEffect(() => {
+    const getUserCartLength = async () => {
+      try {
+        // send request to get user's cart
+        const res = await axios.get('/api/cart/get-length')
+        console.log(res.data.cartLength)
+
+        // set cart length to state
+        dispatch(setCartLength(res.data.cartLength))
+      } catch (err: any) {
+        console.log(err.message)
+        toast.error(err.response.data.message)
+      }
+    }
+    getUserCartLength()
+  }, [dispatch])
 
   // handle show and hide header on scroll
   useEffect(() => {
@@ -106,7 +131,7 @@ function Header({ isStatic }: HeaderProps) {
           <Link href='/cart' className='relative'>
             <FaCartShopping size={24} className='common-transition hover:scale-110' />
             <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>
-              6
+              {cartLength}
             </span>
           </Link>
 

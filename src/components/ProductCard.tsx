@@ -5,6 +5,9 @@ import Price from './Price'
 import Link from 'next/link'
 import { IProduct } from '@/models/ProductModel'
 import { countPercent } from '@/utils/formatNumber'
+import { useCallback, useEffect } from 'react'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 interface ProductCardProps {
   data: IProduct
@@ -12,6 +15,21 @@ interface ProductCardProps {
 }
 
 function ProductCard({ data, className }: ProductCardProps) {
+  // handle add product to cart
+  const handleAddProductToCart = useCallback(async () => {
+    try {
+      // send request to add product to cart
+      const res = await axios.post('/api/cart/add', { productId: data._id, quantity: 1 })
+      console.log(res.data)
+
+      // show toast success
+      toast.success(res.data.message)
+    } catch (err: any) {
+      console.log(err.message)
+      toast.error(err.response.data.message)
+    }
+  }, [data._id])
+
   return (
     <div
       className={`relative w-full p-4 bg-white shadow-lg rounded-xl select-none hover:-translate-y-1 transition duration-500 ${className}`}>
@@ -21,8 +39,8 @@ function ProductCard({ data, className }: ProductCardProps) {
             <Image
               className='flex-shrink snap-start'
               src={src}
-              width={1920}
-              height={1080}
+              width={200}
+              height={200}
               alt='netflix'
               key={src}
             />
@@ -57,7 +75,9 @@ function ProductCard({ data, className }: ProductCardProps) {
         <button className='bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'>
           MUA NGAY
         </button>
-        <button className='bg-primary px-2 py-[6px] rounded-md group hover:bg-secondary common-transition'>
+        <button
+          className='bg-primary px-2 py-[6px] rounded-md group hover:bg-secondary common-transition'
+          onClick={handleAddProductToCart}>
           <FaCartPlus size={18} className='text-white group-hover:scale-110 common-transition' />
         </button>
       </div>

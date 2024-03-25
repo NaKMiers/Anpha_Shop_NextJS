@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import ContactFloating from '@/components/ContactFloating'
 import '../globals.scss'
 import { getServerSession } from 'next-auth'
+import PageLoading from '@/components/PageLoading'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -35,6 +36,8 @@ export default async function RootLayout({
           />
 
           <Header />
+
+          <PageLoading />
 
           <main className='px-21 max-w-1200 mx-auto'>{children}</main>
 

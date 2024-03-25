@@ -13,10 +13,18 @@ export async function GET() {
   try {
     // get all account
     const accounts = await AccountModel.find()
-      .populate('type', 'title images')
-      .populate('type.category', 'title')
+      .populate({
+        path: 'type',
+        select: 'title images category',
+        populate: {
+          path: 'category',
+          select: 'title',
+        },
+      })
       .sort({ createdAt: -1 })
       .lean()
+
+    console.log('Accounts:', accounts)
 
     // return response
     return NextResponse.json({ accounts }, { status: 200 })

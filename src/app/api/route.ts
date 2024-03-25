@@ -51,7 +51,7 @@ export async function GET() {
           .sort((a, b) => b.sold - a.sold)
 
         return {
-          ...category,
+          category,
           products: productsByCtg,
         }
       })
