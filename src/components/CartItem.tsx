@@ -1,6 +1,12 @@
 import { FullyCartItem } from '@/app/api/cart/route'
-import { useAppDispatch } from '@/libs/hooks'
-import { cart, deleteCartItem, updateCartItemQuantity } from '@/libs/reducers/cartReducer'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import {
+  cart,
+  deleteCartItem,
+  setSelectedItems,
+  updateCartItemQuantity,
+  updateLocalCartItemQuantity,
+} from '@/libs/reducers/cartReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
 import Image from 'next/image'
@@ -13,6 +19,7 @@ import Price from './Price'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from './ConfirmDialog'
 import { setOpenConfirm } from '@/libs/reducers/modalReducer'
+import { useSession } from 'next-auth/react'
 
 interface CartItemProps {
   cartItem: FullyCartItem
@@ -31,6 +38,9 @@ function CartItem({
 }: CartItemProps) {
   // hook
   const dispatch = useAppDispatch()
+  const { data: session } = useSession()
+  const curUser: any = session?.user
+  const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
 
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -75,7 +85,7 @@ function CartItem({
     [cartItem.product?.stock, quantity]
   )
 
-  // handle accept delete cart item
+  // handle update cart quantity
   const handleUpdateCartQuantity = useCallback(
     async (value: number, isCustom: boolean = false) => {
       // validate quantity
@@ -100,6 +110,18 @@ function CartItem({
       }
     },
     [handleValidateQuantity, cartItem._id, dispatch]
+  )
+
+  // handle update cart quantity LOCAL
+  const handleUpdateLocalCartQuantity = useCallback(
+    (value: number, isCustom: boolean = false) => {
+      // validate quantity
+      const { isValid, quantity } = handleValidateQuantity(value, isCustom)
+      if (!isValid) return
+
+      dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: quantity }))
+    },
+    [cartItem._id, dispatch, handleValidateQuantity]
   )
 
   // handle delete cart item
@@ -160,7 +182,22 @@ function CartItem({
         </div>
       )}
 
-      {!isLocalCartItem && <input type='checkbox' className='size-5 absolute top-21 right-21' />}
+      {!isLocalCartItem && (
+        <input
+          type='checkbox'
+          className='size-5 z-10 cursor-pointer absolute top-21 right-21'
+          checked={selectedCartItems?.includes(cartItem._id)}
+          onChange={() =>
+            dispatch(
+              setSelectedItems(
+                selectedCartItems.includes(cartItem._id.toString())
+                  ? selectedCartItems.filter(id => id !== cartItem._id)
+                  : [...selectedCartItems, cartItem._id]
+              )
+            )
+          }
+        />
+      )}
 
       <div className={`relative w-full h-full ${isLocalCartItem && !isCheckout ? 'pr-10' : ''}`}>
         <Link href='/netflix'>
@@ -217,7 +254,9 @@ function CartItem({
                     : 'border border-secondary'
                 }`}
                 disabled={quantity <= 1 || isLoading}
-                onClick={() => handleUpdateCartQuantity(-1)}>
+                onClick={() =>
+                  curUser ? handleUpdateCartQuantity(-1) : handleUpdateLocalCartQuantity(-1)
+                }>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
                 ) : (
@@ -236,7 +275,11 @@ function CartItem({
                 pattern='[0-9]*'
                 value={quantity}
                 disabled={isLoading}
-                onChange={e => handleUpdateCartQuantity(+e.target.value, true)}
+                onChange={e =>
+                  curUser
+                    ? handleUpdateCartQuantity(+e.target.value, true)
+                    : handleUpdateLocalCartQuantity(+e.target.value, true)
+                }
               />
               <button
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
@@ -245,7 +288,9 @@ function CartItem({
                     : ' border-secondary'
                 }`}
                 disabled={quantity >= cartItem.product?.stock! || isLoading}
-                onClick={() => handleUpdateCartQuantity(1)}>
+                onClick={() =>
+                  curUser ? handleUpdateCartQuantity(1) : handleUpdateLocalCartQuantity(1)
+                }>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
                 ) : (

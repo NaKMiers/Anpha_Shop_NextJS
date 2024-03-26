@@ -1,26 +1,107 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
+import Input from '@/components/Input'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { formatPrice } from '@/utils/formatNumber'
+import { cart, setSelectedItems } from '@/libs/reducers/cartReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
+import { IVoucher } from '@/models/VoucherModel'
+import { calcPercentage, formatPrice } from '@/utils/formatNumber'
+import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useState } from 'react'
-import { FaPlusSquare } from 'react-icons/fa'
+import Link from 'next/link'
+import { useCallback, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { FaMailBulk, FaPlusSquare } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
+import { MdEmail } from 'react-icons/md'
+import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
 
 function CartPage() {
   // hook
   const dispatch = useAppDispatch()
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const isPageLoading = useAppSelector(state => state.modal.isPageLoading)
   const { data: session } = useSession()
   const curUser: any = session?.user
-  const cartLocalItems = useAppSelector(state => state.cart.localItems)
-  const cartItems = useAppSelector(state => state.cart.items)
+  let cartLocalItems = useAppSelector(state => state.cart.localItems)
+  let cartItems = useAppSelector(state => state.cart.items)
+  const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
+
+  if (!curUser) {
+    cartItems = cartLocalItems
+  }
 
   // states
   const [isShowVoucher, setIsShowVoucher] = useState(false)
-  const [voucherValue, setVoucherValue] = useState('')
+  const [email, setEmail] = useState<string>('')
+  const [voucher, setVoucher] = useState<IVoucher | null>(null)
+  const [voucherMessage, setVoucherMessage] = useState<string>('')
+  const [code, setCode] = useState('')
+
+  // Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      email: curUser?.email || '',
+      code: '',
+    },
+  })
+
+  // handle calculate sub total
+  const handleCalcSubTotal = useCallback(() => {
+    return selectedCartItems.reduce((total, cartItem) => {
+      const item: any = cartItems.find(cI => cI._id === cartItem)
+
+      return total + item?.quantity * item?.product.price
+    }, 0)
+  }, [cartItems, selectedCartItems])
+
+  // handle calculate final total (included voucher)
+  const handleCalcFinalTotal = useCallback(() => {}, [])
+
+  // send request to server to check voucher
+  const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      if (selectedCartItems.length) {
+        // start loading
+        dispatch(setLoading(true))
+
+        try {
+          // send request to server
+          const res = await axios.post(`/api/voucher/${data.code}/apply`, {
+            email: data.email,
+            total: handleCalcSubTotal(),
+          })
+          const { voucher, message } = res.data
+
+          // set voucher to state
+          setVoucher(voucher)
+          setVoucherMessage(message)
+
+          // show success message
+          toast.success(message)
+        } catch (err: any) {
+          const { message } = err.response.data
+          console.log(err.message)
+          toast.error(message)
+          setVoucherMessage(message)
+        } finally {
+          dispatch(setLoading(false))
+        }
+      } else {
+        toast.error('Hãy chọn sản phẩm để tiến hành nhập voucher')
+      }
+    },
+    [handleCalcSubTotal, dispatch, selectedCartItems.length]
+  )
 
   return (
     <div className='mt-20 grid grid-cols-1 md:grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
@@ -43,7 +124,7 @@ function CartPage() {
         <div className='pt-6' />
 
         {/* Local cart items */}
-        {!!cartLocalItems.length && (
+        {!!cartLocalItems.length && curUser && (
           <div className='border border-slate-400 p-4 rounded-medium'>
             <p className='text-primary italic mb-3'>
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
@@ -63,54 +144,129 @@ function CartPage() {
 
         <div className='pt-4' />
 
-        {/* Database cart items */}
-        <div>
-          <div className='flex items-center justify-end gap-2 pr-21'>
-            <label htmlFor='selectAll' className='font-semibold cursor-pointer'>
-              Chọn tất cả
-            </label>
-            <input name='selectAll' id='selectAll' type='checkbox' className='size-5 cursor-pointer' />
+        {cartItems.length ? (
+          <div>
+            <div className='flex items-center justify-end gap-2 pr-21 select-none'>
+              <label htmlFor='selectAll' className='font-semibold cursor-pointer '>
+                {cartItems.length === selectedCartItems.length ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+              </label>
+              <input
+                name='selectAll'
+                id='selectAll'
+                type='checkbox'
+                checked={cartItems.length === selectedCartItems.length}
+                onChange={() =>
+                  cartItems.length === selectedCartItems.length
+                    ? dispatch(setSelectedItems([]))
+                    : dispatch(setSelectedItems(cartItems.map(cartItem => cartItem._id)))
+                }
+                className='size-5 cursor-pointer'
+              />
+            </div>
+
+            <div className='pt-4' />
+
+            {cartItems.map((cartItem, index) => (
+              <CartItem cartItem={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
+            ))}
           </div>
-
-          <div className='pt-4' />
-
-          {cartItems.map((cartItem, index) => (
-            <CartItem cartItem={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
-          ))}
-        </div>
+        ) : (
+          <p className='text-center'>
+            Chưa có sản phẩm nào trong giỏ hàng của hàng. Hãy ấn vào{' '}
+            <Link href='/' className='text-sky-500 underline'>
+              đây
+            </Link>{' '}
+            để bắt đầu mua hàng.{' '}
+            <Link className='text-sky-500 underline italic' href='/'>
+              Quay lại
+            </Link>
+          </p>
+        )}
       </div>
 
       {/* Order Summary */}
       <div className='col-span-1'>
         <div className='border border-slate-300 rounded-medium shadow-lg p-4 sticky mt-[60px] top-[88px] bg-sky-50'>
+          {!curUser && (
+            <>
+              <p className='mb-2'>
+                Nhập email của bạn{' '}
+                <span className='text-primary'>
+                  (Email này sẽ được dùng để gửi đơn hàng sau khi mua)
+                </span>
+              </p>
+              <Input
+                id='email'
+                label='Email'
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+                type='email'
+                icon={MdEmail}
+                className='mb-2'
+              />
+            </>
+          )}
+
           <p className='mb-2'>
-            Bạn có voucher? (<button className='text-sky-600 hover:underline z-10'>ấn vào đây</button>)
+            Bạn có voucher? (
+            <button
+              className='text-sky-600 hover:underline z-10'
+              onClick={() => setIsShowVoucher(prev => !prev)}>
+              ấn vào đây
+            </button>
+            )
           </p>
           {isShowVoucher && (
             <div className='flex items-center gap-1 mb-2'>
-              <input
+              <Input
+                id='code'
+                label='Voucher'
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
                 type='text'
-                className='border w-full outline-secondary text-secondary border-slate-300 rounded-lg py-2 px-4'
-                placeholder='Voucher'
-                value={voucherValue}
-                onChange={e => setVoucherValue(e.target.value.toUpperCase())}
+                icon={RiCoupon2Fill}
+                className='mb-2'
               />
-              <button className='rounded-lg border text-sky-600 border-sky-600 py-2 px-4 text-nowrap flex-shrink-0 hover:bg-sky-600 common-transition hover:text-light'>
-                Áp dụng
+              <button
+                className={`rounded-lg border py-2 px-4 text-nowrap flex-shrink-0 hover:bg-primary common-transition hover:text-light ${
+                  isLoading
+                    ? 'border-slate-200 bg-slate-200 pointer-events-none'
+                    : 'border-primary text-primary '
+                }`}
+                onClick={handleSubmit(handleApplyVoucher)}
+                disabled={isLoading}>
+                {isLoading ? (
+                  <RiDonutChartFill size={26} className='animate-spin text-slate-300' />
+                ) : (
+                  'Áp dụng'
+                )}
               </button>
             </div>
           )}
 
-          <p className='text-green-500 mb-2'>Bạn được {formatPrice(-10000)} vào tổng giá trị đơn hàng</p>
-
+          {voucherMessage && (
+            <p className={`${voucher ? 'text-green-500' : 'text-rose-500'} -mt-3 mb-2`}>
+              {voucherMessage}
+            </p>
+          )}
           <div className='flex items-center justify-between mb-2'>
             <span>Tổng tiền:</span>
-            <span className='font-semibold'>{formatPrice(0)}</span>
+            <span className='font-semibold'>{formatPrice(handleCalcSubTotal())}</span>
           </div>
-          <div className='flex items-center justify-between'>
-            <span>Voucher:</span>
-            <span className='font-semibold text-yellow-400'>{formatPrice(0)}</span>
-          </div>
+          {voucher && (
+            <div className='flex items-center justify-between'>
+              <span>Voucher:</span>
+              <span className='font-semibold text-yellow-400'>
+                {voucher?.type === 'percentage'
+                  ? `${voucher.value} (${calcPercentage(voucher.value, handleCalcSubTotal())})`
+                  : formatPrice(+voucher?.value!)}
+              </span>
+            </div>
+          )}
 
           <div className='pt-2' />
           <hr />
