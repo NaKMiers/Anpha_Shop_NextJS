@@ -3,7 +3,7 @@
 import Pagination from '@/components/Pagination'
 import TagItem from '@/components/admin/TagItem'
 import { useAppDispatch } from '@/libs/hooks'
-import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ITag } from '@/models/TagModel'
 import axios from 'axios'
 import Link from 'next/link'

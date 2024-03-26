@@ -3,10 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export const loading = createSlice({
   name: 'loading',
   initialState: {
+    isOpenConfirm: false,
     isPageLoading: false,
     isLoading: false,
   },
   reducers: {
+    setOpenConfirm: (state, action: PayloadAction<boolean>) => ({
+      ...state,
+      isOpenConfirm: action.payload,
+    }),
     setPageLoading: (state, action: PayloadAction<boolean>) => ({
       ...state,
       isPageLoading: action.payload,
@@ -18,5 +23,5 @@ export const loading = createSlice({
   },
 })
 
-export const { setPageLoading, setLoading } = loading.actions
+export const { setOpenConfirm, setPageLoading, setLoading } = loading.actions
 export default loading.reducer

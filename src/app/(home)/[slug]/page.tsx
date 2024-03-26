@@ -1,4 +1,5 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
+import BuyActionWithQuantity from '@/components/BuyActionWithQuantity'
 import ChooseMe from '@/components/ChooseMe'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
@@ -11,7 +12,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { FaCartPlus, FaCircleCheck, FaMinus, FaPlus, FaTags } from 'react-icons/fa6'
+import { FaCircleCheck, FaTags } from 'react-icons/fa6'
 import { MdCategory } from 'react-icons/md'
 import { TbPackages } from 'react-icons/tb'
 
@@ -62,37 +63,42 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           <LinkBar className='mt-21' link={`${process.env.APP_URL}/${slug}`} />
         </div>
 
+        {/* Basic Product Info */}
         <div className='md:w-[55%]'>
-          {/* Basic Product Info */}
+          {/* Title */}
           <h1 className='text-[28px] text-dark font-semibold mb-3' title={product?.title}>
             {product?.title}
           </h1>
 
+          {/* Price */}
           <Price price={product?.price || 0} oldPrice={product?.oldPrice} />
 
           <div className='flex flex-col gap-3 text-xl font-body tracking-wide mt-5'>
-            <div className='flex items-center gap-1'>
-              <TbPackages className='w-7 text-darker' size={26} />
-              <span className='text-darker font-bold text-nowrap'>Còn lại:</span>
-              <span className='text-green-500'>{product?.stock}</span>
-            </div>
+            {/* Category */}
             <div className='flex items-center gap-1'>
               <MdCategory className='w-7 text-darker' size={26} />
-              <span className='text-darker font-bold text-nowrap'>Danh mục:</span>
+              <span className='text-darker font-bold text-nowrap'>Thể loại:</span>
               <Link
                 href={`/category?ctg=${product?.category.slug}`}
                 className='text-orange-500 hover:underline'>
                 {product?.category.title}
               </Link>
             </div>
+
+            {/* Tags */}
             <div className='flex items-center gap-1 flex-wrap'>
               <FaTags className='w-7 text-darker' size={20} />
-              <span className='text-darker font-bold text-nowrap'>Thể loại:</span>
+              <span className='text-darker font-bold text-nowrap'>Tags:</span>
               {product?.tags.map((tag: ITag, index) => (
                 <Link href={`/tags?ctg=${tag.slug}`} className='text-dark' key={tag.slug}>
                   {tag.title + (index !== product!.tags.length - 1 ? ', ' : '')}
                 </Link>
               ))}
+            </div>
+            <div className='flex items-center gap-1'>
+              <TbPackages className='w-7 text-darker' size={26} />
+              <span className='text-darker font-bold text-nowrap'>Còn lại:</span>
+              <span className='text-green-500'>{product?.stock}</span>
             </div>
             <div className='flex items-center gap-1'>
               <FaCircleCheck className='w-7 text-darker' size={20} />
@@ -101,37 +107,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           </div>
 
-          {/* Quantity */}
-          <div className='inline-flex border-[1.5px] border-secondary rounded-md overflow-hidden my-3'>
-            <button className='flex items-center justify-center px-3 py-[10px] group hover:bg-secondary common-transition'>
-              <FaMinus
-                size={16}
-                className='text-secondary group-hover:text-white group-hover:scale-110 common-transition'
-              />
-            </button>
-            <input
-              className='max-w-14 px-2 outline-none text-center text-lg text-dark font-semibold font-body border-x-[1.5px] border-secondary'
-              type='text'
-              inputMode='numeric'
-              pattern='[0-9]*'
-            />
-            <button className='flex items-center justify-center px-3 py-[10px] group hover:bg-secondary common-transition'>
-              <FaPlus
-                size={16}
-                className='text-secondary group-hover:text-white group-hover:scale-110 common-transition'
-              />
-            </button>
-          </div>
-
-          {/* Action Buttons */}
-          <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-1'>
-            <button className='bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition'>
-              MUA NGAY
-            </button>
-            <button className='bg-primary px-3 py-2 rounded-md'>
-              <FaCartPlus size={22} className='text-white' />
-            </button>
-          </div>
+          <BuyActionWithQuantity product={product} />
         </div>
       </section>
 

@@ -3,10 +3,12 @@
 import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { setCartItems } from '@/libs/reducers/cartReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -16,37 +18,15 @@ import { FaCartShopping } from 'react-icons/fa6'
 function CartPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isPageLoading = useAppSelector(state => state.loading.isPageLoading)
+  const isPageLoading = useAppSelector(state => state.modal.isPageLoading)
+  const { data: session } = useSession()
+  const curUser: any = session?.user
+  const cartLocalItems = useAppSelector(state => state.cart.localItems)
+  const cartItems = useAppSelector(state => state.cart.items)
 
   // states
-  const [cart, setCart] = useState<FullyCartItem[]>([])
   const [isShowVoucher, setIsShowVoucher] = useState(false)
   const [voucherValue, setVoucherValue] = useState('')
-
-  // get user's cart
-  useEffect(() => {
-    const getUserCart = async () => {
-      // start loading
-      dispatch(setPageLoading(true))
-
-      try {
-        // send request to get user's cart
-        const res = await axios.get('/api/cart')
-        const { cart } = res.data
-
-        // set cart to state
-        setCart(cart)
-
-        console.log(cart)
-      } catch (err: any) {
-        console.log(err.message)
-        toast.error(err.response.data.message)
-      } finally {
-        dispatch(setPageLoading(false))
-      }
-    }
-    getUserCart()
-  }, [dispatch])
 
   return (
     <div className='mt-20 grid grid-cols-1 md:grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
@@ -56,23 +36,29 @@ function CartPage() {
           <FaCartShopping size={30} className='text-dark' />
           <span>Giỏ hàng</span>
           <span>
-            (<span className='text-primary font-normal'>3</span>)
+            (
+            <span className='text-primary font-normal'>
+              {curUser
+                ? cartItems.reduce((total, item) => total + item.quantity, 0)
+                : cartLocalItems.reduce((total, item) => total + item.quantity, 0)}
+            </span>
+            )
           </span>
         </h1>
 
         <div className='pt-6' />
 
         {/* Local cart items */}
-        <div className='border border-slate-400 p-4 rounded-medium'>
+        {/* <div className='border border-slate-400 p-4 rounded-medium'>
           <p className='text-primary italic mb-3'>
             Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
             <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
           </p>
 
-          {/* {Array.from({ length: 2 }).map((_, index) => (
+          {Array.from({ length: 2 }).map((_, index) => (
             <CartItem className={index != 0 ? 'mt-4' : ''} key={index} isLocalCartItem />
-          ))} */}
-        </div>
+          ))}
+        </div> */}
 
         <div className='pt-4' />
 
@@ -87,8 +73,8 @@ function CartPage() {
 
           <div className='pt-4' />
 
-          {cart.map((cartItem, index) => (
-            <CartItem data={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
+          {cartItems.map((cartItem, index) => (
+            <CartItem cartItem={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
           ))}
         </div>
       </div>
@@ -135,14 +121,14 @@ function CartPage() {
           </div>
 
           <div className='flex flex-col gap-3'>
-            <button className='flex items-center justify-center rounded-xl gap-1 border border-primary py-2 group hover:bg-primary common-transition'>
+            <button className='flex items-center justify-center rounded-xl gap-1 border border-primary py-2 px-3 group hover:bg-primary common-transition'>
               <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
               <span className='font-semibold ml-1 group-hover:text-light'>
                 Mua ngay với {formatPrice(3761992)}
               </span>
             </button>
 
-            <button className='flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 group hover:bg-[#a1396c] common-transition'>
+            <button className='flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition'>
               <Image
                 className='group-hover:border-white rounded-md border-2'
                 src='/images/momo-icon.jpg'
@@ -153,7 +139,7 @@ function CartPage() {
               <span className='font-semibold group-hover:text-light'>Mua nhanh với Momo</span>
             </button>
 
-            <button className='flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 group hover:bg-[#62b866] common-transition'>
+            <button className='flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition'>
               <Image src='/images/banking-icon.jpg' height={32} width={32} alt='logo' />
               <span className='font-semibold group-hover:text-light'>Mua ngay với BANKING</span>
             </button>

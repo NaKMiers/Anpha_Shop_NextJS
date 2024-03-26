@@ -27,7 +27,7 @@ interface TagItemProps {
 function TagItem({
   data,
   loadingTags,
-  className,
+  className = '',
   // selected
   selectedTags,
   setSelectedTags,

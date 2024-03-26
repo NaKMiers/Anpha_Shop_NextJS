@@ -22,7 +22,7 @@ interface VoucherItemProps {
 function VoucherItem({
   data,
   loadingVouchers,
-  className,
+  className = '',
   // selected
   selectedVouchers,
   setSelectedVouchers,

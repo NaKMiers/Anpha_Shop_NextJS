@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
 import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -15,7 +15,7 @@ import { RiCharacterRecognitionLine } from 'react-icons/ri'
 function AddTagPage() {
   // store
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
 
   // Form
   const {

@@ -14,7 +14,7 @@ import { ImClock } from 'react-icons/im'
 import { MdAutorenew, MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
 import toast from 'react-hot-toast'
-import { setLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -23,7 +23,7 @@ export type GroupTypes = {
 function AddAccountPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
 
   // states
   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})

@@ -28,7 +28,7 @@ interface UserItemProps {
 function UserItem({
   data,
   loadingUsers,
-  className,
+  className = '',
   // selected
   selectedUsers,
   setSelectedUsers,

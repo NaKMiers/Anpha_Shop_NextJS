@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import axios from 'axios'
 import Link from 'next/link'
@@ -26,7 +26,7 @@ import { RiCharacterRecognitionLine, RiCheckboxMultipleBlankLine } from 'react-i
 function AddVoucherPage() {
   // store
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const [isChecked, setIsChecked] = useState(true)
   const [roleUsers, setRoleUsers] = useState<IUser[]>([])
 

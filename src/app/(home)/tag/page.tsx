@@ -45,7 +45,7 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
       {/* products */}
       <div className='grid grid-cols-1 gap-21 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {products.map(product => (
-          <ProductCard data={product} key={product._id} />
+          <ProductCard product={product} key={product._id} />
         ))}
       </div>
     </div>

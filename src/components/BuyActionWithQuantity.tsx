@@ -1,0 +1,172 @@
+'use client'
+
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { addCartItem } from '@/libs/reducers/cartReducer'
+import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
+import { IProduct } from '@/models/ProductModel'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
+import { FaCartPlus, FaMinus, FaPlus } from 'react-icons/fa'
+import { RiDonutChartFill } from 'react-icons/ri'
+
+interface BuyActionWithQuantityProps {
+  product: IProduct | null
+  className?: string
+}
+
+function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantityProps) {
+  // hook
+  const dispatch = useAppDispatch()
+  const isLoading = useAppSelector(state => state.modal.isLoading)
+  const router = useRouter()
+
+  // states
+  const [quantity, setQuantity] = useState<number>(1)
+
+  // handle add product to cart
+  const handleAddProductToCart = useCallback(async () => {
+    if (product) {
+      // start loading
+      dispatch(setLoading(true))
+
+      try {
+        // send request to add product to cart
+        const res = await axios.post('/api/cart/add', { productId: product._id, quantity })
+        const { cartItem, message } = res.data
+
+        // add cart item to state
+        dispatch(addCartItem(cartItem))
+
+        // show toast success
+        toast.success(message)
+      } catch (err: any) {
+        console.log(err.message)
+        toast.error(err.response.data.message)
+      } finally {
+        // stop loading
+        dispatch(setLoading(false))
+      }
+    }
+  }, [dispatch, product, quantity])
+
+  // handle buy now (add to cart and move to cart)
+  const handleBuyNow = useCallback(async () => {
+    // start page loading
+    dispatch(setPageLoading(true))
+    try {
+      // send request to add product to cart
+      const res = await axios.post('/api/cart/add', { productId: product?._id, quantity: 1 })
+      const { cartItem, message } = res.data
+
+      // add cart item to state
+      dispatch(addCartItem(cartItem))
+
+      // show toast success
+      toast.success(message)
+
+      // move to cart page
+      router.push(`/cart?product=${product?.slug}`)
+    } catch (err: any) {
+      console.log(err.message)
+    } finally {
+      // stop page loading
+      dispatch(setPageLoading(false))
+    }
+  }, [product?._id, dispatch, product?.slug, router])
+
+  // handle quantity
+  const handleQuantity = useCallback(
+    (value: number, isCustom: boolean = false) => {
+      if (!isCustom) {
+        // quantity must be > 0
+        if (quantity + value <= 0) return
+
+        // quantity must be <= product stock
+        if (quantity + value > product?.stock!) return
+
+        setQuantity(quantity + value)
+      } else {
+        // quantity must be > 0
+        if (value < 1) return
+
+        // quantity must be <= product stock
+        if (value > product?.stock!) return
+
+        setQuantity(value)
+      }
+    },
+    [product?.stock, quantity]
+  )
+
+  return (
+    <>
+      {/* Quantity */}
+      <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
+        <button
+          className={`flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
+            quantity <= 1
+              ? 'pointer-events-none border-slate-100 bg-slate-100'
+              : 'border border-secondary'
+          }`}
+          disabled={quantity <= 1 || isLoading}
+          onClick={() => handleQuantity(-1)}>
+          <FaMinus
+            size={16}
+            className={`group-hover:text-white group-hover:scale-110 common-transition ${
+              quantity <= 1 ? 'text-slate-300' : 'text-secondary'
+            }`}
+          />
+        </button>
+        <input
+          className='max-w-14 px-2 border-y border-slate-100 outline-none text-center text-lg text-dark font-semibold font-body'
+          type='text'
+          inputMode='numeric'
+          pattern='[0-9]*'
+          value={quantity}
+          onChange={e => handleQuantity(+e.target.value, true)}
+        />
+        <button
+          className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
+            quantity >= product?.stock!
+              ? 'pointer-events-none border-slate-100 bg-slate-100'
+              : ' border-secondary'
+          }`}
+          disabled={quantity === product?.stock || isLoading}
+          onClick={() => handleQuantity(1)}>
+          <FaPlus
+            size={16}
+            className={`group-hover:text-white group-hover:scale-110 common-transition ${
+              quantity >= product?.stock! ? 'text-slate-300' : 'text-secondary'
+            }`}
+          />
+        </button>
+      </div>
+
+      {/* Action Buttons */}
+      <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-1'>
+        <button
+          className='bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition'
+          onClick={handleBuyNow}
+          disabled={isLoading}>
+          MUA NGAY
+        </button>
+        <button
+          className={`bg-primary rounded-md p-2 group hover:bg-primary-600 common-transition ${
+            isLoading ? 'pointer-events-none bg-slate-200' : ''
+          }`}
+          onClick={handleAddProductToCart}
+          disabled={isLoading}>
+          {isLoading ? (
+            <RiDonutChartFill size={22} className='animate-spin text-white' />
+          ) : (
+            <FaCartPlus size={22} className='text-white group-hover:scale-110 common-transition' />
+          )}
+        </button>
+      </div>
+    </>
+  )
+}
+
+export default BuyActionWithQuantity

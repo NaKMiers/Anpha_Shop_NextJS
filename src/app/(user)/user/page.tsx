@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import { formatDate } from '@/utils/formatTime'
 import axios from 'axios'
@@ -20,7 +20,7 @@ import { HiLightningBolt } from 'react-icons/hi'
 function UserPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()
 
   // states

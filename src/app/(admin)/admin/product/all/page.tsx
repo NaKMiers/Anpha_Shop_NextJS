@@ -3,7 +3,7 @@
 import Pagination from '@/components/Pagination'
 import ProductItem from '@/components/admin/ProductItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'

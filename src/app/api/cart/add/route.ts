@@ -90,8 +90,12 @@ export async function POST(req: NextRequest) {
 
       // return data
       return NextResponse.json(
-        { cartItem, cartLength, message: 'Đã thêm sản phẩm vào giỏ hàng' },
-        { status: 200 }
+        {
+          cartItem,
+          cartLength,
+          message: `Đã thêm ${quantity} gói "${product.title}" vào giỏ hàng`,
+        },
+        { status: 201 }
       )
     }
 
@@ -124,12 +128,13 @@ export async function POST(req: NextRequest) {
 
     // return data
     return NextResponse.json(
-      { cartItem: copiedCartItem, cartLength, message: 'Đã thêm sản phẩm vào giỏ hàng' },
+      {
+        cartItem: copiedCartItem,
+        cartLength,
+        message: `Đã thêm ${quantity} gói ${product.title} vào giỏ hàng`,
+      },
       { status: 201 }
     )
-
-    // return new cart
-    return NextResponse.json({ message: 'Add product to cart successfully' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

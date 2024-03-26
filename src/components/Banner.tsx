@@ -10,6 +10,7 @@ import { FaCartPlus } from 'react-icons/fa'
 import { FaBoltLightning, FaChevronUp } from 'react-icons/fa6'
 import Header from './Header'
 import Slider from './Slider'
+import CarouselProduct from './CarouselProduct'
 
 interface BannerProps {
   categories: ICategory[]
@@ -138,37 +139,7 @@ function Banner({ carouselProducts, categories, tags }: BannerProps) {
           <div className='relative rflow-x-scroll shrink-0'>
             <div className='flex items-center h-full -mx-21/2'>
               {carouselProducts?.map(product => (
-                <Link
-                  href={`/${product.slug}`}
-                  key={product._id}
-                  className='aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2'>
-                  <div className='relative rounded-small overflow-hidden group'>
-                    <Image src={product.images[0]} width={1200} height={768} alt='account' />
-                    <div className='flex flex-col sm:gap-1 justify-center absolute w-full h-full top-0 left-0 bg-sky-500 bg-opacity-60 p-2 text-center translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
-                      <h5 className='text-white font-body text-sm' title={product.title}>
-                        {product.title}
-                      </h5>
-                      <p className='uppercase text-xs font-semibold text-slate-200'>
-                        - {product.category.title} -
-                      </p>
-                      <p className='font-bold text-white text-sm'>
-                        Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>
-                      </p>
-                      <div className='flex items-center gap-2 h-[26px] justify-center'>
-                        <button
-                          className='bg-secondary px-[6px] h-full text-xs font-semibold rounded-md text-light tracking-wide hover:bg-primary common-transition'
-                          onClick={e => e.stopPropagation()}>
-                          Mua ngay
-                        </button>
-                        <button
-                          className='bg-primary px-2 h-full font-semibold rounded-md text-light hover:bg-secondary common-transition'
-                          onClick={e => e.stopPropagation()}>
-                          <FaCartPlus size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                <CarouselProduct product={product} key={product._id} />
               ))}
             </div>
           </div>

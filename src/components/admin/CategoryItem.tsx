@@ -25,7 +25,7 @@ interface CategoryItemProps {
 function CategoryItem({
   data,
   loadingCategories,
-  className,
+  className = '',
   // selected
   selectedCategories,
   setSelectedCategories,

@@ -7,10 +7,10 @@ import { FaCaretDown, FaFilter } from 'react-icons/fa6'
 
 interface MetaProps {
   title?: string
-  classname?: string
+  className?: string
 }
 
-function Meta({ title, classname }: MetaProps) {
+function Meta({ title, className = '' }: MetaProps) {
   const [price, setPrice] = useState(9000)
 
   const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
@@ -40,7 +40,7 @@ function Meta({ title, classname }: MetaProps) {
   const handleFilter = useCallback(() => {}, [])
 
   return (
-    <div className={`p-21 bg-white rounded-medium shadow-medium text-dark overflow-auto ${classname}`}>
+    <div className={`p-21 bg-white rounded-medium shadow-medium text-dark overflow-auto ${className}`}>
       <h1 className='text-secondary text-3xl font-semibold tracking-wide mb-2'>{title}</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
         <div className='flex flex-col'>

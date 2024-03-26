@@ -4,7 +4,7 @@ import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import FlashSaleItem from '@/components/admin/FlashSaleItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IFlashsale } from '@/models/FlashsaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { formatPrice } from '@/utils/formatNumber'
@@ -24,7 +24,7 @@ export type FlashSaleWithProducts = IFlashsale & { products: IProduct[] }
 function AllFlashSalesPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isPageLoading = useAppSelector(state => state.loading.isPageLoading)
+  const isPageLoading = useAppSelector(state => state.modal.isPageLoading)
 
   // states
   const [flashSales, setFlashSales] = useState<FlashSaleWithProducts[]>([])

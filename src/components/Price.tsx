@@ -7,7 +7,7 @@ interface PriceProps {
   className?: string
 }
 
-function Price({ price, oldPrice, className }: PriceProps) {
+function Price({ price, oldPrice, className = '' }: PriceProps) {
   return (
     <div
       className={`flex items-center rounded-md flex-wrap justify-evenly px-[6px] py-[5px] bg-slate-100 font-body gap-2 ${className}`}>

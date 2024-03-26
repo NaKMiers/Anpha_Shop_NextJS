@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import loadingReducer from './reducers/loadingReducer'
 import cartReducer from './reducers/cartReducer'
+import modalReducer from './reducers/modalReducer'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      loading: loadingReducer,
+      modal: modalReducer,
       cart: cartReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',

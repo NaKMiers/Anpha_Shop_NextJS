@@ -9,7 +9,7 @@ interface LinkBarProps {
   className?: string
 }
 
-function LinkBar({ link, className }: LinkBarProps) {
+function LinkBar({ link, className = '' }: LinkBarProps) {
   const [isCopied, setIsCopied] = useState(false)
 
   const handleCopy = useCallback(() => {

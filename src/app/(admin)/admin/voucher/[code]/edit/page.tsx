@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading, setPageLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { IVoucher } from '@/models/VoucherModel'
 import axios from 'axios'
@@ -28,7 +28,7 @@ import { RiCharacterRecognitionLine, RiCheckboxMultipleBlankLine } from 'react-i
 function EditVoucherPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { code } = useParams<{ code: string }>()
   const router = useRouter()
 

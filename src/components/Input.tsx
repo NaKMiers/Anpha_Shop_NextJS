@@ -32,7 +32,7 @@ function Input({
   options,
   rows,
   onClick,
-  className,
+  className = '',
 }: InputProps) {
   const [isShowPassword, setIsShowPassword] = useState(false)
 

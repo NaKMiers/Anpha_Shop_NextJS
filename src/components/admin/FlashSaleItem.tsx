@@ -22,7 +22,7 @@ interface FlashSaleItemProps {
 function FlashSaleItem({
   data,
   loadingFlashSales,
-  className,
+  className = '',
   // selected
   selectedFlashSales,
   setSelectedFlashSales,

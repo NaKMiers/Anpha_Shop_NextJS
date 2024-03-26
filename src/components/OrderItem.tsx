@@ -7,7 +7,7 @@ interface OrderItemProps {
   className?: string
 }
 
-function OrderItem({ className }: OrderItemProps) {
+function OrderItem({ className = '' }: OrderItemProps) {
   return (
     <div className={`border rounded-medium px-21 py-4 ${className}`}>
       <div className='flex items-center justify-between'>
@@ -32,7 +32,7 @@ function OrderItem({ className }: OrderItemProps) {
         </div>
       </div>
 
-      <CartItem className='mt-4' isLocalCartItem isCheckout />
+      {/* <CartItem className='mt-4' isLocalCartItem isCheckout /> */}
 
       <hr className='mt-8 mb-3' />
 

@@ -8,7 +8,7 @@ interface LoadingButtonProps {
   className?: string
 }
 
-function LoadingButton({ text, isLoading, onClick, className }: LoadingButtonProps) {
+function LoadingButton({ text, isLoading, onClick, className = '' }: LoadingButtonProps) {
   return (
     <button
       className={`${

@@ -3,7 +3,7 @@
 import Pagination from '@/components/Pagination'
 import CategoryItem from '@/components/admin/CategoryItem'
 import { useAppDispatch } from '@/libs/hooks'
-import { setPageLoading } from '@/libs/reducers/loadingReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import axios from 'axios'
 import Link from 'next/link'

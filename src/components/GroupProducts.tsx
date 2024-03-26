@@ -15,7 +15,7 @@ interface GroupProductsProps {
   className?: string
 }
 
-function GroupProducts({ category, products, hideTop, className }: GroupProductsProps) {
+function GroupProducts({ category, products, hideTop, className = '' }: GroupProductsProps) {
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -121,7 +121,7 @@ function GroupProducts({ category, products, hideTop, className }: GroupProducts
               className={`flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-21/2 ${
                 !isDragging ? 'snap-start' : ''
               }`}>
-              <ProductCard className='' data={product} />
+              <ProductCard product={product} className='' />
             </div>
           ))}
         </div>

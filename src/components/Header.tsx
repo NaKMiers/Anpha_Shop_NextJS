@@ -1,13 +1,13 @@
 'use client'
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setCartLength } from '@/libs/reducers/cartReducer'
+import { setCartItems } from '@/libs/reducers/cartReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { use, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHistory } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
@@ -22,30 +22,37 @@ interface HeaderProps {
 function Header({ isStatic }: HeaderProps) {
   // hook
   const dispatch = useAppDispatch()
-  const cartLength = useAppSelector(state => state.cart.length)
+  const cartItems = useAppSelector(state => state.cart.items)
+  const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
   const curUser: any = session?.user
+  const cartLength = curUser
+    ? cartItems.reduce((total, item) => total + item.quantity, 0)
+    : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
 
+  // states
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
 
-  // get user cart length
+  // get user's cart
   useEffect(() => {
-    const getUserCartLength = async () => {
+    const getUserCart = async () => {
       try {
         // send request to get user's cart
-        const res = await axios.get('/api/cart/get-length')
-        console.log(res.data.cartLength)
+        const res = await axios.get('/api/cart')
+        const { cart } = res.data
 
-        // set cart length to state
-        dispatch(setCartLength(res.data.cartLength))
+        // set cart to state
+        dispatch(setCartItems(cart))
+
+        console.log(cart)
       } catch (err: any) {
         console.log(err.message)
         toast.error(err.response.data.message)
       }
     }
-    getUserCartLength()
+    getUserCart()
   }, [dispatch])
 
   // handle show and hide header on scroll
@@ -130,9 +137,11 @@ function Header({ isStatic }: HeaderProps) {
 
           <Link href='/cart' className='relative'>
             <FaCartShopping size={24} className='common-transition hover:scale-110' />
-            <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>
-              {cartLength}
-            </span>
+            {!!cartLength && (
+              <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>
+                {cartLength}
+              </span>
+            )}
           </Link>
 
           {curUser ? (
@@ -209,9 +218,11 @@ function Header({ isStatic }: HeaderProps) {
               className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
               <FaCartShopping size={18} className='' />
               <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
-              <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
-                9
-              </span>
+              {!!cartLength && (
+                <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
+                  {cartLength}
+                </span>
+              )}
             </Link>
           </li>
           <li>

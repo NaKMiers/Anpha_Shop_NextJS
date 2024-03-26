@@ -22,7 +22,7 @@ interface AccountItemProps {
 function AccountItem({
   data,
   loadingAccounts,
-  className,
+  className = '',
   // selected
   selectedAccounts,
   setSelectedAccounts,

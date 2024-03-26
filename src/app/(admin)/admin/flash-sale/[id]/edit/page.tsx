@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
 import axios from 'axios'
 import { timeStamp } from 'console'
@@ -23,7 +23,7 @@ import { RiCharacterRecognitionLine } from 'react-icons/ri'
 function AddFlashSalePage() {
   // hook
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
 

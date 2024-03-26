@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setLoading } from '@/libs/reducers/loadingReducer'
+import { setLoading } from '@/libs/reducers/modalReducer'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import React, { useCallback, useState } from 'react'
@@ -14,7 +14,7 @@ import { FaCheck, FaEyeSlash } from 'react-icons/fa'
 function SecurityPage() {
   // hook
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.loading.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()
   const curUser: any = session?.user
   const isLocalAuth = curUser?.authType === 'local'

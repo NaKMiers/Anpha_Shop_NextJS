@@ -27,7 +27,7 @@ interface ProductItemProps {
 function ProductItem({
   data,
   loadingProducts,
-  className,
+  className = '',
   // selected
   selectedProducts,
   setSelectedProducts,

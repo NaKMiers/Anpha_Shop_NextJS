@@ -10,7 +10,7 @@ interface SliderProps {
   hideControls?: boolean
 }
 
-function Slider({ time, hideControls, children, className }: SliderProps) {
+function Slider({ time, hideControls, children, className = '' }: SliderProps) {
   const [slide, setSlide] = useState(1)
   const childrenAmount = Children.count(children)
   const slideTrackRef = useRef<HTMLDivElement>(null)
