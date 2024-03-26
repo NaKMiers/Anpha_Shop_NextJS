@@ -41,7 +41,7 @@ function OrderDetailPage() {
           <div className='absolute top-1/2 -translate-y-1/2 left-0 h-[88%] w-px bg-slate-200' />
 
           <div className='rounded-medium border border-slate-300 shadow-lg p-21'>
-            <CartItem isCheckout isLocalCartItem isOrderDetailProduct />
+            {/* <CartItem isCheckout isLocalCartItem isOrderDetailProduct /> */}
 
             <hr className='mt-8 mb-3' />
 

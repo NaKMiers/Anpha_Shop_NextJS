@@ -81,9 +81,9 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='pt-5' />
 
         <div>
-          {Array.from({ length: 3 }).map((_, index) => (
+          {/* {Array.from({ length: 3 }).map((_, index) => (
             <CartItem className={index != 0 ? 'mt-4' : ''} key={index} isLocalCartItem isCheckout />
-          ))}
+          ))} */}
         </div>
       </div>
     </div>

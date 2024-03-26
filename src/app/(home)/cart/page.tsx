@@ -1,17 +1,11 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setCartItems } from '@/libs/reducers/cartReducer'
-import { setPageLoading } from '@/libs/reducers/modalReducer'
-import { ICartItem } from '@/models/CartItemModel'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import { useState } from 'react'
 import { FaPlusSquare } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 
@@ -49,16 +43,23 @@ function CartPage() {
         <div className='pt-6' />
 
         {/* Local cart items */}
-        {/* <div className='border border-slate-400 p-4 rounded-medium'>
-          <p className='text-primary italic mb-3'>
-            Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
-            <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
-          </p>
+        {!!cartLocalItems.length && (
+          <div className='border border-slate-400 p-4 rounded-medium'>
+            <p className='text-primary italic mb-3'>
+              Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
+              <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
+            </p>
 
-          {Array.from({ length: 2 }).map((_, index) => (
-            <CartItem className={index != 0 ? 'mt-4' : ''} key={index} isLocalCartItem />
-          ))}
-        </div> */}
+            {cartLocalItems.map((cartItem, index) => (
+              <CartItem
+                cartItem={cartItem}
+                className={index != 0 ? 'mt-4' : ''}
+                key={index}
+                isLocalCartItem
+              />
+            ))}
+          </div>
+        )}
 
         <div className='pt-4' />
 
