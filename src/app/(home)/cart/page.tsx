@@ -12,6 +12,7 @@ import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -25,11 +26,12 @@ function CartPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const isPageLoading = useAppSelector(state => state.modal.isPageLoading)
-  const { data: session } = useSession()
-  const curUser: any = session?.user
   let cartLocalItems = useAppSelector(state => state.cart.localItems)
   let cartItems = useAppSelector(state => state.cart.items)
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
+  const router = useRouter()
+  const { data: session } = useSession()
+  const curUser: any = session?.user
 
   if (!curUser) {
     cartItems = cartLocalItems
@@ -65,7 +67,22 @@ function CartPage() {
   }, [cartItems, selectedCartItems])
 
   // handle calculate final total (included voucher)
-  const handleCalcFinalTotal = useCallback(() => {}, [])
+  const handleCalcFinalTotal = useCallback(() => {
+    const subTotal = handleCalcSubTotal()
+
+    let finalTotal = subTotal
+    if (voucher) {
+      if (voucher.type === 'fixed-reduce') {
+        finalTotal = subTotal - +voucher.value
+      } else if (voucher.type === 'fixed') {
+        finalTotal = +voucher.value
+      } else if (voucher.type === 'percentage') {
+        finalTotal = subTotal - +calcPercentage(voucher.value, subTotal)
+      }
+    }
+
+    return finalTotal
+  }, [handleCalcSubTotal, voucher])
 
   // send request to server to check voucher
   const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
@@ -262,7 +279,9 @@ function CartPage() {
               <span>Voucher:</span>
               <span className='font-semibold text-yellow-400'>
                 {voucher?.type === 'percentage'
-                  ? `${voucher.value} (${calcPercentage(voucher.value, handleCalcSubTotal())})`
+                  ? `${voucher.value} (${formatPrice(
+                      calcPercentage(voucher.value, handleCalcSubTotal())
+                    )})`
                   : formatPrice(+voucher?.value!)}
               </span>
             </div>
@@ -274,14 +293,18 @@ function CartPage() {
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>{formatPrice(222222)}</span>
+            <span className='font-semibold text-3xl text-green-600'>
+              {formatPrice(handleCalcFinalTotal())}
+            </span>
           </div>
 
           <div className='flex flex-col gap-3'>
-            <button className='flex items-center justify-center rounded-xl gap-1 border border-primary py-2 px-3 group hover:bg-primary common-transition'>
+            <button
+              className='flex items-center justify-center rounded-xl gap-1 border border-primary py-2 px-3 group hover:bg-primary common-transition'
+              onClick={() => !curUser && router.push('/')}>
               <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
               <span className='font-semibold ml-1 group-hover:text-light'>
-                Mua ngay với {formatPrice(3761992)}
+                Mua bằng số dư {curUser && `(${curUser?.balance})`}
               </span>
             </button>
 

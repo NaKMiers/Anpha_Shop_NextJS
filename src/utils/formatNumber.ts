@@ -7,5 +7,5 @@ export const countPercent = (price: number, oldPrice: number) =>
 export const calcPercentage = (percentageString: string, number: number) => {
   const percentage = Number(percentageString.replace('%', ''))
   const result = (percentage / 100) * number
-  return formatPrice(result)
+  return result
 }
