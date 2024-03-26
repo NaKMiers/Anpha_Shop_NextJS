@@ -26,9 +26,10 @@ function Header({ isStatic }: HeaderProps) {
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
   const curUser: any = session?.user
-  const cartLength = curUser
-    ? cartItems.reduce((total, item) => total + item.quantity, 0)
-    : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
+  // const cartLength = curUser
+  //   ? cartItems.reduce((total, item) => total + item.quantity, 0)
+  //   : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
+  const cartLength = 0
 
   // states
   const [isShow, setIsShow] = useState(false)
@@ -38,22 +39,24 @@ function Header({ isStatic }: HeaderProps) {
   // get user's cart
   useEffect(() => {
     const getUserCart = async () => {
-      try {
-        // send request to get user's cart
-        const res = await axios.get('/api/cart')
-        const { cart } = res.data
+      if (curUser) {
+        try {
+          // send request to get user's cart
+          const res = await axios.get('/api/cart')
+          const { cart } = res.data
 
-        // set cart to state
-        dispatch(setCartItems(cart))
+          // set cart to state
+          dispatch(setCartItems(cart))
 
-        console.log(cart)
-      } catch (err: any) {
-        console.log(err.message)
-        toast.error(err.response.data.message)
+          console.log(cart)
+        } catch (err: any) {
+          console.log(err.message)
+          toast.error(err.response.data.message)
+        }
       }
     }
     getUserCart()
-  }, [dispatch])
+  }, [dispatch, curUser])
 
   // handle show and hide header on scroll
   useEffect(() => {
