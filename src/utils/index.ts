@@ -1,17 +1,17 @@
+import OrderModel from '@/models/OrderModel'
 import crypto from 'crypto'
-import { Types } from 'mongoose'
 import slugify from 'slugify'
 import unidecode from 'unidecode'
 
 // generate slug
 const generateSlug = (value: string, id?: string): string => {
-  const baseSlug = slugify(unidecode(value.trim()), {
+  const baseSlug: string = slugify(unidecode(value.trim()), {
     lower: true,
     remove: /[*+~.()'"!:@,]/g,
     strict: true,
   })
 
-  const cleanSlug = baseSlug.replace(/[^a-zA-Z0-9]/g, '-')
+  const cleanSlug: string = baseSlug.replace(/[^a-zA-Z0-9]/g, '-')
 
   return encodeURIComponent(cleanSlug)
 }
@@ -26,22 +26,22 @@ function generateCode(length: number): string {
 }
 
 // generate order code
-// async function generateOrderCode(length:number):string {
-//   let isUnique = false
-//   let code:string
+async function generateOrderCode(length: number) {
+  let isUnique: boolean = false
+  let code: string = ''
 
-//   while (!isUnique) {
-//     code = generateCode(length)
+  while (!isUnique) {
+    code = generateCode(length)
 
-//     const isCodeExists = await OrderModel.findOne({ code }).lean()
+    const isCodeExists = await OrderModel.findOne({ code }).lean()
 
-//     if (!isCodeExists) {
-//       isUnique = true
-//     }
-//   }
+    if (!isCodeExists) {
+      isUnique = true
+    }
+  }
 
-//   return code
-// }
+  return code
+}
 
 // make array becomes chaotic
 function shuffleArray(array: any[]): any[] {
@@ -156,12 +156,13 @@ const groupProductByCategory = (categories: any, products: any, sortBy: any, sor
 }
 
 export {
+  calcExpireTime,
   generateCode,
   generateSlug,
-  shuffleArray,
-  calcExpireTime,
   getTimes,
-  randomFileName,
-  productPriceAfterAppliedFlashsale,
   groupProductByCategory,
+  productPriceAfterAppliedFlashsale,
+  randomFileName,
+  shuffleArray,
+  generateOrderCode,
 }

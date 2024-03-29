@@ -6,6 +6,8 @@ import GoogleProvider from 'next-auth/providers/google'
 
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
+import CartItemModel from '@/models/CartItemModel'
+import { useDispatch } from 'react-redux'
 
 // Connect to database
 connectDatabase()
@@ -90,7 +92,25 @@ const handler = NextAuth({
 
       const { password: _, ...otherDetails } = user
 
+      // // get cart from database
+      // let cart = await CartItemModel.find({ userId: user._id })
+      //   .populate({
+      //     path: 'productId',
+      //     populate: {
+      //       path: 'flashsale',
+      //       model: 'flashsale',
+      //     },
+      //   })
+      //   .lean()
+
+      // cart = cart.map(cartItem => ({
+      //   ...cartItem,
+      //   product: cartItem.productId,
+      //   productId: cartItem.productId._id,
+      // }))
+
       session.user = otherDetails
+      // session.cart = cart || []
       token.role = user.role
       token._id = user._id
 

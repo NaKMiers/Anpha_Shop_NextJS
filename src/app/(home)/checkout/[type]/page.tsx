@@ -1,15 +1,24 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
+import { useAppSelector } from '@/libs/hooks'
 import { formatPrice } from '@/utils/formatNumber'
 import Image from 'next/image'
-import React from 'react'
+import { redirect } from 'next/navigation'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
-  const type = params.type
+  const type: string = params.type
+  const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
+
+  if (!checkout) {
+    redirect('/cart')
+  }
+
+  const { selectedCartItems, total, discount, code, email } = checkout
 
   return (
-    <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
+    <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
       {/* Payment info */}
       <div className='col-span-1 lg:col-span-7'>
         {type === 'momo' ? (
@@ -26,14 +35,16 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         {type === 'momo' && (
           <a href='https://me.momo.vn/anphashop'>
             Ấn vào link sau để chuyển nhanh:{' '}
-            <span className='text-sky-500'>https://me.momo.vn/anphashop</span>
+            <span className='text-[#a1396c]'>https://me.momo.vn/anphashop</span>
           </a>
         )}
 
         <div className='border border-slate-400 py-2 px-4 rounded-md mb-2'>
-          <p>
-            Ngân hàng: <span className='text-[#399162] font-semibold'>Vietcombank</span>
-          </p>
+          {type === 'banking' && (
+            <p>
+              Ngân hàng: <span className='text-[#399162] font-semibold'>Vietcombank</span>
+            </p>
+          )}
           {type === 'momo' ? (
             <p>
               Số tài khoản Momo: <span className='text-[#a1396c] font-semibold'>0899320427</span>
@@ -44,21 +55,21 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             </p>
           )}
           <p>
-            Số tiền chuyển: <span className='text-green-500 font-semibold'>{formatPrice(59000)}</span>
+            Số tiền chuyển: <span className='text-green-500 font-semibold'>{formatPrice(1000)}</span>
           </p>
           <p>
-            Nội dung chuyển khoản: <span className='text-yellow-400 font-semibold'>B09E9</span>
+            Nội dung chuyển khoản: <span className='text-yellow-500 font-semibold'>{code}</span>
           </p>
         </div>
 
         <p className=''>
-          Tài khoản sẽ được gửi cho bạn qua email:{' '}
-          <span className='text-green-500'>diwas118151@gmail.com</span>
+          Tài khoản sẽ được gửi cho bạn qua email: <span className='text-green-500'>{email}</span>
         </p>
 
         <p className='italic text-sky-500'>
-          Lưu ý: nhấn vào nút <span className='text-secondary underline'>xác nhận thanh toán</span> bên
-          dưới sau khi đã chuyển khoản để có thể nhận Email.
+          Lưu ý: nhấn vào nút{' '}
+          <span className='text-secondary underline animate-pulse'>xác nhận thanh toán</span> bên dưới
+          sau khi đã chuyển khoản để có thể nhận Email.
         </p>
 
         <Image
@@ -69,8 +80,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           alt='momo-qr'
         />
 
-        <button className='mt-12 text-xl font-semibold rounded-lg w-full p-2 bg-primary hover:bg-secondary hover:text-light common-transition'>
-          Xác nhận thanh toán
+        <button className='mt-12 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'>
+          <span className=''>Xác nhận thanh toán</span>
         </button>
       </div>
 
@@ -81,9 +92,29 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='pt-5' />
 
         <div>
-          {/* {Array.from({ length: 3 }).map((_, index) => (
-            <CartItem className={index != 0 ? 'mt-4' : ''} key={index} isLocalCartItem isCheckout />
-          ))} */}
+          {selectedCartItems.map((cartItem: FullyCartItem, index: number) => (
+            <CartItem
+              cartItem={cartItem}
+              className={index != 0 ? 'mt-4' : ''}
+              key={cartItem._id}
+              isLocalCartItem
+              isCheckout
+            />
+          ))}
+
+          <hr className='mt-8 mb-6' />
+
+          {!!discount && (
+            <div className='flex items-center justify-between'>
+              <span>Ưu đãi:</span>
+              <span className='font-semibold text-yellow-500'>{formatPrice(discount)}</span>
+            </div>
+          )}
+
+          <div className='flex items-end justify-between mb-4'>
+            <span className='font-semibold text-xl'>Thành tiền:</span>
+            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total)}</span>
+          </div>
         </div>
       </div>
     </div>

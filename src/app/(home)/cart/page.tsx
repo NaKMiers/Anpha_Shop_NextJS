@@ -1,22 +1,22 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import Input from '@/components/Input'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { cart, setSelectedItems } from '@/libs/reducers/cartReducer'
-import { setLoading } from '@/libs/reducers/modalReducer'
+import { setSelectedItems } from '@/libs/reducers/cartReducer'
+import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
+import { generateOrderCode } from '@/utils'
 import { calcPercentage, formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaMailBulk, FaPlusSquare } from 'react-icons/fa'
+import { FaPlusSquare } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
@@ -39,10 +39,11 @@ function CartPage() {
 
   // states
   const [isShowVoucher, setIsShowVoucher] = useState(false)
-  const [email, setEmail] = useState<string>('')
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
   const [voucherMessage, setVoucherMessage] = useState<string>('')
-  const [code, setCode] = useState('')
+  const [subTotal, setSubTotal] = useState<number>(0)
+  const [discount, setDiscount] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
 
   // Form
   const {
@@ -50,6 +51,7 @@ function CartPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    getValues,
   } = useForm<FieldValues>({
     defaultValues: {
       email: curUser?.email || '',
@@ -57,32 +59,31 @@ function CartPage() {
     },
   })
 
-  // handle calculate sub total
-  const handleCalcSubTotal = useCallback(() => {
-    return selectedCartItems.reduce((total, cartItem) => {
-      const item: any = cartItems.find(cI => cI._id === cartItem)
+  useEffect(() => {
+    const subTotal = selectedCartItems.reduce((total, cartItem) => {
+      const item: any = cartItems.find(cI => cI._id === cartItem._id)
 
       return total + item?.quantity * item?.product.price
     }, 0)
-  }, [cartItems, selectedCartItems])
-
-  // handle calculate final total (included voucher)
-  const handleCalcFinalTotal = useCallback(() => {
-    const subTotal = handleCalcSubTotal()
+    setSubTotal(subTotal)
 
     let finalTotal = subTotal
+    let discount = 0
     if (voucher) {
       if (voucher.type === 'fixed-reduce') {
-        finalTotal = subTotal - +voucher.value
+        discount = +voucher.value
+        finalTotal = subTotal - discount
       } else if (voucher.type === 'fixed') {
-        finalTotal = +voucher.value
+        discount = +voucher.value
+        finalTotal = discount
       } else if (voucher.type === 'percentage') {
-        finalTotal = subTotal - +calcPercentage(voucher.value, subTotal)
+        discount = +calcPercentage(voucher.value, subTotal)
+        finalTotal = subTotal - discount
       }
     }
-
-    return finalTotal
-  }, [handleCalcSubTotal, voucher])
+    setDiscount(discount)
+    setTotal(finalTotal)
+  }, [selectedCartItems, voucher, cartItems])
 
   // send request to server to check voucher
   const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
@@ -90,12 +91,11 @@ function CartPage() {
       if (selectedCartItems.length) {
         // start loading
         dispatch(setLoading(true))
-
         try {
           // send request to server
           const res = await axios.post(`/api/voucher/${data.code}/apply`, {
             email: data.email,
-            total: handleCalcSubTotal(),
+            total: subTotal,
           })
           const { voucher, message } = res.data
 
@@ -111,13 +111,62 @@ function CartPage() {
           toast.error(message)
           setVoucherMessage(message)
         } finally {
+          // stop loading
           dispatch(setLoading(false))
         }
       } else {
         toast.error('Hãy chọn sản phẩm để tiến hành nhập voucher')
       }
     },
-    [handleCalcSubTotal, dispatch, selectedCartItems.length]
+    [dispatch, selectedCartItems.length, subTotal]
+  )
+
+  // handle checkout
+  const handleCheckout = useCallback(
+    async (type: string) => {
+      if (!selectedCartItems.length) {
+        toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
+        return
+      }
+
+      // set email
+      if (!curUser) {
+        const email = getValues('email')
+
+        if (!email) {
+          setError('email', { message: 'Email không được để trống' })
+          return
+        }
+      }
+
+      // start page loading
+      dispatch(setPageLoading(true))
+
+      // generate order code
+      try {
+        const res = await axios.get('/api/checkout/get-order-code')
+        console.log(res.data.orderCode)
+
+        // create checkout
+        const checkout = {
+          selectedCartItems,
+          code: res.data.orderCode,
+          email: curUser?.email || getValues('email'),
+          discount,
+          total,
+        }
+        localStorage.setItem('checkout', JSON.stringify(checkout))
+
+        // move to checkout page
+        router.push(`/checkout/${type}`)
+      } catch (err: any) {
+        console.log(err.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
+    },
+    [router, curUser, dispatch, discount, getValues, selectedCartItems, total, setError]
   )
 
   return (
@@ -161,6 +210,7 @@ function CartPage() {
 
         <div className='pt-4' />
 
+        {/* Checkbox All */}
         {cartItems.length ? (
           <div>
             <div className='flex items-center justify-end gap-2 pr-21 select-none'>
@@ -175,7 +225,7 @@ function CartPage() {
                 onChange={() =>
                   cartItems.length === selectedCartItems.length
                     ? dispatch(setSelectedItems([]))
-                    : dispatch(setSelectedItems(cartItems.map(cartItem => cartItem._id)))
+                    : dispatch(setSelectedItems(cartItems))
                 }
                 className='size-5 cursor-pointer'
               />
@@ -272,16 +322,14 @@ function CartPage() {
           )}
           <div className='flex items-center justify-between mb-2'>
             <span>Tổng tiền:</span>
-            <span className='font-semibold'>{formatPrice(handleCalcSubTotal())}</span>
+            <span className='font-semibold'>{formatPrice(subTotal)}</span>
           </div>
           {voucher && (
             <div className='flex items-center justify-between'>
               <span>Voucher:</span>
               <span className='font-semibold text-yellow-400'>
                 {voucher?.type === 'percentage'
-                  ? `${voucher.value} (${formatPrice(
-                      calcPercentage(voucher.value, handleCalcSubTotal())
-                    )})`
+                  ? `${voucher.value} (${formatPrice(calcPercentage(voucher.value, subTotal))})`
                   : formatPrice(+voucher?.value!)}
               </span>
             </div>
@@ -293,9 +341,7 @@ function CartPage() {
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>
-              {formatPrice(handleCalcFinalTotal())}
-            </span>
+            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total)}</span>
           </div>
 
           <div className='flex flex-col gap-3'>
@@ -308,7 +354,9 @@ function CartPage() {
               </span>
             </button>
 
-            <button className='flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition'>
+            <button
+              className='flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition'
+              onClick={() => handleCheckout('momo')}>
               <Image
                 className='group-hover:border-white rounded-md border-2'
                 src='/images/momo-icon.jpg'
@@ -319,7 +367,9 @@ function CartPage() {
               <span className='font-semibold group-hover:text-light'>Mua nhanh với Momo</span>
             </button>
 
-            <button className='flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition'>
+            <button
+              className='flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition'
+              onClick={() => handleCheckout('banking')}>
               <Image src='/images/banking-icon.jpg' height={32} width={32} alt='logo' />
               <span className='font-semibold group-hover:text-light'>Mua ngay với BANKING</span>
             </button>

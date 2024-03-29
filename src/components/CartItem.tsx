@@ -186,13 +186,13 @@ function CartItem({
         <input
           type='checkbox'
           className='size-5 z-10 cursor-pointer absolute top-21 right-21'
-          checked={selectedCartItems?.includes(cartItem._id)}
+          checked={!!selectedCartItems.find(cI => cI._id === cartItem._id)}
           onChange={() =>
             dispatch(
               setSelectedItems(
-                selectedCartItems.includes(cartItem._id.toString())
-                  ? selectedCartItems.filter(id => id !== cartItem._id)
-                  : [...selectedCartItems, cartItem._id]
+                selectedCartItems.find(cI => cI._id === cartItem._id)
+                  ? selectedCartItems.filter(cI => cI._id !== cartItem._id)
+                  : [...selectedCartItems, cartItem]
               )
             )
           }

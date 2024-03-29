@@ -59,6 +59,7 @@ const OrderSchema = new Schema(
 // })
 
 const OrderModel = mongoose.models.order || mongoose.model('order', OrderSchema)
+
 export default OrderModel
 
 export interface IOrder {

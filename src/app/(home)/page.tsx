@@ -1,13 +1,12 @@
 import About from '@/components/About'
 import Banner from '@/components/Banner'
 import ChooseMe from '@/components/ChooseMe'
+import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import axios from 'axios'
 import { FullyProduct } from '../api/product/[slug]/route'
-import GroupProducts from '@/components/GroupProducts'
-import { groupProductByCategory } from '@/utils'
 
 async function HomePage() {
   let productsByCategoryGroups: any[] = []

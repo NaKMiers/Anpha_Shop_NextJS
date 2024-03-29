@@ -26,15 +26,20 @@ function Header({ isStatic }: HeaderProps) {
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
   const curUser: any = session?.user
-  // const cartLength = curUser
-  //   ? cartItems.reduce((total, item) => total + item.quantity, 0)
-  //   : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
-  const cartLength = 0
 
   // states
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
+  const [cartLength, setCartlength] = useState(0)
+
+  useEffect(() => {
+    setCartlength(
+      curUser
+        ? cartItems.reduce((total, item) => total + item.quantity, 0)
+        : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
+    )
+  }, [cartItems, cartLocalItems, curUser])
 
   // get user's cart
   useEffect(() => {

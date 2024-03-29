@@ -37,7 +37,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // handle add product to cart - DATABASE
-  const handleAddProductToCart = useCallback(async () => {
+  const addProductToCart = useCallback(async () => {
     // start loading
     setIsLoading(true)
 
@@ -61,7 +61,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   }, [dispatch, product._id])
 
   // handle buy now (add to cart and move to cart) - DATABASE
-  const handleBuyNow = useCallback(async () => {
+  const buyNow = useCallback(async () => {
     // start page loading
     dispatch(setPageLoading(true))
     try {
@@ -86,7 +86,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   }, [product._id, dispatch, product.slug, router])
 
   // handle add product to cart - LOCAL
-  const handleAddProductToLocalCart = useCallback(() => {
+  const addProductToLocalCart = useCallback(() => {
     // add product to local cart
     // create cart item from product
     const existingCartItem = localCart.find(
@@ -137,12 +137,40 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   }, [curUser?._id, dispatch, localCart, product])
 
   // handle buy now (add to cart and move to cart) - LOCAL
-  const handleBuyNowLocal = useCallback(() => {
-    handleAddProductToLocalCart()
+  const buyNowLocal = useCallback(() => {
+    addProductToLocalCart()
 
     // move to cart page
     router.push(`/cart?product=${product.slug}`)
-  }, [handleAddProductToLocalCart, product.slug, router])
+  }, [addProductToLocalCart, product.slug, router])
+
+  // handle add product to cart
+  const handleAddToCart = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+
+      if (curUser) {
+        addProductToCart()
+      } else {
+        addProductToLocalCart()
+      }
+    },
+    [curUser, addProductToCart, addProductToLocalCart]
+  )
+
+  // handle buy now
+  const handleBuyNow = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+
+      if (curUser) {
+        buyNow()
+      } else {
+        buyNowLocal()
+      }
+    },
+    [curUser, buyNow, buyNowLocal]
+  )
 
   return (
     <div
@@ -153,7 +181,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
           {product.images.map(src => (
             <Image
-              className='flex-shrink snap-start'
+              className='flex-shrink-0 snap-start w-full h-full object-cover'
               src={src}
               width={250}
               height={250}
@@ -190,7 +218,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       <div className='flex items-center justify-end md:justify-start gap-2 mt-2'>
         <button
           className='bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
-          onClick={curUser ? handleBuyNow : handleBuyNowLocal}
+          onClick={handleBuyNow}
           disabled={isLoading}>
           MUA NGAY
         </button>
@@ -198,7 +226,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
           className={`bg-primary rounded-md p-2 group hover:bg-primary-600 common-transition ${
             isLoading ? 'pointer-events-none bg-slate-200' : ''
           }`}
-          onClick={curUser ? handleAddProductToCart : handleAddProductToLocalCart}
+          onClick={handleAddToCart}
           disabled={isLoading}>
           {isLoading ? (
             <RiDonutChartFill size={18} className='animate-spin text-white' />

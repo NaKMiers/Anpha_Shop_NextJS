@@ -17,7 +17,7 @@ export const cart = createSlice({
   initialState: {
     items: [] as FullyCartItem[],
     localItems: getLocalCartItems(),
-    selectedItems: [] as string[],
+    selectedItems: [] as FullyCartItem[],
   },
   reducers: {
     // database cart
@@ -132,8 +132,8 @@ export const cart = createSlice({
       }
     },
 
-    // selected cart items
-    setSelectedItems: (state, action: PayloadAction<string[]>) => {
+    // checkout
+    setSelectedItems: (state, action: PayloadAction<FullyCartItem[]>) => {
       return {
         ...state,
         selectedItems: action.payload,
@@ -143,14 +143,19 @@ export const cart = createSlice({
 })
 
 export const {
+  // database cart
   setCartItems,
   addCartItem,
   deleteCartItem,
   updateCartItemQuantity,
+
+  // local cart
   setLocalCartItems,
   addLocalCartItem,
   deleteLocalCartItem,
   updateLocalCartItemQuantity,
+
+  // checkout
   setSelectedItems,
 } = cart.actions
 export default cart.reducer
