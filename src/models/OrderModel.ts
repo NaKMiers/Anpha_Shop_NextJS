@@ -24,6 +24,10 @@ const OrderSchema = new Schema(
     voucherApplied: {
       type: String,
     },
+    discount: {
+      type: Number,
+      default: 0,
+    },
     items: {
       type: [
         {
@@ -38,6 +42,7 @@ const OrderSchema = new Schema(
       default: 'pending',
     },
     paymentMethod: {
+      enum: ['momo', 'banking', 'balance'],
       type: String,
     },
   },

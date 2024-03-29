@@ -59,6 +59,7 @@ function CartPage() {
     },
   })
 
+  // calc total, discount, subTotal
   useEffect(() => {
     const subTotal = selectedCartItems.reduce((total, cartItem) => {
       const item: any = cartItems.find(cI => cI._id === cartItem._id)
@@ -152,6 +153,7 @@ function CartPage() {
           selectedCartItems,
           code: res.data.orderCode,
           email: curUser?.email || getValues('email'),
+          voucher,
           discount,
           total,
         }
@@ -166,7 +168,7 @@ function CartPage() {
         dispatch(setPageLoading(false))
       }
     },
-    [router, curUser, dispatch, discount, getValues, selectedCartItems, total, setError]
+    [router, curUser, dispatch, discount, getValues, selectedCartItems, voucher, total, setError]
   )
 
   return (
@@ -202,7 +204,7 @@ function CartPage() {
                 cartItem={cartItem}
                 className={index != 0 ? 'mt-4' : ''}
                 key={index}
-                isLocalCartItem
+                localCartItem
               />
             ))}
           </div>
@@ -253,7 +255,7 @@ function CartPage() {
 
       {/* Order Summary */}
       <div className='col-span-1'>
-        <div className='border border-slate-300 rounded-medium shadow-lg p-4 sticky mt-[60px] top-[88px] bg-sky-50'>
+        <div className='border border-slate-300 rounded-medium shadow-lg p-4 sticky mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
           {!curUser && (
             <>
               <p className='mb-2'>

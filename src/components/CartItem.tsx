@@ -1,8 +1,10 @@
 import { FullyCartItem } from '@/app/api/cart/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
+  addCartItem,
   cart,
   deleteCartItem,
+  deleteLocalCartItem,
   setSelectedItems,
   updateCartItemQuantity,
   updateLocalCartItemQuantity,
@@ -23,7 +25,7 @@ import { useSession } from 'next-auth/react'
 
 interface CartItemProps {
   cartItem: FullyCartItem
-  isLocalCartItem?: boolean
+  localCartItem?: boolean
   className?: string
   isCheckout?: boolean
   isOrderDetailProduct?: boolean
@@ -31,7 +33,7 @@ interface CartItemProps {
 
 function CartItem({
   cartItem,
-  isLocalCartItem,
+  localCartItem,
   isCheckout,
   className = '',
   isOrderDetailProduct,
@@ -147,10 +149,46 @@ function CartItem({
     }
   }, [dispatch, cartItem._id])
 
+  // handle delete LOCAL cart item
+  const handleDeleteLocalCartItem = useCallback(() => {
+    dispatch(deleteLocalCartItem(cartItem._id))
+  }, [cartItem._id, dispatch])
+
+  // handle move local cart item to global cart
+  const handleMoveLocalToGlobalCartItem = useCallback(async () => {
+    // add to database cart
+    // handle add product to cart - DATABASE
+    setIsLoading(true)
+
+    try {
+      // send request to add product to cart
+      const res = await axios.post('/api/cart/add', {
+        productId: cartItem.productId,
+        quantity: cartItem.quantity,
+      })
+      const { cartItem: cI, message } = res.data
+
+      // add cart item to state
+      dispatch(addCartItem(cI))
+
+      // show toast success
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err.message)
+      toast.error(err.response.data.message)
+    } finally {
+      // stop loading
+      setIsLoading(false)
+    }
+
+    // delete local cart item
+    handleDeleteLocalCartItem()
+  }, [handleDeleteLocalCartItem, cartItem.productId, dispatch, setIsLoading, cartItem.quantity])
+
   return (
     <div
       className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 ${className} ${
-        isLocalCartItem ? '' : 'rounded-medium border border-slate-400 p-21'
+        localCartItem ? '' : 'rounded-medium border border-slate-400 p-21'
       }`}>
       <Link
         href={`/${cartItem.product.slug}`}
@@ -169,20 +207,29 @@ function CartItem({
         </div>
       </Link>
 
-      {isLocalCartItem && !isCheckout && (
+      {/* Local action buttons */}
+      {localCartItem && !isCheckout && (
         <div className='absolute z-10 top-1 right-4  flex flex-col gap-2'>
-          <FaPlusSquare
-            size={21}
-            className='text-primary cursor-pointer hover:scale-110 common-transition'
-          />
-          <FaTrashAlt
+          {isLoading ? (
+            <RiDonutChartFill size={24} className='animate-spin text-slate-300' />
+          ) : (
+            <FaPlusSquare // add to database cart
+              size={21}
+              className='text-primary cursor-pointer hover:scale-110 common-transition'
+              onClick={handleMoveLocalToGlobalCartItem}
+            />
+          )}
+
+          <FaTrashAlt // delete
             size={21}
             className='text-secondary cursor-pointer hover:scale-110 common-transition'
+            onClick={handleDeleteLocalCartItem}
           />
         </div>
       )}
 
-      {!isLocalCartItem && (
+      {/* Checkbox */}
+      {!localCartItem && (
         <input
           type='checkbox'
           className='size-5 z-10 cursor-pointer absolute top-21 right-21'
@@ -199,7 +246,8 @@ function CartItem({
         />
       )}
 
-      <div className={`relative w-full h-full ${isLocalCartItem && !isCheckout ? 'pr-10' : ''}`}>
+      {/* Info */}
+      <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         <Link href='/netflix'>
           <h2 className={`text-[20px] tracking-wide mb-2 leading-6`} title={cartItem.product.title}>
             {cartItem.product.title}
@@ -208,12 +256,14 @@ function CartItem({
 
         {isOrderDetailProduct && (
           <div className='flex justify-between'>
+            {/* (Order Detail) Quantity */}
             <div className='flex items-center gap-1 text-[16px]'>
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
               <span className='text-green-500'>{cartItem.quantity}</span>
             </div>
 
+            {/* (Order Detail) Price */}
             <div className='flex items-center gap-1 text-[16px]'>
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Giá:</span>
@@ -222,9 +272,10 @@ function CartItem({
           </div>
         )}
 
-        {isLocalCartItem ? (
+        {localCartItem ? (
           !isOrderDetailProduct && (
             <div className='flex flex-col gap-3 text-xl font-body tracking-wide'>
+              {/* Quantity */}
               <div className='flex items-center gap-1 text-[16px]'>
                 <FaHashtag className='text-darker' size={16} />
                 <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
@@ -234,6 +285,7 @@ function CartItem({
           )
         ) : (
           <>
+            {/* Price & Stock */}
             <Price price={cartItem.product.price} oldPrice={cartItem.product.oldPrice} />
             <div className='flex items-center gap-1 mt-2 text-[16px]'>
               <TbPackages className='text-darker' size={22} />
@@ -244,7 +296,7 @@ function CartItem({
         )}
 
         {/* Quantity */}
-        {!isLocalCartItem && (
+        {!localCartItem && (
           <div className='flex items-center justify-between'>
             <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
               <button

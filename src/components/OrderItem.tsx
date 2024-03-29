@@ -32,7 +32,7 @@ function OrderItem({ className = '' }: OrderItemProps) {
         </div>
       </div>
 
-      {/* <CartItem className='mt-4' isLocalCartItem isCheckout /> */}
+      {/* <CartItem className='mt-4' localCartItem isCheckout /> */}
 
       <hr className='mt-8 mb-3' />
 

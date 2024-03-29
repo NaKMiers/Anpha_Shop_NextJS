@@ -2,10 +2,12 @@
 
 import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
-import { useAppSelector } from '@/libs/hooks'
 import { formatPrice } from '@/utils/formatNumber'
+import axios from 'axios'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
+import { useCallback } from 'react'
+import toast from 'react-hot-toast'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
   const type: string = params.type
@@ -15,7 +17,36 @@ function CheckoutPage({ params }: { params: { type: string } }) {
     redirect('/cart')
   }
 
-  const { selectedCartItems, total, discount, code, email } = checkout
+  // checkout detail
+  const { selectedCartItems, total, voucher, discount, code, email } = checkout
+
+  // handle confirm payment
+  const handleConfirmPayment = useCallback(async () => {
+    try {
+      // handle confirm payment
+      console.log('handleConfirmPayment')
+      const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
+        _id: cartItem._id,
+        product: cartItem.product,
+        quantity: cartItem.quantity,
+      }))
+
+      const res = await axios.post('/api/order/create', {
+        code,
+        email,
+        total,
+        voucherApplied: voucher?._id,
+        discount,
+        items,
+        paymentMethod: type,
+      })
+
+      console.log(res.data)
+    } catch (err: any) {
+      console.log(err.message)
+      toast.error(err.response.data.message)
+    }
+  }, [code, email, total, discount, voucher, selectedCartItems, type])
 
   return (
     <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
@@ -80,7 +111,9 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           alt='momo-qr'
         />
 
-        <button className='mt-12 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'>
+        <button
+          className='mt-12 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
+          onClick={handleConfirmPayment}>
           <span className=''>Xác nhận thanh toán</span>
         </button>
       </div>
@@ -97,7 +130,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               cartItem={cartItem}
               className={index != 0 ? 'mt-4' : ''}
               key={cartItem._id}
-              isLocalCartItem
+              localCartItem
               isCheckout
             />
           ))}

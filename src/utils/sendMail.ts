@@ -36,7 +36,9 @@ function sendMail(to: string, subject: string, html: string) {
 // send order notification to admin
 async function notifyNewOrderToAdmin(newOrder: any) {
   // get email interface path
-  const templatePath = path.join(__dirname, '../utils/emailTemplates/NotifyOrderMail.pug')
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyOrderMail.pug')
+
+  console.log('templatePath', templatePath)
 
   // get email interface file
   const templateContent = fs.readFileSync(templatePath, 'utf-8')
@@ -50,7 +52,7 @@ async function notifyNewOrderToAdmin(newOrder: any) {
   const admins: any[] = await UserModel.find({
     role: { $in: ['admin', 'editor'] },
   }).lean()
-  let emails: string = admins.map(admin => admin.email).join(' ') + process.env.MAIL!
+  let emails: string = admins.map(admin => admin.email).join(' ') + ' ' + process.env.MAIL!
 
   // render template with new order data
   const html = compiledTemplate(newOrder)
@@ -60,7 +62,7 @@ async function notifyNewOrderToAdmin(newOrder: any) {
 // notify shortage account to admin
 async function notifyShortageAccount(message: any) {
   // get email interface path
-  const templatePath = path.join(__dirname, '../utils/emailTemplates/ShortageAccountMail.pug')
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/ShortageAccountMail.pug')
 
   // get email interface file
   const templateContent = fs.readFileSync(templatePath, 'utf-8')
@@ -74,7 +76,7 @@ async function notifyShortageAccount(message: any) {
   const admins: any[] = await UserModel.find({
     role: { $in: ['admin', 'editor'] },
   }).lean()
-  let emails: string = admins.map(admin => admin.email).join(' ') + process.env.MAIL!
+  let emails: string = admins.map(admin => admin.email).join(' ') + ' ' + process.env.MAIL!
 
   // render template with new order data
   const html = compiledTemplate({ message })
@@ -84,7 +86,7 @@ async function notifyShortageAccount(message: any) {
 // re-deliver notification
 async function notifyDeliveryOrder(email: string, orderData: any) {
   // get email interface path
-  const templatePath = path.join(__dirname, '../utils/emailTemplates/OrderMail.pug')
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/OrderMail.pug')
 
   // get email interface file
   const templateContent = fs.readFileSync(templatePath, 'utf-8')
@@ -102,7 +104,7 @@ async function notifyDeliveryOrder(email: string, orderData: any) {
 // notify account updated
 async function notifyAccountUpdated(email: string, data: any) {
   // get email interface path
-  const templatePath = path.join(__dirname, '../utils/emailTemplates/UpdateAccountMail.pug')
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/UpdateAccountMail.pug')
 
   // get email interface file
   const templateContent = fs.readFileSync(templatePath, 'utf-8')
