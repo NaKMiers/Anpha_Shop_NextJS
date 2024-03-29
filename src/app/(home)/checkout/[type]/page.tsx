@@ -51,7 +51,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
   return (
     <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
       {/* Payment info */}
-      <div className='col-span-1 lg:col-span-7'>
+      <div className='col-span-1 lg:col-span-7 order-2 lg:order-first'>
         {type === 'momo' ? (
           <h1 className='text-4xl text-[#a1396c] text-center font-semibold'>Thanh toán Momo</h1>
         ) : (

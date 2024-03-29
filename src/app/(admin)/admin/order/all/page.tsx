@@ -1,18 +1,27 @@
 'use client'
 
 import Input from '@/components/Input'
+import OrderItem from '@/components/admin/OrderItem'
 import Pagination from '@/components/Pagination'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { IOrder } from '@/models/OrderModel'
 import { formatPrice } from '@/utils/formatNumber'
-import { Menu, MenuItem } from '@mui/material'
+import axios from 'axios'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCalendar, FaCaretDown, FaCheckSquare, FaFilter, FaSearch } from 'react-icons/fa'
-import { FaX } from 'react-icons/fa6'
+import toast from 'react-hot-toast'
+import { FaArrowLeft, FaCalendar, FaFilter, FaSearch } from 'react-icons/fa'
 
 function AllOrdersPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
+  // store
+  const dispatch = useAppDispatch()
+
+  // states
+  const [orders, setOrders] = useState<IOrder[]>([])
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([])
+  const [loadingOrders, setLoadingOrders] = useState<string[]>([])
 
   // Form
   const {
@@ -25,30 +34,98 @@ function AllOrdersPage() {
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
+  // get all orders
+  useEffect(() => {
+    const getAllTags = async () => {
+      dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+      try {
+        // sent request to server
+        const res = await axios.get('/api/admin/order/all')
+        const { orders } = res.data
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+        // update orders from state
+        setOrders(orders)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.response.data.message)
+      } finally {
+        dispatch(setPageLoading(false))
+      }
+    }
+    getAllTags()
+  }, [dispatch])
 
-  const handleFilter = useCallback(() => {}, [])
+  // activate order
+  const handleActivateOrders = useCallback(async (ids: string[], value: boolean) => {
+    try {
+      // senred request to server
+      const res = await axios.post(`/api/admin/order/activate`, { ids, value })
+      const { updatedOrders, message } = res.data
+
+      // update orders from state
+      setOrders(prev =>
+        prev.map(order =>
+          updatedOrders.map((order: IOrder) => order._id).includes(order._id)
+            ? { ...order, active: value }
+            : order
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    }
+  }, [])
+
+  // delete order
+  const handleDeleteOrders = useCallback(async (ids: string[]) => {
+    setLoadingOrders(ids)
+
+    try {
+      // senred request to server
+      const res = await axios.delete(`/api/admin/order/delete`, { data: { ids } })
+      const { deletedOrders, message } = res.data
+
+      // remove deleted tags from state
+      setOrders(prev =>
+        prev.filter(order => !deletedOrders.map((order: IOrder) => order._id).includes(order._id))
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.response.data.message)
+    } finally {
+      setLoadingOrders([])
+    }
+  }, [])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl + A
+      if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault() // Prevent the default action
+        setSelectedOrders(prev => (prev.length === orders.length ? [] : orders.map(order => order._id)))
+      }
+
+      // Delete
+      if (event.key === 'Delete') {
+        event.preventDefault() // Prevent the default aconti
+        handleDeleteOrders(selectedOrders)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [orders, selectedOrders, handleDeleteOrders])
 
   return (
     <div className='w-full'>
@@ -83,7 +160,7 @@ function AllOrdersPage() {
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Giá: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -92,8 +169,8 @@ function AllOrdersPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={() => {}}
             />
           </div>
           <div className='flex gap-2'>
@@ -121,75 +198,9 @@ function AllOrdersPage() {
               className='w-full'
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
-              Danh mục
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
-          </div>
+          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
           <div className='flex justify-end md:justify-start items-center'>
-            <button
-              className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
@@ -231,73 +242,11 @@ function AllOrdersPage() {
 
       <div className='pt-9' />
 
-      <div className='bg-white rounded-medium shadow-medium p-21'>
-        <table className='w-full text-center text-[14px]' cellPadding={4}>
-          <thead className='border-b border-slate-300'>
-            <tr>
-              <th>
-                <input type='checkbox' className='size-4' />
-              </th>
-              <th>Date(d/m/y)</th>
-              <th>Code</th>
-              <th>Status</th>
-              <th>Email</th>
-              <th>UserId</th>
-              <th>Total</th>
-              <th>Voucher</th>
-              <th>Quantity</th>
-              <th>Method</th>
-              <th>Last updated(d/m/y)</th>
-              <th>-</th>
-            </tr>
-          </thead>
-
-          <tbody className='align-top'>
-            {Array.from({ length: 10 }).map((_, index) => (
-              <tr key={index}>
-                <td>
-                  <input type='checkbox' className='size-4 cursor-pointer' />
-                </td>
-                <td>14/03/2024 13:36:33 </td>
-                <td>
-                  <span className='font-semibold text-primary'>9F422</span>
-                </td>
-                <td>
-                  <span className='font-bold text-slate-400'>cancel</span>
-                </td>
-                <td>veronabui26@gmail.con </td>
-                <td className='flex justify-center'>
-                  <FaCheckSquare size={18} className='text-green-500' />
-                  {/* <FaX size={18} className='text-red-500' /> */}
-                </td>
-                <td>
-                  <span className='text-green-600 font-semibold'>{formatPrice(9000)}</span>
-                </td>
-                <td className='flex justify-center'>
-                  {/* <FaCheckSquare size={18} className='text-green-500' /> */}
-                  <FaX size={18} className='text-red-500' />
-                </td>
-                <td>1</td>
-                <td>momo</td>
-                <td>14/03/2024 13:41:26</td>
-                <td className='flex flex-col gap-2'>
-                  <Link href='/admin/order/' className='underline text-sky-400'>
-                    Detail
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-yellow-400'>
-                    Deliver
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-slate-400'>
-                    Cancel
-                  </Link>
-                  <Link href='/admin/order/' className='underline text-red-400'>
-                    Delete
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* MAIN LIST */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3 items-start'>
+        {orders.map(order => (
+          <OrderItem order={order} key={order._id} />
+        ))}
       </div>
     </div>
   )

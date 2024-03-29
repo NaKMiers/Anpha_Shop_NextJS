@@ -77,4 +77,6 @@ export interface IOrder {
   items: any[]
   status: 'pending' | 'done' | 'cancel'
   paymentMethod: string
+  createdAt: string
+  updatedAt: string
 }

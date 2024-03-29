@@ -8,7 +8,7 @@ connectDatabase()
 
 // [GET]: /admin/account/all
 export async function GET() {
-  console.log('- Get All Account - ')
+  console.log('- Get All Accounts - ')
 
   try {
     // get all account

@@ -10,7 +10,7 @@ connectDatabase()
 
 // [PATCH]: /admin/order/:id/deliver
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
-  console.log('deliverOrder')
+  console.log('- Deliver Order -')
 
   try {
     // --------- Reset -- only for DEVELOPER
