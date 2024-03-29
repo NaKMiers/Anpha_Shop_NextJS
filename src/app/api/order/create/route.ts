@@ -14,7 +14,7 @@ import ProductModel from '@/models/ProductModel'
 // Connect to database
 connectDatabase()
 
-export async function handleDeliverOrder(id: string) {
+async function handleDeliverOrder(id: string) {
   console.log('handleDeliverOrder')
 
   // get order from database to deliver
