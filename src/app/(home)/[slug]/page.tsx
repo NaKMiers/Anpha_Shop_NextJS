@@ -178,7 +178,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 <span className='font-semibold'>Cách 3: </span>
                 <div>
                   -{' '}
-                  <Link href='/user/recharge' className='text-sky-5000 underline'>
+                  <Link href='/recharge' className='text-sky-5000 underline'>
                     Nạp tiền vào tài khoản
                   </Link>{' '}
                   sau đó mua hàng.

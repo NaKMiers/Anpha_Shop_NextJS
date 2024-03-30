@@ -162,9 +162,9 @@ function OrderItem({
         <p className='mr-2 text-green-600 font-semibold' title='email'>
           {formatPrice(data.total)}{' '}
           <span
-            className='px-[6px] py-[2px] text-xs rounded-full shadow-md bg-orange-600 text-white'
+            className='px-[7px] py-[1px] text-center text-xs rounded-full shadow-sm bg-sky-300 text-white'
             title='quantity'>
-            {data.items.reduce((quantity: number, item: any) => quantity + item.quantity, 0)}
+            x{data.items.reduce((quantity: number, item: any) => quantity + item.quantity, 0)}
           </span>
         </p>
 

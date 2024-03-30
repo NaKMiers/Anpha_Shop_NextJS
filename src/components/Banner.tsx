@@ -101,9 +101,7 @@ function Banner({ carouselProducts, categories, tags }: BannerProps) {
               <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Categories</h5>
 
               <li className='rounded-extra-small text-dark hover:bg-primary common-transition'>
-                <Link
-                  className='flex items-center px-[10px] py-[6px] gap-2'
-                  href='/category?ctg=flashsale'>
+                <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>
                   <svg
                     className='animate-bounce'
                     xmlns='http://www.w3.org/2000/svg'

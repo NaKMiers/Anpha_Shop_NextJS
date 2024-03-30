@@ -87,7 +87,7 @@ export default async function UserLayout({
                 <li>
                   <Link
                     className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
-                      pathname === '/user/recharge' ? 'bg-primary rounded-lg text-light' : ''
+                      pathname === '/recharge' ? 'bg-primary rounded-lg text-light' : ''
                     }`}
                     href='/recharge'>
                     <HiLightningBolt size={21} className='commont-transition' />

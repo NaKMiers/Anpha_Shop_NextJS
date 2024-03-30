@@ -125,7 +125,7 @@ function Header({ isStatic }: HeaderProps) {
             .AnphaShop
           </Link>
           <Link
-            href='/user/recharge'
+            href='/recharge'
             className='ml-3 bg-primary px-3 py-[6px] rounded-extra-small flex items-center gap-1 group hover:bg-secondary common-transition'>
             <span className='font-bold font-body text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
               Nạp
@@ -207,7 +207,7 @@ function Header({ isStatic }: HeaderProps) {
             <span>{formatPrice(curUser?.balance)}</span>
             <Link
               className='group flex-shrink-0 rounded-full ml-1 border-2 border-primary p-[2px] hover:scale-110 common-transition'
-              href='/user/recharge'>
+              href='/recharge'>
               <FaPlus size={14} className='text-primary common-transition' />
             </Link>
           </li>

@@ -124,7 +124,7 @@ function Footer() {
                   <p className=''>Thông tin tài khoản</p>
                 </Link>
                 <Link
-                  href='/user/recharge'
+                  href='/recharge'
                   className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                   <FaChevronRight size={14} className='text-primary' />
                   <p className=''>Nạp tiền</p>
