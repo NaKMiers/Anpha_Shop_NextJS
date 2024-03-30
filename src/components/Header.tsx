@@ -255,9 +255,7 @@ function Header({ isStatic }: HeaderProps) {
                 href='/admin'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
                 <FaUserSecret size={18} />
-                <span className='font-body tracking-wide text-[15px] text-primary'>
-                  {curUser?.role.toUpperCase()}
-                </span>
+                <span className='font-body tracking-wide text-[15px] text-primary'>{curUser?.role}</span>
               </Link>
             </li>
           )}

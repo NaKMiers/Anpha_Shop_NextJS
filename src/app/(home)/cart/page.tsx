@@ -254,7 +254,7 @@ function CartPage() {
 
       {/* Order Summary */}
       <div className='col-span-1'>
-        <div className='border border-slate-300 rounded-medium shadow-lg p-4 sticky mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
+        <div className='border-2 border-primary rounded-medium shadow-lg p-4 sticky mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
           {!curUser && (
             <>
               <p className='mb-2'>
@@ -326,7 +326,7 @@ function CartPage() {
           )}
           <div className='flex items-center justify-between mb-2'>
             <span>Tổng tiền:</span>
-            <span className='font-semibold'>{formatPrice(subTotal || 0)}</span>
+            <span className='font-semibold'>{formatPrice(subTotal)}</span>
           </div>
           {voucher && (
             <div className='flex items-center justify-between'>
@@ -345,7 +345,7 @@ function CartPage() {
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total || 0)}</span>
+            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total)}</span>
           </div>
 
           <div className='flex flex-col gap-3'>

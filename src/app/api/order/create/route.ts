@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const { code, email, total, voucherApplied, discount, items, paymentMethod } = asd
 
   // get user id
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
   try {

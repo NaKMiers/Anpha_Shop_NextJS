@@ -11,7 +11,7 @@ export async function DELETE(req: NextRequest, { params: { id } }: { params: { i
   console.log(' - Delete Cart Item - ')
 
   // get user id
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
   try {

@@ -14,7 +14,7 @@ export async function PATCH(req: NextRequest) {
   // get data to change password
   const asd = await req.json()
   const { oldPassword, newPassword } = asd
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
   console.log('asd: ', asd)

@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
   console.log('- Get Product Page -')
 
   // // get user id to check hidden comments
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
   console.log('token', token)

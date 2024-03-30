@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   // get product data to add to cart
   const { productId, quantity } = await req.json()
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId: any = token?._id
 
   try {

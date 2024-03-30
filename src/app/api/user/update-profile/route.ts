@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest) {
 
   // get user and update date to update profile
   const { firstname, lastname, birthday, job, address } = await req.json()
-  const token: JWT | null = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token: JWT | null = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
   try {

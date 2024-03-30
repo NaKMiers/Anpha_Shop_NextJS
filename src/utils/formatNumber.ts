@@ -1,4 +1,4 @@
-export const formatPrice = (price: number) =>
+export const formatPrice = (price: number = 0) =>
   Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
 
 export const countPercent = (price: number, oldPrice: number) =>

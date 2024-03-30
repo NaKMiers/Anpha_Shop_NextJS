@@ -12,7 +12,7 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
   console.log('- Apply Voucher -')
 
   // get userId to check if user used this voucher
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userEmail = token?.email
 
   // get data to check voucher

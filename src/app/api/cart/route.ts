@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   console.log('- Get User Cart')
 
   // get userId to get user's cart
-  const token = await getToken({ req, secret: process.env.JWT_SECRET })
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
   try {
