@@ -25,7 +25,6 @@ function CartPage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
-  const isPageLoading = useAppSelector(state => state.modal.isPageLoading)
   let cartLocalItems = useAppSelector(state => state.cart.localItems)
   let cartItems = useAppSelector(state => state.cart.items)
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
@@ -278,15 +277,18 @@ function CartPage() {
             </>
           )}
 
-          <p className='mb-2'>
-            Bạn có voucher? (
-            <button
-              className='text-sky-600 hover:underline z-10'
-              onClick={() => setIsShowVoucher(prev => !prev)}>
-              ấn vào đây
-            </button>
-            )
-          </p>
+          <div className='mb-2'>
+            Bạn có voucher?{' '}
+            <p className='text-nowrap inline'>
+              (
+              <button
+                className='text-sky-600 hover:underline z-10'
+                onClick={() => setIsShowVoucher(prev => !prev)}>
+                ấn vào đây
+              </button>
+              )
+            </p>
+          </div>
           {isShowVoucher && (
             <div className='flex items-center gap-1 mb-2'>
               <Input
@@ -318,13 +320,13 @@ function CartPage() {
           )}
 
           {voucherMessage && (
-            <p className={`${voucher ? 'text-green-500' : 'text-rose-500'} -mt-3 mb-2`}>
+            <p className={`${voucher ? 'text-green-600' : 'text-rose-500'} -mt-3 mb-2`}>
               {voucherMessage}
             </p>
           )}
           <div className='flex items-center justify-between mb-2'>
             <span>Tổng tiền:</span>
-            <span className='font-semibold'>{formatPrice(subTotal)}</span>
+            <span className='font-semibold'>{formatPrice(subTotal || 0)}</span>
           </div>
           {voucher && (
             <div className='flex items-center justify-between'>
@@ -343,7 +345,7 @@ function CartPage() {
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total)}</span>
+            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total || 0)}</span>
           </div>
 
           <div className='flex flex-col gap-3'>

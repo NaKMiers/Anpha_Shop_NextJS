@@ -1,9 +1,6 @@
 import { connectDatabase } from '@/config/databse'
-import AccountModel from '@/models/AccountModel'
 import OrderModel, { IOrder } from '@/models/OrderModel'
-import ProductModel from '@/models/ProductModel'
 import VoucherModel, { IVoucher } from '@/models/VoucherModel'
-import handleDeliverOrder from '@/utils/handleDeliverOrder'
 import { notifyDeliveryOrder } from '@/utils/sendMail'
 import { NextRequest, NextResponse } from 'next/server'
 

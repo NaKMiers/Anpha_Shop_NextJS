@@ -8,8 +8,6 @@ import { notifyDeliveryOrder, notifyShortageAccount } from '@/utils/sendMail'
 import { NextResponse } from 'next/server'
 
 export default async function handleDeliverOrder(id: string) {
-  console.log('handleDeliverOrder')
-
   // get order from database to deliver
   const order: IOrder | null = await OrderModel.findById(id).lean()
 
@@ -94,7 +92,7 @@ export default async function handleDeliverOrder(id: string) {
   if (orderError.error) {
     notifyShortageAccount(orderError.message)
 
-    return { order, isError: orderError.error }
+    return { order, isError: orderError.error, message: orderError.message }
   }
 
   // prepare a list of step to update accounts

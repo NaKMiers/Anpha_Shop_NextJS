@@ -108,7 +108,7 @@ function CategoryItem({
             {loadingCategories.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (
-              <FaSave size={18} className='group-hover:scale-125 common-transition text-green-500' />
+              <FaSave size={18} className='group-hover:scale-125 common-transition text-green-600' />
             )}
           </button>
         )}

@@ -1,33 +1,110 @@
 import { IOrder } from '@/models/OrderModel'
 import { formatPrice } from '@/utils/formatNumber'
 import { formatTime } from '@/utils/formatTime'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-import { FaCheckSquare, FaEye, FaHistory, FaTrash } from 'react-icons/fa'
+import React, { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
+import { FaCheckSquare, FaEye, FaHistory, FaNimblr, FaRegTrashAlt, FaTrash } from 'react-icons/fa'
 import { GrDeliver } from 'react-icons/gr'
 import { ImCancelCircle } from 'react-icons/im'
+import { RiDonutChartFill } from 'react-icons/ri'
 
 interface OrderItemProps {
-  order: IOrder
-  // loadingOrders: string[]
-  // className?: string
+  data: IOrder
+  loadingOrders: string[]
+  className?: string
 
-  // selectedOrders: string[]
-  // setSelectedOrders: React.Dispatch<React.SetStateAction<string[]>>
+  setOrders: React.Dispatch<React.SetStateAction<IOrder[]>>
+  selectedOrders: string[]
+  setSelectedOrders: React.Dispatch<React.SetStateAction<string[]>>
 
-  // handleActivateOrders: (ids: string[], value: boolean) => void
-  // handleDeleteOrders: (ids: string[]) => void
+  handleCancelOrders: (ids: string[]) => void
+  handleDeleteOrders: (ids: string[]) => void
 }
 
-function OrderItem({ order }: OrderItemProps) {
+function OrderItem({
+  data,
+  loadingOrders,
+  className = '',
+
+  // selected
+  setOrders,
+  selectedOrders,
+  setSelectedOrders,
+
+  // functions
+  handleCancelOrders,
+  handleDeleteOrders,
+}: OrderItemProps) {
+  // states
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  // handle deliver order
+  const handleDeliverOrder = useCallback(async () => {
+    // start loading
+    setIsLoading(true)
+
+    console.log(123)
+    try {
+      // send request to deliver order
+      const res = await axios.patch(`/api/admin/order/${data._id}/deliver`)
+
+      // update order status
+      setOrders(prev => prev.map(o => (o._id === data._id ? { ...o, status: 'done' } : o)))
+
+      // show success message
+      toast.success(res.data.message)
+    } catch (err: any) {
+      console.log(err.message)
+      toast.error(err.response.data.message)
+    } finally {
+      // stop loading
+      setIsLoading(false)
+    }
+  }, [data._id, setOrders])
+
+  // handle re-deliver order
+  const handleReDeliverOrder = useCallback(async () => {
+    // start loading
+    setIsLoading(true)
+
+    try {
+      // send request to re-deliver order
+      const res = await axios.patch(`/api/admin/order/${data._id}/re-deliver`)
+
+      // show success message
+      toast.success(res.data.message)
+    } catch (err: any) {
+      console.log(err.message)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      setIsLoading(false)
+    }
+  }, [data._id])
+
   return (
     <div
-      className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition bg-white`}>
+      className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
+        selectedOrders.includes(data._id)
+          ? 'bg-sky-50 -translate-y-1'
+          : data.status === 'done'
+          ? 'bg-green-200'
+          : data.status === 'pending'
+          ? 'bg-red-200'
+          : 'bg-slate-300'
+      }  ${className}`}
+      onClick={() =>
+        setSelectedOrders(prev =>
+          prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
+        )
+      }>
       <div className='w-full'>
         {/* Thumbnails */}
-        <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[140px] overflow-y-auto '>
-          {[...order.items, ...order.items, ...order.items].map((item: any) => (
+        <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[145px] overflow-y-auto '>
+          {data.items.map((item: any) => (
             <div className='relative rounded-lg shadow-md overflow-hidden' key={item._id}>
               <Image
                 className='aspect-video'
@@ -48,44 +125,46 @@ function OrderItem({ order }: OrderItemProps) {
           {/* Status */}
           <p
             className={`inline font-semibold text-${
-              order.status === 'done' ? 'green' : order.status === 'pending' ? 'red' : 'slate'
+              data.status === 'done' ? 'green' : data.status === 'pending' ? 'red' : 'slate'
             }-400`}
             title='status'>
-            {order.status}
+            {data.status}
           </p>
 
           {/* Code */}
           <p className='inline font-semibold text-primary' title='code'>
-            {order.code}
+            {data.code}
           </p>
 
           {/* Method */}
           <p
             className={`inline font-semibold text-[${
-              order.paymentMethod === 'momo' ? '#a1396c' : '#399162'
+              data.paymentMethod === 'momo' ? '#a1396c' : '#399162'
             }]`}
             title='payment-method'>
-            {order.paymentMethod}
+            {data.paymentMethod}
           </p>
 
           {/* UserID */}
           <FaCheckSquare
             title='userId'
             size={18}
-            className={`${order.userId ? 'text-green-500' : 'text-slate-300'}`}
+            className={`${data.userId ? 'text-green-600' : 'text-slate-600'}`}
           />
         </div>
 
         {/* Email */}
         <p className='underline' title='email'>
-          {order.email}
+          {data.email}
         </p>
 
         {/* Total */}
         <p className='mr-2 text-green-600 font-semibold' title='email'>
-          {formatPrice(order.total)}{' '}
-          <span className='text-orange-700' title='quantity'>
-            ({order.items.reduce((quantity, item) => quantity + item.quantity, 0)})
+          {formatPrice(data.total)}{' '}
+          <span
+            className='px-[6px] py-[2px] text-xs rounded-full shadow-md bg-orange-600 text-white'
+            title='quantity'>
+            {data.items.reduce((quantity: number, item: any) => quantity + item.quantity, 0)}
           </span>
         </p>
 
@@ -93,41 +172,96 @@ function OrderItem({ order }: OrderItemProps) {
         <div className='flex flex-wrap gap-x-2'>
           <p className='text-sm' title='Created (d/m/y)'>
             <span className='font-semibold'>Created: </span>
-            <span>{formatTime(order.createdAt)}</span>
+            <span>{formatTime(data.createdAt)}</span>
           </p>
 
           {/* Updated */}
           <p className='text-sm' title='Updated (d/m/y)'>
             <span className='font-semibold'>Updated: </span>
-            <span>{formatTime(order.updatedAt)}</span>
+            <span>{formatTime(data.updatedAt)}</span>
           </p>
         </div>
       </div>
 
-      <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+      <div className='flex flex-col flex-shrink-0 border bg-white border-dark text-dark rounded-lg px-2 py-3 gap-4'>
         {/* Detail Button */}
-        <Link href={`/admin/order/${order._id}`} className='block group' title='Detail'>
-          <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
-        </Link>
+        {data.status === 'done' && (
+          <Link
+            href={`/admin/order/${data._id}`}
+            target='_blank'
+            className='block group'
+            title='Detail'
+            onClick={e => e.stopPropagation()}>
+            <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
+          </Link>
+        )}
 
         {/* Deliver Button */}
-        <button className='block group' title='Deliver'>
-          <GrDeliver size={18} className='text-yellow-400 group-hover:scale-125 common-transition' />
-        </button>
+        {data.status !== 'done' && (
+          <button
+            className='block group'
+            title='Deliver'
+            disabled={loadingOrders.includes(data._id) || isLoading}
+            onClick={e => {
+              e.stopPropagation()
+              handleDeliverOrder()
+            }}>
+            {isLoading ? (
+              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+            ) : (
+              <GrDeliver size={18} className='text-yellow-400 group-hover:scale-125 common-transition' />
+            )}
+          </button>
+        )}
 
         {/* Re-Deliver Button */}
-        <button className='block group' title='Re-Deliver'>
-          <FaHistory size={18} className='text-blue-500 group-hover:scale-125 common-transition' />
-        </button>
+        {data.status === 'done' && (
+          <button
+            className='block group'
+            title='Re-Deliver'
+            disabled={loadingOrders.includes(data._id) || isLoading}
+            onClick={e => {
+              e.stopPropagation()
+              handleReDeliverOrder()
+            }}>
+            {isLoading ? (
+              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+            ) : (
+              <FaHistory size={18} className='text-blue-500 group-hover:scale-125 common-transition' />
+            )}
+          </button>
+        )}
 
         {/* Cancel Button */}
-        <button className='block group' title='Cancel'>
-          <ImCancelCircle size={18} className='text-slate-300 group-hover:scale-125 common-transition' />
-        </button>
+        {data.status === 'pending' && (
+          <button
+            className='block group'
+            title='Cancel'
+            disabled={loadingOrders.includes(data._id) || isLoading}
+            onClick={e => {
+              e.stopPropagation()
+              handleCancelOrders([data._id])
+            }}>
+            <ImCancelCircle
+              size={18}
+              className='text-slate-300 group-hover:scale-125 common-transition'
+            />
+          </button>
+        )}
 
         {/* Delete Button */}
-        <button className='block group' title='Delete'>
-          <FaTrash size={18} className='text-rose-500 group-hover:scale-125 common-transition' />
+        <button
+          className='block group'
+          disabled={loadingOrders.includes(data._id) || isLoading}
+          onClick={e => {
+            e.stopPropagation()
+            handleDeleteOrders([data._id])
+          }}>
+          {loadingOrders.includes(data._id) ? (
+            <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+          ) : (
+            <FaRegTrashAlt size={18} className='group-hover:scale-125 common-transition text-rose-500' />
+          )}
         </button>
       </div>
     </div>

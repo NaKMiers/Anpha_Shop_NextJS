@@ -24,7 +24,7 @@ function OrderItem({ className = '' }: OrderItemProps) {
       <div className='flex items-center justify-between'>
         <div>
           <span className='font-semibold'>Trạng thái: </span>
-          <span className='text-green-500'>Đã xử lí</span>
+          <span className='text-green-600'>Đã xử lí</span>
         </div>
         <div>
           <span className='font-semibold'>Phương thức thanh toán: </span>

@@ -32,7 +32,7 @@ function AccountItem({
 }: AccountItemProps) {
   return (
     <div
-      className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition  ${
+      className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
         selectedAccounts.includes(data._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
       }  ${className}`}
       onClick={() =>
@@ -56,8 +56,12 @@ function AccountItem({
           </div>
         </Link>
 
-        <div className='absolute z-10 -top-2 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark bg-primary px-2 py-[2px] select-none rounded-lg font-body'>
-          {data.usingUser ? data.usingUser : <span className='text-slate-200'>Empty</span>}
+        {/* Using User */}
+        <div
+          className={`absolute z-10 -top-2 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark  px-2 py-[2px] select-none rounded-lg font-body ${
+            data.usingUser ? 'bg-secondary text-white' : 'bg-slate-300 text-slate-400'
+          }`}>
+          {data.usingUser ? data.usingUser : '___'}
         </div>
 
         {/* Type */}
@@ -103,7 +107,7 @@ function AccountItem({
           <FaCheck
             size={18}
             className={`group-hover:scale-125 common-transition ${
-              data.active ? 'text-green-500' : 'text-slate-300'
+              data.active ? 'text-green-600' : 'text-slate-300'
             }`}
           />
         </button>

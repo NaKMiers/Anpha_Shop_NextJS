@@ -5,16 +5,18 @@ import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import axios from 'axios'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCheck, FaInfo } from 'react-icons/fa'
+import { FaArrowLeft, FaCheck, FaInfo, FaUser } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa6'
 import { ImClock } from 'react-icons/im'
 
-import { setLoading } from '@/libs/reducers/modalReducer'
+import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
-import { ProductWithTagsAndCategory } from '../../product/all/page'
+import { ProductWithTagsAndCategory } from '../../../product/all/page'
+import { IAccount } from '@/models/AccountModel'
+import { useParams, useRouter } from 'next/navigation'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -24,8 +26,11 @@ function AddAccountPage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
+  const router = useRouter()
+  const { id } = useParams<{ id: string }>()
 
   // states
+  const [account, setAccount] = useState<IAccount | null>(null)
   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
 
   // Form
@@ -34,6 +39,8 @@ function AddAccountPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       type: '',
@@ -44,8 +51,44 @@ function AddAccountPage() {
       minutes: 0,
       seconds: 0,
       active: true,
+      notify: true,
     },
   })
+
+  // get account to edit
+  useEffect(() => {
+    const getAccount = async () => {
+      // star page loading
+      dispatch(setPageLoading(true))
+
+      try {
+        const res = await axios.get(`/api/admin/account/${id}`)
+        const { account } = res.data
+
+        console.log('account: ', account)
+
+        // set account to state
+        setAccount(account)
+
+        // set value to form
+        setValue('type', account.type)
+        setValue('info', account.info)
+        setValue('renew', new Date(account.renew).toISOString().split('T')[0])
+        setValue('days', account.times.days)
+        setValue('hours', account.times.hours)
+        setValue('minutes', account.times.minutes)
+        setValue('seconds', account.times.seconds)
+        setValue('active', account.active)
+      } catch (err: any) {
+        console.log(err.message)
+        toast.error(err.response.data.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
+    }
+    getAccount()
+  }, [dispatch, id, setValue])
 
   // get all types (products)
   useEffect(() => {
@@ -121,11 +164,16 @@ function AddAccountPage() {
 
     try {
       // add new tag login here
-      const res = await axios.post('/api/admin/account/add', data)
+      const res = await axios.post(`/api/admin/account/${id}/edit`, data)
       console.log(res.data)
 
       // show success message
       toast.success(res.data.message)
+
+      // reset form
+      reset()
+      dispatch(setPageLoading(false))
+      // router.push('/admin/account/all')
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
@@ -145,7 +193,7 @@ function AddAccountPage() {
           Admin
         </Link>
         <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>
-          Add Account
+          Edit Account
         </div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
@@ -158,6 +206,17 @@ function AddAccountPage() {
       <div className='pt-5' />
 
       <div>
+        {/* Using User */}
+        <div className='flex mb-5'>
+          <div className='bg-white rounded-lg px-3 flex items-center'>
+            <FaUser size={16} className='text-secondary' />
+          </div>
+          <p
+            className={`select-none cursor-pointer border border-dark px-4 py-2 rounded-lg common-transition bg-white text-dark`}>
+            diwas118151@gmail.com
+          </p>
+        </div>
+
         {/* Type */}
         <div className='mb-5'>
           <div className={`flex`}>
@@ -293,10 +352,30 @@ function AddAccountPage() {
           </label>
         </div>
 
+        {/* Notify */}
+        <div className='flex mb-5'>
+          <div className='bg-white rounded-lg px-3 flex items-center'>
+            <FaCheck size={16} className='text-secondary' />
+          </div>
+          <input
+            className='peer'
+            type='checkbox'
+            id='notify'
+            hidden
+            {...register('notify', { required: false })}
+          />
+          <label
+            className={`select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition bg-white text-green-600 peer-checked:bg-green-600 peer-checked:text-white`}
+            htmlFor='notify'>
+            Notify
+          </label>
+        </div>
+
+        {/* Save Button */}
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          text='Add'
+          text='Save'
           isLoading={isLoading}
         />
       </div>

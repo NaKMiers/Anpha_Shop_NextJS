@@ -56,18 +56,18 @@ function AllOrdersPage() {
     getAllTags()
   }, [dispatch])
 
-  // activate order
-  const handleActivateOrders = useCallback(async (ids: string[], value: boolean) => {
+  // cancel orders
+  const handleCancelOrders = useCallback(async (ids: string[]) => {
     try {
       // senred request to server
-      const res = await axios.post(`/api/admin/order/activate`, { ids, value })
-      const { updatedOrders, message } = res.data
+      const res = await axios.patch(`/api/admin/order/cancel`, { ids })
+      const { canceledOrders, message } = res.data
 
       // update orders from state
       setOrders(prev =>
         prev.map(order =>
-          updatedOrders.map((order: IOrder) => order._id).includes(order._id)
-            ? { ...order, active: value }
+          canceledOrders.map((order: IOrder) => order._id).includes(order._id)
+            ? { ...order, status: 'cancel' }
             : order
         )
       )
@@ -80,7 +80,7 @@ function AllOrdersPage() {
     }
   }, [])
 
-  // delete order
+  // delete orders
   const handleDeleteOrders = useCallback(async (ids: string[]) => {
     setLoadingOrders(ids)
 
@@ -142,6 +142,7 @@ function AllOrdersPage() {
 
       <div className='pt-8' />
 
+      {/* Select Filter */}
       <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
           <div className='flex flex-col'>
@@ -199,27 +200,54 @@ function AllOrdersPage() {
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
+
           <div className='flex justify-end md:justify-start items-center'>
-            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
+            {/* Filter Button */}
+            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-white hover:text-dark common-transition'>
               Lọc
-              <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
+              <FaFilter size={12} className='ml-1 text-white group-hover:text-dark common-transition' />
             </button>
           </div>
 
           <div className='flex justify-end items-center col-span-2 gap-2'>
-            <button className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-light common-transition'>
-              Cancel
+            {/* Select All Button */}
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
+              onClick={() =>
+                setSelectedOrders(selectedOrders.length > 0 ? [] : orders.map(order => order._id))
+              }>
+              {selectedOrders.length > 0 ? 'Unselect All' : 'Select All'}
             </button>
-            <button className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'>
-              Delete
-            </button>
+
+            {/* Cancel Many Button */}
+            {selectedOrders.every(
+              id => orders.find(order => order._id === id)?.status === 'pending'
+            ) && (
+              <button
+                className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-white common-transition'
+                onClick={() => handleCancelOrders(selectedOrders)}>
+                Cancel
+              </button>
+            )}
+
+            {/* Delete Many Button */}
+            {!!selectedOrders.length && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
+                onClick={() => {
+                  handleDeleteOrders(selectedOrders)
+                }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       <div className='pt-9' />
 
-      <div className='flex items-center justify-center gap-4 text-light'>
+      {/* Income */}
+      <div className='flex items-center justify-center gap-4 text-white'>
         <div className='flex items-center gap-2'>
           <span className='font-semibold'>From: </span>
           <input
@@ -245,7 +273,16 @@ function AllOrdersPage() {
       {/* MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3 items-start'>
         {orders.map(order => (
-          <OrderItem order={order} key={order._id} />
+          <OrderItem
+            data={order}
+            loadingOrders={loadingOrders}
+            setOrders={setOrders}
+            selectedOrders={selectedOrders}
+            setSelectedOrders={setSelectedOrders}
+            handleCancelOrders={handleCancelOrders}
+            handleDeleteOrders={handleDeleteOrders}
+            key={order._id}
+          />
         ))}
       </div>
     </div>

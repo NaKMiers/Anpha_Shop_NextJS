@@ -40,28 +40,29 @@ export async function POST(req: NextRequest) {
     // notify new order to admin
     notifyNewOrderToAdmin(newOrder)
 
-    // auto deliver order
-    if (process.env.IS_AUTO_DELIVER === 'YES') {
-      const response: any = await handleDeliverOrder(newOrder._id)
-
-      if (response.isError) {
-        console.log('AUTO DELIVERED FAILURE!!!')
-        return NextResponse.json({ message: 'Auto Deliver Failure' }, { status: 500 })
-      } else {
-        console.log('Auto Deliver For Balance Payment Method Successfully')
-      }
-    }
-
     // if user logined => cart is database cart => Delete cart items
+    let removedCartItems = []
     if (userId) {
       // delete cart items from database
-      const cartItemIds = items.map((item: FullyCartItem) => item._id)
+      removedCartItems = items.map((item: FullyCartItem) => item._id)
       await CartItemModel.deleteMany({
-        _id: { $in: cartItemIds },
+        _id: { $in: removedCartItems },
       })
     }
+
+    // auto deliver order
+    let response: any = null
+    if (process.env.IS_AUTO_DELIVER === 'YES') {
+      response = await handleDeliverOrder(newOrder._id)
+    }
+
     // return new order
-    return NextResponse.json({ order: newOrder }, { status: 201 })
+    const message =
+      response && response.isError
+        ? 'Đơn hàng đang được xử lý, xin vui lòng chờ'
+        : 'Đơn hàng đã được giao thành công'
+
+    return NextResponse.json({ removedCartItems, message }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

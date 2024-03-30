@@ -157,7 +157,7 @@ function UserItem({
         <div className='flex items-center gap-2'>
           <p>
             <span className='font-semibold'>Balance: </span>
-            <span className='text-green-500'>{formatPrice(userData.balance)}</span>
+            <span className='text-green-600'>{formatPrice(userData.balance)}</span>
           </p>
           <button
             className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'

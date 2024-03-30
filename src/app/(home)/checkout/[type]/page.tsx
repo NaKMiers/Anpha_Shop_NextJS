@@ -2,51 +2,108 @@
 
 import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { redirect } from 'next/navigation'
-import { useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
   const type: string = params.type
-  const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
 
-  if (!checkout) {
-    redirect('/cart')
-  }
+  // hook
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const cartItems = useAppSelector(state => state.cart.items)
+  const localCartItems = useAppSelector(state => state.cart.localItems)
+  const { data: session } = useSession()
+  const curUser = session?.user
 
-  // checkout detail
-  const { selectedCartItems, total, voucher, discount, code, email } = checkout
+  // states
+  const [confirmed, setConfirmed] = useState(false)
+  const [checkout, setCheckout] = useState<any | null>(null)
+
+  useEffect(() => {
+    const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
+
+    if (!checkout && !confirmed) {
+      toast.error('Đang quay lại giỏ hàng...')
+
+      router.push('/cart')
+    } else {
+      setCheckout(checkout)
+    }
+  }, [confirmed, router, dispatch])
 
   // handle confirm payment
   const handleConfirmPayment = useCallback(async () => {
-    try {
-      // handle confirm payment
-      console.log('handleConfirmPayment')
-      const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
-        _id: cartItem._id,
-        product: cartItem.product,
-        quantity: cartItem.quantity,
-      }))
+    // check if checkout exists
+    if (checkout) {
+      setConfirmed(true)
 
-      const res = await axios.post('/api/order/create', {
-        code,
-        email,
-        total,
-        voucherApplied: voucher?._id,
-        discount,
-        items,
-        paymentMethod: type,
-      })
+      const { selectedCartItems, total, voucher, discount, code, email } = checkout
 
-      console.log(res.data)
-    } catch (err: any) {
-      console.log(err.message)
-      toast.error(err.response.data.message)
+      // start page loading
+      dispatch(setPageLoading(true))
+
+      try {
+        // handle confirm payment
+        console.log('handleConfirmPayment')
+        const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
+          _id: cartItem._id,
+          product: cartItem.product,
+          quantity: cartItem.quantity,
+        }))
+
+        // send request to server to create order
+        const res = await axios.post('/api/order/create', {
+          code,
+          email,
+          total,
+          voucherApplied: voucher?._id,
+          discount,
+          items,
+          paymentMethod: type,
+        })
+
+        const { removedCartItems, message } = res.data
+
+        if (curUser) {
+          // userId exists => cart is DATABASE cart => remove cart items
+          dispatch(setCartItems(cartItems.filter(item => !removedCartItems.includes(item._id))))
+        } else {
+          // userId does not exist => cart is LOCAL cart => remove LOCAL cart items
+          dispatch(
+            setLocalCartItems(localCartItems.filter(item => !removedCartItems.includes(item._id)))
+          )
+        }
+
+        // show success message
+        toast.success(message)
+
+        // redirect to order history page
+        if (curUser) {
+          router.push('/user/order-history')
+        } else {
+          router.push('/cart')
+        }
+
+        // clear checkout (local storage)
+        localStorage.removeItem('checkout')
+      } catch (err: any) {
+        console.log(err.message)
+        toast.error(err.response.data.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
     }
-  }, [code, email, total, discount, voucher, selectedCartItems, type])
+  }, [checkout, type, dispatch, router, curUser, cartItems, localCartItems])
 
   return (
     <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
@@ -86,15 +143,17 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             </p>
           )}
           <p>
-            Số tiền chuyển: <span className='text-green-500 font-semibold'>{formatPrice(1000)}</span>
+            Số tiền chuyển: <span className='text-green-600 font-semibold'>{formatPrice(1000)}</span>
           </p>
           <p>
-            Nội dung chuyển khoản: <span className='text-yellow-500 font-semibold'>{code}</span>
+            Nội dung chuyển khoản:{' '}
+            <span className='text-yellow-500 font-semibold'>{checkout?.code}</span>
           </p>
         </div>
 
         <p className=''>
-          Tài khoản sẽ được gửi cho bạn qua email: <span className='text-green-500'>{email}</span>
+          Tài khoản sẽ được gửi cho bạn qua email:{' '}
+          <span className='text-green-600'>{checkout?.email}</span>
         </p>
 
         <p className='italic text-sky-500'>
@@ -125,7 +184,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='pt-5' />
 
         <div>
-          {selectedCartItems.map((cartItem: FullyCartItem, index: number) => (
+          {checkout?.selectedCartItems.map((cartItem: FullyCartItem, index: number) => (
             <CartItem
               cartItem={cartItem}
               className={index != 0 ? 'mt-4' : ''}
@@ -137,16 +196,20 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
           <hr className='mt-8 mb-6' />
 
-          {!!discount && (
+          {!!checkout?.discount && (
             <div className='flex items-center justify-between'>
               <span>Ưu đãi:</span>
-              <span className='font-semibold text-yellow-500'>{formatPrice(discount)}</span>
+              <span className='font-semibold text-yellow-500'>
+                {formatPrice(checkout?.discount || 0)}
+              </span>
             </div>
           )}
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total)}</span>
+            <span className='font-semibold text-3xl text-green-600'>
+              {formatPrice(checkout?.total || 0)}
+            </span>
           </div>
         </div>
       </div>

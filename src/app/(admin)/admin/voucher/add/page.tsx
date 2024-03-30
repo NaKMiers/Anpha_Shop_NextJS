@@ -350,8 +350,8 @@ function AddVoucherPage() {
             <FaPlay size={16} className='text-secondary' />
           </div>
           <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition  ${
-              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
+            className={`select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition  ${
+              isChecked ? 'bg-green-600 text-white' : 'bg-white text-green-600'
             }`}
             htmlFor='isActive'
             onClick={() => setIsChecked(!isChecked)}>

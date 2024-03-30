@@ -19,7 +19,7 @@ function OrderDetailPage() {
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Trạng thái: </span>
-          <span className='font-semibold text-green-500'>Đã xử lí</span>
+          <span className='font-semibold text-green-600'>Đã xử lí</span>
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Người nhận: </span>

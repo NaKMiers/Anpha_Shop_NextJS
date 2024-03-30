@@ -208,7 +208,7 @@ function AllTagsPage() {
               <>
                 {/* Save Many Button */}
                 <button
-                  className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
+                  className='border border-green-600 text-green-600 rounded-lg px-3 py-2 hover:bg-green-600 hover:text-light common-transition'
                   onClick={() =>
                     handleSaveEditingTags(
                       editingValues.filter(value => selectedTags.includes(value._id))

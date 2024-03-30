@@ -128,7 +128,7 @@ function VoucherItem({
           <FaCheck
             size={18}
             className={`group-hover:scale-125 common-transition ${
-              data.active ? 'text-green-500' : 'text-slate-300'
+              data.active ? 'text-green-600' : 'text-slate-300'
             }`}
           />
         </button>
