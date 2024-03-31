@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems } from '@/libs/reducers/cartReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { use, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHistory } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
@@ -24,25 +24,16 @@ function Header({ isStatic }: HeaderProps) {
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
+  const { data: session } = useSession()
+  const curUser: any = session?.user
 
-  const [curUser, setCurUser] = useState<any>(null)
-
-  console.log(curUser)
+  // console.log(curUser)
 
   // states
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
   const [cartLength, setCartlength] = useState(0)
-
-  // get user session
-  useEffect(() => {
-    const asd = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-    asd()
-  }, [])
 
   // get cart length
   useEffect(() => {
@@ -162,19 +153,21 @@ function Header({ isStatic }: HeaderProps) {
           </Link>
 
           {curUser ? (
-            <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
-              <Image
-                className='aspect-square rounded-full'
-                src={curUser?.avatar || '/images/default-avatar.jpg'}
-                width={40}
-                height={40}
-                alt='avatar'
-              />
-              <div className='text-[18px] font-body hover:underline underline-offset-2'>
-                {formatPrice(curUser?.balance)}
+            !!curUser._id && (
+              <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
+                <Image
+                  className='aspect-square rounded-full'
+                  src={curUser?.avatar || '/images/default-avatar.jpg'}
+                  width={40}
+                  height={40}
+                  alt='avatar'
+                />
+                <div className='text-[18px] font-body hover:underline underline-offset-2'>
+                  {formatPrice(curUser?.balance)}
+                </div>
+                <IoChevronDown size={22} className='common-transition hover:scale-125' />
               </div>
-              <IoChevronDown size={22} className='common-transition hover:scale-125' />
-            </div>
+            )
           ) : (
             <Link
               href='/auth/login'

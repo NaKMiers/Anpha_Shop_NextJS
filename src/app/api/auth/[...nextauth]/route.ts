@@ -87,7 +87,6 @@ const handler = NextAuth({
       console.log('jwt-user', user)
       console.log('jwt-trigger', trigger)
       console.log('jwt-ss', session)
-      // Initial sign in
 
       if (user) {
         const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()
@@ -104,14 +103,8 @@ const handler = NextAuth({
     async session({ session, token }) {
       console.log('session-xxxx', session)
       console.log('session-token', token)
-      // console.log('token-xxxx', token)
-      // const user: any = await UserModel.findOne({
-      //   email: session.user.email,
-      // }).lean()
 
       session.user = token
-      // session.cart = cart || []
-      // token._id = user._id
 
       return session
     },
