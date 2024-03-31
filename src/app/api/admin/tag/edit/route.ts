@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
 import { generateSlug } from '@/utils'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PUT]: /api/admin/tag/edit
