@@ -23,7 +23,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   const router = useRouter()
 
   // states
-  const [quantity, setQuantity] = useState<number>(1)
+  const [quantity, setQuantity] = useState<number>(product && product.stock > 0 ? 1 : 0)
 
   // handle add product to cart
   const handleAddProductToCart = useCallback(async () => {
@@ -79,6 +79,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   // handle quantity
   const handleQuantity = useCallback(
     (value: number, isCustom: boolean = false) => {
+      console.log(value)
+
       if (!isCustom) {
         // quantity must be > 0
         if (quantity + value <= 0) return
@@ -88,11 +90,12 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
 
         setQuantity(quantity + value)
       } else {
+        console.log('custom')
         // quantity must be > 0
-        if (value < 1) return
+        if (value < 1) value = 1
 
         // quantity must be <= product stock
-        if (value > product?.stock!) return
+        if (value > product?.stock!) value = product?.stock!
 
         setQuantity(value)
       }
@@ -123,9 +126,10 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           className='max-w-14 px-2 border-y border-slate-100 outline-none text-center text-lg text-dark font-semibold font-body'
           type='text'
           inputMode='numeric'
-          pattern='[0-9]*'
           value={quantity}
-          onChange={e => handleQuantity(+e.target.value, true)}
+          disabled={isLoading}
+          onChange={e => setQuantity(+e.target.value || 0)}
+          onBlur={e => handleQuantity(+e.target.value, true)}
         />
         <button
           className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${

@@ -74,7 +74,9 @@ function AddTagPage() {
           <FaArrowLeft />
           Admin
         </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>Add Tag</div>
+        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
+          Add Tag
+        </div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
           href='/admin/tag/all'>

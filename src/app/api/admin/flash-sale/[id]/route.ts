@@ -2,7 +2,6 @@ import { FlashSaleWithProducts } from '@/app/(admin)/admin/flash-sale/all/page'
 import { connectDatabase } from '@/config/databse'
 import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /flash-sale/:id
@@ -30,8 +29,5 @@ export async function GET(req: NextRequest, { params: { id } }: { params: { id: 
     return NextResponse.json({ flashSale, message: 'Flashsale found' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

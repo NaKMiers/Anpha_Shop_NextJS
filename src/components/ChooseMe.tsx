@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 function ChooseMe() {
   return (
-    <div className='max-w-1200 m-auto'>
+    <div className='max-w-1200 mx-auto'>
       <div className='px-21/2 sm:px-0 flex flex-wrap justify-between -mx-21'>
         <div className='p-21/2 sm:p-21 w-1/2 md:w-1/3 lg:w-1/4 transition-all duration-300 hover:-translate-y-2'>
           <div className='rounded-small shadow-medium overflow-hidden bg-white'>

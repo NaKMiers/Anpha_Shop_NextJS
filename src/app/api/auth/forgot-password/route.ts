@@ -2,7 +2,6 @@ import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
 import { sendMail } from '@/utils/sendMail'
 import bcrypt from 'bcrypt'
-import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [POST]: /auth/forgot-password
@@ -51,8 +50,5 @@ export async function POST(req: NextRequest) {
     })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

@@ -75,7 +75,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           <div className='flex flex-col gap-3 text-xl font-body tracking-wide mt-5'>
             {/* Category */}
-            <div className='flex items-center gap-1'>
+            <div className='flex items-center flex-wrap gap-1'>
               <MdCategory className='w-7 text-darker' size={26} />
               <span className='text-darker font-bold text-nowrap'>Thể loại:</span>
               <Link

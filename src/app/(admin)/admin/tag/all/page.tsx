@@ -156,7 +156,9 @@ function AllTagsPage() {
           <FaArrowLeft />
           Admin
         </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>All Tags</div>
+        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
+          All Tags
+        </div>
         <Link
           className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
           href='/admin/tag/add'>

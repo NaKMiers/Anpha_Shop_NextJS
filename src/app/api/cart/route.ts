@@ -1,6 +1,5 @@
 import { connectDatabase } from '@/config/databse'
 import CartItemModel, { ICartItem } from '@/models/CartItemModel'
-import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyProduct } from '../product/[slug]/route'
@@ -47,8 +46,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ cart }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

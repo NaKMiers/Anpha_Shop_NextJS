@@ -1,7 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { formatPrice } from '@/utils/formatNumber'
-import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -85,8 +84,5 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
     return NextResponse.json({ voucher, message }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

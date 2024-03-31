@@ -1,6 +1,5 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
-import { connection } from 'mongoose'
 import { NextResponse } from 'next/server'
 
 // [DELETE]: /admin/user/delete
@@ -29,8 +28,5 @@ export async function DELETE(req: Request) {
     })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

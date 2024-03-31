@@ -1,6 +1,5 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
-import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [DELETE]: /admin/order/delete
@@ -35,8 +34,5 @@ export async function DELETE(req: NextRequest) {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

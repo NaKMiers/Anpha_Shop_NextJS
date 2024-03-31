@@ -1,6 +1,5 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
-import { connection } from 'mongoose'
 import { NextResponse } from 'next/server'
 
 // [GET]: /admin/user/role-users
@@ -27,8 +26,5 @@ export async function GET() {
     return NextResponse.json({ roleUsers, message: 'Get collaborators successfully' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

@@ -1,6 +1,5 @@
 import { connectDatabase } from '@/config/databse'
 import CartItemModel from '@/models/CartItemModel'
-import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -41,8 +40,5 @@ export async function DELETE(req: NextRequest, { params: { id } }: { params: { i
   } catch (err: any) {
     console.log(err.message)
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

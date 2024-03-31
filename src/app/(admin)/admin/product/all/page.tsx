@@ -138,7 +138,7 @@ function AllProductsPage() {
           <FaArrowLeft />
           Admin
         </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl'>
+        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
           All Products
         </div>
         <Link

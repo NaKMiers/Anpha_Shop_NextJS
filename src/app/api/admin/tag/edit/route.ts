@@ -1,7 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
 import { generateSlug } from '@/utils'
-import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PUT]: /api/admin/tag/edit
@@ -40,8 +39,5 @@ export async function PUT(req: NextRequest) {
     })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
-  } finally {
-    // close connection
-    connection.close()
   }
 }

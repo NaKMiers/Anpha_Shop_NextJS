@@ -174,7 +174,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
   return (
     <div
-      className={`relative w-full p-4 bg-white shadow-lg rounded-xl select-none hover:-translate-y-1 transition duration-500 ${className}`}>
+      className={`relative w-full h-full p-4 bg-white shadow-lg rounded-xl select-none hover:-translate-y-1 transition duration-500 ${className}`}>
       <Link
         href={`/${product.slug}`}
         className='aspect-video rounded-lg overflow-hidden shadow-lg block'>
