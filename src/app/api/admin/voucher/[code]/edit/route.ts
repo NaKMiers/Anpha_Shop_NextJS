@@ -7,7 +7,7 @@ export async function PUT(req: NextRequest, { params: { code } }: { params: { co
   console.log('- Edit Voucher -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to edit
   const {

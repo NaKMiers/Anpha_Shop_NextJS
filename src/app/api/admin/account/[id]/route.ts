@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, { params: { id } }: { params: { id: 
   console.log('- Get Account -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get account from database

@@ -9,7 +9,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
   console.log('- Edit Product -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to create product
   const formData = await req.formData()

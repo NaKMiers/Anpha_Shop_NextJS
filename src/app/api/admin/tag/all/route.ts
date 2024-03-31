@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get All Tags -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all tags from database

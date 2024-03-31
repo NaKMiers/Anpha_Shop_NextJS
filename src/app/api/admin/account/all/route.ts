@@ -8,7 +8,7 @@ export async function GET() {
   console.log('- Get All Accounts - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all account

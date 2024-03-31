@@ -9,7 +9,7 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
   console.log('- Apply Voucher -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get userId to check if user used this voucher
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   console.log(' - Add Product To Cart - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get product data to add to cart
   const { productId, quantity } = await req.json()

@@ -10,7 +10,7 @@ export async function PATCH(
   console.log('- Edit Product Property -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get field to update
   const { value } = await req.json()

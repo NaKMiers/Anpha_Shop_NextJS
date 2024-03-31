@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get Flash Sale Products -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all products from database

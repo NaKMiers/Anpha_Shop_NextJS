@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
   console.log('- Re-Deliver Order -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get order to re-deliver

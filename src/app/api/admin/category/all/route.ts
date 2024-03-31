@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get All Categories -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all categories from database

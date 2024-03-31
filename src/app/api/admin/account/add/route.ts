@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   console.log('- Add Account - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to add account
   const asd = await req.json()

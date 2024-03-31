@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   console.log('- Add Product -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to create product
   const formData = await req.formData()

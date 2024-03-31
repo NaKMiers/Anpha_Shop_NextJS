@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   console.log('- Activate Accounts - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get account id to delete
   const { ids, value } = await req.json()

@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   console.log('- Add Flash Sale -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to create flash sale
   const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()

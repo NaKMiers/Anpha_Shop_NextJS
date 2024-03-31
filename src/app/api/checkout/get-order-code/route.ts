@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get Order Code -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // generate order code to create order

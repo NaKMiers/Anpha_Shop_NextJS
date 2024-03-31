@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get Role-Users -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get special role users from database

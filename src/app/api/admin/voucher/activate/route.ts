@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Activate Vouchers - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get voucher id to delete
   const { ids, value } = await req.json()

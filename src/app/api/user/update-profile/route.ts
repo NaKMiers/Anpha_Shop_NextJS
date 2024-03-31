@@ -8,7 +8,7 @@ export async function PUT(req: NextRequest) {
   console.log('- Update Profile -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get user and update date to update profile
   const { firstname, lastname, birthday, job, address } = await req.json()

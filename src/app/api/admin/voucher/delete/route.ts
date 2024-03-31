@@ -7,7 +7,7 @@ export async function DELETE(req: NextRequest) {
   console.log('- Delete Voucheres - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get voucher ids to delete
   const { ids } = await req.json()

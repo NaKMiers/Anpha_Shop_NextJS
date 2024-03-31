@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Register -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   let { username, email, password } = await req.json()
   email = email.toLowerCase()

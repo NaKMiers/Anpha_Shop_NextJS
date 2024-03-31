@@ -8,7 +8,7 @@ export async function PUT(req: NextRequest) {
   console.log('- Edit Categories -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get category values to edit
   const { editingValues } = await req.json()

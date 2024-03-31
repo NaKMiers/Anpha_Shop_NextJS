@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get All Orders -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all order from database

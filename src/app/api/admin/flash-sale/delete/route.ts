@@ -8,7 +8,7 @@ export async function DELETE(req: NextRequest) {
   console.log('- Delete Flash Sales - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get voucher ids to delete
   const { ids, productIds } = await req.json()

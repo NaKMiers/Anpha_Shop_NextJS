@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, { params: { id } }: { params: { id: 
   console.log('- Get Product -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get product from database

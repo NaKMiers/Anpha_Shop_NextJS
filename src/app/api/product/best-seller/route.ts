@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get Best Seller Products -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get 10 best seller products by sold field

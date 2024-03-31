@@ -8,7 +8,7 @@ export async function DELETE(req: NextRequest, { params: { id } }: { params: { i
   console.log(' - Delete Cart Item - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get user id
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

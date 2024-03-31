@@ -11,7 +11,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
   console.log(' - Set Cart Quantity - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get user id
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

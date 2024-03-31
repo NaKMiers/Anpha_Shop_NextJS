@@ -14,7 +14,7 @@ export async function GET() {
   console.log('- Get Home Page -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all products to show in home page

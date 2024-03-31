@@ -8,7 +8,7 @@ export async function DELETE(req: NextRequest) {
   console.log('- Delete Accounts - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get account ids to delete
   const { ids } = await req.json()

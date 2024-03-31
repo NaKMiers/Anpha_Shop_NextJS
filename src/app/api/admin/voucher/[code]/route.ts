@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, { params: { code } }: { params: { co
   console.log('- Get Voucher -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get voucher from database

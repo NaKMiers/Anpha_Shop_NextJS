@@ -8,7 +8,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
   console.log('- Recharge - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get value to recharge user
   const { amount } = await req.json()

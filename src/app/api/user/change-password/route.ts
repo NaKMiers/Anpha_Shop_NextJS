@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest) {
   console.log('- Change Password -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to change password
   const asd = await req.json()

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Add Voucher -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to create voucher
   const { code, desc, begin, expire, minTotal, maxReduce, type, value, timesLeft, owner, active } =

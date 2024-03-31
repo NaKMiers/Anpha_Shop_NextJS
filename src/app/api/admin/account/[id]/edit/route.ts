@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
   console.log('- Edit Account -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to edit account
   const { type, info, renew, active, days, hours, minutes, seconds, notify } = await req.json()

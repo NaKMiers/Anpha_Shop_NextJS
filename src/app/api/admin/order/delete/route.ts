@@ -7,7 +7,7 @@ export async function DELETE(req: NextRequest) {
   console.log('- Delete Orders - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get order ids to delete
   const { ids } = await req.json()

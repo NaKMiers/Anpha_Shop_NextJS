@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Add Tag -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data field to add new tag
   const { title, isFeatured } = await req.json()

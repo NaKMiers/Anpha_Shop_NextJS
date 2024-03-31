@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   console.log('- Create Order -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data to create order
   const asd = await req.json()

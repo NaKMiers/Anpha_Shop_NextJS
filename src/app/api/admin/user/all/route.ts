@@ -7,7 +7,7 @@ export async function GET() {
   console.log('- Get All Users -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all users from database

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Activate Products - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get product id to delete
   const { ids, value } = await req.json()

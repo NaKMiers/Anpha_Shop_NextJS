@@ -9,7 +9,7 @@ export async function GET(req: NextRequest, { params: { id } }: { params: { id: 
   console.log('- Get Flash Sale -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get flash sale from database

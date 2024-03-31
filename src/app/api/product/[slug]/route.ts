@@ -22,7 +22,7 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
   console.log('- Get Product Page -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // // get user id to check hidden comments
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

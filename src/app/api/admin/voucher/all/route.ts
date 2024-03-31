@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   console.log('- Get All Vouchers -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   try {
     // get all vouchers from database

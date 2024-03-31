@@ -8,7 +8,7 @@ export async function PUT(req: NextRequest) {
   console.log('- Edit Tags -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get tag values to edit
   const { editingValues } = await req.json()

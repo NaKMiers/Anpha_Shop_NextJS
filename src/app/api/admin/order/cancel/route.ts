@@ -7,7 +7,7 @@ export async function PATCH(req: NextRequest) {
   console.log('- Cancel Orders -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get order ids to cancel
   const { ids } = await req.json()

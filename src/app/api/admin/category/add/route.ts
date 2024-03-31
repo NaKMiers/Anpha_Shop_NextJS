@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Add Category -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get data field to add new category
   const { title } = await req.json()

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   console.log('forgot password')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get email to send link to reset password
   const { email } = await req.json()

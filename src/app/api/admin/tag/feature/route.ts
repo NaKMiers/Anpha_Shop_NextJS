@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   console.log('- Feature Tags - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get tag id to delete
   const { ids, value } = await req.json()

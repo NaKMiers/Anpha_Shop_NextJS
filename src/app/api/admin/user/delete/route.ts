@@ -7,7 +7,7 @@ export async function DELETE(req: Request) {
   console.log('- Delete Users - ')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get user ids to delete
   const { ids } = await req.json()

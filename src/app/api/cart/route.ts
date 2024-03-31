@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   console.log('- Get User Cart')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get userId to get user's cart
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   console.log('- Get Products By Categories -')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get query params
   const searchParams = req.nextUrl.searchParams

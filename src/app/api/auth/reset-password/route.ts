@@ -8,7 +8,7 @@ export async function PATCH(req: NextRequest) {
   console.log('reset password')
 
   // connect to database
-  connectDatabase()
+  await connectDatabase()
 
   // get email and token from query
   const searchParams = req.nextUrl.searchParams
