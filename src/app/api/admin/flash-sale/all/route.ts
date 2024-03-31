@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
+import { connection } from 'mongoose'
 import { NextResponse } from 'next/server'
 
 // [GET]: /admin/flash-sale/all
