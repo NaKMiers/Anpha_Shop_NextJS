@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems } from '@/libs/reducers/cartReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
-import { signOut, useSession } from 'next-auth/react'
+import { getSession, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -24,16 +24,24 @@ function Header({ isStatic }: HeaderProps) {
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
-  const { data: session } = useSession()
-  const curUser: any = session?.user
-
-  // console.log(curUser)
 
   // states
+  const [curUser, setCurUser] = useState<any>(null)
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
   const [cartLength, setCartlength] = useState(0)
+
+  console.log(curUser)
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+    getCurUser()
+  }, [])
 
   // get cart length
   useEffect(() => {
