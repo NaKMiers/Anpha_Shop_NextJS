@@ -26,7 +26,7 @@ function Header({ isStatic }: HeaderProps) {
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
 
   // states
-  const [curUser, setCurUser] = useState<any>(null)
+  const [curUser, setCurUser] = useState<any>({})
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
