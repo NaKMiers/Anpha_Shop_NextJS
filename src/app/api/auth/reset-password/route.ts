@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
 import UserModel from '@/models/UserModel'
 
-// Connect to database
-connectDatabase()
-
 // [PATHC]: /auth/reset-password
 export async function PATCH(req: NextRequest) {
   console.log('reset password')
+
+  // connect to database
+  connectDatabase()
 
   // get email and token from query
   const searchParams = req.nextUrl.searchParams

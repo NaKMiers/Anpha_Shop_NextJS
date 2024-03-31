@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/voucher/feature
 export async function POST(req: NextRequest) {
   console.log('- Activate Vouchers - ')
+
+  // connect to database
+  connectDatabase()
 
   // get voucher id to delete
   const { ids, value } = await req.json()

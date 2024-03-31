@@ -10,9 +10,6 @@ import { ITag } from '@/models/TagModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // products with category and tags and flashsale
 export type FullyProduct = IProduct & {
   category: ICategory
@@ -23,6 +20,9 @@ export type FullyProduct = IProduct & {
 // [GET]: /product/:slug
 export async function GET(req: NextRequest, { params: { slug } }: { params: { slug: string } }) {
   console.log('- Get Product Page -')
+
+  // connect to database
+  connectDatabase()
 
   // // get user id to check hidden comments
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

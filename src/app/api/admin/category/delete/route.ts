@@ -1,14 +1,13 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel from '@/models/CategoryModel'
-import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Connect to database
-connectDatabase()
 
 // [DELETE]: /admin/category/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Categories - ')
+
+  // connect to database
+  connectDatabase()
 
   // get category ids to delete
   const { ids } = await req.json()

@@ -1,16 +1,14 @@
 import { connectDatabase } from '@/config/databse'
+import '@/models/UserModel'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
-import '@/models/UserModel'
-
-// Connect to database
-connectDatabase()
 
 // [GET]: /voucher/:id
 export async function GET(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Get Voucher -')
 
-  console.log('code:', code)
+  // connect to database
+  connectDatabase()
 
   try {
     // get voucher from database

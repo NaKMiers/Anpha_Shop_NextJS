@@ -4,12 +4,12 @@ import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { notifyDeliveryOrder } from '@/utils/sendMail'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/order/:id/re-deliver
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Re-Deliver Order -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get order to re-deliver

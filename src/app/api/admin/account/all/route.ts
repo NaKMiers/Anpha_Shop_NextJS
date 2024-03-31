@@ -3,12 +3,12 @@ import AccountModel from '@/models/AccountModel'
 import { NextResponse } from 'next/server'
 import '@/models/ProductModel'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /admin/account/all
 export async function GET() {
   console.log('- Get All Accounts - ')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all account

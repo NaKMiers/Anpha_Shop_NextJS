@@ -1,13 +1,13 @@
 import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
-import { NextRequest, NextResponse } from 'next/server'
-
-// Connect to database
-connectDatabase()
+import { NextResponse } from 'next/server'
 
 // [GET]: /admin/tag/all
 export async function GET() {
   console.log('- Get All Tags -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all tags from database

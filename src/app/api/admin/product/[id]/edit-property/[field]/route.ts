@@ -1,9 +1,6 @@
 import { connectDatabase } from '@/config/databse'
-import ProductModel, { IProduct } from '@/models/ProductModel'
+import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Connect to database
-connectDatabase()
 
 // [PATCH]: /admin/product/:id/edit-property/:field
 export async function PATCH(
@@ -11,6 +8,9 @@ export async function PATCH(
   { params: { id, field } }: { params: { id: string; field: string } }
 ) {
   console.log('- Edit Product Property -')
+
+  // connect to database
+  connectDatabase()
 
   // get field to update
   const { value } = await req.json()

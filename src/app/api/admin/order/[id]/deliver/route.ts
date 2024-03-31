@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/order/:id/deliver
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Deliver Order -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // handle deliver order

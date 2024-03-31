@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import { generateOrderCode } from '@/utils'
 import { NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /api/checkout/get-order-code
 export async function GET() {
   console.log('- Get Order Code -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // generate order code to create order

@@ -3,12 +3,12 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PUT]: /api/admin/flash-sale/:id/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Flash sale -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to create flash sale
   const asd = await req.json()

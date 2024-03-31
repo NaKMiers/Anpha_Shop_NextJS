@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /product/:id
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Product -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get product from database

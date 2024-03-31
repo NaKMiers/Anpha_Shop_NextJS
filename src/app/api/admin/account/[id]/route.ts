@@ -3,14 +3,12 @@ import AccountModel from '@/models/AccountModel'
 import { NextRequest, NextResponse } from 'next/server'
 import '@/models/UserModel'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /account/:id
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Account -')
 
-  console.log('id:', id)
+  // connect to database
+  connectDatabase()
 
   try {
     // get account from database

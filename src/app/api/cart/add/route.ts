@@ -6,15 +6,15 @@ import mongoose, { Mongoose } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 export type UserWithCart = IUser & { cart: ICartItem[]; cartLength: number }
 export type CartItemWithProduct = ICartItem & { product: IProduct }
 
 // [POST]: /cart/add
 export async function POST(req: NextRequest) {
   console.log(' - Add Product To Cart - ')
+
+  // connect to database
+  connectDatabase()
 
   // get product data to add to cart
   const { productId, quantity } = await req.json()

@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [POST]: /admin/tag/add
 export async function POST(req: NextRequest) {
   console.log('- Add Tag -')
+
+  // connect to database
+  connectDatabase()
 
   // get data field to add new tag
   const { title, isFeatured } = await req.json()

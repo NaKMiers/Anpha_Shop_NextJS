@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import ProductModel from '@/models/ProductModel'
 import { NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /flashsale
 export async function GET() {
   console.log('- Get Flash Sale Products -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all products from database

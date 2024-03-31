@@ -4,9 +4,6 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyProduct } from '../product/[slug]/route'
 
-// Connect to database
-connectDatabase()
-
 export type FullyCartItem = ICartItem & {
   product: FullyProduct
 }
@@ -14,6 +11,9 @@ export type FullyCartItem = ICartItem & {
 // [GET]: /cart
 export async function GET(req: NextRequest) {
   console.log('- Get User Cart')
+
+  // connect to database
+  connectDatabase()
 
   // get userId to get user's cart
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

@@ -3,12 +3,12 @@ import UserModel, { IUser } from '@/models/UserModel'
 import { formatPrice } from '@/utils/formatNumber'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/user/:id/recharge
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Recharge - ')
+
+  // connect to database
+  connectDatabase()
 
   // get value to recharge user
   const { amount } = await req.json()

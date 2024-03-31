@@ -2,14 +2,13 @@ import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
 import { JWT, getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-
-// Connect to database
-connectDatabase()
 
 // [PUT]: /user/update-profile
 export async function PUT(req: NextRequest) {
   console.log('- Update Profile -')
+
+  // connect to database
+  connectDatabase()
 
   // get user and update date to update profile
   const { firstname, lastname, birthday, job, address } = await req.json()

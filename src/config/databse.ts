@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
 
-// let cachedConnection: any = null
+let cachedConnection: any = null
 
 export async function connectDatabase() {
-  // if (cachedConnection) {
-  //   console.log('Returning cached database connection')
-  //   return cachedConnection
-  // }
+  if (cachedConnection) {
+    console.log('Returning cached database connection')
+    return cachedConnection
+  }
 
   try {
     await mongoose.connect(process.env.MONGODB!)
@@ -20,7 +20,7 @@ export async function connectDatabase() {
       console.log('MongoDB connection error. Please make sure MongoDB is running. ' + error)
     })
 
-    // cachedConnection = connection
+    cachedConnection = connection
     return connection
   } catch (error) {
     console.log('Something goes wrong!')

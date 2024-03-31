@@ -7,12 +7,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../../cart/route'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
 
-// Connect to database
-connectDatabase()
-
 // [POST]: /order/create
 export async function POST(req: NextRequest) {
   console.log('- Create Order -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to create order
   const asd = await req.json()

@@ -4,12 +4,12 @@ import { formatPrice } from '@/utils/formatNumber'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [POST]: /voucher/:code/apply
 export async function POST(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Apply Voucher -')
+
+  // connect to database
+  connectDatabase()
 
   // get userId to check if user used this voucher
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

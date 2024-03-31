@@ -3,12 +3,12 @@ import CategoryModel from '@/models/CategoryModel'
 import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PUT]: /admin/categories/edit
 export async function PUT(req: NextRequest) {
   console.log('- Edit Categories -')
+
+  // connect to database
+  connectDatabase()
 
   // get category values to edit
   const { editingValues } = await req.json()

@@ -4,12 +4,12 @@ import ProductModel from '@/models/ProductModel'
 import { getTimes } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [POST]: /admin/account/add
 export async function POST(req: NextRequest) {
   console.log('- Add Account - ')
+
+  // connect to database
+  connectDatabase()
 
   // get data to add account
   const asd = await req.json()

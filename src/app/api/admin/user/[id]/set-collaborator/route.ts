@@ -1,16 +1,14 @@
 import { connectDatabase } from '@/config/databse'
-import UserModel, { IUser } from '@/models/UserModel'
+import UserModel from '@/models/UserModel'
 import { formatPrice } from '@/utils/formatNumber'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Connect to database
-connectDatabase()
 
 // [PATCH]: /admin/user/:id/set-collaborator
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Set Collaborator - ')
 
-  console.log('setCollaborator')
+  // connect to database
+  connectDatabase()
 
   // get data to set collaborator
   const asd = await req.json()

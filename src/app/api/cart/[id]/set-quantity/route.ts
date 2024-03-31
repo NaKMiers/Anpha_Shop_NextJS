@@ -6,12 +6,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../../route'
 import { IProduct } from '@/models/ProductModel'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /cart/:id/set-quantity
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log(' - Set Cart Quantity - ')
+
+  // connect to database
+  connectDatabase()
 
   // get user id
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

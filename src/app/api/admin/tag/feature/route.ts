@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/tag/feature
 export async function POST(req: NextRequest) {
   console.log('- Feature Tags - ')
+
+  // connect to database
+  connectDatabase()
 
   // get tag id to delete
   const { ids, value } = await req.json()

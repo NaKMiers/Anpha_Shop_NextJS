@@ -3,17 +3,15 @@ import AccountModel, { IAccount } from '@/models/AccountModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [DELETE]: /admin/account/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Accounts - ')
 
+  // connect to database
+  connectDatabase()
+
   // get account ids to delete
   const { ids } = await req.json()
-
-  console.log('ids:', ids)
 
   try {
     // Find accounts by their IDs before deletion

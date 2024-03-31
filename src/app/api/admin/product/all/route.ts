@@ -1,15 +1,15 @@
 import { connectDatabase } from '@/config/databse'
-import ProductModel from '@/models/ProductModel'
-import { NextResponse } from 'next/server'
-import '@/models/TagModel'
 import '@/models/CategoryModel'
-
-// Connect to database
-connectDatabase()
+import ProductModel from '@/models/ProductModel'
+import '@/models/TagModel'
+import { NextResponse } from 'next/server'
 
 // [GET]: /admin/product/all
 export async function GET() {
   console.log('- Get All Products -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all products from database

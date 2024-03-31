@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [DELETE]: /admin/voucher/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Voucheres - ')
+
+  // connect to database
+  connectDatabase()
 
   // get voucher ids to delete
   const { ids } = await req.json()

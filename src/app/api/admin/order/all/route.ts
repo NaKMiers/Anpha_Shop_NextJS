@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /admin/order/all
 export async function GET() {
   console.log('- Get All Orders -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all order from database

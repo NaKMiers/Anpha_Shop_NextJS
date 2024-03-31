@@ -4,12 +4,12 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /user/change-password
 export async function PATCH(req: NextRequest) {
   console.log('- Change Password -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to change password
   const asd = await req.json()

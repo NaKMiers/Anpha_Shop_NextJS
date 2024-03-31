@@ -3,10 +3,6 @@ import { NextResponse } from 'next/server'
 import '@/models/TagModel'
 import '@/models/CategoryModel'
 import '@/models/FlashsaleModel'
-
-// Connect to database
-connectDatabase()
-
 import ProductModel from '@/models/ProductModel'
 import CategoryModel, { ICategory } from '@/models/CategoryModel'
 import { FullyProduct } from './product/[slug]/route'
@@ -16,6 +12,9 @@ import { shuffleArray } from '@/utils'
 // [GET]: /
 export async function GET() {
   console.log('- Get Home Page -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all products to show in home page

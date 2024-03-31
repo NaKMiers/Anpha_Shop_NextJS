@@ -4,14 +4,12 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /flash-sale/:id
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Flash Sale -')
 
-  console.log('id', id)
+  // connect to database
+  connectDatabase()
 
   try {
     // get flash sale from database

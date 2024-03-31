@@ -3,12 +3,12 @@ import AccountModel, { IAccount } from '@/models/AccountModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/account/feature
 export async function POST(req: NextRequest) {
   console.log('- Activate Accounts - ')
+
+  // connect to database
+  connectDatabase()
 
   // get account id to delete
   const { ids, value } = await req.json()

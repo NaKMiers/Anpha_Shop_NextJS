@@ -1,15 +1,14 @@
 import { connectDatabase } from '@/config/databse'
 import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
-import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Connect to database
-connectDatabase()
 
 // [DELETE]: /admin/flash-sale/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Flash Sales - ')
+
+  // connect to database
+  connectDatabase()
 
   // get voucher ids to delete
   const { ids, productIds } = await req.json()

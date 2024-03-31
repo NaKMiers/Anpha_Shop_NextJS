@@ -4,12 +4,12 @@ import { generateSlug } from '@/utils'
 import { deleteFile, uploadFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PUT]: /api/admin/tag/:code/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Product -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to create product
   const formData = await req.formData()

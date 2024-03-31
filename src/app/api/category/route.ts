@@ -3,11 +3,12 @@ import CategoryModel from '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 export async function GET(req: NextRequest) {
   console.log('- Get Products By Categories -')
+
+  // connect to database
+  connectDatabase()
+
   // get query params
   const searchParams = req.nextUrl.searchParams
   const searchParamsObj: { [key: string]: string[] } = {}

@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [DELETE]: /admin/tag/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Tags - ')
+
+  // connect to database
+  connectDatabase()
 
   // get tag ids to delete
   const { ids } = await req.json()

@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to dabase
-connectDatabase()
-
 // [DELETE]: /admin/order/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Orders - ')
+
+  // connect to database
+  connectDatabase()
 
   // get order ids to delete
   const { ids } = await req.json()

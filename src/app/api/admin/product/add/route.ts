@@ -6,12 +6,12 @@ import { uploadFile } from '@/utils/uploadFile'
 import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [POST]: /admin/product/add
 export async function POST(req: NextRequest) {
   console.log('- Add Product -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to create product
   const formData = await req.formData()

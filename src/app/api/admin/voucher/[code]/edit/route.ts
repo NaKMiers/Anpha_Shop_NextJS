@@ -1,16 +1,13 @@
-import { useParams } from 'next/navigation'
 import { connectDatabase } from '@/config/databse'
-import TagModel from '@/models/TagModel'
 import VoucherModel from '@/models/VoucherModel'
-import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Connect to database
-connectDatabase()
 
 // [PUT]: /api/admin/tag/:code/edit
 export async function PUT(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Edit Voucher -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to edit
   const {

@@ -3,12 +3,12 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET]: /admin/flash-sale/all
 export async function GET() {
   console.log(' - Get All Flash Sales -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // Get all flash sales from database

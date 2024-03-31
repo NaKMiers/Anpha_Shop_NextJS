@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
 import { NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [GET] /admin/user/all
 export async function GET() {
   console.log('- Get All Users -')
+
+  // connect to database
+  connectDatabase()
 
   try {
     // get all users from database

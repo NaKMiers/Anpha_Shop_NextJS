@@ -3,12 +3,12 @@ import CartItemModel from '@/models/CartItemModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [DELETE]: /cart/:id/delete
 export async function DELETE(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log(' - Delete Cart Item - ')
+
+  // connect to database
+  connectDatabase()
 
   // get user id
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

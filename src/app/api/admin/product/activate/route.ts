@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/product/activate
 export async function POST(req: NextRequest) {
   console.log('- Activate Products - ')
+
+  // connect to database
+  connectDatabase()
 
   // get product id to delete
   const { ids, value } = await req.json()

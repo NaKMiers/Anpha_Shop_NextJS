@@ -3,12 +3,12 @@ import TagModel from '@/models/TagModel'
 import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PUT]: /api/admin/tag/edit
 export async function PUT(req: NextRequest) {
   console.log('- Edit Tags -')
+
+  // connect to database
+  connectDatabase()
 
   // get tag values to edit
   const { editingValues } = await req.json()

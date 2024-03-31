@@ -1,14 +1,14 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
-import { signIn } from 'next-auth/react'
 import { NextRequest, NextResponse } from 'next/server'
 
-// connect to database
-connectDatabase()
-
-// [POST]: /auth/login
+// [POST]: /auth/register
 export async function POST(req: NextRequest) {
-  console.log('register')
+  console.log('- Register -')
+
+  // connect to database
+  connectDatabase()
+
   let { username, email, password } = await req.json()
   email = email.toLowerCase()
 

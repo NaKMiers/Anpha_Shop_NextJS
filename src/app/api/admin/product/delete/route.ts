@@ -1,18 +1,17 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel from '@/models/CategoryModel'
-import FlashsaleModel, { IFlashsale } from '@/models/FlashsaleModel'
+import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import TagModel, { ITag } from '@/models/TagModel'
+import TagModel from '@/models/TagModel'
 import { deleteFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
-import { StringDecoder } from 'string_decoder'
-
-// Connect to database
-connectDatabase()
 
 // [DELETE]: /admin/product/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Products - ')
+
+  // connect to database
+  connectDatabase()
 
   // get product ids to delete
   const { ids } = await req.json()

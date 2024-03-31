@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [POST]: /admin/voucher/add
 export async function POST(req: NextRequest) {
   console.log('- Add Voucher -')
+
+  // connect to database
+  connectDatabase()
 
   // get data to create voucher
   const { code, desc, begin, expire, minTotal, maxReduce, type, value, timesLeft, owner, active } =

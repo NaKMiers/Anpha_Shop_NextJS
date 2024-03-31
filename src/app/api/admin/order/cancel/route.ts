@@ -2,12 +2,12 @@ import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Connect to database
-connectDatabase()
-
 // [PATCH]: /admin/order/cancel
 export async function PATCH(req: NextRequest) {
   console.log('- Cancel Orders -')
+
+  // connect to database
+  connectDatabase()
 
   // get order ids to cancel
   const { ids } = await req.json()
