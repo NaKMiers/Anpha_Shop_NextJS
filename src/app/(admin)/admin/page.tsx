@@ -9,7 +9,7 @@ function AdminPage() {
 
       <div className='pt-2' />
 
-      <div className='grid grid-cols-3 p-21 gap-21 rounded-medium shadow-medium-light bg-white'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-21 gap-21 rounded-medium shadow-medium-light bg-white'>
         {adminLinks.map(item => (
           <div className='text-dark' key={item.title}>
             <h2 className='font-semibold text-2xl mb-1'>{item.title}</h2>

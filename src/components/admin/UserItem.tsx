@@ -162,7 +162,11 @@ function UserItem({
           <button
             className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'
             onClick={e => e.stopPropagation()}>
-            <FaPlus size={10} className='group-hover:text-primary common-transition' />
+            <FaPlus
+              size={10}
+              className='group-hover:text-primary common-transition'
+              onClick={() => setIsOpenRecharge(true)}
+            />
           </button>
         </div>
         <p>

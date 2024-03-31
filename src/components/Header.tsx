@@ -7,7 +7,7 @@ import axios from 'axios'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHistory } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
@@ -26,6 +26,8 @@ function Header({ isStatic }: HeaderProps) {
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
   const curUser: any = session?.user
+
+  console.log('curUser: ', curUser)
 
   // states
   const [isShow, setIsShow] = useState(false)
@@ -92,12 +94,9 @@ function Header({ isStatic }: HeaderProps) {
   })
 
   // open menu
-  const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleOpenMenu = useCallback(() => {
     setIsOpenMenu(!isOpenMenu)
-  }
-
-  // close menu
-  const handleCloseMenu = () => {}
+  }, [isOpenMenu])
 
   return (
     <header
@@ -156,7 +155,7 @@ function Header({ isStatic }: HeaderProps) {
             <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
               <Image
                 className='aspect-square rounded-full'
-                src={curUser?.avatar || process.env.DEFAULT_AVATAR!}
+                src={curUser?.avatar || '/images/default-avatar.jpg'}
                 width={40}
                 height={40}
                 alt='avatar'
