@@ -5,13 +5,17 @@ import FacebookProvider from 'next-auth/providers/facebook'
 import GoogleProvider from 'next-auth/providers/google'
 
 import { connectDatabase } from '@/config/databse'
-import UserModel from '@/models/UserModel'
+import UserModel, { IUser } from '@/models/UserModel'
+import { getSession } from 'next-auth/react'
 
 // Connect to database
 connectDatabase()
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET!,
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET!,
+  },
   providers: [
     // GOOGLE
     GoogleProvider({
@@ -78,23 +82,43 @@ const handler = NextAuth({
     // ...add providers here
   ],
   callbacks: {
-    async session({ session, token }: { session: any; token: any }) {
-      // console.log('session-xxxx', session)
+    async jwt({ token, user, trigger, session }) {
+      console.log('jwt-xxxx', token)
+      console.log('jwt-user', user)
+      console.log('jwt-trigger', trigger)
+      console.log('jwt-ss', session)
+      // Initial sign in
+
+      if (user) {
+        const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()
+        if (userDB) {
+          const { password: _, ...otherDetails } = userDB
+
+          token = { ...token, ...otherDetails }
+        }
+      }
+
+      return token
+    },
+
+    async session({ session, token }) {
+      console.log('session-xxxx', session)
+      console.log('session-token', token)
       // console.log('token-xxxx', token)
-      const user: any = await UserModel.findOne({
-        email: session.user.email,
-      }).lean()
+      // const user: any = await UserModel.findOne({
+      //   email: session.user.email,
+      // }).lean()
 
-      const { password: _, ...otherDetails } = user
-
-      session.user = otherDetails
-      token.role = user.role
-      token._id = user._id
+      session.user = token
+      // session.cart = cart || []
+      // token._id = user._id
 
       return session
     },
 
-    async signIn({ user, account, profile }: any): Promise<string | boolean> {
+    async signIn({ user, account, profile }: any) {
+      console.log('- Sign In -')
+
       if (account && account.provider === 'google') {
         if (!user || !profile) {
           return false

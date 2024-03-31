@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems } from '@/libs/reducers/cartReducer'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
-import { signOut, useSession } from 'next-auth/react'
+import { getSession, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHistory } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
@@ -24,10 +24,10 @@ function Header({ isStatic }: HeaderProps) {
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
-  const { data: session } = useSession()
-  const curUser: any = session?.user
 
-  console.log('curUser: ', curUser)
+  const [curUser, setCurUser] = useState<any>(null)
+
+  console.log(curUser)
 
   // states
   const [isShow, setIsShow] = useState(false)
@@ -35,6 +35,16 @@ function Header({ isStatic }: HeaderProps) {
   const lastScrollTop = useRef(0)
   const [cartLength, setCartlength] = useState(0)
 
+  // get user session
+  useEffect(() => {
+    const asd = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+    asd()
+  }, [])
+
+  // get cart length
   useEffect(() => {
     setCartlength(
       curUser
