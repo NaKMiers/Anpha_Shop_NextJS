@@ -24,8 +24,6 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .lean()
 
-    console.log('Accounts:', accounts)
-
     // return response
     return NextResponse.json({ accounts }, { status: 200 })
   } catch (err: any) {

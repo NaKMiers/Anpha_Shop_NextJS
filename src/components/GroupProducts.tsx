@@ -109,7 +109,7 @@ function GroupProducts({ category, products, hideTop, className = '' }: GroupPro
       <div className='flex flex-wrap px-21/2 bg-white bg-opacity-90 rounded-medium shadow-medium'>
         <div
           className={`flex ${isExpaned ? 'flex-wrap gap-y-21' : ''} w-full py-21 overflow-x-auto ${
-            !isDragging ? 'snap-x' : ''
+            !isDragging ? 'snap-x snap-mandatory' : ''
           }`}
           ref={slideTrackRef}
           onMouseDown={() => setIsDragging(true)}

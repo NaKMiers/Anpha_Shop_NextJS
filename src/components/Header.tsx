@@ -55,7 +55,7 @@ function Header({ isStatic }: HeaderProps) {
   // get user's cart
   useEffect(() => {
     const getUserCart = async () => {
-      if (curUser) {
+      if (curUser?._id) {
         try {
           // send request to get user's cart
           const res = await axios.get('/api/cart')
@@ -72,7 +72,7 @@ function Header({ isStatic }: HeaderProps) {
       }
     }
     getUserCart()
-  }, [dispatch, curUser])
+  }, [dispatch, curUser?._id])
 
   // handle show and hide header on scroll
   useEffect(() => {
@@ -186,11 +186,21 @@ function Header({ isStatic }: HeaderProps) {
         </div>
 
         {/* Nav for sm */}
-        <div className='md:hidden flex items-center' onClick={handleOpenMenu}>
-          <button className='flex justify-center items-center w-[40px] h-[40px]'>
-            <FaBars size={22} className='common-transition hover:scale-110' />
-          </button>
-        </div>
+        {curUser ? (
+          !!curUser._id && (
+            <div className='md:hidden flex items-center' onClick={handleOpenMenu}>
+              <button className='flex justify-center items-center w-[40px] h-[40px]'>
+                <FaBars size={22} className='common-transition hover:scale-110' />
+              </button>
+            </div>
+          )
+        ) : (
+          <Link
+            href='/auth/login'
+            className='bg-secondary hover:bg-primary common-transition px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider cursor-pointer'>
+            Đăng nhập
+          </Link>
+        )}
 
         {/* Menu */}
         <ul
