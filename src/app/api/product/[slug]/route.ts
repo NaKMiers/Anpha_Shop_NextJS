@@ -7,6 +7,7 @@ import { IFlashsale } from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import '@/models/TagModel'
 import { ITag } from '@/models/TagModel'
+import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -70,5 +71,8 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     return NextResponse.json({ product, relatedProducts, comments }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

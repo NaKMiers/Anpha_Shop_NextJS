@@ -1,7 +1,8 @@
 import { connectDatabase } from '@/config/databse'
-import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcrypt'
 import UserModel from '@/models/UserModel'
+import bcrypt from 'bcrypt'
+import { connection } from 'mongoose'
+import { NextRequest, NextResponse } from 'next/server'
 
 // [PATHC]: /auth/reset-password
 export async function PATCH(req: NextRequest) {
@@ -38,5 +39,8 @@ export async function PATCH(req: NextRequest) {
     }
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

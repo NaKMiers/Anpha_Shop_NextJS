@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
+import { connection } from 'mongoose'
 import { JWT, getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -40,5 +41,8 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ updatedUser, message: 'Cập nhật thông tin thành công' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

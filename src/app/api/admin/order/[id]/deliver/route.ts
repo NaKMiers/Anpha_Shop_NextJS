@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/order/:id/deliver
@@ -22,5 +23,8 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     return NextResponse.json({ message: 'Deliver Order Successfully!' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

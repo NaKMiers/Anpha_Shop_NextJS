@@ -1,10 +1,9 @@
 import { connectDatabase } from '@/config/databse'
-import { cart } from '@/libs/reducers/cartReducer'
 import CartItemModel from '@/models/CartItemModel'
+import { IProduct } from '@/models/ProductModel'
+import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyCartItem } from '../../route'
-import { IProduct } from '@/models/ProductModel'
 
 // [PATCH]: /cart/:id/set-quantity
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
@@ -57,5 +56,8 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
   } catch (err: any) {
     console.log(err.message)
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

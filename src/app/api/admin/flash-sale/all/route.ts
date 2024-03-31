@@ -30,5 +30,8 @@ export async function GET() {
     return NextResponse.json({ flashSales: flashSalesWithProducts }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

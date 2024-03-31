@@ -8,6 +8,7 @@ import CategoryModel, { ICategory } from '@/models/CategoryModel'
 import { FullyProduct } from './product/[slug]/route'
 import { ITag } from '@/models/TagModel'
 import { shuffleArray } from '@/utils'
+import { connection } from 'mongoose'
 
 // [GET]: /
 export async function GET() {
@@ -80,5 +81,8 @@ export async function GET() {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

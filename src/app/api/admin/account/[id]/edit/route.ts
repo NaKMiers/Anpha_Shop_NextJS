@@ -1,12 +1,11 @@
 import { connectDatabase } from '@/config/databse'
-import VoucherModel from '@/models/VoucherModel'
-import { NextRequest, NextResponse } from 'next/server'
-import '@/models/UserModel'
-import { notifyAccountUpdated } from '@/utils/sendMail'
-import OrderModel, { IOrder } from '@/models/OrderModel'
-import { getTimes } from '@/utils'
 import AccountModel, { IAccount } from '@/models/AccountModel'
-import mongoose from 'mongoose'
+import OrderModel, { IOrder } from '@/models/OrderModel'
+import '@/models/UserModel'
+import { getTimes } from '@/utils'
+import { notifyAccountUpdated } from '@/utils/sendMail'
+import mongoose, { connection } from 'mongoose'
+import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /account/:id/edit
 export async function POST(req: NextRequest, { params: { id } }: { params: { id: string } }) {
@@ -107,5 +106,8 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
     return NextResponse.json({ updatedAccount, message: 'Account has been updated' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

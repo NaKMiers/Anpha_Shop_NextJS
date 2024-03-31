@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/order/cancel
@@ -31,5 +32,8 @@ export async function PATCH(req: NextRequest) {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

@@ -2,6 +2,7 @@ import { connectDatabase } from '@/config/databse'
 import AccountModel from '@/models/AccountModel'
 import { NextResponse } from 'next/server'
 import '@/models/ProductModel'
+import { connection } from 'mongoose'
 
 // [GET]: /admin/account/all
 export async function GET() {
@@ -30,5 +31,8 @@ export async function GET() {
     return NextResponse.json({ accounts }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

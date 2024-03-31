@@ -4,6 +4,7 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import TagModel from '@/models/TagModel'
 import { deleteFile } from '@/utils/uploadFile'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [DELETE]: /admin/product/delete
@@ -80,5 +81,8 @@ export async function DELETE(req: NextRequest) {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

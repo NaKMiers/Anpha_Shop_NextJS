@@ -39,5 +39,8 @@ export async function PUT(req: NextRequest) {
     })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

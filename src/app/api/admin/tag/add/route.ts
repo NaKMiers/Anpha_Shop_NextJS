@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [POST]: /admin/tag/add
@@ -28,5 +29,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: `Tag "${newTag.title}" has been created` }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

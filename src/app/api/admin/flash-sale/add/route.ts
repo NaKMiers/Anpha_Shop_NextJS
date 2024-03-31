@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [POST]: /admin/flash-sale/add
@@ -46,5 +47,8 @@ export async function POST(req: NextRequest) {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

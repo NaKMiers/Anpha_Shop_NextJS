@@ -6,6 +6,7 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../../cart/route'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
+import { connection } from 'mongoose'
 
 // [POST]: /order/create
 export async function POST(req: NextRequest) {
@@ -65,5 +66,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ removedCartItems, message }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

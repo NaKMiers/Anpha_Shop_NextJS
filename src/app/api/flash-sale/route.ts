@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import ProductModel from '@/models/ProductModel'
+import { connection } from 'mongoose'
 import { NextResponse } from 'next/server'
 
 // [GET]: /flashsale
@@ -26,5 +27,8 @@ export async function GET() {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

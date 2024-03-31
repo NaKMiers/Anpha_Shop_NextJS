@@ -3,7 +3,7 @@ import CategoryModel from '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import TagModel from '@/models/TagModel'
 import { uploadFile } from '@/utils/uploadFile'
-import mongoose from 'mongoose'
+import mongoose, { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [POST]: /admin/product/add
@@ -69,5 +69,8 @@ export async function POST(req: NextRequest) {
     await mongoose.disconnect()
 
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

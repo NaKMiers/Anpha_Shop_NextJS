@@ -1,8 +1,8 @@
 import { connectDatabase } from '@/config/databse'
 import CartItemModel, { ICartItem } from '@/models/CartItemModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import UserModel, { IUser } from '@/models/UserModel'
-import mongoose, { Mongoose } from 'mongoose'
+import { IUser } from '@/models/UserModel'
+import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -137,5 +137,8 @@ export async function POST(req: NextRequest) {
     )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import '@/models/UserModel'
 import VoucherModel from '@/models/VoucherModel'
+import { connection } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /voucher/:id
@@ -21,5 +22,8 @@ export async function GET(req: NextRequest, { params: { code } }: { params: { co
     return NextResponse.json({ voucher, message: 'Voucher found' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

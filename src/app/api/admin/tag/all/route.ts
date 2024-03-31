@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import TagModel from '@/models/TagModel'
+import { connection } from 'mongoose'
 import { NextResponse } from 'next/server'
 
 // [GET]: /admin/tag/all
@@ -16,5 +17,8 @@ export async function GET() {
     return NextResponse.json({ tags }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }

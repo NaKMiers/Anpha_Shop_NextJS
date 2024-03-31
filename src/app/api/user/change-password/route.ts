@@ -1,8 +1,9 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
+import bcrypt from 'bcrypt'
+import { connection } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcrypt'
 
 // [PATCH]: /user/change-password
 export async function PATCH(req: NextRequest) {
@@ -52,5 +53,8 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ messsage: 'Thay đổi mật khẩu thành công' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
+  } finally {
+    // close connection
+    connection.close()
   }
 }
