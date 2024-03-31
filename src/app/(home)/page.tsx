@@ -45,14 +45,14 @@ async function HomePage() {
       <div className='pt-28' />
 
       <Heading title='Top #10' />
-      <section className='max-w-1200 mx-auto'>
+      <section className='max-w-1200 mx-auto px-4'>
         <GroupProducts products={bestSellerProducts} hideTop />
       </section>
 
       <div className='pt-28' />
 
       <Heading title='Sản phẩm' />
-      <section className='max-w-1200 mx-auto'>
+      <section className='max-w-1200 mx-auto px-4'>
         {productsByCategoryGroups.map((group, index) => (
           <GroupProducts
             category={group.category}
