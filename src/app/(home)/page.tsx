@@ -17,7 +17,13 @@ async function HomePage() {
   let carouselProducts: FullyProduct[] = []
 
   try {
-    const res = await axios.get(`${process.env.APP_URL}/api`)
+    const res = await axios.get(`${process.env.APP_URL}/api`, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: 0,
+      },
+    })
 
     // For Banner
     tags = res.data.tags
