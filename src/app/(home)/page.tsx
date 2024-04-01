@@ -17,7 +17,7 @@ async function HomePage() {
 
   try {
     const res = await fetch(`${process.env.APP_URL}/api`, {
-      next: { revalidate: 10 },
+      cache: 'no-store',
     })
     const data = await res.json()
 
