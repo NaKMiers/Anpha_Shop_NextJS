@@ -6,7 +6,6 @@ import GoogleProvider from 'next-auth/providers/google'
 
 import { connectDatabase } from '@/config/databse'
 import UserModel, { IUser } from '@/models/UserModel'
-import { getSession } from 'next-auth/react'
 
 // Connect to database
 connectDatabase()
@@ -85,7 +84,7 @@ const handler = NextAuth({
     async jwt({ token, user, trigger, session }) {
       console.log('- JWT -')
       // console.log('jwt-xxxx', token)
-      // console.log('jwt-user', user)
+      console.log('jwt-user', user)
       // console.log('jwt-trigger', trigger)
       // console.log('jwt-ss', session)
 
