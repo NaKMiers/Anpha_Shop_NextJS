@@ -5,7 +5,6 @@ import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
-import axios from 'axios'
 import { FullyProduct } from '../api/product/[slug]/route'
 
 async function HomePage() {
@@ -17,7 +16,9 @@ async function HomePage() {
   let carouselProducts: FullyProduct[] = []
 
   try {
-    const res = await fetch(`${process.env.APP_URL}/api`)
+    const res = await fetch(`${process.env.APP_URL}/api`, {
+      next: { revalidate: 10 },
+    })
     const data = await res.json()
 
     // For Banner
