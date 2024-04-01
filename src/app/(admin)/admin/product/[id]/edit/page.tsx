@@ -28,7 +28,6 @@ function AddProductPage() {
   const router = useRouter()
 
   // states
-  const [product, setProduct] = useState<IProduct | null>(null)
   const [tags, setTags] = useState<ITag[]>([])
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [categories, setCategories] = useState<ICategory[]>([])
@@ -67,7 +66,6 @@ function AddProductPage() {
 
         // set product to state
         console.log(res.data)
-        setProduct(product)
 
         // set value to form
         setValue('title', product.title)
@@ -193,6 +191,8 @@ function AddProductPage() {
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     console.log(data)
     if (!handleValidate(data)) return
+
+    console.log('data: ', data)
 
     dispatch(setLoading(true))
 

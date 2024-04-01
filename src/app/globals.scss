@@ -34,6 +34,16 @@
   @apply transition-all duration-200 ease-in-out;
 }
 
+.number-input::-webkit-inner-spin-button,
+.number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number-input {
+  -moz-appearance: textfield;
+}
+
 .background-app {
   background: linear-gradient(45deg, #333 80%, #01dbe5 20%);
 }

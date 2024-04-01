@@ -90,11 +90,12 @@ function Input({
           ) : (
             <input
               id={id}
-              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer number-input'
               placeholder=' '
               disabled={disabled}
               type={type === 'password' ? (isShowPassword ? 'text' : 'password') : type}
               {...register(id, { required })}
+              onWheel={e => e.currentTarget.blur()}
             />
           )}
 

@@ -46,12 +46,14 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     // merge the available images and new upload images
     const newImages = Array.from(new Set([...stayImages, ...imageUrls]))
 
+    console.log('oldPrice', oldPrice)
+
     // update product in database
     await ProductModel.findByIdAndUpdate(id, {
       $set: {
         title: title,
         price,
-        oldPrice,
+        oldPrice: oldPrice === 'null' ? null : oldPrice,
         description,
         active: isActive,
         tags,
