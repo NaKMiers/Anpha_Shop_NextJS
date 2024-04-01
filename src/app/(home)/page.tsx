@@ -17,24 +17,19 @@ async function HomePage() {
   let carouselProducts: FullyProduct[] = []
 
   try {
-    const res = await axios.get(`${process.env.APP_URL}/api`, {
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        Pragma: 'no-cache',
-        Expires: 0,
-      },
-    })
+    const res = await fetch(`${process.env.APP_URL}/api`)
+    const data = await res.json()
 
     // For Banner
-    tags = res.data.tags
-    categories = res.data.categories
-    carouselProducts = res.data.carouselProducts
+    tags = data.tags
+    categories = data.categories
+    carouselProducts = data.carouselProducts
 
     // For Top #10
-    bestSellerProducts = res.data.bestSellerProducts
+    bestSellerProducts = data.bestSellerProducts
 
     // For Products
-    productsByCategoryGroups = res.data.productsByCategoryGroups
+    productsByCategoryGroups = data.productsByCategoryGroups
   } catch (err: any) {
     console.log(err.response.data)
   }
