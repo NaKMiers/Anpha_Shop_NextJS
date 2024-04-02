@@ -20,7 +20,6 @@ import { TbPackages } from 'react-icons/tb'
 import Price from './Price'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from './ConfirmDialog'
-import { setOpenConfirm } from '@/libs/reducers/modalReducer'
 import { useSession } from 'next-auth/react'
 
 interface CartItemProps {
@@ -47,6 +46,7 @@ function CartItem({
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
   const quantity =
     cartItem.quantity > cartItem.product.stock ? cartItem.product.stock : cartItem.quantity
 
@@ -145,7 +145,7 @@ function CartItem({
     } finally {
       // stop deleting
       setIsDeleting(false)
-      dispatch(setOpenConfirm(false))
+      setIsOpenConfirmModal(false)
     }
   }, [dispatch, cartItem._id])
 
@@ -358,7 +358,10 @@ function CartItem({
               </button>
             </div>
 
+            {/* Confirm Dialog */}
             <ConfirmDialog
+              open={isOpenConfirmModal}
+              setOpen={setIsOpenConfirmModal}
               title='Xóa sản phẩm khỏi giỏ hàng'
               content='Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?'
               onAccept={() => handleDeleteCartItem()}
@@ -369,7 +372,7 @@ function CartItem({
               size={21}
               className='text-secondary cursor-pointer hover:scale-110 common-transition'
               // onClick={handleDeleteCartItem}
-              onClick={() => dispatch(setOpenConfirm(true))}
+              onClick={() => setIsOpenConfirmModal(true)}
             />
           </div>
         )}

@@ -176,7 +176,11 @@ function ProductItem({
               }}
               onClick={e => e.stopPropagation()}>
               <span className='font-semibold'>
-                {fieldLoading.stock ? <RiDonutChartFill size={16} className='animate-spin' /> : 'Stock:'}
+                {fieldLoading.stock ? (
+                  <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
+                ) : (
+                  'Stock:'
+                )}
               </span>{' '}
               {fieldEditing.stock ? (
                 <input

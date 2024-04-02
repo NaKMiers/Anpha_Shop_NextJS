@@ -354,7 +354,7 @@ function CartPage() {
               onClick={() => !curUser && router.push('/')}>
               <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
               <span className='font-semibold ml-1 group-hover:text-light'>
-                Mua bằng số dư {curUser && `(${curUser?.balance})`}
+                Mua bằng số dư ({formatPrice(curUser?.balance || 0)})
               </span>
             </button>
 
