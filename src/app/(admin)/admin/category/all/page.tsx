@@ -1,6 +1,8 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Pagination from '@/components/Pagination'
+import AdminHeader from '@/components/admin/AdminHeader'
 import CategoryItem from '@/components/admin/CategoryItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -26,6 +28,7 @@ function AllCategoriesPage() {
   const [loadingCategories, setLoadingCategories] = useState<string[]>([])
   const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // get all categories
   useEffect(() => {
@@ -104,6 +107,7 @@ function AllCategoriesPage() {
       toast.error(err.response.data.message)
     } finally {
       setLoadingCategories([])
+      setSelectedCategories([])
     }
   }, [])
 
@@ -134,23 +138,7 @@ function AllCategoriesPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          All Categories
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/category/add'>
-          <FaPlus />
-          Add
-        </Link>
-      </div>
+      <AdminHeader title='All Categories' addLink='/admin/category/add' />
 
       <Pagination />
 
@@ -169,6 +157,7 @@ function AllCategoriesPage() {
               min='9000'
               max='2000000'
               value={9000}
+              onChange={() => {}}
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>
@@ -228,9 +217,7 @@ function AllCategoriesPage() {
             {!!selectedCategories.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteCategories(selectedCategories)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -239,6 +226,16 @@ function AllCategoriesPage() {
       </div>
 
       <div className='pt-9' />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Categories'
+        content='Are you sure that you want to deleted these categories?'
+        onAccept={() => handleDeleteCategories(selectedCategories)}
+        isLoading={loadingCategories.length > 0}
+      />
 
       {/* Category List */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>

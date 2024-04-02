@@ -13,6 +13,8 @@ import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaArrowLeft, FaFilter, FaPlus, FaSearch } from 'react-icons/fa'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
+import AdminHeader from '@/components/admin/AdminHeader'
+import ConfirmDialog from '@/components/ConfirmDialog'
 
 export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
 
@@ -24,6 +26,7 @@ function AllAccountsPage() {
   const [accounts, setAccounts] = useState<AccountWithProduct[]>([])
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
   const [loadingAccounts, setLoadingAccounts] = useState<string[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // Form
   const {
@@ -106,6 +109,7 @@ function AllAccountsPage() {
       toast.error(err.response.data.message)
     } finally {
       setLoadingAccounts([])
+      setSelectedAccounts([])
     }
   }, [])
 
@@ -136,23 +140,7 @@ function AllAccountsPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          All Accounts
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/account/add'>
-          <FaPlus />
-          Add
-        </Link>
-      </div>
+      <AdminHeader title='All Accounts' addLink='/admin/account/add' />
 
       <Pagination />
 
@@ -218,9 +206,7 @@ function AllAccountsPage() {
             {!!selectedAccounts.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteAccounts(selectedAccounts)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -229,6 +215,16 @@ function AllAccountsPage() {
       </div>
 
       <div className='pt-9' />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Accounts'
+        content='Are you sure that you want to deleted these accounts?'
+        onAccept={() => handleDeleteAccounts(selectedAccounts)}
+        isLoading={loadingAccounts.length > 0}
+      />
 
       {/* MAIN LIST */}
       <div className='grid grid-cols-1 gap-21 lg:grid-cols-2 items-start'>

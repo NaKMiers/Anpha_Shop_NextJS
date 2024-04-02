@@ -6,6 +6,7 @@ import Heading from '@/components/Heading'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import { FullyProduct } from '../api/product/[slug]/route'
+import axios from 'axios'
 
 async function HomePage() {
   let productsByCategoryGroups: any[] = []
@@ -16,10 +17,8 @@ async function HomePage() {
   let carouselProducts: FullyProduct[] = []
 
   try {
-    const res = await fetch(`${process.env.APP_URL}/api`, {
-      cache: 'no-store',
-    })
-    const data = await res.json()
+    const res = await axios.get(`${process.env.APP_URL}/api`)
+    const data = res.data
 
     // For Banner
     tags = data.tags

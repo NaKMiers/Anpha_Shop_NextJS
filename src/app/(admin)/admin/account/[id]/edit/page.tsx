@@ -17,6 +17,7 @@ import { MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../../product/all/page'
 import { IAccount } from '@/models/AccountModel'
 import { useParams, useRouter } from 'next/navigation'
+import AdminHeader from '@/components/admin/AdminHeader'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -185,23 +186,7 @@ function AddAccountPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          Edit Account
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/account/all'>
-          <FaArrowLeft />
-          Back
-        </Link>
-      </div>
+      <AdminHeader title='Edit Account' backLink='/admin/account/all' />
 
       <div className='pt-5' />
 

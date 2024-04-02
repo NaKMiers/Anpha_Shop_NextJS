@@ -13,6 +13,7 @@ import Input from '../Input'
 import LoadingButton from '../LoadingButton'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import ConfirmDialog from '../ConfirmDialog'
 
 interface UserItemProps {
   data: IUser
@@ -46,6 +47,7 @@ function UserItem({
   const [isLoadingRecharge, setIsLoadingRecharge] = useState(false)
   const [isOpenSetCollaborator, setIsOpenSetCollaborator] = useState(false)
   const [isLoadingSetCollaborator, setIsLoadingSetCollaborator] = useState(false)
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // Form
   const {
@@ -94,7 +96,7 @@ function UserItem({
 
   // submit collaborator form
   const onSetCollaboratorSubmit: SubmitHandler<FieldValues> = async formData => {
-    setIsLoadingRecharge(true)
+    setIsLoadingSetCollaborator(true)
 
     console.log(formData)
 
@@ -120,237 +122,251 @@ function UserItem({
       console.log(213213)
       toast.error(err.response.userData.message)
     } finally {
-      setIsOpenSetCollaborator(false)
+      setIsLoadingSetCollaborator(false)
     }
   }
 
   return (
-    <div
-      className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg common-transition select-none  ${
-        selectedUsers.includes(userData._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
-      } ${!isCurUser ? 'cursor-pointer' : ''} ${className}`}
-      onClick={() =>
-        !isCurUser &&
-        setSelectedUsers(prev =>
-          prev.includes(userData._id) ? prev.filter(id => id !== userData._id) : [...prev, userData._id]
-        )
-      }>
-      <div>
-        {/* Avatar */}
-        <Image
-          className='aspect-square bg-dark-100 float-start mr-3 rounded-md shadow-lg'
-          src={userData.avatar}
-          height={68}
-          width={68}
-          alt='thumbnail'
-        />
-
-        {/* Infomation */}
-        <div className='absolute z-30 -top-2 -left-2 shadow-md text-xs text-yellow-300 bg-secondary px-2 py-[2px] select-none rounded-lg font-body'>
-          {userData.role}
-        </div>
-        <p
-          className='inline font-semibold text-[18px] leading-4 font-body tracking-wide text-secondary'
-          title={userData.email}>
-          {userData.email}
-        </p>
-        <div className='flex items-center gap-2'>
-          <p>
-            <span className='font-semibold'>Balance: </span>
-            <span className='text-green-600'>{formatPrice(userData.balance)}</span>
-          </p>
-          <button
-            className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'
-            onClick={e => e.stopPropagation()}>
-            <FaPlus
-              size={10}
-              className='group-hover:text-primary common-transition'
-              onClick={() => setIsOpenRecharge(true)}
-            />
-          </button>
-        </div>
-        <p>
-          <span className='font-semibold'>Accumulated: </span>
-          <span>{formatPrice(userData.accumulated)}</span>
-        </p>
-        {userData.username && (
-          <p>
-            <span className='font-semibold'>Username: </span>
-            <span>{userData.username}</span>
-          </p>
-        )}
-        {(userData.firstname || userData.lastname) && (
-          <p>
-            <span className='font-semibold'>Fullname: </span>
-            <span>{userData.firstname + ' ' + userData.lastname}</span>
-          </p>
-        )}
-        {userData.birthday && (
-          <p>
-            <span className='font-semibold'>Birthday: </span>
-            <span>{userData.birthday}</span>
-          </p>
-        )}
-        {userData.phone && (
-          <p>
-            <span className='font-semibold'>Phone: </span>
-            <span>{userData.phone}</span>
-          </p>
-        )}
-        {userData.address && (
-          <p>
-            <span className='font-semibold'>Address: </span>
-            <span>{userData.address}</span>
-          </p>
-        )}
-        {userData.job && (
-          <p>
-            <span className='font-semibold'>Job: </span>
-            <span>{userData.job}</span>
-          </p>
-        )}
-        <p>
-          <span className='font-semibold'>Created At: </span>
-          <span>{formatTime(userData.createdAt)}</span>
-        </p>
-        <p>
-          <span className='font-semibold'>Updated At: </span>
-          <span>{formatTime(userData.updatedAt)}</span>
-        </p>
-      </div>
-
-      {/* Recharge Modal */}
-      {isOpenRecharge && (
-        <div
-          className='absolute z-20 p-21 top-0 left-0 w-full h-full flex items-center justify-center gap-2 rounded-md bg-secondary bg-opacity-80'
-          onClick={e => {
-            e.stopPropagation()
-            setIsOpenRecharge(false)
-          }}>
-          <Input
-            id='recharge'
-            label='Recharge'
-            disabled={isLoadingRecharge}
-            register={register}
-            errors={errors}
-            required
-            type='number'
-            icon={HiLightningBolt}
-            className='w-full shadow-lg'
-            onClick={e => e.stopPropagation()}
+    <>
+      <div
+        className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg common-transition select-none  ${
+          selectedUsers.includes(userData._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
+        } ${!isCurUser ? 'cursor-pointer' : ''} ${className}`}
+        onClick={() =>
+          !isCurUser &&
+          setSelectedUsers(prev =>
+            prev.includes(userData._id)
+              ? prev.filter(id => id !== userData._id)
+              : [...prev, userData._id]
+          )
+        }>
+        <div>
+          {/* Avatar */}
+          <Image
+            className='aspect-square bg-dark-100 float-start mr-3 rounded-md shadow-lg'
+            src={userData.avatar}
+            height={68}
+            width={68}
+            alt='thumbnail'
           />
-          <LoadingButton
-            className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
-            text='Add'
+
+          {/* Infomation */}
+          <div className='absolute z-30 -top-2 -left-2 shadow-md text-xs text-yellow-300 bg-secondary px-2 py-[2px] select-none rounded-lg font-body'>
+            {userData.role}
+          </div>
+          <p
+            className='inline font-semibold text-[18px] leading-4 font-body tracking-wide text-secondary'
+            title={userData.email}>
+            {userData.email}
+          </p>
+          <div className='flex items-center gap-2'>
+            <p>
+              <span className='font-semibold'>Balance: </span>
+              <span className='text-green-600'>{formatPrice(userData.balance)}</span>
+            </p>
+            <button
+              className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'
+              onClick={e => e.stopPropagation()}>
+              <FaPlus
+                size={10}
+                className='group-hover:text-primary common-transition'
+                onClick={() => setIsOpenRecharge(true)}
+              />
+            </button>
+          </div>
+          <p>
+            <span className='font-semibold'>Accumulated: </span>
+            <span>{formatPrice(userData.accumulated)}</span>
+          </p>
+          {userData.username && (
+            <p>
+              <span className='font-semibold'>Username: </span>
+              <span>{userData.username}</span>
+            </p>
+          )}
+          {(userData.firstname || userData.lastname) && (
+            <p>
+              <span className='font-semibold'>Fullname: </span>
+              <span>{userData.firstname + ' ' + userData.lastname}</span>
+            </p>
+          )}
+          {userData.birthday && (
+            <p>
+              <span className='font-semibold'>Birthday: </span>
+              <span>{userData.birthday}</span>
+            </p>
+          )}
+          {userData.phone && (
+            <p>
+              <span className='font-semibold'>Phone: </span>
+              <span>{userData.phone}</span>
+            </p>
+          )}
+          {userData.address && (
+            <p>
+              <span className='font-semibold'>Address: </span>
+              <span>{userData.address}</span>
+            </p>
+          )}
+          {userData.job && (
+            <p>
+              <span className='font-semibold'>Job: </span>
+              <span>{userData.job}</span>
+            </p>
+          )}
+          <p>
+            <span className='font-semibold'>Created At: </span>
+            <span>{formatTime(userData.createdAt)}</span>
+          </p>
+          <p>
+            <span className='font-semibold'>Updated At: </span>
+            <span>{formatTime(userData.updatedAt)}</span>
+          </p>
+        </div>
+
+        {/* Recharge Modal */}
+        {isOpenRecharge && (
+          <div
+            className='absolute z-20 p-21 top-0 left-0 w-full h-full flex items-center justify-center gap-2 rounded-md bg-secondary bg-opacity-80'
             onClick={e => {
               e.stopPropagation()
-              handleSubmit(onRechargeSubmit)(e)
-            }}
-            isLoading={isLoadingRecharge}
-          />
-        </div>
-      )}
-
-      {/* Set Collaborator Modal */}
-      {isOpenSetCollaborator && (
-        <div
-          className='absolute z-20 p-21 top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 rounded-md bg-yellow-400 bg-opacity-80'
-          onClick={e => {
-            e.stopPropagation()
-            setIsOpenSetCollaborator(false)
-          }}>
-          {/* Type */}
-          <Input
-            id='type'
-            label='Type'
-            disabled={isLoadingSetCollaborator}
-            register={register}
-            errors={errors}
-            icon={RiCheckboxMultipleBlankLine}
-            type='select'
-            className='w-full'
-            onClick={e => e.stopPropagation()}
-            options={[
-              {
-                value: 'percentage',
-                label: 'Percentage',
-              },
-              {
-                value: 'fixed',
-                label: 'Fixed',
-              },
-            ]}
-          />
-          <div className='flex w-full gap-2 items-center'>
+              setIsOpenRecharge(false)
+            }}>
             <Input
-              id={'value-' + data._id}
-              label='Commission'
-              disabled={isLoadingSetCollaborator}
+              id='recharge'
+              label='Recharge'
+              disabled={isLoadingRecharge}
               register={register}
               errors={errors}
               required
-              type='text'
+              type='number'
               icon={HiLightningBolt}
               className='w-full shadow-lg'
               onClick={e => e.stopPropagation()}
             />
             <LoadingButton
-              className='px-4 h-[46px] shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
-              text='Set'
+              className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+              text='Add'
               onClick={e => {
                 e.stopPropagation()
-                handleSubmit(onSetCollaboratorSubmit)(e)
+                handleSubmit(onRechargeSubmit)(e)
               }}
-              isLoading={isLoadingSetCollaborator}
+              isLoading={isLoadingRecharge}
             />
           </div>
-        </div>
-      )}
+        )}
 
-      {!isCurUser && (
-        <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-          {/* Delete Button */}
-          <button
-            className='block group'
+        {/* Set Collaborator Modal */}
+        {isOpenSetCollaborator && (
+          <div
+            className='absolute z-20 p-21 top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 rounded-md bg-yellow-400 bg-opacity-80'
             onClick={e => {
               e.stopPropagation()
-              handleDeleteUsers([userData._id])
-            }}
-            disabled={loadingUsers.includes(userData._id)}>
-            {loadingUsers.includes(userData._id) ? (
-              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-            ) : (
-              <FaTrash size={18} className='group-hover:scale-125 common-transition' />
-            )}
-          </button>
-
-          {/* Promote User Button */}
-          <button
-            className='block group'
-            onClick={e => {
-              e.stopPropagation()
-              userData.role === 'collaborator' ? alert('Downgrade') : setIsOpenSetCollaborator(true)
+              setIsOpenSetCollaborator(false)
             }}>
-            <GrUpgrade
-              size={18}
-              className={`group-hover:scale-125 common-transition ${
-                userData.role === 'collaborator' ? 'rotate-180 text-red-500' : ''
-              }`}
+            {/* Type */}
+            <Input
+              id='type'
+              label='Type'
+              disabled={isLoadingSetCollaborator}
+              register={register}
+              errors={errors}
+              icon={RiCheckboxMultipleBlankLine}
+              type='select'
+              className='w-full'
+              onClick={e => e.stopPropagation()}
+              options={[
+                {
+                  value: 'percentage',
+                  label: 'Percentage',
+                },
+                {
+                  value: 'fixed',
+                  label: 'Fixed',
+                },
+              ]}
             />
-          </button>
+            <div className='flex w-full gap-2 items-center'>
+              <Input
+                id={'value-' + data._id}
+                label='Commission'
+                disabled={isLoadingSetCollaborator}
+                register={register}
+                errors={errors}
+                required
+                type='text'
+                icon={HiLightningBolt}
+                className='w-full shadow-lg'
+                onClick={e => e.stopPropagation()}
+              />
+              <LoadingButton
+                className='px-4 h-[46px] shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+                text='Set'
+                onClick={e => {
+                  e.stopPropagation()
+                  handleSubmit(onSetCollaboratorSubmit)(e)
+                }}
+                isLoading={isLoadingSetCollaborator}
+              />
+            </div>
+          </div>
+        )}
 
-          {/* Add Balance Button */}
-          <button
-            className='block group'
-            onClick={e => {
-              e.stopPropagation()
-              setIsOpenRecharge(true)
-            }}>
-            <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
-          </button>
-        </div>
-      )}
-    </div>
+        {!isCurUser && (
+          <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+            {/* Promote User Button */}
+            <button
+              className='block group'
+              onClick={e => {
+                e.stopPropagation()
+                userData.role === 'collaborator' ? alert('Downgrade') : setIsOpenSetCollaborator(true)
+              }}>
+              <GrUpgrade
+                size={18}
+                className={`group-hover:scale-125 common-transition ${
+                  userData.role === 'collaborator' ? 'rotate-180 text-red-500' : ''
+                }`}
+              />
+            </button>
+
+            {/* Add Balance Button */}
+            <button
+              className='block group'
+              onClick={e => {
+                e.stopPropagation()
+                setIsOpenRecharge(true)
+              }}>
+              <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
+            </button>
+
+            {/* Delete Button */}
+            <button
+              className='block group'
+              onClick={e => {
+                e.stopPropagation()
+                setIsOpenConfirmModal(true)
+              }}
+              disabled={loadingUsers.includes(userData._id)}>
+              {loadingUsers.includes(userData._id) ? (
+                <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+              ) : (
+                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete User'
+        content='Are you sure that you want to deleted this user?'
+        onAccept={() => handleDeleteUsers([data._id])}
+        isLoading={loadingUsers.includes(data._id)}
+      />
+    </>
   )
 }
 

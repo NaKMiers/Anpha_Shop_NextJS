@@ -1,7 +1,9 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
+import AdminHeader from '@/components/admin/AdminHeader'
 import VoucherItem from '@/components/admin/VoucherItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -26,6 +28,7 @@ function AllVouchersPage() {
   const [vouchers, setVouchers] = useState<VoucherWithOwner[]>([])
   const [selectedVouchers, setSelectedVouchers] = useState<string[]>([])
   const [loadingVouchers, setLoadingVouchers] = useState<string[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // Form
   const {
@@ -105,6 +108,7 @@ function AllVouchersPage() {
       toast.error(err.response.data.message)
     } finally {
       setLoadingVouchers([])
+      setSelectedVouchers([])
     }
   }, [])
 
@@ -135,23 +139,7 @@ function AllVouchersPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          All Vouchers
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/voucher/add'>
-          <FaPlus />
-          Add
-        </Link>
-      </div>
+      <AdminHeader title='All Vouchers' addLink='/admin/voucher/add' />
 
       <Pagination />
 
@@ -283,9 +271,7 @@ function AllVouchersPage() {
             {!!selectedVouchers.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteVouchers(selectedVouchers)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -294,6 +280,16 @@ function AllVouchersPage() {
       </div>
 
       <div className='pt-9' />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Vouchers'
+        content='Are you sure that you want to deleted these vouchers?'
+        onAccept={() => handleDeleteVouchers(selectedVouchers)}
+        isLoading={loadingVouchers.length > 0}
+      />
 
       {/* MAIN (LIST) */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>

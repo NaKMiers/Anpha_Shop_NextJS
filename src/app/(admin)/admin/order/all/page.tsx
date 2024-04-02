@@ -1,18 +1,19 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
-import OrderItem from '@/components/admin/OrderItem'
 import Pagination from '@/components/Pagination'
+import AdminHeader from '@/components/admin/AdminHeader'
+import OrderItem from '@/components/admin/OrderItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IOrder } from '@/models/OrderModel'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaCalendar, FaFilter, FaSearch } from 'react-icons/fa'
+import { FaCalendar, FaFilter, FaSearch } from 'react-icons/fa'
 
 function AllOrdersPage() {
   // store
@@ -22,6 +23,7 @@ function AllOrdersPage() {
   const [orders, setOrders] = useState<IOrder[]>([])
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
   const [loadingOrders, setLoadingOrders] = useState<string[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // Form
   const {
@@ -101,6 +103,7 @@ function AllOrdersPage() {
       toast.error(err.response.data.message)
     } finally {
       setLoadingOrders([])
+      setSelectedOrders([])
     }
   }, [])
 
@@ -129,14 +132,7 @@ function AllOrdersPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-center mb-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-      </div>
+      <AdminHeader title='All Orders' />
 
       <Pagination />
 
@@ -234,9 +230,7 @@ function AllOrdersPage() {
             {!!selectedOrders.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-                onClick={() => {
-                  handleDeleteOrders(selectedOrders)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -269,6 +263,16 @@ function AllOrdersPage() {
       </div>
 
       <div className='pt-9' />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Orders'
+        content='Are you sure that you want to deleted these orders?'
+        onAccept={() => handleDeleteOrders(selectedOrders)}
+        isLoading={loadingOrders.length > 0}
+      />
 
       {/* MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3 items-start'>

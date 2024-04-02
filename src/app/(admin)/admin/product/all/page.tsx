@@ -1,22 +1,19 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Pagination from '@/components/Pagination'
+import AdminHeader from '@/components/admin/AdminHeader'
 import ProductItem from '@/components/admin/ProductItem'
-import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaEyeSlash, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
-import { FaBoltLightning } from 'react-icons/fa6'
-import { MdEdit } from 'react-icons/md'
+import { FaFilter } from 'react-icons/fa'
 
 export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: ICategory }
 
@@ -28,6 +25,7 @@ function AllProductsPage() {
   const [products, setProducts] = useState<ProductWithTagsAndCategory[]>([])
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [loadingProducts, setLoadingProducts] = useState<string[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // get all product
   useEffect(() => {
@@ -101,6 +99,7 @@ function AllProductsPage() {
       toast.error(err.response.data.message)
     } finally {
       setLoadingProducts([])
+      setSelectedProducts([])
     }
   }, [])
 
@@ -131,23 +130,7 @@ function AllProductsPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          All Products
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/product/add'>
-          <FaPlus />
-          Add
-        </Link>
-      </div>
+      <AdminHeader title='All Products' addLink='/admin/product/add' />
 
       <Pagination />
 
@@ -260,9 +243,7 @@ function AllProductsPage() {
             {!!selectedProducts.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteProducts(selectedProducts)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -271,6 +252,16 @@ function AllProductsPage() {
       </div>
 
       <div className='pt-9' />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Products'
+        content='Are you sure that you want to deleted these products?'
+        onAccept={() => handleDeleteProducts(selectedProducts)}
+        isLoading={loadingProducts.length > 0}
+      />
 
       {/* MAIN LIST */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-3'>

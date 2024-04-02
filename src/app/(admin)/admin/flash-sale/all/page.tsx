@@ -1,7 +1,9 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
+import AdminHeader from '@/components/admin/AdminHeader'
 import FlashSaleItem from '@/components/admin/FlashSaleItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -30,6 +32,7 @@ function AllFlashSalesPage() {
   const [flashSales, setFlashSales] = useState<FlashSaleWithProducts[]>([])
   const [selectedFlashSales, setSelectedFlashSales] = useState<string[]>([])
   const [loadingFlashSales, setLoadingFlashSales] = useState<string[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // Form
   const {
@@ -101,6 +104,7 @@ function AllFlashSalesPage() {
         toast.error(err.response.data.message)
       } finally {
         setLoadingFlashSales([])
+        setSelectedFlashSales([])
       }
     },
     [flashSales]
@@ -133,23 +137,7 @@ function AllFlashSalesPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          All Flash Sales
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/flash-sale/add'>
-          <FaPlus />
-          Add
-        </Link>
-      </div>
+      <AdminHeader title='All Flash Sales' addLink='/admin/flash-sale/add' />
 
       <Pagination />
 
@@ -235,9 +223,7 @@ function AllFlashSalesPage() {
             {!!selectedFlashSales.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteFlashSales(selectedFlashSales)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -247,7 +233,18 @@ function AllFlashSalesPage() {
 
       <div className='pt-9' />
 
-      <div className='grid items-start grid-cols-2 lg:grid-cols-3 gap-21 '>
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Flash Sales'
+        content='Are you sure that you want to deleted these flash sales?'
+        onAccept={() => handleDeleteFlashSales(selectedFlashSales)}
+        isLoading={loadingFlashSales.length > 0}
+      />
+
+      {/* MAIN LIST */}
+      <div className='grid items-start grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-21 '>
         {flashSales.map(flashSale => (
           <FlashSaleItem
             data={flashSale}

@@ -2,6 +2,7 @@
 
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
+import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
@@ -215,23 +216,7 @@ function EditVoucherPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          Edit Voucher: {voucher?.code}
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/voucher/all'>
-          <FaArrowLeft />
-          Back
-        </Link>
-      </div>
+      <AdminHeader title={`Edit Voucher: ${voucher?.code}`} backLink='/admin/voucher/all' />
 
       <div className='pt-5' />
 

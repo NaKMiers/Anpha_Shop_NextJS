@@ -2,9 +2,12 @@
 
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
+import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
+import { generateCode } from '@/utils'
+import { generateRandomString } from '@/utils/generate'
 import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -40,7 +43,7 @@ function AddVoucherPage() {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      code: '',
+      code: generateRandomString(5).toUpperCase(),
       description: '',
       // default begin is today
       begin: new Date().toISOString().split('T')[0],
@@ -104,7 +107,7 @@ function AddVoucherPage() {
       }
 
       // minTotal >= 0
-      if (data.minTotal < 0) {
+      if (+data.minTotal < 0) {
         setError('minTotal', {
           type: 'manual',
           message: 'Min total must be >= 0',
@@ -113,7 +116,7 @@ function AddVoucherPage() {
       }
 
       // maxReduce >= 0
-      if (data.maxReduce < 0) {
+      if (+data.maxReduce < 0) {
         setError('maxReduce', {
           type: 'manual',
           message: 'Max reduce must be >= 0',
@@ -122,10 +125,19 @@ function AddVoucherPage() {
       }
 
       // timesLeft >= 0
-      if (data.timesLeft < 0) {
+      if (+data.timesLeft < 0) {
         setError('timesLeft', {
           type: 'manual',
           message: 'Times left must be >= 0',
+        })
+        isValid = false
+      }
+
+      // value < maxReduce
+      if (+data.value > +data.maxReduce) {
+        setError('value', {
+          type: 'manual',
+          message: 'Value must be <= max reduce',
         })
         isValid = false
       }
@@ -152,6 +164,11 @@ function AddVoucherPage() {
 
         // reset form
         reset()
+        setValue('code', generateRandomString(5).toUpperCase())
+        const adminUser = roleUsers.find((user: IUser) => user.role === 'admin')
+        if (adminUser) {
+          setValue('onwer', adminUser._id)
+        }
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -159,7 +176,7 @@ function AddVoucherPage() {
         dispatch(setLoading(false))
       }
     },
-    [handleValidate, reset, dispatch]
+    [handleValidate, reset, dispatch, setValue, roleUsers]
   )
 
   // Enter key to submit
@@ -174,23 +191,7 @@ function AddVoucherPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          Add Voucher
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/voucher/all'>
-          <FaArrowLeft />
-          Back
-        </Link>
-      </div>
+      <AdminHeader title='Add Voucher' backLink='/admin/voucher/all' />
 
       <div className='pt-5' />
 

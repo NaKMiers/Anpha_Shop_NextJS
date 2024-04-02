@@ -1,6 +1,8 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Pagination from '@/components/Pagination'
+import AdminHeader from '@/components/admin/AdminHeader'
 import TagItem from '@/components/admin/TagItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -27,6 +29,7 @@ function AllTagsPage() {
   const [editingTags, setEditingTags] = useState<string[]>([])
   const [loadingTags, setLoadingTags] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // get all tags
   useEffect(() => {
@@ -67,6 +70,7 @@ function AllTagsPage() {
       toast.error(err.response.data.message)
     } finally {
       setLoadingTags([])
+      setSelectedTags([])
     }
   }, [])
 
@@ -149,23 +153,7 @@ function AllTagsPage() {
 
   return (
     <div className='w-full'>
-      <div className='flex items-end mb-3 gap-3'>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
-          href='/admin'>
-          <FaArrowLeft />
-          Admin
-        </Link>
-        <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
-          All Tags
-        </div>
-        <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href='/admin/tag/add'>
-          <FaPlus />
-          Add
-        </Link>
-      </div>
+      <AdminHeader title='All Tags' addLink='/admin/tag/add' />
 
       <Pagination />
 
@@ -255,9 +243,7 @@ function AllTagsPage() {
             {!!selectedTags.length && (
               <button
                 className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteTags(selectedTags)
-                }}>
+                onClick={() => setIsOpenConfirmModal(true)}>
                 Delete
               </button>
             )}
@@ -266,6 +252,16 @@ function AllTagsPage() {
       </div>
 
       <div className='pt-9' />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Tags'
+        content='Are you sure that you want to deleted these tags?'
+        onAccept={() => handleDeleteTags(selectedTags)}
+        isLoading={loadingTags.length > 0}
+      />
 
       {/* MAIN (LIST) */}
       <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>

@@ -10,6 +10,7 @@ import { FaCheckSquare, FaEye, FaHistory, FaNimblr, FaRegTrashAlt, FaTrash } fro
 import { GrDeliver } from 'react-icons/gr'
 import { ImCancelCircle } from 'react-icons/im'
 import { RiDonutChartFill } from 'react-icons/ri'
+import ConfirmDialog from '../ConfirmDialog'
 
 interface OrderItemProps {
   data: IOrder
@@ -40,6 +41,7 @@ function OrderItem({
 }: OrderItemProps) {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // handle deliver order
   const handleDeliverOrder = useCallback(async () => {
@@ -86,185 +88,205 @@ function OrderItem({
   }, [data._id])
 
   return (
-    <div
-      className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
-        selectedOrders.includes(data._id)
-          ? 'bg-sky-50 -translate-y-1'
-          : data.status === 'done'
-          ? 'bg-green-200'
-          : data.status === 'pending'
-          ? 'bg-red-200'
-          : 'bg-slate-300'
-      }  ${className}`}
-      onClick={() =>
-        setSelectedOrders(prev =>
-          prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
-        )
-      }>
-      <div className='w-full'>
-        {/* Thumbnails */}
-        <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[145px] overflow-y-auto '>
-          {data.items.map((item: any) => (
-            <div className='relative rounded-lg shadow-md overflow-hidden' key={item._id}>
-              <Image
-                className='aspect-video'
-                src={item.product.images[0]}
-                height={120}
-                width={120}
-                alt='thumbnail'
-              />
-              <span className='py-[2px] px-[3px] rounded-full absolute top-1 right-1 bg-secondary shadow-md text-[8px] font-semibold text-light border-2 border-white'>
-                x{item.quantity}
-              </span>
-            </div>
-          ))}
-        </div>
+    <>
+      <div
+        className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
+          selectedOrders.includes(data._id)
+            ? 'bg-sky-50 -translate-y-1'
+            : data.status === 'done'
+            ? 'bg-green-200'
+            : data.status === 'pending'
+            ? 'bg-red-200'
+            : 'bg-slate-300'
+        }  ${className}`}
+        onClick={() =>
+          setSelectedOrders(prev =>
+            prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
+          )
+        }>
+        <div className='w-full'>
+          {/* Thumbnails */}
+          <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[145px] overflow-y-auto '>
+            {data.items.map((item: any) => (
+              <div className='relative rounded-lg shadow-md overflow-hidden' key={item._id}>
+                <Image
+                  className='aspect-video'
+                  src={item.product.images[0]}
+                  height={120}
+                  width={120}
+                  alt='thumbnail'
+                />
+                <span className='py-[2px] px-[3px] rounded-full absolute top-1 right-1 bg-secondary shadow-md text-[8px] font-semibold text-light border-2 border-white'>
+                  x{item.quantity}
+                </span>
+              </div>
+            ))}
+          </div>
 
-        {/* Information */}
-        <div className='flex gap-2 flex-wrap items-center'>
-          {/* Status */}
-          <p
-            className={`inline font-semibold text-${
-              data.status === 'done' ? 'green' : data.status === 'pending' ? 'red' : 'slate'
-            }-400`}
-            title='status'>
-            {data.status}
-          </p>
+          {/* Information */}
+          <div className='flex gap-2 flex-wrap items-center'>
+            {/* Status */}
+            <p
+              className={`inline font-semibold text-${
+                data.status === 'done' ? 'green' : data.status === 'pending' ? 'red' : 'slate'
+              }-400`}
+              title='status'>
+              {data.status}
+            </p>
 
-          {/* Code */}
-          <p className='inline font-semibold text-primary' title='code'>
-            {data.code}
-          </p>
+            {/* Code */}
+            <p className='inline font-semibold text-primary' title='code'>
+              {data.code}
+            </p>
 
-          {/* Method */}
-          <p
-            className={`inline font-semibold text-[${
-              data.paymentMethod === 'momo' ? '#a1396c' : '#399162'
-            }]`}
-            title='payment-method'>
-            {data.paymentMethod}
-          </p>
+            {/* Method */}
+            <p
+              className={`inline font-semibold text-[${
+                data.paymentMethod === 'momo' ? '#a1396c' : '#399162'
+              }]`}
+              title='payment-method'>
+              {data.paymentMethod}
+            </p>
 
-          {/* UserID */}
-          <FaCheckSquare
-            title='userId'
-            size={18}
-            className={`${data.userId ? 'text-green-600' : 'text-slate-600'}`}
-          />
-        </div>
-
-        {/* Email */}
-        <p className='underline' title='email'>
-          {data.email}
-        </p>
-
-        {/* Total */}
-        <p className='mr-2 text-green-600 font-semibold' title='email'>
-          {formatPrice(data.total)}{' '}
-          <span
-            className='px-[7px] py-[1px] text-center text-xs rounded-full shadow-sm bg-sky-300 text-white'
-            title='quantity'>
-            x{data.items.reduce((quantity: number, item: any) => quantity + item.quantity, 0)}
-          </span>
-        </p>
-
-        {/* Created */}
-        <div className='flex flex-wrap gap-x-2'>
-          <p className='text-sm' title='Created (d/m/y)'>
-            <span className='font-semibold'>Created: </span>
-            <span>{formatTime(data.createdAt)}</span>
-          </p>
-
-          {/* Updated */}
-          <p className='text-sm' title='Updated (d/m/y)'>
-            <span className='font-semibold'>Updated: </span>
-            <span>{formatTime(data.updatedAt)}</span>
-          </p>
-        </div>
-      </div>
-
-      <div className='flex flex-col flex-shrink-0 border bg-white border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-        {/* Detail Button */}
-        {data.status === 'done' && (
-          <Link
-            href={`/admin/order/${data._id}`}
-            target='_blank'
-            className='block group'
-            title='Detail'
-            onClick={e => e.stopPropagation()}>
-            <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
-          </Link>
-        )}
-
-        {/* Deliver Button */}
-        {data.status !== 'done' && (
-          <button
-            className='block group'
-            title='Deliver'
-            disabled={loadingOrders.includes(data._id) || isLoading}
-            onClick={e => {
-              e.stopPropagation()
-              handleDeliverOrder()
-            }}>
-            {isLoading ? (
-              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-            ) : (
-              <GrDeliver size={18} className='text-yellow-400 group-hover:scale-125 common-transition' />
-            )}
-          </button>
-        )}
-
-        {/* Re-Deliver Button */}
-        {data.status === 'done' && (
-          <button
-            className='block group'
-            title='Re-Deliver'
-            disabled={loadingOrders.includes(data._id) || isLoading}
-            onClick={e => {
-              e.stopPropagation()
-              handleReDeliverOrder()
-            }}>
-            {isLoading ? (
-              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-            ) : (
-              <FaHistory size={18} className='text-blue-500 group-hover:scale-125 common-transition' />
-            )}
-          </button>
-        )}
-
-        {/* Cancel Button */}
-        {data.status === 'pending' && (
-          <button
-            className='block group'
-            title='Cancel'
-            disabled={loadingOrders.includes(data._id) || isLoading}
-            onClick={e => {
-              e.stopPropagation()
-              handleCancelOrders([data._id])
-            }}>
-            <ImCancelCircle
+            {/* UserID */}
+            <FaCheckSquare
+              title='userId'
               size={18}
-              className='text-slate-300 group-hover:scale-125 common-transition'
+              className={`${data.userId ? 'text-green-600' : 'text-slate-600'}`}
             />
-          </button>
-        )}
+          </div>
 
-        {/* Delete Button */}
-        <button
-          className='block group'
-          disabled={loadingOrders.includes(data._id) || isLoading}
-          onClick={e => {
-            e.stopPropagation()
-            handleDeleteOrders([data._id])
-          }}>
-          {loadingOrders.includes(data._id) ? (
-            <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
-          ) : (
-            <FaRegTrashAlt size={18} className='group-hover:scale-125 common-transition text-rose-500' />
+          {/* Email */}
+          <p className='underline' title='email'>
+            {data.email}
+          </p>
+
+          {/* Total */}
+          <p
+            className='flex items-center flex-wrap gap-x-2 mr-2 text-green-600 text-xl font-semibold'
+            title='email'>
+            {formatPrice(data.total)}{' '}
+            <span
+              className='px-[7px] py-[1px] text-center text-xs rounded-full shadow-sm bg-sky-300 text-white'
+              title='quantity'>
+              x{data.items.reduce((quantity: number, item: any) => quantity + item.quantity, 0)}
+            </span>
+          </p>
+
+          {/* Created */}
+          <div className='flex flex-wrap gap-x-2'>
+            <p className='text-sm' title='Created (d/m/y)'>
+              <span className='font-semibold'>Created: </span>
+              <span>{formatTime(data.createdAt)}</span>
+            </p>
+
+            {/* Updated */}
+            <p className='text-sm' title='Updated (d/m/y)'>
+              <span className='font-semibold'>Updated: </span>
+              <span>{formatTime(data.updatedAt)}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className='flex flex-col flex-shrink-0 border bg-white border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+          {/* Detail Button */}
+          {data.status === 'done' && (
+            <Link
+              href={`/admin/order/${data._id}`}
+              target='_blank'
+              className='block group'
+              title='Detail'
+              onClick={e => e.stopPropagation()}>
+              <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
+            </Link>
           )}
-        </button>
+
+          {/* Deliver Button */}
+          {data.status !== 'done' && (
+            <button
+              className='block group'
+              title='Deliver'
+              disabled={loadingOrders.includes(data._id) || isLoading}
+              onClick={e => {
+                e.stopPropagation()
+                handleDeliverOrder()
+              }}>
+              {isLoading ? (
+                <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+              ) : (
+                <GrDeliver
+                  size={18}
+                  className='text-yellow-400 group-hover:scale-125 common-transition'
+                />
+              )}
+            </button>
+          )}
+
+          {/* Re-Deliver Button */}
+          {data.status === 'done' && (
+            <button
+              className='block group'
+              title='Re-Deliver'
+              disabled={loadingOrders.includes(data._id) || isLoading}
+              onClick={e => {
+                e.stopPropagation()
+                handleReDeliverOrder()
+              }}>
+              {isLoading ? (
+                <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+              ) : (
+                <FaHistory size={18} className='text-blue-500 group-hover:scale-125 common-transition' />
+              )}
+            </button>
+          )}
+
+          {/* Cancel Button */}
+          {data.status === 'pending' && (
+            <button
+              className='block group'
+              title='Cancel'
+              disabled={loadingOrders.includes(data._id) || isLoading}
+              onClick={e => {
+                e.stopPropagation()
+                handleCancelOrders([data._id])
+              }}>
+              <ImCancelCircle
+                size={18}
+                className='text-slate-300 group-hover:scale-125 common-transition'
+              />
+            </button>
+          )}
+
+          {/* Delete Button */}
+          <button
+            className='block group'
+            disabled={loadingOrders.includes(data._id) || isLoading}
+            onClick={e => {
+              e.stopPropagation()
+              setIsOpenConfirmModal(true)
+            }}>
+            {loadingOrders.includes(data._id) ? (
+              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+            ) : (
+              <FaRegTrashAlt
+                size={18}
+                className='group-hover:scale-125 common-transition text-rose-500'
+              />
+            )}
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title='Delete Order'
+        content='Are you sure that you want to deleted this order?'
+        onAccept={() => handleDeleteOrders([data._id])}
+        isLoading={loadingOrders.includes(data._id)}
+      />
+    </>
   )
 }
 
