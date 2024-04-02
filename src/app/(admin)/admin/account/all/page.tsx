@@ -227,7 +227,7 @@ function AllAccountsPage() {
       />
 
       {/* MAIN LIST */}
-      <div className='grid grid-cols-1 gap-21 lg:grid-cols-2 items-start'>
+      <div className='grid gap-21 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start'>
         {accounts.map(account => (
           <AccountItem
             data={account}

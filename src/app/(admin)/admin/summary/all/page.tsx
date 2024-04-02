@@ -78,7 +78,7 @@ function AllSummariesPage() {
 
       <div className='pt-9' />
 
-      <div className='grid grid-cols-2 lg:grid-cols-4 gap-21 '>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-21 '>
         {Array.from({ length: 5 }).map((_, index) => (
           <div className='flex flex-col p-4 rounded-lg shadow-lg bg-white' key={index}>
             <div className='font-semibold' title='netflix'>

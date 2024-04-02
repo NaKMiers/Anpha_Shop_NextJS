@@ -214,7 +214,7 @@ function AllUsersPage() {
       />
 
       {/* MAIN LIST */}
-      <div className='grid grid-cols-2 gap-21 lg:grid-cols-3 items-start'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-21'>
         {users.map(user => (
           <UserItem
             data={user}

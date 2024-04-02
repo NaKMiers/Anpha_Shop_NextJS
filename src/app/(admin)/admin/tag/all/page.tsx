@@ -264,7 +264,7 @@ function AllTagsPage() {
       />
 
       {/* MAIN (LIST) */}
-      <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-21 lg:grid-cols-5'>
         {tags.map(tag => (
           <TagItem
             data={tag}

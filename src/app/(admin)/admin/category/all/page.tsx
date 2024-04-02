@@ -238,7 +238,7 @@ function AllCategoriesPage() {
       />
 
       {/* Category List */}
-      <div className='grid grid-cols-2 gap-21 lg:grid-cols-5'>
+      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-21'>
         {categories.map(category => (
           <CategoryItem
             data={category}

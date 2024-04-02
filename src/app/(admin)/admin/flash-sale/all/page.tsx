@@ -244,7 +244,7 @@ function AllFlashSalesPage() {
       />
 
       {/* MAIN LIST */}
-      <div className='grid items-start grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-21 '>
+      <div className='grid items-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21 '>
         {flashSales.map(flashSale => (
           <FlashSaleItem
             data={flashSale}
