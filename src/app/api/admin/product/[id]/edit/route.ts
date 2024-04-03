@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     })
 
     // return response
-    return NextResponse.json({ message: 'Product has been updated' }, { status: 200 })
+    return NextResponse.json({ message: `Product ${product.title} has been updated` }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
