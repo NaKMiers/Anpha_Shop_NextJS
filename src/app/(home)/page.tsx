@@ -5,8 +5,15 @@ import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
-import { FullyProduct } from '../api/product/[slug]/route'
 import axios from 'axios'
+import { FullyProduct } from '../api/product/[slug]/route'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Anpha Shop',
+  description:
+    'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
+}
 
 async function HomePage() {
   let productsByCategoryGroups: any[] = []

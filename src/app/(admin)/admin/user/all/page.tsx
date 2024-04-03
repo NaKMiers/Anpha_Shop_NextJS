@@ -9,16 +9,12 @@ import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaFilter, FaPlus, FaPlusCircle, FaSearch, FaTrash } from 'react-icons/fa'
-import { GrUpgrade } from 'react-icons/gr'
+import { FaFilter, FaSearch } from 'react-icons/fa'
 
 function AllUsersPage() {
   // hook
