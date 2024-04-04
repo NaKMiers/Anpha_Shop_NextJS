@@ -21,7 +21,7 @@ export async function PUT(req: NextRequest, { params: { code } }: { params: { co
     value,
     timesLeft,
     owner,
-    isActive,
+    active,
   } = await req.json()
 
   try {
@@ -40,7 +40,7 @@ export async function PUT(req: NextRequest, { params: { code } }: { params: { co
           value,
           timesLeft,
           owner: owner || null,
-          active: isActive,
+          active,
         },
       }
     )

@@ -1,20 +1,19 @@
 'use client'
 
+import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AccountItem from '@/components/admin/AccountItem'
+import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
-import axios from 'axios'
-import Link from 'next/link'
+import { activateAccountsApi, deleteAccountsApi, getAllAccountsApi } from '@/requests'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaFilter, FaPlus, FaSearch } from 'react-icons/fa'
+import { FaFilter, FaSearch } from 'react-icons/fa'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
-import AdminHeader from '@/components/admin/AdminHeader'
-import ConfirmDialog from '@/components/ConfirmDialog'
 
 export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
 
@@ -46,8 +45,7 @@ function AllAccountsPage() {
 
       try {
         // sent request to server
-        const res = await axios.get('/api/admin/account/all')
-        const { accounts } = res.data
+        const { accounts } = await getAllAccountsApi()
 
         // update accounts from state
         setAccounts(accounts)
@@ -65,8 +63,7 @@ function AllAccountsPage() {
   const handleActivateAccounts = useCallback(async (ids: string[], value: boolean) => {
     try {
       // senred request to server
-      const res = await axios.post(`/api/admin/account/activate`, { ids, value })
-      const { updatedAccounts, message } = res.data
+      const { updatedAccounts, message } = await activateAccountsApi(ids, value)
 
       // update accounts from state
       setAccounts(prev =>
@@ -91,8 +88,7 @@ function AllAccountsPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/account/delete`, { data: { ids } })
-      const { deletedAccounts, message } = res.data
+      const { deletedAccounts, message } = await deleteAccountsApi(ids)
 
       // remove deleted tags from state
       setAccounts(prev =>
@@ -221,7 +217,7 @@ function AllAccountsPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Accounts'
-        content='Are you sure that you want to deleted these accounts?'
+        content='Are you sure that you want to delete these accounts?'
         onAccept={() => handleDeleteAccounts(selectedAccounts)}
         isLoading={loadingAccounts.length > 0}
       />

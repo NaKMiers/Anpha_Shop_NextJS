@@ -176,7 +176,7 @@ function TagItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Tag'
-        content='Are you sure that you want to deleted this tag?'
+        content='Are you sure that you want to delete this tag?'
         onAccept={() => handleDeleteTags([data._id])}
         isLoading={loadingTags.includes(data._id)}
       />

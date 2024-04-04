@@ -5,6 +5,7 @@ import LoadingButton from '@/components/LoadingButton'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
+import { addTagApi } from '@/requests'
 import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -39,10 +40,10 @@ function AddTagPage() {
       console.log(data)
       try {
         // add new tag login here
-        const res = await axios.post('/api/admin/tag/add', data)
+        const { message } = await addTagApi(data)
 
         // show success message
-        toast.success(res.data.message)
+        toast.success(message)
 
         // clear form
         reset()

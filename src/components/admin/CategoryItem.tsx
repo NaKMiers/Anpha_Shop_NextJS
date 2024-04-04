@@ -156,7 +156,7 @@ function CategoryItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Category'
-        content='Are you sure that you want to deleted this category?'
+        content='Are you sure that you want to delete this category?'
         onAccept={() => handleDeleteCategories([data._id])}
         isLoading={loadingCategories.includes(data._id)}
       />

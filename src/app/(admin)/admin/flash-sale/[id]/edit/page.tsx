@@ -6,15 +6,12 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
-import axios from 'axios'
-import { timeStamp } from 'console'
+import { getAllProductsApi, getFlashSaleApi, updateFlashSaleApi } from '@/requests'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft } from 'react-icons/fa'
 import { FaPause, FaPlay } from 'react-icons/fa6'
 import { IoReload } from 'react-icons/io5'
 
@@ -29,7 +26,6 @@ function AddFlashSalePage() {
   const router = useRouter()
 
   // states
-  const [flashSale, setFlashSale] = useState<IProduct | null>(null)
   const [products, setProducts] = useState<IProduct[]>([])
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [timeType, setTimeType] = useState<'loop' | 'once'>('loop')
@@ -57,13 +53,8 @@ function AddFlashSalePage() {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        // send request to server to get product
-        const res = await axios.get(`/api/admin/flash-sale/${id}`)
-        const { flashSale, message } = res.data
-
-        // set product to state
-        console.log(res.data)
-        setFlashSale(flashSale)
+        // send request to server to get flash sale
+        const { flashSale } = await getFlashSaleApi(id)
 
         // // set value to form
         setValue('type', flashSale.type)
@@ -88,11 +79,10 @@ function AddFlashSalePage() {
     const getAllProducts = async () => {
       try {
         // send request to server
-        const res = await axios.get('/api/admin/product/all')
-        console.log(res.data)
+        const { products } = await getAllProductsApi()
 
         // set products to state
-        setProducts(res.data.products)
+        setProducts(products)
       } catch (err: any) {
         console.error(err)
         toast.error(err.response.data.message)
@@ -140,25 +130,25 @@ function AddFlashSalePage() {
     [setError]
   )
 
-  // handle send request to server to add flash sale
+  // handle send request to server to edit flash sale
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    if (!handleValidate(data)) return
-
     console.log(data)
+
+    // validate form
+    if (!handleValidate(data)) return
 
     // set loading
     dispatch(setLoading(true))
 
     try {
       // send request to server
-      const res = await axios.put(`/api/admin/flash-sale/${id}/edit`, {
-        ...data,
-        appliedProducts: selectedProducts,
-      })
-      console.log(res)
+      const { message } = await updateFlashSaleApi(id, data, selectedProducts)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
+
+      // redirect back
+      router.back()
     } catch (err: any) {
       console.error(err)
       toast.error(err.response.data.message)
@@ -293,7 +283,11 @@ function AddFlashSalePage() {
           {products.map(product => (
             <div
               className={`border-2 border-slate-300 rounded-lg flex items-center p-2 gap-2 cursor-pointer common-transition ${
-                selectedProducts.includes(product._id) ? 'bg-secondary border-white text-white' : ''
+                selectedProducts.includes(product._id)
+                  ? 'bg-secondary border-white text-white'
+                  : product.flashsale
+                  ? 'bg-slate-300'
+                  : ''
               }`}
               onClick={() =>
                 selectedProducts.includes(product._id)

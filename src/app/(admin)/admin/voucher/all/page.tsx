@@ -8,8 +8,8 @@ import VoucherItem from '@/components/admin/VoucherItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
+import { activateVouchersApi, deleteVouchersApi, getAllVouchersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -44,10 +44,8 @@ function AllVouchersPage() {
 
     const getAllVouchers = async () => {
       try {
-        const res = await axios.get('/api/admin/voucher/all')
-        setVouchers(res.data.vouchers)
-
-        console.log(res.data)
+        const { vouchers } = await getAllVouchersApi()
+        setVouchers(vouchers)
       } catch (err: any) {
         console.log(err)
       } finally {
@@ -61,8 +59,7 @@ function AllVouchersPage() {
   const handleActivateVouchers = useCallback(async (ids: string[], value: boolean) => {
     try {
       // senred request to server
-      const res = await axios.post(`/api/admin/voucher/activate`, { ids, value })
-      const { updatedVouchers, message } = res.data
+      const { updatedVouchers, message } = await activateVouchersApi(ids, value)
       console.log(updatedVouchers, message)
 
       // update vouchers from state
@@ -88,8 +85,7 @@ function AllVouchersPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/voucher/delete`, { data: { ids } })
-      const { deletedVouchers, message } = res.data
+      const { deletedVouchers, message } = await deleteVouchersApi(ids)
 
       // remove deleted vouchers from state
       setVouchers(prev =>
@@ -283,7 +279,7 @@ function AllVouchersPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Vouchers'
-        content='Are you sure that you want to deleted these vouchers?'
+        content='Are you sure that you want to delete these vouchers?'
         onAccept={() => handleDeleteVouchers(selectedVouchers)}
         isLoading={loadingVouchers.length > 0}
       />

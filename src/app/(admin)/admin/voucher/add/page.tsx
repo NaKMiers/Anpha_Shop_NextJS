@@ -6,6 +6,7 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
+import { addVoucherApi, getRoleUsersApi } from '@/requests'
 import { generateCode } from '@/utils'
 import { generateRandomString } from '@/utils/generate'
 import axios from 'axios'
@@ -63,11 +64,11 @@ function AddVoucherPage() {
     const getRoleUsers = async () => {
       try {
         // send request to server to get role-users
-        const res = await axios.get('/api/admin/user/role-users')
+        const { roleUsers } = await getRoleUsersApi()
 
         // set roleUsers to state
-        setRoleUsers(res.data.roleUsers)
-        setValue('owner', res.data.roleUsers.find((user: IUser) => user.role === 'admin')._id)
+        setRoleUsers(roleUsers)
+        setValue('owner', roleUsers.find((user: IUser) => user.role === 'admin')._id)
       } catch (err: any) {
         console.log(err)
       }
@@ -157,10 +158,10 @@ function AddVoucherPage() {
 
       try {
         // send request to server to add voucher
-        const res = await axios.post('/api/admin/voucher/add', data)
+        const { message } = await addVoucherApi(data)
 
         // show success message
-        toast.success(res.data.message)
+        toast.success(message)
 
         // reset form
         reset()

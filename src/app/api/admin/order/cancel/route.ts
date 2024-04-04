@@ -13,6 +13,10 @@ export async function PATCH(req: NextRequest) {
   const { ids } = await req.json()
 
   try {
+    if (!ids || !ids.length) {
+      return NextResponse.json({ canceledOrders: [], message: 'No order to cancel' }, { status: 400 })
+    }
+
     // cancel orders
     await OrderModel.updateMany({ _id: { $in: ids } }, { $set: { status: 'cancel' } })
 

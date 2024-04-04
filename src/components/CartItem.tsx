@@ -249,7 +249,7 @@ function CartItem({
       {/* Info */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         <Link href='/netflix'>
-          <h2 className={`text-[20px] tracking-wide mb-2 leading-6`} title={cartItem.product.title}>
+          <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
             {cartItem.product.title}
           </h2>
         </Link>

@@ -140,7 +140,6 @@ function VoucherItem({
           {/* Edit Button Link */}
           <Link
             href={`/admin/voucher/${data.code}/edit`}
-            target='_blank'
             className='block group'
             onClick={e => e.stopPropagation()}>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
@@ -168,7 +167,7 @@ function VoucherItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Voucher'
-        content='Are you sure that you want to deleted these products?'
+        content='Are you sure that you want to delete these products?'
         onAccept={() => handleDeleteVouchers([data._id])}
         isLoading={loadingVouchers.includes(data._id)}
       />

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
+import { addProductApi, getAllCagetoriesApi, getAllTagsApi } from '@/requests'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -56,8 +57,8 @@ function AddVoucherPage() {
     const getTags = async () => {
       try {
         // send request to server to get all tags
-        const res = await axios.get('/api/admin/tag/all')
-        setTags(res.data.tags)
+        const { tags } = await getAllTagsApi()
+        setTags(tags)
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -66,8 +67,8 @@ function AddVoucherPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const res = await axios.get('/api/admin/category/all')
-        setCategories(res.data.categories)
+        const { categories } = await getAllCagetoriesApi()
+        setCategories(categories)
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -161,7 +162,6 @@ function AddVoucherPage() {
 
     try {
       console.log(data)
-      // send request to server to create new product
       const formData = new FormData()
 
       formData.append('title', data.title)
@@ -173,11 +173,11 @@ function AddVoucherPage() {
       formData.append('category', selectedCategory)
       files.forEach(file => formData.append('images', file))
 
-      const res = await axios.post('/api/admin/product/add', formData)
-      console.log(res.data)
+      // send request to server to create new product
+      const { message } = await addProductApi(formData)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
 
       // reset form
       setFiles([])
@@ -195,7 +195,7 @@ function AddVoucherPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
-      <AdminHeader title='Add Product' addLink='/admin/product/add' />
+      <AdminHeader title='Add Product' backLink='/admin/product/all' />
 
       <div className='pt-5' />
 

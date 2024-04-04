@@ -6,14 +6,12 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
-import axios from 'axios'
-import { timeStamp } from 'console'
+import { addFlashSaleApi, getAllProductsApi } from '@/requests'
 import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft } from 'react-icons/fa'
 import { FaPause, FaPlay } from 'react-icons/fa6'
 import { IoReload } from 'react-icons/io5'
 
@@ -24,6 +22,7 @@ function AddFlashSalePage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
+  const router = useRouter()
 
   // states
   const [products, setProducts] = useState<IProduct[]>([])
@@ -54,11 +53,10 @@ function AddFlashSalePage() {
     const getAllProducts = async () => {
       try {
         // send request to server
-        const res = await axios.get('/api/admin/product/all')
-        console.log(res.data)
+        const { products } = await getAllProductsApi()
 
         // set products to state
-        setProducts(res.data.products)
+        setProducts(products)
       } catch (err: any) {
         console.error(err)
         toast.error(err.response.data.message)
@@ -115,18 +113,21 @@ function AddFlashSalePage() {
 
     try {
       // send request to server
-      const res = await axios.post('/api/admin/flash-sale/add', {
+      const { message } = await addFlashSaleApi({
         ...data,
         appliedProducts: selectedProducts,
       })
-      console.log(res)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
 
       // reset
       reset()
       setSelectedProducts([])
+
+      // update products
+      const { products } = await getAllProductsApi()
+      setProducts(products)
     } catch (err: any) {
       console.error(err)
       toast.error(err.response.data.message)
@@ -262,7 +263,11 @@ function AddFlashSalePage() {
           {products.map(product => (
             <div
               className={`border-2 border-slate-300 rounded-lg flex items-center p-2 gap-2 cursor-pointer common-transition ${
-                selectedProducts.includes(product._id) ? 'bg-secondary border-white text-white' : ''
+                selectedProducts.includes(product._id)
+                  ? 'bg-secondary border-white text-white'
+                  : product.flashsale
+                  ? 'bg-slate-200'
+                  : ''
               }`}
               onClick={() =>
                 selectedProducts.includes(product._id)

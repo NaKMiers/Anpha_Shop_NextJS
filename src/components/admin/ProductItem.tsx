@@ -217,7 +217,6 @@ function ProductItem({
           {/* Edit Button Link */}
           <Link
             href={`/admin/product/${data._id}/edit`}
-            target='_blank'
             className='block group'
             onClick={e => e.stopPropagation()}>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
@@ -259,7 +258,7 @@ function ProductItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Product'
-        content='Are you sure that you want to deleted this product?'
+        content='Are you sure that you want to delete this product?'
         onAccept={() => handleDeleteProducts([data._id])}
         isLoading={loadingProducts.includes(data._id)}
       />

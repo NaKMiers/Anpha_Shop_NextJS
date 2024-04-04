@@ -70,7 +70,7 @@ function AccountItem({
 
           {/* Type */}
           <p
-            className='inline-flex flex-wrap gap-2 items-center font-semibold text-[18px] mr-2 leading-4 font-body tracking-wide'
+            className='inline-flex mb-2 flex-wrap gap-2 items-center font-semibold text-[18px] mr-2 leading-5 font-body tracking-wide'
             title='Type---'>
             <span className='shadow-md text-xs text-dark bg-yellow-400 px-2 py-px select-none rounded-md font-body'>
               Netflix
@@ -119,7 +119,6 @@ function AccountItem({
           {/* Edit Button Link */}
           <Link
             href={`/admin/account/${data._id}/edit`}
-            target='_blank'
             className='block group'
             onClick={e => e.stopPropagation()}>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
@@ -147,7 +146,7 @@ function AccountItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Account'
-        content='Are you sure that you want to deleted this account?'
+        content='Are you sure that you want to delete this account?'
         onAccept={() => handleDeleteAccounts([data._id])}
         isLoading={loadingAccounts.includes(data._id)}
       />

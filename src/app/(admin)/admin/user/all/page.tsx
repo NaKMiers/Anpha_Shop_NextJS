@@ -8,6 +8,7 @@ import UserItem from '@/components/admin/UserItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
+import { deleteUsersApi, getAllUsersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
@@ -46,8 +47,8 @@ function AllUsersPage() {
 
       console.log('get all users')
       try {
-        const res = await axios.get('/api/admin/user/all')
-        setUsers(res.data.users)
+        const { users } = await getAllUsersApi()
+        setUsers(users)
       } catch (err: any) {
         console.log(err.message)
       } finally {
@@ -63,8 +64,7 @@ function AllUsersPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/user/delete`, { data: { ids } })
-      const { deletedUsers, message } = res.data
+      const { deletedUsers, message } = await deleteUsersApi(ids)
 
       // remove deleted users from state
       setUsers(prev =>
@@ -204,7 +204,7 @@ function AllUsersPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Users'
-        content='Are you sure that you want to deleted these users?'
+        content='Are you sure that you want to delete these users?'
         onAccept={() => handleDeleteUsers(selectedUsers)}
         isLoading={loadingUsers.length > 0}
       />

@@ -9,17 +9,11 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IFlashsale } from '@/models/FlashsaleModel'
 import { IProduct } from '@/models/ProductModel'
-import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
-import { Menu, MenuItem } from '@mui/material'
-import axios from 'axios'
-import Image from 'next/image'
-import Link from 'next/link'
+import { deleteFlashSalesApi, getAllFlashSalesApi } from '@/requests'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaCalendar, FaCaretDown, FaCheck, FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
-import { MdEdit } from 'react-icons/md'
+import { FaCalendar, FaFilter } from 'react-icons/fa'
 
 export type FlashSaleWithProducts = IFlashsale & { products: IProduct[] }
 
@@ -53,11 +47,10 @@ function AllFlashSalesPage() {
 
       try {
         // send request to server to get all flash sales
-        const res = await axios.get('/api/admin/flash-sale/all')
-        console.log('res-flash-sales:', res.data)
+        const { flashSales } = await getAllFlashSalesApi()
 
         // set flash sales to state
-        setFlashSales(res.data.flashSales)
+        setFlashSales(flashSales)
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -86,8 +79,7 @@ function AllFlashSalesPage() {
           )
 
         // send request to server
-        const res = await axios.delete(`/api/admin/flash-sale/delete`, { data: { ids, productIds } })
-        const { deletedFlashSales, message } = res.data
+        const { deletedFlashSales, message } = await deleteFlashSalesApi(ids, productIds)
 
         // remove deleted vouchers from state
         setFlashSales(prev =>
@@ -238,7 +230,7 @@ function AllFlashSalesPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Flash Sales'
-        content='Are you sure that you want to deleted these flash sales?'
+        content='Are you sure that you want to delete these flash sales?'
         onAccept={() => handleDeleteFlashSales(selectedFlashSales)}
         isLoading={loadingFlashSales.length > 0}
       />

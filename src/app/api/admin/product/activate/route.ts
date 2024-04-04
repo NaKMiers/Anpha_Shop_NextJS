@@ -3,7 +3,7 @@ import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/product/activate
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   console.log('- Activate Products - ')
 
   // connect to database

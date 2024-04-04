@@ -95,7 +95,6 @@ function FlashSaleItem({
           {/* Edit Button Link */}
           <Link
             href={`/admin/flash-sale/${data._id}/edit`}
-            target='_blank'
             className='block group'
             onClick={e => e.stopPropagation()}>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
@@ -123,7 +122,7 @@ function FlashSaleItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Flash Sale'
-        content='Are you sure that you want to deleted this flash sale?'
+        content='Are you sure that you want to delete this flash sale?'
         onAccept={() => handleDeleteFlashSales([data._id])}
         isLoading={loadingFlashSales.includes(data._id)}
       />

@@ -7,20 +7,12 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { IVoucher } from '@/models/VoucherModel'
-import axios from 'axios'
-import Link from 'next/link'
+import { getRoleUsersApi, getVoucherApi, updateVoucherApi } from '@/requests'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {
-  FaArrowCircleLeft,
-  FaArrowLeft,
-  FaMinus,
-  FaQuoteRight,
-  FaUserEdit,
-  FaWindowMaximize,
-} from 'react-icons/fa'
+import { FaArrowCircleLeft, FaMinus, FaQuoteRight, FaUserEdit, FaWindowMaximize } from 'react-icons/fa'
 import { FaPause, FaPlay } from 'react-icons/fa6'
 
 import { MdNumbers } from 'react-icons/md'
@@ -36,13 +28,13 @@ function EditVoucherPage() {
   // states
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
   const [roleUsers, setRoleUsers] = useState<IUser[]>([])
-  const [isChecked, setIsChecked] = useState<boolean>(true)
 
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
     setError,
     reset,
@@ -58,7 +50,7 @@ function EditVoucherPage() {
       value: '',
       timesLeft: 1,
       owner: '',
-      isActive: true,
+      active: true,
     },
   })
 
@@ -67,26 +59,25 @@ function EditVoucherPage() {
     const getVoucher = async () => {
       try {
         // send request to server to get voucher
-        const res = await axios.get(`/api/admin/voucher/${code}`)
-        const { voucher, message } = res.data
+        const { voucher } = await getVoucherApi(code)
 
         // set voucher to state
-        console.log(res.data)
         setVoucher(voucher)
 
         // set value to form
         setValue('code', voucher.code)
         setValue('desc', voucher.desc)
         setValue('begin', new Date(voucher.begin).toISOString().split('T')[0])
-        setValue('expire', new Date(voucher.expire).toISOString().split('T')[0])
+        if (voucher.expire) {
+          setValue('expire', new Date(voucher.expire).toISOString().split('T')[0])
+        }
         setValue('minTotal', voucher.minTotal)
         setValue('maxReduce', voucher.maxReduce)
         setValue('type', voucher.type)
         setValue('value', voucher.value)
         setValue('timesLeft', voucher.timesLeft)
         setValue('owner', voucher.owner._id)
-        setValue('isActive', voucher.isActive)
-        setIsChecked(voucher.isActive)
+        setValue('active', voucher.active)
       } catch (err: any) {
         console.log('err:', err)
         toast.error(err.response.data.message)
@@ -100,11 +91,11 @@ function EditVoucherPage() {
     const getRoleUsers = async () => {
       try {
         // send request to server to get role-users
-        const res = await axios.get('/api/admin/user/role-users')
+        const { roleUsers } = await getRoleUsersApi()
 
         // set roleUsers to state
-        setRoleUsers(res.data.roleUsers)
-        setValue('owner', res.data.roleUsers.find((user: IUser) => user.role === 'admin')._id)
+        setRoleUsers(roleUsers)
+        setValue('owner', roleUsers.find((user: IUser) => user.role === 'admin')._id)
       } catch (err: any) {
         console.log(err)
       }
@@ -117,7 +108,7 @@ function EditVoucherPage() {
     data => {
       let isValid = true
       // code >= 5
-      if (data.code.length <= 5) {
+      if (data.code.length < 5) {
         setError('code', {
           type: 'manual',
           message: 'Code must be at least 5 characters',
@@ -135,7 +126,7 @@ function EditVoucherPage() {
       }
 
       // begin < expire when expire is not empty
-      if (data.expire && data.begin > data.expire) {
+      if (data.expire && new Date(data.begin) > new Date(data.expire)) {
         setError('expire', {
           type: 'manual',
           message: 'Expire must be greater than begin',
@@ -185,15 +176,15 @@ function EditVoucherPage() {
 
       try {
         // send request to server to add voucher
-        const res = await axios.put(`/api/admin/voucher/${code}/edit`, data)
+        const { message } = await updateVoucherApi(code, data)
 
         // show success message
-        toast.success(res.data.message)
+        toast.success(message)
 
         // reset form
         reset()
         dispatch(setPageLoading(false))
-        router.push('/admin/voucher/all')
+        router.back()
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -375,15 +366,20 @@ function EditVoucherPage() {
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaPlay size={16} className='text-secondary' />
           </div>
+          <input
+            className='peer'
+            type='checkbox'
+            id='active'
+            hidden
+            {...register('active', { required: false })}
+          />
           <label
-            className={`select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition  ${
-              isChecked ? 'bg-green-600 text-white' : 'bg-white text-green-600'
-            }`}
-            htmlFor='isActive'
-            onClick={() => setIsChecked(!isChecked)}>
+            className={
+              'select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition peer-checked:bg-green-600 peer-checked:text-white bg-white text-green-600'
+            }
+            htmlFor='active'>
             Active
           </label>
-          <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
         </div>
 
         <LoadingButton

@@ -7,13 +7,13 @@ import TagItem from '@/components/admin/TagItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ITag } from '@/models/TagModel'
+import { deleteTagsApi, featureTagsApi, getAllTagsApi, updateTagsApi } from '@/requests'
 import axios from 'axios'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaFilter, FaPlus } from 'react-icons/fa'
+import { FaFilter } from 'react-icons/fa'
 
-type EditingValues = {
+export type EditingValues = {
   _id: string
   title: string
 }
@@ -38,8 +38,7 @@ function AllTagsPage() {
 
       try {
         // sent request to server
-        const res = await axios.get('/api/admin/tag/all')
-        const { tags } = res.data
+        const { tags } = await getAllTagsApi()
         setTags(tags)
       } catch (err: any) {
         console.log(err)
@@ -57,8 +56,7 @@ function AllTagsPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/tag/delete`, { data: { ids } })
-      const { deletedTags, message } = res.data
+      const { deletedTags, message } = await deleteTagsApi(ids)
 
       // remove deleted tags from state
       setTags(prev => prev.filter(tag => !deletedTags.map((tag: ITag) => tag._id).includes(tag._id)))
@@ -78,8 +76,7 @@ function AllTagsPage() {
   const handleFeatureTags = useCallback(async (ids: string[], value: boolean) => {
     try {
       // senred request to server
-      const res = await axios.post(`/api/admin/tag/feature`, { ids, value })
-      const { updatedTags, message } = res.data
+      const { updatedTags, message } = await featureTagsApi(ids, value)
       console.log(updatedTags, message)
 
       // update tags from state
@@ -103,8 +100,7 @@ function AllTagsPage() {
 
     try {
       // senred request to server
-      const res = await axios.put(`/api/admin/tag/edit`, { editingValues })
-      const { editedTags, message } = res.data
+      const { editedTags, message } = await updateTagsApi(editingValues)
 
       console.log('editedTags: ', editedTags)
 
@@ -258,7 +254,7 @@ function AllTagsPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Tags'
-        content='Are you sure that you want to deleted these tags?'
+        content='Are you sure that you want to delete these tags?'
         onAccept={() => handleDeleteTags(selectedTags)}
         isLoading={loadingTags.length > 0}
       />

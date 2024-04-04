@@ -8,8 +8,8 @@ import { getTimes } from '@/utils'
 import AccountModel, { IAccount } from '@/models/AccountModel'
 import mongoose from 'mongoose'
 
-// [GET]: /account/:id/edit
-export async function POST(req: NextRequest, { params: { id } }: { params: { id: string } }) {
+// [PUT]: /account/:id/edit
+export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Account -')
 
   // connect to database
@@ -18,6 +18,8 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
   // get data to edit account
   const { type, info, renew, active, days, hours, minutes, seconds, notify } = await req.json()
   const times = getTimes(+days, +hours, +minutes, +seconds)
+
+  console.log('notify', notify)
 
   try {
     // update account
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
           info,
           renew,
           times,
-          active: active === 'on',
+          active,
         },
       },
       { new: true }
@@ -99,6 +101,7 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
           newInfo: { info },
         }
 
+        console.log('notifyAccountUpdated')
         notifyAccountUpdated(order.email, data)
       }
     }

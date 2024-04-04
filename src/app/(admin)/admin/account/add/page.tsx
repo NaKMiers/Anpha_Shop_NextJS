@@ -16,6 +16,7 @@ import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
 import AdminHeader from '@/components/admin/AdminHeader'
+import { addAccountApi, getAllProductsApi } from '@/requests'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -53,8 +54,7 @@ function AddAccountPage() {
     const getAllTypes = async () => {
       try {
         // send request to server to get all products
-        const res = await axios.get('/api/admin/product/all')
-        const { products } = res.data
+        const { products } = await getAllProductsApi()
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
@@ -112,7 +112,7 @@ function AddAccountPage() {
     [setError]
   )
 
-  // send request to server to add product
+  // send request to server to add account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
     console.log(data)
@@ -121,12 +121,11 @@ function AddAccountPage() {
     dispatch(setLoading(true))
 
     try {
-      // add new tag login here
-      const res = await axios.post('/api/admin/account/add', data)
-      console.log(res.data)
+      // add new account here
+      const { message } = await addAccountApi(data)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)

@@ -362,7 +362,7 @@ function UserItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete User'
-        content='Are you sure that you want to deleted this user?'
+        content='Are you sure that you want to delete this user?'
         onAccept={() => handleDeleteUsers([data._id])}
         isLoading={loadingUsers.includes(data._id)}
       />

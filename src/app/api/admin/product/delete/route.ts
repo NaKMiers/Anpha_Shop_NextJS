@@ -72,7 +72,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json(
       {
         deletedProducts: products,
-        message: `${products.length} product${products.length > 1 ? 's' : ''} ${
+        message: `${products.map(product => product.title).join(', ')} ${
           products.length > 1 ? 'have' : 'has'
         } been deleted`,
       },

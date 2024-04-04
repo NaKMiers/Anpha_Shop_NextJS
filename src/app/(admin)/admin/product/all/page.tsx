@@ -9,8 +9,8 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
+import { activateProductsApi, deleteProductsApi, getAllProductsApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaFilter } from 'react-icons/fa'
@@ -34,10 +34,10 @@ function AllProductsPage() {
 
       try {
         // send request to server to get all products
-        const res = await axios.get('/api/admin/product/all')
+        const { products } = await getAllProductsApi()
 
         // set products to state
-        setProducts(res.data.products)
+        setProducts(products)
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -52,8 +52,7 @@ function AllProductsPage() {
   const handleActivateProducts = useCallback(async (ids: string[], value: boolean) => {
     try {
       // senred request to server
-      const res = await axios.post(`/api/admin/product/activate`, { ids, value })
-      const { updatedProducts, message } = res.data
+      const { updatedProducts, message } = await activateProductsApi(ids, value)
       console.log(updatedProducts, message)
 
       // update products from state
@@ -79,8 +78,7 @@ function AllProductsPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/product/delete`, { data: { ids } })
-      const { deletedProducts, message } = res.data
+      const { deletedProducts, message } = await deleteProductsApi(ids)
 
       // remove deleted products from state
       setProducts(prev =>
@@ -258,7 +256,7 @@ function AllProductsPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Products'
-        content='Are you sure that you want to deleted these products?'
+        content='Are you sure that you want to delete these products?'
         onAccept={() => handleDeleteProducts(selectedProducts)}
         isLoading={loadingProducts.length > 0}
       />

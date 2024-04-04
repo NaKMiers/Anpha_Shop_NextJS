@@ -3,7 +3,7 @@ import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/tag/feature
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   console.log('- Feature Tags - ')
 
   // connect to database

@@ -8,8 +8,8 @@ import OrderItem from '@/components/admin/OrderItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IOrder } from '@/models/OrderModel'
+import { cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -28,7 +28,6 @@ function AllOrdersPage() {
   // Form
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -43,8 +42,7 @@ function AllOrdersPage() {
 
       try {
         // sent request to server
-        const res = await axios.get('/api/admin/order/all')
-        const { orders } = res.data
+        const { orders } = await getAllOrdersApi()
 
         // update orders from state
         setOrders(orders)
@@ -62,8 +60,7 @@ function AllOrdersPage() {
   const handleCancelOrders = useCallback(async (ids: string[]) => {
     try {
       // senred request to server
-      const res = await axios.patch(`/api/admin/order/cancel`, { ids })
-      const { canceledOrders, message } = res.data
+      const { canceledOrders, message } = await cancelOrdersApi(ids)
 
       // update orders from state
       setOrders(prev =>
@@ -88,8 +85,7 @@ function AllOrdersPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/order/delete`, { data: { ids } })
-      const { deletedOrders, message } = res.data
+      const { deletedOrders, message } = await deletedOrdersApi(ids)
 
       // remove deleted tags from state
       setOrders(prev =>
@@ -216,15 +212,16 @@ function AllOrdersPage() {
             </button>
 
             {/* Cancel Many Button */}
-            {selectedOrders.every(
-              id => orders.find(order => order._id === id)?.status === 'pending'
-            ) && (
-              <button
-                className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-white common-transition'
-                onClick={() => handleCancelOrders(selectedOrders)}>
-                Cancel
-              </button>
-            )}
+            {!!selectedOrders.length &&
+              selectedOrders.every(
+                id => orders.find(order => order._id === id)?.status === 'pending'
+              ) && (
+                <button
+                  className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-white common-transition'
+                  onClick={() => handleCancelOrders(selectedOrders)}>
+                  Cancel
+                </button>
+              )}
 
             {/* Delete Many Button */}
             {!!selectedOrders.length && (
@@ -269,7 +266,7 @@ function AllOrdersPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Orders'
-        content='Are you sure that you want to deleted these orders?'
+        content='Are you sure that you want to delete these orders?'
         onAccept={() => handleDeleteOrders(selectedOrders)}
         isLoading={loadingOrders.length > 0}
       />

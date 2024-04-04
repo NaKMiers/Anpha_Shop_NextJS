@@ -5,6 +5,7 @@ import LoadingButton from '@/components/LoadingButton'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
+import { addCategoryApi } from '@/requests'
 import axios from 'axios'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -30,18 +31,18 @@ function AddCategoryPage() {
     },
   })
 
-  // add new tag
+  // add new category
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       dispatch(setLoading(true))
 
       console.log(data)
       try {
-        // add new tag login here
-        const res = await axios.post('/api/admin/category/add', data)
+        // add new category here
+        const { message } = await addCategoryApi(data)
 
         // show success message
-        toast.success(res.data.message)
+        toast.success(message)
 
         // clear form
         reset()

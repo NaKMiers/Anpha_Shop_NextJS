@@ -7,13 +7,12 @@ import CategoryItem from '@/components/admin/CategoryItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
-import axios from 'axios'
-import Link from 'next/link'
+import { deleteCategoriesApi, getAllCagetoriesApi, updateCategoriesApi } from '@/requests'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaFilter, FaPlus } from 'react-icons/fa'
+import { FaFilter } from 'react-icons/fa'
 
-type EditingValues = {
+export type EditingValues = {
   _id: string
   title: string
 }
@@ -32,13 +31,12 @@ function AllCategoriesPage() {
 
   // get all categories
   useEffect(() => {
-    const getAllTags = async () => {
+    const getAllCategories = async () => {
       dispatch(setPageLoading(true))
 
       try {
         // sent request to server
-        const res = await axios.get('/api/admin/category/all')
-        const { categories } = res.data
+        const { categories } = await getAllCagetoriesApi()
         setCategories(categories)
       } catch (err: any) {
         console.log(err)
@@ -47,7 +45,7 @@ function AllCategoriesPage() {
         dispatch(setPageLoading(false))
       }
     }
-    getAllTags()
+    getAllCategories()
   }, [dispatch])
 
   // delete category
@@ -56,8 +54,7 @@ function AllCategoriesPage() {
 
     try {
       // senred request to server
-      const res = await axios.delete(`/api/admin/category/delete`, { data: { ids } })
-      const { deletedCategories, message } = res.data
+      const { deletedCategories, message } = await deleteCategoriesApi(ids)
 
       // remove deleted tags from state
       setCategories(prev =>
@@ -82,10 +79,8 @@ function AllCategoriesPage() {
     setLoadingCategories(editingValues.map(cate => cate._id))
 
     try {
-      // senred request to server
-      const res = await axios.put(`/api/admin/category/edit`, { editingValues })
-      const { editedCategories, message } = res.data
-
+      // send request to server
+      const { editedCategories, message } = await updateCategoriesApi(editingValues)
       console.log('editedCategories: ', editedCategories)
 
       // update categories from state
@@ -232,7 +227,7 @@ function AllCategoriesPage() {
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Categories'
-        content='Are you sure that you want to deleted these categories?'
+        content='Are you sure that you want to delete these categories?'
         onAccept={() => handleDeleteCategories(selectedCategories)}
         isLoading={loadingCategories.length > 0}
       />

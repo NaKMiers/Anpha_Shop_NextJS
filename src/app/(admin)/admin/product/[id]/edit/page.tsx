@@ -8,6 +8,7 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
+import { getAllCagetoriesApi, getAllTagsApi, getProductApi, updateProductApi } from '@/requests'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -62,11 +63,7 @@ function AddProductPage() {
     const getProduct = async () => {
       try {
         // send request to server to get product
-        const res = await axios.get(`/api/admin/product/${id}`)
-        const { product, message } = res.data
-
-        // set product to state
-        console.log(res.data)
+        const { product } = await getProductApi(id)
 
         // set value to form
         setValue('title', product.title)
@@ -92,8 +89,8 @@ function AddProductPage() {
     const getTags = async () => {
       try {
         // send request to server to get all tags
-        const res = await axios.get('/api/admin/tag/all')
-        setTags(res.data.tags)
+        const { tags } = await getAllTagsApi()
+        setTags(tags)
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -102,8 +99,8 @@ function AddProductPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const res = await axios.get('/api/admin/category/all')
-        setCategories(res.data.categories)
+        const { categories } = await getAllCagetoriesApi()
+        setCategories(categories)
       } catch (err: any) {
         console.log(err)
         toast.error(err.response.data.message)
@@ -212,11 +209,10 @@ function AddProductPage() {
       formData.append('originalImages', JSON.stringify(originalImages))
       files.forEach(file => formData.append('images', file))
 
-      const res = await axios.put(`/api/admin/product/${id}/edit`, formData)
-      console.log(res.data)
+      const { message } = await updateProductApi(id, formData)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
 
       // redirect to product page
       router.push('/admin/product/all')

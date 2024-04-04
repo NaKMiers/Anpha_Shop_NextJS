@@ -193,7 +193,6 @@ function OrderItem({
           {data.status === 'done' && (
             <Link
               href={`/admin/order/${data._id}`}
-              target='_blank'
               className='block group'
               title='Detail'
               onClick={e => e.stopPropagation()}>
@@ -282,7 +281,7 @@ function OrderItem({
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
         title='Delete Order'
-        content='Are you sure that you want to deleted this order?'
+        content='Are you sure that you want to delete this order?'
         onAccept={() => handleDeleteOrders([data._id])}
         isLoading={loadingOrders.includes(data._id)}
       />

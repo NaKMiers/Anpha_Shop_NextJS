@@ -3,7 +3,7 @@ import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/voucher/feature
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   console.log('- Activate Vouchers - ')
 
   // connect to database

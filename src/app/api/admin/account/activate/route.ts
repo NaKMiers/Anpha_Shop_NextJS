@@ -4,7 +4,7 @@ import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/account/feature
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   console.log('- Activate Accounts - ')
 
   // connect to database

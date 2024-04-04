@@ -18,6 +18,7 @@ import { ProductWithTagsAndCategory } from '../../../product/all/page'
 import { IAccount } from '@/models/AccountModel'
 import { useParams, useRouter } from 'next/navigation'
 import AdminHeader from '@/components/admin/AdminHeader'
+import { getAccountApi, getAllProductsApi, updateAccountApi } from '@/requests'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -63,8 +64,7 @@ function AddAccountPage() {
       dispatch(setPageLoading(true))
 
       try {
-        const res = await axios.get(`/api/admin/account/${id}`)
-        const { account } = res.data
+        const { account } = await getAccountApi(id)
 
         console.log('account: ', account)
 
@@ -96,8 +96,7 @@ function AddAccountPage() {
     const getAllTypes = async () => {
       try {
         // send request to server to get all products
-        const res = await axios.get('/api/admin/product/all')
-        const { products } = res.data
+        const { products } = await getAllProductsApi()
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
@@ -155,7 +154,7 @@ function AddAccountPage() {
     [setError]
   )
 
-  // send request to server to add product
+  // send request to server to edit account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
     console.log(data)
@@ -164,17 +163,15 @@ function AddAccountPage() {
     dispatch(setLoading(true))
 
     try {
-      // add new tag login here
-      const res = await axios.post(`/api/admin/account/${id}/edit`, data)
-      console.log(res.data)
+      const { message } = await updateAccountApi(id, data)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
 
       // reset form
       reset()
       dispatch(setPageLoading(false))
-      // router.push('/admin/account/all')
+      router.back()
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
