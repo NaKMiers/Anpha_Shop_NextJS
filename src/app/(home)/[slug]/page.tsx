@@ -113,11 +113,12 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
       <div className='pt-9' />
 
-      <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
-        <GroupProducts products={relatedProducts} hideTop />
-      </section>
-
-      <div className='pt-9' />
+      {/* Related Products */}
+      {relatedProducts.length!! && (
+        <section className='mb-9 max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
+          <GroupProducts products={relatedProducts} hideTop />
+        </section>
+      )}
 
       <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
         <div className='flex flex-wrap w-full -mx-21/2'>

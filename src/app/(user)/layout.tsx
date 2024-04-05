@@ -30,7 +30,7 @@ export default async function UserLayout({
 
   return (
     <html lang='vi'>
-      <body className='text-dark' suppressHydrationWarning={true}>
+      <body className='text-dark px-21' suppressHydrationWarning={true}>
         <StoreProvider session={session}>
           <div className='background-app fixed w-screen h-screen top-0 left-0 -z-10' />
           <Toaster
@@ -44,7 +44,7 @@ export default async function UserLayout({
 
           <Header isStatic />
 
-          <main className='px-21 max-w-1200 mx-auto'>
+          <main className='max-w-1200 mx-auto'>
             <div className='flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
               {/* Sidebar */}
               <ul className='h-full flex flex-row flex-shrink-0 justify-evenly lg:flex-col w-full lg:w-1/4 md:min-w-[265px] p-21 bg-white rounded-medium shadow-medium'>
