@@ -1,5 +1,3 @@
-'use server'
-
 // Page
 export const getHomeApi = async () => {
   const res = await fetch(`${process.env.APP_URL}/api`, { cache: 'no-store' })
