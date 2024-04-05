@@ -33,8 +33,6 @@ function Header({ isStatic }: HeaderProps) {
   const lastScrollTop = useRef(0)
   const [cartLength, setCartlength] = useState(0)
 
-  console.log(curUser)
-
   // get user session
   useEffect(() => {
     const getCurUser = async () => {

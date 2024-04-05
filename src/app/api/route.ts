@@ -9,6 +9,8 @@ import { FullyProduct } from './product/[slug]/route'
 import { ITag } from '@/models/TagModel'
 import { shuffleArray } from '@/utils'
 
+// export const dynamic = 'force-dynamic'
+
 // [GET]: /
 export async function GET() {
   console.log('- Get Home Page -')
