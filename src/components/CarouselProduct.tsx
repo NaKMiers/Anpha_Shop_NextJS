@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
-import axios from 'axios'
+import { addToCartApi } from '@/requests'
 import mongoose from 'mongoose'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -40,8 +40,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
 
     try {
       // send request to add product to cart
-      const res = await axios.post('/api/cart/add', { productId: product._id, quantity: 1 })
-      const { cartItem, message } = res.data
+      const { cartItem, message } = await addToCartApi(product._id, 1)
 
       // add cart item to state
       dispatch(addCartItem(cartItem))
@@ -49,8 +48,8 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
       // show toast success
       toast.success(message)
     } catch (err: any) {
-      console.log(err.message)
-      toast.error(err.response.data.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       // stop loading
       setIsLoading(false)
@@ -63,8 +62,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
     dispatch(setPageLoading(true))
     try {
       // send request to add product to cart
-      const res = await axios.post('/api/cart/add', { productId: product._id, quantity: 1 })
-      const { cartItem, message } = res.data
+      const { cartItem, message } = await addToCartApi(product._id, 1)
 
       // add cart item to state
       dispatch(addCartItem(cartItem))
@@ -75,7 +73,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
       // move to cart page
       router.push(`/cart?product=${product.slug}`)
     } catch (err: any) {
-      console.log(err.message)
+      console.log(err)
     } finally {
       // stop page loading
       dispatch(setPageLoading(false))

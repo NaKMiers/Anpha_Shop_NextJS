@@ -8,13 +8,11 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import { addProductApi, getAllCagetoriesApi, getAllTagsApi } from '@/requests'
-import axios from 'axios'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaFile, FaMoneyBillAlt } from 'react-icons/fa'
+import { FaFile, FaMoneyBillAlt } from 'react-icons/fa'
 import { FaPlay, FaX } from 'react-icons/fa6'
 
 import { MdNumbers } from 'react-icons/md'
@@ -61,7 +59,7 @@ function AddVoucherPage() {
         setTags(tags)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       }
     }
     const getCategories = async () => {
@@ -71,7 +69,7 @@ function AddVoucherPage() {
         setCategories(categories)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       }
     }
     getTags()
@@ -187,7 +185,7 @@ function AddVoucherPage() {
       reset()
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       dispatch(setLoading(false))
     }

@@ -2,7 +2,7 @@ import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
 import ProductCard from '@/components/ProductCard'
 import { ICategory } from '@/models/CategoryModel'
-import axios from 'axios'
+import { getCategoriesPageApi } from '@/requests'
 
 async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   let categories: ICategory[] = []
@@ -12,27 +12,10 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
     // send request to get products
     console.log('searchParams: ', searchParams)
 
-    let url = `${process.env.APP_URL}/api/category?`
-    for (let key in searchParams) {
-      // check if key is an array
-      if (Array.isArray(searchParams[key])) {
-        for (let value of searchParams[key]) {
-          url += `${key}=${value}&`
-        }
-      } else {
-        url += `${key}=${searchParams[key]}&`
-      }
-    }
+    const data = await getCategoriesPageApi(searchParams)
 
-    // remove final '&'
-    url = url.slice(0, -1)
-    console.log('url:', url)
-
-    const res = await axios.get(url)
-    console.log(res.data)
-
-    products = res.data.products
-    categories = res.data.categories
+    products = data.products
+    categories = data.categories
   } catch (err: any) {
     console.log(err)
   }

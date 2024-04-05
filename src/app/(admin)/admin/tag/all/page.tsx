@@ -8,7 +8,6 @@ import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ITag } from '@/models/TagModel'
 import { deleteTagsApi, featureTagsApi, getAllTagsApi, updateTagsApi } from '@/requests'
-import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaFilter } from 'react-icons/fa'
@@ -42,7 +41,7 @@ function AllTagsPage() {
         setTags(tags)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         dispatch(setPageLoading(false))
       }
@@ -65,7 +64,7 @@ function AllTagsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingTags([])
       setSelectedTags([])
@@ -90,7 +89,7 @@ function AllTagsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     }
   }, [])
 
@@ -118,7 +117,7 @@ function AllTagsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingTags([])
     }

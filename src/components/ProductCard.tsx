@@ -1,24 +1,24 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { ICartItem } from '@/models/CartItemModel'
+import { IProduct } from '@/models/ProductModel'
+import { addToCartApi } from '@/requests'
+import { countPercent } from '@/utils/formatNumber'
+import mongoose from 'mongoose'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
-import Price from './Price'
-import Link from 'next/link'
-import { IProduct } from '@/models/ProductModel'
-import { countPercent } from '@/utils/formatNumber'
-import { useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import axios from 'axios'
-import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
-import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { RiDonutChartFill } from 'react-icons/ri'
-import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
-import { ICartItem } from '@/models/CartItemModel'
-import { FullyCartItem } from '@/app/api/cart/route'
-import mongoose from 'mongoose'
+import Price from './Price'
 
 interface ProductCardProps {
   product: IProduct
@@ -43,8 +43,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
     try {
       // send request to add product to cart
-      const res = await axios.post('/api/cart/add', { productId: product._id, quantity: 1 })
-      const { cartItem, message } = res.data
+      const { cartItem, message } = await addToCartApi(product._id, 1)
 
       // add cart item to state
       dispatch(addCartItem(cartItem))
@@ -52,8 +51,8 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       // show toast success
       toast.success(message)
     } catch (err: any) {
-      console.log(err.message)
-      toast.error(err.response.data.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       // stop loading
       setIsLoading(false)
@@ -66,8 +65,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
     dispatch(setPageLoading(true))
     try {
       // send request to add product to cart
-      const res = await axios.post('/api/cart/add', { productId: product._id, quantity: 1 })
-      const { cartItem, message } = res.data
+      const { cartItem, message } = await addToCartApi(product._id, 1)
 
       // add cart item to state
       dispatch(addCartItem(cartItem))
@@ -78,7 +76,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       // move to cart page
       router.push(`/cart?product=${product.slug}`)
     } catch (err: any) {
-      console.log(err.message)
+      console.log(err)
     } finally {
       // stop page loading
       dispatch(setPageLoading(false))

@@ -40,7 +40,7 @@ function AllProductsPage() {
         setProducts(products)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         dispatch(setPageLoading(false))
       }
@@ -68,7 +68,7 @@ function AllProductsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     }
   }, [])
 
@@ -94,7 +94,7 @@ function AllProductsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingProducts([])
       setSelectedProducts([])

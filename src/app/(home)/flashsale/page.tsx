@@ -1,16 +1,15 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
 import ProductCard from '@/components/ProductCard'
-import axios from 'axios'
+import { getFlashSalePageApi } from '@/requests'
 
 async function FlashSalePage() {
   let products: FullyProduct[] = []
 
   try {
     // send request to get products
-    const res = await axios.get(`${process.env.APP_URL}/api/flash-sale`)
-
-    products = res.data.products
+    const data = await getFlashSalePageApi()
+    products = data.products
   } catch (err: any) {
     console.log(err)
   }

@@ -7,7 +7,7 @@ import Price from '@/components/Price'
 import Slider from '@/components/Slider'
 import { IComment } from '@/models/CommentModel'
 import { ITag } from '@/models/TagModel'
-import axios from 'axios'
+import { getProductPageApi } from '@/requests'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -28,12 +28,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
   let comments: IComment[] = []
 
   try {
-    const res = await axios.get(`${process.env.APP_URL}/api/product/${slug}`)
-    product = res.data.product
-    relatedProducts = res.data.relatedProducts
-    comments = res.data.comments
-
-    console.log('res: ---', res.data)
+    const data = await getProductPageApi(slug)
+    product = data.product
+    relatedProducts = data.relatedProducts
+    comments = data.comments
   } catch (err: any) {
     // redirect home
     redirect('/')

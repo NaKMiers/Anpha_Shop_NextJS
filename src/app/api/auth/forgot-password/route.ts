@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         {
           message: `Email này được xác thực bởi ${user.authType}, bạn không thể thực hiện tính năng này`,
         },
-        { status: 401 }
+        { status: 500 }
       )
     }
 
@@ -40,13 +40,13 @@ export async function POST(req: NextRequest) {
     console.log('url', url)
 
     // send email
-    sendMail(email, 'Reset Password', `<a href="${url}"> Reset Password </a>`)
+    sendMail(email, 'Khôi phục mật khẩu', `<a href="${url}"> Đặt lại mật khẩu </a>`)
 
     // return response
     return NextResponse.json({
       sending: true,
       email,
-      message: 'Link reset password đã được gửi đến email của bạn',
+      message: 'Link khôi phục mật khẩu đã được gửi đến email của bạn',
     })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })

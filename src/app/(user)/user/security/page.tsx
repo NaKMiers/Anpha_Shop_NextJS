@@ -4,9 +4,9 @@ import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
-import axios from 'axios'
+import { changePasswordApi } from '@/requests'
 import { useSession } from 'next-auth/react'
-import React, { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCheck, FaEyeSlash } from 'react-icons/fa'
@@ -84,15 +84,17 @@ function SecurityPage() {
     dispatch(setLoading(true))
     try {
       // send request to server to change password
-      const res = await axios.patch('/api/user/change-password', data)
-      console.log('res', res.data)
+      const { message } = await changePasswordApi(data)
+      console.log(message)
+
       // reset form
       reset()
+
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
     } catch (err: any) {
-      toast.error(err.response.data.message)
       console.log(err)
+      toast.error(err.message)
     } finally {
       // reset loading state
       dispatch(setLoading(false))
@@ -156,6 +158,10 @@ function SecurityPage() {
         <div className='col-span-1'>
           <h4 className='text-2xl mb-2'>Mật khẩu</h4>
           <ul>
+            <li className='flex items-center gap-2'>
+              <FaCheck size={16} className='text-green-600' />
+              <p>Mật khẩu mới phải khác mật khẩu cũ</p>
+            </li>
             <li className='flex items-center gap-2'>
               <FaCheck size={16} className='text-green-600' />
               <p>Phải có tối thiếu 6 ký tự</p>

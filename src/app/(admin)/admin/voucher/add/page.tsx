@@ -7,21 +7,11 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { addVoucherApi, getRoleUsersApi } from '@/requests'
-import { generateCode } from '@/utils'
 import { generateRandomString } from '@/utils/generate'
-import axios from 'axios'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {
-  FaArrowCircleLeft,
-  FaArrowLeft,
-  FaMinus,
-  FaQuoteRight,
-  FaUserEdit,
-  FaWindowMaximize,
-} from 'react-icons/fa'
+import { FaArrowCircleLeft, FaMinus, FaQuoteRight, FaUserEdit, FaWindowMaximize } from 'react-icons/fa'
 import { FaPause, FaPlay } from 'react-icons/fa6'
 
 import { MdNumbers } from 'react-icons/md'
@@ -172,7 +162,7 @@ function AddVoucherPage() {
         }
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         dispatch(setLoading(false))
       }

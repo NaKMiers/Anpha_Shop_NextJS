@@ -6,17 +6,14 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
-import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { getAllCagetoriesApi, getAllTagsApi, getProductApi, updateProductApi } from '@/requests'
-import axios from 'axios'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaFile, FaMoneyBillAlt } from 'react-icons/fa'
+import { FaFile, FaMoneyBillAlt } from 'react-icons/fa'
 import { FaPlay, FaX } from 'react-icons/fa6'
 
 import { MdNumbers } from 'react-icons/md'
@@ -77,8 +74,8 @@ function AddProductPage() {
         setSelectedCategory(product.category)
         setOriginalImages(product.images)
       } catch (err: any) {
-        console.log('err:', err)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       }
     }
     getProduct()
@@ -93,7 +90,7 @@ function AddProductPage() {
         setTags(tags)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       }
     }
     const getCategories = async () => {
@@ -103,7 +100,7 @@ function AddProductPage() {
         setCategories(categories)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       }
     }
     getTags()
@@ -218,7 +215,7 @@ function AddProductPage() {
       router.push('/admin/product/all')
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       dispatch(setLoading(false))
     }

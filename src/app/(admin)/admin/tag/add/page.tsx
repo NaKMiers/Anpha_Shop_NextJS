@@ -6,12 +6,10 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { addTagApi } from '@/requests'
-import axios from 'axios'
-import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft, FaPlay } from 'react-icons/fa'
+import { FaPlay } from 'react-icons/fa'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
 function AddTagPage() {
@@ -48,7 +46,7 @@ function AddTagPage() {
         // clear form
         reset()
       } catch (err: any) {
-        toast.error(err.response.data.message)
+        toast.error(err.message)
         console.log(err)
       } finally {
         dispatch(setLoading(false))

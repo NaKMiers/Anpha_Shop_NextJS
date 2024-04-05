@@ -53,7 +53,7 @@ function AllFlashSalesPage() {
         setFlashSales(flashSales)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         // stop page loading
         dispatch(setPageLoading(false))
@@ -93,7 +93,7 @@ function AllFlashSalesPage() {
         toast.success(message)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         setLoadingFlashSales([])
         setSelectedFlashSales([])

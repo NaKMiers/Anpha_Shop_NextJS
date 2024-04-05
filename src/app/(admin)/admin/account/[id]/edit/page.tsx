@@ -3,22 +3,20 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import axios from 'axios'
-import Link from 'next/link'
-import { use, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCheck, FaInfo, FaUser } from 'react-icons/fa'
+import { FaCheck, FaInfo, FaUser } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa6'
 import { ImClock } from 'react-icons/im'
 
+import AdminHeader from '@/components/admin/AdminHeader'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
+import { IAccount } from '@/models/AccountModel'
+import { getAccountApi, getAllProductsApi, updateAccountApi } from '@/requests'
+import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../../product/all/page'
-import { IAccount } from '@/models/AccountModel'
-import { useParams, useRouter } from 'next/navigation'
-import AdminHeader from '@/components/admin/AdminHeader'
-import { getAccountApi, getAllProductsApi, updateAccountApi } from '@/requests'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -81,8 +79,8 @@ function AddAccountPage() {
         setValue('seconds', account.times.seconds)
         setValue('active', account.active)
       } catch (err: any) {
-        console.log(err.message)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       } finally {
         // stop page loading
         dispatch(setPageLoading(false))
@@ -115,6 +113,7 @@ function AddAccountPage() {
         setGroupTypes(groupTypes)
       } catch (err: any) {
         console.log(err)
+        toast.error(err.message)
       }
     }
     getAllTypes()

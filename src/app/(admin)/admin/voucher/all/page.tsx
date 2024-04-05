@@ -75,7 +75,7 @@ function AllVouchersPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     }
   }, [])
 
@@ -98,7 +98,7 @@ function AllVouchersPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingVouchers([])
       setSelectedVouchers([])

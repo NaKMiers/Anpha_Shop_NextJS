@@ -79,8 +79,8 @@ function EditVoucherPage() {
         setValue('owner', voucher.owner._id)
         setValue('active', voucher.active)
       } catch (err: any) {
-        console.log('err:', err)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       }
     }
     getVoucher()
@@ -187,7 +187,7 @@ function EditVoucherPage() {
         router.back()
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         dispatch(setLoading(false))
       }

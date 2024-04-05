@@ -10,7 +10,6 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { deleteUsersApi, getAllUsersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
@@ -50,7 +49,7 @@ function AllUsersPage() {
         const { users } = await getAllUsersApi()
         setUsers(users)
       } catch (err: any) {
-        console.log(err.message)
+        console.log(err)
       } finally {
         dispatch(setPageLoading(false))
       }
@@ -75,7 +74,7 @@ function AllUsersPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingUsers([])
       setSelectedUsers([])

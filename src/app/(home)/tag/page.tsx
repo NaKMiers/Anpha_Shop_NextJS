@@ -2,7 +2,7 @@ import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
 import ProductCard from '@/components/ProductCard'
 import { ITag } from '@/models/TagModel'
-import axios from 'axios'
+import { getTagsPageApi } from '@/requests'
 
 async function TagPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   let tags: ITag[] = []
@@ -11,28 +11,10 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
   try {
     // send request to get products
     console.log('searchParams: ', searchParams)
+    const data = await getTagsPageApi(searchParams)
 
-    let url = `${process.env.APP_URL}/api/tag?`
-    for (let key in searchParams) {
-      // check if key is an array
-      if (Array.isArray(searchParams[key])) {
-        for (let value of searchParams[key]) {
-          url += `${key}=${value}&`
-        }
-      } else {
-        url += `${key}=${searchParams[key]}&`
-      }
-    }
-
-    // remove final '&'
-    url = url.slice(0, -1)
-    console.log('url:', url)
-
-    const res = await axios.get(url)
-    console.log(res.data)
-
-    products = res.data.products
-    tags = res.data.tags
+    products = data.products
+    tags = data.tags
   } catch (err: any) {
     console.log(err)
   }

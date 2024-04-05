@@ -6,12 +6,9 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { addCategoryApi } from '@/requests'
-import axios from 'axios'
-import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowLeft } from 'react-icons/fa'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
 function AddCategoryPage() {
@@ -47,8 +44,8 @@ function AddCategoryPage() {
         // clear form
         reset()
       } catch (err: any) {
-        toast.error(err.response.data.message)
         console.log(err)
+        toast.error(err.message)
       } finally {
         dispatch(setLoading(false))
       }

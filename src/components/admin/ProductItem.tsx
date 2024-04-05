@@ -1,7 +1,7 @@
 import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page'
 import { ITag } from '@/models/TagModel'
+import { updateProductPropertyApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
@@ -58,11 +58,7 @@ function ProductItem({
       setFieldLoading(prev => ({ ...prev, [field]: true }))
 
       try {
-        const res = await axios.patch(`/api/admin/product/${id}/edit-property/${field}`, {
-          value: fieldValue[field],
-        })
-        const { newValue, message } = res.data
-        console.log(newValue)
+        const { newValue, message } = await updateProductPropertyApi(id, field, fieldValue[field])
 
         // show success message
         toast.success(message)
@@ -72,7 +68,7 @@ function ProductItem({
         data[field] = newValue
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         setFieldLoading(prev => ({ ...prev, [field]: false }))
       }

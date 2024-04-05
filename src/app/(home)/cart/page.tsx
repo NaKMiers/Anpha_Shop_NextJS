@@ -6,9 +6,8 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setSelectedItems } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
-import { generateOrderCode } from '@/utils'
+import { applyVoucherApi, getOrderCodeApi } from '@/requests'
 import { calcPercentage, formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -72,13 +71,13 @@ function CartPage() {
     if (voucher) {
       if (voucher.type === 'fixed-reduce') {
         discount = +voucher.value
-        finalTotal = subTotal - discount
+        finalTotal = subTotal + discount
       } else if (voucher.type === 'fixed') {
         discount = +voucher.value
         finalTotal = discount
       } else if (voucher.type === 'percentage') {
         discount = +calcPercentage(voucher.value, subTotal)
-        finalTotal = subTotal - discount
+        finalTotal = subTotal + discount
       }
     }
     setDiscount(discount)
@@ -93,11 +92,7 @@ function CartPage() {
         dispatch(setLoading(true))
         try {
           // send request to server
-          const res = await axios.post(`/api/voucher/${data.code}/apply`, {
-            email: data.email,
-            total: subTotal,
-          })
-          const { voucher, message } = res.data
+          const { voucher, message } = await applyVoucherApi(data.code, data.email, subTotal)
 
           // set voucher to state
           setVoucher(voucher)
@@ -106,8 +101,8 @@ function CartPage() {
           // show success message
           toast.success(message)
         } catch (err: any) {
-          const { message } = err.response.data
-          console.log(err.message)
+          console.log(err)
+          const { message } = err
           toast.error(message)
           setVoucherMessage(message)
         } finally {
@@ -144,13 +139,12 @@ function CartPage() {
 
       // generate order code
       try {
-        const res = await axios.get('/api/checkout/get-order-code')
-        console.log(res.data.orderCode)
+        const { orderCode } = await getOrderCodeApi()
 
         // create checkout
         const checkout = {
           selectedCartItems,
-          code: res.data.orderCode,
+          code: orderCode,
           email: curUser?.email || getValues('email'),
           voucher,
           discount,
@@ -161,7 +155,7 @@ function CartPage() {
         // move to checkout page
         router.push(`/checkout/${type}`)
       } catch (err: any) {
-        console.log(err.message)
+        console.log(err)
       } finally {
         // stop page loading
         dispatch(setPageLoading(false))

@@ -2,20 +2,19 @@
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems } from '@/libs/reducers/cartReducer'
+import { getCartApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { getSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHistory, FaUserPlus } from 'react-icons/fa'
 import { FaBars, FaCartShopping, FaPhone, FaPlus, FaUser, FaUserSecret } from 'react-icons/fa6'
+import { FiLogIn } from 'react-icons/fi'
 import { HiLightningBolt } from 'react-icons/hi'
-import { IoMdLogIn } from 'react-icons/io'
 import { IoChevronDown } from 'react-icons/io5'
 import { TbLogout } from 'react-icons/tb'
-import { FiLogIn } from 'react-icons/fi'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -60,8 +59,7 @@ function Header({ isStatic }: HeaderProps) {
       if (curUser?._id) {
         try {
           // send request to get user's cart
-          const res = await axios.get('/api/cart')
-          const { cart } = res.data
+          const { cart } = await getCartApi()
 
           // set cart to state
           dispatch(setCartItems(cart))

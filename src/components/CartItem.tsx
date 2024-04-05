@@ -2,25 +2,24 @@ import { FullyCartItem } from '@/app/api/cart/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
   addCartItem,
-  cart,
   deleteCartItem,
   deleteLocalCartItem,
   setSelectedItems,
   updateCartItemQuantity,
   updateLocalCartItemQuantity,
 } from '@/libs/reducers/cartReducer'
+import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
-import { TbPackages } from 'react-icons/tb'
-import Price from './Price'
 import { RiDonutChartFill } from 'react-icons/ri'
+import { TbPackages } from 'react-icons/tb'
 import ConfirmDialog from './ConfirmDialog'
-import { useSession } from 'next-auth/react'
+import Price from './Price'
 
 interface CartItemProps {
   cartItem: FullyCartItem
@@ -98,14 +97,13 @@ function CartItem({
       setIsLoading(true)
       try {
         // send request to update cart quantity
-        const res = await axios.patch(`/api/cart/${cartItem._id}/set-quantity`, { quantity })
-        const { updatedCartItem, message } = res.data
+        const { updatedCartItem, message } = await updateCartQuantityApi(cartItem._id, quantity)
 
         // update cart item in store
         dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
       } catch (err: any) {
-        console.log(err.message)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       } finally {
         // stop loading
         setIsLoading(false)
@@ -132,16 +130,14 @@ function CartItem({
     setIsDeleting(true)
 
     try {
-      const res = await axios.delete(`/api/cart/${cartItem._id}/delete`)
-      const { deletedCartItem, message } = res.data
-
+      const { deletedCartItem, message } = await deleteCartItemApi(cartItem._id)
       dispatch(deleteCartItem(deletedCartItem._id))
 
       // show toast success
       toast.success(message)
     } catch (err: any) {
-      console.log(err.message)
-      toast.error(err.response.cartItem.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       // stop deleting
       setIsDeleting(false)
@@ -162,11 +158,7 @@ function CartItem({
 
     try {
       // send request to add product to cart
-      const res = await axios.post('/api/cart/add', {
-        productId: cartItem.productId,
-        quantity: cartItem.quantity,
-      })
-      const { cartItem: cI, message } = res.data
+      const { cartItem: cI, message } = await addToCartApi(cartItem.productId, cartItem.quantity)
 
       // add cart item to state
       dispatch(addCartItem(cI))
@@ -174,8 +166,8 @@ function CartItem({
       // show toast success
       toast.success(message)
     } catch (err: any) {
-      console.log(err.message)
-      toast.error(err.response.data.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       // stop loading
       setIsLoading(false)
@@ -364,7 +356,7 @@ function CartItem({
               setOpen={setIsOpenConfirmModal}
               title='Xóa sản phẩm khỏi giỏ hàng'
               content='Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?'
-              onAccept={() => handleDeleteCartItem()}
+              onAccept={() => (curUser ? handleDeleteCartItem() : handleDeleteLocalCartItem())}
               isLoading={isDeleting}
             />
 

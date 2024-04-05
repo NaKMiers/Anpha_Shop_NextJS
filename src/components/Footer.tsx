@@ -1,13 +1,13 @@
 'use client'
 import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page'
+import { getBestSellerProductsApi } from '@/requests'
 import AspectRatio from '@mui/joy/AspectRatio'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Divider from '@mui/joy/Divider'
-import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaCheck, FaChevronRight } from 'react-icons/fa6'
 import { PiSignOutBold } from 'react-icons/pi'
 
@@ -21,13 +21,12 @@ function Footer() {
     const getBestSellerProducts = async () => {
       try {
         // send request to server to get best seller products
-        const res = await axios.get('/api/product/best-seller')
-        console.log(res.data)
+        const { products } = await getBestSellerProductsApi()
 
         // set best seller products to state
-        setBestSellerProducts(res.data.products)
+        setBestSellerProducts(products)
       } catch (err: any) {
-        console.log(err.message)
+        console.log(err)
       }
     }
     getBestSellerProducts()

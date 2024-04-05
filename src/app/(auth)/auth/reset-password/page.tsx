@@ -1,7 +1,7 @@
 'use client'
 
 import Input from '@/components/Input'
-import axios from 'axios'
+import { resetPassword } from '@/requests'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
 import { FaCircleNotch } from 'react-icons/fa6'
 
-function LoginPage() {
+function ResetPasswordPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -42,16 +42,16 @@ function LoginPage() {
       const token = url.searchParams.get('token')
 
       // send request to server
-      const res = await axios.patch(`/api/auth/reset-password?email=${email}&token=${token}`, data)
+      const { message } = await resetPassword(email!, token!, data.newPassword)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
 
       // redirect to login page
       router.push('/auth/login')
     } catch (err: any) {
       // show error message
-      toast.error(err.response.data.message)
+      toast.error(err.message)
       console.log(err)
     } finally {
       // reset loading state
@@ -68,7 +68,7 @@ function LoginPage() {
 
         <Input
           id='newPassword'
-          label='Mật khẩu cũ'
+          label='Mật khẩu mới'
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -118,4 +118,4 @@ function LoginPage() {
   )
 }
 
-export default LoginPage
+export default ResetPasswordPage

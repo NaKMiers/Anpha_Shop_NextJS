@@ -58,8 +58,8 @@ function AddFlashSalePage() {
         // set products to state
         setProducts(products)
       } catch (err: any) {
-        console.error(err)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       }
     }
     getAllProducts()
@@ -70,6 +70,7 @@ function AddFlashSalePage() {
     data => {
       let isValid = true
 
+      // if type if percentage, value must have % at the end
       if (data.type === 'percentage' && !data.value.endsWith('%')) {
         setError('value', { type: 'manual', message: 'Value must have %' })
         isValid = false
@@ -129,8 +130,8 @@ function AddFlashSalePage() {
       const { products } = await getAllProductsApi()
       setProducts(products)
     } catch (err: any) {
-      console.error(err)
-      toast.error(err.response.data.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       dispatch(setLoading(false))
     }

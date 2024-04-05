@@ -1,7 +1,7 @@
 'use client'
 
 import Input from '@/components/Input'
-import axios from 'axios'
+import { registerApi } from '@/requests'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -85,9 +85,7 @@ function ResgiterPage() {
 
     try {
       // register logic here
-      const res = await axios.post('/api/auth/register', data)
-      const { user, message } = res.data
-      console.log(res.data)
+      const { user, message } = await registerApi(data)
 
       // sign in user
       const callback = await signIn('credentials', {
@@ -107,8 +105,8 @@ function ResgiterPage() {
       }
     } catch (err: any) {
       // show error message
-      toast.error(err.response.data.message)
       console.log(err)
+      toast.error(err.message)
     } finally {
       // stop loading
       setIsLoading(false)

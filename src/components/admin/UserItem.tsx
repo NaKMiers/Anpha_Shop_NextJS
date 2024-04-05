@@ -1,19 +1,19 @@
 import { IUser } from '@/models/UserModel'
+import { demoteCollaboratorApi, rechargeUserApi, setCollaboratorApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
+import { formatDate, formatTime } from '@/utils/formatTime'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FaPlus, FaPlusCircle, FaTrash } from 'react-icons/fa'
 import { GrUpgrade } from 'react-icons/gr'
 import { HiLightningBolt } from 'react-icons/hi'
 import { RiCheckboxMultipleBlankLine, RiDonutChartFill } from 'react-icons/ri'
+import ConfirmDialog from '../ConfirmDialog'
 import Input from '../Input'
 import LoadingButton from '../LoadingButton'
-import toast from 'react-hot-toast'
-import axios from 'axios'
-import ConfirmDialog from '../ConfirmDialog'
 
 interface UserItemProps {
   data: IUser
@@ -43,11 +43,14 @@ function UserItem({
 
   // states
   const [userData, setUserData] = useState<IUser>(data)
-  const [isOpenRecharge, setIsOpenRecharge] = useState(false)
-  const [isLoadingRecharge, setIsLoadingRecharge] = useState(false)
-  const [isOpenSetCollaborator, setIsOpenSetCollaborator] = useState(false)
-  const [isLoadingSetCollaborator, setIsLoadingSetCollaborator] = useState(false)
+  const [isOpenRecharge, setIsOpenRecharge] = useState<boolean>(false)
+  const [isLoadingRecharge, setIsLoadingRecharge] = useState<boolean>(false)
+  const [isOpenSetCollaborator, setIsOpenSetCollaborator] = useState<boolean>(false)
+  const [isLoadingSetCollaborator, setIsLoadingSetCollaborator] = useState<boolean>(false)
+  const [isDemoting, setIsDemoting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+  const [isOpenDemoteCollboratorConfirmationDialog, setIsOpenDemoteCollboratorConfirmationDialog] =
+    useState<boolean>(false)
 
   // Form
   const {
@@ -55,6 +58,7 @@ function UserItem({
     handleSubmit,
     formState: { errors },
     reset,
+    setError,
   } = useForm<FieldValues>({
     defaultValues: {
       recharge: '',
@@ -71,11 +75,7 @@ function UserItem({
 
     try {
       // send request to server
-      const res = await axios.patch(`/api/admin/user/${userData._id}/recharge`, {
-        amount: formData.recharge,
-      })
-      const { user, message } = res.data
-      console.log(res)
+      const { user, message } = await rechargeUserApi(userData._id, formData.recharge)
 
       // update user data
       setUserData(user)
@@ -94,20 +94,50 @@ function UserItem({
     }
   }
 
+  // validate form
+  const handleValidate: SubmitHandler<FieldValues> = useCallback(
+    formData => {
+      let isValid = true
+
+      // if type if percentage, value must have '%' at the end
+      if (formData.type === 'percentage' && !formData['value-' + data._id].endsWith('%')) {
+        setError('value-' + data._id, { type: 'manual', message: 'Value must have %' })
+        isValid = false
+      }
+
+      // if type if percentage, value have '%' at the end and must be number
+      if (formData.type === 'percentage' && isNaN(Number(formData['value-' + data._id].slice(0, -1)))) {
+        setError('value-' + data._id, { type: 'manual', message: 'Value must be number' })
+        isValid = false
+      }
+
+      // if type if fixed-reduce, value must be number
+      if (formData.type !== 'percentage' && isNaN(Number(formData['value-' + data._id]))) {
+        setError('value-' + data._id, { type: 'manual', message: 'Value must be number' })
+        isValid = false
+      }
+
+      return isValid
+    },
+    [setError, data._id]
+  )
+
   // submit collaborator form
   const onSetCollaboratorSubmit: SubmitHandler<FieldValues> = async formData => {
+    // validate form
+    if (!handleValidate(formData)) return
+
     setIsLoadingSetCollaborator(true)
 
     console.log(formData)
 
     try {
       // send request to server
-      const res = await axios.patch(`/api/admin/user/${userData._id}/set-collaborator`, {
-        type: formData.type,
-        value: formData['value-' + data._id],
-      })
-      const { user, message } = res.data
-      console.log(res)
+      const { user, message } = await setCollaboratorApi(
+        userData._id,
+        formData.type,
+        formData['value-' + data._id]
+      )
 
       // update user data
       setUserData(user)
@@ -125,6 +155,31 @@ function UserItem({
       setIsLoadingSetCollaborator(false)
     }
   }
+
+  // handle demote collaborator
+  const handleDemoteCollaborator = useCallback(async () => {
+    setIsDemoting(true)
+
+    try {
+      // send request to server
+      const { user, message } = await demoteCollaboratorApi(data._id)
+
+      // update user data
+      setUserData(user)
+
+      // show success message
+      toast.success(message)
+
+      // reset
+      reset()
+      setIsOpenSetCollaborator(false)
+    } catch (err: any) {
+      console.log(213213)
+      toast.error(err.response.userData.message)
+    } finally {
+      setIsDemoting(false)
+    }
+  }, [data._id, reset])
 
   return (
     <>
@@ -193,7 +248,7 @@ function UserItem({
           {userData.birthday && (
             <p>
               <span className='font-semibold'>Birthday: </span>
-              <span>{userData.birthday}</span>
+              <span>{formatDate(userData.birthday)}</span>
             </p>
           )}
           {userData.phone && (
@@ -300,7 +355,7 @@ function UserItem({
                 onClick={e => e.stopPropagation()}
               />
               <LoadingButton
-                className='px-4 h-[46px] shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+                className='px-4 h-[46px] flex items-center justify-center shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
                 text='Set'
                 onClick={e => {
                   e.stopPropagation()
@@ -319,14 +374,21 @@ function UserItem({
               className='block group'
               onClick={e => {
                 e.stopPropagation()
-                userData.role === 'collaborator' ? alert('Downgrade') : setIsOpenSetCollaborator(true)
-              }}>
-              <GrUpgrade
-                size={18}
-                className={`group-hover:scale-125 common-transition ${
-                  userData.role === 'collaborator' ? 'rotate-180 text-red-500' : ''
-                }`}
-              />
+                userData.role === 'collaborator'
+                  ? setIsOpenDemoteCollboratorConfirmationDialog(true)
+                  : setIsOpenSetCollaborator(true)
+              }}
+              disabled={loadingUsers.includes(userData._id) || isDemoting}>
+              {isDemoting ? (
+                <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+              ) : (
+                <GrUpgrade
+                  size={18}
+                  className={`group-hover:scale-125 common-transition ${
+                    userData.role === 'collaborator' ? 'rotate-180 text-red-500' : ''
+                  }`}
+                />
+              )}
             </button>
 
             {/* Add Balance Button */}
@@ -335,7 +397,8 @@ function UserItem({
               onClick={e => {
                 e.stopPropagation()
                 setIsOpenRecharge(true)
-              }}>
+              }}
+              disabled={loadingUsers.includes(userData._id) || isDemoting}>
               <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
             </button>
 
@@ -346,7 +409,7 @@ function UserItem({
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
-              disabled={loadingUsers.includes(userData._id)}>
+              disabled={loadingUsers.includes(userData._id) || isDemoting}>
               {loadingUsers.includes(userData._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -357,7 +420,7 @@ function UserItem({
         )}
       </div>
 
-      {/* Confirm Dialog */}
+      {/* Confirm Delete Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
@@ -365,6 +428,16 @@ function UserItem({
         content='Are you sure that you want to delete this user?'
         onAccept={() => handleDeleteUsers([data._id])}
         isLoading={loadingUsers.includes(data._id)}
+      />
+
+      {/* Confirm Demote Collaborator Dialog */}
+      <ConfirmDialog
+        open={isOpenDemoteCollboratorConfirmationDialog}
+        setOpen={setIsOpenDemoteCollboratorConfirmationDialog}
+        title='Demote Collaborator'
+        content='Are you sure that you want to  this collaborator?'
+        onAccept={handleDemoteCollaborator}
+        isLoading={isDemoting}
       />
     </>
   )

@@ -3,20 +3,18 @@
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import axios from 'axios'
-import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaCheck, FaInfo } from 'react-icons/fa'
+import { FaCheck, FaInfo } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa6'
 import { ImClock } from 'react-icons/im'
 
+import AdminHeader from '@/components/admin/AdminHeader'
 import { setLoading } from '@/libs/reducers/modalReducer'
+import { addAccountApi, getAllProductsApi } from '@/requests'
 import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
-import AdminHeader from '@/components/admin/AdminHeader'
-import { addAccountApi, getAllProductsApi } from '@/requests'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -73,6 +71,7 @@ function AddAccountPage() {
         setGroupTypes(groupTypes)
       } catch (err: any) {
         console.log(err)
+        toast.error(err.message)
       }
     }
     getAllTypes()

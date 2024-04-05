@@ -51,7 +51,7 @@ function AllAccountsPage() {
         setAccounts(accounts)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         dispatch(setPageLoading(false))
       }
@@ -78,7 +78,7 @@ function AllAccountsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     }
   }, [])
 
@@ -102,7 +102,7 @@ function AllAccountsPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingAccounts([])
       setSelectedAccounts([])

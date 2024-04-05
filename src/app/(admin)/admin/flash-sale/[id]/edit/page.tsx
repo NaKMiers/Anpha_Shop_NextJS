@@ -67,8 +67,8 @@ function AddFlashSalePage() {
 
         setSelectedProducts(flashSale.products.map((product: IProduct) => product._id))
       } catch (err: any) {
-        console.log('err:', err)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       }
     }
     getProduct()
@@ -84,8 +84,8 @@ function AddFlashSalePage() {
         // set products to state
         setProducts(products)
       } catch (err: any) {
-        console.error(err)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       }
     }
     getAllProducts()
@@ -150,8 +150,8 @@ function AddFlashSalePage() {
       // redirect back
       router.back()
     } catch (err: any) {
-      console.error(err)
-      toast.error(err.response.data.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       dispatch(setLoading(false))
     }

@@ -5,9 +5,9 @@ import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
-import axios from 'axios'
-import { FullyProduct } from '../api/product/[slug]/route'
+import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
+import { FullyProduct } from '../api/product/[slug]/route'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
@@ -26,8 +26,7 @@ async function HomePage() {
   let carouselProducts: FullyProduct[] = []
 
   try {
-    const res = await axios.get(`${process.env.APP_URL}/api`)
-    const data = res.data
+    const data = await getHomeApi()
 
     // For Banner
     tags = data.tags
@@ -40,7 +39,7 @@ async function HomePage() {
     // For Products
     productsByCategoryGroups = data.productsByCategoryGroups
   } catch (err: any) {
-    console.log(err.response.data)
+    console.log(err)
   }
 
   return (

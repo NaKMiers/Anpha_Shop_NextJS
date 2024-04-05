@@ -11,8 +11,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
   await connectDatabase()
 
   // get data to set collaborator
-  const asd = await req.json()
-  const { type, value } = asd
+  const { type, value } = await req.json()
 
   try {
     // set collaborator

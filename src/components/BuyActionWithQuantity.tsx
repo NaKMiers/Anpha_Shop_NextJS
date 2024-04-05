@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
-import axios from 'axios'
+import { addToCartApi } from '@/requests'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -33,8 +33,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
 
       try {
         // send request to add product to cart
-        const res = await axios.post('/api/cart/add', { productId: product._id, quantity })
-        const { cartItem, message } = res.data
+        const { cartItem, message } = await addToCartApi(product._id, quantity)
 
         // add cart item to state
         dispatch(addCartItem(cartItem))
@@ -42,8 +41,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
         // show toast success
         toast.success(message)
       } catch (err: any) {
-        console.log(err.message)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       } finally {
         // stop loading
         dispatch(setLoading(false))
@@ -53,28 +52,30 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
 
   // handle buy now (add to cart and move to cart)
   const handleBuyNow = useCallback(async () => {
-    // start page loading
-    dispatch(setPageLoading(true))
-    try {
-      // send request to add product to cart
-      const res = await axios.post('/api/cart/add', { productId: product?._id, quantity: 1 })
-      const { cartItem, message } = res.data
+    if (product) {
+      // start page loading
+      dispatch(setPageLoading(true))
 
-      // add cart item to state
-      dispatch(addCartItem(cartItem))
+      try {
+        // send request to add product to cart
+        const { cartItem, message } = await addToCartApi(product._id, quantity)
 
-      // show toast success
-      toast.success(message)
+        // add cart item to state
+        dispatch(addCartItem(cartItem))
 
-      // move to cart page
-      router.push(`/cart?product=${product?.slug}`)
-    } catch (err: any) {
-      console.log(err.message)
-    } finally {
-      // stop page loading
-      dispatch(setPageLoading(false))
+        // show toast success
+        toast.success(message)
+
+        // move to cart page
+        router.push(`/cart?product=${product?.slug}`)
+      } catch (err: any) {
+        console.log(err)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
     }
-  }, [product?._id, dispatch, product?.slug, router])
+  }, [product, dispatch, quantity, router])
 
   // handle quantity
   const handleQuantity = useCallback(

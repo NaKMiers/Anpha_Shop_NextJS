@@ -40,7 +40,7 @@ function AllCategoriesPage() {
         setCategories(categories)
       } catch (err: any) {
         console.log(err)
-        toast.error(err.response.data.message)
+        toast.error(err.message)
       } finally {
         dispatch(setPageLoading(false))
       }
@@ -68,7 +68,7 @@ function AllCategoriesPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingCategories([])
     }
@@ -99,7 +99,7 @@ function AllCategoriesPage() {
       toast.success(message)
     } catch (err: any) {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err.message)
     } finally {
       setLoadingCategories([])
       setSelectedCategories([])

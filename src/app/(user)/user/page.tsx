@@ -4,9 +4,9 @@ import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
+import { updateProfileApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
 import { formatDate } from '@/utils/formatTime'
-import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -63,11 +63,7 @@ function UserPage() {
 
     try {
       // send request to server to update profile
-      const res = await axios.put('/api/user/update-profile', data)
-      const { updatedUser, message } = res.data
-
-      console.log('res', res.data)
-
+      const { updatedUser, message } = await updateProfileApi(data)
       setUser(updatedUser)
 
       // turn off editing mode
@@ -76,8 +72,8 @@ function UserPage() {
       // show success message
       toast.success(message)
     } catch (err: any) {
-      toast.error(err.response.data.message)
       console.log(err)
+      toast.error(err.message)
     } finally {
       // reset loading state
       dispatch(setLoading(false))
@@ -93,7 +89,7 @@ function UserPage() {
           <div className='relative aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden cursor-pointer p-3 group'>
             <Image
               className='rounded-full common-transition'
-              src={user?.avatar || process.env.DEFAULT_AVATAR!}
+              src={user?.avatar || '/images/default-avatar.jpg'}
               width={160}
               height={160}
               alt='avatar'

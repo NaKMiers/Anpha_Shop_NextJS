@@ -12,13 +12,9 @@ export async function PATCH(req: NextRequest) {
   await connectDatabase()
 
   // get data to change password
-  const asd = await req.json()
-  const { oldPassword, newPassword } = asd
+  const { oldPassword, newPassword } = await req.json()
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
-
-  console.log('asd: ', asd)
-  console.log('token: ', token)
 
   try {
     // get user to change password
@@ -48,8 +44,9 @@ export async function PATCH(req: NextRequest) {
       },
       { new: true }
     )
+
     // return response
-    return NextResponse.json({ messsage: 'Thay đổi mật khẩu thành công' }, { status: 200 })
+    return NextResponse.json({ message: 'Thay đổi mật khẩu thành công' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

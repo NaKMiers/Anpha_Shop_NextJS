@@ -1,7 +1,7 @@
 'use client'
 
 import Input from '@/components/Input'
-import axios from 'axios'
+import { forgotPasswordApi } from '@/requests'
 import { useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -51,8 +51,7 @@ function ForgotPasswordPage() {
 
     try {
       // send request to server
-      const res = await axios.post('/api/auth/forgot-password', data)
-      const { email, sending, message } = res.data
+      const { message } = await forgotPasswordApi(data)
 
       // show success message
       toast.success(message)
@@ -61,9 +60,10 @@ function ForgotPasswordPage() {
       setIsSent(true)
     } catch (err: any) {
       // show error message
-      const { message } = err.response.data
-      setError('email', { type: 'manual', message: message })
       console.log(err)
+      const { message } = err
+      setError('email', { type: 'manual', message: message })
+      toast.error(message)
     } finally {
       // reset loading state
       setIsLoading(false)

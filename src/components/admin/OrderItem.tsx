@@ -1,12 +1,12 @@
 import { IOrder } from '@/models/OrderModel'
+import { deliverOrderApi, reDeliverOrder } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
 import { formatTime } from '@/utils/formatTime'
-import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaCheckSquare, FaEye, FaHistory, FaNimblr, FaRegTrashAlt, FaTrash } from 'react-icons/fa'
+import { FaCheckSquare, FaEye, FaHistory, FaRegTrashAlt } from 'react-icons/fa'
 import { GrDeliver } from 'react-icons/gr'
 import { ImCancelCircle } from 'react-icons/im'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -51,16 +51,16 @@ function OrderItem({
     console.log(123)
     try {
       // send request to deliver order
-      const res = await axios.patch(`/api/admin/order/${data._id}/deliver`)
+      const { message } = await deliverOrderApi(data._id)
 
       // update order status
       setOrders(prev => prev.map(o => (o._id === data._id ? { ...o, status: 'done' } : o)))
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
     } catch (err: any) {
-      console.log(err.message)
-      toast.error(err.response.data.message)
+      console.log(err)
+      toast.error(err.message)
     } finally {
       // stop loading
       setIsLoading(false)
@@ -74,12 +74,12 @@ function OrderItem({
 
     try {
       // send request to re-deliver order
-      const res = await axios.patch(`/api/admin/order/${data._id}/re-deliver`)
+      const { message } = await reDeliverOrder(data._id)
 
       // show success message
-      toast.success(res.data.message)
+      toast.success(message)
     } catch (err: any) {
-      console.log(err.message)
+      console.log(err)
       toast.error(err.message)
     } finally {
       // stop loading

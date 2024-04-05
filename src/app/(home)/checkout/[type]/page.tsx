@@ -5,8 +5,8 @@ import CartItem from '@/components/CartItem'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { createOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -61,17 +61,15 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         }))
 
         // send request to server to create order
-        const res = await axios.post('/api/order/create', {
+        const { removedCartItems, message } = await createOrderApi(
           code,
           email,
           total,
-          voucherApplied: voucher?._id,
+          voucher?._id,
           discount,
           items,
-          paymentMethod: type,
-        })
-
-        const { removedCartItems, message } = res.data
+          type
+        )
 
         if (curUser) {
           // userId exists => cart is DATABASE cart => remove cart items
@@ -96,8 +94,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         // clear checkout (local storage)
         localStorage.removeItem('checkout')
       } catch (err: any) {
-        console.log(err.message)
-        toast.error(err.response.data.message)
+        console.log(err)
+        toast.error(err.message)
       } finally {
         // stop page loading
         dispatch(setPageLoading(false))
@@ -147,7 +145,9 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </p>
           <p>
             Nội dung chuyển khoản:{' '}
-            <span className='text-yellow-500 font-semibold'>{checkout?.code}</span>
+            <span className='text-rose-500 underline underline-offset-1 font-semibold'>
+              {checkout?.code}
+            </span>
           </p>
         </div>
 
