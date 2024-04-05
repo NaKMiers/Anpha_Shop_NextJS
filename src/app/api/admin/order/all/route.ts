@@ -13,7 +13,7 @@ export async function GET() {
 
   try {
     // get all order from database
-    const orders = await OrderModel.find().sort({ createdAt: -1 }).lean()
+    const orders = await OrderModel.find().sort({ createdAt: -1 }).limit(8).lean()
 
     // retunr all orders
     return NextResponse.json({ orders }, { status: 200 })

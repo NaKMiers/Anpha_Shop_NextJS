@@ -123,45 +123,12 @@ function productPriceAfterAppliedFlashsale(product: any) {
   return price
 }
 
-// group product by category
-const groupProductByCategory = (categories: any, products: any, sortBy: any, sortDirection = 'asc') => {
-  // initialize an object of category groups
-  const categoryMap = categories.reduce((result: any, category: any) => {
-    result[category._id] = category.title
-    return result
-  }, {})
-
-  // Group products by category title and sort products in each category by ...
-  const groupedProducts = products.reduce((result: any, product: any) => {
-    const categoryId = product.category
-    const categoryTitle = categoryMap[categoryId]
-
-    // Check if the category title is already a key in the result object
-    if (!result[categoryTitle]) {
-      result[categoryTitle] = []
-    }
-
-    // Add the current product to the category
-    result[categoryTitle].push(product)
-
-    // Sort products in the category by ...
-    result[categoryTitle].sort((a: any, b: any) =>
-      sortDirection === 'asc' ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy]
-    )
-
-    return result
-  }, {})
-
-  return groupedProducts
-}
-
 export {
   calcExpireTime,
   generateCode,
   generateOrderCode,
   generateSlug,
   getTimes,
-  groupProductByCategory,
   productPriceAfterAppliedFlashsale,
   randomFileName,
   shuffleArray,

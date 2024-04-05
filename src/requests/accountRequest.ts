@@ -1,9 +1,9 @@
 // Account -------------------------------------
 
 // [GET]
-export const getAllAccountsApi = async () => {
+export const getAllAccountsApi = async (query: string = '') => {
   // no-store to bypass cache
-  const res = await fetch('/api/admin/account/all', { cache: 'no-store' })
+  const res = await fetch(`/api/admin/account/all${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

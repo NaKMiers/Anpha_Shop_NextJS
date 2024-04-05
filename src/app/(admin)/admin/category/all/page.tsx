@@ -134,10 +134,7 @@ function AllCategoriesPage() {
   return (
     <div className='w-full'>
       <AdminHeader title='All Categories' addLink='/admin/category/add' />
-
-      <Pagination />
-
-      <div className='pt-8' />
+      {/* <Pagination /> */}
 
       <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>

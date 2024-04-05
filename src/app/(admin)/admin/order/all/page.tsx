@@ -8,7 +8,7 @@ import OrderItem from '@/components/admin/OrderItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IOrder } from '@/models/OrderModel'
-import { cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
+import { caclIncomeApi, cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
@@ -126,13 +126,22 @@ function AllOrdersPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [orders, selectedOrders, handleDeleteOrders])
 
+  // calculate income
+  const handleCalcIncome = useCallback(async (timeType: 'day' | 'month' | 'year') => {
+    try {
+      const { income } = await caclIncomeApi(new Date(), timeType)
+
+      toast.success(`Income: ${formatPrice(income)}`)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    }
+  }, [])
+
   return (
     <div className='w-full'>
       <AdminHeader title='All Orders' />
-
-      <Pagination />
-
-      <div className='pt-8' />
+      {/* <Pagination /> */}
 
       {/* Select Filter */}
       <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
@@ -248,13 +257,19 @@ function AllOrdersPage() {
             onChange={() => {}}
           />
         </div>
-        <button className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'>
+        <button
+          className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'
+          onClick={() => handleCalcIncome('day')}>
           Day Income
         </button>
-        <button className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'>
+        <button
+          className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'
+          onClick={() => handleCalcIncome('month')}>
           Month Income
         </button>
-        <button className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'>
+        <button
+          className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'
+          onClick={() => handleCalcIncome('year')}>
           Year Income
         </button>
       </div>

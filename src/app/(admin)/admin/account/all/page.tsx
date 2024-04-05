@@ -14,15 +14,17 @@ import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaFilter, FaSearch } from 'react-icons/fa'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
+import { handleQuery } from '@/utils/handleQuery'
 
 export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
 
-function AllAccountsPage() {
+function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
   const dispatch = useAppDispatch()
 
   // states
   const [accounts, setAccounts] = useState<AccountWithProduct[]>([])
+  const [amount, setAmount] = useState<number>(0)
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
   const [loadingAccounts, setLoadingAccounts] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
@@ -38,26 +40,32 @@ function AllAccountsPage() {
     },
   })
 
-  // get all accounts
+  // get all accounts at first time
   useEffect(() => {
-    const getAllTags = async () => {
+    // get all accounts
+    const getAllAccounts = async () => {
+      const query = handleQuery(searchParams)
+
+      // start page loading
       dispatch(setPageLoading(true))
 
       try {
         // sent request to server
-        const { accounts } = await getAllAccountsApi() // cache: no-store
+        const { accounts, amount } = await getAllAccountsApi(query) // cache: no-store
 
         // update accounts from state
         setAccounts(accounts)
+        setAmount(amount)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
       } finally {
+        // stop page loading
         dispatch(setPageLoading(false))
       }
     }
-    getAllTags()
-  }, [dispatch])
+    getAllAccounts()
+  }, [dispatch, searchParams])
 
   // activate account
   const handleActivateAccounts = useCallback(async (ids: string[], value: boolean) => {
@@ -136,12 +144,11 @@ function AllAccountsPage() {
 
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Accounts' addLink='/admin/account/add' />
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={9} className='mb-8' />
 
-      <Pagination />
-
-      <div className='pt-8' />
-
+      {/* Select Filter */}
       <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
           <div className='flex flex-col'>
@@ -210,8 +217,6 @@ function AllAccountsPage() {
         </div>
       </div>
 
-      <div className='pt-9' />
-
       {/* Confirm Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
@@ -221,6 +226,10 @@ function AllAccountsPage() {
         onAccept={() => handleDeleteAccounts(selectedAccounts)}
         isLoading={loadingAccounts.length > 0}
       />
+
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {amount} account{amount > 1 && 's'}
+      </div>
 
       {/* MAIN LIST */}
       <div className='grid gap-21 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start'>

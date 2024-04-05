@@ -71,10 +71,7 @@ function AllSummariesPage() {
   return (
     <div className='w-full'>
       <AdminHeader title='All Summaries' />
-
-      <Pagination />
-
-      <div className='pt-9' />
+      {/* <Pagination /> */}
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-21 '>
         {Array.from({ length: 5 }).map((_, index) => (

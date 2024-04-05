@@ -1,7 +1,7 @@
 import { IOrder } from '@/models/OrderModel'
 import { deliverOrderApi, reDeliverOrder } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
+import { formatTime, isToday } from '@/utils/formatTime'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
@@ -177,7 +177,9 @@ function OrderItem({
           <div className='flex flex-wrap gap-x-2'>
             <p className='text-sm' title='Created (d/m/y)'>
               <span className='font-semibold'>Created: </span>
-              <span>{formatTime(data.createdAt)}</span>
+              <span className={isToday(new Date(data.createdAt)) ? 'font-semibold text-slate-600' : ''}>
+                {formatTime(data.createdAt)}
+              </span>
             </p>
 
             {/* Updated */}
