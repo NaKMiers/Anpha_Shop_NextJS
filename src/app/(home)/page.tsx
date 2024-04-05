@@ -24,6 +24,7 @@ async function HomePage() {
   let carouselProducts: FullyProduct[] = []
 
   try {
+    // revalidate every 1 minute
     const data = await getHomeApi()
 
     // For Banner

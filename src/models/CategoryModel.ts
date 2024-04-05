@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
 import { generateSlug } from '@/utils'
+import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const CategorySchema = new Schema(

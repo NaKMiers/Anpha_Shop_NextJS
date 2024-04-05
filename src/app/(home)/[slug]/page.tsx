@@ -28,7 +28,9 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
   let comments: IComment[] = []
 
   try {
+    // revalidate every 1 minute
     const data = await getProductPageApi(slug)
+
     product = data.product
     relatedProducts = data.relatedProducts
     comments = data.comments

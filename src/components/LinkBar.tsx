@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useCallback, useState } from 'react'
-import { FaBook, FaCheck, FaCopy } from 'react-icons/fa6'
+import { useCallback, useState } from 'react'
 import Toast from 'react-hot-toast'
+import { FaCheck, FaCopy } from 'react-icons/fa6'
 
 interface LinkBarProps {
   link: string

@@ -11,6 +11,8 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
   try {
     // send request to get products
     console.log('searchParams: ', searchParams)
+
+    // revalidate every 1 minute
     const data = await getTagsPageApi(searchParams)
 
     products = data.products

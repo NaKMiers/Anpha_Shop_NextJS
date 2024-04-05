@@ -3,6 +3,8 @@ import AccountModel from '@/models/AccountModel'
 import { NextResponse } from 'next/server'
 import '@/models/ProductModel'
 
+export const dynamic = 'force-dynamic'
+
 // [GET]: /admin/account/all
 export async function GET() {
   console.log('- Get All Accounts - ')

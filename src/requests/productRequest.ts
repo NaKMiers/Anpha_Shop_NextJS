@@ -1,6 +1,9 @@
 // Product -------------------------------------
+
+// [GET]
 export const getAllProductsApi = async () => {
-  const res = await fetch('/api/admin/product/all')
+  // no-store to avoid cache
+  const res = await fetch('/api/admin/product/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -10,8 +13,10 @@ export const getAllProductsApi = async () => {
   return await res.json()
 }
 
+// [GET]
 export const getProductApi = async (id: string) => {
-  const res = await fetch(`/api/admin/product/${id}`)
+  // no-cache
+  const res = await fetch(`/api/admin/product/${id}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -21,8 +26,10 @@ export const getProductApi = async (id: string) => {
   return await res.json()
 }
 
+// [GET]
 export const getBestSellerProductsApi = async () => {
-  const res = await fetch('/api/product/best-seller')
+  // revalidate every 1 hour
+  const res = await fetch('/api/product/best-seller', { next: { revalidate: 3600 } })
 
   // check status
   if (!res.ok) {
@@ -32,6 +39,7 @@ export const getBestSellerProductsApi = async () => {
   return await res.json()
 }
 
+// [POST]
 export const addProductApi = async (data: FormData) => {
   const res = await fetch('/api/admin/product/add', {
     method: 'POST',
@@ -46,6 +54,7 @@ export const addProductApi = async (data: FormData) => {
   return await res.json()
 }
 
+// [PATCH]
 export const activateProductsApi = async (ids: string[], value: boolean) => {
   const res = await fetch('/api/admin/product/activate', {
     method: 'PATCH',
@@ -60,6 +69,7 @@ export const activateProductsApi = async (ids: string[], value: boolean) => {
   return await res.json()
 }
 
+// [PATCH]
 export const updateProductPropertyApi = async (id: string, field: string, value: any) => {
   const res = await fetch(`/api/admin/product/${id}/edit-property/${field}`, {
     method: 'PATCH',
@@ -74,6 +84,7 @@ export const updateProductPropertyApi = async (id: string, field: string, value:
   return await res.json()
 }
 
+// [PUT]
 export const updateProductApi = async (id: string, data: FormData) => {
   const res = await fetch(`/api/admin/product/${id}/edit`, {
     method: 'PUT',
@@ -88,6 +99,7 @@ export const updateProductApi = async (id: string, data: FormData) => {
   return await res.json()
 }
 
+// [DELETE]
 export const deleteProductsApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/product/delete', {
     method: 'DELETE',

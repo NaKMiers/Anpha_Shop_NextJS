@@ -32,6 +32,3 @@ export * from './flashSaleRequest'
 export * from './cartRequest'
 
 // Comment
-
-// Checkout
-export * from './checkoutRequest'

@@ -2,6 +2,8 @@ import { connectDatabase } from '@/config/databse'
 import ProductModel from '@/models/ProductModel'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // [GET]: /flashsale
 export async function GET() {
   console.log('- Get Flash Sale Products -')

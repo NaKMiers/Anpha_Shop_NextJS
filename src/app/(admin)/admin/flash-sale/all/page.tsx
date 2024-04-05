@@ -47,7 +47,7 @@ function AllFlashSalesPage() {
 
       try {
         // send request to server to get all flash sales
-        const { flashSales } = await getAllFlashSalesApi()
+        const { flashSales } = await getAllFlashSalesApi() // cache: no-store
 
         // set flash sales to state
         setFlashSales(flashSales)

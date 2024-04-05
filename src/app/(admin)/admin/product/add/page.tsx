@@ -55,7 +55,7 @@ function AddVoucherPage() {
     const getTags = async () => {
       try {
         // send request to server to get all tags
-        const { tags } = await getAllTagsApi()
+        const { tags } = await getAllTagsApi() // cache: no-store
         setTags(tags)
       } catch (err: any) {
         console.log(err)
@@ -65,7 +65,7 @@ function AddVoucherPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const { categories } = await getAllCagetoriesApi()
+        const { categories } = await getAllCagetoriesApi() // cache: no-store
         setCategories(categories)
       } catch (err: any) {
         console.log(err)

@@ -2,6 +2,8 @@ import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // [GET] /admin/user/all
 export async function GET() {
   console.log('- Get All Users -')

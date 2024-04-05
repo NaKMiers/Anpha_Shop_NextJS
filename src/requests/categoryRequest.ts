@@ -1,8 +1,11 @@
 import { EditingValues } from '@/app/(admin)/admin/category/all/page'
 
 // Category -------------------------------------
+
+// [GET]
 export const getAllCagetoriesApi = async () => {
-  const res = await fetch('/api/admin/category/all')
+  // no cache
+  const res = await fetch('/api/admin/category/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -12,6 +15,7 @@ export const getAllCagetoriesApi = async () => {
   return await res.json()
 }
 
+// [POST]
 export const addCategoryApi = async (data: any) => {
   const res = await fetch('/api/admin/category/add', {
     method: 'POST',
@@ -26,6 +30,7 @@ export const addCategoryApi = async (data: any) => {
   return await res.json()
 }
 
+// [PUT]
 export const updateCategoriesApi = async (editingValues: EditingValues[]) => {
   const res = await fetch('/api/admin/category/edit', {
     method: 'PUT',
@@ -40,6 +45,7 @@ export const updateCategoriesApi = async (editingValues: EditingValues[]) => {
   return await res.json()
 }
 
+// [DELETE]
 export const deleteCategoriesApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/category/delete', {
     method: 'DELETE',

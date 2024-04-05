@@ -8,6 +8,8 @@ async function FlashSalePage() {
 
   try {
     // send request to get products
+
+    // revalidate every 1 minute
     const data = await getFlashSalePageApi()
     products = data.products
   } catch (err: any) {

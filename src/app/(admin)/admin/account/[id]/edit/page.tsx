@@ -62,7 +62,7 @@ function AddAccountPage() {
       dispatch(setPageLoading(true))
 
       try {
-        const { account } = await getAccountApi(id)
+        const { account } = await getAccountApi(id) // no-cache
 
         console.log('account: ', account)
 

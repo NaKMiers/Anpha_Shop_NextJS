@@ -3,6 +3,9 @@ import CategoryModel from '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
+// [GET]: /category?ctg=slug1&ctg?=slug2...
 export async function GET(req: NextRequest) {
   console.log('- Get Products By Categories -')
 

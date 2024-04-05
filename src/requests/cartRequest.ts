@@ -1,6 +1,9 @@
 // Cart
+
+// [GET]
 export const getCartApi = async () => {
-  const res = await fetch('/api/cart')
+  // no cache
+  const res = await fetch('/api/cart', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -10,6 +13,7 @@ export const getCartApi = async () => {
   return await res.json()
 }
 
+// [POST]
 export const addToCartApi = async (productId: string, quantity: number) => {
   const res = await fetch('/api/cart/add', {
     method: 'POST',
@@ -24,6 +28,7 @@ export const addToCartApi = async (productId: string, quantity: number) => {
   return await res.json()
 }
 
+// [PATCH]
 export const updateCartQuantityApi = async (cartItemId: string, quantity: number) => {
   const res = await fetch(`/api/cart/${cartItemId}/set-quantity`, {
     method: 'PATCH',
@@ -38,6 +43,7 @@ export const updateCartQuantityApi = async (cartItemId: string, quantity: number
   return await res.json()
 }
 
+// [DELETE]
 export const deleteCartItemApi = async (cartItemId: string) => {
   const res = await fetch(`/api/cart/${cartItemId}/delete`, {
     method: 'DELETE',

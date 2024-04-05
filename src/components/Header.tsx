@@ -57,7 +57,7 @@ function Header({ isStatic }: HeaderProps) {
       if (curUser?._id) {
         try {
           // send request to get user's cart
-          const { cart } = await getCartApi()
+          const { cart } = await getCartApi() // cache: no-store
 
           // set cart to state
           dispatch(setCartItems(cart))

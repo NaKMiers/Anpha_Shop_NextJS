@@ -3,6 +3,9 @@ import ProductModel from '@/models/ProductModel'
 import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
+// [GET]: /tag?tag=slug1&tag?=slug2...
 export async function GET(req: NextRequest) {
   console.log('- Get Products By Tags -')
 

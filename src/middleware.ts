@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { JWT, getToken } from 'next-auth/jwt'
+import { NextRequest, NextResponse } from 'next/server'
 
 // Require Auth
 const requireAuth = async (req: NextRequest, token: JWT | null) => {

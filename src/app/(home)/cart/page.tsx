@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setSelectedItems } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
-import { applyVoucherApi, getOrderCodeApi } from '@/requests'
+import { applyVoucherApi, generateOrderCodeApi } from '@/requests'
 import { calcPercentage, formatPrice } from '@/utils/formatNumber'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -139,7 +139,7 @@ function CartPage() {
 
       // generate order code
       try {
-        const { orderCode } = await getOrderCodeApi()
+        const { orderCode } = await generateOrderCodeApi() // cache: no-store
 
         // create checkout
         const checkout = {

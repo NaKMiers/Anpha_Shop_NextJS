@@ -1,6 +1,9 @@
 // User -------------------------------------
+
+// [GET]
 export const getAllUsersApi = async () => {
-  const res = await fetch('/api/admin/user/all')
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/user/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -10,8 +13,10 @@ export const getAllUsersApi = async () => {
   return await res.json()
 }
 
+// [GET]
 export const getRoleUsersApi = async () => {
-  const res = await fetch('/api/admin/user/role-users')
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/user/role-users', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -21,6 +26,7 @@ export const getRoleUsersApi = async () => {
   return await res.json()
 }
 
+// [PUT]
 export const updateProfileApi = async (data: any) => {
   const res = await fetch('/api/user/update-profile', {
     method: 'PUT',
@@ -35,6 +41,7 @@ export const updateProfileApi = async (data: any) => {
   return await res.json()
 }
 
+// [PATCH]
 export const changePasswordApi = async (data: any) => {
   const res = await fetch('/api/user/change-password', {
     method: 'PATCH',
@@ -52,6 +59,7 @@ export const changePasswordApi = async (data: any) => {
   return asd
 }
 
+// [PATCH]
 export const rechargeUserApi = async (id: string, amount: number) => {
   const res = await fetch(`/api/admin/user/${id}/recharge`, {
     method: 'PATCH',
@@ -66,6 +74,7 @@ export const rechargeUserApi = async (id: string, amount: number) => {
   return await res.json()
 }
 
+// [PATCH]
 export const setCollaboratorApi = async (userId: string, type: string, value: string) => {
   const res = await fetch(`/api/admin/user/${userId}/set-collaborator`, {
     method: 'PATCH',
@@ -80,6 +89,7 @@ export const setCollaboratorApi = async (userId: string, type: string, value: st
   return await res.json()
 }
 
+// [PATCH]
 export const demoteCollaboratorApi = async (userId: string) => {
   const res = await fetch(`/api/admin/user/${userId}/demote-collaborator`, {
     method: 'PATCH',
@@ -93,6 +103,7 @@ export const demoteCollaboratorApi = async (userId: string) => {
   return await res.json()
 }
 
+// [DELETE]
 export const deleteUsersApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/user/delete', {
     method: 'DELETE',

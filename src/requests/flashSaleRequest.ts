@@ -1,6 +1,9 @@
 // Flashsale
+
+// [GET]
 export const getAllFlashSalesApi = async () => {
-  const res = await fetch('/api/admin/flash-sale/all')
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/flash-sale/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -10,8 +13,10 @@ export const getAllFlashSalesApi = async () => {
   return await res.json()
 }
 
+// [GET]
 export const getFlashSaleApi = async (id: string) => {
-  const res = await fetch(`/api/admin/flash-sale/${id}`)
+  // no-store to bypass cache
+  const res = await fetch(`/api/admin/flash-sale/${id}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -21,6 +26,7 @@ export const getFlashSaleApi = async (id: string) => {
   return await res.json()
 }
 
+// [POST]
 export const addFlashSaleApi = async (data: any) => {
   const res = await fetch('/api/admin/flash-sale/add', {
     method: 'POST',
@@ -35,6 +41,7 @@ export const addFlashSaleApi = async (data: any) => {
   return await res.json()
 }
 
+// [PUT]
 export const updateFlashSaleApi = async (id: string, data: any, appliedProducts: string[]) => {
   const res = await fetch(`/api/admin/flash-sale/${id}/edit`, {
     method: 'PUT',
@@ -52,6 +59,7 @@ export const updateFlashSaleApi = async (id: string, data: any, appliedProducts:
   return await res.json()
 }
 
+// [DELETE]
 export const deleteFlashSalesApi = async (ids: string[], productIds: string[]) => {
   const res = await fetch('/api/admin/flash-sale/delete', {
     method: 'DELETE',

@@ -1,5 +1,4 @@
 import { ITag } from '@/models/TagModel'
-import Link from 'next/link'
 import React, { useState } from 'react'
 import { FaCheck, FaSave, FaTrash } from 'react-icons/fa'
 import { MdCancel, MdEdit } from 'react-icons/md'

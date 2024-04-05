@@ -37,7 +37,7 @@ function AllTagsPage() {
 
       try {
         // sent request to server
-        const { tags } = await getAllTagsApi()
+        const { tags } = await getAllTagsApi() // cache: no-store
         setTags(tags)
       } catch (err: any) {
         console.log(err)

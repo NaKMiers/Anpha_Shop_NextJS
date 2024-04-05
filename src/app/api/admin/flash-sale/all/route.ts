@@ -3,6 +3,8 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // [GET]: /admin/flash-sale/all
 export async function GET() {
   console.log(' - Get All Flash Sales -')

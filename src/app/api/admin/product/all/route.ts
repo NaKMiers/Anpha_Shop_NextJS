@@ -4,6 +4,8 @@ import ProductModel from '@/models/ProductModel'
 import '@/models/TagModel'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // [GET]: /admin/product/all
 export async function GET() {
   console.log('- Get All Products -')

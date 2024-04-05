@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaEye } from 'react-icons/fa'
 
 interface InputProps {
   label: string

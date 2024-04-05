@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import React from 'react'
 import { FaArrowLeft, FaPlus } from 'react-icons/fa'
 
 interface AdminHeaderProps {

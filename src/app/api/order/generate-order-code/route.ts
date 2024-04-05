@@ -2,9 +2,11 @@ import { connectDatabase } from '@/config/databse'
 import { generateOrderCode } from '@/utils'
 import { NextResponse } from 'next/server'
 
-// [GET]: /api/checkout/get-order-code
+export const dynamic = 'force-dynamic'
+
+// [GET]: /api/order/generate-order-code
 export async function GET() {
-  console.log('- Get Order Code -')
+  console.log('- Generate Order Code -')
 
   // connect to database
   await connectDatabase()

@@ -158,11 +158,11 @@ const groupProductByCategory = (categories: any, products: any, sortBy: any, sor
 export {
   calcExpireTime,
   generateCode,
+  generateOrderCode,
   generateSlug,
   getTimes,
   groupProductByCategory,
   productPriceAfterAppliedFlashsale,
   randomFileName,
   shuffleArray,
-  generateOrderCode,
 }

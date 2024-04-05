@@ -46,7 +46,7 @@ function AllUsersPage() {
 
       console.log('get all users')
       try {
-        const { users } = await getAllUsersApi()
+        const { users } = await getAllUsersApi() // cache: no-store
         setUsers(users)
       } catch (err: any) {
         console.log(err)

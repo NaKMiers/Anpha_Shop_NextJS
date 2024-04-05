@@ -1,6 +1,3 @@
-import CartItem from '@/components/CartItem'
-import React from 'react'
-
 function OrderDetailPage() {
   return (
     <div>

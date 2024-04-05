@@ -6,11 +6,10 @@ import { ITag } from '@/models/TagModel'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { FaCartPlus } from 'react-icons/fa'
 import { FaBoltLightning, FaChevronUp } from 'react-icons/fa6'
+import CarouselProduct from './CarouselProduct'
 import Header from './Header'
 import Slider from './Slider'
-import CarouselProduct from './CarouselProduct'
 
 interface BannerProps {
   categories: ICategory[]

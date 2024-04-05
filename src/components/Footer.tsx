@@ -21,7 +21,7 @@ function Footer() {
     const getBestSellerProducts = async () => {
       try {
         // send request to server to get best seller products
-        const { products } = await getBestSellerProductsApi()
+        const { products } = await getBestSellerProductsApi() // revalidate every 1 hour
 
         // set best seller products to state
         setBestSellerProducts(products)

@@ -1,4 +1,6 @@
 // Auth -------------------------------------
+
+// [POST]
 export const registerApi = async (data: any) => {
   const res = await fetch('/api/auth/register', {
     method: 'POST',
@@ -13,6 +15,7 @@ export const registerApi = async (data: any) => {
   return await res.json()
 }
 
+// [POST]
 export const forgotPasswordApi = async (data: any) => {
   const res = await fetch('/api/auth/forgot-password', {
     method: 'POST',
@@ -27,6 +30,7 @@ export const forgotPasswordApi = async (data: any) => {
   return await res.json()
 }
 
+// [PATCH]
 export const resetPassword = async (email: string, token: string, newPassword: string) => {
   const res = await fetch(`/api/auth/reset-password?email=${email}&token=${token}`, {
     method: 'PATCH',

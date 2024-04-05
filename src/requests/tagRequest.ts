@@ -1,8 +1,11 @@
 import { EditingValues } from '@/app/(admin)/admin/tag/all/page'
 
 // Tag -------------------------------------
+
+// [GET]
 export const getAllTagsApi = async () => {
-  const res = await fetch('/api/admin/tag/all')
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/tag/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -12,6 +15,7 @@ export const getAllTagsApi = async () => {
   return await res.json()
 }
 
+// [POST]
 export const addTagApi = async (data: any) => {
   const res = await fetch('/api/admin/tag/add', {
     method: 'POST',
@@ -26,6 +30,7 @@ export const addTagApi = async (data: any) => {
   return await res.json()
 }
 
+// [PATCH]
 export const featureTagsApi = async (ids: string[], value: boolean) => {
   const res = await fetch('/api/admin/tag/feature', {
     method: 'PATCH',
@@ -40,6 +45,7 @@ export const featureTagsApi = async (ids: string[], value: boolean) => {
   return await res.json()
 }
 
+// [PUT]
 export const updateTagsApi = async (editingValues: EditingValues[]) => {
   const res = await fetch('/api/admin/tag/edit', {
     method: 'PUT',
@@ -54,6 +60,7 @@ export const updateTagsApi = async (editingValues: EditingValues[]) => {
   return await res.json()
 }
 
+// [DELETE]
 export const deleteTagsApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/tag/delete', {
     method: 'DELETE',

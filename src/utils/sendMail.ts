@@ -1,7 +1,7 @@
-import nodeMailer from 'nodemailer'
-import fs from 'fs'
-import path from 'path'
 import UserModel from '@/models/UserModel'
+import fs from 'fs'
+import nodeMailer from 'nodemailer'
+import path from 'path'
 import pug from 'pug'
 
 // SENDMAIL CORE
@@ -141,10 +141,10 @@ async function summaryNotification(email: string, summary: any) {
 }
 
 export {
-  sendMail,
+  notifyAccountUpdated,
+  notifyDeliveryOrder,
   notifyNewOrderToAdmin,
   notifyShortageAccount,
-  notifyDeliveryOrder,
-  notifyAccountUpdated,
+  sendMail,
   summaryNotification,
 }

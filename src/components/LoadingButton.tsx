@@ -1,4 +1,3 @@
-import React from 'react'
 import { RiDonutChartFill } from 'react-icons/ri'
 
 interface LoadingButtonProps {

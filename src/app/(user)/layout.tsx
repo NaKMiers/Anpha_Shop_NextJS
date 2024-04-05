@@ -1,15 +1,15 @@
+import ContactFloating from '@/components/ContactFloating'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 import StoreProvider from '@/libs/StoreProvider'
 import type { Metadata } from 'next'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import { Toaster } from 'react-hot-toast'
-import ContactFloating from '@/components/ContactFloating'
-import '../globals.scss'
-import Link from 'next/link'
-import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
-import { HiLightningBolt } from 'react-icons/hi'
 import { getServerSession } from 'next-auth'
 import { headers } from 'next/headers'
+import Link from 'next/link'
+import { Toaster } from 'react-hot-toast'
+import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
+import { HiLightningBolt } from 'react-icons/hi'
+import '../globals.scss'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',

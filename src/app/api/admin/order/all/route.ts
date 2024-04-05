@@ -1,6 +1,8 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+
+export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/order/all
 export async function GET() {

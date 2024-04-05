@@ -1,5 +1,4 @@
 import { countPercent, formatPrice } from '@/utils/formatNumber'
-import React from 'react'
 
 interface PriceProps {
   price: number

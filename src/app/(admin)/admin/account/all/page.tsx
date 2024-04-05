@@ -45,7 +45,7 @@ function AllAccountsPage() {
 
       try {
         // sent request to server
-        const { accounts } = await getAllAccountsApi()
+        const { accounts } = await getAllAccountsApi() // cache: no-store
 
         // update accounts from state
         setAccounts(accounts)

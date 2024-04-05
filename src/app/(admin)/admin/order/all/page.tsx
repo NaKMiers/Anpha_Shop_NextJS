@@ -42,7 +42,7 @@ function AllOrdersPage() {
 
       try {
         // sent request to server
-        const { orders } = await getAllOrdersApi()
+        const { orders } = await getAllOrdersApi() // cache: no-store
 
         // update orders from state
         setOrders(orders)

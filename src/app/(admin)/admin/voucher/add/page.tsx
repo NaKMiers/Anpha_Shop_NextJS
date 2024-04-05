@@ -54,7 +54,7 @@ function AddVoucherPage() {
     const getRoleUsers = async () => {
       try {
         // send request to server to get role-users
-        const { roleUsers } = await getRoleUsersApi()
+        const { roleUsers } = await getRoleUsersApi() // cache: no-store
 
         // set roleUsers to state
         setRoleUsers(roleUsers)

@@ -1,8 +1,11 @@
 import { FullyCartItem } from '@/app/api/cart/route'
 
 // Order -------------------------------------
+
+// [GET]
 export const getAllOrdersApi = async () => {
-  const res = await fetch('/api/admin/order/all')
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/order/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -12,6 +15,20 @@ export const getAllOrdersApi = async () => {
   return await res.json()
 }
 
+// [GET]
+export const generateOrderCodeApi = async () => {
+  // no cache
+  const res = await fetch('/api/order/generate-order-code', { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [POST]
 export const createOrderApi = async (
   code: string,
   email: string,
@@ -42,6 +59,7 @@ export const createOrderApi = async (
   return await res.json()
 }
 
+// [PATCH]
 export const deliverOrderApi = async (orderId: string) => {
   const res = await fetch(`/api/admin/order/${orderId}/deliver`, {
     method: 'PATCH',
@@ -55,6 +73,7 @@ export const deliverOrderApi = async (orderId: string) => {
   return await res.json()
 }
 
+// [PATCH]
 export const reDeliverOrder = async (orderId: string) => {
   const res = await fetch(`/api/admin/order/${orderId}/re-deliver`, {
     method: 'PATCH',
@@ -68,6 +87,7 @@ export const reDeliverOrder = async (orderId: string) => {
   return await res.json()
 }
 
+// [PATCH]
 export const cancelOrdersApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/order/cancel', {
     method: 'PATCH',
@@ -82,6 +102,7 @@ export const cancelOrdersApi = async (ids: string[]) => {
   return await res.json()
 }
 
+// [DELETE]
 export const deletedOrdersApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/order/delete', {
     method: 'DELETE',

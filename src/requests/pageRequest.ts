@@ -1,6 +1,9 @@
-// Page
+// Page -------------------------------------
+
+// [GET]
 export const getHomeApi = async () => {
-  const res = await fetch(`${process.env.APP_URL}/api`, { cache: 'no-store' })
+  // revalidate every 1 minute
+  const res = await fetch(`${process.env.APP_URL}/api`, { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {
@@ -10,8 +13,10 @@ export const getHomeApi = async () => {
   return await res.json()
 }
 
+// [GET]
 export const getProductPageApi = async (slug: string) => {
-  const res = await fetch(`${process.env.APP_URL}/api/product/${slug}`)
+  // revalidate every 1 minute
+  const res = await fetch(`${process.env.APP_URL}/api/product/${slug}`, { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {
@@ -21,6 +26,7 @@ export const getProductPageApi = async (slug: string) => {
   return await res.json()
 }
 
+// [GET]
 export const getTagsPageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
   let url = `${process.env.APP_URL}/api/tag?`
   for (let key in searchParams) {
@@ -37,7 +43,8 @@ export const getTagsPageApi = async (searchParams: { [key: string]: string[] } |
   // remove final '&'
   url = url.slice(0, -1)
 
-  const res = await fetch(url)
+  // revalidate every 1 minute
+  const res = await fetch(url, { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {
@@ -47,6 +54,7 @@ export const getTagsPageApi = async (searchParams: { [key: string]: string[] } |
   return await res.json()
 }
 
+// [GET]
 export const getCategoriesPageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
   let url = `${process.env.APP_URL}/api/category?`
   for (let key in searchParams) {
@@ -63,7 +71,8 @@ export const getCategoriesPageApi = async (searchParams: { [key: string]: string
   // remove final '&'
   url = url.slice(0, -1)
 
-  const res = await fetch(url)
+  // revalidate every 1 minute
+  const res = await fetch(url, { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {
@@ -73,8 +82,10 @@ export const getCategoriesPageApi = async (searchParams: { [key: string]: string
   return await res.json()
 }
 
+// [GET]
 export const getFlashSalePageApi = async () => {
-  const res = await fetch(`${process.env.APP_URL}/api/flash-sale`)
+  // revalidate every 1 minute
+  const res = await fetch(`${process.env.APP_URL}/api/flash-sale`, { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {

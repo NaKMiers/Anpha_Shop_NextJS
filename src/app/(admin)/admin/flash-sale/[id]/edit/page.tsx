@@ -54,7 +54,7 @@ function AddFlashSalePage() {
     const getProduct = async () => {
       try {
         // send request to server to get flash sale
-        const { flashSale } = await getFlashSaleApi(id)
+        const { flashSale } = await getFlashSaleApi(id) // cache: no-store
 
         // // set value to form
         setValue('type', flashSale.type)

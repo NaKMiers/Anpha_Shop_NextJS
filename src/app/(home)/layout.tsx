@@ -1,12 +1,12 @@
+import ContactFloating from '@/components/ContactFloating'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
+import PageLoading from '@/components/PageLoading'
 import StoreProvider from '@/libs/StoreProvider'
 import type { Metadata } from 'next'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import { Toaster } from 'react-hot-toast'
-import ContactFloating from '@/components/ContactFloating'
-import '../globals.scss'
 import { getServerSession } from 'next-auth'
-import PageLoading from '@/components/PageLoading'
+import { Toaster } from 'react-hot-toast'
+import '../globals.scss'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',

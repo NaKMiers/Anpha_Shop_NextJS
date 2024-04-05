@@ -3,6 +3,8 @@ import '@/models/UserModel'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // [GET]: /voucher/:id
 export async function GET(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Get Voucher -')

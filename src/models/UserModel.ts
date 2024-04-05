@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema(

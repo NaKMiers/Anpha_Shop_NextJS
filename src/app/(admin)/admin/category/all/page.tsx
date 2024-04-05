@@ -36,7 +36,7 @@ function AllCategoriesPage() {
 
       try {
         // sent request to server
-        const { categories } = await getAllCagetoriesApi()
+        const { categories } = await getAllCagetoriesApi() // cache: no-store
         setCategories(categories)
       } catch (err: any) {
         console.log(err)

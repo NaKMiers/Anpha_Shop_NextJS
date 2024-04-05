@@ -1,5 +1,3 @@
-import React from 'react'
-import CartItem from './CartItem'
 import { formatPrice } from '@/utils/formatNumber'
 import Link from 'next/link'
 

@@ -12,6 +12,7 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
     // send request to get products
     console.log('searchParams: ', searchParams)
 
+    // revalidate every 1 minute
     const data = await getCategoriesPageApi(searchParams)
 
     products = data.products

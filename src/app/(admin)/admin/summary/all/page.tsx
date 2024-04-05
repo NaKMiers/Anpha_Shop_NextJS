@@ -2,10 +2,8 @@
 
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
-import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import { FaArrowLeft, FaPlus } from 'react-icons/fa'
 import { IoIosSend } from 'react-icons/io'
 
 function AllSummariesPage() {

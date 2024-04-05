@@ -60,7 +60,7 @@ function AddProductPage() {
     const getProduct = async () => {
       try {
         // send request to server to get product
-        const { product } = await getProductApi(id)
+        const { product } = await getProductApi(id) // cache: no-store
 
         // set value to form
         setValue('title', product.title)
@@ -86,7 +86,7 @@ function AddProductPage() {
     const getTags = async () => {
       try {
         // send request to server to get all tags
-        const { tags } = await getAllTagsApi()
+        const { tags } = await getAllTagsApi() // cache: no-store
         setTags(tags)
       } catch (err: any) {
         console.log(err)
@@ -96,7 +96,7 @@ function AddProductPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const { categories } = await getAllCagetoriesApi()
+        const { categories } = await getAllCagetoriesApi() // cache: no-store
         setCategories(categories)
       } catch (err: any) {
         console.log(err)

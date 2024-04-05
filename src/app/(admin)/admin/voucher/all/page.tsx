@@ -44,7 +44,7 @@ function AllVouchersPage() {
 
     const getAllVouchers = async () => {
       try {
-        const { vouchers } = await getAllVouchersApi()
+        const { vouchers } = await getAllVouchersApi() // cache: no-store
         setVouchers(vouchers)
       } catch (err: any) {
         console.log(err)

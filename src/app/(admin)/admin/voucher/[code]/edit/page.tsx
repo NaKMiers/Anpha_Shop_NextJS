@@ -59,7 +59,7 @@ function EditVoucherPage() {
     const getVoucher = async () => {
       try {
         // send request to server to get voucher
-        const { voucher } = await getVoucherApi(code)
+        const { voucher } = await getVoucherApi(code) // no cache
 
         // set voucher to state
         setVoucher(voucher)
@@ -91,7 +91,7 @@ function EditVoucherPage() {
     const getRoleUsers = async () => {
       try {
         // send request to server to get role-users
-        const { roleUsers } = await getRoleUsersApi()
+        const { roleUsers } = await getRoleUsersApi() // cache: no-store
 
         // set roleUsers to state
         setRoleUsers(roleUsers)

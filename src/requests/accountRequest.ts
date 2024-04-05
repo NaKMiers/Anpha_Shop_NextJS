@@ -1,6 +1,9 @@
 // Account -------------------------------------
+
+// [GET]
 export const getAllAccountsApi = async () => {
-  const res = await fetch('/api/admin/account/all')
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/account/all', { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -10,8 +13,10 @@ export const getAllAccountsApi = async () => {
   return await res.json()
 }
 
+// [GET]
 export const getAccountApi = async (id: string) => {
-  const res = await fetch(`/api/admin/account/${id}`)
+  // no-cache
+  const res = await fetch(`/api/admin/account/${id}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -21,6 +26,7 @@ export const getAccountApi = async (id: string) => {
   return await res.json()
 }
 
+// [POST]
 export const addAccountApi = async (data: any) => {
   const res = await fetch('/api/admin/account/add', {
     method: 'POST',
@@ -35,6 +41,7 @@ export const addAccountApi = async (data: any) => {
   return await res.json()
 }
 
+// [PUT]
 export const updateAccountApi = async (id: string, data: any) => {
   const res = await fetch(`/api/admin/account/${id}/edit`, {
     method: 'PUT',
@@ -49,6 +56,7 @@ export const updateAccountApi = async (id: string, data: any) => {
   return await res.json()
 }
 
+// [PATCH]
 export const activateAccountsApi = async (ids: string[], value: boolean) => {
   const res = await fetch(`/api/admin/account/activate`, {
     method: 'PATCH',
@@ -63,6 +71,7 @@ export const activateAccountsApi = async (ids: string[], value: boolean) => {
   return await res.json()
 }
 
+// [DELETE]
 export const deleteAccountsApi = async (ids: string[]) => {
   const res = await fetch(`/api/admin/account/delete`, {
     method: 'DELETE',

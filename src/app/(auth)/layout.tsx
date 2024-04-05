@@ -1,9 +1,8 @@
 import StoreProvider from '@/libs/StoreProvider'
 import type { Metadata } from 'next'
+import { getServerSession } from 'next-auth'
 import { Toaster } from 'react-hot-toast'
 import '../globals.scss'
-import { SessionProvider } from 'next-auth/react'
-import { getServerSession } from 'next-auth'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',

@@ -1,7 +1,6 @@
 'use client'
 
 import { useAppSelector } from '@/libs/hooks'
-import React from 'react'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 function Loading() {

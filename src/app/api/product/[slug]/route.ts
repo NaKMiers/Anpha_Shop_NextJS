@@ -10,6 +10,8 @@ import { ITag } from '@/models/TagModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // products with category and tags and flashsale
 export type FullyProduct = IProduct & {
   category: ICategory

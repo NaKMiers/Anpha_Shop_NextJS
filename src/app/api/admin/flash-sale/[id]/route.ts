@@ -4,6 +4,8 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // [GET]: /flash-sale/:id
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Flash Sale -')
