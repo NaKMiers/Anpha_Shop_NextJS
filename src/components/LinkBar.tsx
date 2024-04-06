@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import Toast from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import { FaCheck, FaCopy } from 'react-icons/fa6'
 
 interface LinkBarProps {
@@ -14,14 +14,8 @@ function LinkBar({ link, className = '' }: LinkBarProps) {
 
   const handleCopy = useCallback(() => {
     if (!isCopied) {
-      var textField = document.createElement('textarea')
-      textField.innerText = link
-      document.body.appendChild(textField)
-      textField.select()
-      document.execCommand('copy')
-      textField.remove()
-
-      Toast.success('Đã sao chép ' + link)
+      navigator.clipboard.writeText(link)
+      toast.success('Đã sao chép: ' + link)
 
       setIsCopied(true)
     }

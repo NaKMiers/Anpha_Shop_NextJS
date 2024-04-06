@@ -1,42 +1,56 @@
+import { IOrder } from '@/models/OrderModel'
 import { formatPrice } from '@/utils/formatNumber'
+import { formatTime } from '@/utils/formatTime'
 import Link from 'next/link'
+import CartItem from './CartItem'
 
 interface OrderItemProps {
+  order: IOrder
   className?: string
 }
 
-function OrderItem({ className = '' }: OrderItemProps) {
+function OrderItem({ order, className = '' }: OrderItemProps) {
   return (
     <div className={`border rounded-medium px-21 py-4 ${className}`}>
       <div className='flex items-center justify-between'>
         <div>
           <span className='font-semibold'>Mã hó đơn: </span>
-          <span className='text-primary'>16059</span>
+          <span className='text-primary'>{order.code}</span>
         </div>
         <div>
           <span className='font-semibold'>Ngày đặt hàng: </span>
-          <span>14/03/2024 08:46:22</span>
+          <span>{formatTime(order.createdAt)}</span>
         </div>
       </div>
 
       <div className='flex items-center justify-between'>
         <div>
           <span className='font-semibold'>Trạng thái: </span>
-          <span className='text-green-600'>Đã xử lí</span>
+          <span className='text-green-600'>
+            {order.status === 'pending'
+              ? 'Đang xử lí'
+              : order.status === 'cancel'
+              ? 'Đã hủy'
+              : order.status === 'done'
+              ? 'Hoàn tất'
+              : ''}
+          </span>
         </div>
         <div>
           <span className='font-semibold'>Phương thức thanh toán: </span>
-          <span className='text-primary'>BALANCE</span>
+          <span className='text-primary'>{order.paymentMethod.toLowerCase()}</span>
         </div>
       </div>
 
-      {/* <CartItem className='mt-4' localCartItem isCheckout /> */}
+      {order.items.map(item => (
+        <CartItem cartItem={item} localCartItem isCheckout className='mt-4' key={item.product._id} />
+      ))}
 
       <hr className='mt-8 mb-3' />
 
       <div className='flex justify-end items-center gap-2 mb-2'>
         <span>Tổng: </span>
-        <span className='text-green-600 font-semibold text-2xl'>{formatPrice(699000)}</span>
+        <span className='text-green-600 font-semibold text-2xl'>{formatPrice(order.total)}</span>
       </div>
 
       <div className='flex justify-end gap-2'>
@@ -44,7 +58,7 @@ function OrderItem({ className = '' }: OrderItemProps) {
           Mua lại
         </button>
         <Link
-          href='/user/order/16059'
+          href={`/user/order/${order.code}`}
           className='px-[14px] py-[6px] rounded-lg bg-primary hover:bg-secondary hover:text-white common-transition'>
           Chi tiết
         </Link>

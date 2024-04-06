@@ -194,7 +194,7 @@ function OrderItem({
           {/* Detail Button */}
           {data.status === 'done' && (
             <Link
-              href={`/admin/order/${data._id}`}
+              href={`/admin/order/${data.code}`}
               className='block group'
               title='Detail'
               onClick={e => e.stopPropagation()}>

@@ -16,6 +16,32 @@ export const getAllOrdersApi = async () => {
 }
 
 // [GET]
+export const getOrderHistoryApi = async () => {
+  // no-store to bypass cache
+  const res = await fetch('/api/user/order-history', { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [GET]
+export const getOrderApi = async (code: string) => {
+  // no-store to bypass cache
+  const res = await fetch(`/api/order/${code}`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [GET]
 export const generateOrderCodeApi = async () => {
   // no cache
   const res = await fetch('/api/order/generate-order-code', { cache: 'no-store' })

@@ -2,53 +2,62 @@
 
 import Input from '@/components/Input'
 import OrderItem from '@/components/OrderItem'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { IOrder } from '@/models/OrderModel'
+import { getOrderHistoryApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
-import { Menu, MenuItem } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { BsThreeDots } from 'react-icons/bs'
 import { FaCaretDown, FaFilter } from 'react-icons/fa'
 import { IoMdCode } from 'react-icons/io'
 
 function OrderHistoryPage() {
-  const [price, setPrice] = useState(9000)
+  // hook
+  const dispatch = useAppDispatch()
+
+  // states
   const [isShowFilter, setIsShowFilter] = useState(false)
+  const [orders, setOrders] = useState<IOrder[]>([])
 
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       orderCode: '',
     },
   })
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
+  // get user's order
+  useEffect(() => {
+    const getOrderHistory = async () => {
+      // start page loading
+      dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+      try {
+        // send request to server to get current user's orders
+        const { orders } = await getOrderHistoryApi()
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+        console.log(orders)
 
-  const handleFilter = useCallback(() => {}, [])
+        // set orders to state
+        setOrders(orders)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
+    }
+    getOrderHistory()
+  }, [dispatch])
 
   return (
     <div className='flex flex-col'>
@@ -82,7 +91,7 @@ function OrderHistoryPage() {
           <div className='flex flex-col'>
             <label>
               <span className='font-bold'>Giá: </span>
-              <span>{formatPrice(price)}</span>
+              <span>{formatPrice(9000)}</span>
               {' - '}
               <span>{formatPrice(2000000)}</span>
             </label>
@@ -91,79 +100,25 @@ function OrderHistoryPage() {
               type='range'
               min='9000'
               max='2000000'
-              value={price}
-              onChange={e => setPrice(Number(e.target.value))}
+              value={9000}
+              onChange={e => () => {}}
             />
           </div>
           <div className='flex justify-end items-center flex-wrap gap-3'>
             <button
               className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu1}>
+              onClick={() => {}}>
               Danh mục
               <FaCaretDown
                 size={16}
                 className='ml-1 text-dark group-hover:text-light common-transition'
               />
             </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl1}
-              open={open1}
-              onClose={handleCloseMenu1}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu1}>
-                <span className='font-body'>Thông tin tài khoản</span>
-              </MenuItem>
-            </Menu>
-
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-secondary hover:text-light common-transition'
-              onClick={handleOpenMenu2}>
-              Sắp xếp
-              <FaCaretDown
-                size={16}
-                className='ml-1 text-dark group-hover:text-light common-transition'
-              />
-            </button>
-            <Menu
-              className='mt-2'
-              id='basic-menu'
-              anchorEl={anchorEl2}
-              open={open2}
-              onClose={handleCloseMenu2}>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-              <MenuItem className='group flex gap-2' onClick={handleCloseMenu2}>
-                <span className='font-body'>Thông tin</span>
-              </MenuItem>
-            </Menu>
           </div>
           <div className='flex justify-end md:justify-start items-center'>
             <button
               className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'
-              onClick={handleFilter}>
+              onClick={() => {}}>
               Lọc
               <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
             </button>
@@ -174,8 +129,8 @@ function OrderHistoryPage() {
       <div className='pt-5' />
 
       {/* Order items */}
-      {Array.from({ length: 5 }).map((_, index) => (
-        <OrderItem className={index !== 0 ? 'mt-4' : ''} key={index} />
+      {orders.map((order, index) => (
+        <OrderItem order={order} className={index !== 0 ? 'mt-4' : ''} key={order._id} />
       ))}
     </div>
   )

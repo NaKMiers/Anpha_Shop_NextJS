@@ -76,13 +76,16 @@ function Input({
           ) : type === 'select' ? (
             <select
               id={id}
-              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
+              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark focus:outline-none focus:ring-0 peer rounded-r-lg'
               disabled={disabled}
               {...register(id, { required })}
               onChange={onChange}
               defaultValue={options?.find(option => option.selected)?.value}>
               {options?.map((option, index) => (
-                <option key={index} value={option.value}>
+                <option
+                  className='bg-dark-100 appearance-none text-white font-body font-semibold tracking-wider p-5'
+                  key={index}
+                  value={option.value}>
                   {option.label}
                 </option>
               ))}

@@ -5,7 +5,7 @@ import '@/models/UserModel'
 
 export const dynamic = 'force-dynamic'
 
-// [GET]: /account/:id
+// [GET]: /admin/account/:id
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Account -')
 

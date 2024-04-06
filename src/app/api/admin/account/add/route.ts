@@ -12,12 +12,8 @@ export async function POST(req: NextRequest) {
   await connectDatabase()
 
   // get data to add account
-  const asd = await req.json()
-  const { type, info, renew, active, days, hours, minutes, seconds } = asd
+  const { type, info, renew, active, days, hours, minutes, seconds } = await req.json()
   const times = getTimes(+days, +hours, +minutes, +seconds)
-
-  console.log('asd', asd)
-  console.log('times-----', times)
 
   try {
     // create new account

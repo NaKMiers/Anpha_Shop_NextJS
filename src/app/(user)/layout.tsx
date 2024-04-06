@@ -10,6 +10,7 @@ import { Toaster } from 'react-hot-toast'
 import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
 import { HiLightningBolt } from 'react-icons/hi'
 import '../globals.scss'
+import PageLoading from '@/components/PageLoading'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -43,6 +44,7 @@ export default async function UserLayout({
           />
 
           <Header isStatic />
+          <PageLoading />
 
           <main className='px-21'>
             <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
