@@ -1,6 +1,7 @@
 'use client'
 
 import ConfirmDialog from '@/components/ConfirmDialog'
+import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
 import TagItem from '@/components/admin/TagItem'
@@ -8,46 +9,102 @@ import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ITag } from '@/models/TagModel'
 import { deleteTagsApi, featureTagsApi, getAllTagsApi, updateTagsApi } from '@/requests'
+import { handleQuery } from '@/utils/handleQuery'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaFilter } from 'react-icons/fa'
+import { BiReset } from 'react-icons/bi'
+import { FaFilter, FaSort } from 'react-icons/fa'
 
 export type EditingValues = {
   _id: string
   title: string
 }
 
-function AllTagsPage() {
-  // hook
+function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  // store
   const dispatch = useAppDispatch()
+  const pathname = usePathname()
+  const router = useRouter()
 
   // states
   const [tags, setTags] = useState<ITag[]>([])
+  const [amount, setAmount] = useState<number>(0)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [tgs, setTgs] = useState<ITag[]>([])
+  const [selectedFilterTags, setSelectedFilterTags] = useState<string[]>([])
 
-  const [editingTags, setEditingTags] = useState<string[]>([])
-  const [loadingTags, setLoadingTags] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
+
+  // loading and confirming
+  const [loadingTags, setLoadingTags] = useState<string[]>([])
+  const [editingTags, setEditingTags] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // values
+  const itemPerPage = 10
+  const [minPQ, setMinPQ] = useState<number>(0)
+  const [maxPQ, setMaxPQ] = useState<number>(0)
+  const [productQuantity, setProductQuantity] = useState<number>(0)
+
+  // Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue,
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      sort: 'updatedAt|-1',
+      isFeatured: '',
+    },
+  })
 
   // get all tags
   useEffect(() => {
+    // get all tags
     const getAllTags = async () => {
+      // remove page
+      const query = handleQuery(searchParams)
+      console.log(query)
+
+      // start page loading
       dispatch(setPageLoading(true))
 
       try {
         // sent request to server
-        const { tags } = await getAllTagsApi() // cache: no-store
+        const { tags, amount, tgs } = await getAllTagsApi(query) // cache: no-store
+
+        // set to states
         setTags(tags)
+        setTgs(tgs)
+        setAmount(amount)
+        setSelectedFilterTags(
+          [].concat((searchParams?._id || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
+        )
+
+        console.log('tgs: ', tgs)
+
+        // get the product that have the min and max quantity
+        const min = Math.min(...tgs.map((tag: ITag) => tag.productQuantity))
+        const max = Math.max(...tgs.map((tag: ITag) => tag.productQuantity))
+
+        setMinPQ(min)
+        setMaxPQ(max)
+        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity[0] : max)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
       } finally {
+        // stop page loading
         dispatch(setPageLoading(false))
       }
     }
     getAllTags()
-  }, [dispatch])
+  }, [dispatch, searchParams])
 
   // delete tag
   const handleDeleteTags = useCallback(async (ids: string[]) => {
@@ -123,19 +180,58 @@ function AllTagsPage() {
     }
   }, [])
 
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      console.log(data)
+      console.log({ ...searchParams, ...data, productQuantity, _id: selectedFilterTags })
+
+      // handle query
+      const query = handleQuery({
+        ...searchParams,
+        ...data,
+        productQuantity: [productQuantity.toString()],
+        _id: selectedFilterTags,
+      })
+
+      console.log(query)
+
+      router.push(pathname + query)
+    },
+    [searchParams, productQuantity, selectedFilterTags, router, pathname]
+  )
+
+  // handle reset filter
+  const handleResetFilter = useCallback(() => {
+    reset()
+    router.push(pathname)
+  }, [reset, router, pathname])
+
   // keyboard event
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Crtl + A
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
-        setSelectedTags(prev => (prev.length === tags.length ? [] : tags.map(tag => tag._id)))
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt + A (Select All)
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault()
+        setSelectedTags(prev => (prev.length === tags.length ? [] : tags.map(category => category._id)))
       }
 
-      // Delete
-      if (event.key === 'Delete') {
-        event.preventDefault() // Prevent the default aconti
-        handleDeleteTags(selectedTags)
+      // Alt + Delete (Delete)
+      if (e.altKey && e.key === 'Delete') {
+        e.preventDefault()
+        setIsOpenConfirmModal(true)
+      }
+
+      // Alt + F (Filter)
+      if (e.altKey && e.key === 'f') {
+        e.preventDefault()
+        handleSubmit(handleFilter)()
+      }
+
+      // Alt + R (Reset)
+      if (e.altKey && e.key === 'r') {
+        e.preventDefault()
+        handleResetFilter()
       }
     }
 
@@ -144,41 +240,150 @@ function AllTagsPage() {
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [tags, selectedTags, handleDeleteTags])
+  }, [tags, selectedTags, handleDeleteTags, handleFilter, handleSubmit, handleResetFilter])
 
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Tags' addLink='/admin/tag/add' />
-      {/* <Pagination /> */}
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
-          <div className='flex flex-col'>
-            <label>
+      {/* Filter */}
+      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+        <div className='grid grid-cols-12 gap-21'>
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <label htmlFor='productQuantity'>
               <span className='font-bold'>Product Quantity: </span>
-              <span>1</span> - <span>12</span>
+              <span>{productQuantity || minPQ}</span> - <span>{maxPQ}</span>
             </label>
             <input
+              id='productQuantity'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
+              min={minPQ || 0}
+              max={maxPQ || 0}
+              value={productQuantity}
+              onChange={e => setProductQuantity(+e.target.value)}
             />
           </div>
 
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
+          {/* Cate Selection */}
+          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[186px] md:max-h-[148px] lg:max-h-[110px] overflow-auto col-span-12 md:col-span-8'>
+            <div
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                tgs.length === selectedFilterTags.length
+                  ? 'bg-dark-100 text-white border-dark-100'
+                  : 'border-slate-300'
+              }`}
+              title='All Types'
+              onClick={() =>
+                setSelectedFilterTags(
+                  tgs.length === selectedFilterTags.length ? [] : tgs.map(category => category._id)
+                )
+              }>
+              All
+            </div>
+            {tgs.map(category => (
+              <div
+                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                  selectedFilterTags.includes(category._id)
+                    ? 'bg-secondary text-white border-secondary'
+                    : 'border-slate-300'
+                }`}
+                title={category.title}
+                key={category._id}
+                onClick={
+                  selectedFilterTags.includes(category._id)
+                    ? () => setSelectedFilterTags(prev => prev.filter(id => id !== category._id))
+                    : () => setSelectedFilterTags(prev => [...prev, category._id])
+                }>
+                {category.title}
+              </div>
+            ))}
+          </div>
 
-          {/* Filter Button */}
-          <div className='flex justify-end md:justify-start items-center'>
-            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
-              Lọc
-              <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
+          {/* Select Filter */}
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+            {/* Sort */}
+            <Input
+              id='sort'
+              label='Sort'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: 'createdAt|-1',
+                  label: 'Newest',
+                },
+                {
+                  value: 'createdAt|1',
+                  label: 'Oldest',
+                },
+                {
+                  value: 'updatedAt|-1',
+                  label: 'Latest',
+                  selected: true,
+                },
+                {
+                  value: 'updatedAt|1',
+                  label: 'Earliest',
+                },
+              ]}
+            />
+
+            {/* Featured */}
+            <Input
+              id='isFeatured'
+              label='Featured'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'On',
+                },
+                {
+                  value: 'false',
+                  label: 'Off',
+                },
+              ]}
+            />
+          </div>
+
+          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
+            {/* Filter Button */}
+            <button
+              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
+              title='Alt + Enter'
+              onClick={handleSubmit(handleFilter)}>
+              Filter
+              <FaFilter size={16} className='ml-1 common-transition' />
+            </button>
+
+            {/* Reset Button */}
+            <button
+              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
+              title='Alt + R'
+              onClick={handleResetFilter}>
+              Reset
+              <BiReset size={24} className='ml-1 common-transition' />
             </button>
           </div>
 
-          <div className='flex justify-end items-center col-span-2 gap-2'>
+          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
             {/* Select All Button */}
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
@@ -243,8 +448,6 @@ function AllTagsPage() {
         </div>
       </div>
 
-      <div className='pt-9' />
-
       {/* Confirm Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
@@ -254,6 +457,14 @@ function AllTagsPage() {
         onAccept={() => handleDeleteTags(selectedTags)}
         isLoading={loadingTags.length > 0}
       />
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} tag{amount > 1 ? 's' : ''}
+      </div>
 
       {/* MAIN (LIST) */}
       <div className='grid grid-cols-1 md:grid-cols-3 gap-21 lg:grid-cols-5'>

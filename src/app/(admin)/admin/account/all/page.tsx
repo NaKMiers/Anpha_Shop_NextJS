@@ -39,7 +39,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   // loading & opening
   const [loadingAccounts, setLoadingAccounts] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
-  const itemPerPage = 8
+  const itemPerPage = 9
 
   // Form
   const {
@@ -465,6 +465,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         isLoading={loadingAccounts.length > 0}
       />
 
+      {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {itemPerPage * +(searchParams?.page || 1) > amount
           ? amount

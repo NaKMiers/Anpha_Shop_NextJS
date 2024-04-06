@@ -1,9 +1,9 @@
 // User -------------------------------------
 
 // [GET]
-export const getAllUsersApi = async () => {
+export const getAllUsersApi = async (query: string = '') => {
   // no-store to bypass cache
-  const res = await fetch('/api/admin/user/all', { cache: 'no-store' })
+  const res = await fetch(`/api/admin/user/all${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

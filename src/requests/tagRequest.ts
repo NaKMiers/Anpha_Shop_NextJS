@@ -3,9 +3,9 @@ import { EditingValues } from '@/app/(admin)/admin/tag/all/page'
 // Tag -------------------------------------
 
 // [GET]
-export const getAllTagsApi = async () => {
+export const getAllTagsApi = async (query: string = '') => {
   // no-store to bypass cache
-  const res = await fetch('/api/admin/tag/all', { cache: 'no-store' })
+  const res = await fetch(`/api/admin/tag/all${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

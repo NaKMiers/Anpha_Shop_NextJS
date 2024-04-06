@@ -145,10 +145,6 @@ function Header({ isStatic }: HeaderProps) {
 
         {/* Nav for > sm */}
         <div className='hidden md:flex items-center gap-4'>
-          <Link href='/buying-introduction' className='text-[18px] font-body tracking-wide text-nowrap'>
-            Hướng dẫn mua hàng
-          </Link>
-
           <Link href='/cart' className='relative'>
             <FaCartShopping size={24} className='common-transition hover:scale-110' />
             {!!cartLength && (
@@ -193,7 +189,9 @@ function Header({ isStatic }: HeaderProps) {
         {/* Menu */}
         <ul
           className={`${
-            isOpenMenu ? 'max-w-full w-[300px] max-h-[350px] p-3' : 'max-h-0 p-0 max-w-0 w-0'
+            isOpenMenu
+              ? 'max-w-full w-[300px] max-h-[350px] p-3 opacity-1'
+              : 'max-h-0 p-0 max-w-0 w-0 opacity-0'
           } overflow-hidden transition-all duration-300 absolute top-[60px] right-0 sm:right-21 z-30 rounded-medium shadow-sky-400 shadow-md bg-dark-100`}>
           {curUser?._id ? (
             <>
@@ -245,7 +243,7 @@ function Header({ isStatic }: HeaderProps) {
               </li>
               <li>
                 <Link
-                  href='/order-history'
+                  href='/user/order-history'
                   className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
                   <FaHistory size={18} className='' />
                   <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>

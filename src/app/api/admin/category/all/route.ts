@@ -1,7 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel from '@/models/CategoryModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
-import { max } from 'moment'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /admin/tag/all
@@ -18,7 +17,7 @@ export async function GET(req: NextRequest) {
 
     // options
     let skip = 0
-    let itemPerPage = 8
+    let itemPerPage = 10
     const filter: { [key: string]: any } = {}
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
@@ -59,7 +58,7 @@ export async function GET(req: NextRequest) {
     const categories = await CategoryModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
     // get all categories without filter
-    const cates = await CategoryModel.find().select('title category productQuantity').lean()
+    const cates = await CategoryModel.find().select('title productQuantity').lean()
 
     return NextResponse.json({ categories, amount, cates }, { status: 200 })
   } catch (err: any) {

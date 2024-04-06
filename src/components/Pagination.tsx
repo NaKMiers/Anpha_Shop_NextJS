@@ -51,27 +51,6 @@ function Pagination({
     router.push(pathname + query)
   }
 
-  // keyboard event
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        // check page
-        if (currentPage - 1 < 1) return
-        handlePage(0, -1)
-      } else if (e.key === 'ArrowRight') {
-        // check current page
-        if (currentPage + 1 > pageAmount) return
-        handlePage(0, 1)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  })
-
   return (
     pageAmount > 1 && (
       <div className={`flex font-semibold gap-2 justify-center ${className}`}>

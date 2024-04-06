@@ -2,6 +2,7 @@ import { connectDatabase } from '@/config/databse'
 import AccountModel from '@/models/AccountModel'
 import { NextRequest, NextResponse } from 'next/server'
 import '@/models/ProductModel'
+import '@/models/CategoryModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import ProductModel from '@/models/ProductModel'
 
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     // options
     let skip = 0
-    let itemPerPage = 8
+    let itemPerPage = 9
     const filter: { [key: string]: any } = {}
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 

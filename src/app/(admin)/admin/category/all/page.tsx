@@ -35,15 +35,15 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const [cates, setCates] = useState<ICategory[]>([])
   const [selectedFilterCategories, setSelectedFilterCategories] = useState<string[]>([])
 
-  const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // loading and confirming
   const [loadingCategories, setLoadingCategories] = useState<string[]>([])
+  const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // values
-  const itemPerPage = 8
+  const itemPerPage = 10
   const [minPQ, setMinPQ] = useState<number>(0)
   const [maxPQ, setMaxPQ] = useState<number>(0)
   const [productQuantity, setProductQuantity] = useState<number>(0)
@@ -53,13 +53,11 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
       sort: 'updatedAt|-1',
-      active: '',
     },
   })
 
@@ -70,6 +68,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
       const query = handleQuery(searchParams)
       console.log(query)
 
+      // start page loading
       dispatch(setPageLoading(true))
 
       try {
@@ -94,11 +93,12 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
 
         setMinPQ(min)
         setMaxPQ(max)
-        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity[0] : max)
+        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity : max)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
       } finally {
+        // stop page loading
         dispatch(setPageLoading(false))
       }
     }
@@ -416,6 +416,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         isLoading={loadingCategories.length > 0}
       />
 
+      {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {itemPerPage * +(searchParams?.page || 1) > amount
           ? amount

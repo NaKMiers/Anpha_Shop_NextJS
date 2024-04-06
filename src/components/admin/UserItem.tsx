@@ -198,7 +198,7 @@ function UserItem({
         <div>
           {/* Avatar */}
           <Image
-            className='aspect-square bg-dark-100 float-start mr-3 rounded-md shadow-lg'
+            className='aspect-square float-start mr-3 rounded-md'
             src={userData.avatar}
             height={68}
             width={68}

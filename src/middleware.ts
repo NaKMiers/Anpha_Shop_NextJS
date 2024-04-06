@@ -39,7 +39,7 @@ const requireAdmin = async (req: NextRequest, token: JWT | null) => {
   console.log('- Require Admin -')
 
   // check auth
-  if (token?.role !== 'admin') {
+  if (!['admin', 'editor'].includes(token?.role as string)) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
