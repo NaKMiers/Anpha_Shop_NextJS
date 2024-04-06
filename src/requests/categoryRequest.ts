@@ -3,9 +3,9 @@ import { EditingValues } from '@/app/(admin)/admin/category/all/page'
 // Category -------------------------------------
 
 // [GET]
-export const getAllCagetoriesApi = async () => {
+export const getAllCagetoriesApi = async (query: string) => {
   // no cache
-  const res = await fetch('/api/admin/category/all', { cache: 'no-store' })
+  const res = await fetch(`/api/admin/category/all${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

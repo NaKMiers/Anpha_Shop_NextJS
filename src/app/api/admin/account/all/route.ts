@@ -83,7 +83,15 @@ export async function GET(req: NextRequest) {
       .lean()
 
     // get all types
-    const types = await ProductModel.find().select('title').lean()
+    const types = await ProductModel.find()
+      .select('title category')
+      .populate({
+        path: 'category',
+        select: 'title',
+      })
+      .lean()
+
+    console.log('types: ', types)
 
     // return response
     return NextResponse.json({ accounts, amount, types }, { status: 200 })
