@@ -2,6 +2,8 @@ import { connectDatabase } from '@/config/databse'
 import AccountModel from '@/models/AccountModel'
 import { NextRequest, NextResponse } from 'next/server'
 import '@/models/ProductModel'
+import { searchParamsToObject } from '@/utils/handleQuery'
+import ProductModel from '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,36 +16,53 @@ export async function GET(req: NextRequest) {
 
   try {
     // get query params
-    const searchParams = req.nextUrl.searchParams
-    const searchParamsObj: { [key: string]: string[] } = {}
-    for (let key of Array.from(searchParams.keys())) {
-      searchParamsObj[key] = searchParams.getAll(key)
-    }
+    const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
+    console.log('params: ', params)
 
-    console.log('searchParams: ', searchParamsObj)
-
+    // options
     let skip = 0
     let itemPerPage = 9
     const filter: { [key: string]: any } = {}
+    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
-    for (const key in searchParamsObj) {
-      if (searchParamsObj.hasOwnProperty(key)) {
-        // handle page param
+    // build filter
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        // Special Cases ---------------------
         if (key === 'page') {
-          const page = +searchParamsObj[key][0]
+          const page = +params[key][0]
           skip = (page - 1) * itemPerPage
           continue
         }
 
-        if (searchParamsObj[key].length === 1) {
-          // 1 value
-          filter[key] = searchParamsObj[key][0]
-        } else {
-          // array of values
-          filter[key] = { $in: searchParamsObj[key] }
+        if (key === 'search') {
+          filter.$or = [
+            { info: { $regex: params[key][0], $options: 'i' } },
+            { usingUser: { $regex: params[key][0], $options: 'i' } },
+          ]
+          continue
         }
+
+        if (key === 'sort') {
+          sort = {
+            [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
+          }
+          continue
+        }
+
+        if (key === 'usingUser') {
+          filter[key] =
+            params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
+          continue
+        }
+
+        // Normal Cases ---------------------
+        filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
     }
+
+    console.log('filter: ', filter)
+    console.log('sort: ', sort)
 
     // get amount of account
     const amount = await AccountModel.countDocuments(filter)
@@ -58,13 +77,16 @@ export async function GET(req: NextRequest) {
           select: 'title',
         },
       })
-      .sort({ createdAt: -1 })
+      .sort(sort)
       .skip(skip)
       .limit(itemPerPage)
       .lean()
 
+    // get all types
+    const types = await ProductModel.find().select('title').lean()
+
     // return response
-    return NextResponse.json({ accounts, amount }, { status: 200 })
+    return NextResponse.json({ accounts, amount, types }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

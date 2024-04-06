@@ -1,5 +1,6 @@
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 interface PaginationProps {
   searchParams: { [key: string]: string[] } | undefined
@@ -17,10 +18,12 @@ function Pagination({
   // hook
   const pathname = usePathname()
   const router = useRouter()
-  console.log(pathname)
 
+  // calculate page amount
   const pageAmount = Math.ceil(amount / itemsPerPage)
   const currentPage = searchParams.page ? +searchParams.page[0] : 1
+
+  console.log('pageAmount: ', pageAmount)
 
   const handlePage = (page: number, next: number = 0) => {
     console.log('handlePage: ', page)
@@ -30,22 +33,52 @@ function Pagination({
     }
 
     // add page to searchParams
-    searchParams.page = [(next != 0 ? currentPage + next : page).toString()]
+    searchParams.page = [
+      (next != 0
+        ? currentPage + next < 1
+          ? 1
+          : currentPage + next > pageAmount
+          ? pageAmount
+          : currentPage + next
+        : page
+      ).toString(),
+    ]
 
     // handle query
     const query = handleQuery(searchParams)
 
-    console.log(query)
-
+    // push to router
     router.push(pathname + query)
   }
 
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        // check page
+        if (currentPage - 1 < 1) return
+        handlePage(0, -1)
+      } else if (e.key === 'ArrowRight') {
+        // check current page
+        if (currentPage + 1 > pageAmount) return
+        handlePage(0, 1)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  })
+
   return (
-    !!pageAmount && (
+    pageAmount > 1 && (
       <div className={`flex font-semibold gap-2 justify-center ${className}`}>
         {currentPage != 1 && (
           <button
             className='rounded-lg border-2 py-[6px] px-2 bg-white hover:bg-secondary hover:text-light common-transition border-white'
+            title='👈 Previous'
             onClick={() => handlePage(0, -1)}>
             Trước
           </button>
@@ -67,6 +100,7 @@ function Pagination({
         {currentPage != pageAmount && (
           <button
             className='rounded-lg border-2 py-[6px] px-2 bg-white hover:bg-secondary hover:text-light common-transition border-white'
+            title='👉 Next'
             onClick={() => handlePage(0, 1)}>
             Sau
           </button>

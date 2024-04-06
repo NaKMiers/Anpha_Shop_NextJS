@@ -28,6 +28,7 @@ function ConfirmDialog({
   const modalRef = useRef<HTMLDivElement>(null)
   const modalBodyRef = useRef<HTMLDivElement>(null)
 
+  // show/hide modal
   useEffect(() => {
     if (open) {
       // show modal
@@ -57,6 +58,25 @@ function ConfirmDialog({
       }, 350)
     }
   }, [open])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // ESC
+      if (e.key === 'Escape') {
+        setOpen(false)
+      }
+
+      // Enter
+      if (e.key === 'Enter') {
+        onAccept()
+        setOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [setOpen, onAccept])
 
   return (
     <div
