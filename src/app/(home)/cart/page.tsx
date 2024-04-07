@@ -314,7 +314,7 @@ function CartPage() {
           )}
 
           {voucherMessage && (
-            <p className={`${voucher ? 'text-green-600' : 'text-rose-500'} -mt-3 mb-2`}>
+            <p className={`${voucher ? 'text-green-500' : 'text-rose-500'} -mt-3 mb-2`}>
               {voucherMessage}
             </p>
           )}
@@ -339,7 +339,7 @@ function CartPage() {
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>{formatPrice(total)}</span>
+            <span className='font-semibold text-3xl text-green-500'>{formatPrice(total)}</span>
           </div>
 
           <div className='flex flex-col gap-3'>

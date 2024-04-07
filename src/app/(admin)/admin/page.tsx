@@ -5,7 +5,7 @@ import Link from 'next/link'
 function AdminPage() {
   return (
     <div className='max-w-1200 mx-auto'>
-      <Heading title='Nguyen Anh Khoa' />
+      <Heading title='Admin' />
 
       <div className='pt-2' />
 

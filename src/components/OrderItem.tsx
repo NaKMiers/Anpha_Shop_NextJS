@@ -26,7 +26,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
       <div className='flex items-center justify-between'>
         <div>
           <span className='font-semibold'>Trạng thái: </span>
-          <span className='text-green-600'>
+          <span className='text-green-500'>
             {order.status === 'pending'
               ? 'Đang xử lí'
               : order.status === 'cancel'
@@ -50,7 +50,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
 
       <div className='flex justify-end items-center gap-2 mb-2'>
         <span>Tổng: </span>
-        <span className='text-green-600 font-semibold text-2xl'>{formatPrice(order.total)}</span>
+        <span className='text-green-500 font-semibold text-2xl'>{formatPrice(order.total)}</span>
       </div>
 
       <div className='flex justify-end gap-2'>

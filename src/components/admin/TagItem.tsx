@@ -96,7 +96,7 @@ function TagItem({
               <FaCheck
                 size={18}
                 className={`group-hover:scale-125 common-transition ${
-                  data.isFeatured ? 'text-green-600' : 'text-slate-300'
+                  data.isFeatured ? 'text-green-500' : 'text-slate-300'
                 }`}
               />
             </button>
@@ -131,7 +131,7 @@ function TagItem({
               {loadingTags.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
-                <FaSave size={18} className='group-hover:scale-125 common-transition text-green-600' />
+                <FaSave size={18} className='group-hover:scale-125 common-transition text-green-500' />
               )}
             </button>
           )}

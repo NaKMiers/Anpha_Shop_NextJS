@@ -1,9 +1,9 @@
 // Voucher
 
 // [GET]
-export const getAllVouchersApi = async () => {
+export const getAllVouchersApi = async (query: string = '') => {
   // no cache
-  const res = await fetch('/api/admin/voucher/all', { cache: 'no-store' })
+  const res = await fetch(`/api/admin/voucher/all${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

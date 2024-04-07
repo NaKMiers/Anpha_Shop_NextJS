@@ -34,7 +34,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [tgs, setTgs] = useState<ITag[]>([])
   const [selectedFilterTags, setSelectedFilterTags] = useState<string[]>([])
-
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // loading and confirming
@@ -53,8 +52,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
-    setValue,
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -67,7 +64,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   useEffect(() => {
     // get all tags
     const getAllTags = async () => {
-      // remove page
       const query = handleQuery(searchParams)
       console.log(query)
 
@@ -80,8 +76,8 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
 
         // set to states
         setTags(tags)
-        setTgs(tgs)
         setAmount(amount)
+        setTgs(tgs)
         setSelectedFilterTags(
           [].concat((searchParams?._id || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
         )
@@ -94,7 +90,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
 
         setMinPQ(min)
         setMaxPQ(max)
-        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity[0] : max)
+        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity : max)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -254,7 +250,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='productQuantity'>
               <span className='font-bold'>Product Quantity: </span>
-              <span>{productQuantity || minPQ}</span> - <span>{maxPQ}</span>
+              <span>{productQuantity || maxPQ}</span> - <span>{maxPQ}</span>
             </label>
             <input
               id='productQuantity'
@@ -395,7 +391,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
               <>
                 {/* Save Many Button */}
                 <button
-                  className='border border-green-600 text-green-600 rounded-lg px-3 py-2 hover:bg-green-600 hover:text-light common-transition'
+                  className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
                   onClick={() =>
                     handleSaveEditingTags(
                       editingValues.filter(value => selectedTags.includes(value._id))

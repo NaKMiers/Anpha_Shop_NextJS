@@ -152,7 +152,7 @@ function OrderItem({
             <FaCheckSquare
               title='userId'
               size={18}
-              className={`${data.userId ? 'text-green-600' : 'text-slate-600'}`}
+              className={`${data.userId ? 'text-green-500' : 'text-slate-600'}`}
             />
           </div>
 
@@ -163,7 +163,7 @@ function OrderItem({
 
           {/* Total */}
           <p
-            className='flex items-center flex-wrap gap-x-2 mr-2 text-green-600 text-xl font-semibold'
+            className='flex items-center flex-wrap gap-x-2 mr-2 text-green-500 text-xl font-semibold'
             title='email'>
             {formatPrice(data.total)}{' '}
             <span

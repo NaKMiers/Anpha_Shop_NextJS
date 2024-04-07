@@ -141,7 +141,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             </p>
           )}
           <p>
-            Số tiền chuyển: <span className='text-green-600 font-semibold'>{formatPrice(1000)}</span>
+            Số tiền chuyển: <span className='text-green-500 font-semibold'>{formatPrice(1000)}</span>
           </p>
           <p>
             Nội dung chuyển khoản:{' '}
@@ -153,7 +153,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
         <p className=''>
           Tài khoản sẽ được gửi cho bạn qua email:{' '}
-          <span className='text-green-600'>{checkout?.email}</span>
+          <span className='text-green-500'>{checkout?.email}</span>
         </p>
 
         <p className='italic text-sky-500'>
@@ -207,7 +207,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
           <div className='flex items-end justify-between mb-4'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-600'>
+            <span className='font-semibold text-3xl text-green-500'>
               {formatPrice(checkout?.total || 0)}
             </span>
           </div>

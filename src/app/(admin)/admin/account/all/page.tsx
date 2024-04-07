@@ -234,6 +234,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       {/* Filter */}
       <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-12 gap-21'>
+          {/* Search */}
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <Input
               className='md:max-w-[450px]'
@@ -306,8 +307,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Select Filter */}
           <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
-            {/* Select */}
-
             {/* Sort */}
             <Input
               id='sort'

@@ -159,23 +159,23 @@ function SecurityPage() {
           <h4 className='text-2xl mb-2'>Mật khẩu</h4>
           <ul>
             <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-600' />
+              <FaCheck size={16} className='text-green-500' />
               <p>Mật khẩu mới phải khác mật khẩu cũ</p>
             </li>
             <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-600' />
+              <FaCheck size={16} className='text-green-500' />
               <p>Phải có tối thiếu 6 ký tự</p>
             </li>
             <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-600' />
+              <FaCheck size={16} className='text-green-500' />
               <p>Phải có ít nhất một chữ hoa</p>
             </li>
             <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-600' />
+              <FaCheck size={16} className='text-green-500' />
               <p>Phải có ít nhất một chữ thường</p>
             </li>
             <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-600' />
+              <FaCheck size={16} className='text-green-500' />
               <p>Phải có ít nhất một chữ số</p>
             </li>
           </ul>

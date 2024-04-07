@@ -375,7 +375,7 @@ function EditVoucherPage() {
           />
           <label
             className={
-              'select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition peer-checked:bg-green-600 peer-checked:text-white bg-white text-green-600'
+              'select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition peer-checked:bg-green-500 peer-checked:text-white bg-white text-green-500'
             }
             htmlFor='active'>
             Active

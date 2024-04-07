@@ -151,14 +151,14 @@ function ProductItem({
               </span>{' '}
               {fieldEditing.sold ? (
                 <input
-                  className='max-w-[40px] px-1 rounded-md border border-green-600 text-green-600 outline-none text-ellipsis'
+                  className='max-w-[40px] px-1 rounded-md border border-green-500 text-green-500 outline-none text-ellipsis'
                   value={fieldValue.sold}
                   onChange={e => setFieldValue(prev => ({ ...prev, sold: +e.target.value }))}
                   disabled={fieldLoading.sold}
                   type='text'
                 />
               ) : (
-                <span className='text-green-600'>{fieldValue.sold}</span>
+                <span className='text-green-500'>{fieldValue.sold}</span>
               )}
             </div>
 
@@ -195,15 +195,16 @@ function ProductItem({
           {/* Tags */}
           <p className='text-slate-500'>
             <span className='text-dark font-semibold'>Tags: </span>
-            {data.tags.map((tag: ITag) => (
+            {data.tags.map((tag: ITag, index) => (
               <span key={tag.slug} className='text-slate-400'>
                 {tag.title}
+                {index < data.tags.length - 1 ? ', ' : ''}
               </span>
             ))}
           </p>
 
           {/* Category */}
-          <p className='text-rose-600'>
+          <p className='text-orange-600'>
             <span className='font-semibold text-dark'>Category: </span>{' '}
             <span>{data.category.title}</span>
           </p>
@@ -226,7 +227,7 @@ function ProductItem({
               handleActivateProducts([data._id], !data.active)
             }}>
             {data.active ? (
-              <FaEye size={18} className='group-hover:scale-125 common-transition text-green-600' />
+              <FaEye size={18} className='group-hover:scale-125 common-transition text-green-500' />
             ) : (
               <FaEyeSlash size={18} className='group-hover:scale-125 common-transition text-slate-300' />
             )}

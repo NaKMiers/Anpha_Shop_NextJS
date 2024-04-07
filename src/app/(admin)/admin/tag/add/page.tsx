@@ -96,7 +96,7 @@ function AddTagPage() {
             {...register('isFeatured', { required: false })}
           />
           <label
-            className='select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition bg-white text-green-600 peer-checked:bg-green-600 peer-checked:text-white'
+            className='select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition bg-white text-green-500 peer-checked:bg-green-500 peer-checked:text-white'
             htmlFor='isFeatured'>
             Featured
           </label>

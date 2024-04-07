@@ -1,6 +1,7 @@
 'use client'
 
 import ConfirmDialog from '@/components/ConfirmDialog'
+import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
 import ProductItem from '@/components/admin/ProductItem'
@@ -11,42 +12,121 @@ import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { activateProductsApi, deleteProductsApi, getAllProductsApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
+import { handleQuery } from '@/utils/handleQuery'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaFilter } from 'react-icons/fa'
+import { BiReset } from 'react-icons/bi'
+import { FaFilter, FaSort } from 'react-icons/fa'
 
 export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: ICategory }
 
-function AllProductsPage() {
-  // hook
+function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  // store
   const dispatch = useAppDispatch()
+  const pathname = usePathname()
+  const router = useRouter()
 
   // states
   const [products, setProducts] = useState<ProductWithTagsAndCategory[]>([])
+  const [amount, setAmount] = useState<number>(0)
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
+  const [tgs, setTgs] = useState<ITag[]>([])
+  const [selectedFilterTags, setSelectedFilterTags] = useState<string[]>([])
+  const [cates, setCates] = useState<ICategory[]>([])
+  const [selectedFilterCates, setSelectedFilterCates] = useState<string[]>([])
+
+  // loading and confirming
   const [loadingProducts, setLoadingProducts] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
+  // values
+  const itemPerPage = 9
+  const [minPrice, setMinPrice] = useState<number>(0)
+  const [maxPrice, setMaxPrice] = useState<number>(0)
+  const [price, setPrice] = useState<number>(0)
+
+  const [minSold, setMinSold] = useState<number>(0)
+  const [maxSold, setMaxSold] = useState<number>(0)
+  const [sold, setSold] = useState<number>(0)
+
+  const [minStock, setMinStock] = useState<number>(0)
+  const [maxStock, setMaxStock] = useState<number>(0)
+  const [stock, setStock] = useState<number>(0)
+
+  // Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      sort: 'updatedAt|-1',
+      active: '',
+      flashsale: '',
+    },
+  })
+
   // get all product
   useEffect(() => {
+    // get all products
     const getAllProducts = async () => {
+      const query = handleQuery(searchParams)
+      console.log(query)
+
+      // start page loading
       dispatch(setPageLoading(true))
 
       try {
         // send request to server to get all products
-        const { products } = await getAllProductsApi()
+        const { products, amount, prods, cates, tgs } = await getAllProductsApi(query)
 
         // set products to state
         setProducts(products)
+        setAmount(amount)
+        setCates(cates)
+        setTgs(tgs)
+
+        setSelectedFilterCates(
+          []
+            .concat((searchParams?.category || cates.map((cate: ICategory) => cate._id)) as [])
+            .map(type => type)
+        )
+
+        setSelectedFilterTags(
+          [].concat((searchParams?.tag || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
+        )
+
+        // get min - max
+        const minPrice = Math.min(...prods.map((prod: IProduct) => prod.price))
+        const maxPrice = Math.max(...prods.map((prod: IProduct) => prod.price))
+        setMinPrice(minPrice)
+        setMaxPrice(maxPrice)
+        setPrice(searchParams?.price ? +searchParams.price : maxPrice)
+
+        const minStock = Math.min(...prods.map((prod: IProduct) => prod.stock))
+        const maxStock = Math.max(...prods.map((prod: IProduct) => prod.stock))
+        setMinStock(minStock)
+        setMaxStock(maxStock)
+        setStock(searchParams?.stock ? +searchParams.stock : maxStock)
+
+        const minSold = Math.min(...prods.map((prod: IProduct) => prod.sold))
+        const maxSold = Math.max(...prods.map((prod: IProduct) => prod.sold))
+        setMinSold(minSold)
+        setMaxSold(maxSold)
+        setSold(searchParams?.sold ? +searchParams.sold : maxSold)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
       } finally {
+        // stop page loading
         dispatch(setPageLoading(false))
       }
     }
     getAllProducts()
-  }, [dispatch])
+  }, [dispatch, searchParams])
 
   // activate product
   const handleActivateProducts = useCallback(async (ids: string[], value: boolean) => {
@@ -101,21 +181,73 @@ function AllProductsPage() {
     }
   }, [])
 
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      console.log(data)
+
+      // handle query
+      const query = handleQuery({
+        ...searchParams,
+        ...data,
+        price: [price.toString()],
+        sold: [sold.toString()],
+        stock: [stock.toString()],
+        category: selectedFilterCates.length === cates.length ? [] : selectedFilterCates,
+        tags: selectedFilterTags.length === tgs.length ? [] : selectedFilterTags,
+      })
+
+      console.log(query)
+
+      router.push(pathname + query)
+    },
+    [
+      searchParams,
+      price,
+      sold,
+      stock,
+      selectedFilterCates,
+      selectedFilterTags,
+      router,
+      pathname,
+      tgs,
+      cates,
+    ]
+  )
+
+  // handle reset filter
+  const handleResetFilter = useCallback(() => {
+    reset()
+    router.push(pathname)
+  }, [reset, router, pathname])
+
   // keyboard event
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Ctrl + A
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt + A (Select All)
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault()
         setSelectedProducts(prev =>
           prev.length === products.length ? [] : products.map(product => product._id)
         )
       }
 
-      // Delete
-      if (event.key === 'Delete') {
-        event.preventDefault() // Prevent the default action
-        handleDeleteProducts(selectedProducts)
+      // Alt + Delete (Delete)
+      if (e.altKey && e.key === 'Delete') {
+        e.preventDefault()
+        setIsOpenConfirmModal(true)
+      }
+
+      // Alt + F (Filter)
+      if (e.altKey && e.key === 'f') {
+        e.preventDefault()
+        handleSubmit(handleFilter)()
+      }
+
+      // Alt + R (Reset)
+      if (e.altKey && e.key === 'r') {
+        e.preventDefault()
+        handleResetFilter()
       }
     }
 
@@ -124,72 +256,252 @@ function AllProductsPage() {
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [products, selectedProducts, handleDeleteProducts])
+  }, [handleFilter, handleResetFilter, products, handleSubmit])
 
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Products' addLink='/admin/product/add' />
-      {/* <Pagination /> */}
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
-          <div className='flex flex-col'>
-            <label>
+      {/* Filter */}
+      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+        <div className='grid grid-cols-12 gap-21'>
+          {/* Price */}
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <label htmlFor='price'>
               <span className='font-bold'>Price: </span>
-              <span>{formatPrice(9000)}</span>
-              {' - '}
-              <span>{formatPrice(2000000)}</span>
+              <span>{formatPrice(price || maxPrice)}</span> - <span>{formatPrice(maxPrice)}</span>
             </label>
             <input
+              id='price'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
-              onChange={() => {}}
+              min={minPrice || 0}
+              max={maxPrice || 0}
+              value={price}
+              onChange={e => setPrice(+e.target.value)}
             />
           </div>
-          <div className='flex flex-col'>
-            <label>
+
+          {/* Sold */}
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <label htmlFor='sold'>
               <span className='font-bold'>Sold: </span>
-              <span>{formatPrice(9000)}</span>
-              {' - '}
-              <span>{formatPrice(2000000)}</span>
+              <span>{sold || maxSold}</span> - <span>{maxSold}</span>
             </label>
             <input
+              id='sold'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
-              onChange={() => {}}
+              min={minSold || 0}
+              max={maxSold || 0}
+              value={sold}
+              onChange={e => setSold(+e.target.value)}
             />
           </div>
-          <div className='flex flex-col'>
-            <label>
+
+          {/* Stock */}
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <label htmlFor='stock'>
               <span className='font-bold'>Stock: </span>
-              <span>{formatPrice(9000)}</span>
-              {' - '}
-              <span>{formatPrice(2000000)}</span>
+              <span>{stock || maxStock}</span> - <span>{maxStock}</span>
             </label>
             <input
+              id='stock'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
-              onChange={() => {}}
+              min={minStock || 0}
+              max={maxStock || 0}
+              value={stock}
+              onChange={e => setStock(+e.target.value)}
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
-          <div className='flex justify-end md:justify-start items-center'>
-            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
-              Lọc
-              <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
+
+          {/* Cate Selection */}
+          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[186px] md:max-h-[148px] lg:max-h-[110px] overflow-auto col-span-12'>
+            <div
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                cates.length === selectedFilterCates.length
+                  ? 'bg-dark-100 text-white border-dark-100'
+                  : 'border-slate-300'
+              }`}
+              title='All Types'
+              onClick={() =>
+                setSelectedFilterCates(
+                  cates.length === selectedFilterCates.length ? [] : cates.map(category => category._id)
+                )
+              }>
+              All
+            </div>
+            {cates.map(category => (
+              <div
+                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                  selectedFilterCates.includes(category._id)
+                    ? 'bg-primary text-white border-primary'
+                    : 'border-slate-300'
+                }`}
+                title={category.title}
+                key={category._id}
+                onClick={
+                  selectedFilterCates.includes(category._id)
+                    ? () => setSelectedFilterCates(prev => prev.filter(id => id !== category._id))
+                    : () => setSelectedFilterCates(prev => [...prev, category._id])
+                }>
+                {category.title}
+              </div>
+            ))}
+          </div>
+
+          {/* Tag Selection */}
+          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[186px] md:max-h-[148px] lg:max-h-[110px] overflow-auto col-span-12'>
+            <div
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                tgs.length === selectedFilterTags.length
+                  ? 'bg-dark-100 text-white border-dark-100'
+                  : 'border-slate-300'
+              }`}
+              title='All Types'
+              onClick={() =>
+                setSelectedFilterTags(
+                  tgs.length === selectedFilterTags.length ? [] : tgs.map(tag => tag._id)
+                )
+              }>
+              All
+            </div>
+            {tgs.map(tag => (
+              <div
+                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                  selectedFilterTags.includes(tag._id)
+                    ? 'bg-secondary text-white border-secondary'
+                    : 'border-slate-300'
+                }`}
+                title={tag.title}
+                key={tag._id}
+                onClick={
+                  selectedFilterTags.includes(tag._id)
+                    ? () => setSelectedFilterTags(prev => prev.filter(id => id !== tag._id))
+                    : () => setSelectedFilterTags(prev => [...prev, tag._id])
+                }>
+                {tag.title}
+              </div>
+            ))}
+          </div>
+
+          {/* Select Filter */}
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+            {/* Sort */}
+            <Input
+              id='sort'
+              label='Sort'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: 'createdAt|-1',
+                  label: 'Newest',
+                },
+                {
+                  value: 'createdAt|1',
+                  label: 'Oldest',
+                },
+                {
+                  value: 'updatedAt|-1',
+                  label: 'Latest',
+                  selected: true,
+                },
+                {
+                  value: 'updatedAt|1',
+                  label: 'Earliest',
+                },
+              ]}
+            />
+
+            {/* Active */}
+            <Input
+              id='active'
+              label='Active'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'On',
+                },
+                {
+                  value: 'false',
+                  label: 'Off',
+                },
+              ]}
+            />
+
+            {/* Flash Sale */}
+            <Input
+              id='flashsale'
+              label='Flash Sale'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'On',
+                },
+                {
+                  value: 'false',
+                  label: 'Off',
+                },
+              ]}
+            />
+          </div>
+
+          {/* Filter Buttons */}
+          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
+            {/* Filter Button */}
+            <button
+              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
+              title='Alt + Enter'
+              onClick={handleSubmit(handleFilter)}>
+              Filter
+              <FaFilter size={16} className='ml-1 common-transition' />
+            </button>
+
+            {/* Reset Button */}
+            <button
+              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
+              title='Alt + R'
+              onClick={handleResetFilter}>
+              Reset
+              <BiReset size={24} className='ml-1 common-transition' />
             </button>
           </div>
 
-          <div className='flex justify-end items-center col-span-2 gap-2'>
+          {/* Action Buttons */}
+          <div className='flex justify-end items-center col-span-12 gap-2'>
             {/* Select All Button */}
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
@@ -246,8 +558,6 @@ function AllProductsPage() {
         </div>
       </div>
 
-      <div className='pt-9' />
-
       {/* Confirm Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
@@ -257,6 +567,14 @@ function AllProductsPage() {
         onAccept={() => handleDeleteProducts(selectedProducts)}
         isLoading={loadingProducts.length > 0}
       />
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} product{amount > 1 ? 's' : ''}
+      </div>
 
       {/* MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>

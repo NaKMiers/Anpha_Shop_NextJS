@@ -87,8 +87,8 @@ function AllSummariesPage() {
 
             <p>
               <span className='font-semibold'>Vouchers: </span>
-              <span className='text-green-600'>GUDJOB</span>{' '}
-              <span className='text-green-600'>GIAM10K</span>
+              <span className='text-green-500'>GUDJOB</span>{' '}
+              <span className='text-green-500'>GIAM10K</span>
             </p>
 
             <div className='flex self-end border border-dark text-dark rounded-lg px-3 py-2 gap-4'>

@@ -126,7 +126,7 @@ function UserPage() {
             <div className='mb-3'>
               <p className='font-semibold'>Số dư tài khoản</p>
               <div className='flex items-center gap-2 justify-center sm:justify-normal'>
-                {user?.balance >= 0 && <p className='text-green-600'>{formatPrice(user?.balance)}</p>}
+                {user?.balance >= 0 && <p className='text-green-500'>{formatPrice(user?.balance)}</p>}
                 <Link
                   className='group flex-shrink-0 rounded-full border-2 border-primary hover:border-secondary p-[2px] hover:scale-110 common-transition'
                   href='/recharge'>

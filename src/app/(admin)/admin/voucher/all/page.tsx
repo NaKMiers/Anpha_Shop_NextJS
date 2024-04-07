@@ -10,50 +10,99 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
 import { activateVouchersApi, deleteVouchersApi, getAllVouchersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
+import { handleQuery } from '@/utils/handleQuery'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaCalendar, FaFilter } from 'react-icons/fa'
+import { BiReset } from 'react-icons/bi'
+import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 
 export type VoucherWithOwner = IVoucher & { owner: { firstname: string; lastname: string } }
 
-function AllVouchersPage() {
+function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
   const dispatch = useAppDispatch()
+  const pathname = usePathname()
+  const router = useRouter()
 
   // states
   const [vouchers, setVouchers] = useState<VoucherWithOwner[]>([])
+  const [amount, setAmount] = useState<number>(0)
   const [selectedVouchers, setSelectedVouchers] = useState<string[]>([])
+
+  // loading and confirming
   const [loadingVouchers, setLoadingVouchers] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // values
+  const itemPerPage = 9
+  const [minMinTotal, setMinMinTotal] = useState<number>(0)
+  const [maxMinTotal, setMaxMinTotal] = useState<number>(0)
+  const [minTotal, setMinTotal] = useState<number>(0)
+
+  const [minMaxReduce, setMinMaxReduce] = useState<number>(0)
+  const [maxMaxReduce, setMaxMaxReduce] = useState<number>(0)
+  const [maxReduce, setMaxReduce] = useState<number>(0)
 
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      orderCode: '',
+      search: '',
+      sort: 'updatedAt|-1',
+      type: '',
+      active: '',
+      timesLeft: '',
+      beginFrom: '',
+      beginTo: '',
+      expireFrom: '',
+      expireTo: '',
     },
   })
 
   // get all vouchers
   useEffect(() => {
-    dispatch(setPageLoading(true))
-
+    // get all vouchers
     const getAllVouchers = async () => {
+      const query = handleQuery(searchParams)
+      console.log(query)
+
+      // start page loading
+      dispatch(setPageLoading(true))
+
       try {
-        const { vouchers } = await getAllVouchersApi() // cache: no-store
+        const { vouchers, amount, vcs } = await getAllVouchersApi(query) // cache: no-store
+
+        // set vouchers to state
         setVouchers(vouchers)
+        setAmount(amount)
+
+        // get min - max
+        const minMinTotal = Math.min(...vcs.map((vc: IVoucher) => vc.minTotal))
+        const maxMinTotal = Math.max(...vcs.map((vc: IVoucher) => vc.minTotal))
+        setMinMinTotal(minMinTotal)
+        setMaxMinTotal(maxMinTotal)
+        setMinTotal(searchParams?.minTotal ? +searchParams.minTotal : maxMinTotal)
+
+        const minMaxReduce = Math.min(...vcs.map((vc: IVoucher) => vc.maxReduce))
+        const maxMaxReduce = Math.max(...vcs.map((vc: IVoucher) => vc.maxReduce))
+        setMinMaxReduce(minMaxReduce)
+        setMaxMaxReduce(maxMaxReduce)
+        setMaxReduce(searchParams?.maxReduce ? +searchParams.maxReduce : maxMaxReduce)
       } catch (err: any) {
         console.log(err)
       } finally {
+        // stop page loading
         dispatch(setPageLoading(false))
       }
     }
     getAllVouchers()
-  }, [dispatch])
+  }, [dispatch, searchParams])
 
   // activate voucher
   const handleActivateVouchers = useCallback(async (ids: string[], value: boolean) => {
@@ -105,21 +154,64 @@ function AllVouchersPage() {
     }
   }, [])
 
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      console.log(data)
+      const { beginFrom, beginTo, expireFrom, expireTo, ...rest } = data
+
+      rest.begin = (beginFrom || '') + '|' + (beginTo || '')
+      rest.expire = (expireFrom || '') + '|' + (expireTo || '')
+      console.log(rest)
+
+      // handle query
+      const query = handleQuery({
+        ...searchParams,
+        ...rest,
+        minTotal: minTotal === maxMinTotal ? [] : [minTotal.toString()],
+        maxReduce: maxReduce === maxMaxReduce ? [] : [maxReduce.toString()],
+      })
+
+      console.log(query)
+
+      router.push(pathname + query)
+    },
+    [router, searchParams, minTotal, maxReduce, pathname, maxMinTotal, maxMaxReduce]
+  )
+
+  // handle reset filter
+  const handleResetFilter = useCallback(() => {
+    reset()
+    router.push(pathname)
+  }, [reset, router, pathname])
+
   // keyboard event
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Ctrl + A
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt + A (Select All)
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault()
         setSelectedVouchers(prev =>
           prev.length === vouchers.length ? [] : vouchers.map(voucher => voucher._id)
         )
       }
 
-      // Delete
-      if (event.key === 'Delete') {
-        event.preventDefault() // Prevent the default aconti
-        handleDeleteVouchers(selectedVouchers)
+      // Alt + Delete (Delete)
+      if (e.altKey && e.key === 'Delete') {
+        e.preventDefault()
+        setIsOpenConfirmModal(true)
+      }
+
+      // Alt + F (Filter)
+      if (e.altKey && e.key === 'f') {
+        e.preventDefault()
+        handleSubmit(handleFilter)()
+      }
+
+      // Alt + R (Reset)
+      if (e.altKey && e.key === 'r') {
+        e.preventDefault()
+        handleResetFilter()
       }
     }
 
@@ -128,51 +220,79 @@ function AllVouchersPage() {
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [vouchers, selectedVouchers, handleDeleteVouchers])
+  }, [handleFilter, handleResetFilter, handleSubmit, vouchers])
 
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Vouchers' addLink='/admin/voucher/add' />
-      {/* <Pagination /> */}
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
-          <div className='flex flex-col'>
-            <label>
+      {/* Filter */}
+      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+        <div className='grid grid-cols-12 gap-21'>
+          {/* Search */}
+          <div className='flex flex-col col-span-12'>
+            <Input
+              className='md:max-w-[450px]'
+              id='search'
+              label='Search'
+              disabled={false}
+              register={register}
+              errors={errors}
+              type='text'
+              icon={FaSearch}
+            />
+          </div>
+
+          {/* Min Total */}
+          <div className='flex flex-col col-span-12 md:col-span-6'>
+            <label htmlFor='minTotal'>
               <span className='font-bold'>Min Total: </span>
-              <span>{formatPrice(35000)}</span> - <span>{formatPrice(60000)}</span>
+              <span>{formatPrice(minTotal || maxMinTotal)}</span> -{' '}
+              <span>{formatPrice(maxMinTotal)}</span>
             </label>
             <input
+              id='minTotal'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
-              onChange={() => {}}
+              min={minMinTotal || 0}
+              max={maxMinTotal || 0}
+              value={minTotal}
+              onChange={e => setMinTotal(+e.target.value)}
             />
           </div>
-          <div className='flex flex-col'>
-            <label>
+
+          {/* Max Reduce */}
+          <div className='flex flex-col col-span-12 md:col-span-6'>
+            <label htmlFor='maxReduce'>
               <span className='font-bold'>Max Reduce: </span>
-              <span>{formatPrice(10000)}</span> - <span>{formatPrice(15000)}</span>
+              <span>{formatPrice(maxReduce || maxMaxReduce)}</span> -{' '}
+              <span>{formatPrice(maxMaxReduce)}</span>
             </label>
             <input
+              id='maxReduce'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
-              onChange={() => {}}
+              min={minMaxReduce || 0}
+              max={maxMaxReduce || 0}
+              value={maxReduce}
+              onChange={e => setMaxReduce(+e.target.value)}
             />
           </div>
-          <div className='flex gap-2'>
+
+          {/* Begin */}
+          <div className='flex gap-2 col-span-12 md:col-span-6'>
             <Input
               id='beginFrom'
               label='Begin From'
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -184,20 +304,20 @@ function AllVouchersPage() {
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
             />
           </div>
-          <div className='flex gap-2'>
+
+          {/* Expire */}
+          <div className='flex gap-2 col-span-12 md:col-span-6'>
             <Input
               id='expireFrom'
               label='Expire From'
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -209,7 +329,6 @@ function AllVouchersPage() {
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -217,17 +336,143 @@ function AllVouchersPage() {
           </div>
 
           {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+            {/* Sort */}
+            <Input
+              id='sort'
+              label='Sort'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: 'createdAt|-1',
+                  label: 'Newest',
+                },
+                {
+                  value: 'createdAt|1',
+                  label: 'Oldest',
+                },
+                {
+                  value: 'updatedAt|-1',
+                  label: 'Latest',
+                  selected: true,
+                },
+                {
+                  value: 'updatedAt|1',
+                  label: 'Earliest',
+                },
+              ]}
+            />
 
-          {/* Filter Button */}
-          <div className='flex justify-end md:justify-start items-center'>
-            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
-              Lọc
-              <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
+            {/* Times Left */}
+            <Input
+              id='timesLeft'
+              label='Times Left'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'Still',
+                },
+                {
+                  value: 'false',
+                  label: 'Run Out',
+                },
+              ]}
+            />
+
+            {/* Type */}
+            <Input
+              id='type'
+              label='Type'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'percentage',
+                  label: 'Percentage',
+                },
+                {
+                  value: 'fixed-reduce',
+                  label: 'Fixed Reduce',
+                },
+                {
+                  value: 'fixed',
+                  label: 'Fixed',
+                },
+              ]}
+            />
+
+            {/* Active */}
+            <Input
+              id='active'
+              label='Active'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'On',
+                },
+                {
+                  value: 'false',
+                  label: 'Off',
+                },
+              ]}
+            />
+          </div>
+
+          {/* Filter Buttons */}
+          <div className='flex justify-end items-center gap-2 col-span-12 md:col-span-4'>
+            {/* Filter Button */}
+            <button
+              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
+              title='Alt + Enter'
+              onClick={handleSubmit(handleFilter)}>
+              Filter
+              <FaFilter size={16} className='ml-1 common-transition' />
+            </button>
+
+            {/* Reset Button */}
+            <button
+              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
+              title='Alt + R'
+              onClick={handleResetFilter}>
+              Reset
+              <BiReset size={24} className='ml-1 common-transition' />
             </button>
           </div>
 
-          <div className='flex justify-end items-center col-span-2 gap-2'>
+          {/* Action Buttons */}
+          <div className='flex justify-end items-center gap-2 col-span-12'>
             {/* Select All Button */}
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
@@ -269,8 +514,6 @@ function AllVouchersPage() {
         </div>
       </div>
 
-      <div className='pt-9' />
-
       {/* Confirm Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
@@ -280,6 +523,14 @@ function AllVouchersPage() {
         onAccept={() => handleDeleteVouchers(selectedVouchers)}
         isLoading={loadingVouchers.length > 0}
       />
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} voucher{amount > 1 ? 's' : ''}
+      </div>
 
       {/* MAIN (LIST) */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21'>

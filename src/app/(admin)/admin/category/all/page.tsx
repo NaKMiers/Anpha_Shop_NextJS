@@ -247,7 +247,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='productQuantity'>
               <span className='font-bold'>Product Quantity: </span>
-              <span>{productQuantity || minPQ}</span> - <span>{maxPQ}</span>
+              <span>{productQuantity || maxPQ}</span> - <span>{maxPQ}</span>
             </label>
             <input
               id='productQuantity'
@@ -332,6 +332,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             />
           </div>
 
+          {/* Filter Buttons */}
           <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
             {/* Filter Button */}
             <button
@@ -352,6 +353,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             </button>
           </div>
 
+          {/* Acction Buttons */}
           <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
             {/* Select All Button */}
             <button
@@ -368,7 +370,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
               <>
                 {/* Save Many Button */}
                 <button
-                  className='border border-green-600 text-green-600 rounded-lg px-3 py-2 hover:bg-green-600 hover:text-light common-transition'
+                  className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
                   onClick={() =>
                     handleSaveEditingCategories(
                       editingValues.filter(value => selectedCategories.includes(value._id))

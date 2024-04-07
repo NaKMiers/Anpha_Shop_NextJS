@@ -37,10 +37,11 @@ export async function GET(req: NextRequest) {
         }
 
         if (key === 'search') {
-          filter.$or = [
-            { info: { $regex: params[key][0], $options: 'i' } },
-            { usingUser: { $regex: params[key][0], $options: 'i' } },
-          ]
+          const searchFields = ['info', 'usingUser']
+
+          filter.$or = searchFields.map(field => ({
+            [field]: { $regex: params[key][0], $options: 'i' },
+          }))
           continue
         }
 

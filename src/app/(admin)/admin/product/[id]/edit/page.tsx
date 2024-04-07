@@ -287,8 +287,8 @@ function AddProductPage() {
             <FaPlay size={16} className='text-secondary' />
           </div>
           <label
-            className={`select-none cursor-pointer border border-green-600 px-4 py-2 rounded-lg common-transition  ${
-              isChecked ? 'bg-green-600 text-white' : 'bg-white text-green-600'
+            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition  ${
+              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
             }`}
             htmlFor='isActive'
             onClick={() => setIsChecked(!isChecked)}>
@@ -316,8 +316,8 @@ function AddProductPage() {
                   id={tag._id}
                 />
                 <label
-                  className={`cursor-pointer select-none rounded-lg border border-green-600 text-green-600 py-[6px] px-3 common-transition ${
-                    selectedTags.some(t => t === tag._id) ? 'bg-green-600 text-white' : ''
+                  className={`cursor-pointer select-none rounded-lg border border-green-500 text-green-500 py-[6px] px-3 common-transition ${
+                    selectedTags.some(t => t === tag._id) ? 'bg-green-500 text-white' : ''
                   }`}
                   htmlFor={tag._id}>
                   {tag.title}

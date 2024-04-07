@@ -35,7 +35,7 @@ function RechargePage() {
             </li>
             <li>
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
-              <span className='text-green-600'>Nguyễn Anh Khoa</span>)
+              <span className='text-green-500'>Nguyễn Anh Khoa</span>)
             </li>
           </ul>
 
@@ -90,7 +90,7 @@ function RechargePage() {
             </li>
             <li>
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
-              <span className='text-green-600'>Nguyễn Anh Khoa</span>)
+              <span className='text-green-500'>Nguyễn Anh Khoa</span>)
             </li>
           </ul>
 

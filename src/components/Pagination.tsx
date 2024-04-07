@@ -21,7 +21,7 @@ function Pagination({
 
   // calculate page amount
   const pageAmount = Math.ceil(amount / itemsPerPage)
-  const currentPage = searchParams.page ? +searchParams.page[0] : 1
+  const currentPage = searchParams.page ? +searchParams.page : 1
 
   console.log('pageAmount: ', pageAmount)
 

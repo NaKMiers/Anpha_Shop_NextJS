@@ -98,7 +98,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             <div className='flex items-center gap-1'>
               <TbPackages className='w-7 text-darker' size={26} />
               <span className='text-darker font-bold text-nowrap'>Còn lại:</span>
-              <span className='text-green-600'>{product?.stock}</span>
+              <span className='text-green-500'>{product?.stock}</span>
             </div>
             <div className='flex items-center gap-1'>
               <FaCircleCheck className='w-7 text-darker' size={20} />
