@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import '@/models/UserModel'
 import { notifyAccountUpdated } from '@/utils/sendMail'
 import OrderModel, { IOrder } from '@/models/OrderModel'
-import { getTimes } from '@/utils/number'
 import AccountModel, { IAccount } from '@/models/AccountModel'
 import mongoose from 'mongoose'
+import { getTimes } from '@/utils'
 
 // [PUT]: /account/:id/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {

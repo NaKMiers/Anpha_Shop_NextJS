@@ -1,7 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import AccountModel from '@/models/AccountModel'
 import ProductModel from '@/models/ProductModel'
-import { getTimes } from '@/utils/number'
+import { getTimes } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [POST]: /admin/account/add

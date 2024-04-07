@@ -3,9 +3,9 @@ import CategoryModel, { ICategory } from '@/models/CategoryModel'
 import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
-import { shuffleArray } from '@/utils/number'
 import { NextResponse } from 'next/server'
 import { FullyProduct } from './product/[slug]/route'
+import { shuffleArray } from '@/utils'
 
 export const dynamic = 'force-dynamic'
 
