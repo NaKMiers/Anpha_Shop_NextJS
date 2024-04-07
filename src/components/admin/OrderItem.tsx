@@ -94,10 +94,10 @@ function OrderItem({
           selectedOrders.includes(data._id)
             ? 'bg-sky-50 -translate-y-1'
             : data.status === 'done'
-            ? 'bg-green-200'
+            ? 'bg-green-100'
             : data.status === 'pending'
-            ? 'bg-red-200'
-            : 'bg-slate-300'
+            ? 'bg-red-100'
+            : 'bg-slate-200'
         }  ${className}`}
         onClick={() =>
           setSelectedOrders(prev =>

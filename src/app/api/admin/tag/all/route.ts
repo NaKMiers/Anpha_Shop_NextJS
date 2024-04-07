@@ -59,10 +59,18 @@ export async function GET(req: NextRequest) {
     // get all tags from database
     const tags = await TagModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
-    // get all tags without filter
-    const tgs = await TagModel.find().select('title productQuantity').lean()
+    // get all order without filter
+    const chops = await TagModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          minProductQuantity: { $min: '$productQuantity' },
+          maxProductQuantity: { $max: '$productQuantity' },
+        },
+      },
+    ])
 
-    return NextResponse.json({ tags, amount, tgs }, { status: 200 })
+    return NextResponse.json({ tags, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

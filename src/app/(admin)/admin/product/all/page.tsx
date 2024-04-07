@@ -81,7 +81,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
 
       try {
         // send request to server to get all products
-        const { products, amount, prods, cates, tgs } = await getAllProductsApi(query)
+        const { products, amount, cates, tgs, chops } = await getAllProductsApi(query)
 
         // set products to state
         setProducts(products)
@@ -100,23 +100,17 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         )
 
         // get min - max
-        const minPrice = Math.min(...prods.map((prod: IProduct) => prod.price))
-        const maxPrice = Math.max(...prods.map((prod: IProduct) => prod.price))
-        setMinPrice(minPrice)
-        setMaxPrice(maxPrice)
-        setPrice(searchParams?.price ? +searchParams.price : maxPrice)
+        setMinPrice(chops.minPrice)
+        setMaxPrice(chops.maxPrice)
+        setPrice(searchParams?.price ? +searchParams.price : chops.maxPrice)
 
-        const minStock = Math.min(...prods.map((prod: IProduct) => prod.stock))
-        const maxStock = Math.max(...prods.map((prod: IProduct) => prod.stock))
-        setMinStock(minStock)
-        setMaxStock(maxStock)
-        setStock(searchParams?.stock ? +searchParams.stock : maxStock)
+        setMinStock(chops.minStock)
+        setMaxStock(chops.maxStock)
+        setStock(searchParams?.stock ? +searchParams.stock : chops.maxStock)
 
-        const minSold = Math.min(...prods.map((prod: IProduct) => prod.sold))
-        const maxSold = Math.max(...prods.map((prod: IProduct) => prod.sold))
-        setMinSold(minSold)
-        setMaxSold(maxSold)
-        setSold(searchParams?.sold ? +searchParams.sold : maxSold)
+        setMinSold(chops.minSold)
+        setMaxSold(chops.maxSold)
+        setSold(searchParams?.sold ? +searchParams.sold : chops.maxSold)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)

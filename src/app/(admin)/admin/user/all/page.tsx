@@ -81,27 +81,21 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
 
       console.log('get all users')
       try {
-        const { users, amount, urs } = await getAllUsersApi(query) // cache: no-store
+        const { users, amount, chops } = await getAllUsersApi(query) // cache: no-store
 
         // set to states
         setUsers(users)
         setAmount(amount)
 
         // set balance
-        const minBalance = Math.min(...urs.map((user: IUser) => user.balance))
-        const maxBalance = Math.max(...urs.map((user: IUser) => user.balance))
-
-        setMinBalance(minBalance)
-        setMaxBalance(maxBalance)
-        setBalance(searchParams?.balance ? +searchParams.balance : maxBalance)
+        setMinBalance(chops.minBalance)
+        setMaxBalance(chops.maxBalance)
+        setBalance(searchParams?.balance ? +searchParams.balance : chops.maxBalance)
 
         // set accumulated
-        const minAccumulated = Math.min(...urs.map((user: IUser) => user.accumulated))
-        const maxAccumulated = Math.max(...urs.map((user: IUser) => user.accumulated))
-
-        setMinAccumulated(minAccumulated)
-        setMaxAccumulated(maxAccumulated)
-        setAccumulated(searchParams?.accumulated ? +searchParams.accumulated : maxAccumulated)
+        setMinAccumulated(chops.minAccumulated)
+        setMaxAccumulated(chops.maxAccumulated)
+        setAccumulated(searchParams?.accumulated ? +searchParams.accumulated : chops.maxAccumulated)
       } catch (err: any) {
         console.log(err)
       } finally {

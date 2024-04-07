@@ -32,8 +32,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const [categories, setCategories] = useState<ICategory[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [cates, setCates] = useState<ICategory[]>([])
-  const [selectedFilterCategories, setSelectedFilterCategories] = useState<string[]>([])
 
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
@@ -53,7 +51,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -73,27 +70,18 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
 
       try {
         // sent request to server
-        const { categories, amount, cates } = await getAllCagetoriesApi(query) // cache: no-store
-
-        console.log(cates)
+        const { categories, amount, chops } = await getAllCagetoriesApi(query) // cache: no-store
 
         // set to states
         setCategories(categories)
-        setCates(cates)
         setAmount(amount)
-        setSelectedFilterCategories(
-          []
-            .concat((searchParams?._id || cates.map((cate: ICategory) => cate._id)) as [])
-            .map(type => type)
+
+        // set min and max
+        setMinPQ(chops.minProductQuantity)
+        setMaxPQ(chops.maxProductQuantity)
+        setProductQuantity(
+          searchParams?.productQuantity ? +searchParams.productQuantity : chops.maxProductQuantity
         )
-
-        // get the product that have the min and max quantity
-        const min = Math.min(...cates.map((cate: ICategory) => cate.productQuantity))
-        const max = Math.max(...cates.map((cate: ICategory) => cate.productQuantity))
-
-        setMinPQ(min)
-        setMaxPQ(max)
-        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity : max)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -103,7 +91,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
       }
     }
     getAllCategories()
-  }, [dispatch, searchParams, setValue])
+  }, [dispatch, searchParams])
 
   // delete category
   const handleDeleteCategories = useCallback(async (ids: string[]) => {
@@ -168,21 +156,19 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const handleFilter: SubmitHandler<FieldValues> = useCallback(
     async data => {
       console.log(data)
-      console.log({ ...searchParams, ...data, productQuantity, _id: selectedFilterCategories })
 
       // handle query
       const query = handleQuery({
         ...searchParams,
         ...data,
         productQuantity: [productQuantity.toString()],
-        _id: selectedFilterCategories,
       })
 
       console.log(query)
 
       router.push(pathname + query)
     },
-    [searchParams, productQuantity, selectedFilterCategories, router, pathname]
+    [searchParams, productQuantity, router, pathname]
   )
 
   // handle reset filter
@@ -262,45 +248,8 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             />
           </div>
 
-          {/* Cate Selection */}
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[186px] md:max-h-[148px] lg:max-h-[110px] overflow-auto col-span-12 md:col-span-8'>
-            <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
-                cates.length === selectedFilterCategories.length
-                  ? 'bg-dark-100 text-white border-dark-100'
-                  : 'border-slate-300'
-              }`}
-              title='All Types'
-              onClick={() =>
-                setSelectedFilterCategories(
-                  cates.length === selectedFilterCategories.length
-                    ? []
-                    : cates.map(category => category._id)
-                )
-              }>
-              All
-            </div>
-            {cates.map(category => (
-              <div
-                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
-                  selectedFilterCategories.includes(category._id)
-                    ? 'bg-secondary text-white border-secondary'
-                    : 'border-slate-300'
-                }`}
-                title={category.title}
-                key={category._id}
-                onClick={
-                  selectedFilterCategories.includes(category._id)
-                    ? () => setSelectedFilterCategories(prev => prev.filter(id => id !== category._id))
-                    : () => setSelectedFilterCategories(prev => [...prev, category._id])
-                }>
-                {category.title}
-              </div>
-            ))}
-          </div>
-
           {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
             {/* Sort */}
             <Input
               id='sort'

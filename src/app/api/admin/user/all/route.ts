@@ -80,11 +80,21 @@ export async function GET(req: NextRequest) {
     // get all users from database
     const users = await UserModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
-    // get all users without filter
-    const urs = await UserModel.find().select('balance accumulated').lean()
+    // get all order without filter
+    const chops = await UserModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          minBalance: { $min: '$balance' },
+          maxBalance: { $max: '$balance' },
+          minAccumulated: { $min: '$accumulated' },
+          maxAccumulated: { $max: '$accumulated' },
+        },
+      },
+    ])
 
     // return response
-    return NextResponse.json({ users, amount, urs }, { status: 200 })
+    return NextResponse.json({ users, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

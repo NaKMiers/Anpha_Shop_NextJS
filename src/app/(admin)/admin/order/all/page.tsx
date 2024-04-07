@@ -10,51 +10,83 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IOrder } from '@/models/OrderModel'
 import { caclIncomeApi, cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
 import { formatPrice } from '@/utils/formatNumber'
+import { handleQuery } from '@/utils/handleQuery'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaCalendar, FaFilter, FaSearch } from 'react-icons/fa'
+import { BiReset } from 'react-icons/bi'
+import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 
-function AllOrdersPage() {
+function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
   const dispatch = useAppDispatch()
+  const pathname = usePathname()
+  const router = useRouter()
 
   // states
   const [orders, setOrders] = useState<IOrder[]>([])
+  const [amount, setAmount] = useState<number>(0)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
+
+  // loading and confirming
   const [loadingOrders, setLoadingOrders] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // values
+  const itemPerPage = 9
+  const [minTotal, setMinTotal] = useState<number>(0)
+  const [maxTotal, setMaxTotal] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
 
   // Form
   const {
     register,
+    handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      orderCode: '',
+      search: '',
+      sort: 'updatedAt|-1',
+      userId: '',
+      voucherApplied: '',
+      status: '',
+      paymentMethod: '',
+      from: '',
+      to: '',
     },
   })
 
   // get all orders
   useEffect(() => {
     const getAllTags = async () => {
+      const query = handleQuery(searchParams)
+      console.log(query)
+
+      // start page loading
       dispatch(setPageLoading(true))
 
       try {
         // sent request to server
-        const { orders } = await getAllOrdersApi() // cache: no-store
+        const { orders, amount, chops } = await getAllOrdersApi(query) // cache: no-store
 
         // update orders from state
         setOrders(orders)
+        setAmount(amount)
+        setMinTotal(chops.minTotal)
+        setMaxTotal(chops.maxTotal)
+        setTotal(searchParams?.total ? +searchParams.total : chops.maxTotal)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
       } finally {
+        // stop page loading
         dispatch(setPageLoading(false))
       }
     }
     getAllTags()
-  }, [dispatch])
+  }, [dispatch, searchParams])
 
   // cancel orders
   const handleCancelOrders = useCallback(async (ids: string[]) => {
@@ -103,29 +135,6 @@ function AllOrdersPage() {
     }
   }, [])
 
-  // keyboard event
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Ctrl + A
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
-        setSelectedOrders(prev => (prev.length === orders.length ? [] : orders.map(order => order._id)))
-      }
-
-      // Delete
-      if (event.key === 'Delete') {
-        event.preventDefault() // Prevent the default aconti
-        handleDeleteOrders(selectedOrders)
-      }
-    }
-
-    // Add the event listener
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [orders, selectedOrders, handleDeleteOrders])
-
   // calculate income
   const handleCalcIncome = useCallback(async (timeType: 'day' | 'month' | 'year') => {
     try {
@@ -138,51 +147,124 @@ function AllOrdersPage() {
     }
   }, [])
 
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      console.log(data)
+      const { from, to, ...rest } = data
+
+      const fromTo = (from || '') + '|' + (to || '')
+      console.log(fromTo)
+
+      if (fromTo !== '|') {
+        rest['from-to'] = fromTo
+      }
+
+      // handle query
+      const query = handleQuery({
+        ...searchParams,
+        ...rest,
+        total: total === maxTotal ? [] : [total.toString()],
+      })
+
+      console.log(query)
+
+      router.push(pathname + query)
+    },
+    [router, pathname, searchParams, total, maxTotal]
+  )
+
+  // handle reset filter
+  const handleResetFilter = useCallback(() => {
+    reset()
+    router.push(pathname)
+  }, [reset, router, pathname])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt + A (Select All)
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault()
+        setSelectedOrders(prev => (prev.length === orders.length ? [] : orders.map(order => order._id)))
+      }
+
+      // Alt + Delete (Delete)
+      if (e.altKey && e.key === 'Delete') {
+        e.preventDefault()
+        setIsOpenConfirmModal(true)
+      }
+
+      // Alt + F (Filter)
+      if (e.altKey && e.key === 'f') {
+        e.preventDefault()
+        handleSubmit(handleFilter)()
+      }
+
+      // Alt + R (Reset)
+      if (e.altKey && e.key === 'r') {
+        e.preventDefault()
+        handleResetFilter()
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleFilter, handleResetFilter, handleSubmit, orders])
+
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Orders' />
-      {/* <Pagination /> */}
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Select Filter */}
-      <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
-          <div className='flex flex-col'>
+      {/* Filter */}
+      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+        <div className='grid grid-cols-12 gap-21'>
+          {/* Search */}
+          <div className='flex flex-col col-span-12 md:col-span-6'>
             <Input
-              className='max-w-[450px]'
+              className='md:max-w-[450px]'
               id='search'
               label='Search'
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='text'
               icon={FaSearch}
             />
           </div>
-          <div className='flex flex-col'>
-            <label>
-              <span className='font-bold'>Giá: </span>
-              <span>{formatPrice(9000)}</span>
-              {' - '}
-              <span>{formatPrice(2000000)}</span>
+
+          {/* Total */}
+          <div className='flex flex-col col-span-12 md:col-span-6'>
+            <label htmlFor='total'>
+              <span className='font-bold'>Total: </span>
+              <span>{formatPrice(total || maxTotal)}</span> - <span>{formatPrice(maxTotal)}</span>
             </label>
             <input
+              id='total'
               className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
               type='range'
-              min='9000'
-              max='2000000'
-              value={9000}
-              onChange={() => {}}
+              min={minTotal || 0}
+              max={maxTotal || 0}
+              value={total}
+              onChange={e => setTotal(+e.target.value)}
             />
           </div>
-          <div className='flex gap-2'>
+
+          {/* From To */}
+          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
             <Input
               id='from'
               label='From'
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -194,23 +276,150 @@ function AllOrdersPage() {
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
             />
           </div>
-          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
 
-          <div className='flex justify-end md:justify-start items-center'>
+          {/* Select Filter */}
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+            {/* Sort */}
+            <Input
+              id='sort'
+              label='Sort'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: 'createdAt|-1',
+                  label: 'Newest',
+                },
+                {
+                  value: 'createdAt|1',
+                  label: 'Oldest',
+                },
+                {
+                  value: 'updatedAt|-1',
+                  label: 'Latest',
+                  selected: true,
+                },
+                {
+                  value: 'updatedAt|1',
+                  label: 'Earliest',
+                },
+              ]}
+            />
+
+            {/* User ID */}
+            <Input
+              id='userId'
+              label='User ID'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'Yes',
+                },
+                {
+                  value: 'false',
+                  label: 'No',
+                },
+              ]}
+            />
+
+            {/* Voucher Applied */}
+            <Input
+              id='voucherApplied'
+              label='Voucher'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'true',
+                  label: 'On',
+                },
+                {
+                  value: 'false',
+                  label: 'Off',
+                },
+              ]}
+            />
+
+            {/* Status */}
+            <Input
+              id='status'
+              label='Status'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'done',
+                  label: 'Done',
+                },
+                {
+                  value: 'pending',
+                  label: 'Pending',
+                },
+                {
+                  value: 'cancel',
+                  label: 'Cancel',
+                },
+              ]}
+            />
+          </div>
+
+          {/* Filter Buttons */}
+          <div className='flex justify-end items-center gap-2 col-span-12 md:col-span-4'>
             {/* Filter Button */}
-            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-white hover:text-dark common-transition'>
-              Lọc
-              <FaFilter size={12} className='ml-1 text-white group-hover:text-dark common-transition' />
+            <button
+              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
+              title='Alt + Enter'
+              onClick={handleSubmit(handleFilter)}>
+              Filter
+              <FaFilter size={16} className='ml-1 common-transition' />
+            </button>
+
+            {/* Reset Button */}
+            <button
+              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
+              title='Alt + R'
+              onClick={handleResetFilter}>
+              Reset
+              <BiReset size={24} className='ml-1 common-transition' />
             </button>
           </div>
 
-          <div className='flex justify-end items-center col-span-2 gap-2'>
+          {/* Action Buttons */}
+          <div className='flex justify-end items-center gap-2 col-span-12'>
             {/* Select All Button */}
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
@@ -274,8 +483,6 @@ function AllOrdersPage() {
         </button>
       </div>
 
-      <div className='pt-9' />
-
       {/* Confirm Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
@@ -285,6 +492,14 @@ function AllOrdersPage() {
         onAccept={() => handleDeleteOrders(selectedOrders)}
         isLoading={loadingOrders.length > 0}
       />
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} order{amount > 1 ? 's' : ''}
+      </div>
 
       {/* MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3 items-start'>

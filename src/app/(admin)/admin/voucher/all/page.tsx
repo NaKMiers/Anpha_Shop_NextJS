@@ -13,7 +13,7 @@ import { formatPrice } from '@/utils/formatNumber'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
@@ -76,24 +76,20 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       dispatch(setPageLoading(true))
 
       try {
-        const { vouchers, amount, vcs } = await getAllVouchersApi(query) // cache: no-store
+        const { vouchers, amount, chops } = await getAllVouchersApi(query) // cache: no-store
 
         // set vouchers to state
         setVouchers(vouchers)
         setAmount(amount)
 
         // get min - max
-        const minMinTotal = Math.min(...vcs.map((vc: IVoucher) => vc.minTotal))
-        const maxMinTotal = Math.max(...vcs.map((vc: IVoucher) => vc.minTotal))
-        setMinMinTotal(minMinTotal)
-        setMaxMinTotal(maxMinTotal)
-        setMinTotal(searchParams?.minTotal ? +searchParams.minTotal : maxMinTotal)
+        setMinMinTotal(chops.minMinTotal)
+        setMaxMinTotal(chops.maxMinTotal)
+        setMinTotal(searchParams?.minTotal ? +searchParams.minTotal : chops.maxMinTotal)
 
-        const minMaxReduce = Math.min(...vcs.map((vc: IVoucher) => vc.maxReduce))
-        const maxMaxReduce = Math.max(...vcs.map((vc: IVoucher) => vc.maxReduce))
-        setMinMaxReduce(minMaxReduce)
-        setMaxMaxReduce(maxMaxReduce)
-        setMaxReduce(searchParams?.maxReduce ? +searchParams.maxReduce : maxMaxReduce)
+        setMinMaxReduce(chops.minMaxReduce)
+        setMaxMaxReduce(chops.maxMaxReduce)
+        setMaxReduce(searchParams?.maxReduce ? +searchParams.maxReduce : chops.maxMaxReduce)
       } catch (err: any) {
         console.log(err)
       } finally {
@@ -229,7 +225,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-12 gap-21'>
           {/* Search */}
           <div className='flex flex-col col-span-12'>

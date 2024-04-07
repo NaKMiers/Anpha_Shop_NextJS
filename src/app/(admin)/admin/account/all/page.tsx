@@ -39,6 +39,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   // loading & opening
   const [loadingAccounts, setLoadingAccounts] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // values
   const itemPerPage = 9
 
   // Form

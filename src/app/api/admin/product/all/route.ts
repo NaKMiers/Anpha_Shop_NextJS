@@ -72,13 +72,27 @@ export async function GET(req: NextRequest) {
       .limit(itemPerPage)
       .lean()
 
-    // get all products and tags and categories
-    const prods = await ProductModel.find().select('price stock sold').lean()
+    // get tags and categories
     const tgs = await TagModel.find().select('title').lean()
     const cates = await CategoryModel.find().select('title').lean()
 
+    // get all order without filter
+    const chops = await ProductModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+          minSold: { $min: '$sold' },
+          maxSold: { $max: '$sold' },
+          minStock: { $min: '$stock' },
+          maxStock: { $max: '$stock' },
+        },
+      },
+    ])
+
     // return all products
-    return NextResponse.json({ products, amount, prods, tgs, cates }, { status: 200 })
+    return NextResponse.json({ products, amount, tgs, cates, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

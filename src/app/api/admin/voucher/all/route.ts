@@ -103,11 +103,21 @@ export async function GET(req: NextRequest) {
       .limit(itemPerPage)
       .lean()
 
-    // get all voucher without filter
-    const vcs = await VoucherModel.find().select('minTotal maxReduce').lean()
+    // get all order without filter
+    const chops = await VoucherModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          minMinTotal: { $min: '$minTotal' },
+          maxMinTotal: { $max: '$minTotal' },
+          minMaxReduce: { $min: '$maxReduce' },
+          maxMaxReduce: { $max: '$maxReduce' },
+        },
+      },
+    ])
 
     // return vouchers
-    return NextResponse.json({ vouchers, amount, vcs }, { status: 200 })
+    return NextResponse.json({ vouchers, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

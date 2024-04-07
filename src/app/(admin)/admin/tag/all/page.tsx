@@ -32,8 +32,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   const [tags, setTags] = useState<ITag[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const [tgs, setTgs] = useState<ITag[]>([])
-  const [selectedFilterTags, setSelectedFilterTags] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // loading and confirming
@@ -72,25 +70,18 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
 
       try {
         // sent request to server
-        const { tags, amount, tgs } = await getAllTagsApi(query) // cache: no-store
+        const { tags, amount, chops } = await getAllTagsApi(query) // cache: no-store
 
         // set to states
         setTags(tags)
         setAmount(amount)
-        setTgs(tgs)
-        setSelectedFilterTags(
-          [].concat((searchParams?._id || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
+
+        // set min and max
+        setMinPQ(chops.minProductQuantity)
+        setMaxPQ(chops.maxProductQuantity)
+        setProductQuantity(
+          searchParams?.productQuantity ? +searchParams.productQuantity : chops.maxProductQuantity
         )
-
-        console.log('tgs: ', tgs)
-
-        // get the product that have the min and max quantity
-        const min = Math.min(...tgs.map((tag: ITag) => tag.productQuantity))
-        const max = Math.max(...tgs.map((tag: ITag) => tag.productQuantity))
-
-        setMinPQ(min)
-        setMaxPQ(max)
-        setProductQuantity(searchParams?.productQuantity ? +searchParams.productQuantity : max)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -180,21 +171,19 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   const handleFilter: SubmitHandler<FieldValues> = useCallback(
     async data => {
       console.log(data)
-      console.log({ ...searchParams, ...data, productQuantity, _id: selectedFilterTags })
 
       // handle query
       const query = handleQuery({
         ...searchParams,
         ...data,
         productQuantity: [productQuantity.toString()],
-        _id: selectedFilterTags,
       })
 
       console.log(query)
 
       router.push(pathname + query)
     },
-    [searchParams, productQuantity, selectedFilterTags, router, pathname]
+    [searchParams, productQuantity, router, pathname]
   )
 
   // handle reset filter
@@ -247,6 +236,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
       {/* Filter */}
       <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-12 gap-21'>
+          {/* Product Quantity */}
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='productQuantity'>
               <span className='font-bold'>Product Quantity: </span>
@@ -265,43 +255,8 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             />
           </div>
 
-          {/* Cate Selection */}
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[186px] md:max-h-[148px] lg:max-h-[110px] overflow-auto col-span-12 md:col-span-8'>
-            <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
-                tgs.length === selectedFilterTags.length
-                  ? 'bg-dark-100 text-white border-dark-100'
-                  : 'border-slate-300'
-              }`}
-              title='All Types'
-              onClick={() =>
-                setSelectedFilterTags(
-                  tgs.length === selectedFilterTags.length ? [] : tgs.map(category => category._id)
-                )
-              }>
-              All
-            </div>
-            {tgs.map(category => (
-              <div
-                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
-                  selectedFilterTags.includes(category._id)
-                    ? 'bg-secondary text-white border-secondary'
-                    : 'border-slate-300'
-                }`}
-                title={category.title}
-                key={category._id}
-                onClick={
-                  selectedFilterTags.includes(category._id)
-                    ? () => setSelectedFilterTags(prev => prev.filter(id => id !== category._id))
-                    : () => setSelectedFilterTags(prev => [...prev, category._id])
-                }>
-                {category.title}
-              </div>
-            ))}
-          </div>
-
           {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
             {/* Sort */}
             <Input
               id='sort'
