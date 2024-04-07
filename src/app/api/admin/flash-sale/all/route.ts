@@ -1,20 +1,80 @@
 import { connectDatabase } from '@/config/databse'
 import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
-import { NextResponse } from 'next/server'
+import { searchParamsToObject } from '@/utils/handleQuery'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/flash-sale/all
-export async function GET() {
+export async function GET(req: NextRequest) {
   console.log(' - Get All Flash Sales -')
 
   // connect to database
   await connectDatabase()
 
   try {
+    // get query params
+    const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
+    console.log('params: ', params)
+
+    // options
+    let skip = 0
+    let itemPerPage = 9
+    const filter: { [key: string]: any } = {}
+    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
+
+    // build filter
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        // Special Cases ---------------------
+        if (key === 'page') {
+          const page = +params[key][0]
+          skip = (page - 1) * itemPerPage
+          continue
+        }
+
+        if (key === 'sort') {
+          sort = {
+            [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
+          }
+          continue
+        }
+
+        if (['begin', 'expire'].includes(key)) {
+          const dates = params[key][0].split('|')
+
+          if (dates[0] && dates[1]) {
+            filter[key] = {
+              $gte: new Date(dates[0]),
+              $lt: new Date(dates[1]),
+            }
+          } else if (dates[0]) {
+            filter[key] = {
+              $gte: new Date(dates[0]),
+            }
+          } else if (dates[1]) {
+            filter[key] = {
+              $lt: new Date(dates[1]),
+            }
+          }
+
+          continue
+        }
+
+        // Normal Cases ---------------------
+        filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
+      }
+    }
+
+    console.log('filter: ', filter)
+    console.log('sort: ', sort)
+
+    // get amount of account
+    const amount = await FlashsaleModel.countDocuments(filter)
+
     // Get all flash sales from database
-    const flashSales = await FlashsaleModel.find().sort({ createdAt: -1 }).lean()
+    const flashSales = await FlashsaleModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
     // get products associated with each flash sale
     const flashSalesWithProducts = await Promise.all(
@@ -29,7 +89,7 @@ export async function GET() {
     console.log('flashSalesWithProducts:', flashSalesWithProducts)
 
     // Return response
-    return NextResponse.json({ flashSales: flashSalesWithProducts }, { status: 200 })
+    return NextResponse.json({ flashSales: flashSalesWithProducts, amount }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

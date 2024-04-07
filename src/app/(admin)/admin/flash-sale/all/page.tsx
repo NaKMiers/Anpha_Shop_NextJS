@@ -10,47 +10,65 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IFlashsale } from '@/models/FlashsaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { deleteFlashSalesApi, getAllFlashSalesApi } from '@/requests'
+import { handleQuery } from '@/utils/handleQuery'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaCalendar, FaFilter } from 'react-icons/fa'
+import { BiReset } from 'react-icons/bi'
+import { FaCalendar, FaFilter, FaSort } from 'react-icons/fa'
 
 export type FlashSaleWithProducts = IFlashsale & { products: IProduct[] }
 
-function AllFlashSalesPage() {
-  // hook
+function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  // store
   const dispatch = useAppDispatch()
-  const isPageLoading = useAppSelector(state => state.modal.isPageLoading)
+  const pathname = usePathname()
+  const router = useRouter()
 
   // states
   const [flashSales, setFlashSales] = useState<FlashSaleWithProducts[]>([])
+  const [amount, setAmount] = useState<number>(0)
   const [selectedFlashSales, setSelectedFlashSales] = useState<string[]>([])
+
+  // loading and confirming
   const [loadingFlashSales, setLoadingFlashSales] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // values
+  const itemPerPage = 9
 
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      orderCode: '',
+      sort: 'updatedAt|-1',
+      type: '',
+      timeType: '',
     },
   })
 
-  // get all flashsales
+  // get all flash sales
   useEffect(() => {
+    // get all flash sales
     const getAllFlashSales = async () => {
-      // set page loading
+      const query = handleQuery(searchParams)
+      console.log(query)
+
+      // start page loading
       dispatch(setPageLoading(true))
 
       try {
         // send request to server to get all flash sales
-        const { flashSales } = await getAllFlashSalesApi() // cache: no-store
+        const { flashSales, amount } = await getAllFlashSalesApi(query) // cache: no-store
 
-        // set flash sales to state
+        // set vouchers to state
         setFlashSales(flashSales)
+        setAmount(amount)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -61,7 +79,7 @@ function AllFlashSalesPage() {
     }
 
     getAllFlashSales()
-  }, [dispatch])
+  }, [dispatch, searchParams])
 
   // delete voucher
   const handleDeleteFlashSales = useCallback(
@@ -102,21 +120,62 @@ function AllFlashSalesPage() {
     [flashSales]
   )
 
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      console.log(data)
+      const { beginFrom, beginTo, expireFrom, expireTo, ...rest } = data
+
+      rest.begin = (beginFrom || '') + '|' + (beginTo || '')
+      rest.expire = (expireFrom || '') + '|' + (expireTo || '')
+      console.log(rest)
+
+      // handle query
+      const query = handleQuery({
+        ...searchParams,
+        ...rest,
+      })
+
+      console.log(query)
+
+      router.push(pathname + query)
+    },
+    [router, pathname, searchParams]
+  )
+
+  // handle reset filter
+  const handleResetFilter = useCallback(() => {
+    reset()
+    router.push(pathname)
+  }, [reset, router, pathname])
+
   // keyboard event
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Ctrl + A
-      if (event.ctrlKey && event.key === 'a') {
-        event.preventDefault() // Prevent the default action
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt + A (Select All)
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault()
         setSelectedFlashSales(prev =>
-          prev.length === flashSales.length ? [] : flashSales.map(voucher => voucher._id)
+          prev.length === flashSales.length ? [] : flashSales.map(flashSale => flashSale._id)
         )
       }
 
-      // Delete
-      if (event.key === 'Delete') {
-        event.preventDefault() // Prevent the default aconti
-        handleDeleteFlashSales(selectedFlashSales)
+      // Alt + Delete (Delete)
+      if (e.altKey && e.key === 'Delete') {
+        e.preventDefault()
+        setIsOpenConfirmModal(true)
+      }
+
+      // Alt + F (Filter)
+      if (e.altKey && e.key === 'f') {
+        e.preventDefault()
+        handleSubmit(handleFilter)()
+      }
+
+      // Alt + R (Reset)
+      if (e.altKey && e.key === 'r') {
+        e.preventDefault()
+        handleResetFilter()
       }
     }
 
@@ -125,23 +184,25 @@ function AllFlashSalesPage() {
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [flashSales, selectedFlashSales, handleDeleteFlashSales])
+  }, [handleFilter, handleResetFilter, handleSubmit, flashSales])
 
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Flash Sales' addLink='/admin/flash-sale/add' />
-      {/* <Pagination /> */}
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
+      {/* Filter */}
       <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-21'>
-          <div className='flex gap-2'>
+        <div className='grid grid-cols-12 gap-21'>
+          {/* Begin */}
+          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
             <Input
               id='beginFrom'
               label='Begin From'
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -153,20 +214,20 @@ function AllFlashSalesPage() {
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
             />
           </div>
-          <div className='flex gap-2'>
+
+          {/* Expire */}
+          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
             <Input
               id='expireFrom'
               label='Expire From'
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -178,7 +239,6 @@ function AllFlashSalesPage() {
               disabled={false}
               register={register}
               errors={errors}
-              required
               type='date'
               icon={FaCalendar}
               className='w-full'
@@ -186,17 +246,117 @@ function AllFlashSalesPage() {
           </div>
 
           {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3'>Select</div>
+          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+            {/* Sort */}
+            <Input
+              id='sort'
+              label='Sort'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: 'createdAt|-1',
+                  label: 'Newest',
+                },
+                {
+                  value: 'createdAt|1',
+                  label: 'Oldest',
+                },
+                {
+                  value: 'updatedAt|-1',
+                  label: 'Latest',
+                  selected: true,
+                },
+                {
+                  value: 'updatedAt|1',
+                  label: 'Earliest',
+                },
+              ]}
+            />
 
-          {/* Filter Button */}
-          <div className='flex justify-end md:justify-start items-center'>
-            <button className='group flex items-center text-nowrap bg-secondary text-[14px] font-semibold p-2 rounded-md cursor-pointer hover:bg-primary text-light hover:text-dark common-transition'>
-              Lọc
-              <FaFilter size={12} className='ml-1 text-light group-hover:text-dark common-transition' />
+            {/* Time Type */}
+            <Input
+              id='timeType'
+              label='Time Type'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'loop',
+                  label: 'Loop',
+                },
+                {
+                  value: 'once',
+                  label: 'Once',
+                },
+              ]}
+            />
+
+            {/* type */}
+            <Input
+              id='type'
+              label='Type'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: 'percentage',
+                  label: 'Percentage',
+                },
+                {
+                  value: 'fixed-reduce',
+                  label: 'Fixed Reduce',
+                },
+                {
+                  value: 'fixed',
+                  label: 'Fixed',
+                },
+              ]}
+            />
+          </div>
+
+          {/* Filter Buttons */}
+          <div className='flex justify-end items-center gap-2 col-span-12 md:col-span-4'>
+            {/* Filter Button */}
+            <button
+              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
+              title='Alt + Enter'
+              onClick={handleSubmit(handleFilter)}>
+              Filter
+              <FaFilter size={16} className='ml-1 common-transition' />
+            </button>
+
+            {/* Reset Button */}
+            <button
+              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
+              title='Alt + R'
+              onClick={handleResetFilter}>
+              Reset
+              <BiReset size={24} className='ml-1 common-transition' />
             </button>
           </div>
 
-          <div className='flex justify-end items-center col-span-2 gap-2'>
+          {/* Action Buttons */}
+          <div className='flex justify-end items-center gap-2 col-span-12'>
             {/* Select All Button */}
             <button
               className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
@@ -220,8 +380,6 @@ function AllFlashSalesPage() {
         </div>
       </div>
 
-      <div className='pt-9' />
-
       {/* Confirm Dialog */}
       <ConfirmDialog
         open={isOpenConfirmModal}
@@ -231,6 +389,14 @@ function AllFlashSalesPage() {
         onAccept={() => handleDeleteFlashSales(selectedFlashSales)}
         isLoading={loadingFlashSales.length > 0}
       />
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} flash sale{amount > 1 ? 's' : ''}
+      </div>
 
       {/* MAIN LIST */}
       <div className='grid items-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21 '>

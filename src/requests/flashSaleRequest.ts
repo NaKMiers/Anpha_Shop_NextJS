@@ -1,9 +1,9 @@
 // Flashsale
 
 // [GET]
-export const getAllFlashSalesApi = async () => {
+export const getAllFlashSalesApi = async (query: string) => {
   // no-store to bypass cache
-  const res = await fetch('/api/admin/flash-sale/all', { cache: 'no-store' })
+  const res = await fetch(`/api/admin/flash-sale/all${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

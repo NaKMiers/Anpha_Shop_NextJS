@@ -229,7 +229,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+      <div className='bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
         <div className='grid grid-cols-12 gap-21'>
           {/* Search */}
           <div className='flex flex-col col-span-12'>
@@ -286,7 +286,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           </div>
 
           {/* Begin */}
-          <div className='flex gap-2 col-span-12 md:col-span-6'>
+          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
             <Input
               id='beginFrom'
               label='Begin From'
@@ -311,7 +311,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           </div>
 
           {/* Expire */}
-          <div className='flex gap-2 col-span-12 md:col-span-6'>
+          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
             <Input
               id='expireFrom'
               label='Expire From'
