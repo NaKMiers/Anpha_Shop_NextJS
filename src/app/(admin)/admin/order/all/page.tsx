@@ -470,10 +470,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         </div>
       </div>
 
-      <div className='pt-9' />
-
       {/* Income */}
-      <div className='flex items-center justify-center gap-4 text-white'>
+      <div className='mt-9 flex flex-wrap items-center justify-center gap-4 text-white'>
         <div className='flex items-center gap-2'>
           <span className='font-semibold'>From: </span>
           <input

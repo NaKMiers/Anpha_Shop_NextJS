@@ -12,7 +12,7 @@ interface OrderItemProps {
 function OrderItem({ order, className = '' }: OrderItemProps) {
   return (
     <div className={`border rounded-medium px-21 py-4 ${className}`}>
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-wrap items-center justify-between'>
         <div>
           <span className='font-semibold'>Mã hó đơn: </span>
           <span className='text-primary'>{order.code}</span>
@@ -23,7 +23,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         </div>
       </div>
 
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-wrap items-center justify-between'>
         <div>
           <span className='font-semibold'>Trạng thái: </span>
           <span className='text-green-500'>
@@ -38,7 +38,10 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         </div>
         <div>
           <span className='font-semibold'>Phương thức thanh toán: </span>
-          <span className='text-primary'>{order.paymentMethod.toLowerCase()}</span>
+          <span
+            className={`font-semibold text-[${order.paymentMethod === 'momo' ? '#a1396c' : '#399162'}]`}>
+            {order.paymentMethod.toUpperCase()}
+          </span>
         </div>
       </div>
 
