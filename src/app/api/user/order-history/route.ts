@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
+import { searchParamsToObject } from '@/utils/handleQuery'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -22,16 +23,111 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'User không tồn tại' }, { status: 401 })
     }
 
+    // get query params
+    const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
+    console.log('params: ', params)
+
+    // options
+    let skip = 0
+    let itemPerPage = 6
+    const filter: { [key: string]: any } = {}
+    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
+
+    // build filter
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        // Special Cases ---------------------
+        if (key === 'page') {
+          const page = +params[key][0]
+          skip = (page - 1) * itemPerPage
+          continue
+        }
+
+        if (key === 'search') {
+          const searchFields = ['code', 'email', 'status', 'paymentMethod']
+
+          filter.$or = searchFields.map(field => ({
+            [field]: { $regex: params[key][0], $options: 'i' },
+          }))
+          continue
+        }
+
+        if (key === 'sort') {
+          sort = {
+            [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
+          }
+          continue
+        }
+
+        if (key === 'total') {
+          filter[key] = { $lte: +params[key][0] }
+          continue
+        }
+
+        if (['userId', 'voucherApplied'].includes(key)) {
+          filter[key] =
+            params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
+          continue
+        }
+
+        if (key === 'from-to') {
+          const dates = params[key][0].split('|')
+
+          if (dates[0] && dates[1]) {
+            filter.createdAt = {
+              $gte: new Date(dates[0]),
+              $lt: new Date(dates[1]),
+            }
+          } else if (dates[0]) {
+            filter.createdAt = {
+              $gte: new Date(dates[0]),
+            }
+          } else if (dates[1]) {
+            filter.createdAt = {
+              $lt: new Date(dates[1]),
+            }
+          }
+
+          continue
+        }
+
+        // Normal Cases ---------------------
+        filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
+      }
+    }
+
+    console.log('filter: ', filter)
+    console.log('sort: ', sort)
+
+    // get amount of account
+    const amount = await OrderModel.countDocuments({
+      userId,
+      ...filter,
+    })
+
     // get all order from database
     const orders = await OrderModel.find({
       userId,
+      ...filter,
     })
-      .sort({ createdAt: -1 })
-      .limit(8)
+      .sort(sort)
+      .skip(skip)
+      .limit(itemPerPage)
       .lean()
 
+    // get all order without filter
+    const chops = await OrderModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          minTotal: { $min: '$total' },
+          maxTotal: { $max: '$total' },
+        },
+      },
+    ])
+
     // retunr all orders
-    return NextResponse.json({ orders }, { status: 200 })
+    return NextResponse.json({ orders, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

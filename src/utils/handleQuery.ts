@@ -1,5 +1,8 @@
-export const handleQuery = (searchParams: { [key: string]: string[] } | undefined): string => {
-  let query = '?'
+export const handleQuery = (
+  searchParams: { [key: string]: string[] } | undefined,
+  prefix: string = ''
+): string => {
+  let query = prefix + '?'
 
   // remove empty value
   for (let key in searchParams) {

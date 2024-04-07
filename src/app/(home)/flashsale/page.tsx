@@ -1,25 +1,55 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
+import Pagination from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
-import { getFlashSalePageApi } from '@/requests'
+import { ICategory } from '@/models/CategoryModel'
+import { ITag } from '@/models/TagModel'
+import { getFlashSalePageApi, getTagsPageApi } from '@/requests'
 
-async function FlashSalePage() {
+async function TagPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  let tags: ITag[] = []
+  let categories: ICategory[] = []
   let products: FullyProduct[] = []
+  let amount: number = 0
+  let chops: { [key: string]: number } | null = null
+
+  // values
+  const itemPerPage = 8
 
   try {
     // send request to get products
+    console.log('searchParams: ', searchParams)
 
-    // revalidate every 1 minute
-    const data = await getFlashSalePageApi()
+    // cache: no-store for filter
+    const data = await getFlashSalePageApi(searchParams)
+
+    // destructure
     products = data.products
+    tags = data.tags
+    categories = data.categories
+    amount = data.amount
+    chops = data.chops
   } catch (err: any) {
     console.log(err)
   }
 
   return (
     <div className='pt-24'>
-      <Meta title={`Hiện Đang Giảm Giá`} />
-      <div className='pt-11' />
+      <Meta
+        title={`Flash Sale}`}
+        searchParams={searchParams}
+        type='flash-sale'
+        items={tags}
+        chops={chops}
+      />
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} sản phẩm
+      </div>
 
       {/* products */}
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4'>
@@ -27,8 +57,15 @@ async function FlashSalePage() {
           <ProductCard product={product} key={product._id} />
         ))}
       </div>
+
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+        className='mt-11'
+      />
     </div>
   )
 }
 
-export default FlashSalePage
+export default TagPage

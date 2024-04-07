@@ -287,7 +287,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='price'>
               <span className='font-bold'>Price: </span>
-              <span>{formatPrice(price || maxPrice)}</span> - <span>{formatPrice(maxPrice)}</span>
+              <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
             </label>
             <input
               id='price'
@@ -306,7 +306,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='sold'>
               <span className='font-bold'>Sold: </span>
-              <span>{sold || maxSold}</span> - <span>{maxSold}</span>
+              <span>{sold}</span> - <span>{maxSold}</span>
             </label>
             <input
               id='sold'
@@ -325,7 +325,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='stock'>
               <span className='font-bold'>Stock: </span>
-              <span>{stock || maxStock}</span> - <span>{maxStock}</span>
+              <span>{stock}</span> - <span>{maxStock}</span>
             </label>
             <input
               id='stock'

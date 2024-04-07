@@ -82,7 +82,7 @@ function Footer() {
           <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
             {/* Slider */}
             <div
-              className='flex overflow-x-scroll flex-1 no-scrollbar md:mr-5 -mx-1 relative select-none cursor-pointer snap-x'
+              className='flex overflow-x-scroll flex-1 md:mr-5 -mx-1 relative select-none cursor-pointer snap-x'
               ref={slideTrackRef}>
               {bestSellerProducts.map((product, index) => (
                 <Link

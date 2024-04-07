@@ -54,12 +54,12 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
       </div>
 
       <div className='flex justify-end gap-2'>
-        <button className='px-[14px] py-[6px] rounded-lg bg-secondary hover:bg-primary text-white hover:text-dark common-transition'>
+        <button className='px-[14px] py-[6px] rounded-md font-semibold bg-secondary hover:bg-primary text-white hover:text-dark common-transition'>
           Mua lại
         </button>
         <Link
           href={`/user/order/${order.code}`}
-          className='px-[14px] py-[6px] rounded-lg bg-primary hover:bg-secondary hover:text-white common-transition'>
+          className='px-[14px] py-[6px] rounded-md font-semibold bg-primary hover:bg-secondary hover:text-white common-transition'>
           Chi tiết
         </Link>
       </div>

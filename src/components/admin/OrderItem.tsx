@@ -192,15 +192,13 @@ function OrderItem({
 
         <div className='flex flex-col flex-shrink-0 border bg-white border-dark text-dark rounded-lg px-2 py-3 gap-4'>
           {/* Detail Button */}
-          {data.status === 'done' && (
-            <Link
-              href={`/admin/order/${data.code}`}
-              className='block group'
-              title='Detail'
-              onClick={e => e.stopPropagation()}>
-              <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
-            </Link>
-          )}
+          <Link
+            href={`/admin/order/${data.code}`}
+            className='block group'
+            title='Detail'
+            onClick={e => e.stopPropagation()}>
+            <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
+          </Link>
 
           {/* Deliver Button */}
           {data.status !== 'done' && (

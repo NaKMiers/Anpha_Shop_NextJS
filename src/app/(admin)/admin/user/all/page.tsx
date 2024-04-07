@@ -232,7 +232,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='balance'>
               <span className='font-bold'>Balance: </span>
-              <span>{formatPrice(balance || maxBalance)}</span> - <span>{formatPrice(maxBalance)}</span>
+              <span>{formatPrice(balance)}</span> - <span>{formatPrice(maxBalance)}</span>
             </label>
             <input
               id='balance'

@@ -1,5 +1,7 @@
 // Page -------------------------------------
 
+import { handleQuery } from '@/utils/handleQuery'
+
 // [GET]
 export const getHomeApi = async () => {
   // revalidate every 1 minute
@@ -28,23 +30,10 @@ export const getProductPageApi = async (slug: string) => {
 
 // [GET]
 export const getTagsPageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
-  let url = `${process.env.APP_URL}/api/tag?`
-  for (let key in searchParams) {
-    // check if key is an array
-    if (Array.isArray(searchParams[key])) {
-      for (let value of searchParams[key]) {
-        url += `${key}=${value}&`
-      }
-    } else {
-      url += `${key}=${searchParams[key]}&`
-    }
-  }
-
-  // remove final '&'
-  url = url.slice(0, -1)
+  const url = handleQuery(searchParams, `${process.env.APP_URL}/api/tag`)
 
   // revalidate every 1 minute
-  const res = await fetch(url, { next: { revalidate: 60 } })
+  const res = await fetch(url, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -56,23 +45,10 @@ export const getTagsPageApi = async (searchParams: { [key: string]: string[] } |
 
 // [GET]
 export const getCategoriesPageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
-  let url = `${process.env.APP_URL}/api/category?`
-  for (let key in searchParams) {
-    // check if key is an array
-    if (Array.isArray(searchParams[key])) {
-      for (let value of searchParams[key]) {
-        url += `${key}=${value}&`
-      }
-    } else {
-      url += `${key}=${searchParams[key]}&`
-    }
-  }
-
-  // remove final '&'
-  url = url.slice(0, -1)
+  const url = handleQuery(searchParams, `${process.env.APP_URL}/api/category`)
 
   // revalidate every 1 minute
-  const res = await fetch(url, { next: { revalidate: 60 } })
+  const res = await fetch(url, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -83,9 +59,11 @@ export const getCategoriesPageApi = async (searchParams: { [key: string]: string
 }
 
 // [GET]
-export const getFlashSalePageApi = async () => {
+export const getFlashSalePageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
+  const url = handleQuery(searchParams, `${process.env.APP_URL}/api/flash-sale`)
+
   // revalidate every 1 minute
-  const res = await fetch(`${process.env.APP_URL}/api/flash-sale`, { next: { revalidate: 60 } })
+  const res = await fetch(url, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

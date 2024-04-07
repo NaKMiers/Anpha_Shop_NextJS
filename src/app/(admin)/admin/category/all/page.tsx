@@ -254,7 +254,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           <div className='flex flex-col col-span-12 md:col-span-4'>
             <label htmlFor='productQuantity'>
               <span className='font-bold'>Product Quantity: </span>
-              <span>{productQuantity || maxPQ}</span> - <span>{maxPQ}</span>
+              <span>{productQuantity}</span> - <span>{maxPQ}</span>
             </label>
             <input
               id='productQuantity'

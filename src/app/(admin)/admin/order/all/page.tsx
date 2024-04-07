@@ -161,9 +161,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         }
       }
 
-      const { from, to, ...rest } = data
-
       // from | to
+      const { from, to, ...rest } = data
       const fromTo = (from || '') + '|' + (to || '')
       if (fromTo !== '|') {
         rest['from-to'] = fromTo
@@ -260,7 +259,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           <div className='flex flex-col col-span-12 md:col-span-6'>
             <label htmlFor='total'>
               <span className='font-bold'>Total: </span>
-              <span>{formatPrice(total || maxTotal)}</span> - <span>{formatPrice(maxTotal)}</span>
+              <span>{formatPrice(total)}</span> - <span>{formatPrice(maxTotal)}</span>
             </label>
             <input
               id='total'
