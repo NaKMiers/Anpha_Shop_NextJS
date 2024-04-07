@@ -4,7 +4,7 @@ import slugify from 'slugify'
 import unidecode from 'unidecode'
 
 // generate slug
-const generateSlug = (value: string, id?: string): string => {
+export const generateSlug = (value: string, id?: string): string => {
   const baseSlug: string = slugify(unidecode(value.trim()), {
     lower: true,
     remove: /[*+~.()'"!:@,]/g,
@@ -17,7 +17,7 @@ const generateSlug = (value: string, id?: string): string => {
 }
 
 // generate random code
-function generateCode(length: number): string {
+export const generateCode = (length: number): string => {
   return crypto
     .randomBytes(Math.ceil(length / 2))
     .toString('hex')
@@ -26,7 +26,7 @@ function generateCode(length: number): string {
 }
 
 // generate order code
-async function generateOrderCode(length: number) {
+export const generateOrderCode = async (length: number) => {
   let isUnique: boolean = false
   let code: string = ''
 
@@ -44,7 +44,7 @@ async function generateOrderCode(length: number) {
 }
 
 // make array becomes chaotic
-function shuffleArray(array: any[]): any[] {
+export const shuffleArray = (array: any[]): any[] => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
     ;[array[i], array[j]] = [array[j], array[i]]
@@ -53,7 +53,7 @@ function shuffleArray(array: any[]): any[] {
 }
 
 // get times
-function getTimes(d = 0, h = 0, m = 0, s = 0) {
+export const getTimes = (d = 0, h = 0, m = 0, s = 0) => {
   // convert all to seconds
   const totalSeconds = h * 3600 + m * 60 + s
 
@@ -74,7 +74,7 @@ function getTimes(d = 0, h = 0, m = 0, s = 0) {
 }
 
 // from numbers of (day, hour, minute, second) => expire time
-function calcExpireTime(d = 0, h = 0, m = 0, s = 0) {
+export const calcExpireTime = (d = 0, h = 0, m = 0, s = 0) => {
   // calc days, hours, minutes, seconds
   const { days, hours, minutes, seconds } = getTimes(d, h, m, s)
 
@@ -95,10 +95,10 @@ function calcExpireTime(d = 0, h = 0, m = 0, s = 0) {
 }
 
 // create a unique random image name
-const randomFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
+export const randomFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
 
 // apply voucher to product
-function productPriceAfterAppliedFlashsale(product: any) {
+export const productPriceAfterAppliedFlashsale = (product: any) => {
   let price = product.price
 
   const { flashsale } = product
@@ -121,15 +121,4 @@ function productPriceAfterAppliedFlashsale(product: any) {
   }
 
   return price
-}
-
-export {
-  calcExpireTime,
-  generateCode,
-  generateOrderCode,
-  generateSlug,
-  getTimes,
-  productPriceAfterAppliedFlashsale,
-  randomFileName,
-  shuffleArray,
 }

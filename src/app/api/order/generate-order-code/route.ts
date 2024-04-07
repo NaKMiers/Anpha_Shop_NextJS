@@ -1,5 +1,5 @@
 import { connectDatabase } from '@/config/databse'
-import { generateOrderCode } from '@/utils'
+import { generateOrderCode } from '@/utils/number'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'

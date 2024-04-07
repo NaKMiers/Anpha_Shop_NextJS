@@ -1,6 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import { generateSlug } from '@/utils'
+import { generateSlug } from '@/utils/number'
 import { deleteFile, uploadFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
 

@@ -1,4 +1,4 @@
-import { generateSlug } from '@/utils'
+import { generateSlug } from '@/utils/number'
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 

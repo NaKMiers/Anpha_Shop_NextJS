@@ -122,10 +122,7 @@ async function notifyAccountUpdated(email: string, data: any) {
 // summary notification
 async function summaryNotification(email: string, summary: any) {
   // get email interface path
-  const templatePath = path.resolve(
-    process.cwd(),
-    'src/resources/views/Pages/EmailTemplates/SummaryMail.pug'
-  )
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/SummaryMail.pug')
 
   // get email interface file
   const templateContent = fs.readFileSync(templatePath, 'utf-8')

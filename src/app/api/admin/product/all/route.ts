@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
     console.log('filter: ', filter)
     console.log('sort: ', sort)
 
-    // get amount of account
+    // get amount of products
     const amount = await ProductModel.countDocuments(filter)
 
     // get all products from database

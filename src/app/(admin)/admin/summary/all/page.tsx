@@ -1,102 +1,167 @@
 'use client'
 
+import { UserWithVouchers } from '@/app/api/admin/summary/all/route'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
-import { useCallback, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
-import { IoIosSend } from 'react-icons/io'
+import SummaryItem from '@/components/admin/SummaryItem'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { getAllCollaboratorsApi, sendSummaryApi } from '@/requests/summaryRequest'
+import { handleQuery } from '@/utils/handleQuery'
+import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
-function AllSummariesPage() {
-  const [isShowFilter, setIsShowFilter] = useState(false)
-  const [price, setPrice] = useState(9000)
+function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  // hook
+  const dispatch = useAppDispatch()
 
-  // Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      orderCode: '',
-    },
-  })
+  // states
+  const [summaries, setSummaries] = useState<UserWithVouchers[]>([])
+  const [amount, setAmount] = useState<number>(0)
+  const [selectedSummaries, setSelectedSummaries] = useState<string[]>([])
 
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null)
-  const [anchorEl3, setAnchorEl3] = useState<null | HTMLElement>(null)
-  const [anchorEl4, setAnchorEl4] = useState<null | HTMLElement>(null)
-  const open1 = Boolean(anchorEl1)
-  const open2 = Boolean(anchorEl2)
-  const open3 = Boolean(anchorEl3)
-  const open4 = Boolean(anchorEl4)
+  // loading
+  const [loadingSummaries, setLoadingSummaries] = useState<string[]>([])
 
-  // open menu
-  const handleOpenMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl1(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu1 = () => {
-    setAnchorEl1(null)
-  }
+  // values
+  const itemPerPage = 9
 
-  // open menu
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null)
-  }
+  // get all summaries
+  useEffect(() => {
+    // get all summaries
+    const getAllSummaries = async () => {
+      const query = handleQuery(searchParams)
+      console.log(query)
 
-  // open menu
-  const handleOpenMenu3 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu3 = () => {
-    setAnchorEl2(null)
-  }
+      // start page loading
+      dispatch(setPageLoading(true))
 
-  // open menu
-  const handleOpenMenu4 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget)
-  }
-  // close menu
-  const handleCloseMenu4 = () => {
-    setAnchorEl2(null)
-  }
+      try {
+        // send request to server to get all products
+        const { collaborators, amount } = await getAllCollaboratorsApi(query)
 
-  const handleFilter = useCallback(() => {}, [])
+        // set products to state
+        setSummaries(collaborators)
+        setAmount(amount)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
+      }
+    }
+    getAllSummaries()
+  }, [dispatch, searchParams])
+
+  // sent summaries
+  const handleSendSummaries = useCallback(async (ids: string[]) => {
+    // set loading
+    setLoadingSummaries(ids)
+
+    try {
+      // senred request to server
+      const { message } = await sendSummaryApi(ids)
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      setLoadingSummaries([])
+      setSelectedSummaries([])
+    }
+  }, [])
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt + A (Select All)
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault()
+        setSelectedSummaries(prev =>
+          prev.length === summaries.length ? [] : summaries.map(summary => summary._id)
+        )
+      }
+
+      // // Alt + F (Filter)
+      // if (e.altKey && e.key === 'f') {
+      //   e.preventDefault()
+      //   handleSubmit(handleFilter)()
+      // }
+
+      // // Alt + R (Reset)
+      // if (e.altKey && e.key === 'r') {
+      //   e.preventDefault()
+      //   handleResetFilter()
+      // }
+    }
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Remove the event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [summaries])
 
   return (
     <div className='w-full'>
+      {/* Top & Pagination */}
       <AdminHeader title='All Summaries' />
-      {/* <Pagination /> */}
+      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-21 '>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div className='flex flex-col p-4 rounded-lg shadow-lg bg-white' key={index}>
-            <div className='font-semibold' title='netflix'>
-              <span title='Collaborator' className='font-semibold text-secodary mr-2'>
-                Hồ Thị Ngọc Trâm
-              </span>
-              <span title='Commission'>10%</span>
-            </div>
+      {/* Filter */}
+      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
+        <div className='grid grid-cols-12 gap-21'>
+          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+            {/* Select All Button */}
+            <button
+              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+              title='Alt + A'
+              onClick={() =>
+                setSelectedSummaries(
+                  selectedSummaries.length > 0 ? [] : summaries.map(summary => summary._id)
+                )
+              }>
+              {selectedSummaries.length > 0 ? 'Unselect All' : 'Select All'}
+            </button>
 
-            <p>hothingoctram03@gmail.com</p>
-
-            <p>
-              <span className='font-semibold'>Vouchers: </span>
-              <span className='text-green-500'>GUDJOB</span>{' '}
-              <span className='text-green-500'>GIAM10K</span>
-            </p>
-
-            <div className='flex self-end border border-dark text-dark rounded-lg px-3 py-2 gap-4'>
-              <button className='block group'>
-                <IoIosSend size={18} className='group-hover:scale-125 common-transition' />
+            {/* Send Summaries Button */}
+            {!!selectedSummaries.length && (
+              <button
+                className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
+                title='Alt + Delete'
+                onClick={() => handleSendSummaries(selectedSummaries)}>
+                Sent
               </button>
-            </div>
+            )}
           </div>
+        </div>
+      </div>
+
+      {/* Amount */}
+      <div className='p-3 text-sm text-right text-white font-semibold'>
+        {itemPerPage * +(searchParams?.page || 1) > amount
+          ? amount
+          : itemPerPage * +(searchParams?.page || 1)}
+        /{amount} collaborator{amount > 1 ? 's' : ''}
+      </div>
+
+      {/* MAIN LIST */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>
+        {summaries.map(user => (
+          <SummaryItem
+            data={user}
+            loadingSummaries={loadingSummaries}
+            // selected
+            selectedSummaries={selectedSummaries}
+            setSelectedSummaries={setSelectedSummaries}
+            // functions
+            handleSendSummaries={handleSendSummaries}
+            key={user._id}
+          />
         ))}
       </div>
     </div>

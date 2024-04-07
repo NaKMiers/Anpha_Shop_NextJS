@@ -1,5 +1,5 @@
 import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
-import { formatTime } from '@/utils/formatTime'
+import { formatTime } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'

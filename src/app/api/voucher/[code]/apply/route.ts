@@ -1,6 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import VoucherModel, { IVoucher } from '@/models/VoucherModel'
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 

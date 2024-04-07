@@ -1,4 +1,4 @@
-import { countPercent, formatPrice } from '@/utils/formatNumber'
+import { countPercent, formatPrice } from '@/utils/number'
 
 interface PriceProps {
   price: number

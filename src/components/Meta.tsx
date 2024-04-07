@@ -1,6 +1,6 @@
 'use client'
 
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import { Menu, MenuItem } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { FaCaretDown, FaFilter } from 'react-icons/fa6'

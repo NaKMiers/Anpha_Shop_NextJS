@@ -9,7 +9,7 @@ import {
   updateLocalCartItemQuantity,
 } from '@/libs/reducers/cartReducer'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'

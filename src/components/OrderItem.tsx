@@ -1,6 +1,6 @@
 import { IOrder } from '@/models/OrderModel'
-import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
+import { formatPrice } from '@/utils/number'
+import { formatTime } from '@/utils/time'
 import Link from 'next/link'
 import CartItem from './CartItem'
 

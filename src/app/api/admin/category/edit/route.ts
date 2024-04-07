@@ -1,6 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel from '@/models/CategoryModel'
-import { generateSlug } from '@/utils'
+import { generateSlug } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PUT]: /admin/categories/edit

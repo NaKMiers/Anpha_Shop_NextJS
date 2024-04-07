@@ -1,7 +1,7 @@
 import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page'
 import { ITag } from '@/models/TagModel'
 import { updateProductPropertyApi } from '@/requests'
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'

@@ -1,6 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import UserModel from '@/models/UserModel'
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [PATCH]: /admin/user/:id/set-collaborator

@@ -3,7 +3,7 @@
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems } from '@/libs/reducers/cartReducer'
 import { getCartApi } from '@/requests'
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import { getSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'

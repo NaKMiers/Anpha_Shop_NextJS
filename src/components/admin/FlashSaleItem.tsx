@@ -1,6 +1,6 @@
 import { FlashSaleWithProducts } from '@/app/(admin)/admin/flash-sale/all/page'
-import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
+import { formatPrice } from '@/utils/number'
+import { formatTime } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'

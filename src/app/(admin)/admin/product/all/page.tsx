@@ -11,7 +11,7 @@ import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { activateProductsApi, deleteProductsApi, getAllProductsApi } from '@/requests'
-import { formatPrice } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/number'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -69,7 +69,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     },
   })
 
-  // get all product
+  // get all products
   useEffect(() => {
     // get all products
     const getAllProducts = async () => {

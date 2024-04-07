@@ -1,6 +1,6 @@
 import { VoucherWithOwner } from '@/app/(admin)/admin/voucher/all/page'
-import { formatPrice } from '@/utils/formatNumber'
-import { formatTime } from '@/utils/formatTime'
+import { formatPrice } from '@/utils/number'
+import { formatTime } from '@/utils/time'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { FaCheck, FaTrash } from 'react-icons/fa'

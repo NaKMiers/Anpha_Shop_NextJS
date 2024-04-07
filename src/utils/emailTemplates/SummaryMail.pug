@@ -6,7 +6,7 @@ body(style='font-family: Arial')
       h3 Tên: 
          span(style='color: blueviolet;')= `${collaborator.firstname} ${collaborator.lastname}`
       h3 Tiền hoa hồng: 
-         span(style='color: orange')= Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(collaborator.commission.value)
+         span(style='color: orange')= collaborator.commission.type === 'percentage' ? collaborator.commission.value : Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(collaborator.commission.value)
       h3 Số lượng voucher trong tháng: 
          span(style='color: green;')= vouchers.length
       h3 Thu nhập trong tháng: 
@@ -35,12 +35,12 @@ body(style='font-family: Arial')
                href=process.env.ZALO target="_blank" rel='noreferrer'
                style='padding-top: 0;'
             ) 
-               img(src="https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Zalo-Arc.jpg" alt="zalo" style='width: 32px; object-fit: cover;')
+               img(src="https://anphashop.s3.ap-southeast-1.amazonaws.com/zalo-icon.jpg" alt="zalo" style='width: 32px; object-fit: cover;')
             a(
                href=process.env.MESSENGER target="_blank" rel='noreferrer'
                style='padding-top: 0;'
             ) 
-               img(src="https://tiemtraannhien.vn/wp-content/uploads/2023/04/messenger-icon-free-png.webp" alt="messenger" style='width: 32px; object-fit: cover;')
+               img(src="https://anphashop.s3.ap-southeast-1.amazonaws.com/messenger-icon.jpg" alt="messenger" style='width: 32px; object-fit: cover;')
 
          div(style='padding-top: 20px;')
 

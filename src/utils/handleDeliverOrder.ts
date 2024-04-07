@@ -3,7 +3,7 @@ import OrderModel, { IOrder } from '@/models/OrderModel'
 import ProductModel from '@/models/ProductModel'
 import UserModel, { IUser } from '@/models/UserModel'
 import VoucherModel, { IVoucher } from '@/models/VoucherModel'
-import { calcExpireTime } from '@/utils'
+import { calcExpireTime } from '@/utils/number'
 import { notifyDeliveryOrder, notifyShortageAccount } from '@/utils/sendMail'
 import { NextResponse } from 'next/server'
 
