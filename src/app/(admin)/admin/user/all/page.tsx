@@ -9,9 +9,8 @@ import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { deleteUsersApi, getAllUsersApi } from '@/requests'
-import { formatPrice } from '@/utils/number'
 import { handleQuery } from '@/utils/handleQuery'
-import { getSession } from 'next-auth/react'
+import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -24,9 +23,6 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
   const dispatch = useAppDispatch()
   const pathname = usePathname()
   const router = useRouter()
-
-  // user session
-  const [curUser, setCurUser] = useState<any>({})
 
   // states
   const [users, setUsers] = useState<IUser[]>([])
@@ -59,15 +55,6 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
       role: '',
     },
   })
-
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-    getCurUser()
-  }, [])
 
   // get all users
   useEffect(() => {
@@ -137,25 +124,45 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
     )
   }, [users, selectedUsers.length])
 
+  // handle opimize filter
+  const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      console.log(data)
+
+      // prevent sort default
+      if (data.sort === 'updatedAt|-1') {
+        if (Object.keys(searchParams || {}).length) {
+          data.sort = ''
+        } else {
+          delete data.sort
+        }
+      }
+
+      return {
+        ...data,
+        balance: balance === maxBalance ? [] : [balance.toString()],
+        accumulated: accumulated === maxAccumulated ? [] : [accumulated.toString()],
+      }
+    },
+    [accumulated, balance, maxBalance, maxAccumulated, searchParams]
+  )
+
   // handle submit filter
   const handleFilter: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      console.log(data)
-      console.log({ ...searchParams, ...data, balance, accumulated })
+      const params: any = handleOptimizeFilter(data)
 
       // handle query
       const query = handleQuery({
         ...searchParams,
-        ...data,
-        balance: [balance.toString()],
-        accumulated: [accumulated.toString()],
+        ...params,
       })
 
+      // push to router
       console.log(query)
-
       router.push(pathname + query)
     },
-    [searchParams, balance, accumulated, router, pathname]
+    [handleOptimizeFilter, router, searchParams, pathname]
   )
 
   // handle reset filter

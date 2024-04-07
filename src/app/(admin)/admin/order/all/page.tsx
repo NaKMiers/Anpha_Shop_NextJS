@@ -147,31 +147,49 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
     }
   }, [])
 
-  // handle submit filter
-  const handleFilter: SubmitHandler<FieldValues> = useCallback(
-    async data => {
+  // handle opimize filter
+  const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
+    data => {
       console.log(data)
+
+      // prevent sort default
+      if (data.sort === 'updatedAt|-1') {
+        if (Object.keys(searchParams || {}).length) {
+          data.sort = ''
+        } else {
+          delete data.sort
+        }
+      }
+
       const { from, to, ...rest } = data
 
+      // from | to
       const fromTo = (from || '') + '|' + (to || '')
-      console.log(fromTo)
-
       if (fromTo !== '|') {
         rest['from-to'] = fromTo
       }
 
+      return { ...rest, total: total === maxTotal ? [] : [total.toString()] }
+    },
+    [maxTotal, total, searchParams]
+  )
+
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      const params: any = handleOptimizeFilter(data)
+
       // handle query
       const query = handleQuery({
         ...searchParams,
-        ...rest,
-        total: total === maxTotal ? [] : [total.toString()],
+        ...params,
       })
 
+      // push to router
       console.log(query)
-
       router.push(pathname + query)
     },
-    [router, pathname, searchParams, total, maxTotal]
+    [handleOptimizeFilter, router, searchParams, pathname]
   )
 
   // handle reset filter

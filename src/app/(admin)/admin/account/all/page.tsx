@@ -160,20 +160,38 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     }
   }, [])
 
+  // handle opimize filter
+  const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      console.log(data)
+
+      // prevent sort default
+      if (data.sort === 'updatedAt|-1') {
+        if (Object.keys(searchParams || {}).length) {
+          data.sort = ''
+        } else {
+          delete data.sort
+        }
+      }
+
+      return { ...data, type: selectedTypes.length === types.length ? [] : selectedTypes }
+    },
+    [selectedTypes, types, searchParams]
+  )
+
   // handle submit filter
   const handleFilter: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      console.log(data)
-      console.log({ ...searchParams, ...data, type: selectedTypes })
+      const params: any = handleOptimizeFilter(data)
 
       // handle query
-      const query = handleQuery({ ...searchParams, ...data, type: selectedTypes })
+      const query = handleQuery({ ...searchParams, ...params })
 
+      // push to new url
       console.log(query)
-
       router.push(pathname + query)
     },
-    [searchParams, selectedTypes, router, pathname]
+    [handleOptimizeFilter, router, searchParams, pathname]
   )
 
   // handle reset filter

@@ -150,29 +150,51 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
     }
   }, [])
 
-  // handle submit filter
-  const handleFilter: SubmitHandler<FieldValues> = useCallback(
-    async data => {
+  // handle opimize filter
+  const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
+    data => {
       console.log(data)
+
+      // prevent sort default
+      if (data.sort === 'updatedAt|-1') {
+        if (Object.keys(searchParams || {}).length) {
+          data.sort = ''
+        } else {
+          delete data.sort
+        }
+      }
+
       const { beginFrom, beginTo, expireFrom, expireTo, ...rest } = data
 
       rest.begin = (beginFrom || '') + '|' + (beginTo || '')
       rest.expire = (expireFrom || '') + '|' + (expireTo || '')
-      console.log(rest)
+
+      return {
+        ...rest,
+        minTotal: minTotal === maxMinTotal ? [] : [minTotal.toString()],
+        maxReduce: maxReduce === maxMaxReduce ? [] : [maxReduce.toString()],
+      }
+    },
+    [minTotal, maxMinTotal, maxReduce, maxMaxReduce, searchParams]
+  )
+
+  // handle submit filter
+  const handleFilter: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      const params: any = handleOptimizeFilter(data)
+      console.log(data)
 
       // handle query
       const query = handleQuery({
         ...searchParams,
-        ...rest,
-        minTotal: minTotal === maxMinTotal ? [] : [minTotal.toString()],
-        maxReduce: maxReduce === maxMaxReduce ? [] : [maxReduce.toString()],
+        ...params,
       })
 
+      // push to router
       console.log(query)
-
       router.push(pathname + query)
     },
-    [router, searchParams, minTotal, maxReduce, pathname, maxMinTotal, maxMaxReduce]
+    [handleOptimizeFilter, router, searchParams, pathname]
   )
 
   // handle reset filter

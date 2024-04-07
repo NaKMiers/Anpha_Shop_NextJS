@@ -120,27 +120,53 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     [flashSales]
   )
 
+  // handle opimize filter
+  const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
+    data => {
+      console.log(data)
+
+      // prevent sort default
+      if (data.sort === 'updatedAt|-1') {
+        if (Object.keys(searchParams || {}).length) {
+          data.sort = ''
+        } else {
+          delete data.sort
+        }
+      }
+
+      const { beginFrom, beginTo, expireFrom, expireTo, ...rest } = data
+
+      const begin = (beginFrom || '') + '|' + (beginTo || '')
+      if (begin !== '|') {
+        rest.begin = begin
+      }
+      const expire = (expireFrom || '') + '|' + (expireTo || '')
+      if (expire !== '|') {
+        rest.expire = expire
+      }
+
+      return {
+        ...rest,
+      }
+    },
+    [searchParams]
+  )
+
   // handle submit filter
   const handleFilter: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      console.log(data)
-      const { beginFrom, beginTo, expireFrom, expireTo, ...rest } = data
-
-      rest.begin = (beginFrom || '') + '|' + (beginTo || '')
-      rest.expire = (expireFrom || '') + '|' + (expireTo || '')
-      console.log(rest)
+      const params: any = handleOptimizeFilter(data)
 
       // handle query
       const query = handleQuery({
         ...searchParams,
-        ...rest,
+        ...params,
       })
 
       console.log(query)
-
       router.push(pathname + query)
     },
-    [router, pathname, searchParams]
+    [handleOptimizeFilter, router, searchParams, pathname]
   )
 
   // handle reset filter
