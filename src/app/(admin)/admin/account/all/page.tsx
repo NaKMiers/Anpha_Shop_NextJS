@@ -277,9 +277,9 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           </div>
 
           {/* Type Selection */}
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[186px] md:max-h-[148px] lg:max-h-[110px] overflow-auto col-span-12 md:col-span-8'>
+          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[174px] md:max-h-[145px] lg:max-h-[116px] overflow-auto col-span-12 md:col-span-8'>
             <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap text-xs h-[25px] leading-[25px] px-[6px] rounded-md border cursor-pointer select-none common-transition ${
                 types.length === selectedTypes.length
                   ? 'bg-dark-100 text-white border-dark-100'
                   : 'border-slate-300'
@@ -295,7 +295,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             {Object.keys(groupTypes).map(key => (
               <Fragment key={key}>
                 <div
-                  className={`ml-2 overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                  className={`ml-1 overflow-hidden max-w-60 text-ellipsis text-nowrap text-xs h-[25px] leading-[25px] px-[6px] rounded-md border cursor-pointer select-none common-transition ${
                     checkAllTypesOfCategorySelected(groupTypes[key])
                       ? 'bg-dark-100 text-white border-dark-100'
                       : 'border-slate-300 bg-slate-200'
@@ -314,7 +314,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
                 </div>
                 {groupTypes[key].map(type => (
                   <div
-                    className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                    className={`overflow-hidden max-w-60 text-ellipsis text-nowrap text-xs h-[25px] leading-[25px] px-[6px] rounded-md border cursor-pointer select-none common-transition ${
                       selectedTypes.includes(type._id)
                         ? 'bg-secondary text-white border-secondary'
                         : 'border-slate-300'

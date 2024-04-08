@@ -41,10 +41,10 @@ function Header({ isStatic }: HeaderProps) {
       setCurUser(session?.user)
     }
 
-    if (!curUser._id) {
+    if (!curUser?._id) {
       getCurUser()
     }
-  }, [curUser._id])
+  }, [curUser?._id])
 
   // get cart length
   useEffect(() => {

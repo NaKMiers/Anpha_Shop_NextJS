@@ -10,14 +10,14 @@ interface AdminHeaderProps {
 
 function AdminHeader({ title, addLink, backLink, className = '' }: AdminHeaderProps) {
   return (
-    <div className={`flex justify-center items-end mb-3 gap-3 ${className}`}>
+    <div className={`flex flex-wrap text-sm justify-center items-end mb-3 gap-3 ${className}`}>
       <Link
         className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-white hover:text-primary'
         href='/admin'>
         <FaArrowLeft />
         Admin
       </Link>
-      <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-2xl text-center'>
+      <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-lg text-center'>
         {title}
       </div>
       {backLink && (
