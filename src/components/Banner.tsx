@@ -10,6 +10,7 @@ import { FaBoltLightning, FaChevronUp } from 'react-icons/fa6'
 import CarouselProduct from './CarouselProduct'
 import Header from './Header'
 import Slider from './Slider'
+import Carousel from './Carousel'
 
 interface BannerProps {
   categories: ICategory[]
@@ -17,7 +18,7 @@ interface BannerProps {
   carouselProducts: FullyProduct[]
 }
 
-function Banner({ carouselProducts, categories, tags }: BannerProps) {
+function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -56,7 +57,13 @@ function Banner({ carouselProducts, categories, tags }: BannerProps) {
             </ul>
 
             {/* Slider */}
-            <Slider>
+            <Slider
+              time={5000}
+              thumbs={[
+                '/images/capcut-banner.jpg',
+                '/images/netflix-banner.jpg',
+                '/images/grammarly-banner.jpg',
+              ]}>
               <Image
                 src='/images/capcut-banner.jpg'
                 alt='netflix'
@@ -133,12 +140,8 @@ function Banner({ carouselProducts, categories, tags }: BannerProps) {
           </div>
 
           {/* Bottom */}
-          <div className='relative rflow-x-scroll shrink-0'>
-            <div className='flex items-center h-full -mx-21/2'>
-              {carouselProducts?.map(product => (
-                <CarouselProduct product={product} key={product._id} />
-              ))}
-            </div>
+          <div className='relative shrink-0 -mb-4'>
+            <Carousel products={carouselProducts} />
           </div>
 
           {/* Menu Absolute */}

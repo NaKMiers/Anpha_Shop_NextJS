@@ -121,7 +121,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
     }
 
     // calculate user cart length
-    const cartLength = localCart.reduce((total, cartItem) => total + cartItem.quantity, 0) + 1
+    // const cartLength = localCart.reduce((total, cartItem) => total + cartItem.quantity, 0) + 1
 
     dispatch(addLocalCartItem(newCartItem as FullyCartItem))
 
@@ -173,7 +173,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
       <div className='relative rounded-small overflow-hidden group'>
         {/* Thumbnail */}
         <Image
-          className='flex-shrink-0 snap-start w-full h-full object-cover'
+          className='flex-shrink-0 snap-start w-full h-full object-cover block'
           src={product.images[0]}
           width={1200}
           height={768}
@@ -181,35 +181,38 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
         />
 
         {/* Overlay */}
-        <div className='flex flex-col sm:gap-1 justify-center absolute w-full h-full top-0 left-0 bg-sky-500 bg-opacity-60 p-2 text-center translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
-          <h5 className='text-white font-body text-sm' title={product.title}>
+        <div className='flex flex-col sm:gap-1 justify-center absolute translate-y-full opacity-0 w-full h-full top-0 left-0 bg-sky-500 bg-opacity-65 p-3 text-center transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
+          <h5
+            className='text-white text-sm font-body leading-4 text-ellipsis flex-shrink-0 line-clamp-2'
+            title={product.title}>
             {product.title}
           </h5>
-          <p className='uppercase text-xs font-semibold text-slate-200'>- {product.category.title} -</p>
-          <p className='font-bold text-white text-sm'>
+          <p className='uppercase text-xs font-semibold text-slate-200 leading-3'>
+            - {product.category.title} -
+          </p>
+          <p className='font-bold text-white text-xs'>
             Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>
           </p>
-
           {/* Action Buttons */}
           <div
             className='flex items-center gap-2 h-[26px] justify-center'
             onClick={e => e.preventDefault()}>
             <button
-              className='bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
+              className='bg-secondary rounded-[4px] text-[12px] text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
               onClick={handleBuyNow}
               disabled={isLoading}>
               MUA NGAY
             </button>
             <button
-              className={`bg-primary rounded-md p-2 group hover:bg-primary-600 common-transition hover:bg-secondary ${
+              className={`bg-primary rounded-[4px] p-[6px] group hover:bg-primary-600 common-transition hover:bg-secondary ${
                 isLoading ? 'pointer-events-none bg-slate-200' : ''
               }`}
               onClick={handleAddToCart}
               disabled={isLoading}>
               {isLoading ? (
-                <RiDonutChartFill size={16} className='animate-spin text-white' />
+                <RiDonutChartFill size={13} className='animate-spin text-white' />
               ) : (
-                <FaCartPlus size={16} className='text-white group-hover:scale-110 common-transition' />
+                <FaCartPlus size={13} className='text-white group-hover:scale-110 common-transition' />
               )}
             </button>
           </div>

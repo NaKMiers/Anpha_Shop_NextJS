@@ -220,7 +220,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
           MUA NGAY
         </button>
         <button
-          className={`bg-primary rounded-md p-2 group hover:bg-primary-600 common-transition ${
+          className={`bg-primary rounded-md p-2 group hover:bg-primary-600 hover:bg-secondary common-transition ${
             isLoading ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}

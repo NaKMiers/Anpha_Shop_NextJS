@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import React, { Children, useCallback, useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
@@ -8,66 +9,117 @@ interface SliderProps {
   children: React.ReactNode
   className?: string
   hideControls?: boolean
+  thumbs?: string[]
 }
 
-function Slider({ time, hideControls, children, className = '' }: SliderProps) {
+function Slider({ time, hideControls, children, thumbs = [], className = '' }: SliderProps) {
+  // states
   const [slide, setSlide] = useState(1)
-  const childrenAmount = Children.count(children)
+  const [isSliding, setIsSliding] = useState(false)
+
+  // refs
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
-  // prev slide
-  const handlePrev = useCallback(() => {
+  // values
+  const childrenAmount = Children.count(children)
+
+  // change slide main function
+  useEffect(() => {
     if (slideTrackRef.current) {
-      slideTrackRef.current.scrollTo({
-        left: slideTrackRef.current.scrollLeft - slideTrackRef.current.children[0].clientWidth,
-        behavior: 'smooth',
-      })
+      slideTrackRef.current.style.marginLeft = `calc(-100% * ${slide})`
     }
+  }, [slide])
 
-    setSlide(prev => (prev === 1 ? childrenAmount : prev - 1))
-  }, [childrenAmount])
+  // to next slide
+  const nextSlide = useCallback(() => {
+    // not sliding
+    if (!isSliding) {
+      // start sliding
+      setIsSliding(true)
 
-  // next slide
-  const handleNext = useCallback(() => {
-    if (slideTrackRef.current) {
-      slideTrackRef.current.scrollTo({
-        left: slideTrackRef.current.scrollLeft + slideTrackRef.current.children[0].clientWidth,
-        behavior: 'smooth',
-      })
+      if (slide === childrenAmount) {
+        setSlide(childrenAmount + 1)
+
+        setTimeout(() => {
+          if (slideTrackRef.current) {
+            slideTrackRef.current.style.transition = 'none'
+            setSlide(1)
+          }
+        }, 510)
+
+        setTimeout(() => {
+          if (slideTrackRef.current) {
+            slideTrackRef.current.style.transition = 'all 0.5s linear'
+          }
+        }, 520)
+      } else {
+        setSlide(prev => prev + 1)
+      }
+
+      // stop sliding after slided
+      setTimeout(() => {
+        setIsSliding(false)
+      }, 550)
     }
+  }, [childrenAmount, isSliding, slide])
 
-    setSlide(prev => (prev === childrenAmount ? 1 : prev + 1))
-  }, [childrenAmount])
+  // to previous slide
+  const prevSlide = useCallback(() => {
+    // if not sliding
+    if (!isSliding) {
+      // start sliding
+      setIsSliding(true)
 
-  const handleSlideIndicator = useCallback((slide: number) => {
-    if (slideTrackRef.current) {
-      slideTrackRef.current.scrollTo({
-        left: slideTrackRef.current.children[0].clientWidth * (slide - 1),
-        behavior: 'smooth',
-      })
+      if (slide === 1) {
+        setSlide(0)
 
-      setSlide(slide)
+        setTimeout(() => {
+          if (slideTrackRef.current) {
+            slideTrackRef.current.style.transition = 'none'
+            setSlide(childrenAmount)
+          }
+        }, 510)
+
+        setTimeout(() => {
+          if (slideTrackRef.current) {
+            slideTrackRef.current.style.transition = 'all 0.5s linear'
+          }
+        }, 550)
+      } else {
+        setSlide(prev => prev - 1)
+      }
+
+      // stop sliding after slided
+      setTimeout(() => {
+        setIsSliding(false)
+      }, 550)
     }
-  }, [])
+  }, [childrenAmount, isSliding, slide])
 
+  // next slide by time
   useEffect(() => {
     if (time) {
       const interval = setInterval(() => {
-        handleNext()
+        nextSlide()
       }, time)
 
       return () => clearInterval(interval)
     }
-  }, [time, childrenAmount, handleNext])
+  }, [time, nextSlide])
 
   return (
-    <div className={`relative w-full h-full overflow-hidden rounded-lg ${className}`}>
+    <div className={`relative w-full h-full overflow-hidden rounded-lg group ${className}`}>
       {/* Slide Track */}
       <div
-        className={`flex w-full h-full cursor-pointer overflow-x-hidden snap-x no-scrollbar`}
+        className={`flex w-full h-full cursor-pointer no-scrollbar transition-all ease-linear duration-500`}
+        style={{ marginLeft: '-100%' }}
         ref={slideTrackRef}>
-        {Children.toArray(children).map((child, index) => (
-          <div key={index} className='w-full h-full shrink-0 snap-start'>
+        {[
+          Children.toArray(children)[childrenAmount - 1],
+          ...Children.toArray(children),
+          Children.toArray(children)[0],
+        ].map((child, index) => (
+          <div key={index} className='w-full h-full shrink-0'>
             {child}
           </div>
         ))}
@@ -77,21 +129,37 @@ function Slider({ time, hideControls, children, className = '' }: SliderProps) {
       {!hideControls && childrenAmount >= 2 && (
         <>
           <button
-            className='group absolute flex items-center justify-center hover:bg-slate-400 hover:bg-opacity-50  common-transition h-full w-12 left-0 top-0'
-            onClick={handlePrev}>
+            className='group md:-translate-x-full group-hover:translate-x-0 absolute flex items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 common-transition h-full w-12 left-0 top-0'
+            onClick={prevSlide}>
             <FaChevronLeft size={16} className='group-hover:scale-125 common-transition text-white' />
           </button>
           <button
-            className='group absolute flex items-center justify-center hover:bg-slate-400 hover:bg-opacity-50  common-transition h-full w-12 right-0 top-0'
-            onClick={handleNext}>
+            className='group md:translate-x-full group-hover:translate-x-0 absolute flex items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 common-transition h-full w-12 right-0 top-0'
+            onClick={nextSlide}>
             <FaChevronRight size={16} className='group-hover:scale-125 common-transition text-white' />
           </button>
         </>
       )}
 
       {/* Indicators */}
-      {childrenAmount >= 2 && (
-        <div className='absolute flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[8%]'>
+      {thumbs.length >= 2 && (
+        <div className='absolute flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full  md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition'>
+          {thumbs.map((src, index) => {
+            return (
+              <button
+                className={`aspect-video rounded-lg shadow-md border-2 border-white common-transition hover:opacity-100 hover:scale-105 hover:-translate-y-1 overflow-hidden ${
+                  slide === index + 1 ? 'opacity-100' : 'opacity-60'
+                }`}
+                onClick={() => setSlide(index + 1)}
+                key={src}>
+                <Image className='' src={src} width={70} height={70} alt='slide-thumb' />
+              </button>
+            )
+          })}
+        </div>
+      )}
+      {childrenAmount >= 2 && thumbs.length <= 0 && (
+        <div className='absolute flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[10%] md:translate-y-full  md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[10%] common-transition'>
           {Array.from({ length: childrenAmount }).map((_, index) => {
             return (
               <button
@@ -99,7 +167,7 @@ function Slider({ time, hideControls, children, className = '' }: SliderProps) {
                 className={`w-[14px] h-[14px] rounded-full bg-white hover:bg-opacity-100 common-transition shadow-md ${
                   slide === index + 1 ? 'bg-opacity-100' : 'bg-opacity-50'
                 }`}
-                onClick={() => handleSlideIndicator(index + 1)}
+                onClick={() => setSlide(index + 1)}
               />
             )
           })}
