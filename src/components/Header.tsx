@@ -172,7 +172,7 @@ function Header({ isStatic }: HeaderProps) {
             !!curUser._id && (
               <div
                 className='group flex items-center gap-2 cursor-pointer'
-                onClick={() => setIsOpenMenu(true)}>
+                onClick={() => setIsOpenMenu(prev => !prev)}>
                 <Image
                   className='aspect-square rounded-full'
                   src={curUser?.avatar || '/images/default-avatar.jpg'}
@@ -196,7 +196,7 @@ function Header({ isStatic }: HeaderProps) {
         </div>
 
         {/* Nav for sm */}
-        <div className='md:hidden flex items-center' onClick={() => setIsOpenMenu(true)}>
+        <div className='md:hidden flex items-center' onClick={() => setIsOpenMenu(prev => !prev)}>
           <button className='flex justify-center items-center w-[40px] h-[40px]'>
             <FaBars size={22} className='common-transition hover:scale-110' />
           </button>

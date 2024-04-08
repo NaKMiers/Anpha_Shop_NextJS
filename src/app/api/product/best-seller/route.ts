@@ -14,7 +14,7 @@ export async function GET() {
 
   try {
     // get 10 best seller products by sold field
-    const products = await ProductModel.find({})
+    const products = await ProductModel.find({ active: true })
       .populate('category', 'title')
       .sort({ sold: -1 })
       .limit(10)

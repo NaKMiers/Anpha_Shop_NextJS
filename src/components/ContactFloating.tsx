@@ -8,7 +8,7 @@ function ContactFloating() {
 
   return (
     <div
-      className={`fixed right-12 bottom-9 bg-white flex flex-col justify-center items-center rounded-xl transition-all duration-300 overflow-hidden shadow-lg ${
+      className={`fixed z-30 right-12 bottom-9 bg-white flex flex-col justify-center items-center rounded-xl transition-all duration-300 overflow-hidden shadow-lg ${
         !isShow ? 'translate-y-full' : ''
       }`}>
       <button
@@ -34,13 +34,13 @@ function ContactFloating() {
         className='p-2 hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
         <Image src='/images/messenger.jpg' width={36} height={36} alt='zalo' />
       </a>
-      <a
+      {/* <a
         href='https://www.instagram.com/anpha.shop'
         target='_blank'
         rel='noreferrer'
         className='p-2 hover:scale-110 common-transition hover:shadow-medium-light'>
         <Image src='/images/instagram.jpg' width={36} height={36} alt='zalo' />
-      </a>
+      </a> */}
     </div>
   )
 }

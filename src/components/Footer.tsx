@@ -66,13 +66,13 @@ function Footer() {
                 className='hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
                 <Image src='/images/messenger.jpg' width={30} height={30} alt='zalo' />
               </a>
-              <a
+              {/* <a
                 href='https://www.instagram.com/anpha.shop'
                 target='_blank'
                 rel='noreferrer'
                 className='hover:scale-110 common-transition hover:shadow-medium-light'>
                 <Image src='/images/instagram.jpg' width={30} height={30} alt='zalo' />
-              </a>
+              </a> */}
             </div>
           </div>
 
