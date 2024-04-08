@@ -9,7 +9,7 @@ import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
 import { applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
 import { calcPercentage, formatPrice } from '@/utils/number'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -30,13 +30,9 @@ function CartPage() {
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
   const router = useRouter()
   const { data: session } = useSession()
-  const curUser: any = session?.user
-
-  if (!curUser) {
-    cartItems = cartLocalItems
-  }
 
   // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
   const [voucherMessage, setVoucherMessage] = useState<string>('')
   const [subTotal, setSubTotal] = useState<number>(0)
@@ -46,6 +42,22 @@ function CartPage() {
   // loading and showing
   const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
   const [isBuying, setIsBuying] = useState<boolean>(false)
+
+  if (!curUser) {
+    cartItems = cartLocalItems
+  }
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser?._id) {
+      getCurUser()
+    }
+  }, [curUser?._id])
 
   // Form
   const {

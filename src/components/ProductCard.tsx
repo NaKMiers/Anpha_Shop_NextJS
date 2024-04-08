@@ -9,11 +9,11 @@ import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import { countPercent } from '@/utils/number'
 import mongoose from 'mongoose'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
@@ -31,10 +31,22 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
-  const curUser: any = session?.user
 
   // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser?._id) {
+      getCurUser()
+    }
+  }, [curUser?._id])
 
   // handle add product to cart - DATABASE
   const addProductToCart = useCallback(async () => {

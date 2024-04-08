@@ -2,9 +2,9 @@ import { IUser } from '@/models/UserModel'
 import { demoteCollaboratorApi, rechargeUserApi, setCollaboratorApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatDate, formatTime } from '@/utils/time'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaPlus, FaPlusCircle, FaTrash } from 'react-icons/fa'
@@ -38,10 +38,9 @@ function UserItem({
 }: UserItemProps) {
   // hook
   const { data: session } = useSession()
-  const curUser: any = session?.user
-  const isCurUser = data._id === curUser?._id
 
   // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const [userData, setUserData] = useState<IUser>(data)
   const [isOpenRecharge, setIsOpenRecharge] = useState<boolean>(false)
   const [isLoadingRecharge, setIsLoadingRecharge] = useState<boolean>(false)
@@ -51,6 +50,8 @@ function UserItem({
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
   const [isOpenDemoteCollboratorConfirmationDialog, setIsOpenDemoteCollboratorConfirmationDialog] =
     useState<boolean>(false)
+
+  const isCurUser = data._id === curUser?._id
 
   // Form
   const {
@@ -66,6 +67,18 @@ function UserItem({
       ['value-' + data._id]: '10%',
     },
   })
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser?._id) {
+      getCurUser()
+    }
+  }, [curUser?._id])
 
   // submit recharge form
   const onRechargeSubmit: SubmitHandler<FieldValues> = async formData => {

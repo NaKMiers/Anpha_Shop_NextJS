@@ -195,9 +195,9 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
 
         {/* Item Selection */}
         {!!items.length && (
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[72px] lg:max-h-[110px] overflow-auto col-span-12'>
+          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
             <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
                 items.length === selectedFilterItems.length
                   ? 'bg-dark-100 text-white border-dark-100'
                   : 'border-slate-300 bg-slate-200'
@@ -212,7 +212,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             </div>
             {items.map(item => (
               <div
-                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap p px-2 py-1 rounded-md border cursor-pointer select-none common-transition ${
+                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
                   selectedFilterItems.includes(item.slug)
                     ? 'bg-secondary text-white border-secondary'
                     : 'border-slate-300'

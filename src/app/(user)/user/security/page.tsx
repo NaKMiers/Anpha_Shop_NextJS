@@ -5,8 +5,8 @@ import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { changePasswordApi } from '@/requests'
-import { useSession } from 'next-auth/react'
-import { useCallback } from 'react'
+import { getSession, useSession } from 'next-auth/react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCheck, FaEyeSlash } from 'react-icons/fa'
@@ -16,7 +16,9 @@ function SecurityPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()
-  const curUser: any = session?.user
+
+  // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const isLocalAuth = curUser?.authType === 'local'
 
   // Form
@@ -33,6 +35,18 @@ function SecurityPage() {
       reNewPassword: '',
     },
   })
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser?._id) {
+      getCurUser()
+    }
+  }, [curUser?._id])
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(

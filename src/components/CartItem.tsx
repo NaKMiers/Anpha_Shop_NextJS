@@ -10,7 +10,7 @@ import {
 } from '@/libs/reducers/cartReducer'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -39,14 +39,26 @@ function CartItem({
   // hook
   const dispatch = useAppDispatch()
   const { data: session } = useSession()
-  const curUser: any = session?.user
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
 
   // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
   const quantity = cartItem.quantity
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser?._id) {
+      getCurUser()
+    }
+  }, [curUser?._id])
 
   // handle update cart quantity
   const handleUpdateCartQuantity = useCallback(async () => {
@@ -125,7 +137,7 @@ function CartItem({
   useEffect(() => {
     if (quantity < 1) {
       setTimeout(() => {
-        if (curUser) {
+        if (curUser._id) {
           dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
           handleUpdateCartQuantity()
         } else {
@@ -134,7 +146,7 @@ function CartItem({
       }, 500)
     } else if (quantity > cartItem.product.stock) {
       setTimeout(() => {
-        if (curUser) {
+        if (curUser._id) {
           dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
           handleUpdateCartQuantity()
         } else {

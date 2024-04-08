@@ -7,7 +7,7 @@ import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { createOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -22,11 +22,23 @@ function CheckoutPage({ params }: { params: { type: string } }) {
   const cartItems = useAppSelector(state => state.cart.items)
   const localCartItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
-  const curUser = session?.user
 
   // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const [confirmed, setConfirmed] = useState(false)
   const [checkout, setCheckout] = useState<any | null>(null)
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser?._id) {
+      getCurUser()
+    }
+  }, [curUser?._id])
 
   useEffect(() => {
     const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')

@@ -7,7 +7,7 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { updateProfileApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatDate } from '@/utils/time'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -24,7 +24,7 @@ function UserPage() {
   const { data: session } = useSession()
 
   // states
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<any>(session?.user)
   const [isEditing, setIsEditing] = useState(false)
 
   // Form
@@ -43,19 +43,26 @@ function UserPage() {
     },
   })
 
-  // get user from session
+  // get user session
   useEffect(() => {
-    // get user from session
-    const curUser: any = session?.user
-    setUser(curUser)
+    const getCurUser = async () => {
+      const session = await getSession()
+      // get user from session
+      const curUser: any = session?.user
+      setUser(curUser)
 
-    // set form values
-    setValue('firstname', curUser?.firstname)
-    setValue('lastname', curUser?.lastname)
-    setValue('birthday', curUser?.birthday)
-    setValue('job', curUser?.job)
-    setValue('address', curUser?.address)
-  }, [session?.user, setValue])
+      // set form values
+      setValue('firstname', curUser?.firstname)
+      setValue('lastname', curUser?.lastname)
+      setValue('birthday', curUser?.birthday)
+      setValue('job', curUser?.job)
+      setValue('address', curUser?.address)
+    }
+
+    if (!user?._id) {
+      getCurUser()
+    }
+  }, [user?._id, setValue])
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     console.log(data)

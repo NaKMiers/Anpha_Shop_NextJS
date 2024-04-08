@@ -81,6 +81,14 @@
   }
 }
 
+.md\:show-scrollbar {
+  @screen md {
+    &::-webkit-scrollbar {
+      display: initial; /* Thay 'none' bằng 'initial' để hiển thị lại thanh cuộn */
+    }
+  }
+}
+
 .input-range {
   -webkit-appearance: none;
   appearance: none;

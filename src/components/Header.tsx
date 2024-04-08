@@ -159,8 +159,8 @@ function Header({ isStatic }: HeaderProps) {
 
         {/* Nav for > sm */}
         <div className='hidden md:flex items-center gap-4'>
-          <Link href='/cart' className='relative'>
-            <FaCartShopping size={24} className='common-transition hover:scale-110' />
+          <Link href='/cart' className='relative hover:scale-110 common-transition'>
+            <FaCartShopping size={24} />
             {!!cartLength && (
               <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>
                 {cartLength}
@@ -206,7 +206,7 @@ function Header({ isStatic }: HeaderProps) {
         <div
           className={`${
             isOpenMenu ? 'block' : 'hidden'
-          } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30`}
+          } fixed top-[72px] left-0 right-0 bottom-0 w-screen h-screen z-30`}
           onClick={() => setIsOpenMenu(false)}
         />
         <ul
@@ -254,7 +254,7 @@ function Header({ isStatic }: HeaderProps) {
                 <Link
                   href='/cart'
                   className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                  <FaCartShopping size={18} className='' />
+                  <FaCartShopping size={18} />
                   <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                   {!!cartLength && (
                     <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>

@@ -14,7 +14,6 @@ import { PiSignOutBold } from 'react-icons/pi'
 function Footer() {
   // states
   const [bestSellerProducts, setBestSellerProducts] = useState<ProductWithTagsAndCategory[]>([])
-  const slideTrackRef = useRef<HTMLDivElement>(null)
 
   // get best seller products
   useEffect(() => {
@@ -78,12 +77,11 @@ function Footer() {
           </div>
 
           <Divider sx={{ my: 2 }} />
+
           {/* Center */}
           <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
             {/* Slider */}
-            <div
-              className='flex overflow-x-scroll flex-1 md:mr-5 -mx-1 relative select-none cursor-pointer snap-mandatory'
-              ref={slideTrackRef}>
+            <div className='flex w-full overflow-x-scroll flex-1 md:mr-5 -mx-1 relative select-none cursor-pointer snap-mandatory no-scrollbar md:show-scrollbar'>
               {bestSellerProducts.map((product, index) => (
                 <Link
                   href={`/${product.slug}`}
