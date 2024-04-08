@@ -76,7 +76,8 @@ function Input({
           ) : type === 'select' ? (
             <select
               id={id}
-              className='block min-h-[46px] px-2.5 pb-2.5 pt-4 w-full text-sm text-dark focus:outline-none focus:ring-0 peer rounded-r-lg'
+              className=' block min-h-[46px] px-2.5 pb-2.5 pt-4 w-full text-sm text-dark focus:outline-none focus:ring-0 peer rounded-r-lg'
+              style={{ WebkitAppearance: 'none' }}
               disabled={disabled}
               {...register(id, { required })}
               onChange={onChange}
