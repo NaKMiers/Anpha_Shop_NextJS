@@ -2,7 +2,6 @@
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems } from '@/libs/reducers/cartReducer'
-import { IUser } from '@/models/UserModel'
 import { getCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { getSession, signOut, useSession } from 'next-auth/react'
@@ -27,13 +26,25 @@ function Header({ isStatic }: HeaderProps) {
   const cartItems = useAppSelector(state => state.cart.items)
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
-  const curUser: any = session?.user
 
   // states
+  const [curUser, setCurUser] = useState<any>(session?.user)
   const [isShow, setIsShow] = useState(false)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const lastScrollTop = useRef(0)
   const [cartLength, setCartlength] = useState(0)
+
+  // get user session
+  useEffect(() => {
+    const getCurUser = async () => {
+      const session = await getSession()
+      setCurUser(session?.user)
+    }
+
+    if (!curUser._id) {
+      getCurUser()
+    }
+  }, [curUser._id])
 
   // get cart length
   useEffect(() => {
