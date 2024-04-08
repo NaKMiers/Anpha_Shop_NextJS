@@ -87,13 +87,17 @@ function AccountItem({
           {/* Expire */}
           <p className='text-sm' title='Expire (d/m/y)'>
             <span className='font-semibold'>Expire: </span>
-            <span>{data.expire ? formatTime(data.expire) : '-'}</span>
+            <span className={`${new Date() > new Date(data.expire || '') ? 'text-red-500' : ''}`}>
+              {data.expire ? formatTime(data.expire) : '-'}
+            </span>
           </p>
 
           {/* Renew */}
           <p className='text-sm' title='Expire (d/m/y)'>
             <span className='font-semibold'>Renew: </span>
-            <span>{formatTime(data.renew)}</span>
+            <span className={`${new Date() > new Date(data.renew) ? 'text-red-500' : ''}`}>
+              {formatTime(data.renew)}
+            </span>
           </p>
 
           {/* Info */}

@@ -55,6 +55,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       sort: 'updatedAt|-1',
       active: '',
       usingUser: '',
+      expire: '',
+      renew: '',
     },
   })
 
@@ -134,31 +136,37 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   }, [])
 
   // delete account
-  const handleDeleteAccounts = useCallback(async (ids: string[]) => {
-    setLoadingAccounts(ids)
+  const handleDeleteAccounts = useCallback(
+    async (ids: string[]) => {
+      setLoadingAccounts(ids)
 
-    try {
-      // senred request to server
-      const { deletedAccounts, message } = await deleteAccountsApi(ids)
+      try {
+        // senred request to server
+        const { deletedAccounts, message } = await deleteAccountsApi(ids)
 
-      // remove deleted tags from state
-      setAccounts(prev =>
-        prev.filter(
-          account =>
-            !deletedAccounts.map((account: AccountWithProduct) => account._id).includes(account._id)
+        // remove deleted tags from state
+        setAccounts(prev =>
+          prev.filter(
+            account =>
+              !deletedAccounts.map((account: AccountWithProduct) => account._id).includes(account._id)
+          )
         )
-      )
 
-      // show success message
-      toast.success(message)
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      setLoadingAccounts([])
-      setSelectedAccounts([])
-    }
-  }, [])
+        // show success message
+        toast.success(message)
+
+        // refresh page
+        router.refresh()
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        setLoadingAccounts([])
+        setSelectedAccounts([])
+      }
+    },
+    [router]
+  )
 
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
@@ -405,6 +413,58 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
                 {
                   value: false,
                   label: 'Empty',
+                },
+              ]}
+            />
+
+            {/* Expire */}
+            <Input
+              id='expire'
+              label='Expire'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: true,
+                  label: 'Expired',
+                },
+                {
+                  value: false,
+                  label: 'Normal',
+                },
+              ]}
+            />
+
+            {/* Renew */}
+            <Input
+              id='renew'
+              label='Renew'
+              disabled={false}
+              register={register}
+              errors={errors}
+              icon={FaSort}
+              type='select'
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                  selected: true,
+                },
+                {
+                  value: true,
+                  label: 'Expired',
+                },
+                {
+                  value: false,
+                  label: 'Normal',
                 },
               ]}
             />

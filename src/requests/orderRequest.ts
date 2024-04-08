@@ -59,8 +59,8 @@ export const createOrderApi = async (
   code: string,
   email: string,
   total: number,
-  voucherApplied: string,
-  discount: number,
+  voucherApplied: string | undefined,
+  discount: number | undefined,
   items: FullyCartItem[],
   paymentMethod: string
 ) => {

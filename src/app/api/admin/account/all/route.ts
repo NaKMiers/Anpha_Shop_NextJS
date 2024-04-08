@@ -58,6 +58,18 @@ export async function GET(req: NextRequest) {
           continue
         }
 
+        if (['expire', 'renew'].includes(key)) {
+          // expire = true: < now && exist
+          // expire = false: > now or not exist
+
+          if (params[key][0] === 'true') {
+            filter[key] = { $lt: new Date(), $exists: true, $ne: null }
+          } else {
+            filter.$or = [{ [key]: { $gt: new Date() } }, { [key]: { $exists: false } }]
+          }
+          continue
+        }
+
         // Normal Cases ---------------------
         filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
@@ -92,8 +104,6 @@ export async function GET(req: NextRequest) {
         select: 'title',
       })
       .lean()
-
-    console.log('types: ', types)
 
     // return response
     return NextResponse.json({ accounts, amount, types }, { status: 200 })

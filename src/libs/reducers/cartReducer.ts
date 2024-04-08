@@ -2,7 +2,7 @@ import { FullyCartItem } from '@/app/api/cart/route'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a function to access localStorage safely
-const getLocalCartItems = () => {
+const getLocalCartItems = (): FullyCartItem[] => {
   if (typeof window !== 'undefined') {
     // Access localStorage only if window (browser) is defined
     return JSON.parse(localStorage.getItem('localCart') ?? '[]') as FullyCartItem[]

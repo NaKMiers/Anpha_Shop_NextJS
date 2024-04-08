@@ -14,6 +14,19 @@ export const getAllProductsApi = async (query: string = '') => {
 }
 
 // [GET]
+export const getForceAllProductsApi = async () => {
+  // no-store to avoid cache
+  const res = await fetch(`/api/admin/product/force-all`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [GET]
 export const getProductApi = async (id: string) => {
   // no-cache
   const res = await fetch(`/api/admin/product/${id}`, { cache: 'no-store' })

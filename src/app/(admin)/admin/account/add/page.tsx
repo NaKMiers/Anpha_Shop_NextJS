@@ -11,10 +11,11 @@ import { ImClock } from 'react-icons/im'
 
 import AdminHeader from '@/components/admin/AdminHeader'
 import { setLoading } from '@/libs/reducers/modalReducer'
-import { addAccountApi, getAllProductsApi } from '@/requests'
+import { addAccountApi, getForceAllProductsApi } from '@/requests'
 import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -52,11 +53,11 @@ function AddAccountPage() {
     const getAllTypes = async () => {
       try {
         // send request to server to get all products
-        const { products } = await getAllProductsApi()
+        const { products } = await getForceAllProductsApi()
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
-        products.forEach((product: ProductWithTagsAndCategory) => {
+        products.forEach((product: FullyProduct) => {
           if (!groupTypes[product.category.title]) {
             groupTypes[product.category.title] = []
           }

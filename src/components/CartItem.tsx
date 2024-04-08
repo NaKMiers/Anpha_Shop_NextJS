@@ -13,7 +13,7 @@ import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -46,83 +46,27 @@ function CartItem({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
-  const quantity =
-    cartItem.quantity > cartItem.product.stock ? cartItem.product.stock : cartItem.quantity
-
-  // handle quantity
-  const handleValidateQuantity = useCallback(
-    (value: number, isCustom: boolean) => {
-      let isValid: boolean = true
-      let qty = quantity
-
-      if (!isCustom) {
-        // quantity must be > 0
-        if (quantity + value <= 0) {
-          isValid = false
-        }
-
-        // quantity must be <= product stock
-        if (quantity + value > cartItem.product?.stock!) {
-          isValid = false
-        }
-
-        qty = quantity + value
-      } else {
-        // quantity must be > 0
-        if (value < 1) {
-          isValid = false
-        }
-
-        // quantity must be <= product stock
-        if (value > cartItem.product?.stock!) {
-          isValid = false
-        }
-
-        qty = value
-      }
-
-      return { isValid, quantity: qty }
-    },
-    [cartItem.product?.stock, quantity]
-  )
+  const quantity = cartItem.quantity
 
   // handle update cart quantity
-  const handleUpdateCartQuantity = useCallback(
-    async (value: number, isCustom: boolean = false) => {
-      // validate quantity
-      const { isValid, quantity } = handleValidateQuantity(value, isCustom)
-      if (!isValid) return
-
+  const handleUpdateCartQuantity = useCallback(async () => {
+    try {
       // start loading
       setIsLoading(true)
-      try {
-        // send request to update cart quantity
-        const { updatedCartItem, message } = await updateCartQuantityApi(cartItem._id, quantity)
 
-        // update cart item in store
-        dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
-      } finally {
-        // stop loading
-        setIsLoading(false)
-      }
-    },
-    [handleValidateQuantity, cartItem._id, dispatch]
-  )
+      // send request to update cart quantity
+      const { updatedCartItem } = await updateCartQuantityApi(cartItem._id, quantity)
 
-  // handle update cart quantity LOCAL
-  const handleUpdateLocalCartQuantity = useCallback(
-    (value: number, isCustom: boolean = false) => {
-      // validate quantity
-      const { isValid, quantity } = handleValidateQuantity(value, isCustom)
-      if (!isValid) return
-
-      dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: quantity }))
-    },
-    [cartItem._id, dispatch, handleValidateQuantity]
-  )
+      // update cart item in store
+      dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      setIsLoading(false)
+    }
+  }, [cartItem._id, dispatch, quantity])
 
   // handle delete cart item
   const handleDeleteCartItem = useCallback(async () => {
@@ -177,6 +121,39 @@ function CartItem({
     handleDeleteLocalCartItem()
   }, [handleDeleteLocalCartItem, cartItem.productId, dispatch, setIsLoading, cartItem.quantity])
 
+  // validate quantity
+  useEffect(() => {
+    if (quantity < 1) {
+      setTimeout(() => {
+        if (curUser) {
+          dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+          handleUpdateCartQuantity()
+        } else {
+          dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+        }
+      }, 500)
+    } else if (quantity > cartItem.product.stock) {
+      setTimeout(() => {
+        if (curUser) {
+          dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
+          handleUpdateCartQuantity()
+        } else {
+          dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
+        }
+      }, 500)
+    } else {
+      handleUpdateCartQuantity()
+    }
+  }, [
+    cartItem._id,
+    cartItem.product.stock,
+    cartItem.quantity,
+    curUser,
+    dispatch,
+    quantity,
+    selectedCartItems,
+    handleUpdateCartQuantity,
+  ])
   return (
     <div
       className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 ${className} ${
@@ -238,7 +215,7 @@ function CartItem({
         />
       )}
 
-      {/* Info */}
+      {/* Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         <Link href='/netflix'>
           <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
@@ -299,7 +276,19 @@ function CartItem({
                 }`}
                 disabled={quantity <= 1 || isLoading}
                 onClick={() =>
-                  curUser ? handleUpdateCartQuantity(-1) : handleUpdateLocalCartQuantity(-1)
+                  curUser
+                    ? dispatch(
+                        updateCartItemQuantity({
+                          id: cartItem._id,
+                          quantity: quantity <= 1 ? 1 : quantity - 1,
+                        })
+                      )
+                    : dispatch(
+                        updateLocalCartItemQuantity({
+                          id: cartItem._id,
+                          quantity: quantity <= 1 ? 1 : quantity - 1,
+                        })
+                      )
                 }>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
@@ -313,16 +302,27 @@ function CartItem({
                 )}
               </button>
               <input
-                className='max-w-14 px-2 border-y border-slate-100 outline-none text-center text-lg text-dark font-semibold font-body'
-                type='text'
+                className='max-w-14 px-2 border-y border-slate-100 outline-none text-center text-lg text-dark font-semibold font-body number-input'
+                type='number'
                 inputMode='numeric'
                 pattern='[0-9]*'
                 value={quantity}
                 disabled={isLoading}
+                onWheel={e => e.currentTarget.blur()}
                 onChange={e =>
                   curUser
-                    ? handleUpdateCartQuantity(+e.target.value, true)
-                    : handleUpdateLocalCartQuantity(+e.target.value, true)
+                    ? dispatch(
+                        updateCartItemQuantity({
+                          id: cartItem._id,
+                          quantity: +e.target.value,
+                        })
+                      )
+                    : dispatch(
+                        updateLocalCartItemQuantity({
+                          id: cartItem._id,
+                          quantity: +e.target.value,
+                        })
+                      )
                 }
               />
               <button
@@ -333,7 +333,25 @@ function CartItem({
                 }`}
                 disabled={quantity >= cartItem.product?.stock! || isLoading}
                 onClick={() =>
-                  curUser ? handleUpdateCartQuantity(1) : handleUpdateLocalCartQuantity(1)
+                  curUser
+                    ? dispatch(
+                        updateCartItemQuantity({
+                          id: cartItem._id,
+                          quantity:
+                            quantity >= cartItem.product?.stock!
+                              ? cartItem.product?.stock!
+                              : quantity + 1,
+                        })
+                      )
+                    : dispatch(
+                        updateLocalCartItemQuantity({
+                          id: cartItem._id,
+                          quantity:
+                            quantity >= cartItem.product?.stock!
+                              ? cartItem.product?.stock!
+                              : quantity + 1,
+                        })
+                      )
                 }>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
@@ -363,7 +381,6 @@ function CartItem({
             <FaTrashAlt
               size={21}
               className='text-secondary cursor-pointer hover:scale-110 common-transition'
-              // onClick={handleDeleteCartItem}
               onClick={() => setIsOpenConfirmModal(true)}
             />
           </div>

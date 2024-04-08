@@ -6,23 +6,45 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../../cart/route'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
+import UserModel, { IUser } from '@/models/UserModel'
 
 // [POST]: /order/create
 export async function POST(req: NextRequest) {
   console.log('- Create Order -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to create order
-  const asd = await req.json()
-  const { code, email, total, voucherApplied, discount, items, paymentMethod } = asd
-
-  // get user id
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to create order
+    const asd = await req.json()
+    const { code, email, total, voucherApplied, discount, items, paymentMethod } = asd
+
+    // get user id
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
+    // balance payment method
+    if (paymentMethod === 'balance') {
+      if (!userId) {
+        return NextResponse.json(
+          { message: 'Bạn cần đăng nhập để sử dụng phương thức thanh toán này' },
+          { status: 400 }
+        )
+      }
+
+      // get user balance
+      const user: IUser | null = await UserModel.findById(userId).lean()
+
+      // check user balance
+      if ((user?.balance || 0) < total) {
+        return NextResponse.json(
+          { message: 'Số dư không đủ, hãy nạp thêm để thanh toán' },
+          { status: 400 }
+        )
+      }
+    }
+
     // create new order
     const newOrder = new OrderModel({
       code,
@@ -52,15 +74,22 @@ export async function POST(req: NextRequest) {
 
     // auto deliver order
     let response: any = null
-    if (process.env.IS_AUTO_DELIVER === 'YES') {
+    if (process.env.IS_AUTO_DELIVER === 'YES' || paymentMethod === 'balance') {
       response = await handleDeliverOrder(newOrder._id)
+
+      // update user balance
+      if (paymentMethod === 'balance' && !response.isError) {
+        await UserModel.findByIdAndUpdate(userId, {
+          $inc: { balance: -total },
+        })
+      }
     }
 
     // return new order
     const message =
       response && response.isError
         ? 'Đơn hàng đang được xử lý, xin vui lòng chờ'
-        : 'Đơn hàng đã được giao thành công'
+        : 'Đơn hàng đã được gửi qua email ' + email
 
     return NextResponse.json({ removedCartItems, message }, { status: 201 })
   } catch (err: any) {

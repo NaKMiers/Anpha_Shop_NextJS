@@ -7,9 +7,6 @@ import GoogleProvider from 'next-auth/providers/google'
 import { connectDatabase } from '@/config/databse'
 import UserModel, { IUser } from '@/models/UserModel'
 
-// Connect to database
-connectDatabase()
-
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET!,
   jwt: {
@@ -83,13 +80,25 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       console.log('- JWT -')
-      // console.log('jwt-xxxx', token)
-      console.log('jwt-user', user)
-      // console.log('jwt-trigger', trigger)
+      console.log('jwt-xxxx', token)
+      console.log('jwt-trigger', trigger)
       // console.log('jwt-ss', session)
 
-      if (user) {
-        const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()
+      // if (trigger === 'update') {
+      //   console.log('update token')
+      //   console.log('session', token)
+
+      //   const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
+      //   if (userDB) {
+      //     const { password: _, ...otherDetails } = userDB
+
+      //     token = { ...token, ...otherDetails }
+      //   }
+      // }
+
+      if (token) {
+        console.log(new Date())
+        const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
         if (userDB) {
           const { password: _, ...otherDetails } = userDB
 
@@ -112,6 +121,9 @@ const handler = NextAuth({
 
     async signIn({ user, account, profile }: any) {
       console.log('- Sign In -')
+
+      // connect to database
+      await connectDatabase()
 
       if (account && account.provider === 'google') {
         if (!user || !profile) {

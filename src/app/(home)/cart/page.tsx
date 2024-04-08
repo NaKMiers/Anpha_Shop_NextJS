@@ -1,12 +1,13 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import Input from '@/components/Input'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setSelectedItems } from '@/libs/reducers/cartReducer'
+import { setCartItems, setSelectedItems } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
-import { applyVoucherApi, generateOrderCodeApi } from '@/requests'
+import { applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
 import { calcPercentage, formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -36,12 +37,15 @@ function CartPage() {
   }
 
   // states
-  const [isShowVoucher, setIsShowVoucher] = useState(false)
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
   const [voucherMessage, setVoucherMessage] = useState<string>('')
   const [subTotal, setSubTotal] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
+
+  // loading and showing
+  const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
+  const [isBuying, setIsBuying] = useState<boolean>(false)
 
   // Form
   const {
@@ -62,7 +66,7 @@ function CartPage() {
     const subTotal = selectedCartItems.reduce((total, cartItem) => {
       const item: any = cartItems.find(cI => cI._id === cartItem._id)
 
-      return total + item?.quantity * item?.product.price
+      return total + (item?.quantity ?? 0) * (item?.product.price ?? 0)
     }, 0)
     setSubTotal(subTotal)
 
@@ -116,23 +120,26 @@ function CartPage() {
     [dispatch, selectedCartItems.length, subTotal]
   )
 
+  const handleValidateBeforeCheckout = useCallback(() => {
+    let isValid = true
+    if (!selectedCartItems.length) {
+      toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
+      isValid = false
+    }
+
+    if (!curUser && !getValues('email')) {
+      setError('email', { message: 'Email không được để trống' })
+      isValid = false
+    }
+
+    return isValid
+  }, [curUser, getValues, selectedCartItems.length, setError])
+
   // handle checkout
   const handleCheckout = useCallback(
     async (type: string) => {
-      if (!selectedCartItems.length) {
-        toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
-        return
-      }
-
-      // set email
-      if (!curUser) {
-        const email = getValues('email')
-
-        if (!email) {
-          setError('email', { message: 'Email không được để trống' })
-          return
-        }
-      }
+      // validate before checkout
+      if (!handleValidateBeforeCheckout()) return
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -161,8 +168,83 @@ function CartPage() {
         dispatch(setPageLoading(false))
       }
     },
-    [router, curUser, dispatch, discount, getValues, selectedCartItems, voucher, total, setError]
+    [
+      curUser?.email,
+      dispatch,
+      getValues,
+      handleValidateBeforeCheckout,
+      router,
+      selectedCartItems,
+      voucher,
+      discount,
+      total,
+    ]
   )
+
+  // handle buy with balance
+  const handleBuyWithBalance = useCallback(async () => {
+    console.log('buy with balance')
+
+    // check user
+    if (!curUser) {
+      router.push('/')
+      return
+    }
+
+    // validate before checkout
+    if (!handleValidateBeforeCheckout()) return
+
+    // start loading
+    setIsBuying(true)
+
+    try {
+      const { orderCode } = await generateOrderCodeApi() // cache: no-store
+
+      const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
+        _id: cartItem._id,
+        product: cartItem.product,
+        quantity: cartItem.quantity,
+      })) as FullyCartItem[]
+
+      console.log(total)
+
+      // send request to server to create order
+      const { removedCartItems, message } = await createOrderApi(
+        orderCode,
+        curUser.email,
+        total,
+        voucher?._id,
+        discount,
+        items,
+        'balance'
+      )
+
+      // remove cart items in store
+      dispatch(setCartItems(cartItems.filter(item => !removedCartItems.includes(item._id))))
+
+      // show success message
+      toast.success(message)
+
+      // redirect to order history page
+      router.push('/user/order-history')
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      setIsBuying(false)
+    }
+  }, [
+    curUser,
+    handleValidateBeforeCheckout,
+    router,
+    selectedCartItems,
+    total,
+    voucher,
+    discount,
+    cartItems,
+    dispatch,
+  ])
 
   return (
     <div className='mt-20 grid grid-cols-1 md:grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
@@ -294,10 +376,9 @@ function CartPage() {
                 required
                 type='text'
                 icon={RiCoupon2Fill}
-                className='mb-2'
               />
               <button
-                className={`rounded-lg border py-2 px-4 text-nowrap flex-shrink-0 hover:bg-primary common-transition hover:text-light ${
+                className={`rounded-lg border py-2 px-3 text-nowrap h-[46px] flex-shrink-0 hover:bg-primary common-transition hover:text-light ${
                   isLoading
                     ? 'border-slate-200 bg-slate-200 pointer-events-none'
                     : 'border-primary text-primary '
@@ -342,11 +423,18 @@ function CartPage() {
             <span className='font-semibold text-3xl text-green-500'>{formatPrice(total)}</span>
           </div>
 
-          <div className='flex flex-col gap-3'>
+          <div className='flex flex-col gap-3 select-none'>
             <button
-              className='flex items-center justify-center rounded-xl gap-1 border border-primary py-2 px-3 group hover:bg-primary common-transition'
-              onClick={() => !curUser && router.push('/')}>
-              <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
+              className={`flex items-center justify-center rounded-xl gap-1 border py-2 px-3 group border-primary hover:bg-primary common-transition ${
+                isBuying ? 'pointer-events-none' : ''
+              }`}
+              disabled={isBuying}
+              onClick={handleBuyWithBalance}>
+              {isBuying ? (
+                <RiDonutChartFill size={32} className='animate-spin text-slate-200' />
+              ) : (
+                <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
+              )}
               <span className='font-semibold ml-1 group-hover:text-light'>
                 Mua bằng số dư ({formatPrice(curUser?.balance || 0)})
               </span>
