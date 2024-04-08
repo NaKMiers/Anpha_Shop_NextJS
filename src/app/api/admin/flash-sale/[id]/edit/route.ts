@@ -11,9 +11,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
   await connectDatabase()
 
   // get data to create flash sale
-  const asd = await req.json()
-  const { type, value, begin, timeType, duration, expire, appliedProducts } = asd
-  console.log('asd', asd)
+  const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
 
   try {
     // update flashsale

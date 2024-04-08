@@ -80,8 +80,6 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   // handle quantity
   const handleQuantity = useCallback(
     (value: number, isCustom: boolean = false) => {
-      console.log(value)
-
       if (!isCustom) {
         // quantity must be > 0
         if (quantity + value <= 0) return
@@ -91,7 +89,6 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
 
         setQuantity(quantity + value)
       } else {
-        console.log('custom')
         // quantity must be > 0
         if (value < 1) value = 1
 

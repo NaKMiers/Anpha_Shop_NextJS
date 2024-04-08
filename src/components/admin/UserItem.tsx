@@ -38,9 +38,9 @@ function UserItem({
 }: UserItemProps) {
   // hook
   const { data: session } = useSession()
+  const curUser: any = session?.user
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
   const [userData, setUserData] = useState<IUser>(data)
   const [isOpenRecharge, setIsOpenRecharge] = useState<boolean>(false)
   const [isLoadingRecharge, setIsLoadingRecharge] = useState<boolean>(false)
@@ -68,23 +68,9 @@ function UserItem({
     },
   })
 
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-
-    if (!curUser?._id) {
-      getCurUser()
-    }
-  }, [curUser?._id])
-
   // submit recharge form
   const onRechargeSubmit: SubmitHandler<FieldValues> = async formData => {
     setIsLoadingRecharge(true)
-
-    console.log(formData)
 
     try {
       // send request to server
@@ -100,7 +86,7 @@ function UserItem({
       reset()
       setIsOpenRecharge(false)
     } catch (err: any) {
-      console.log(213213)
+      console.log(err)
       toast.error(err.response.userData.message)
     } finally {
       setIsLoadingRecharge(false)
@@ -162,7 +148,7 @@ function UserItem({
       reset()
       setIsOpenSetCollaborator(false)
     } catch (err: any) {
-      console.log(213213)
+      console.log(err)
       toast.error(err.response.userData.message)
     } finally {
       setIsLoadingSetCollaborator(false)

@@ -35,7 +35,7 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: any) {
-        console.log('credentials', credentials)
+        console.log('- Cedentials -', credentials)
 
         // check if credentials is empty
         if (!credentials?.usernameOrEmail || !credentials?.password) {
@@ -84,8 +84,17 @@ const handler = NextAuth({
       // console.log('jwt-trigger', trigger)
       // console.log('jwt-ss', session)
 
+      if (trigger === 'update' && token.email) {
+        console.log('- Update Token -')
+        const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
+        if (userDB) {
+          const { password: _, ...otherDetails } = userDB
+
+          return { ...token, ...otherDetails }
+        }
+      }
+
       if (user) {
-        console.log(new Date())
         const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()
         if (userDB) {
           const { password: _, ...otherDetails } = userDB

@@ -46,15 +46,12 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
       { new: true }
     )
 
-    console.log('updatedCartItem: ', updatedCartItem)
-
     // return response
     return NextResponse.json(
       { updatedCartItem, message: 'Cập nhật số lượng sản phẩm thành công' },
       { status: 200 }
     )
   } catch (err: any) {
-    console.log(err)
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
 }

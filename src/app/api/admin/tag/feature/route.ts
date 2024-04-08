@@ -11,8 +11,6 @@ export async function PATCH(req: NextRequest) {
 
   // get tag id to delete
   const { ids, value } = await req.json()
-  console.log(ids)
-  console.log(value)
 
   try {
     // update tags from database

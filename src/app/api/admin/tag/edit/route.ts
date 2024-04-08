@@ -12,7 +12,6 @@ export async function PUT(req: NextRequest) {
 
   // get tag values to edit
   const { editingValues } = await req.json()
-  console.log(editingValues)
 
   try {
     const editedTags = []

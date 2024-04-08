@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/product/force-all
 export async function GET() {
-  console.log('- Get FORCE All Products -')
+  console.log('- Get Force All Products -')
 
   // connect to database
   await connectDatabase()

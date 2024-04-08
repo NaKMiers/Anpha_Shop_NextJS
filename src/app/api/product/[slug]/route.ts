@@ -28,9 +28,6 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const userId = token?._id
 
-  console.log('token', token)
-  console.log('slug', slug)
-
   try {
     // get product from database
     const product: FullyProduct | null = await ProductModel.findOne({

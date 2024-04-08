@@ -92,7 +92,7 @@ const UserSchema = new Schema(
 )
 
 UserSchema.pre('save', async function (next) {
-  console.log('UserSchema pre-save')
+  console.log('- UserSchema Pre-Save -')
 
   // check authType & username before saving
   if (this.authType !== 'local' || !this.isModified('password')) {
@@ -103,8 +103,6 @@ UserSchema.pre('save', async function (next) {
   try {
     const hashedPassword = await bcrypt.hash(this.password || '', +process.env.BCRYPT_SALT_ROUND! || 10)
     this.password = hashedPassword
-
-    console.log('hashedPassword', hashedPassword)
 
     next()
   } catch (err: any) {

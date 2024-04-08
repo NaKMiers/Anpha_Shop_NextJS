@@ -57,7 +57,6 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     // get all flash sales
     const getAllFlashSales = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -87,7 +86,6 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
       setLoadingFlashSales(ids)
 
       try {
-        console.log(ids)
         // from selected flash sales, get product ids
         const productIds = flashSales
           .filter(flashSale => ids.includes(flashSale._id))
@@ -123,8 +121,6 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

@@ -11,7 +11,6 @@ export async function DELETE(req: NextRequest) {
 
   // get voucher ids to delete
   const { ids } = await req.json()
-  console.log(ids)
 
   try {
     // get delete vouchers

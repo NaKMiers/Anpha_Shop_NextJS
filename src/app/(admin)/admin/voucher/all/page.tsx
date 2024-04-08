@@ -70,7 +70,6 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
     // get all vouchers
     const getAllVouchers = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -105,7 +104,6 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
     try {
       // senred request to server
       const { updatedVouchers, message } = await activateVouchersApi(ids, value)
-      console.log(updatedVouchers, message)
 
       // update vouchers from state
       setVouchers(prev =>
@@ -153,8 +151,6 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {
@@ -182,7 +178,6 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
   const handleFilter: SubmitHandler<FieldValues> = useCallback(
     async data => {
       const params: any = handleOptimizeFilter(data)
-      console.log(data)
 
       // handle query
       const query = handleQuery({

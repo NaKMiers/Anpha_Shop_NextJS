@@ -17,8 +17,7 @@ export async function POST(req: NextRequest) {
     await connectDatabase()
 
     // get data to create order
-    const asd = await req.json()
-    const { code, email, total, voucherApplied, discount, items, paymentMethod } = asd
+    const { code, email, total, voucherApplied, discount, items, paymentMethod } = await req.json()
 
     // get user id
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

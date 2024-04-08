@@ -10,8 +10,6 @@ const requireAuth = async (req: NextRequest, token: JWT | null) => {
     return NextResponse.redirect(new URL('/auth/login', req.url))
   }
 
-  console.log('req.url:', req.url)
-
   const requestHeaders = new Headers(req.headers)
   requestHeaders.set('x-url', new URL(req.url).pathname.toString())
 
@@ -50,7 +48,7 @@ const requireAdmin = async (req: NextRequest, token: JWT | null) => {
 export default async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
-  console.log('token', token)
+  // console.log('token', token)
 
   if (req.nextUrl.pathname.startsWith('/admin')) {
     return requireAdmin(req, token)

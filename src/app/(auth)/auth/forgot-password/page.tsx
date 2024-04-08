@@ -32,8 +32,6 @@ function ForgotPasswordPage() {
     }
   }, [isSent, countDown])
 
-  console.log(isCounting)
-
   // Form
   const {
     register,

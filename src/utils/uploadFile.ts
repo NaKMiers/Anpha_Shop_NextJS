@@ -28,7 +28,6 @@ async function getFileUrl(key: string) {
 }
 
 async function uploadFile(file: any, shape?: string) {
-  console.log('file', file)
   let size: any = { height: 480, width: 854, fit: 'cover' }
   if (shape === '1:1') {
     size.height = 480
@@ -58,8 +57,6 @@ async function uploadFile(file: any, shape?: string) {
     ContentType: file.type,
   }
 
-  console.log('params', params)
-
   const command = new PutObjectCommand(params)
   s3.send(command)
 
@@ -68,8 +65,6 @@ async function uploadFile(file: any, shape?: string) {
 }
 
 async function deleteFile(key: string) {
-  console.log('key', key)
-
   if (key.startsWith('http')) {
     key = key.split(
       `https://${process.env.AWS_BUCKET_NAME!}.s3.${process.env.AWS_BUCKET_REGION!}.amazonaws.com/`

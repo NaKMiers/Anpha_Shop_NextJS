@@ -5,7 +5,7 @@ import UserModel from '@/models/UserModel'
 
 // [PATHC]: /auth/reset-password
 export async function PATCH(req: NextRequest) {
-  console.log('reset password')
+  console.log('- Reset Password -')
 
   // connect to database
   await connectDatabase()

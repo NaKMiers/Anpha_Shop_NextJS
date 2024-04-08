@@ -132,8 +132,6 @@ function AddFlashSalePage() {
 
   // handle send request to server to edit flash sale
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
-
     // validate form
     if (!handleValidate(data)) return
 
@@ -231,7 +229,6 @@ function AddFlashSalePage() {
             required
             type='select'
             onChange={e => {
-              console.log(2132)
               setValue('timeType', e.target.value)
               setTimeType(e.target.value as 'loop' | 'once')
             }}

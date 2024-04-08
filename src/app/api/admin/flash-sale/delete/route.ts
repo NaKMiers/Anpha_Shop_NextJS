@@ -12,8 +12,6 @@ export async function DELETE(req: NextRequest) {
 
   // get voucher ids to delete
   const { ids, productIds } = await req.json()
-  console.log(ids)
-  console.log(productIds)
 
   try {
     // get delete flash sales

@@ -18,8 +18,6 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
   // states
   const [order, setOrder] = useState<IOrder | null>(null)
 
-  console.log(order)
-
   useEffect(() => {
     const getOrder = async () => {
       // start page loading

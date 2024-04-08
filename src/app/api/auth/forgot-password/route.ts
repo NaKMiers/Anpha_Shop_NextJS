@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // [POST]: /auth/forgot-password
 export async function POST(req: NextRequest) {
-  console.log('forgot password')
+  console.log('- Forgot Password -')
 
   // connect to database
   await connectDatabase()
@@ -36,8 +36,6 @@ export async function POST(req: NextRequest) {
     // ready for sending email
     const mailHashed = await bcrypt.hash(email, +process.env.BCRYPT_SALT_ROUND! || 10)
     const url = `${process.env.APP_URL}/auth/reset-password?email=${email}&token=${mailHashed}`
-
-    console.log('url', url)
 
     // send email
     sendMail(email, 'Khôi phục mật khẩu', `<a href="${url}"> Đặt lại mật khẩu </a>`)

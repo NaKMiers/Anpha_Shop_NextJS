@@ -144,8 +144,6 @@ function AddVoucherPage() {
         isValid = false
       }
 
-      console.log(isValid)
-
       return isValid
     },
     [setError, selectedCategory, selectedTags, files]

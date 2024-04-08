@@ -48,7 +48,6 @@ function OrderItem({
     // start loading
     setIsLoading(true)
 
-    console.log(123)
     try {
       // send request to deliver order
       const { message } = await deliverOrderApi(data._id)

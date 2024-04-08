@@ -40,25 +40,13 @@ function CartItem({
   const dispatch = useAppDispatch()
   const { data: session } = useSession()
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
+  const curUser: any = session?.user
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
   const quantity = cartItem.quantity
-
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-
-    if (!curUser?._id) {
-      getCurUser()
-    }
-  }, [curUser?._id])
 
   // handle update cart quantity
   const handleUpdateCartQuantity = useCallback(async () => {

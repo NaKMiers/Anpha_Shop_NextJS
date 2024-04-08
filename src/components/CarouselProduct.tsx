@@ -28,22 +28,10 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
   const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
+  const curUser: any = session?.user
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-
-    if (!curUser?._id) {
-      getCurUser()
-    }
-  }, [curUser?._id])
 
   // handle add product to cart - DATABASE
   const addProductToCart = useCallback(async () => {
@@ -102,7 +90,6 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
 
     // product has already existed in cart
     if (existingCartItem) {
-      console.log('existed')
       // if not enough products in stock
       if (existingCartItem.quantity + 1 > product.stock) {
         toast.error('Hiện không đủ sản phẩm để thêm vào giỏ hàng của bạn. Xin lỗi vì sự bất tiện này')

@@ -53,10 +53,7 @@ export const changePasswordApi = async (data: any) => {
     throw new Error((await res.json()).message)
   }
 
-  const asd = await res.json()
-  console.log('asd', asd)
-
-  return asd
+  return await res.json()
 }
 
 // [PATCH]

@@ -32,8 +32,6 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
     [].concat((searchParams?.[type] || items.map(item => item.slug)) as []).map(type => type)
   )
 
-  console.log('selectedFilterItems: ', selectedFilterItems)
-
   // values
   const minPrice: number = chops?.minPrice || 0
   const maxPrice: number = chops?.maxPrice || 0
@@ -46,8 +44,6 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   const [stock, setStock] = useState<number>(
     searchParams?.stock ? +searchParams.stock : chops?.maxStock || 0
   )
-
-  console.log(stock)
 
   // Form
   const {
@@ -65,8 +61,6 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

@@ -33,7 +33,6 @@ function LoginPage() {
     try {
       // send request to server
       const res = await signIn('credentials', { ...data, redirect: false })
-      console.log(res)
 
       if (res?.ok) {
         // show success message

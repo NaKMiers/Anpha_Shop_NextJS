@@ -4,9 +4,9 @@ import VoucherModel from '@/models/VoucherModel'
 import { summaryNotification } from '@/utils/sendMail'
 import { NextRequest, NextResponse } from 'next/server'
 
-// [POST]: /admin/summary/:id/send
+// [POST]: /admin/summary/send
 export async function POST(req: NextRequest) {
-  console.log('sendSummary')
+  console.log('- Send Summaries')
 
   // connect to database
   await connectDatabase()
@@ -23,8 +23,6 @@ export async function POST(req: NextRequest) {
 
     // get collaborator
     const collaborators: IUser[] = await UserModel.find({ _id: { $in: ids } }).lean()
-
-    console.log('collaborators:', collaborators)
 
     // get summaries
     const summaries = collaborators.map(collaborator => {

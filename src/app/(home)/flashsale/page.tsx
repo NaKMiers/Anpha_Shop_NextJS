@@ -17,9 +17,6 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
   const itemPerPage = 8
 
   try {
-    // send request to get products
-    console.log('searchParams: ', searchParams)
-
     // cache: no-store for filter
     const data = await getFlashSalePageApi(searchParams)
 

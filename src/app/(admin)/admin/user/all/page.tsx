@@ -61,12 +61,10 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
     // get all users
     const getAllUsers = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
 
-      console.log('get all users')
       try {
         const { users, amount, chops } = await getAllUsersApi(query) // cache: no-store
 
@@ -127,8 +125,6 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

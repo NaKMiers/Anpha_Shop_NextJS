@@ -20,8 +20,6 @@ export async function PATCH(req: NextRequest) {
     // get user to change password
     const user = await UserModel.findById(userId)
 
-    console.log('user: ', user)
-
     // check authType to decide whether to change the pasword
     if (user.authType !== 'local') {
       return NextResponse.json(

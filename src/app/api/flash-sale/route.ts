@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
   try {
     // get query params
     const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
-    console.log('params: ', params)
 
     // options
     let skip = 0
@@ -103,8 +102,6 @@ export async function GET(req: NextRequest) {
         },
       },
     ])
-
-    console.log('chops: ', chops[0])
 
     // return flashsale products
     return NextResponse.json({ products, amount, chops: chops[0] }, { status: 200 })

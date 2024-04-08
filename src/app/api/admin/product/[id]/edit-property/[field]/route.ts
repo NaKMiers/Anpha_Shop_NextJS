@@ -15,10 +15,6 @@ export async function PATCH(
   // get field to update
   const { value } = await req.json()
 
-  console.log('id:', id)
-  console.log('field:', field)
-  console.log('value:', value)
-
   try {
     // update product property
     const product: any = await ProductModel.findByIdAndUpdate(
@@ -28,8 +24,6 @@ export async function PATCH(
     )
       .select(field)
       .lean()
-
-    console.log('product:', product)
 
     // check product
     if (!product) {

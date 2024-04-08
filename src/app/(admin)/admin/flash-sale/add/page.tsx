@@ -211,7 +211,6 @@ function AddFlashSalePage() {
             required
             type='select'
             onChange={e => {
-              console.log(2132)
               setValue('timeType', e.target.value)
               setTimeType(e.target.value as 'loop' | 'once')
             }}

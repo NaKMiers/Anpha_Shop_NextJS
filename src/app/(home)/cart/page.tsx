@@ -30,9 +30,9 @@ function CartPage() {
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
   const router = useRouter()
   const { data: session } = useSession()
+  const curUser: any = session?.user
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
   const [voucherMessage, setVoucherMessage] = useState<string>('')
   const [subTotal, setSubTotal] = useState<number>(0)
@@ -46,18 +46,6 @@ function CartPage() {
   if (!curUser) {
     cartItems = cartLocalItems
   }
-
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-
-    if (!curUser?._id) {
-      getCurUser()
-    }
-  }, [curUser?._id])
 
   // Form
   const {
@@ -195,8 +183,6 @@ function CartPage() {
 
   // handle buy with balance
   const handleBuyWithBalance = useCallback(async () => {
-    console.log('buy with balance')
-
     // check user
     if (!curUser) {
       router.push('/')
@@ -217,8 +203,6 @@ function CartPage() {
         product: cartItem.product,
         quantity: cartItem.quantity,
       })) as FullyCartItem[]
-
-      console.log(total)
 
       // send request to server to create order
       const { removedCartItems, message } = await createOrderApi(

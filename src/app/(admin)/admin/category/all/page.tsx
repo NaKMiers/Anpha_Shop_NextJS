@@ -63,7 +63,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     // get all categories
     const getAllCategories = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -127,7 +126,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     try {
       // send request to server
       const { editedCategories, message } = await updateCategoriesApi(editingValues)
-      console.log('editedCategories: ', editedCategories)
 
       // update categories from state
       setCategories(prev =>
@@ -155,8 +153,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

@@ -15,7 +15,6 @@ export async function GET(req: NextRequest) {
   try {
     // get query params
     const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
-    console.log('params: ', params)
 
     // options
     let skip = 0

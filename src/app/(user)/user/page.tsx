@@ -65,7 +65,6 @@ function UserPage() {
   }, [user?._id, setValue])
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
     dispatch(setLoading(true))
 
     try {

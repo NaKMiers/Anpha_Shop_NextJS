@@ -63,7 +63,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     // get all tags
     const getAllTags = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -120,7 +119,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     try {
       // senred request to server
       const { updatedTags, message } = await featureTagsApi(ids, value)
-      console.log(updatedTags, message)
 
       // update tags from state
       setTags(prev =>
@@ -145,8 +143,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
       // senred request to server
       const { editedTags, message } = await updateTagsApi(editingValues)
 
-      console.log('editedTags: ', editedTags)
-
       // update tags from state
       setTags(prev =>
         prev.map(t =>
@@ -170,8 +166,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

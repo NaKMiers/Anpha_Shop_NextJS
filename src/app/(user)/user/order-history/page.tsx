@@ -57,7 +57,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   useEffect(() => {
     const getOrderHistory = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -65,7 +64,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
       try {
         // send request to server to get current user's orders
         const { orders, amount, chops } = await getOrderHistoryApi(query)
-        console.log(orders)
 
         // set to states
         setOrders(orders)
@@ -89,8 +87,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

@@ -38,8 +38,6 @@ export async function DELETE(req: NextRequest) {
       })
     )
 
-    console.log('deleted', accounts)
-
     // return response
     return NextResponse.json(
       {

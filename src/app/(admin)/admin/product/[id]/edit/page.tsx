@@ -175,8 +175,6 @@ function AddProductPage() {
         isValid = false
       }
 
-      console.log(isValid)
-
       return isValid
     },
     [setError, selectedCategory, selectedTags, files, originalImages]
@@ -184,15 +182,11 @@ function AddProductPage() {
 
   // send data to server to create new product
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
     if (!handleValidate(data)) return
-
-    console.log('data: ', data)
 
     dispatch(setLoading(true))
 
     try {
-      console.log(data)
       // send request to server to create new product
       const formData = new FormData()
 
@@ -220,8 +214,6 @@ function AddProductPage() {
       dispatch(setLoading(false))
     }
   }
-
-  console.log(imageUrls)
 
   return (
     <div className='max-w-1200 mx-auto'>

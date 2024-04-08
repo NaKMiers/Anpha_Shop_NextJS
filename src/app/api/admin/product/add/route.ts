@@ -20,9 +20,6 @@ export async function POST(req: NextRequest) {
   const tags = JSON.parse(data.tags as string)
   let images = formData.getAll('images')
 
-  console.log('tags', tags)
-  console.log('category', category)
-
   try {
     // check images
     if (!images.length) {

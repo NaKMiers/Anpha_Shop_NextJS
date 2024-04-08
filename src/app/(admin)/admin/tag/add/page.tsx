@@ -35,7 +35,6 @@ function AddTagPage() {
     async data => {
       dispatch(setLoading(true))
 
-      console.log(data)
       try {
         // add new tag login here
         const { message } = await addTagApi(data)

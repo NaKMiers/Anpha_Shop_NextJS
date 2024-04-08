@@ -18,10 +18,6 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
   // get data to check voucher
   const { email, total } = await req.json()
 
-  console.log('code: ', code)
-  console.log('email: ', email)
-  console.log('total: ', total)
-
   try {
     // get voucher from database to apply
     const voucher: IVoucher | null = await VoucherModel.findOne({ code }).lean()

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /admin/order/:id/user
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
-  console.log('getUserOrders')
+  console.log('- Get User Order -')
 
   // connect to database
   await connectDatabase()

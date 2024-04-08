@@ -22,23 +22,11 @@ function CheckoutPage({ params }: { params: { type: string } }) {
   const cartItems = useAppSelector(state => state.cart.items)
   const localCartItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
+  const curUser: any = session?.user
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
   const [confirmed, setConfirmed] = useState(false)
   const [checkout, setCheckout] = useState<any | null>(null)
-
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-
-    if (!curUser?._id) {
-      getCurUser()
-    }
-  }, [curUser?._id])
 
   useEffect(() => {
     const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
@@ -65,7 +53,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
       try {
         // handle confirm payment
-        console.log('handleConfirmPayment')
         const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
           _id: cartItem._id,
           product: cartItem.product,

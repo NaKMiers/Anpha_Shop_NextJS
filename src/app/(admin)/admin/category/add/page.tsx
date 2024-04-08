@@ -33,7 +33,6 @@ function AddCategoryPage() {
     async data => {
       dispatch(setLoading(true))
 
-      console.log(data)
       try {
         // add new category here
         const { message } = await addCategoryApi(data)

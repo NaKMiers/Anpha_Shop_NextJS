@@ -31,7 +31,6 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
     // get all summaries
     const getAllSummaries = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))

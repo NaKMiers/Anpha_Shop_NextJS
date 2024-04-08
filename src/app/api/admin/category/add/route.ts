@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
   // get data field to add new category
   const { title } = await req.json()
 
-  console.log('title:', title)
-
   try {
     // create new tag
     const newCategory = new CategoryModel({

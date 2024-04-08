@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
   // get data field to add new tag
   const { title, isFeatured } = await req.json()
 
-  console.log('title:', title)
-
   try {
     // create new tag
     const newTag = new TagModel({

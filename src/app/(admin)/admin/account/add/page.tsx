@@ -64,11 +64,6 @@ function AddAccountPage() {
           groupTypes[product.category.title].push(product)
         })
 
-        console.log('groupTypes: ', groupTypes)
-
-        Object.keys(groupTypes).map(group => {
-          console.log('group: ', group)
-        })
         setGroupTypes(groupTypes)
       } catch (err: any) {
         console.log(err)
@@ -115,7 +110,6 @@ function AddAccountPage() {
   // send request to server to add account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
-    console.log(data)
 
     // start loading
     dispatch(setLoading(true))

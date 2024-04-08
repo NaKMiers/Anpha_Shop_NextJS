@@ -65,7 +65,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     // get all accounts
     const getAllAccounts = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -82,14 +81,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           }
           groupTypes[product.category.title].push(product)
         })
-
-        console.log('groupTypes: ', groupTypes)
-
-        Object.keys(groupTypes).map(group => {
-          console.log('group: ', group)
-        })
-
-        // count length of types from gropTypes
 
         // update accounts from state
         setAccounts(accounts)
@@ -171,8 +162,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

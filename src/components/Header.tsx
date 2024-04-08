@@ -23,9 +23,10 @@ interface HeaderProps {
 function Header({ isStatic }: HeaderProps) {
   // hook
   const dispatch = useAppDispatch()
+
   const cartItems = useAppSelector(state => state.cart.items)
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
-  const { data: session } = useSession()
+  const { data: session, update } = useSession()
 
   // states
   const [curUser, setCurUser] = useState<any>(session?.user)
@@ -36,15 +37,19 @@ function Header({ isStatic }: HeaderProps) {
 
   // get user session
   useEffect(() => {
+    console.log('re-get user session')
+
     const getCurUser = async () => {
       const session = await getSession()
       setCurUser(session?.user)
+
+      // await update()
     }
 
     if (!curUser?._id) {
       getCurUser()
     }
-  }, [curUser?._id])
+  }, [curUser?._id, update])
 
   // get cart length
   useEffect(() => {
@@ -65,8 +70,6 @@ function Header({ isStatic }: HeaderProps) {
 
           // set cart to state
           dispatch(setCartItems(cart))
-
-          console.log(cart)
         } catch (err: any) {
           console.log(err.message)
           toast.error(err.response.data.message)

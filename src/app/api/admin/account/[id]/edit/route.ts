@@ -19,8 +19,6 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
   const { type, info, renew, active, days, hours, minutes, seconds, notify } = await req.json()
   const times = getTimes(+days, +hours, +minutes, +seconds)
 
-  console.log('notify', notify)
-
   try {
     // update account
     const updatedAccount: IAccount | null = await AccountModel.findByIdAndUpdate(
@@ -101,7 +99,6 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           newInfo: { info },
         }
 
-        console.log('notifyAccountUpdated')
         notifyAccountUpdated(order.email, data)
       }
     }

@@ -13,9 +13,6 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
   // get value to recharge user
   const { amount } = await req.json()
 
-  console.log('amount:', amount)
-  console.log('id:', id)
-
   try {
     // find user by id
     const user: IUser | null = await UserModel.findByIdAndUpdate(

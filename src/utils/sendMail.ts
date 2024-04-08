@@ -38,8 +38,6 @@ async function notifyNewOrderToAdmin(newOrder: any) {
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyOrderMail.pug')
 
-  console.log('templatePath', templatePath)
-
   // get email interface file
   const templateContent = fs.readFileSync(templatePath, 'utf-8')
 
@@ -115,7 +113,6 @@ async function notifyAccountUpdated(email: string, data: any) {
 
   // render template with new data
   const html = compiledTemplate(data)
-  console.log(html)
   sendMail(email, 'Cập nhật thông tin tài khoản', html)
 }
 

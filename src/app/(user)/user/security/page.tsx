@@ -16,9 +16,9 @@ function SecurityPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()
+  const curUser: any = session?.user
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
   const isLocalAuth = curUser?.authType === 'local'
 
   // Form
@@ -35,18 +35,6 @@ function SecurityPage() {
       reNewPassword: '',
     },
   })
-
-  // get user session
-  useEffect(() => {
-    const getCurUser = async () => {
-      const session = await getSession()
-      setCurUser(session?.user)
-    }
-
-    if (!curUser?._id) {
-      getCurUser()
-    }
-  }, [curUser?._id])
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(
@@ -92,14 +80,11 @@ function SecurityPage() {
       return
     }
 
-    console.log(data)
-
     // start loading
     dispatch(setLoading(true))
     try {
       // send request to server to change password
       const { message } = await changePasswordApi(data)
-      console.log(message)
 
       // reset form
       reset()

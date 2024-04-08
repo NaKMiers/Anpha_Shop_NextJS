@@ -43,8 +43,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    console.log('timeRange: ', timeRange)
-
     // get all in time from database
     const orders = await OrderModel.find({
       createdAt: timeRange,

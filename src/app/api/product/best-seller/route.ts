@@ -20,8 +20,6 @@ export async function GET() {
       .limit(10)
       .lean()
 
-    console.log('products: ', products)
-
     // return products
     return NextResponse.json({ products }, { status: 200 })
   } catch (err: any) {

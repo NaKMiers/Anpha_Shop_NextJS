@@ -15,9 +15,6 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
   const itemPerPage = 8
 
   try {
-    // send request to get products
-    console.log('searchParams: ', searchParams)
-
     // cache: no-store for filter
     const data = await getCategoriesPageApi(searchParams)
 

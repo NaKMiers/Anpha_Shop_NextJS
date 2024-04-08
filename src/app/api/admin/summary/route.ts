@@ -16,8 +16,6 @@ export async function DELETE(req: NextRequest) {
   // get product ids to delete
   const { ids } = await req.json()
 
-  console.log('ids:', ids)
-
   try {
     // Find products by their IDs before deletion
     const products: IProduct[] = await ProductModel.find({
@@ -65,8 +63,6 @@ export async function DELETE(req: NextRequest) {
         await Promise.all(product.images.map(deleteFile))
       })
     )
-
-    console.log('deleted', products)
 
     // return deleted products
     return NextResponse.json(

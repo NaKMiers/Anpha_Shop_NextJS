@@ -62,7 +62,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   useEffect(() => {
     const getAllTags = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -150,8 +149,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

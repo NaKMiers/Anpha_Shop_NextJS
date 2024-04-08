@@ -74,7 +74,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     // get all products
     const getAllProducts = async () => {
       const query = handleQuery(searchParams)
-      console.log(query)
 
       // start page loading
       dispatch(setPageLoading(true))
@@ -127,7 +126,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     try {
       // senred request to server
       const { updatedProducts, message } = await activateProductsApi(ids, value)
-      console.log(updatedProducts, message)
 
       // update products from state
       setProducts(prev =>
@@ -178,8 +176,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log(data)
-
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {
