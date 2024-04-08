@@ -206,7 +206,7 @@ function Header({ isStatic }: HeaderProps) {
         <div
           className={`${
             isOpenMenu ? 'block' : 'hidden'
-          } fixed top-[72px] left-0 right-0 bottom-0 w-screen h-screen z-30`}
+          } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30`}
           onClick={() => setIsOpenMenu(false)}
         />
         <ul

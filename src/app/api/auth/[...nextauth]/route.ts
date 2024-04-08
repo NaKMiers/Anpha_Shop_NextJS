@@ -84,21 +84,9 @@ const handler = NextAuth({
       console.log('jwt-trigger', trigger)
       // console.log('jwt-ss', session)
 
-      // if (trigger === 'update') {
-      //   console.log('update token')
-      //   console.log('session', token)
-
-      //   const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
-      //   if (userDB) {
-      //     const { password: _, ...otherDetails } = userDB
-
-      //     token = { ...token, ...otherDetails }
-      //   }
-      // }
-
-      if (token) {
+      if (user) {
         console.log(new Date())
-        const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
+        const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()
         if (userDB) {
           const { password: _, ...otherDetails } = userDB
 
