@@ -1,6 +1,8 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel, { ICategory } from '@/models/CategoryModel'
 import '@/models/FlashsaleModel'
+import '@/models/TagModel'
+import '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { shuffleArray } from '@/utils'
