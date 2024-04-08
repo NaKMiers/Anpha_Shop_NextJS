@@ -104,10 +104,20 @@ function Header({ isStatic }: HeaderProps) {
     }
   })
 
-  // open menu
-  const handleOpenMenu = useCallback(() => {
-    setIsOpenMenu(!isOpenMenu)
-  }, [isOpenMenu])
+  // key board event
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setIsOpenMenu(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    // clean up
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   return (
     <header
@@ -160,7 +170,9 @@ function Header({ isStatic }: HeaderProps) {
 
           {curUser ? (
             !!curUser._id && (
-              <div className='group flex items-center gap-2 cursor-pointer' onClick={handleOpenMenu}>
+              <div
+                className='group flex items-center gap-2 cursor-pointer'
+                onClick={() => setIsOpenMenu(true)}>
                 <Image
                   className='aspect-square rounded-full'
                   src={curUser?.avatar || '/images/default-avatar.jpg'}
@@ -184,13 +196,19 @@ function Header({ isStatic }: HeaderProps) {
         </div>
 
         {/* Nav for sm */}
-        <div className='md:hidden flex items-center' onClick={handleOpenMenu}>
+        <div className='md:hidden flex items-center' onClick={() => setIsOpenMenu(true)}>
           <button className='flex justify-center items-center w-[40px] h-[40px]'>
             <FaBars size={22} className='common-transition hover:scale-110' />
           </button>
         </div>
 
         {/* Menu */}
+        <div
+          className={`${
+            isOpenMenu ? 'block' : 'hidden'
+          } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30`}
+          onClick={() => setIsOpenMenu(false)}
+        />
         <ul
           className={`${
             isOpenMenu
