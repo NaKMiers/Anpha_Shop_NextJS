@@ -1,4 +1,5 @@
 import { connectDatabase } from '@/config/databse'
+import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import TagModel, { ITag } from '@/models/TagModel'
 import { searchParamsToObject } from '@/utils/handleQuery'

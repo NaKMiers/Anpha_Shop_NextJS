@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
+import '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /admin/order/:id/user

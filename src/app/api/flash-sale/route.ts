@@ -1,4 +1,5 @@
 import { connectDatabase } from '@/config/databse'
+import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'

@@ -1,9 +1,10 @@
 import { connectDatabase } from '@/config/databse'
 import CartItemModel, { ICartItem } from '@/models/CartItemModel'
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyProduct } from '../product/[slug]/route'
-import '@/models/FlashsaleModel'
 
 export const dynamic = 'force-dynamic'
 

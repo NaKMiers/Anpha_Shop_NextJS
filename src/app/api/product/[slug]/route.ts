@@ -1,12 +1,10 @@
 import { connectDatabase } from '@/config/databse'
-import '@/models/CategoryModel'
 import { ICategory } from '@/models/CategoryModel'
 import CommentModel from '@/models/CommentModel'
-import '@/models/FlashsaleModel'
 import { IFlashsale } from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import '@/models/TagModel'
 import { ITag } from '@/models/TagModel'
+import '@/models/UserModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 

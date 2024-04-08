@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel, { ICategory } from '@/models/CategoryModel'
+import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'

@@ -42,7 +42,7 @@ export const getProductApi = async (id: string) => {
 // [GET]
 export const getBestSellerProductsApi = async () => {
   // revalidate every 1 hour
-  const res = await fetch('/api/product/best-seller', { next: { revalidate: 3600 } })
+  const res = await fetch('/api/product/best-seller', { next: { revalidate: 0 } })
 
   // check status
   if (!res.ok) {

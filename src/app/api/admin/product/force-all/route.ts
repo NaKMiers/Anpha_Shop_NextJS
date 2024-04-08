@@ -1,10 +1,8 @@
 import { connectDatabase } from '@/config/databse'
-import CategoryModel from '@/models/CategoryModel'
+import '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
-import TagModel from '@/models/TagModel'
-import { searchParamsToObject } from '@/utils/handleQuery'
-import { create } from 'domain'
-import { NextRequest, NextResponse } from 'next/server'
+import '@/models/TagModel'
+import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 

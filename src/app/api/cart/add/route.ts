@@ -1,8 +1,7 @@
 import { connectDatabase } from '@/config/databse'
 import CartItemModel, { ICartItem } from '@/models/CartItemModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import UserModel, { IUser } from '@/models/UserModel'
-import mongoose, { Mongoose } from 'mongoose'
+import { IUser } from '@/models/UserModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -32,21 +31,6 @@ export async function POST(req: NextRequest) {
     if (!product) {
       return NextResponse.json({ message: 'Product not found' }, { status: 404 })
     }
-
-    // get user with cart
-    // let userWithCart: UserWithCart[] = await UserModel.aggregate([
-    //   { $match: { _id: new mongoose.Types.ObjectId(userId) } },
-    //   {
-    //     $lookup: {
-    //       from: 'cartitems',
-    //       localField: '_id',
-    //       foreignField: 'userId',
-    //       as: 'cart',
-    //     },
-    //   },
-    //   { $addFields: { cartLength: { $sum: '$cart.quantity' } } },
-    // ])
-    // const user: UserWithCart = userWithCart[0]
 
     // get user's cart
     let cart: ICartItem[] = await CartItemModel.find({ userId }).lean()

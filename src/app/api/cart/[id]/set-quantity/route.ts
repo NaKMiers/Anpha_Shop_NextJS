@@ -1,10 +1,9 @@
 import { connectDatabase } from '@/config/databse'
-import { cart } from '@/libs/reducers/cartReducer'
 import CartItemModel from '@/models/CartItemModel'
+import '@/models/ProductModel'
+import { IProduct } from '@/models/ProductModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyCartItem } from '../../route'
-import { IProduct } from '@/models/ProductModel'
 
 // [PATCH]: /cart/:id/set-quantity
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {

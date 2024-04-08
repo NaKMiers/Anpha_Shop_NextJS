@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import CartItemModel from '@/models/CartItemModel'
+import '@/models/ProductModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 

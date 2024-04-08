@@ -80,8 +80,8 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       console.log('- JWT -')
-      console.log('jwt-xxxx', token)
-      console.log('jwt-trigger', trigger)
+      // console.log('jwt-xxxx', token)
+      // console.log('jwt-trigger', trigger)
       // console.log('jwt-ss', session)
 
       if (user) {
