@@ -130,7 +130,7 @@ function Header({ isStatic }: HeaderProps) {
       {/* Main Header */}
       <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* Brand */}
-        <div className='flex items-center '>
+        <div className='flex items-center max-w-[300px] w-[90%] overflow-x-scroll no-scrollbar'>
           <Link
             href='/'
             className='hidden sm:block shrink-0 rounded-full common-transition hover:shadow-medium-light'>
@@ -147,7 +147,7 @@ function Header({ isStatic }: HeaderProps) {
           </Link>
           <Link
             href='/recharge'
-            className='hidden sm:flex ml-3 bg-primary px-3 py-[6px] rounded-extra-small items-center gap-1 group hover:bg-secondary common-transition'>
+            className='flex ml-3 bg-primary px-[10px] py-[6px] rounded-lg items-center gap-1 group hover:bg-secondary common-transition'>
             <span className='font-bold font-body text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
               Nạp
             </span>

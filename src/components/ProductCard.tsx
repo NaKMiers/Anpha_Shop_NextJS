@@ -171,14 +171,14 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
   return (
     <div
-      className={`relative w-full h-full p-4 bg-white shadow-lg rounded-xl select-none hover:-translate-y-1 transition duration-500 ${className}`}>
+      className={`relative w-full h-full p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}>
       <Link
         href={`/${product.slug}`}
         className='aspect-video rounded-lg overflow-hidden shadow-lg block'>
         <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
           {product.images.map(src => (
             <Image
-              className='flex-shrink-0 snap-start w-full h-full object-cover'
+              className='flex-shrink-0 snap-start w-full h-full object-cover hover:scale-105 duration-500 transition-all'
               src={src}
               width={250}
               height={250}

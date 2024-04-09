@@ -34,6 +34,13 @@ function ContactFloating() {
         className='p-2 hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
         <Image src='/images/messenger.jpg' width={36} height={36} alt='zalo' />
       </a>
+      <a
+        href='mailto:anpha.pohs@gmail.com'
+        target='_blank'
+        rel='noreferrer'
+        className='p-2 hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
+        <Image src='/images/gmail.jpg' width={36} height={36} alt='gmail' />
+      </a>
       {/* <a
         href='https://www.instagram.com/anpha.shop'
         target='_blank'

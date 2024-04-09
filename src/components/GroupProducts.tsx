@@ -13,9 +13,10 @@ interface GroupProductsProps {
   products: FullyProduct[]
   hideTop?: boolean
   className?: string
+  bestSeller?: boolean
 }
 
-function GroupProducts({ category, products, hideTop, className = '' }: GroupProductsProps) {
+function GroupProducts({ category, products, hideTop, bestSeller, className = '' }: GroupProductsProps) {
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -68,13 +69,20 @@ function GroupProducts({ category, products, hideTop, className = '' }: GroupPro
     <div className={`relative ${className}`}>
       {/* Top Ears */}
       {!hideTop && (
-        <div className='flex justify-between px-6'>
-          <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
-            <div className='aspect-square items-center w-6 h-6'>
-              <Image src={`/images/${category?.slug}-icon.jpg`} width={200} height={200} alt='netflix' />
+        <div className={`flex ${!bestSeller ? 'justify-between' : 'justify-end'} px-6`}>
+          {!bestSeller && (
+            <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
+              <div className='aspect-square items-center w-6 h-6'>
+                <Image
+                  src={`/images/${category?.slug}-icon.jpg`}
+                  width={200}
+                  height={200}
+                  alt='netflix'
+                />
+              </div>
+              <span className='font-semibold'>{category?.title}</span>
             </div>
-            <span className='font-semibold'>{category?.title}</span>
-          </div>
+          )}
           <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
             {isMedium ? (
               <button className='text-sky-600' onClick={() => setIsExpaned(prev => !prev)}>
@@ -115,15 +123,33 @@ function GroupProducts({ category, products, hideTop, className = '' }: GroupPro
           onMouseDown={() => setIsDragging(true)}
           onMouseMove={handleDraging}
           onMouseUp={() => setIsDragging(false)}>
-          {products.map(product => (
-            <div
-              key={product._id}
-              className={`flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-21/2 ${
-                !isDragging ? 'snap-start' : ''
-              }`}>
-              <ProductCard product={product} className='' />
-            </div>
-          ))}
+          {products.map((product, index) => {
+            const color =
+              index <= 2 ? (index <= 1 ? (index <= 0 ? '#f44336' : 'orange') : 'lightgreen') : '#0dcaf0'
+
+            return (
+              <div
+                key={product._id}
+                className={`relative flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-21/2 ${
+                  !isDragging ? 'snap-start' : ''
+                }`}>
+                {bestSeller && (
+                  <div
+                    className='absolute z-10 right-1 font-[700] rotate-[10deg]'
+                    style={{
+                      color,
+                      fontSize:
+                        index <= 2 ? (index <= 1 ? (index <= 0 ? '56px' : '48px') : '40px') : '32px',
+                      top:
+                        index <= 2 ? (index <= 1 ? (index <= 0 ? '-30px' : '-26px') : '-22px') : '-13px',
+                    }}>
+                    #{index + 1}
+                  </div>
+                )}
+                <ProductCard product={product} className='' />
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

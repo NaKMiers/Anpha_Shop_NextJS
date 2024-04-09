@@ -36,7 +36,7 @@ function Footer() {
       <div className='max-w-1200 mx-auto bg-dark-100 text-light shadow-medium rounded-medium'>
         <div className='p-21'>
           {/* Top */}
-          <div className='flex items-center justify-between gap-2 group'>
+          <div className='flex flex-col sm:flex-row items-center justify-between gap-2 group overflow-scroll no-scrollbar'>
             <Link href='/' className='flex items-center'>
               <Image
                 className='group-hover:shadow-medium-light common-transition rounded-full'
@@ -64,7 +64,14 @@ function Footer() {
                 target='_blank'
                 rel='noreferrer'
                 className='hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
-                <Image src='/images/messenger.jpg' width={30} height={30} alt='zalo' />
+                <Image src='/images/messenger.jpg' width={30} height={30} alt='messenger' />
+              </a>
+              <a
+                href='mailto:anpha.pohs@gmail.com'
+                target='_blank'
+                rel='noreferrer'
+                className='hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
+                <Image src='/images/gmail.jpg' width={30} height={30} alt='gmail' />
               </a>
               {/* <a
                 href='https://www.instagram.com/anpha.shop'
@@ -85,7 +92,7 @@ function Footer() {
               {bestSellerProducts.map((product, index) => (
                 <Link
                   href={`/${product.slug}`}
-                  className='block w-[235px] shrink-0 px-2 group snap-start group'
+                  className='block w-[230px] shrink-0 px-2 group snap-start group'
                   key={index}>
                   <Card className='text-dark' variant='soft'>
                     <AspectRatio ratio='16/9'>
