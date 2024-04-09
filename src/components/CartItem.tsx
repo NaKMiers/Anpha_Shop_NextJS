@@ -13,7 +13,7 @@ import { formatPrice } from '@/utils/number'
 import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -46,27 +46,10 @@ function CartItem({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // values
+  const inputRef = useRef<any>({})
   const quantity = cartItem.quantity
-
-  // handle update cart quantity
-  const handleUpdateCartQuantity = useCallback(async () => {
-    try {
-      // start loading
-      setIsLoading(true)
-
-      // send request to update cart quantity
-      const { updatedCartItem } = await updateCartQuantityApi(cartItem._id, quantity)
-
-      // update cart item in store
-      dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      // stop loading
-      setIsLoading(false)
-    }
-  }, [cartItem._id, dispatch, quantity])
 
   // handle delete cart item
   const handleDeleteCartItem = useCallback(async () => {
@@ -121,39 +104,118 @@ function CartItem({
     handleDeleteLocalCartItem()
   }, [handleDeleteLocalCartItem, cartItem.productId, dispatch, setIsLoading, cartItem.quantity])
 
-  // validate quantity
-  useEffect(() => {
-    if (quantity < 1) {
-      setTimeout(() => {
-        if (curUser._id) {
-          dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
-          handleUpdateCartQuantity()
-        } else {
-          dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+  // update cart item quantity in database
+  const updateQuantityGlobal = useCallback(
+    async (value: number) => {
+      console.log('update quantity global: ', value)
+
+      try {
+        // start loading
+        setIsLoading(true)
+        // send request to update cart quantity
+        const { updatedCartItem } = await updateCartQuantityApi(cartItem._id, value)
+
+        // update cart item in store
+        dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop loading
+        setIsLoading(false)
+      }
+    },
+    [cartItem._id, dispatch]
+  )
+
+  // handle update cart quantity
+  const updateQuantity = useCallback(
+    async (type: 'input' | 'button', value: number) => {
+      if (type === 'button') {
+        // decrease
+        if (value === -1) {
+          if (quantity <= 1) return
+          if (curUser) {
+            dispatch(
+              updateCartItemQuantity({
+                id: cartItem._id,
+                quantity: quantity - 1,
+              })
+            )
+            updateQuantityGlobal(quantity - 1)
+          } else {
+            dispatch(
+              updateLocalCartItemQuantity({
+                id: cartItem._id,
+                quantity: quantity - 1,
+              })
+            )
+          }
+        } else if (value === 1) {
+          // increase
+          if (quantity >= cartItem.product.stock) return
+          if (curUser) {
+            dispatch(
+              updateCartItemQuantity({
+                id: cartItem._id,
+                quantity: quantity + 1,
+              })
+            )
+            updateQuantityGlobal(quantity + 1)
+          } else {
+            dispatch(
+              updateLocalCartItemQuantity({
+                id: cartItem._id,
+                quantity: quantity + 1,
+              })
+            )
+          }
         }
-      }, 500)
-    } else if (quantity > cartItem.product.stock) {
-      setTimeout(() => {
-        if (curUser._id) {
-          dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
-          handleUpdateCartQuantity()
-        } else {
-          dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
-        }
-      }, 500)
-    } else {
-      handleUpdateCartQuantity()
-    }
-  }, [
-    cartItem._id,
-    cartItem.product.stock,
-    cartItem.quantity,
-    curUser,
-    dispatch,
-    quantity,
-    selectedCartItems,
-    handleUpdateCartQuantity,
-  ])
+      }
+
+      if (type === 'input') {
+        // start input
+        inputRef.current.isInputing = true
+        dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: value }))
+
+        // continue input
+        clearTimeout(inputRef.current.timeOut)
+
+        // stop input after 500ms if no input
+        inputRef.current.timeOut = setTimeout(() => {
+          inputRef.current.isInputing = false
+        }, 500)
+
+        // update quantity after 500ms if no input
+        setTimeout(() => {
+          if (!inputRef.current.isInputing) {
+            if (value <= 1) {
+              if (curUser) {
+                dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+                updateQuantityGlobal(1)
+              } else {
+                dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+              }
+            }
+            if (value >= cartItem.product.stock) {
+              if (curUser) {
+                dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
+                updateQuantityGlobal(cartItem.product.stock)
+              } else {
+                dispatch(
+                  updateLocalCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock })
+                )
+              }
+            } else {
+              updateQuantityGlobal(value)
+            }
+          }
+        }, 510)
+      }
+    },
+    [cartItem._id, cartItem.product.stock, curUser, dispatch, quantity, updateQuantityGlobal]
+  )
+
   return (
     <div
       className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 ${className} ${
@@ -217,12 +279,14 @@ function CartItem({
 
       {/* Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
+        {/* Title */}
         <Link href='/netflix'>
           <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
             {cartItem.product.title}
           </h2>
         </Link>
 
+        {/* Info */}
         {isOrderDetailProduct && (
           <div className='flex justify-between'>
             {/* (Order Detail) Quantity */}
@@ -241,6 +305,7 @@ function CartItem({
           </div>
         )}
 
+        {/* Quantity - Price - Stock*/}
         {localCartItem ? (
           !isOrderDetailProduct && (
             <div className='flex flex-col gap-3 text-xl font-body tracking-wide'>
@@ -264,7 +329,7 @@ function CartItem({
           </>
         )}
 
-        {/* Quantity */}
+        {/* Quantity Updater */}
         {!localCartItem && (
           <div className='flex items-center justify-between'>
             <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
@@ -275,21 +340,7 @@ function CartItem({
                     : 'border border-secondary'
                 }`}
                 disabled={quantity <= 1 || isLoading}
-                onClick={() =>
-                  curUser
-                    ? dispatch(
-                        updateCartItemQuantity({
-                          id: cartItem._id,
-                          quantity: quantity <= 1 ? 1 : quantity - 1,
-                        })
-                      )
-                    : dispatch(
-                        updateLocalCartItemQuantity({
-                          id: cartItem._id,
-                          quantity: quantity <= 1 ? 1 : quantity - 1,
-                        })
-                      )
-                }>
+                onClick={() => updateQuantity('button', -1)}>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
                 ) : (
@@ -309,22 +360,9 @@ function CartItem({
                 value={quantity}
                 disabled={isLoading}
                 onWheel={e => e.currentTarget.blur()}
-                onChange={e =>
-                  curUser
-                    ? dispatch(
-                        updateCartItemQuantity({
-                          id: cartItem._id,
-                          quantity: +e.target.value,
-                        })
-                      )
-                    : dispatch(
-                        updateLocalCartItemQuantity({
-                          id: cartItem._id,
-                          quantity: +e.target.value,
-                        })
-                      )
-                }
+                onChange={e => updateQuantity('input', +e.target.value)}
               />
+
               <button
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
                   quantity >= cartItem.product?.stock! || isLoading
@@ -332,27 +370,7 @@ function CartItem({
                     : ' border-secondary'
                 }`}
                 disabled={quantity >= cartItem.product?.stock! || isLoading}
-                onClick={() =>
-                  curUser
-                    ? dispatch(
-                        updateCartItemQuantity({
-                          id: cartItem._id,
-                          quantity:
-                            quantity >= cartItem.product?.stock!
-                              ? cartItem.product?.stock!
-                              : quantity + 1,
-                        })
-                      )
-                    : dispatch(
-                        updateLocalCartItemQuantity({
-                          id: cartItem._id,
-                          quantity:
-                            quantity >= cartItem.product?.stock!
-                              ? cartItem.product?.stock!
-                              : quantity + 1,
-                        })
-                      )
-                }>
+                onClick={() => updateQuantity('button', 1)}>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
                 ) : (

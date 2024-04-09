@@ -143,7 +143,7 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
 
       {/* Indicators */}
       {thumbs.length >= 2 && (
-        <div className='absolute w-full px-21 flex justify-center items-center gap-5 left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition'>
+        <div className='absolute z-10 w-full px-21 flex justify-center items-center gap-5 left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition'>
           {thumbs.map((src, index) => {
             return (
               <button
@@ -159,7 +159,7 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
         </div>
       )}
       {childrenAmount >= 2 && thumbs.length <= 0 && (
-        <div className='absolute flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[10%] md:translate-y-full  md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[10%] common-transition'>
+        <div className='absolute z-10 flex items-center gap-5 left-1/2 -translate-x-1/2 bottom-[10%] md:translate-y-full  md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[10%] common-transition'>
           {Array.from({ length: childrenAmount }).map((_, index) => {
             return (
               <button

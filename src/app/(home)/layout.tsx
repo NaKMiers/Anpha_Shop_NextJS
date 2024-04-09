@@ -43,16 +43,19 @@ export default async function RootLayout({
             }}
           />
 
+          {/* Header */}
           <Header />
 
-          <PageLoading />
-
+          {/* Main */}
           <main className='px-21'>
             <div className='max-w-1200 mx-auto'>{children}</div>
           </main>
 
+          {/* Utils */}
+          <PageLoading />
           <ContactFloating />
 
+          {/* Footer */}
           <Footer />
         </StoreProvider>
       </body>

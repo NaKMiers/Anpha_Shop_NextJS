@@ -66,7 +66,7 @@ function TagItem({
             disabled={loadingTags.includes(data._id)}
             onChange={e =>
               setEditingValues(prev =>
-                prev.map(t => (t._id === data._id ? { _id: data._id, title: e.target.value.trim() } : t))
+                prev.map(t => (t._id === data._id ? { _id: data._id, title: e.target.value } : t))
               )
             }
           />

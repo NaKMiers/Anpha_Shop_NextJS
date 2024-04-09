@@ -9,7 +9,7 @@ import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
 import { applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
 import { calcPercentage, formatPrice } from '@/utils/number'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -47,7 +47,34 @@ function CartPage() {
     cartItems = cartLocalItems
   }
 
+  // // update products in local cart
+  // useEffect(() => {
+  //   const getCorrespondingProducts = async () => {
+  //     try {
+  //       // send product ids to get corresponding cart items
+  //       const data = await updateProductsInLocalCartApi(localCartItems.map(item => item.product._id))
+
+  //       const products: FullyProduct[] = data.products
+
+  //       const updatedLocalCartItems = localCartItems.map(cartItem => {
+  //         return {
+  //           ...cartItem,
+  //           product: products.find(product => product._id === cartItem.product._id),
+  //         }
+  //       })
+  //     } catch (err: any) {
+  //       console.log(err)
+  //       toast.error(err.message)
+  //     }
+  //   }
+
+  //   if (!curUser) {
+  //     getCorrespondingProducts()
+  //   }
+  // }, [localCartItems, curUser])
+
   // Form
+
   const {
     register,
     handleSubmit,

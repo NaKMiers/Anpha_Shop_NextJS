@@ -34,7 +34,7 @@ function AdminMenu() {
         onClick={() => setOpen(false)}
       />
       <button
-        className={`fixed top-[20%] z-30 right-0 p-[5px] pl-2 bg-dark-100 text-white rounded-tl-md rounded-bl-md shadow-md common-transition hover:bg-primary ${
+        className={`fixed top-[20%] z-20 right-0 p-[5px] pl-2 bg-dark-100 text-white rounded-tl-md rounded-bl-md shadow-md common-transition hover:bg-primary ${
           !open ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={() => setOpen(!open)}>

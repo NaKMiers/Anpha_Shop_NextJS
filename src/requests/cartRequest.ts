@@ -14,6 +14,21 @@ export const getCartApi = async () => {
 }
 
 // [POST]
+export const updateProductsInLocalCartApi = async (ids: string[]) => {
+  const res = await fetch('/api/cart/update-local-cart', {
+    method: 'POST',
+    body: JSON.stringify({ ids }),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [POST]
 export const addToCartApi = async (productId: string, quantity: number) => {
   const res = await fetch('/api/cart/add', {
     method: 'POST',
