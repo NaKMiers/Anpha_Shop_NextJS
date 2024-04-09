@@ -4,19 +4,24 @@ import Pagination from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { ICategory } from '@/models/CategoryModel'
 import { getCategoriesPageApi } from '@/requests'
+import { handleQuery } from '@/utils/handleQuery'
 
 async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   let categories: ICategory[] = []
   let products: FullyProduct[] = []
   let amount: number = 0
   let chops: { [key: string]: number } | null = null
+  let query = ''
 
   // values
   const itemPerPage = 8
 
   try {
+    // get query
+    query = handleQuery(searchParams)
+
     // cache: no-store for filter
-    const data = await getCategoriesPageApi(searchParams)
+    const data = await getCategoriesPageApi(query)
 
     // destructure
     products = data.products
@@ -27,8 +32,37 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
     console.log(err)
   }
 
+  // jsonLd
+  const jsonLd = {
+    '@context': 'http://schema.org',
+    '@type': 'ItemList',
+    name: `Danh Mục`,
+    url: `${process.env.APP_URL}/category${query}`,
+    itemListElement: products.map((product, index) => ({
+      '@type': 'ListItem',
+      position: `${index + 1}`,
+      item: {
+        '@type': 'Product',
+        name: product.title,
+        url: `${process.env.APP_URL}/${product.slug}`,
+        image: product.images[0],
+        description: product.description,
+        offers: {
+          '@type': 'Offer',
+          price: `${product.price}`,
+          priceCurrency: 'VND',
+          availability: product.stock ? 'InStock' : 'OutOfStock',
+        },
+      },
+    })),
+  }
+
   return (
-    <div className='pt-24'>
+    <div className='pt-16'>
+      {/* Add JSON-LD */}
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* Meta */}
       <Meta
         title={`Danh Mục - ${categories.map(category => category.title).join(', ')}`}
         searchParams={searchParams}

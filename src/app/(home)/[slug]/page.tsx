@@ -39,8 +39,51 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     redirect('/')
   }
 
+  // jsonLD
+  const jsonLd = {
+    '@context': 'http://schema.org',
+    '@type': 'Product',
+    name: product?.title,
+    description: product?.description,
+    brand: {
+      '@type': 'Brand',
+      name: product?.category.title,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: 'product.price',
+      priceCurrency: 'VND',
+      availability: product?.stock ? 'InStock' : 'OutOfStock',
+      priceValidUntil: null,
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: 5.0,
+      reviewCount: 7,
+    },
+    review: [
+      {
+        '@type': 'Review',
+        author: {
+          '@type': 'Person',
+          name: 'hothingoctram03',
+        },
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: '5.0',
+        },
+        description: 'Sản phẩm tốt, ưu tín, chủ shop dễ thương còn được tặng voucher nữa',
+      },
+    ],
+    image: product?.images[0],
+    url: `${process.env.APP_URL}/${product?.slug}`,
+  }
+
   return (
     <div className='pt-9'>
+      {/* Add JSON-LD */}
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       <section className='bg-white p-8 flex flex-col gap-21 md:flex-row rounded-medium shadow-medium'>
         {/* Thumbnails */}
         <div className='w-full md:w-[45%] md:max-w-[500px]'>
@@ -130,10 +173,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </p>
             <p className='font-semibold text-lg font-body leading-6'>
               Khám phá thế giới phim và series truyền hình độc đáo, đỉnh cao với
-              <span className='text-red-500'>Netflix</span> . Đặc biệt, bạn sẽ được tận hưởng trải nghiệm
-              xem phim linh hoạt trên mọi thiết bị. Hãy bắt đầu hành trình giải trí của bạn ngay hôm nay
-              và không bỏ lỡ những thước phim độc quyền chỉ có tại
-              <span className='text-red-500'>Netflix</span> . 🍿🌟🎬
+              <span className='text-red-500'> Netflix</span> . Đặc biệt, bạn sẽ được tận hưởng trải
+              nghiệm xem phim linh hoạt trên mọi thiết bị. Hãy bắt đầu hành trình giải trí của bạn ngay
+              hôm nay và không bỏ lỡ những thước phim độc quyền chỉ có tại
+              <span className='text-red-500'> Netflix</span> . 🍿🌟🎬
             </p>
           </div>
 
@@ -179,7 +222,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 <span className='font-semibold'>Cách 3: </span>
                 <div>
                   -{' '}
-                  <Link href='/recharge' className='text-sky-5000 underline'>
+                  <Link href='/recharge' className='text-secondary underline'>
                     Nạp tiền vào tài khoản
                   </Link>{' '}
                   sau đó mua hàng.
@@ -202,11 +245,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <li>
                 Nếu không thể đăng nhập:
                 <ul className='list-disc pl-6'>
-                  <li>Tài khoản sẽ được sửa chữa trong 12h.</li>
+                  <li>Tài khoản sẽ được sửa chữa trong 2h.</li>
                   <li>Được cấp tài khoản thay để dùng tạm thời trong thời gian sửa lỗi.</li>
                   <li>
-                    Nếu thời gian sửa lỗi vượt 12h bạn sẽ được tặng voucher giảm 10% cho lần mua tiếp
-                    theo. .
+                    Nếu thời gian sửa lỗi vượt 2h bạn sẽ được cấp tài khoản mới và được tặng voucher giảm
+                    10% cho lần mua tiếp theo.
                   </li>
                 </ul>
               </li>
@@ -215,22 +258,16 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 <ul className='list-disc pl-6'>
                   <li>Lỗi không thể sửa được.</li>
                   <li>
-                    Tài khoản hết hạn trước 50% thời gian sử dụng (Ví dụ: mua Netflix 30 ngày nhưng lại
-                    hết hạn trước ngày thứ 15)
+                    Tài khoản hết hạn trước 80% thời gian sử dụng (Ví dụ: mua Netflix 30 ngày nhưng lại
+                    hết hạn trước ngày 24)
                   </li>
                 </ul>
               </li>
             </ul>
-            <p className='font-semibold'>Hình thức bảo hành:</p>
+            <p className='font-semibold'>Chính sách đền bù:</p>
             <ul className='list-disc pl-10'>
-              <li>
-                Nếu dùng dưới 5 ngày: Đền bù voucher giảm 100% cho đơn hàng có giá tối thiểu bằng đơn
-                hàng hiện tại.
-              </li>
-              <li>
-                Nếu dùng trên từ 5 ngày trở lên: Đền bù voucher giảm 50% cho đơn hàng có giá tối thiểu
-                bằng đơn hàng hiện tại.
-              </li>
+              <li>Nếu dùng dưới 80% thời gian: cấp mới tài khoản</li>
+              <li>Thời gian sữa lỗi quá 2h: cấp mới tài khoản + voucher giảm 10%</li>
             </ul>
             <p className='font-semibold'>Miễn trừ trách nhiệm:</p>
             <ul className='list-disc pl-10'>
@@ -244,7 +281,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               - Liên hệ người bán tại{' '}
               <a
                 href='https://m.me/anphashopacc'
-                className='text-sky-5000 underline'
+                className='text-sky-5000 underline text-pink-500'
                 target='_blank'
                 rel='noreferrer'>
                 Messenger
@@ -252,7 +289,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               hoặc{' '}
               <a
                 href='https://zalo.me/0899320427'
-                className='text-sky-5000 underline'
+                className='text-sky-500 underline'
                 target='_blank'
                 rel='noreferrer'>
                 Zalo
@@ -280,7 +317,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                   Hãy chờ trong khoảng 1 - 2 tiếng sau đó quay lại hoặc liên hệ người bán thông qua{' '}
                   <a
                     href='https://m.me/anphashopacc'
-                    className='text-sky-5000 underline'
+                    className='text-sky-5000 underline text-pink-500'
                     target='_blank'
                     rel='noreferrer'>
                     Messenger
@@ -288,12 +325,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                   hoặc{' '}
                   <a
                     href='https://zalo.me/0899320427'
-                    className='text-sky-5000 underline'
+                    className='text-sky-500 underline'
                     target='_blank'
                     rel='noreferrer'>
                     Zalo
-                  </a>
-                  {''}
+                  </a>{' '}
                   để được xử lí trong thời gian sớm nhất
                 </p>
               </li>

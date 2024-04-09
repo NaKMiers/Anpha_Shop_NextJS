@@ -41,17 +41,39 @@ async function HomePage() {
     console.log(err)
   }
 
+  // jsonLD
+  const jsonLd = {
+    '@context': 'http://schema.org',
+    '@type': 'WebSite',
+    name: 'Anpha Shop',
+    logo: `${process.env.APP_URL}/logo.jpg`,
+    url: `${process.env.APP_URL}`,
+    inLanguage: 'vi',
+    description:
+      'Anpha Shop - Shop tài khoản uy tín, chất lượng hàng đầu tại Việt Nam. Đặc biệt, Account tại Anpha Shop hiện là đang là gói account có giá cạnh nhất hàng đầu - chỉ là 9.000VND/tháng',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Anpha Shop',
+    },
+  }
+
   return (
     <div className='min-h-screen'>
+      {/* Add JSON-LD */}
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* Banner */}
       <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
 
       <div className='pt-28' />
 
+      {/* About */}
       <Heading title='Về Anpha Shop' />
       <About />
 
       <div className='pt-28' />
 
+      {/* Top #10 */}
       <Heading title='Top #10' />
       <section className='max-w-1200 mx-auto px-4'>
         <GroupProducts products={bestSellerProducts} hideTop />
@@ -59,6 +81,7 @@ async function HomePage() {
 
       <div className='pt-28' />
 
+      {/* Products */}
       <Heading title='Sản phẩm' />
       <section className='max-w-1200 mx-auto px-4'>
         {productsByCategoryGroups.map((group, index) => (
@@ -73,6 +96,7 @@ async function HomePage() {
 
       <div className='pt-28' />
 
+      {/* Choose Me */}
       <Heading title='Tại sao chọn tôi' />
       <ChooseMe />
     </div>

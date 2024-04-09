@@ -29,11 +29,9 @@ export const getProductPageApi = async (slug: string) => {
 }
 
 // [GET]
-export const getTagsPageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
-  const url = handleQuery(searchParams, `${process.env.APP_URL}/api/tag`)
-
-  // revalidate every 1 minute
-  const res = await fetch(url, { cache: 'no-store' })
+export const getTagsPageApi = async (query: string = '') => {
+  // no cache for filter
+  const res = await fetch(`${process.env.APP_URL}/api/tag${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -44,11 +42,9 @@ export const getTagsPageApi = async (searchParams: { [key: string]: string[] } |
 }
 
 // [GET]
-export const getCategoriesPageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
-  const url = handleQuery(searchParams, `${process.env.APP_URL}/api/category`)
-
-  // revalidate every 1 minute
-  const res = await fetch(url, { cache: 'no-store' })
+export const getCategoriesPageApi = async (query: string = '') => {
+  // no cache for filter
+  const res = await fetch(`${process.env.APP_URL}/api/category${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -59,11 +55,9 @@ export const getCategoriesPageApi = async (searchParams: { [key: string]: string
 }
 
 // [GET]
-export const getFlashSalePageApi = async (searchParams: { [key: string]: string[] } | undefined) => {
-  const url = handleQuery(searchParams, `${process.env.APP_URL}/api/flash-sale`)
-
-  // revalidate every 1 minute
-  const res = await fetch(url, { cache: 'no-store' })
+export const getFlashSalePageApi = async (query: string = '') => {
+  // no cache for filter
+  const res = await fetch(`${process.env.APP_URL}/api/flash-sale${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

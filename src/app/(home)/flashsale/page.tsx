@@ -5,40 +5,64 @@ import ProductCard from '@/components/ProductCard'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import { getFlashSalePageApi, getTagsPageApi } from '@/requests'
+import { handleQuery } from '@/utils/handleQuery'
 
 async function TagPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
-  let tags: ITag[] = []
-  let categories: ICategory[] = []
   let products: FullyProduct[] = []
   let amount: number = 0
   let chops: { [key: string]: number } | null = null
+  let query = ''
 
   // values
   const itemPerPage = 8
 
   try {
+    // get query
+    query = handleQuery(searchParams)
+
     // cache: no-store for filter
-    const data = await getFlashSalePageApi(searchParams)
+    const data = await getFlashSalePageApi(query)
 
     // destructure
     products = data.products
-    tags = data.tags
-    categories = data.categories
     amount = data.amount
     chops = data.chops
   } catch (err: any) {
     console.log(err)
   }
 
+  // jsonLd
+  const jsonLd = {
+    '@context': 'http://schema.org',
+    '@type': 'ItemList',
+    name: `Flash Sale`,
+    url: `${process.env.APP_URL}/category${query}`,
+    itemListElement: products.map((product, index) => ({
+      '@type': 'ListItem',
+      position: `${index + 1}`,
+      item: {
+        '@type': 'Product',
+        name: product.title,
+        url: `${process.env.APP_URL}/${product.slug}`,
+        image: product.images[0],
+        description: product.description,
+        offers: {
+          '@type': 'Offer',
+          price: `${product.price}`,
+          priceCurrency: 'VND',
+          availability: product.stock ? 'InStock' : 'OutOfStock',
+        },
+      },
+    })),
+  }
+
   return (
-    <div className='pt-24'>
-      <Meta
-        title={`Flash Sale}`}
-        searchParams={searchParams}
-        type='flash-sale'
-        items={tags}
-        chops={chops}
-      />
+    <div className='pt-16'>
+      {/* Add JSON-LD */}
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* Meta */}
+      <Meta title={`Flash Sale}`} searchParams={searchParams} type='flash-sale' chops={chops} />
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
