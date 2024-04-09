@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Set Collaborator - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to set collaborator
-  const { type, value } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to set collaborator
+    const { type, value } = await req.json()
+
     // set collaborator
     const user = await UserModel.findByIdAndUpdate(
       id,

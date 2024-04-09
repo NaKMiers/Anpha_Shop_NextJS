@@ -21,14 +21,14 @@ export type FullyProduct = IProduct & {
 export async function GET(req: NextRequest, { params: { slug } }: { params: { slug: string } }) {
   console.log('- Get Product Page -')
 
-  // connect to database
-  await connectDatabase()
-
-  // // get user id to check hidden comments
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // // get user id to check hidden comments
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
     // get product from database
     const product: FullyProduct | null = await ProductModel.findOne({
       slug: encodeURIComponent(slug),

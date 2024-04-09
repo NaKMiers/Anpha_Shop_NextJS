@@ -10,13 +10,15 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Products - ')
 
+  // connect to database
+  await connectDatabase()
+
+  // get product ids to delete
+  const { ids } = await req.json()
+
+  console.log('ids:', ids)
+
   try {
-    // connect to database
-    await connectDatabase()
-
-    // get product ids to delete
-    const { ids } = await req.json()
-
     // Find products by their IDs before deletion
     const products: IProduct[] = await ProductModel.find({
       _id: { $in: ids },
@@ -63,6 +65,8 @@ export async function DELETE(req: NextRequest) {
         await Promise.all(product.images.map(deleteFile))
       })
     )
+
+    console.log('deleted', products)
 
     // return deleted products
     return NextResponse.json(

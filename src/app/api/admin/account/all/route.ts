@@ -12,10 +12,10 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   console.log('- Get All Accounts - ')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get query params
     const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
 

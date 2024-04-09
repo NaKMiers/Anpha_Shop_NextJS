@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   console.log('- Get Best Seller Products -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get 10 best seller products by sold field
     const products = await ProductModel.find({ active: true })
       .populate('category')

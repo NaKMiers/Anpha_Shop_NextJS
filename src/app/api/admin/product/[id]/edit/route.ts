@@ -8,18 +8,18 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Product -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to create product
-  const formData = await req.formData()
-  const data = Object.fromEntries(formData)
-  const { title, price, oldPrice, description, isActive, category } = data
-  const tags = JSON.parse(data.tags as string)
-  const originalImages = JSON.parse(data.originalImages as string)
-  let images = formData.getAll('images')
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to create product
+    const formData = await req.formData()
+    const data = Object.fromEntries(formData)
+    const { title, price, oldPrice, description, isActive, category } = data
+    const tags = JSON.parse(data.tags as string)
+    const originalImages = JSON.parse(data.originalImages as string)
+    let images = formData.getAll('images')
+
     // get product from database to edit
     const product: IProduct | null = await ProductModel.findById(id).lean()
     // product does exist

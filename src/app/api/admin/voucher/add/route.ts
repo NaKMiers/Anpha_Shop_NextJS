@@ -6,14 +6,14 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Add Voucher -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to create voucher
-  const { code, desc, begin, expire, minTotal, maxReduce, type, value, timesLeft, owner, active } =
-    await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to create voucher
+    const { code, desc, begin, expire, minTotal, maxReduce, type, value, timesLeft, owner, active } =
+      await req.json()
+
     // get voucher with code from database
     const voucher = await VoucherModel.findOne({ code }).lean()
 

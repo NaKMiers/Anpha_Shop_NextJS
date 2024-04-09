@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest) {
   console.log('- Activate Accounts - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get account id to delete
-  const { ids, value } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get account id to delete
+    const { ids, value } = await req.json()
+
     // update accounts from database
     await AccountModel.updateMany({ _id: { $in: ids } }, { $set: { active: value || false } })
 

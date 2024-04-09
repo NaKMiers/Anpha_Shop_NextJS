@@ -65,7 +65,7 @@ function CategoryItem({
             onChange={e =>
               setEditingValues(prev =>
                 prev.map(cate =>
-                  cate._id === data._id ? { _id: data._id, title: e.target.value.trim() } : cate
+                  cate._id === data._id ? { _id: data._id, title: e.target.value } : cate
                 )
               )
             }

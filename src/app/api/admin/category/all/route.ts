@@ -7,10 +7,10 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(req: NextRequest) {
   console.log('- Get All Categories -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get query params
     const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
 

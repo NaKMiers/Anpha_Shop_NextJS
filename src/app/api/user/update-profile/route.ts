@@ -7,15 +7,15 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PUT(req: NextRequest) {
   console.log('- Update Profile -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get user and update date to update profile
-  const { firstname, lastname, birthday, job, address } = await req.json()
-  const token: JWT | null = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get user and update date to update profile
+    const { firstname, lastname, birthday, job, address } = await req.json()
+    const token: JWT | null = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
     // update user profile
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,

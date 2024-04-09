@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Add Flash Sale -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to create flash sale
-  const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to create flash sale
+    const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
+
     // create new flash sale in databasee
     const newFlashSale = new FlashsaleModel({
       type,

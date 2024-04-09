@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest) {
   console.log('- Feature Tags - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get tag id to delete
-  const { ids, value } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get tag id to delete
+    const { ids, value } = await req.json()
+
     // update tags from database
     await TagModel.updateMany({ _id: { $in: ids } }, { $set: { isFeatured: value || false } })
 

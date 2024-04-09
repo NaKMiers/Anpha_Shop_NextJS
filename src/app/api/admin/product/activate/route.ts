@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest) {
   console.log('- Activate Products - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get product id to delete
-  const { ids, value } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get product id to delete
+    const { ids, value } = await req.json()
+
     // update products from database
     await ProductModel.updateMany({ _id: { $in: ids } }, { $set: { active: value || false } })
 

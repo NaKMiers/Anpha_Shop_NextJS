@@ -1,15 +1,18 @@
 import ProductModel from '@/models/ProductModel'
 import '@/models/FlashsaleModel'
 import { NextRequest, NextResponse } from 'next/server'
+import { connectDatabase } from '@/config/databse'
 
 // [POST]: /cart/update-local-cart
 export async function POST(req: NextRequest) {
   console.log('- Update Local Cart -')
 
-  // get product ids to get corresponding cart items
-  const { ids } = await req.json()
-
   try {
+    // connect database
+    await connectDatabase()
+
+    // get product ids to get corresponding cart items
+    const { ids } = await req.json()
     // get produts to update cart
     const products = await ProductModel.find({ _id: { $in: ids } })
       .populate('flashsale')

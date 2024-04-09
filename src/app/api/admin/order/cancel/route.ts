@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest) {
   console.log('- Cancel Orders -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get order ids to cancel
-  const { ids } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get order ids to cancel
+    const { ids } = await req.json()
+
     if (!ids || !ids.length) {
       return NextResponse.json({ canceledOrders: [], message: 'No order to cancel' }, { status: 400 })
     }

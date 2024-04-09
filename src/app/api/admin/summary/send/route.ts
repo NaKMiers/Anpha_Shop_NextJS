@@ -8,13 +8,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Send Summaries')
 
-  // connect to database
-  await connectDatabase()
-
-  // get product ids to delete
-  const { ids } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get product ids to delete
+    const { ids } = await req.json()
+
     // get voucher of this collaborator
     const vouchers = await VoucherModel.find({
       owner: { $in: ids },

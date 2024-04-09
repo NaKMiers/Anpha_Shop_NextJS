@@ -10,14 +10,14 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   console.log('- Get Order History -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get userId to get user's order history
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get userId to get user's order history
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
     // check if userId not exist
     if (!userId) {
       return NextResponse.json({ message: 'User không tồn tại' }, { status: 401 })

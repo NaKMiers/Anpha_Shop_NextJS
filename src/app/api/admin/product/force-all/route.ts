@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   console.log('- Get Force All Products -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get all products from database
     const products = await ProductModel.find().populate('tags category').sort({ createdAt: -1 }).lean()
 

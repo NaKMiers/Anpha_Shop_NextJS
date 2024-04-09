@@ -9,16 +9,16 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log(' - Set Cart Quantity - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get user id
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
-  const { quantity } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get user id
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
+    const { quantity } = await req.json()
+
     // check if user is authenticated
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

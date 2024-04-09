@@ -12,14 +12,14 @@ import { getTimes } from '@/utils'
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Account -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to edit account
-  const { type, info, renew, active, days, hours, minutes, seconds, notify } = await req.json()
-  const times = getTimes(+days, +hours, +minutes, +seconds)
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to edit account
+    const { type, info, renew, active, days, hours, minutes, seconds, notify } = await req.json()
+    const times = getTimes(+days, +hours, +minutes, +seconds)
+
     // update account
     const updatedAccount: IAccount | null = await AccountModel.findByIdAndUpdate(
       id,

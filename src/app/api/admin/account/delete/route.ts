@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Accounts - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get account ids to delete
-  const { ids } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get account ids to delete
+    const { ids } = await req.json()
+
     // Find accounts by their IDs before deletion
     const accounts: IAccount[] = await AccountModel.find({
       _id: { $in: ids },

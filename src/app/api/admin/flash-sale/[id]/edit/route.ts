@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Flash sale -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to create flash sale
-  const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to create flash sale
+    const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
+
     // update flashsale
     const updatedFlashSale = await FlashsaleModel.findByIdAndUpdate(id, {
       $set: {

@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest) {
   console.log('- Activate Vouchers - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get voucher id to delete
-  const { ids, value } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get voucher id to delete
+    const { ids, value } = await req.json()
+
     // update vouchers from database
     await VoucherModel.updateMany({ _id: { $in: ids } }, { $set: { active: value || false } })
 

@@ -15,10 +15,10 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   console.log('- Get Home Page -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get all products to show in home page
     const products: FullyProduct[] = await ProductModel.find({ active: true })
       .populate('tags')

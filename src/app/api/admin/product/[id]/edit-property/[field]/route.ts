@@ -9,13 +9,13 @@ export async function PATCH(
 ) {
   console.log('- Edit Product Property -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get field to update
-  const { value } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get field to update
+    const { value } = await req.json()
+
     // update product property
     const product: any = await ProductModel.findByIdAndUpdate(
       id,

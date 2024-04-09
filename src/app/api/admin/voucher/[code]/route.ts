@@ -9,16 +9,18 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Get Voucher -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get voucher from database
     const voucher = await VoucherModel.findOne({ code }).populate('owner').lean()
+
     // check voucher
     if (!voucher) {
       return NextResponse.json({ message: 'Voucher not found' }, { status: 404 })
     }
+
     // return voucher
     return NextResponse.json({ voucher, message: 'Voucher found' }, { status: 200 })
   } catch (err: any) {

@@ -8,14 +8,14 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function DELETE(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log(' - Delete Cart Item - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get user id
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get user id
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
     // check if user is authenticated
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

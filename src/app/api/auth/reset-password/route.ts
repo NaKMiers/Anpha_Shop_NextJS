@@ -7,18 +7,18 @@ import UserModel from '@/models/UserModel'
 export async function PATCH(req: NextRequest) {
   console.log('- Reset Password -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get email and token from query
-  const searchParams = req.nextUrl.searchParams
-  const email = searchParams.get('email')
-  const token = searchParams.get('token')
-
-  // get new password from req body
-  const { newPassword } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get email and token from query
+    const searchParams = req.nextUrl.searchParams
+    const email = searchParams.get('email')
+    const token = searchParams.get('token')
+
+    // get new password from req body
+    const { newPassword } = await req.json()
+
     // check if email and token are exist
     if (email && token) {
       // check if token is valid

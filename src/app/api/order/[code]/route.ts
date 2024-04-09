@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Get Order -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get order from database
     const order = await OrderModel.findOne({ code }).lean()
     // check order

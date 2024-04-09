@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
   console.log('- Calculate Income -')
 
-  // get time to calculate income
-  const { time, timeType } = await req.json() // timeType can be 'day', 'month', 'year'
-
   try {
+    // get time to calculate income
+    const { time, timeType } = await req.json() // timeType can be 'day', 'month', 'year'
+
     // get day, month, year from time
     let timeRange = null
     const day = new Date(time).getDate()

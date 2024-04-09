@@ -6,13 +6,13 @@ import { NextResponse } from 'next/server'
 export async function DELETE(req: Request) {
   console.log('- Delete Users - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get user ids to delete
-  const { ids } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get user ids to delete
+    const { ids } = await req.json()
+
     // get deleted users
     const deletedUsers = await UserModel.find({ _id: { $in: ids } }).lean()
 

@@ -6,25 +6,25 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PUT(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Edit Voucher -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to edit
-  const {
-    code: newCode,
-    desc,
-    begin,
-    expire,
-    minTotal,
-    maxReduce,
-    type,
-    value,
-    timesLeft,
-    owner,
-    active,
-  } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to edit
+    const {
+      code: newCode,
+      desc,
+      begin,
+      expire,
+      minTotal,
+      maxReduce,
+      type,
+      value,
+      timesLeft,
+      owner,
+      active,
+    } = await req.json()
+
     // update voucher
     await VoucherModel.findOneAndUpdate(
       { code },

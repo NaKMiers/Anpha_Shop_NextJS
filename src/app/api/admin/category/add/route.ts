@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Add Category -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data field to add new category
-  const { title } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data field to add new category
+    const { title } = await req.json()
+
     // create new tag
     const newCategory = new CategoryModel({
       title: title.trim(),

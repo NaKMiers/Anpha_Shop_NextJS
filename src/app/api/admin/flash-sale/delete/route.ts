@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Flash Sales - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get voucher ids to delete
-  const { ids, productIds } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get voucher ids to delete
+    const { ids, productIds } = await req.json()
+
     // get delete flash sales
     const deletedFlashSales = await FlashsaleModel.find({ _id: { $in: ids } }).lean()
 

@@ -7,10 +7,10 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get User Order -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get user's orders
     const orders = await OrderModel.find({ userId: id }).populate('voucherApplied').lean()
 

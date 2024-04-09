@@ -12,15 +12,15 @@ export type CartItemWithProduct = ICartItem & { product: IProduct }
 export async function POST(req: NextRequest) {
   console.log(' - Add Product To Cart - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get product data to add to cart
-  const { productId, quantity } = await req.json()
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId: any = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get product data to add to cart
+    const { productId, quantity } = await req.json()
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId: any = token?._id
+
     // check if user logged in
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

@@ -1,3 +1,4 @@
+import { EditingValues } from '@/app/(admin)/admin/category/all/page'
 import { connectDatabase } from '@/config/databse'
 import CategoryModel from '@/models/CategoryModel'
 import { generateSlug } from '@/utils'
@@ -7,31 +8,31 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PUT(req: NextRequest) {
   console.log('- Edit Categories -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get category values to edit
-  const { editingValues } = await req.json()
-
   try {
-    const editedCategories = []
+    // connect to database
+    await connectDatabase()
 
-    // Loop through each editing value
-    for (let editValue of editingValues) {
-      // Update the category with the corresponding id
-      const updatedCategory = await CategoryModel.findByIdAndUpdate(
+    // get category values to edit
+    const { editingValues } = await req.json()
+
+    // create an array of promises for each update operation
+    const updatePromises = editingValues.map((editValue: EditingValues) =>
+      CategoryModel.findByIdAndUpdate(
         editValue._id,
         {
           $set: {
-            title: editValue.title,
-            slug: generateSlug(editValue.title),
+            title: editValue.title.trim(),
+            slug: generateSlug(editValue.title.trim()),
           },
         },
         { new: true }
       )
-      editedCategories.push(updatedCategory)
-    }
+    )
 
+    // wait for all update operations to complete
+    const editedCategories = await Promise.all(updatePromises)
+
+    // return response
     return NextResponse.json({
       editedCategories,
       message: `Edited Categories: ${editedCategories.map(cate => cate.title).join(', ')}`,

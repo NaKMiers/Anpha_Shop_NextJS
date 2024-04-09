@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   console.log('- Generate Order Code -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // generate order code to create order
     const orderCode = await generateOrderCode(5)
 

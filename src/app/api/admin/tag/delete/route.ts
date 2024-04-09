@@ -6,14 +6,14 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Tags - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get tag ids to delete
-  const { ids } = await req.json()
-  console.log(ids)
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get tag ids to delete
+    const { ids } = await req.json()
+    console.log(ids)
+
     // get delete tags
     const deletedTags = await TagModel.find({ _id: { $in: ids } }).lean()
 

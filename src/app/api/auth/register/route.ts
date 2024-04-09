@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Register -')
 
-  // connect to database
-  await connectDatabase()
-
-  let { username, email, password } = await req.json()
-  email = email.toLowerCase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    let { username, email, password } = await req.json()
+    email = email.toLowerCase()
+
     // check if user is already exist in database
     const existingUser: any = await UserModel.findOne({ $or: [{ email }, { username }] }).lean()
 

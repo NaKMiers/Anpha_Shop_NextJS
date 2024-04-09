@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   console.log('- Get Role-Users -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get special role users from database
     let roleUsers = await UserModel.find({
       role: { $in: ['admin', 'editor', 'collaborator'] },

@@ -9,12 +9,13 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Account -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get account from database
     const account = await AccountModel.findById(id).lean()
+
     // check account
     if (!account) {
       return NextResponse.json({ message: 'Account not found' }, { status: 404 })

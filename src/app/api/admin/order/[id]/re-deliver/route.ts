@@ -8,10 +8,10 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Re-Deliver Order -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get order to re-deliver
     let order: IOrder | null = await OrderModel.findById(id).lean()
 

@@ -8,13 +8,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Forgot Password -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get email to send link to reset password
-  const { email } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get email to send link to reset password
+    const { email } = await req.json()
+
     // get user by email
     const user: any = await UserModel.findOne({ email }).lean()
 

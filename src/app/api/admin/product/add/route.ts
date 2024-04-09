@@ -10,17 +10,17 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Add Product -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to create product
-  const formData = await req.formData()
-  const data = Object.fromEntries(formData)
-  const { title, price, oldPrice, description, isActive, category } = data
-  const tags = JSON.parse(data.tags as string)
-  let images = formData.getAll('images')
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to create product
+    const formData = await req.formData()
+    const data = Object.fromEntries(formData)
+    const { title, price, oldPrice, description, isActive, category } = data
+    const tags = JSON.parse(data.tags as string)
+    let images = formData.getAll('images')
+
     // check images
     if (!images.length) {
       return NextResponse.json({ message: 'Images are required' }, { status: 400 })

@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Voucheres - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get voucher ids to delete
-  const { ids } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get voucher ids to delete
+    const { ids } = await req.json()
+
     // get delete vouchers
     const deletedVouchers = await VoucherModel.find({ _id: { $in: ids } }).lean()
 

@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Flash Sale -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get flash sale from database
     const flashSale: FlashSaleWithProducts | null = await FlashsaleModel.findById(id).lean()
 

@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Recharge - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get value to recharge user
-  const { amount } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get value to recharge user
+    const { amount } = await req.json()
+
     // find user by id
     const user: IUser | null = await UserModel.findByIdAndUpdate(
       id,

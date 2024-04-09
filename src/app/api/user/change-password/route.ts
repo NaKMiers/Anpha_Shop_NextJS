@@ -8,15 +8,15 @@ import bcrypt from 'bcrypt'
 export async function PATCH(req: NextRequest) {
   console.log('- Change Password -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to change password
-  const { oldPassword, newPassword } = await req.json()
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userId = token?._id
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to change password
+    const { oldPassword, newPassword } = await req.json()
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userId = token?._id
+
     // get user to change password
     const user = await UserModel.findById(userId)
 

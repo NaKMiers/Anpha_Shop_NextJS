@@ -8,14 +8,14 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Add Account - ')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data to add account
-  const { type, info, renew, active, days, hours, minutes, seconds } = await req.json()
-  const times = getTimes(+days, +hours, +minutes, +seconds)
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data to add account
+    const { type, info, renew, active, days, hours, minutes, seconds } = await req.json()
+    const times = getTimes(+days, +hours, +minutes, +seconds)
+
     // create new account
     const newAccount = new AccountModel({
       type,

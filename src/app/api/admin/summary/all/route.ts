@@ -10,10 +10,10 @@ export type UserWithVouchers = IUser & { vouchers: IVoucher[] }
 export async function GET(req: NextRequest) {
   console.log('- Get All Collaborators -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get query params
     const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
 

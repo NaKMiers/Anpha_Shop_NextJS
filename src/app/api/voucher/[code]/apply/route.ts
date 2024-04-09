@@ -8,17 +8,17 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Apply Voucher -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get userId to check if user used this voucher
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const userEmail = token?.email
-
-  // get data to check voucher
-  const { email, total } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get userId to check if user used this voucher
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const userEmail = token?.email
+
+    // get data to check voucher
+    const { email, total } = await req.json()
+
     // get voucher from database to apply
     const voucher: IVoucher | null = await VoucherModel.findOne({ code }).lean()
 

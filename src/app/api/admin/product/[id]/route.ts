@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get Product -')
 
-  // connect to database
-  await connectDatabase()
-
   try {
+    // connect to database
+    await connectDatabase()
+
     // get product from database
     const product = await ProductModel.findById(id).lean()
 

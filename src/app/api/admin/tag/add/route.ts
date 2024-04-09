@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   console.log('- Add Tag -')
 
-  // connect to database
-  await connectDatabase()
-
-  // get data field to add new tag
-  const { title, isFeatured } = await req.json()
-
   try {
+    // connect to database
+    await connectDatabase()
+
+    // get data field to add new tag
+    const { title, isFeatured } = await req.json()
+
     // create new tag
     const newTag = new TagModel({
       title: title.trim(),
