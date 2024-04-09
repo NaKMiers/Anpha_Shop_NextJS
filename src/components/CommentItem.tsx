@@ -114,7 +114,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           <span className='font-semibold'>
             {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username}
           </span>{' '}
-          - <span className='text-green-500 text-sm'>{format(comment.createdAt)}</span>{' '}
+          - <span className='text-slate-500 text-sm'>{format(comment.createdAt)}</span>{' '}
           <button
             className={`ml-2 px-[6px] py-[1px] rounded-[4px] text-sm border ${
               comment.hide
@@ -158,9 +158,9 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         {/* Reply Section */}
         <div
           className={`${
-            isOpenReply ? 'max-h-[72px]' : 'max-h-0'
-          } h-full overflow-hidden common-transition mt-1 `}>
-          <div className='flex items-start gap-2'>
+            isOpenReply ? 'max-h-[300px]' : 'max-h-0'
+          } relative h-full overflow-y-scroll common-transition mt-1 `}>
+          <div className='sticky z-10 top-0 flex items-start gap-2 bg-white'>
             <Image
               className={`rounded-full shadow-lg ${className}`}
               src={'/images/default-avatar.jpg'}
@@ -191,30 +191,32 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Replied Comments */}
-        <div className='relative flex flex-col mt-5 gap-3 pl-21'>
-          <div className='position top-0 left-0 w-px h-full bg-slate-300' />
-
-          {Array.from({ length: 3 }).map((_, idx) => (
-            <div key={idx} className='flex items-start gap-3'>
-              <Image
-                className={`rounded-full shadow-lg ${className}`}
-                src={'/images/default-avatar.jpg'}
-                width={24}
-                height={24}
-                alt='avatar'
-              />
-              <div className='w-full'>
-                <div className='flex items-center gap-1'>
-                  <span className='font-semibold'>Username</span>
-                  <span className='text-sm text-slate-500'>- 2 giờ trước</span>
+          {/* Replied Comments */}
+          <div className='relative flex flex-col gap-3 pl-21 mt-1'>
+            {comment.replied.map((comment: FullyComment) => (
+              <div key={comment._id} className='flex items-start gap-3'>
+                <Image
+                  className={`rounded-full shadow-lg ${className}`}
+                  src={'/images/default-avatar.jpg'}
+                  width={24}
+                  height={24}
+                  alt='avatar'
+                />
+                <div className='w-full'>
+                  <div className='flex items-center gap-1'>
+                    <span className='font-semibold'>
+                      {user.firstname && user.lastname
+                        ? `${user.firstname} ${user.lastname}`
+                        : user.username}
+                    </span>{' '}
+                    -<span className='text-sm text-slate-500'>{format(comment.createdAt)}</span>
+                  </div>
+                  <p className='font-body tracking-tide'>{comment.content}</p>
                 </div>
-                <p className='font-body tracking-tide'>Lorem ipsum dolor sit amet.</p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

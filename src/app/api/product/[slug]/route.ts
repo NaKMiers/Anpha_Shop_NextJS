@@ -60,6 +60,12 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
       $or: [{ hide: false }, { userId }],
     })
       .populate('userId')
+      .populate({
+        path: 'replied',
+        populate: {
+          path: 'userId',
+        },
+      })
       .sort({ likes: -1, createdAt: -1 })
       .limit(6)
       .lean()
@@ -67,6 +73,10 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     comments = comments.map(comment => ({
       ...comment,
       user: comment.userId,
+      replied: comment.replied.map((reply: any) => ({
+        ...reply,
+        user: reply.userId,
+      })),
     }))
 
     console.log('comments', comments)

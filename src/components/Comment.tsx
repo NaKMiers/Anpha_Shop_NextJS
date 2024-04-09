@@ -13,6 +13,7 @@ import { addCommentApi } from '@/requests/commentRequest'
 
 export type FullyComment = IComment & {
   user: IUser
+  replied: FullyComment[]
 }
 
 interface CommentProps {
