@@ -10,10 +10,10 @@ import {
 } from '@/libs/reducers/cartReducer'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -231,7 +231,7 @@ function CartItem({
               src={src}
               width={150}
               height={150}
-              alt='netflix'
+              alt={`/${cartItem.product.slug}`}
               key={src}
             />
           ))}
@@ -280,7 +280,7 @@ function CartItem({
       {/* Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
-        <Link href='/netflix'>
+        <Link href={`/${cartItem.product.slug}`}>
           <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
             {cartItem.product.title}
           </h2>

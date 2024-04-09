@@ -1,0 +1,125 @@
+'use client'
+
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { useCallback, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import LoadingButton from './LoadingButton'
+import CommentItem from './CommentItem'
+import { IComment } from '@/models/CommentModel'
+import { IUser } from '@/models/UserModel'
+import { addCommentApi } from '@/requests/commentRequest'
+
+export type FullyComment = IComment & {
+  user: IUser
+}
+
+interface CommentProps {
+  comments: FullyComment[]
+  productId: string | undefined
+  className?: string
+}
+
+function Comment({ comments, productId, className = '' }: CommentProps) {
+  // hook
+  const { data: session } = useSession()
+  const curUser: any = session?.user
+
+  // states
+  const [cmts, setCmts] = useState<FullyComment[]>(comments || [])
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      comment: '',
+    },
+  })
+
+  // handle send comment
+  const sendComment: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      if (productId) {
+        setIsLoading(true)
+
+        console.log(data)
+
+        try {
+          // send request to add comment
+          const { newComment } = await addCommentApi(productId, data.comment)
+          newComment.user = curUser
+
+          // add new comment to list
+          setCmts(prev => [newComment, ...prev])
+        } catch (err: any) {
+          toast.error(err.message)
+          console.log(err)
+        } finally {
+          // reset loading state
+          setIsLoading(false)
+        }
+      }
+    },
+    [productId, curUser]
+  )
+
+  return (
+    <div>
+      <div className={`flex items-center justify-between gap-3 ${className}`}>
+        <Image
+          className='rounded-full shadow-lg'
+          src={curUser?.avatar || '/images/default-avatar.jpg'}
+          width={40}
+          height={40}
+          alt='avatar'
+        />
+        <div
+          className={`relative w-full rounded-lg border-[2px] bg-white${
+            errors.comment ? 'border-rose-400' : 'border-slate-200'
+          }`}>
+          <input
+            id='comment'
+            className='h-[40px] block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer number-input'
+            placeholder=' '
+            disabled={isLoading}
+            type='text'
+            {...register('comment', { required: true })}
+            onWheel={e => e.currentTarget.blur()}
+          />
+
+          {/* label */}
+          <label
+            htmlFor='comment'
+            className={`absolute text-nowrap rounded-md text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer ${
+              errors.comment ? 'text-rose-400' : 'text-dark'
+            }`}>
+            Comment
+          </label>
+        </div>
+        <LoadingButton
+          className='h-[40px] flex items-center px-3 sm:px-6 border border-primary hover:bg-primary text-primary hover:text-white rounded-lg common-transition'
+          onClick={handleSubmit(sendComment)}
+          text='Gửi'
+          isLoading={isLoading}
+        />
+      </div>
+      {errors.comment?.message && (
+        <span className='text-sm text-rose-400 ml-[60px]'>{errors.comment?.message?.toString()}</span>
+      )}
+
+      <div className='flex flex-col mt-5 gap-3'>
+        {cmts.map(comment => (
+          <CommentItem comment={comment} setCmts={setCmts} key={comment._id} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default Comment

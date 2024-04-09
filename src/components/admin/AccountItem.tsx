@@ -47,7 +47,7 @@ function AccountItem({
         <div className='w-full'>
           {/* Thumbnails */}
           <Link
-            href='/netflix'
+            href={`/${data.type.slug}`}
             className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
             <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
               <Image

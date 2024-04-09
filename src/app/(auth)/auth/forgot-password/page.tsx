@@ -2,13 +2,14 @@
 
 import Input from '@/components/Input'
 import { forgotPasswordApi } from '@/requests'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCircleNotch } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 
 function ForgotPasswordPage() {
+  // states
   const [isSent, setIsSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isCounting, setIsCounting] = useState(false)
@@ -44,29 +45,32 @@ function ForgotPasswordPage() {
     },
   })
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    setIsLoading(true)
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      setIsLoading(true)
 
-    try {
-      // send request to server
-      const { message } = await forgotPasswordApi(data)
+      try {
+        // send request to server
+        const { message } = await forgotPasswordApi(data)
 
-      // show success message
-      toast.success(message)
+        // show success message
+        toast.success(message)
 
-      // set is sent
-      setIsSent(true)
-    } catch (err: any) {
-      // show error message
-      console.log(err)
-      const { message } = err
-      setError('email', { type: 'manual', message: message })
-      toast.error(message)
-    } finally {
-      // reset loading state
-      setIsLoading(false)
-    }
-  }
+        // set is sent
+        setIsSent(true)
+      } catch (err: any) {
+        // show error message
+        console.log(err)
+        const { message } = err
+        setError('email', { type: 'manual', message: message })
+        toast.error(message)
+      } finally {
+        // reset loading state
+        setIsLoading(false)
+      }
+    },
+    [setError]
+  )
 
   return (
     <div className='relative w-full min-h-screen'>

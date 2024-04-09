@@ -89,7 +89,9 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
                 {isExpaned ? 'Thu lại' : 'Tất cả'}
               </button>
             ) : (
-              <Link href={`/category/?ctg=${category?.slug}`} className='underline text-sky-600'>
+              <Link
+                href={bestSeller ? '/best-seller' : `/category/?ctg=${category?.slug}`}
+                className='underline text-sky-600 hover:text-green-600 common-transition'>
                 Tất cả
               </Link>
             )}

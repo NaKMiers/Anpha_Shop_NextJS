@@ -66,3 +66,16 @@ export const getFlashSalePageApi = async (query: string = '') => {
 
   return await res.json()
 }
+
+// [GET]
+export const getBestSellerPageApi = async (query: string = '') => {
+  // no cache for filter
+  const res = await fetch(`${process.env.APP_URL}/api/best-seller${query}`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}

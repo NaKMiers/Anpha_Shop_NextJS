@@ -13,7 +13,10 @@ import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 
 function ResgiterPage() {
+  // hook
   const router = useRouter()
+
+  // states
   const [isLoading, setIsLoading] = useState(false)
 
   // Form
@@ -76,42 +79,45 @@ function ResgiterPage() {
     [setError]
   )
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    // validate form
-    if (!handleValidate(data)) return
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      // validate form
+      if (!handleValidate(data)) return
 
-    // start loading
-    setIsLoading(true)
+      // start loading
+      setIsLoading(true)
 
-    try {
-      // register logic here
-      const { user, message } = await registerApi(data)
+      try {
+        // register logic here
+        const { user, message } = await registerApi(data)
 
-      // sign in user
-      const callback = await signIn('credentials', {
-        usernameOrEmail: user.username,
-        password: data.password,
-        redirect: false,
-      })
+        // sign in user
+        const callback = await signIn('credentials', {
+          usernameOrEmail: user.username,
+          password: data.password,
+          redirect: false,
+        })
 
-      if (callback?.error) {
-        toast.error(callback.error)
-      } else {
-        // show success message
-        toast.success(message)
+        if (callback?.error) {
+          toast.error(callback.error)
+        } else {
+          // show success message
+          toast.success(message)
 
-        // redirect to home page
-        router.push('/')
+          // redirect to home page
+          router.push('/')
+        }
+      } catch (err: any) {
+        // show error message
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop loading
+        setIsLoading(false)
       }
-    } catch (err: any) {
-      // show error message
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      // stop loading
-      setIsLoading(false)
-    }
-  }
+    },
+    [handleValidate, router]
+  )
 
   return (
     <div className='relative w-full min-h-screen'>

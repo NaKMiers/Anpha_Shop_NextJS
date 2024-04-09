@@ -109,7 +109,7 @@ function Header({ isStatic }: HeaderProps) {
           // set cart to state
           dispatch(setCartItems(cart))
         } catch (err: any) {
-          console.log(err.message)
+          console.log(err)
           toast.error(err.response.data.message)
         }
       }

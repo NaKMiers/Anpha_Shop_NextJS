@@ -64,7 +64,7 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
 
       {/* Meta */}
       <Meta
-        title={`TAG - ${tags.map(tag => tag.title).join(', ')}`}
+        title={`Sản Phẩm Theo "Tag"`}
         searchParams={searchParams}
         type='tag'
         items={tags}

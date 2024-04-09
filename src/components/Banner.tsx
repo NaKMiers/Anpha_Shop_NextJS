@@ -146,7 +146,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
           {/* Menu Absolute */}
           <div
-            className={`lg:hidden absolute top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 p-21 flex flex-col md:flex-row justify-evenly items-center md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden`}
+            className={`lg:hidden absolute z-10 top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 px-21 py-9 flex flex-col sm:flex-row justify-evenly items-start md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden`}
             style={{ transform: !isMenuOpen ? 'translate(calc(100% - 32px), calc(-100% + 32px))' : '' }}>
             <button
               className='absolute w-8 h-8 flex items-center justify-center top-0 right-0 shadow-md rounded-bl-lg p-[6px] bg-white'
@@ -169,7 +169,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             </button>
 
             {/* Tag */}
-            <ul className='relative max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-medium shadow-small overflow-y-scroll'>
+            <ul className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'>
               <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
                 Tags
               </h5>
@@ -189,7 +189,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             </ul>
 
             {/* Category */}
-            <ul className='relative max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-medium shadow-small overflow-y-scroll'>
+            <ul className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'>
               <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
                 Categories
               </h5>

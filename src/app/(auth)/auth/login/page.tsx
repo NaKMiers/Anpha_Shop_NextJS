@@ -4,14 +4,17 @@ import Input from '@/components/Input'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
 import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 
 function LoginPage() {
+  // hook
   const router = useRouter()
+
+  // states
   const [isLoading, setIsLoading] = useState(false)
 
   // Form
@@ -27,35 +30,38 @@ function LoginPage() {
     },
   })
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    setIsLoading(true)
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      setIsLoading(true)
 
-    try {
-      // send request to server
-      const res = await signIn('credentials', { ...data, redirect: false })
+      try {
+        // send request to server
+        const res = await signIn('credentials', { ...data, redirect: false })
 
-      if (res?.ok) {
-        // show success message
-        toast.success('Đăng nhập thành công')
+        if (res?.ok) {
+          // show success message
+          toast.success('Đăng nhập thành công')
 
-        // redirect to home page
-        router.push('/')
+          // redirect to home page
+          router.push('/')
+        }
+
+        if (res?.error) {
+          // show error message
+          toast.error(res.error)
+          setError('usernameOrEmail', { type: 'manual' })
+          setError('password', { type: 'manual' })
+        }
+      } catch (err: any) {
+        toast.error(err.message)
+        console.log(err)
+      } finally {
+        // reset loading state
+        setIsLoading(false)
       }
-
-      if (res?.error) {
-        // show error message
-        toast.error(res.error)
-        setError('usernameOrEmail', { type: 'manual' })
-        setError('password', { type: 'manual' })
-      }
-    } catch (err: any) {
-      toast.error(err.message)
-      console.log(err)
-    } finally {
-      // reset loading state
-      setIsLoading(false)
-    }
-  }
+    },
+    [setError, router]
+  )
 
   return (
     <div className='relative w-full min-h-screen'>

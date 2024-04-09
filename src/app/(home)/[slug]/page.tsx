@@ -1,6 +1,7 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
 import BuyActionWithQuantity from '@/components/BuyActionWithQuantity'
 import ChooseMe from '@/components/ChooseMe'
+import Comment, { FullyComment } from '@/components/Comment'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
   let product: FullyProduct | null = null
   let relatedProducts: FullyProduct[] = []
-  let comments: IComment[] = []
+  let comments: FullyComment[] = []
 
   try {
     // revalidate every 1 minute
@@ -163,6 +164,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         </section>
       )}
 
+      {/* Detail */}
       <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
         <div className='flex flex-wrap w-full -mx-21/2'>
           <div className='w-full px-21/2 mb-12'>
@@ -342,6 +344,15 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           <ChooseMe />
         </div>
+      </section>
+
+      <div className='pt-9' />
+
+      {/* Comment */}
+      <section className='max-w-1200 mx-auto bg-white p-21 rounded-medium shadow-medium'>
+        <h3 className='text-[24px] font-semibold text-dark'>Bình luận gần đây</h3>
+
+        <Comment comments={comments} productId={product?._id} className='mt-4' />
       </section>
     </div>
   )

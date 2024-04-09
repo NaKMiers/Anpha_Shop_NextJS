@@ -59,10 +59,17 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
       // $or: [...orCondition.filter(c => c)],
       $or: [{ hide: false }, { userId }],
     })
+      .populate('userId')
       .sort({ likes: -1, createdAt: -1 })
       .limit(6)
-      .populate('user')
       .lean()
+
+    comments = comments.map(comment => ({
+      ...comment,
+      user: comment.userId,
+    }))
+
+    console.log('comments', comments)
 
     return NextResponse.json({ product, relatedProducts, comments }, { status: 200 })
   } catch (err: any) {

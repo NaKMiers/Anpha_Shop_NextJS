@@ -39,7 +39,9 @@ function CartPage() {
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
   const [cartLength, setCartlength] = useState(0)
+
   const [items, setItems] = useState<FullyCartItem[]>([])
+  const [localItems, setLocalItems] = useState<FullyCartItem[]>([])
 
   // loading and showing
   const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
@@ -64,6 +66,7 @@ function CartPage() {
     if (curUser) {
       setCartlength(cartItems.reduce((total, item) => total + item.quantity, 0))
       setItems(cartItems)
+      setLocalItems(localCartItems)
     } else {
       setCartlength(localCartItems.reduce((total, item) => total + item.quantity, 0))
       setItems(localCartItems)
@@ -265,14 +268,14 @@ function CartPage() {
         <div className='pt-6' />
 
         {/* Local cart items */}
-        {!!localCartItems.length && curUser && (
+        {!!localItems.length && curUser && (
           <div className='border border-slate-400 p-4 rounded-medium'>
             <p className='text-primary italic mb-3'>
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
               <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
             </p>
 
-            {localCartItems.map((cartItem, index) => (
+            {localItems.map((cartItem, index) => (
               <CartItem
                 cartItem={cartItem}
                 className={index != 0 ? 'mt-4' : ''}

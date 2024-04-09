@@ -131,7 +131,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
     <div
       className={`bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 ${className}`}>
       {/* Title */}
-      {/* <h2 className='text-2xl font-semibold mb-21'>{title}</h2> */}
+      <h2 className='text-2xl font-semibold mb-21'>{title}</h2>
 
       {/* Filter */}
       <div className='grid grid-cols-12 gap-21'>

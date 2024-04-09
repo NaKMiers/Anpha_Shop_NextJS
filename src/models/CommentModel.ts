@@ -40,10 +40,13 @@ const CommentModel = mongoose.models.comment || mongoose.model('comment', Commen
 export default CommentModel
 
 export interface IComment {
+  _id: string
   userId: string
   productId: string
   content: string
   replied: string[]
   likes: string[]
   hide: boolean
+  createdAt: string
+  updatedAt: string
 }

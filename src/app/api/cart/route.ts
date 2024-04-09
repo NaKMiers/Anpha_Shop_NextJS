@@ -14,7 +14,7 @@ export type FullyCartItem = ICartItem & {
 
 // [GET]: /cart
 export async function GET(req: NextRequest) {
-  console.log('- Get User Cart')
+  console.log('- Get User Cart - ')
 
   try {
     // connect to database
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     }
 
     // get cart from database
-    let cart = await CartItemModel.find({ userId })
+    let cart: any[] = await CartItemModel.find({ userId })
       .populate({
         path: 'productId',
         populate: {
@@ -40,11 +40,17 @@ export async function GET(req: NextRequest) {
       })
       .lean()
 
-    cart = cart.map(cartItem => ({
-      ...cartItem,
-      product: cartItem.productId,
-      productId: cartItem.productId._id,
-    }))
+    cart = cart
+      .map(cartItem =>
+        cartItem.productId
+          ? {
+              ...cartItem,
+              product: cartItem.productId,
+              productId: cartItem.productId._id,
+            }
+          : null
+      )
+      .filter(cartItem => cartItem) as FullyCartItem[]
 
     // return user's cart
     return NextResponse.json({ cart }, { status: 200 })

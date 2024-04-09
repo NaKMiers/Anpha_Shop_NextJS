@@ -16,7 +16,8 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
   // states
   const [slide, setSlide] = useState(1)
   const [isSliding, setIsSliding] = useState(false)
-
+  const [touchStartX, setTouchStartX] = useState(0)
+  const [touchEndX, setTouchEndX] = useState(0)
   // refs
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
@@ -45,13 +46,13 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
             slideTrackRef.current.style.transition = 'none'
             setSlide(1)
           }
-        }, 510)
+        }, 310)
 
         setTimeout(() => {
           if (slideTrackRef.current) {
-            slideTrackRef.current.style.transition = 'all 0.5s linear'
+            slideTrackRef.current.style.transition = 'all 0.3s linear'
           }
-        }, 520)
+        }, 350)
       } else {
         setSlide(prev => prev + 1)
       }
@@ -59,7 +60,7 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
       // stop sliding after slided
       setTimeout(() => {
         setIsSliding(false)
-      }, 550)
+      }, 350)
     }
   }, [childrenAmount, isSliding, slide])
 
@@ -78,13 +79,13 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
             slideTrackRef.current.style.transition = 'none'
             setSlide(childrenAmount)
           }
-        }, 510)
+        }, 310)
 
         setTimeout(() => {
           if (slideTrackRef.current) {
-            slideTrackRef.current.style.transition = 'all 0.5s linear'
+            slideTrackRef.current.style.transition = 'all 0.3s linear'
           }
-        }, 550)
+        }, 350)
       } else {
         setSlide(prev => prev - 1)
       }
@@ -92,7 +93,7 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
       // stop sliding after slided
       setTimeout(() => {
         setIsSliding(false)
-      }, 550)
+      }, 350)
     }
   }, [childrenAmount, isSliding, slide])
 
@@ -107,11 +108,34 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
     }
   }, [time, nextSlide])
 
+  // Touch Events ----
+  const handleTouchStart = (event: React.TouchEvent) => {
+    setTouchStartX(event.touches[0].clientX)
+  }
+
+  const handleTouchMove = (event: React.TouchEvent) => {
+    setTouchEndX(event.touches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    const touchDiff = touchStartX - touchEndX
+    if (touchDiff > 0 && touchDiff > 50) {
+      nextSlide() // Swiped left
+    } else if (touchDiff < 0 && touchDiff < -50) {
+      prevSlide() // Swiped right
+    }
+  }
+  // --- Touch Events
+
   return (
-    <div className={`relative w-full h-full overflow-hidden rounded-lg group ${className}`}>
+    <div
+      className={`relative w-full h-full overflow-hidden rounded-lg group ${className}`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}>
       {/* Slide Track */}
       <div
-        className={`flex w-full h-full cursor-pointer no-scrollbar transition-all ease-linear duration-500`}
+        className={`flex w-full h-full cursor-pointer no-scrollbar transition-all ease-linear duration-300`}
         style={{ marginLeft: '-100%' }}
         ref={slideTrackRef}>
         {[
