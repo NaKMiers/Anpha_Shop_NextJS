@@ -63,9 +63,9 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
       <ul
         className={`${
           open
-            ? 'sm:max-w-full sm:w-[300px] sm:max-h-[350px] sm:p-3 opacity-1'
-            : 'sm:max-h-0 sm:p-0 sm:max-w-0 sm:w-0 opacity-0'
-        }  w-full h-[calc(100vh_-_72px_-_2*21px)] overflow-hidden transition-all duration-300 p-3 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}>
+            ? 'max-h-screen sm:max-w-full sm:w-[300px] sm:max-h-[350px] p-3 opacity-1x'
+            : 'max-h-0 sm:max-h-0 p-0 sm:max-w-0 sm:w-0 opacity-0x'
+        }  w-full h-[calc(100vh_-_72px)] overflow-hidden transition-all duration-300 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}>
         {curUser?._id ? (
           <>
             <li className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>

@@ -25,9 +25,9 @@ function CartPage() {
   // hook
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
-  let cartLocalItems = useAppSelector(state => state.cart.localItems)
+  let localCartItems = useAppSelector(state => state.cart.localItems)
   let cartItems = useAppSelector(state => state.cart.items)
-  const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
+  const selectedItems = useAppSelector(state => state.cart.selectedItems)
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -38,43 +38,14 @@ function CartPage() {
   const [subTotal, setSubTotal] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
+  const [cartLength, setCartlength] = useState(0)
+  const [items, setItems] = useState<FullyCartItem[]>([])
 
   // loading and showing
   const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
   const [isBuying, setIsBuying] = useState<boolean>(false)
 
-  if (!curUser) {
-    cartItems = cartLocalItems
-  }
-
-  // // update products in local cart
-  // useEffect(() => {
-  //   const getCorrespondingProducts = async () => {
-  //     try {
-  //       // send product ids to get corresponding cart items
-  //       const data = await updateProductsInLocalCartApi(localCartItems.map(item => item.product._id))
-
-  //       const products: FullyProduct[] = data.products
-
-  //       const updatedLocalCartItems = localCartItems.map(cartItem => {
-  //         return {
-  //           ...cartItem,
-  //           product: products.find(product => product._id === cartItem.product._id),
-  //         }
-  //       })
-  //     } catch (err: any) {
-  //       console.log(err)
-  //       toast.error(err.message)
-  //     }
-  //   }
-
-  //   if (!curUser) {
-  //     getCorrespondingProducts()
-  //   }
-  // }, [localCartItems, curUser])
-
   // Form
-
   const {
     register,
     handleSubmit,
@@ -88,10 +59,21 @@ function CartPage() {
     },
   })
 
+  // get cart length
+  useEffect(() => {
+    if (curUser) {
+      setCartlength(cartItems.reduce((total, item) => total + item.quantity, 0))
+      setItems(cartItems)
+    } else {
+      setCartlength(localCartItems.reduce((total, item) => total + item.quantity, 0))
+      setItems(localCartItems)
+    }
+  }, [cartItems, localCartItems, curUser])
+
   // calc total, discount, subTotal
   useEffect(() => {
-    const subTotal = selectedCartItems.reduce((total, cartItem) => {
-      const item: any = cartItems.find(cI => cI._id === cartItem._id)
+    const subTotal = selectedItems.reduce((total, cartItem) => {
+      const item: any = items.find(cI => cI._id === cartItem._id)
 
       return total + (item?.quantity ?? 0) * (item?.product.price ?? 0)
     }, 0)
@@ -113,12 +95,12 @@ function CartPage() {
     }
     setDiscount(discount)
     setTotal(finalTotal)
-  }, [selectedCartItems, voucher, cartItems])
+  }, [selectedItems, voucher, items])
 
   // send request to server to check voucher
   const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      if (selectedCartItems.length) {
+      if (selectedItems.length) {
         // start loading
         dispatch(setLoading(true))
         try {
@@ -144,12 +126,12 @@ function CartPage() {
         toast.error('Hãy chọn sản phẩm để tiến hành nhập voucher')
       }
     },
-    [dispatch, selectedCartItems.length, subTotal]
+    [dispatch, selectedItems.length, subTotal]
   )
 
   const handleValidateBeforeCheckout = useCallback(() => {
     let isValid = true
-    if (!selectedCartItems.length) {
+    if (!selectedItems.length) {
       toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
       isValid = false
     }
@@ -160,7 +142,7 @@ function CartPage() {
     }
 
     return isValid
-  }, [curUser, getValues, selectedCartItems.length, setError])
+  }, [curUser, getValues, selectedItems.length, setError])
 
   // handle checkout
   const handleCheckout = useCallback(
@@ -177,7 +159,7 @@ function CartPage() {
 
         // create checkout
         const checkout = {
-          selectedCartItems,
+          selectedItems,
           code: orderCode,
           email: curUser?.email || getValues('email'),
           voucher,
@@ -201,7 +183,7 @@ function CartPage() {
       getValues,
       handleValidateBeforeCheckout,
       router,
-      selectedCartItems,
+      selectedItems,
       voucher,
       discount,
       total,
@@ -225,7 +207,7 @@ function CartPage() {
     try {
       const { orderCode } = await generateOrderCodeApi() // cache: no-store
 
-      const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
+      const items = selectedItems.map((cartItem: FullyCartItem) => ({
         _id: cartItem._id,
         product: cartItem.product,
         quantity: cartItem.quantity,
@@ -243,7 +225,7 @@ function CartPage() {
       )
 
       // remove cart items in store
-      dispatch(setCartItems(cartItems.filter(item => !removedCartItems.includes(item._id))))
+      dispatch(setCartItems(items.filter(item => !removedCartItems.includes(item._id))))
 
       // show success message
       toast.success(message)
@@ -259,14 +241,13 @@ function CartPage() {
     }
   }, [
     curUser,
+    dispatch,
     handleValidateBeforeCheckout,
     router,
-    selectedCartItems,
+    selectedItems,
     total,
-    voucher,
+    voucher?._id,
     discount,
-    cartItems,
-    dispatch,
   ])
 
   return (
@@ -277,27 +258,21 @@ function CartPage() {
           <FaCartShopping size={30} className='text-dark' />
           <span>Giỏ hàng</span>
           <span>
-            (
-            <span className='text-primary font-normal'>
-              {curUser
-                ? cartItems.reduce((total, item) => total + item.quantity, 0)
-                : cartLocalItems.reduce((total, item) => total + item.quantity, 0)}
-            </span>
-            )
+            (<span className='text-primary font-normal'>{cartLength}</span>)
           </span>
         </h1>
 
         <div className='pt-6' />
 
         {/* Local cart items */}
-        {!!cartLocalItems.length && curUser && (
+        {!!localCartItems.length && curUser && (
           <div className='border border-slate-400 p-4 rounded-medium'>
             <p className='text-primary italic mb-3'>
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
               <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
             </p>
 
-            {cartLocalItems.map((cartItem, index) => (
+            {localCartItems.map((cartItem, index) => (
               <CartItem
                 cartItem={cartItem}
                 className={index != 0 ? 'mt-4' : ''}
@@ -311,21 +286,21 @@ function CartPage() {
         <div className='pt-4' />
 
         {/* Checkbox All */}
-        {cartItems.length ? (
+        {items.length ? (
           <div>
             <div className='flex items-center justify-end gap-2 pr-21 select-none'>
               <label htmlFor='selectAll' className='font-semibold cursor-pointer '>
-                {cartItems.length === selectedCartItems.length ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+                {items.length === selectedItems.length ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
               </label>
               <input
                 name='selectAll'
                 id='selectAll'
                 type='checkbox'
-                checked={cartItems.length === selectedCartItems.length}
+                checked={items.length === selectedItems.length}
                 onChange={() =>
-                  cartItems.length === selectedCartItems.length
+                  items.length === selectedItems.length
                     ? dispatch(setSelectedItems([]))
-                    : dispatch(setSelectedItems(cartItems))
+                    : dispatch(setSelectedItems(items))
                 }
                 className='size-5 cursor-pointer'
               />
@@ -333,7 +308,7 @@ function CartPage() {
 
             <div className='pt-4' />
 
-            {cartItems.map((cartItem, index) => (
+            {items.map((cartItem, index) => (
               <CartItem cartItem={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
             ))}
           </div>
@@ -459,7 +434,7 @@ function CartPage() {
                 <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
               )}
               <span className='font-semibold ml-1 group-hover:text-light'>
-                Mua bằng số dư ({formatPrice(curUser?.balance || 0)})
+                Mua bằng số dư {curUser?._id ? `(${formatPrice(curUser.balance || 0)})` : ''}
               </span>
             </button>
 

@@ -1,8 +1,8 @@
 'use client'
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setCartItems } from '@/libs/reducers/cartReducer'
-import { getCartApi } from '@/requests'
+import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
+import { getCartApi, updateProductsInLocalCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -13,6 +13,8 @@ import { FaBars, FaCartShopping } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
 import Menu from './Menu'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
+import { FullyCartItem } from '@/app/api/cart/route'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -22,15 +24,16 @@ function Header({ isStatic }: HeaderProps) {
   // hook
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
-  const cartLocalItems = useAppSelector(state => state.cart.localItems)
+  const localCartItems = useAppSelector(state => state.cart.localItems)
   const { data: session, update } = useSession()
 
   // states
   const [curUser, setCurUser] = useState<any>(session?.user)
-  const [isShow, setIsShow] = useState(false)
-  const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const [isShow, setIsShow] = useState<boolean>(false)
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false)
   const lastScrollTop = useRef(0)
-  const [cartLength, setCartlength] = useState(0)
+  const [cartLength, setCartlength] = useState<number>(0)
+  const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
 
   // get user session
   useEffect(() => {
@@ -47,14 +50,53 @@ function Header({ isStatic }: HeaderProps) {
     }
   }, [curUser?._id, update])
 
+  // update products in local cart
+  useEffect(() => {
+    const getCorrespondingProducts = async () => {
+      try {
+        // send product ids to get corresponding cart items
+        const { products } = await updateProductsInLocalCartApi(
+          localCartItems.map(item => item.product._id)
+        )
+
+        const updatedLocalCartItems = localCartItems
+          .map(cartItem => {
+            const product = products.find(
+              (product: FullyProduct) => product._id === cartItem.product._id
+            )
+
+            return product
+              ? {
+                  ...cartItem,
+                  product,
+                }
+              : null
+          })
+          .filter(cartItem => cartItem) as FullyCartItem[]
+
+        console.log('updatedLocalCartItems: ', updatedLocalCartItems)
+
+        dispatch(setLocalCartItems(updatedLocalCartItems))
+        setIsLocalCartUpdated(true)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      }
+    }
+
+    if (!curUser?._id && !isLocalCartUpdated) {
+      getCorrespondingProducts()
+    }
+  }, [curUser?._id, dispatch, localCartItems, isLocalCartUpdated])
+
   // get cart length
   useEffect(() => {
     setCartlength(
-      curUser
+      curUser?._id
         ? cartItems.reduce((total, item) => total + item.quantity, 0)
-        : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
+        : localCartItems.reduce((total, item) => total + item.quantity, 0)
     )
-  }, [cartItems, cartLocalItems, curUser])
+  }, [cartItems, localCartItems, curUser?._id])
 
   // get user's cart
   useEffect(() => {
