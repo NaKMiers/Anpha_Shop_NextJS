@@ -2,7 +2,7 @@ import { IUser } from '@/models/UserModel'
 import Image from 'next/image'
 import React, { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
 import LoadingButton from './LoadingButton'
 import toast from 'react-hot-toast'
 import { FullyComment } from './Comment'
@@ -190,7 +190,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
                   : 'border-green-500 hover:bg-green-500 text-green-500'
               } hover:text-white common-transition`}
               onClick={() => hideComment(comment._id, comment.hide ? 'n' : 'y')}>
-              {comment.hide ? 'hiding' : 'showing'}
+              {comment.hide ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
             </button>
           )}
         </div>

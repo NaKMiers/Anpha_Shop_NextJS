@@ -1,7 +1,6 @@
 'use client'
 
 import Input from '@/components/Input'
-import Meta from '@/components/Meta'
 import OrderItem from '@/components/OrderItem'
 import Pagination from '@/components/Pagination'
 import { useAppDispatch } from '@/libs/hooks'
@@ -16,8 +15,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
-import { FaCalendar, FaCaretDown, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
-import { IoMdCode } from 'react-icons/io'
+import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 
 function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // hooks
@@ -178,7 +176,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
             <Input
               className='md:max-w-[450px]'
               id='search'
-              label='Search'
+              label='Tìm kiếm'
               disabled={false}
               register={register}
               errors={errors}
@@ -210,7 +208,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
           <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
             <Input
               id='from'
-              label='From'
+              label='Từ ngày'
               disabled={false}
               register={register}
               errors={errors}
@@ -221,7 +219,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
 
             <Input
               id='to'
-              label='To'
+              label='Đến ngày'
               disabled={false}
               register={register}
               errors={errors}
@@ -245,20 +243,20 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               options={[
                 {
                   value: 'createdAt|-1',
-                  label: 'Newest',
+                  label: 'Mới nhất',
                 },
                 {
                   value: 'createdAt|1',
-                  label: 'Oldest',
+                  label: 'Cũ nhất',
                 },
                 {
                   value: 'updatedAt|-1',
-                  label: 'Latest',
+                  label: 'Cập nhật mới nhất',
                   selected: true,
                 },
                 {
                   value: 'updatedAt|1',
-                  label: 'Earliest',
+                  label: 'Cập nhật cũ nhất',
                 },
               ]}
             />
@@ -270,7 +268,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
               title='Alt + Enter'
               onClick={handleSubmit(handleFilter)}>
-              Filter
+              Lọc
               <FaFilter size={14} className='ml-[6px] wiggle' />
             </button>
 
@@ -279,7 +277,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
               title='Alt + R'
               onClick={handleResetFilter}>
-              Reset
+              Đặt lại
               <BiReset size={22} className='ml-1 wiggle' />
             </button>
           </div>

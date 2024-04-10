@@ -98,7 +98,7 @@ function UserPage() {
 
       <div className='grid grid-cols-12 gap-21'>
         <div className='col-span-12 sm:col-span-5 lg:col-span-3 sm:border-r border-slate-400 p-2'>
-          <div className='relative aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden cursor-pointer p-3 group'>
+          <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden cursor-pointer p-3 group'>
             <Image
               className='rounded-full common-transition'
               src={user?.avatar || '/images/default-avatar.jpg'}

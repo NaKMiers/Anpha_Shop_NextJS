@@ -12,7 +12,7 @@ interface OrderItemProps {
 function OrderItem({ order, className = '' }: OrderItemProps) {
   return (
     <div className={`border rounded-medium px-21 py-4 ${className}`}>
-      <div className='flex flex-wrap items-center justify-between'>
+      <div className='flex flex-wrap items-center justify-between gap-x-3'>
         <div>
           <span className='font-semibold'>Mã hó đơn: </span>
           <span className='text-primary font-semibold'>{order.code}</span>
@@ -23,7 +23,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         </div>
       </div>
 
-      <div className='flex flex-wrap items-center justify-between'>
+      <div className='flex flex-wrap items-center justify-between gap-x-3'>
         <div>
           <span className='font-semibold'>Trạng thái: </span>
           <span
@@ -55,6 +55,19 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
           </span>
         </div>
       </div>
+
+      {order.voucherApplied && (
+        <div className='flex flex-wrap items-center justify-between gap-x-3'>
+          <div>
+            <span className='font-semibold'>Voucher: </span>
+            <span>{order.voucherApplied}</span>
+          </div>
+          <div>
+            <span className='font-semibold'>Giảm giá: </span>
+            <span>{formatPrice(order.discount)}</span>
+          </div>
+        </div>
+      )}
 
       {order.items.map(item => (
         <CartItem cartItem={item} localCartItem isCheckout className='mt-4' key={item.product._id} />

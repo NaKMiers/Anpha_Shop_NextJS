@@ -71,9 +71,12 @@ function AccountItem({
           {/* Type */}
           <p
             className='inline-flex mb-2 flex-wrap gap-2 items-center font-semibold text-[18px] mr-2 leading-5 font-body tracking-wide'
-            title='Type---'>
-            <span className='shadow-md text-xs text-dark bg-yellow-400 px-2 py-px select-none rounded-md font-body'>
-              Netflix
+            title={data.type?.title}>
+            <span
+              className={`shadow-md text-xs ${
+                data.type?.category.title ? 'bg-yellow-300 text-dark' : 'bg-slate-200 text-slate-400'
+              } px-2 py-px select-none rounded-md font-body`}>
+              {data.type?.category.title || 'empty'}
             </span>
             {data.type?.title}
           </p>

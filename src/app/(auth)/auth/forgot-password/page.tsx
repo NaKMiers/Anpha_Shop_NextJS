@@ -8,12 +8,14 @@ import toast from 'react-hot-toast'
 import { FaCircleNotch } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 
+const time = 60
+
 function ForgotPasswordPage() {
   // states
   const [isSent, setIsSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isCounting, setIsCounting] = useState(false)
-  const [countDown, setCountDown] = useState(3)
+  const [countDown, setCountDown] = useState(time)
 
   useEffect(() => {
     if (isSent) {
@@ -24,7 +26,7 @@ function ForgotPasswordPage() {
           clearInterval(interval)
           setIsCounting(false)
           setIsSent(false)
-          setCountDown(3)
+          setCountDown(time)
           return
         }
         setCountDown(prev => prev - 1)
@@ -78,6 +80,10 @@ function ForgotPasswordPage() {
         <h1 className='text-secondary text-[40px] font-semibold tracking-wide font-body mb-4'>
           Quên Mật Khẩu
         </h1>
+
+        <p className='mb-1 font-body tracking-wider'>
+          *Vui lòng nhập email để nhận mã khôi phục mật khẩu.
+        </p>
 
         {isSent && isCounting ? (
           <div className='flex items-center justify-between gap-3 mb-3'>

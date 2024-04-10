@@ -97,7 +97,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <Link
                 href='/user'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaUser size={18} className='wiggle' />
+                <FaUser size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
               </Link>
             </li>
@@ -105,7 +105,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <Link
                 href='/cart'
                 className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaCartShopping size={18} className='wiggle' />
+                <FaCartShopping size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                 {!!cartLength && (
                   <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
@@ -118,7 +118,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <Link
                 href='/user/order-history'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaHistory size={18} className='wiggle' />
+                <FaHistory size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
               </Link>
             </li>
@@ -126,7 +126,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <a
                 href='https://www.messenger.com/t/170660996137305'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaPhone size={18} className='wiggle' />
+                <FaPhone size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
               </a>
             </li>
@@ -135,9 +135,9 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 <Link
                   href='/admin'
                   className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                  <FaUserSecret size={18} className='wiggle' />
+                  <FaUserSecret size={18} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px] text-primary'>
-                    {curUser?.role}
+                    {curUser?.role.charAt(0).toUpperCase() + curUser?.role.slice(1)}
                   </span>
                 </Link>
               </li>
@@ -146,7 +146,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <button
                 className='flex items-center w-full gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
                 onClick={() => signOut()}>
-                <TbLogout size={18} className='wiggle' />
+                <TbLogout size={20} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
               </button>
             </li>
@@ -157,7 +157,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <Link
                 href='/cart'
                 className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaCartShopping size={18} className='wiggle' />
+                <FaCartShopping size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                 {!!cartLength && (
                   <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
@@ -170,7 +170,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <Link
                 href='/auth/login'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FiLogIn size={18} className='wiggle' />
+                <FiLogIn size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng nhập</span>
               </Link>
             </li>
@@ -178,7 +178,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <Link
                 href='/auth/register'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaUserPlus size={18} className='wiggle' />
+                <FaUserPlus size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng ký</span>
               </Link>
             </li>

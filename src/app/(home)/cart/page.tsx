@@ -308,7 +308,7 @@ function CartPage() {
                     ? dispatch(setSelectedItems([]))
                     : dispatch(setSelectedItems(items))
                 }
-                className='size-5 cursor-pointer'
+                className='size-5 accent-primary   cursor-pointer'
               />
             </div>
 
@@ -369,41 +369,41 @@ function CartPage() {
               )
             </p>
           </div>
-          {isShowVoucher && (
-            <div className='flex items-center gap-1 mb-2'>
-              <Input
-                id='code'
-                label='Voucher'
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-                type='text'
-                icon={RiCoupon2Fill}
-              />
-              <button
-                className={`rounded-lg border py-2 px-3 text-nowrap h-[46px] flex-shrink-0 hover:bg-primary common-transition hover:text-light ${
-                  isLoading
-                    ? 'border-slate-200 bg-slate-200 pointer-events-none'
-                    : 'border-primary text-primary '
-                }`}
-                onClick={handleSubmit(handleApplyVoucher)}
-                disabled={isLoading}>
-                {isLoading ? (
-                  <RiDonutChartFill size={26} className='animate-spin text-slate-300' />
-                ) : (
-                  'Áp dụng'
-                )}
-              </button>
-            </div>
-          )}
+          <div
+            className={`flex items-center gap-1 mb-2 overflow-hidden common-transition ${
+              isShowVoucher ? 'max-h-[200px]' : 'max-h-0'
+            }`}>
+            <Input
+              id='code'
+              label='Voucher'
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+              required
+              type='text'
+              icon={RiCoupon2Fill}
+              className='w-full'
+            />
+            <button
+              className={`rounded-lg border py-2 px-2 text-[14px] text-nowrap h-[46px] flex-shrink-0 hover:bg-primary common-transition hover:text-light ${
+                isLoading
+                  ? 'border-slate-200 bg-slate-200 pointer-events-none'
+                  : 'border-primary text-primary '
+              }`}
+              onClick={handleSubmit(handleApplyVoucher)}
+              disabled={isLoading}>
+              {isLoading ? (
+                <RiDonutChartFill size={26} className='animate-spin text-slate-300' />
+              ) : (
+                'Áp dụng'
+              )}
+            </button>
+          </div>
 
           {voucherMessage && (
-            <p className={`${voucher ? 'text-green-500' : 'text-rose-500'} -mt-3 mb-2`}>
-              {voucherMessage}
-            </p>
+            <p className={`${voucher ? 'text-green-500' : 'text-rose-500'} mb-2`}>{voucherMessage}</p>
           )}
-          <div className='flex items-center justify-between mb-2'>
+          <div className='flex items-center justify-between mb-2 gap-3'>
             <span>Tổng tiền:</span>
             <span className='font-semibold'>{formatPrice(subTotal)}</span>
           </div>
@@ -422,7 +422,7 @@ function CartPage() {
           <hr />
           <div className='pt-2' />
 
-          <div className='flex items-end justify-between mb-4'>
+          <div className='flex items-end justify-between mb-4 gap-x-3'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
             <span className='font-semibold text-3xl text-green-500'>{formatPrice(total)}</span>
           </div>

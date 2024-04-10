@@ -10,9 +10,10 @@ interface SliderProps {
   className?: string
   hideControls?: boolean
   thumbs?: string[]
+  mobile?: boolean
 }
 
-function Slider({ time, hideControls, children, thumbs = [], className = '' }: SliderProps) {
+function Slider({ time, hideControls, children, thumbs = [], mobile, className = '' }: SliderProps) {
   // states
   const [slide, setSlide] = useState(1)
   const [isSliding, setIsSliding] = useState(false)
@@ -167,16 +168,27 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
 
       {/* Indicators */}
       {thumbs.length >= 2 && (
-        <div className='absolute z-10 w-full px-21 flex justify-center items-center gap-5 left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition'>
+        <div
+          className={`absolute z-10 w-full px-21 ${
+            mobile ? 'gap-6' : 'gap-5'
+          } flex justify-center items-center left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition`}>
           {thumbs.map((src, index) => {
             return (
               <button
-                className={`aspect-video rounded-lg shadow-md border-2 border-white common-transition hover:opacity-100 hover:scale-105 hover:-translate-y-1 overflow-hidden ${
+                className={`${
+                  mobile ? 'aspect-[9/16]' : 'aspect-video'
+                } rounded-lg shadow-md border-2 border-white common-transition hover:opacity-100 hover:scale-105 hover:-translate-y-1 overflow-hidden ${
                   slide === index + 1 ? 'opacity-100' : 'opacity-60'
                 }`}
                 onClick={() => setSlide(index + 1)}
                 key={src}>
-                <Image className='' src={src} width={70} height={70} alt='slide-thumb' />
+                <Image
+                  className='w-full h-full object-cover'
+                  src={src}
+                  width={mobile ? 40 : 70}
+                  height={mobile ? 70 : 40}
+                  alt='slide-thumb'
+                />
               </button>
             )
           })}

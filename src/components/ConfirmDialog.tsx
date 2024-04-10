@@ -81,10 +81,12 @@ function ConfirmDialog({
   return (
     <div
       className='fixed z-40 top-0 left-0 h-screen text-dark w-screen hidden items-center justify-center p-21 bg-black bg-opacity-10 opacity-0 transition-all duration-300'
-      ref={modalRef}>
+      ref={modalRef}
+      onClick={() => setOpen(false)}>
       <div
         className={`rounded-medium shadow-medium-light bg-white p-21 max-w-[500px] w-full max-h-[500px] opacity-0 transition-all duration-300 translate-y-8 ${className}`}
-        ref={modalBodyRef}>
+        ref={modalBodyRef}
+        onClick={e => e.stopPropagation()}>
         <h2 className='text-2xl font-semibold tracking-wide'>{title}</h2>
         <hr className='my-2' />
 

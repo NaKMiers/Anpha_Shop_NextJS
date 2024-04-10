@@ -60,7 +60,7 @@ function ResgiterPage() {
         setError('password', {
           type: 'manual',
           message:
-            'Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hóa, 1 chữ thường, 1 chữ số',
+            'Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số',
         })
         isValid = false
       }

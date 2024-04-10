@@ -36,7 +36,7 @@ function Footer() {
       <div className='max-w-1200 mx-auto bg-dark-100 text-light shadow-medium rounded-medium'>
         <div className='p-21'>
           {/* Top */}
-          <div className='flex flex-col px-4 -mx-4 sm:flex-row items-center justify-between gap-2 group'>
+          <div className='flex flex-col px-4 -mx-4 sm:flex-row items-center justify-between gap-3 group'>
             <Link href='/' className='flex items-center'>
               <div className='rounded-full spin'>
                 <Image
@@ -53,7 +53,7 @@ function Footer() {
             </Link>
 
             {/* Social Contacts */}
-            <div className='flex gap-3'>
+            <div className='flex gap-5 sm:gap-3'>
               <a href='https://zalo.me/0899320427' target='_blank' rel='noreferrer' className='wiggle-1'>
                 <Image src='/images/zalo.jpg' width={30} height={30} alt='zalo' />
               </a>

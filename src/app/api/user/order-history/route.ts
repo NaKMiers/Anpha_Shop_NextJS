@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
+import '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
@@ -109,6 +110,7 @@ export async function GET(req: NextRequest) {
       userId,
       ...filter,
     })
+      .populate('voucherApplied', 'code')
       .sort(sort)
       .skip(skip)
       .limit(itemPerPage)

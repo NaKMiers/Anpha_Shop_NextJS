@@ -181,12 +181,12 @@ function CartItem({
         // continue input
         clearTimeout(inputRef.current.timeOut)
 
-        // stop input after 500ms if no input
+        // stop input after 1s if no input
         inputRef.current.timeOut = setTimeout(() => {
           inputRef.current.isInputing = false
-        }, 500)
+        }, 1000)
 
-        // update quantity after 500ms if no input
+        // update quantity after 1s if no input
         setTimeout(() => {
           if (!inputRef.current.isInputing) {
             if (value <= 1) {
@@ -210,7 +210,7 @@ function CartItem({
               updateQuantityGlobal(value)
             }
           }
-        }, 510)
+        }, 1010)
       }
     },
     [cartItem._id, cartItem.product.stock, curUser, dispatch, quantity, updateQuantityGlobal]
@@ -263,7 +263,7 @@ function CartItem({
       {!localCartItem && (
         <input
           type='checkbox'
-          className='size-5 z-10 cursor-pointer absolute top-21 right-21'
+          className='size-5 z-10 cursor-pointer absolute top-21 right-21 accent-primary'
           checked={!!selectedCartItems.find(cI => cI._id === cartItem._id)}
           onChange={() =>
             dispatch(

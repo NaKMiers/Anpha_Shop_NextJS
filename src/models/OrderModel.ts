@@ -22,7 +22,8 @@ const OrderSchema = new Schema(
       min: 0,
     },
     voucherApplied: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'voucher',
     },
     discount: {
       type: Number,
@@ -74,6 +75,7 @@ export interface IOrder {
   email: string
   total: number
   voucherApplied?: string
+  discount: number
   items: any[]
   status: 'pending' | 'done' | 'cancel'
   paymentMethod: string

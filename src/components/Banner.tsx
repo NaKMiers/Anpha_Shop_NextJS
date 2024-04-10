@@ -5,15 +5,13 @@ import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BiSolidCategoryAlt } from 'react-icons/bi'
+import { FaTag } from 'react-icons/fa'
 import { FaBoltLightning, FaChevronUp } from 'react-icons/fa6'
-import CarouselProduct from './CarouselProduct'
+import Carousel from './Carousel'
 import Header from './Header'
 import Slider from './Slider'
-import Carousel from './Carousel'
-import { FaTag } from 'react-icons/fa'
-import { MdCategory } from 'react-icons/md'
-import { BiSolidCategoryAlt } from 'react-icons/bi'
 
 interface BannerProps {
   categories: ICategory[]
@@ -22,7 +20,27 @@ interface BannerProps {
 }
 
 function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+  const [width, setWidth] = useState<number>(0)
+
+  console.log('width: ', width)
+
+  // set width
+  useEffect(() => {
+    // handle resize
+    const handleResize = () => {
+      setWidth(window.innerWidth)
+    }
+
+    // initial width
+    setWidth(window.innerWidth)
+
+    // add event listener
+    window.addEventListener('resize', handleResize)
+
+    // remove event listener
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <section className='h-screen py-21'>
@@ -60,13 +78,26 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             {/* Slider */}
             <Slider
               time={5000}
-              thumbs={[
-                '/images/grammarly-banner.jpg',
-                '/images/capcut-banner.jpg',
-                '/images/netflix-banner.jpg',
-              ]}>
+              mobile={width < 576 && width > 0}
+              thumbs={
+                width < 576 && width > 0
+                  ? [
+                      '/images/netflix-banner-mobile.jpg',
+                      '/images/grammarly-banner-mobile.jpg',
+                      '/images/capcut-banner-mobile.jpg',
+                    ]
+                  : [
+                      '/images/netflix-banner.jpg',
+                      '/images/grammarly-banner.jpg',
+                      '/images/capcut-banner.jpg',
+                    ]
+              }>
               <Image
-                src='/images/grammarly-banner.jpg'
+                src={
+                  width < 576 && width > 0
+                    ? '/images/netflix-banner-mobile.jpg'
+                    : '/images/netflix-banner.jpg'
+                }
                 alt='netflix'
                 width={1200}
                 height={768}
@@ -78,7 +109,11 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 }}
               />
               <Image
-                src='/images/capcut-banner.jpg'
+                src={
+                  width < 576 && width > 0
+                    ? '/images/grammarly-banner-mobile.jpg'
+                    : '/images/grammarly-banner.jpg'
+                }
                 alt='netflix'
                 width={1200}
                 height={768}
@@ -90,7 +125,11 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 }}
               />
               <Image
-                src='/images/netflix-banner.jpg'
+                src={
+                  width < 576 && width > 0
+                    ? '/images/capcut-banner-mobile.jpg'
+                    : '/images/capcut-banner.jpg'
+                }
                 alt='netflix'
                 width={1200}
                 height={768}
