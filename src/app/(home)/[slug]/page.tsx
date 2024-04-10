@@ -342,7 +342,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         <div className='mb-10'>
           <h3 className='w-full text-dark text-[28px] tracking-wide'>Tại sao chọn tôi</h3>
 
-          <ChooseMe />
+          <ChooseMe className='mx-[-16px]' />
         </div>
       </section>
 

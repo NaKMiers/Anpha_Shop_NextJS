@@ -36,7 +36,7 @@ function CartItem({
   className = '',
   isOrderDetailProduct,
 }: CartItemProps) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const { data: session } = useSession()
   const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
@@ -227,7 +227,7 @@ function CartItem({
         <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
           {cartItem.product.images.map(src => (
             <Image
-              className='flex-shrink w-full snap-start'
+              className='flex-shrink w-full snap-start hover:scale-105 duration-300 transition-all'
               src={src}
               width={150}
               height={150}
@@ -346,7 +346,7 @@ function CartItem({
                 ) : (
                   <FaMinus
                     size={16}
-                    className={`group-hover:text-white group-hover:scale-110 common-transition ${
+                    className={`group-hover:text-white wiggle ${
                       quantity <= 1 || isLoading ? 'text-slate-300' : 'text-secondary'
                     }`}
                   />
@@ -376,7 +376,7 @@ function CartItem({
                 ) : (
                   <FaPlus
                     size={16}
-                    className={`group-hover:text-white group-hover:scale-110 common-transition ${
+                    className={`group-hover:text-white wiggle ${
                       quantity >= cartItem.product?.stock! || isLoading
                         ? 'text-slate-300'
                         : 'text-secondary'
@@ -398,7 +398,7 @@ function CartItem({
 
             <FaTrashAlt
               size={21}
-              className='text-secondary cursor-pointer hover:scale-110 common-transition'
+              className='text-secondary cursor-pointer hover:scale-110 common-transition wiggle'
               onClick={() => setIsOpenConfirmModal(true)}
             />
           </div>

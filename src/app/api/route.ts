@@ -62,6 +62,7 @@ export async function GET() {
     // shuffle products to get random
     const shuffledProducts = shuffleArray([...products.filter(product => product.stock > 0)])
     const carouselProducts = shuffledProducts.slice(0, 7)
+
     // get best seller
     const bestSellerProducts = products.sort((a, b) => b.sold - a.sold).slice(0, 10)
 

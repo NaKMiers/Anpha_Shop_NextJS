@@ -15,7 +15,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
       <div className='flex flex-wrap items-center justify-between'>
         <div>
           <span className='font-semibold'>Mã hó đơn: </span>
-          <span className='text-primary'>{order.code}</span>
+          <span className='text-primary font-semibold'>{order.code}</span>
         </div>
         <div>
           <span className='font-semibold'>Ngày đặt hàng: </span>
@@ -26,7 +26,16 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
       <div className='flex flex-wrap items-center justify-between'>
         <div>
           <span className='font-semibold'>Trạng thái: </span>
-          <span className='text-green-500'>
+          <span
+            className={
+              order.status === 'pending'
+                ? 'text-yellow-500'
+                : order.status === 'cancel'
+                ? 'text-slate-400'
+                : order.status === 'done'
+                ? 'text-green-500'
+                : ''
+            }>
             {order.status === 'pending'
               ? 'Đang xử lí'
               : order.status === 'cancel'
@@ -39,7 +48,9 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         <div>
           <span className='font-semibold'>Phương thức thanh toán: </span>
           <span
-            className={`font-semibold text-[${order.paymentMethod === 'momo' ? '#a1396c' : '#399162'}]`}>
+            className={`font-semibold ${
+              order.paymentMethod === 'momo' ? 'text-[#a1396c]' : 'text-green-600'
+            }`}>
             {order.paymentMethod.toUpperCase()}
           </span>
         </div>

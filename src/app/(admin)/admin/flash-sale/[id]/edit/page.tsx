@@ -19,7 +19,7 @@ import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
 function AddFlashSalePage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { id } = useParams<{ id: string }>()

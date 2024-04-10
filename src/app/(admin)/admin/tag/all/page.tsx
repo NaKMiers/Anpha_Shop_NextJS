@@ -4,6 +4,7 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import TagItem from '@/components/admin/TagItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -14,8 +15,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { BiReset } from 'react-icons/bi'
-import { FaFilter, FaSort } from 'react-icons/fa'
+import { FaSort } from 'react-icons/fa'
 
 export type EditingValues = {
   _id: string
@@ -221,18 +221,6 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
-
-      // Alt + F (Filter)
-      if (e.altKey && e.key === 'f') {
-        e.preventDefault()
-        handleSubmit(handleFilter)()
-      }
-
-      // Alt + R (Reset)
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault()
-        handleResetFilter()
-      }
     }
 
     // Add the event listener
@@ -249,170 +237,147 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          {/* Product Quantity */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='productQuantity'>
-              <span className='font-bold'>Product Quantity: </span>
-              <span>{productQuantity}</span> - <span>{maxPQ}</span>
-            </label>
-            <input
-              id='productQuantity'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minPQ || 0}
-              max={maxPQ || 0}
-              value={productQuantity}
-              onChange={e => setProductQuantity(+e.target.value)}
-            />
-          </div>
+      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+        {/* Product Quantity */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='productQuantity'>
+            <span className='font-bold'>Product Quantity: </span>
+            <span>{productQuantity}</span> - <span>{maxPQ}</span>
+          </label>
+          <input
+            id='productQuantity'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minPQ || 0}
+            max={maxPQ || 0}
+            value={productQuantity}
+            onChange={e => setProductQuantity(+e.target.value)}
+          />
+        </div>
 
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
-            {/* Sort */}
-            <Input
-              id='sort'
-              label='Sort'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: 'createdAt|-1',
-                  label: 'Newest',
-                },
-                {
-                  value: 'createdAt|1',
-                  label: 'Oldest',
-                },
-                {
-                  value: 'updatedAt|-1',
-                  label: 'Latest',
-                  selected: true,
-                },
-                {
-                  value: 'updatedAt|1',
-                  label: 'Earliest',
-                },
-              ]}
-            />
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
+          {/* Sort */}
+          <Input
+            id='sort'
+            label='Sort'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: 'createdAt|-1',
+                label: 'Newest',
+              },
+              {
+                value: 'createdAt|1',
+                label: 'Oldest',
+              },
+              {
+                value: 'updatedAt|-1',
+                label: 'Latest',
+                selected: true,
+              },
+              {
+                value: 'updatedAt|1',
+                label: 'Earliest',
+              },
+            ]}
+          />
 
-            {/* Featured */}
-            <Input
-              id='isFeatured'
-              label='Featured'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'true',
-                  label: 'On',
-                },
-                {
-                  value: 'false',
-                  label: 'Off',
-                },
-              ]}
-            />
-          </div>
+          {/* Featured */}
+          <Input
+            id='isFeatured'
+            label='Featured'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'true',
+                label: 'On',
+              },
+              {
+                value: 'false',
+                label: 'Off',
+              },
+            ]}
+          />
+        </div>
 
-          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
-            {/* Filter Button */}
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
-              Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
-            </button>
+        {/* Action Buttons */}
+        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
+            {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
 
-            {/* Reset Button */}
-            <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
-              onClick={handleResetFilter}>
-              Reset
-              <BiReset size={24} className='ml-1 common-transition' />
-            </button>
-          </div>
-
-          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
-              onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
-              {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
-
-            {!!editingTags.filter(id => selectedTags.includes(id)).length && (
-              <>
-                {/* Save Many Button */}
-                <button
-                  className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
-                  onClick={() =>
-                    handleSaveEditingTags(
-                      editingValues.filter(value => selectedTags.includes(value._id))
-                    )
-                  }>
-                  Save All
-                </button>
-                {/* Cancel Many Button */}
-                <button
-                  className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
-                  onClick={() => {
-                    // cancel editing values are selected
-                    setEditingTags(editingTags.filter(id => !selectedTags.includes(id)))
-                    setEditingValues(editingValues.filter(value => !selectedTags.includes(value._id)))
-                  }}>
-                  Cancel
-                </button>
-              </>
-            )}
-
-            {/* Mark Many Button */}
-            {!!selectedTags.length &&
-              selectedTags.some(id => !tags.find(tag => tag._id === id)?.isFeatured) && (
-                <button
-                  className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
-                  onClick={() => handleFeatureTags(selectedTags, true)}>
-                  Mark
-                </button>
-              )}
-
-            {/* Unmark Many Button */}
-            {!!selectedTags.length &&
-              selectedTags.some(id => tags.find(tag => tag._id === id)?.isFeatured) && (
-                <button
-                  className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                  onClick={() => handleFeatureTags(selectedTags, false)}>
-                  Unmark
-                </button>
-              )}
-
-            {/* Delete Many Button */}
-            {!!selectedTags.length && (
+          {!!editingTags.filter(id => selectedTags.includes(id)).length && (
+            <>
+              {/* Save Many Button */}
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => setIsOpenConfirmModal(true)}>
-                Delete
+                className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
+                onClick={() =>
+                  handleSaveEditingTags(editingValues.filter(value => selectedTags.includes(value._id)))
+                }>
+                Save All
+              </button>
+              {/* Cancel Many Button */}
+              <button
+                className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
+                onClick={() => {
+                  // cancel editing values are selected
+                  setEditingTags(editingTags.filter(id => !selectedTags.includes(id)))
+                  setEditingValues(editingValues.filter(value => !selectedTags.includes(value._id)))
+                }}>
+                Cancel
+              </button>
+            </>
+          )}
+
+          {/* Mark Many Button */}
+          {!!selectedTags.length &&
+            selectedTags.some(id => !tags.find(tag => tag._id === id)?.isFeatured) && (
+              <button
+                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+                onClick={() => handleFeatureTags(selectedTags, true)}>
+                Mark
               </button>
             )}
-          </div>
+
+          {/* Unmark Many Button */}
+          {!!selectedTags.length &&
+            selectedTags.some(id => tags.find(tag => tag._id === id)?.isFeatured) && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => handleFeatureTags(selectedTags, false)}>
+                Unmark
+              </button>
+            )}
+
+          {/* Delete Many Button */}
+          {!!selectedTags.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => setIsOpenConfirmModal(true)}>
+              Delete
+            </button>
+          )}
         </div>
-      </div>
+      </AdminMeta>
 
       {/* Confirm Dialog */}
       <ConfirmDialog

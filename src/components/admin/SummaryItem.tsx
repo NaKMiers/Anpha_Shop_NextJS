@@ -38,7 +38,7 @@ function SummaryItem({
       <div className='w-full'>
         <p>
           <span className='font-semibold'>Email: </span>
-          <span>hothingoctram03@gmail.com</span>
+          <span>{data.email}</span>
         </p>
 
         <div className='flex items-center font-semibold' title='netflix'>
@@ -48,7 +48,7 @@ function SummaryItem({
               : data.username || 'No name'}
           </span>
           <span
-            className='px-[6px] py-[2px] bg-sky-200 border border-dark rounded-full shadow-lg text-sm hover:bg-sky-300 common-transition'
+            className='px-[6px] py-[2px] bg-sky-200 border border-dark rounded-lg shadow-lg text-sm hover:bg-sky-300 common-transition'
             title='Commission'>
             {data.commission?.type === 'percentage'
               ? data.commission.value

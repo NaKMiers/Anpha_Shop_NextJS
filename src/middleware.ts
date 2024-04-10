@@ -10,14 +10,7 @@ const requireAuth = async (req: NextRequest, token: JWT | null) => {
     return NextResponse.redirect(new URL('/auth/login', req.url))
   }
 
-  const requestHeaders = new Headers(req.headers)
-  requestHeaders.set('x-url', new URL(req.url).pathname.toString())
-
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  })
+  return NextResponse.next()
 }
 
 // Require UnAuth

@@ -25,10 +25,6 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     // connect to database
     await connectDatabase()
 
-    // // get user id to check hidden comments
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-    const userId = token?._id
-
     // get product from database
     const product: FullyProduct | null = await ProductModel.findOne({
       slug: encodeURIComponent(slug),
@@ -56,8 +52,6 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     // get comment of the current product
     let comments = await CommentModel.find({
       productId: product._id,
-      // $or: [...orCondition.filter(c => c)],
-      $or: [{ hide: false }, { userId }],
     })
       .populate('userId')
       .populate({
@@ -65,21 +59,22 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
         populate: {
           path: 'userId',
         },
+        options: { sort: { likes: -1, createdAt: -1 }, limit: 6 },
       })
       .sort({ likes: -1, createdAt: -1 })
-      .limit(6)
+      .limit(12)
       .lean()
 
     comments = comments.map(comment => ({
       ...comment,
+      userId: comment.userId._id,
       user: comment.userId,
       replied: comment.replied.map((reply: any) => ({
         ...reply,
+        userId: reply.userId._id,
         user: reply.userId,
       })),
     }))
-
-    console.log('comments', comments)
 
     return NextResponse.json({ product, relatedProducts, comments }, { status: 200 })
   } catch (err: any) {

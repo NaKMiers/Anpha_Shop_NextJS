@@ -10,7 +10,7 @@ import { FaEyeSlash } from 'react-icons/fa'
 import { FaCircleNotch } from 'react-icons/fa6'
 
 function ResetPasswordPage() {
-  // hook
+  // hooks
   const router = useRouter()
 
   // states

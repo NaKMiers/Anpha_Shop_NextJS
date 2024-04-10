@@ -8,7 +8,7 @@ export const redPathnameList = ['/auth']
 export const adminLinks = [
   {
     title: 'Order',
-    icon: RiBillFill,
+    Icon: RiBillFill,
     links: [
       {
         title: 'All Orders',
@@ -18,7 +18,7 @@ export const adminLinks = [
   },
   {
     title: 'Account',
-    icon: FaGift,
+    Icon: FaGift,
     links: [
       {
         title: 'All Accounts',
@@ -32,7 +32,7 @@ export const adminLinks = [
   },
   {
     title: 'User',
-    icon: FaUser,
+    Icon: FaUser,
     links: [
       {
         title: 'All Users',
@@ -42,7 +42,7 @@ export const adminLinks = [
   },
   {
     title: 'Summary',
-    icon: FaListCheck,
+    Icon: FaListCheck,
     links: [
       {
         title: 'All Summaries',
@@ -52,7 +52,7 @@ export const adminLinks = [
   },
   {
     title: 'Product',
-    icon: FaCubes,
+    Icon: FaCubes,
     links: [
       {
         title: 'All Products',
@@ -66,7 +66,7 @@ export const adminLinks = [
   },
   {
     title: 'Tag',
-    icon: FaTags,
+    Icon: FaTags,
     links: [
       {
         title: 'All Tags',
@@ -80,7 +80,7 @@ export const adminLinks = [
   },
   {
     title: 'Category',
-    icon: MdCategory,
+    Icon: MdCategory,
     links: [
       {
         title: 'All Categories',
@@ -94,7 +94,7 @@ export const adminLinks = [
   },
   {
     title: 'Voucher',
-    icon: FaTicketAlt,
+    Icon: FaTicketAlt,
     links: [
       {
         title: 'All Vouchers',
@@ -108,7 +108,7 @@ export const adminLinks = [
   },
   {
     title: 'Flash Sale',
-    icon: FaBoltLightning,
+    Icon: FaBoltLightning,
     links: [
       {
         title: 'All Flash Sales',

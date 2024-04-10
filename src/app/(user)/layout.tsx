@@ -1,16 +1,13 @@
 import ContactFloating from '@/components/ContactFloating'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
+import PageLoading from '@/components/PageLoading'
 import StoreProvider from '@/libs/StoreProvider'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
-import { headers } from 'next/headers'
-import Link from 'next/link'
 import { Toaster } from 'react-hot-toast'
-import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
-import { HiLightningBolt } from 'react-icons/hi'
 import '../globals.scss'
-import PageLoading from '@/components/PageLoading'
+import UserMenu from '@/components/UserMenu'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -33,10 +30,6 @@ export default async function UserLayout({
 }>) {
   const session = await getServerSession()
 
-  // get pathname
-  const headersList = headers()
-  const pathname = headersList.get('x-url') || ''
-
   return (
     <html lang='vi'>
       <body className='text-dark' suppressHydrationWarning={true}>
@@ -57,56 +50,7 @@ export default async function UserLayout({
           <main className='px-21'>
             <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
               {/* Sidebar */}
-              <ul className='h-full flex flex-row flex-shrink-0 justify-evenly lg:flex-col w-full lg:w-1/4 md:min-w-[265px] p-21 bg-white rounded-medium shadow-medium'>
-                <li>
-                  <Link
-                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
-                      pathname === '/user' ? 'bg-primary rounded-lg text-light' : ''
-                    }`}
-                    href='/user'>
-                    <FaUser size={21} className='commont-transition' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
-                      Thông tin tài khoản
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
-                      pathname === '/user/order-history' ? 'bg-primary rounded-lg text-light' : ''
-                    }`}
-                    href='/user/order-history'>
-                    <FaHistory size={21} className='commont-transition' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
-                      Lịch sử mua hàng
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
-                      pathname === '/user/security' ? 'bg-primary rounded-lg text-light' : ''
-                    }`}
-                    href='/user/security'>
-                    <FaUserLock size={21} className='commont-transition' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
-                      Mật khẩu - Bảo mật
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={`flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
-                      pathname === '/recharge' ? 'bg-primary rounded-lg text-light' : ''
-                    }`}
-                    href='/recharge'>
-                    <HiLightningBolt size={21} className='commont-transition' />
-                    <span className='hidden md:block font-body text-[18px] font-semibold commont-transition'>
-                      Nạp tiền vào tài khoản
-                    </span>
-                  </Link>
-                </li>
-              </ul>
+              <UserMenu />
 
               {/* Content */}
               <div className='w-full bg-white rounded-medium shadow-medium p-8'>{children}</div>

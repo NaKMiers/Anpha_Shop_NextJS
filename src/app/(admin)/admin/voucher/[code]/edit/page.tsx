@@ -19,7 +19,7 @@ import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine, RiCheckboxMultipleBlankLine } from 'react-icons/ri'
 
 function EditVoucherPage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { code } = useParams<{ code: string }>()

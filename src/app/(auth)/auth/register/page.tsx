@@ -13,7 +13,7 @@ import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 
 function ResgiterPage() {
-  // hook
+  // hooks
   const router = useRouter()
 
   // states
@@ -210,23 +210,11 @@ function ResgiterPage() {
           <button
             className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'
             onClick={() => signIn('google', { callbackUrl: '/' })}>
-            <Image
-              className='group-hover:scale-110 common-transition'
-              src='/images/google.jpg'
-              height={25}
-              width={25}
-              alt='google'
-            />
+            <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
           </button>
 
           <button className='p-2 rounded-full border-2 border-sky-300 group hover:bg-sky-300 common-transition'>
-            <Image
-              className='group-hover:scale-110 common-transition'
-              src='/images/facebook.jpg'
-              height={25}
-              width={25}
-              alt='facebook'
-            />
+            <Image className='wiggle' src='/images/facebook.jpg' height={25} width={25} alt='facebook' />
           </button>
         </div>
       </div>

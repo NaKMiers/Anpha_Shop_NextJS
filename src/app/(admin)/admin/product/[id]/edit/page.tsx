@@ -20,7 +20,7 @@ import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
 function AddProductPage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { id } = useParams<{ id: string }>()

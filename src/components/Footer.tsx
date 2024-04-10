@@ -36,15 +36,17 @@ function Footer() {
       <div className='max-w-1200 mx-auto bg-dark-100 text-light shadow-medium rounded-medium'>
         <div className='p-21'>
           {/* Top */}
-          <div className='flex flex-col sm:flex-row items-center justify-between gap-2 group overflow-scroll no-scrollbar'>
+          <div className='flex flex-col px-4 -mx-4 sm:flex-row items-center justify-between gap-2 group'>
             <Link href='/' className='flex items-center'>
-              <Image
-                className='group-hover:shadow-medium-light common-transition rounded-full'
-                src='/images/logo.jpg'
-                width={40}
-                height={40}
-                alt='logo'
-              />
+              <div className='rounded-full spin'>
+                <Image
+                  className='aspect-square rounded-full'
+                  src='/images/logo.jpg'
+                  width={40}
+                  height={40}
+                  alt='logo'
+                />
+              </div>
               <span className='text-2xl font-bold group-hover:tracking-wide transition-all duration-300'>
                 .AnphaShop
               </span>
@@ -52,34 +54,23 @@ function Footer() {
 
             {/* Social Contacts */}
             <div className='flex gap-3'>
-              <a
-                href='https://zalo.me/0899320427'
-                target='_blank'
-                rel='noreferrer'
-                className='hover:scale-110 common-transition hover:shadow-medium-light'>
+              <a href='https://zalo.me/0899320427' target='_blank' rel='noreferrer' className='wiggle-1'>
                 <Image src='/images/zalo.jpg' width={30} height={30} alt='zalo' />
               </a>
               <a
                 href='https://www.messenger.com/t/170660996137305'
                 target='_blank'
                 rel='noreferrer'
-                className='hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
+                className='wiggle-1'>
                 <Image src='/images/messenger.jpg' width={30} height={30} alt='messenger' />
               </a>
               <a
                 href='mailto:anpha.pohs@gmail.com'
                 target='_blank'
                 rel='noreferrer'
-                className='hover:scale-110 common-transition hover:shadow-medium-light rounded-full'>
+                className='wiggle-1'>
                 <Image src='/images/gmail.jpg' width={30} height={30} alt='gmail' />
               </a>
-              {/* <a
-                href='https://www.instagram.com/anpha.shop'
-                target='_blank'
-                rel='noreferrer'
-                className='hover:scale-110 common-transition hover:shadow-medium-light'>
-                <Image src='/images/instagram.jpg' width={30} height={30} alt='zalo' />
-              </a> */}
             </div>
           </div>
 

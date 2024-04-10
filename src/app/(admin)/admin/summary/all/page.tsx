@@ -3,6 +3,7 @@
 import { UserWithVouchers } from '@/app/api/admin/summary/all/route'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import SummaryItem from '@/components/admin/SummaryItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -12,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
 
   // states
@@ -112,33 +113,35 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
-              title='Alt + A'
-              onClick={() =>
-                setSelectedSummaries(
-                  selectedSummaries.length > 0 ? [] : summaries.map(summary => summary._id)
-                )
-              }>
-              {selectedSummaries.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
+      <AdminMeta handleFilter={() => {}} handleResetFilter={() => {}}>
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'></div>
 
-            {/* Send Summaries Button */}
-            {!!selectedSummaries.length && (
-              <button
-                className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
-                title='Alt + Delete'
-                onClick={() => handleSendSummaries(selectedSummaries)}>
-                Sent
-              </button>
-            )}
-          </div>
+        {/* Action Buttons */}
+        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            title='Alt + A'
+            onClick={() =>
+              setSelectedSummaries(
+                selectedSummaries.length > 0 ? [] : summaries.map(summary => summary._id)
+              )
+            }>
+            {selectedSummaries.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
+
+          {/* Send Summaries Button */}
+          {!!selectedSummaries.length && (
+            <button
+              className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
+              title='Alt + Delete'
+              onClick={() => handleSendSummaries(selectedSummaries)}>
+              Sent
+            </button>
+          )}
         </div>
-      </div>
+      </AdminMeta>
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>

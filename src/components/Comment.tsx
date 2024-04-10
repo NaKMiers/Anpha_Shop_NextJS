@@ -23,7 +23,7 @@ interface CommentProps {
 }
 
 function Comment({ comments, productId, className = '' }: CommentProps) {
-  // hook
+  // hooks
   const { data: session } = useSession()
   const curUser: any = session?.user
 
@@ -31,12 +31,15 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
   const [cmts, setCmts] = useState<FullyComment[]>(comments || [])
   const [isLoading, setIsLoading] = useState(false)
 
+  console.log(cmts)
+
   // Form
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       comment: '',
@@ -46,6 +49,10 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
   // handle send comment
   const sendComment: SubmitHandler<FieldValues> = useCallback(
     async data => {
+      // check login
+      if (!curUser) return toast.error('Bạn cần đăng nhập để thực hiện chức năng này')
+
+      // check if comment is valid
       if (productId) {
         setIsLoading(true)
 
@@ -58,6 +65,9 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
 
           // add new comment to list
           setCmts(prev => [newComment, ...prev])
+
+          // reset form
+          reset()
         } catch (err: any) {
           toast.error(err.message)
           console.log(err)
@@ -67,11 +77,12 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
         }
       }
     },
-    [productId, curUser]
+    [productId, curUser, reset]
   )
 
   return (
     <div>
+      {/* Input */}
       <div className={`flex items-center justify-between gap-3 ${className}`}>
         <Image
           className='rounded-full shadow-lg'
@@ -114,10 +125,13 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
         <span className='text-sm text-rose-400 ml-[60px]'>{errors.comment?.message?.toString()}</span>
       )}
 
-      <div className='flex flex-col mt-5 gap-3'>
-        {cmts.map(comment => (
-          <CommentItem comment={comment} setCmts={setCmts} key={comment._id} />
-        ))}
+      {/* Comment List */}
+      <div className='flex flex-col mt-5 gap-3 max-h-[500px] overflow-y-scroll'>
+        {cmts
+          .filter(comment => !comment.hide || comment.userId === curUser?._id)
+          .map(comment => (
+            <CommentItem comment={comment} setCmts={setCmts} key={comment._id} />
+          ))}
       </div>
     </div>
   )

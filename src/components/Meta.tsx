@@ -265,7 +265,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             title='Alt + Enter'
             onClick={handleSubmit(handleFilter)}>
             Filter
-            <FaFilter size={16} className='ml-1 common-transition' />
+            <FaFilter size={14} className='ml-1 wiggle' />
           </button>
 
           {/* Reset Button */}
@@ -274,7 +274,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             title='Alt + R'
             onClick={handleResetFilter}>
             Reset
-            <BiReset size={24} className='ml-1 common-transition' />
+            <BiReset size={22} className='ml-1 wiggle' />
           </button>
         </div>
       </div>

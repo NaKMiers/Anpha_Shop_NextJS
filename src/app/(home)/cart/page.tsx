@@ -22,7 +22,7 @@ import { MdEmail } from 'react-icons/md'
 import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
 
 function CartPage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   let localCartItems = useAppSelector(state => state.cart.localItems)
@@ -63,6 +63,9 @@ function CartPage() {
 
   // get cart length
   useEffect(() => {
+    // stop page loading
+    dispatch(setPageLoading(false))
+
     if (curUser) {
       setCartlength(cartItems.reduce((total, item) => total + item.quantity, 0))
       setItems(cartItems)
@@ -71,7 +74,7 @@ function CartPage() {
       setCartlength(localCartItems.reduce((total, item) => total + item.quantity, 0))
       setItems(localCartItems)
     }
-  }, [cartItems, localCartItems, curUser])
+  }, [cartItems, localCartItems, curUser, dispatch])
 
   // calc total, discount, subTotal
   useEffect(() => {
@@ -258,7 +261,7 @@ function CartPage() {
       {/* Cart Items */}
       <div className='col-span-1 md:col-span-2'>
         <h1 className='flex items-center gap-2 font-semibold font-body text-3xl'>
-          <FaCartShopping size={30} className='text-dark' />
+          <FaCartShopping size={30} className='text-dark wiggle' />
           <span>Giỏ hàng</span>
           <span>
             (<span className='text-primary font-normal'>{cartLength}</span>)
@@ -272,7 +275,7 @@ function CartPage() {
           <div className='border border-slate-400 p-4 rounded-medium'>
             <p className='text-primary italic mb-3'>
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
-              <FaPlusSquare size={19} className='inline-block' /> bên dưới để thêm vào giỏ hàng.
+              <FaPlusSquare size={19} className='inline-block wiggle' /> bên dưới để thêm vào giỏ hàng.
             </p>
 
             {localItems.map((cartItem, index) => (
@@ -434,7 +437,7 @@ function CartPage() {
               {isBuying ? (
                 <RiDonutChartFill size={32} className='animate-spin text-slate-200' />
               ) : (
-                <Image src='/images/logo.jpg' height={32} width={32} alt='logo' />
+                <Image className='wiggle-0' src='/images/logo.jpg' height={32} width={32} alt='logo' />
               )}
               <span className='font-semibold ml-1 group-hover:text-light'>
                 Mua bằng số dư {curUser?._id ? `(${formatPrice(curUser.balance || 0)})` : ''}
@@ -445,7 +448,7 @@ function CartPage() {
               className='flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition'
               onClick={() => handleCheckout('momo')}>
               <Image
-                className='group-hover:border-white rounded-md border-2'
+                className='group-hover:border-white rounded-md border-2 wiggle-0'
                 src='/images/momo-icon.jpg'
                 height={32}
                 width={32}
@@ -457,7 +460,13 @@ function CartPage() {
             <button
               className='flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition'
               onClick={() => handleCheckout('banking')}>
-              <Image src='/images/banking-icon.jpg' height={32} width={32} alt='logo' />
+              <Image
+                className='wiggle-0'
+                src='/images/banking-icon.jpg'
+                height={32}
+                width={32}
+                alt='logo'
+              />
               <span className='font-semibold group-hover:text-light'>Mua ngay với BANKING</span>
             </button>
           </div>

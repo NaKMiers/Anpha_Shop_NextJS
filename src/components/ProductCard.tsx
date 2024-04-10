@@ -9,11 +9,11 @@ import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import { countPercent } from '@/utils/number'
 import mongoose from 'mongoose'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
@@ -26,7 +26,7 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, className = '' }: ProductCardProps) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
@@ -123,9 +123,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       quantity: 1,
     }
 
-    // calculate user cart length
-    const cartLength = localCart.reduce((total, cartItem) => total + cartItem.quantity, 0) + 1
-
+    // add new cart item to local cart
     dispatch(addLocalCartItem(newCartItem as FullyCartItem))
 
     // success toast
@@ -172,9 +170,23 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   return (
     <div
       className={`relative w-full h-full p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}>
+      {/* Sold out */}
+      {product.stock <= 0 && (
+        <div className='absolute z-10 top-4 left-4 right-4 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+          <Image
+            className='animate-wiggle -mt-1'
+            src='/images/sold-out.jpg'
+            width={60}
+            height={60}
+            alt='sold-out'
+          />
+        </div>
+      )}
+
+      {/* Thumbnails */}
       <Link
         href={`/${product.slug}`}
-        className='aspect-video rounded-lg overflow-hidden shadow-lg block'>
+        className='relative aspect-video rounded-lg overflow-hidden shadow-lg block'>
         <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
           {product.images.map(src => (
             <Image
@@ -196,6 +208,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         </div>
       )}
 
+      {/* Title */}
       <Link href={`/${product.slug}`}>
         <h3
           className='font-body text-[18px] text-dark tracking-wide leading-[22px] my-3'
@@ -204,31 +217,36 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         </h3>
       </Link>
 
+      {/* Price */}
       <Price price={product.price} oldPrice={product.oldPrice} className='mb-2' />
 
+      {/* Basic Information */}
       <div className='flex items-center font-body tracking-wide'>
         <FaCircleCheck size={16} className='text-darker' />
         <span className='font-bold text-darker ml-1'>Đã bán:</span>
         <span className='text-red-500 ml-1'>{product.sold}</span>
       </div>
 
+      {/* Action Buttons */}
       <div className='flex items-center justify-end md:justify-start gap-2 mt-2'>
         <button
-          className='bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
+          className={`bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition ${
+            product.stock <= 0 ? 'bg-slate-200 pointer-events-none' : ''
+          }`}
           onClick={handleBuyNow}
-          disabled={isLoading}>
+          disabled={isLoading || product.stock <= 0}>
           MUA NGAY
         </button>
         <button
-          className={`bg-primary rounded-md p-2 group hover:bg-primary-600 hover:bg-secondary common-transition ${
-            isLoading ? 'pointer-events-none bg-slate-200' : ''
+          className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 hover:bg-secondary common-transition ${
+            isLoading || product.stock <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}
-          disabled={isLoading}>
+          disabled={isLoading || product.stock <= 0}>
           {isLoading ? (
             <RiDonutChartFill size={18} className='animate-spin text-white' />
           ) : (
-            <FaCartPlus size={18} className='text-white group-hover:scale-110 common-transition' />
+            <FaCartPlus size={18} className='text-white wiggle' />
           )}
         </button>
       </div>

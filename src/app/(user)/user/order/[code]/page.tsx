@@ -12,7 +12,7 @@ import { Fragment, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
 
   // states
@@ -53,7 +53,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
       <hr className='my-5' />
 
       {/* Info */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 items-start'>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Ngày mua: </span>
           {order && <span className=''>{formatTime(order.createdAt)}</span>}
@@ -84,25 +84,34 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
           <div className='rounded-medium border border-slate-300 shadow-lg p-21'>
             <CartItem cartItem={item} isCheckout localCartItem isOrderDetailProduct />
 
-            {item.accounts.map((account: IAccount) => (
-              <Fragment key={account._id}>
-                <hr className='mt-5 mb-3' />
+            {order.status === 'done' ? (
+              item?.accounts.map((account: IAccount) => (
+                <Fragment key={account._id}>
+                  <hr className='mt-5 mb-3' />
 
-                <div className='border border-slate-300 rounded-xl p-4'>
-                  {account.info.split(' ').map((word, index) => (
-                    <span
-                      key={index}
-                      className='cursor-pointer'
-                      onClick={() => {
-                        navigator.clipboard.writeText(word)
-                        toast.success('Copied: ' + word)
-                      }}>
-                      {word + ' '}
-                    </span>
-                  ))}
-                </div>
-              </Fragment>
-            ))}
+                  <div className='border border-slate-300 rounded-xl p-4'>
+                    {account.info.split(' ').map((word, index) => (
+                      <span
+                        key={index}
+                        className='cursor-pointer'
+                        onClick={() => {
+                          navigator.clipboard.writeText(word)
+                          toast.success('Copied: ' + word)
+                        }}>
+                        {word + ' '}
+                      </span>
+                    ))}
+                  </div>
+                </Fragment>
+              ))
+            ) : (
+              <p
+                className={`mt-3 text-center italic ${
+                  order.status === 'pending' ? 'text-yellow-500' : 'text-slate-400'
+                } border-t border-slate-200`}>
+                {order.status === 'pending' ? 'Đang chờ xử lí' : 'Đã hủy'}
+              </p>
+            )}
           </div>
         </div>
       ))}

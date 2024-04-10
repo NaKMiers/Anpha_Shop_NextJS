@@ -21,7 +21,7 @@ interface HeaderProps {
 }
 
 function Header({ isStatic }: HeaderProps) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
   const localCartItems = useAppSelector(state => state.cart.localItems)
@@ -155,10 +155,8 @@ function Header({ isStatic }: HeaderProps) {
       {/* Main Header */}
       <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* Brand */}
-        <div className='flex items-center max-w-[300px] w-[90%] overflow-x-scroll no-scrollbar'>
-          <Link
-            href='/'
-            className='hidden sm:block shrink-0 rounded-full common-transition hover:shadow-medium-light'>
+        <div className='pl-4 -ml-4 flex items-center max-w-[300px] w-[90%] h-full overflow-x-scroll no-scrollbar'>
+          <Link href='/' className='hidden sm:block shrink-0 rounded-full common-transition spin'>
             <Image
               className='aspect-square rounded-full'
               src='/images/logo.jpg'
@@ -185,7 +183,7 @@ function Header({ isStatic }: HeaderProps) {
 
         {/* Nav */}
         <div className='hidden md:flex items-center gap-4'>
-          <Link href='/cart' className='relative hover:scale-110 common-transition'>
+          <Link href='/cart' className='relative wiggle'>
             <FaCartShopping size={24} />
             {!!cartLength && (
               <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>
@@ -197,10 +195,10 @@ function Header({ isStatic }: HeaderProps) {
           {curUser ? (
             !!curUser._id && (
               <div
-                className='group flex items-center gap-2 cursor-pointer'
+                className='flex items-center gap-2 cursor-pointer'
                 onClick={() => setIsOpenMenu(prev => !prev)}>
                 <Image
-                  className='aspect-square rounded-full'
+                  className='aspect-square rounded-full wiggle-0'
                   src={curUser?.avatar || '/images/default-avatar.jpg'}
                   width={40}
                   height={40}
@@ -209,7 +207,7 @@ function Header({ isStatic }: HeaderProps) {
                 <div className='text-[18px] font-body hover:underline underline-offset-2'>
                   {formatPrice(curUser?.balance)}
                 </div>
-                <IoChevronDown size={22} className='common-transition hover:scale-125' />
+                <IoChevronDown size={22} className='common-transition wiggle' />
               </div>
             )
           ) : (
@@ -223,7 +221,7 @@ function Header({ isStatic }: HeaderProps) {
 
         <div className='md:hidden flex items-center' onClick={() => setIsOpenMenu(prev => !prev)}>
           <button className='flex justify-center items-center w-[40px] h-[40px]'>
-            <FaBars size={22} className='common-transition hover:scale-110' />
+            <FaBars size={22} className='common-transition wiggle' />
           </button>
         </div>
 

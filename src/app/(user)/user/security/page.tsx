@@ -12,7 +12,7 @@ import toast from 'react-hot-toast'
 import { FaCheck, FaEyeSlash } from 'react-icons/fa'
 
 function SecurityPage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()

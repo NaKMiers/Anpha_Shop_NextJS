@@ -19,6 +19,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { FaFilter, FaSort } from 'react-icons/fa'
+import AdminMeta from '@/components/admin/AdminMeta'
 
 export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: ICategory }
 
@@ -249,18 +250,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
-
-      // Alt + F (Filter)
-      if (e.altKey && e.key === 'f') {
-        e.preventDefault()
-        handleSubmit(handleFilter)()
-      }
-
-      // Alt + R (Reset)
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault()
-        handleResetFilter()
-      }
     }
 
     // Add the event listener
@@ -277,298 +266,275 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          {/* Price */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='price'>
-              <span className='font-bold'>Price: </span>
-              <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
-            </label>
-            <input
-              id='price'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minPrice || 0}
-              max={maxPrice || 0}
-              value={price}
-              onChange={e => setPrice(+e.target.value)}
-            />
-          </div>
-
-          {/* Sold */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='sold'>
-              <span className='font-bold'>Sold: </span>
-              <span>{sold}</span> - <span>{maxSold}</span>
-            </label>
-            <input
-              id='sold'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minSold || 0}
-              max={maxSold || 0}
-              value={sold}
-              onChange={e => setSold(+e.target.value)}
-            />
-          </div>
-
-          {/* Stock */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='stock'>
-              <span className='font-bold'>Stock: </span>
-              <span>{stock}</span> - <span>{maxStock}</span>
-            </label>
-            <input
-              id='stock'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minStock || 0}
-              max={maxStock || 0}
-              value={stock}
-              onChange={e => setStock(+e.target.value)}
-            />
-          </div>
-
-          {/* Cate Selection */}
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
-            <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                cates.length === selectedFilterCates.length
-                  ? 'bg-dark-100 text-white border-dark-100'
-                  : 'border-slate-300'
-              }`}
-              title='All Types'
-              onClick={() =>
-                setSelectedFilterCates(
-                  cates.length === selectedFilterCates.length ? [] : cates.map(category => category._id)
-                )
-              }>
-              All
-            </div>
-            {cates.map(category => (
-              <div
-                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                  selectedFilterCates.includes(category._id)
-                    ? 'bg-primary text-white border-primary'
-                    : 'border-slate-300'
-                }`}
-                title={category.title}
-                key={category._id}
-                onClick={
-                  selectedFilterCates.includes(category._id)
-                    ? () => setSelectedFilterCates(prev => prev.filter(id => id !== category._id))
-                    : () => setSelectedFilterCates(prev => [...prev, category._id])
-                }>
-                {category.title}
-              </div>
-            ))}
-          </div>
-
-          {/* Tag Selection */}
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
-            <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                tgs.length === selectedFilterTags.length
-                  ? 'bg-dark-100 text-white border-dark-100'
-                  : 'border-slate-300'
-              }`}
-              title='All Types'
-              onClick={() =>
-                setSelectedFilterTags(
-                  tgs.length === selectedFilterTags.length ? [] : tgs.map(tag => tag._id)
-                )
-              }>
-              All
-            </div>
-            {tgs.map(tag => (
-              <div
-                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                  selectedFilterTags.includes(tag._id)
-                    ? 'bg-secondary text-white border-secondary'
-                    : 'border-slate-300'
-                }`}
-                title={tag.title}
-                key={tag._id}
-                onClick={
-                  selectedFilterTags.includes(tag._id)
-                    ? () => setSelectedFilterTags(prev => prev.filter(id => id !== tag._id))
-                    : () => setSelectedFilterTags(prev => [...prev, tag._id])
-                }>
-                {tag.title}
-              </div>
-            ))}
-          </div>
-
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
-            {/* Sort */}
-            <Input
-              id='sort'
-              label='Sort'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: 'createdAt|-1',
-                  label: 'Newest',
-                },
-                {
-                  value: 'createdAt|1',
-                  label: 'Oldest',
-                },
-                {
-                  value: 'updatedAt|-1',
-                  label: 'Latest',
-                  selected: true,
-                },
-                {
-                  value: 'updatedAt|1',
-                  label: 'Earliest',
-                },
-              ]}
-            />
-
-            {/* Active */}
-            <Input
-              id='active'
-              label='Active'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'true',
-                  label: 'On',
-                },
-                {
-                  value: 'false',
-                  label: 'Off',
-                },
-              ]}
-            />
-
-            {/* Flash Sale */}
-            <Input
-              id='flashsale'
-              label='Flash Sale'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'true',
-                  label: 'On',
-                },
-                {
-                  value: 'false',
-                  label: 'Off',
-                },
-              ]}
-            />
-          </div>
-
-          {/* Filter Buttons */}
-          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
-            {/* Filter Button */}
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
-              Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
-            </button>
-
-            {/* Reset Button */}
-            <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
-              onClick={handleResetFilter}>
-              Reset
-              <BiReset size={24} className='ml-1 common-transition' />
-            </button>
-          </div>
-
-          {/* Action Buttons */}
-          <div className='flex justify-end items-center col-span-12 gap-2'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
-              onClick={() =>
-                setSelectedProducts(
-                  selectedProducts.length > 0 ? [] : products.map(product => product._id)
-                )
-              }>
-              {selectedProducts.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
-
-            {/* Activate Many Button */}
-            {/* Only show activate button if at least 1 product is selected and at least 1 selected product is deactive */}
-            {!!selectedProducts.length &&
-              selectedProducts.some(id => !products.find(product => product._id === id)?.active) && (
-                <button
-                  className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
-                  onClick={() => handleActivateProducts(selectedProducts, true)}>
-                  Activate
-                </button>
-              )}
-
-            {/* Deactivate Many Button */}
-            {/* Only show deactivate button if at least 1 product is selected and at least 1 selected product is acitve */}
-            {!!selectedProducts.length &&
-              selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
-                <button
-                  className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                  onClick={() => handleActivateProducts(selectedProducts, false)}>
-                  Deactivate
-                </button>
-              )}
-
-            {/* Remove Flash Sale Many Button */}
-            {!!selectedProducts.length && (
-              <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => {
-                  handleDeleteProducts(selectedProducts)
-                }}>
-                Remove Flash Sale
-              </button>
-            )}
-
-            {/* Delete Many Button */}
-            {!!selectedProducts.length && (
-              <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => setIsOpenConfirmModal(true)}>
-                Delete
-              </button>
-            )}
-          </div>
+      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+        {/* Price */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='price'>
+            <span className='font-bold'>Price: </span>
+            <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
+          </label>
+          <input
+            id='price'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minPrice || 0}
+            max={maxPrice || 0}
+            value={price}
+            onChange={e => setPrice(+e.target.value)}
+          />
         </div>
-      </div>
+
+        {/* Sold */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='sold'>
+            <span className='font-bold'>Sold: </span>
+            <span>{sold}</span> - <span>{maxSold}</span>
+          </label>
+          <input
+            id='sold'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minSold || 0}
+            max={maxSold || 0}
+            value={sold}
+            onChange={e => setSold(+e.target.value)}
+          />
+        </div>
+
+        {/* Stock */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='stock'>
+            <span className='font-bold'>Stock: </span>
+            <span>{stock}</span> - <span>{maxStock}</span>
+          </label>
+          <input
+            id='stock'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minStock || 0}
+            max={maxStock || 0}
+            value={stock}
+            onChange={e => setStock(+e.target.value)}
+          />
+        </div>
+
+        {/* Cate Selection */}
+        <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
+          <div
+            className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+              cates.length === selectedFilterCates.length
+                ? 'bg-dark-100 text-white border-dark-100'
+                : 'border-slate-300'
+            }`}
+            title='All Types'
+            onClick={() =>
+              setSelectedFilterCates(
+                cates.length === selectedFilterCates.length ? [] : cates.map(category => category._id)
+              )
+            }>
+            All
+          </div>
+          {cates.map(category => (
+            <div
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                selectedFilterCates.includes(category._id)
+                  ? 'bg-primary text-white border-primary'
+                  : 'border-slate-300'
+              }`}
+              title={category.title}
+              key={category._id}
+              onClick={
+                selectedFilterCates.includes(category._id)
+                  ? () => setSelectedFilterCates(prev => prev.filter(id => id !== category._id))
+                  : () => setSelectedFilterCates(prev => [...prev, category._id])
+              }>
+              {category.title}
+            </div>
+          ))}
+        </div>
+
+        {/* Tag Selection */}
+        <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
+          <div
+            className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+              tgs.length === selectedFilterTags.length
+                ? 'bg-dark-100 text-white border-dark-100'
+                : 'border-slate-300'
+            }`}
+            title='All Types'
+            onClick={() =>
+              setSelectedFilterTags(
+                tgs.length === selectedFilterTags.length ? [] : tgs.map(tag => tag._id)
+              )
+            }>
+            All
+          </div>
+          {tgs.map(tag => (
+            <div
+              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                selectedFilterTags.includes(tag._id)
+                  ? 'bg-secondary text-white border-secondary'
+                  : 'border-slate-300'
+              }`}
+              title={tag.title}
+              key={tag._id}
+              onClick={
+                selectedFilterTags.includes(tag._id)
+                  ? () => setSelectedFilterTags(prev => prev.filter(id => id !== tag._id))
+                  : () => setSelectedFilterTags(prev => [...prev, tag._id])
+              }>
+              {tag.title}
+            </div>
+          ))}
+        </div>
+
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+          {/* Sort */}
+          <Input
+            id='sort'
+            label='Sort'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: 'createdAt|-1',
+                label: 'Newest',
+              },
+              {
+                value: 'createdAt|1',
+                label: 'Oldest',
+              },
+              {
+                value: 'updatedAt|-1',
+                label: 'Latest',
+                selected: true,
+              },
+              {
+                value: 'updatedAt|1',
+                label: 'Earliest',
+              },
+            ]}
+          />
+
+          {/* Active */}
+          <Input
+            id='active'
+            label='Active'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'true',
+                label: 'On',
+              },
+              {
+                value: 'false',
+                label: 'Off',
+              },
+            ]}
+          />
+
+          {/* Flash Sale */}
+          <Input
+            id='flashsale'
+            label='Flash Sale'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'true',
+                label: 'On',
+              },
+              {
+                value: 'false',
+                label: 'Off',
+              },
+            ]}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className='flex justify-end items-center col-span-12 gap-2'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            onClick={() =>
+              setSelectedProducts(
+                selectedProducts.length > 0 ? [] : products.map(product => product._id)
+              )
+            }>
+            {selectedProducts.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
+
+          {/* Activate Many Button */}
+          {/* Only show activate button if at least 1 product is selected and at least 1 selected product is deactive */}
+          {!!selectedProducts.length &&
+            selectedProducts.some(id => !products.find(product => product._id === id)?.active) && (
+              <button
+                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+                onClick={() => handleActivateProducts(selectedProducts, true)}>
+                Activate
+              </button>
+            )}
+
+          {/* Deactivate Many Button */}
+          {/* Only show deactivate button if at least 1 product is selected and at least 1 selected product is acitve */}
+          {!!selectedProducts.length &&
+            selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => handleActivateProducts(selectedProducts, false)}>
+                Deactivate
+              </button>
+            )}
+
+          {/* Remove Flash Sale Many Button */}
+          {!!selectedProducts.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => {
+                handleDeleteProducts(selectedProducts)
+              }}>
+              Remove Flash Sale
+            </button>
+          )}
+
+          {/* Delete Many Button */}
+          {!!selectedProducts.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => setIsOpenConfirmModal(true)}>
+              Delete
+            </button>
+          )}
+        </div>
+      </AdminMeta>
 
       {/* Confirm Dialog */}
       <ConfirmDialog

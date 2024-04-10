@@ -75,7 +75,7 @@ async function HomePage() {
 
       {/* Top #10 */}
       <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
-        Top <span className='font-semibold text-5xl italic text-orange-500'>#10</span>
+        Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
       </h2>
       <section className='max-w-1200 mx-auto px-4'>
         <GroupProducts products={bestSellerProducts} bestSeller />

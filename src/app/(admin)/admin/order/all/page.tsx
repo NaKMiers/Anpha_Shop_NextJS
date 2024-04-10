@@ -17,6 +17,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
+import AdminMeta from '@/components/admin/AdminMeta'
 
 function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
@@ -208,18 +209,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
-
-      // Alt + F (Filter)
-      if (e.altKey && e.key === 'f') {
-        e.preventDefault()
-        handleSubmit(handleFilter)()
-      }
-
-      // Alt + R (Reset)
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault()
-        handleResetFilter()
-      }
     }
 
     // Add the event listener
@@ -236,236 +225,211 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          {/* Search */}
-          <div className='flex flex-col col-span-12 md:col-span-6'>
-            <Input
-              className='md:max-w-[450px]'
-              id='search'
-              label='Search'
-              disabled={false}
-              register={register}
-              errors={errors}
-              type='text'
-              icon={FaSearch}
-            />
-          </div>
+      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+        {/* Search */}
+        <div className='flex flex-col col-span-12 md:col-span-6'>
+          <Input
+            className='md:max-w-[450px]'
+            id='search'
+            label='Search'
+            disabled={false}
+            register={register}
+            errors={errors}
+            type='text'
+            icon={FaSearch}
+          />
+        </div>
 
-          {/* Total */}
-          <div className='flex flex-col col-span-12 md:col-span-6'>
-            <label htmlFor='total'>
-              <span className='font-bold'>Total: </span>
-              <span>{formatPrice(total)}</span> - <span>{formatPrice(maxTotal)}</span>
-            </label>
-            <input
-              id='total'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minTotal || 0}
-              max={maxTotal || 0}
-              value={total}
-              onChange={e => setTotal(+e.target.value)}
-            />
-          </div>
+        {/* Total */}
+        <div className='flex flex-col col-span-12 md:col-span-6'>
+          <label htmlFor='total'>
+            <span className='font-bold'>Total: </span>
+            <span>{formatPrice(total)}</span> - <span>{formatPrice(maxTotal)}</span>
+          </label>
+          <input
+            id='total'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minTotal || 0}
+            max={maxTotal || 0}
+            value={total}
+            onChange={e => setTotal(+e.target.value)}
+          />
+        </div>
 
-          {/* From To */}
-          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
-            <Input
-              id='from'
-              label='From'
-              disabled={false}
-              register={register}
-              errors={errors}
-              type='date'
-              icon={FaCalendar}
-              className='w-full'
-            />
+        {/* From To */}
+        <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
+          <Input
+            id='from'
+            label='From'
+            disabled={false}
+            register={register}
+            errors={errors}
+            type='date'
+            icon={FaCalendar}
+            className='w-full'
+          />
 
-            <Input
-              id='to'
-              label='To'
-              disabled={false}
-              register={register}
-              errors={errors}
-              type='date'
-              icon={FaCalendar}
-              className='w-full'
-            />
-          </div>
+          <Input
+            id='to'
+            label='To'
+            disabled={false}
+            register={register}
+            errors={errors}
+            type='date'
+            icon={FaCalendar}
+            className='w-full'
+          />
+        </div>
 
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
-            {/* Sort */}
-            <Input
-              id='sort'
-              label='Sort'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: 'createdAt|-1',
-                  label: 'Newest',
-                },
-                {
-                  value: 'createdAt|1',
-                  label: 'Oldest',
-                },
-                {
-                  value: 'updatedAt|-1',
-                  label: 'Latest',
-                  selected: true,
-                },
-                {
-                  value: 'updatedAt|1',
-                  label: 'Earliest',
-                },
-              ]}
-            />
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+          {/* Sort */}
+          <Input
+            id='sort'
+            label='Sort'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: 'createdAt|-1',
+                label: 'Newest',
+              },
+              {
+                value: 'createdAt|1',
+                label: 'Oldest',
+              },
+              {
+                value: 'updatedAt|-1',
+                label: 'Latest',
+                selected: true,
+              },
+              {
+                value: 'updatedAt|1',
+                label: 'Earliest',
+              },
+            ]}
+          />
 
-            {/* User ID */}
-            <Input
-              id='userId'
-              label='User ID'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'true',
-                  label: 'Yes',
-                },
-                {
-                  value: 'false',
-                  label: 'No',
-                },
-              ]}
-            />
+          {/* User ID */}
+          <Input
+            id='userId'
+            label='User ID'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'true',
+                label: 'Yes',
+              },
+              {
+                value: 'false',
+                label: 'No',
+              },
+            ]}
+          />
 
-            {/* Voucher Applied */}
-            <Input
-              id='voucherApplied'
-              label='Voucher'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'true',
-                  label: 'On',
-                },
-                {
-                  value: 'false',
-                  label: 'Off',
-                },
-              ]}
-            />
+          {/* Voucher Applied */}
+          <Input
+            id='voucherApplied'
+            label='Voucher'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'true',
+                label: 'On',
+              },
+              {
+                value: 'false',
+                label: 'Off',
+              },
+            ]}
+          />
 
-            {/* Status */}
-            <Input
-              id='status'
-              label='Status'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'done',
-                  label: 'Done',
-                },
-                {
-                  value: 'pending',
-                  label: 'Pending',
-                },
-                {
-                  value: 'cancel',
-                  label: 'Cancel',
-                },
-              ]}
-            />
-          </div>
+          {/* Status */}
+          <Input
+            id='status'
+            label='Status'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'done',
+                label: 'Done',
+              },
+              {
+                value: 'pending',
+                label: 'Pending',
+              },
+              {
+                value: 'cancel',
+                label: 'Cancel',
+              },
+            ]}
+          />
+        </div>
 
-          {/* Filter Buttons */}
-          <div className='flex justify-end items-center gap-2 col-span-12 md:col-span-4'>
-            {/* Filter Button */}
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
-              Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
-            </button>
+        {/* Action Buttons */}
+        <div className='flex justify-end items-center gap-2 col-span-12'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
+            onClick={() =>
+              setSelectedOrders(selectedOrders.length > 0 ? [] : orders.map(order => order._id))
+            }>
+            {selectedOrders.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
 
-            {/* Reset Button */}
-            <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
-              onClick={handleResetFilter}>
-              Reset
-              <BiReset size={24} className='ml-1 common-transition' />
-            </button>
-          </div>
-
-          {/* Action Buttons */}
-          <div className='flex justify-end items-center gap-2 col-span-12'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
-              onClick={() =>
-                setSelectedOrders(selectedOrders.length > 0 ? [] : orders.map(order => order._id))
-              }>
-              {selectedOrders.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
-
-            {/* Cancel Many Button */}
-            {!!selectedOrders.length &&
-              selectedOrders.every(
-                id => orders.find(order => order._id === id)?.status === 'pending'
-              ) && (
-                <button
-                  className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-white common-transition'
-                  onClick={() => handleCancelOrders(selectedOrders)}>
-                  Cancel
-                </button>
-              )}
-
-            {/* Delete Many Button */}
-            {!!selectedOrders.length && (
+          {/* Cancel Many Button */}
+          {!!selectedOrders.length &&
+            selectedOrders.every(id => orders.find(order => order._id === id)?.status === 'pending') && (
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-                onClick={() => setIsOpenConfirmModal(true)}>
-                Delete
+                className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-white common-transition'
+                onClick={() => handleCancelOrders(selectedOrders)}>
+                Cancel
               </button>
             )}
-          </div>
+
+          {/* Delete Many Button */}
+          {!!selectedOrders.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
+              onClick={() => setIsOpenConfirmModal(true)}>
+              Delete
+            </button>
+          )}
         </div>
-      </div>
+      </AdminMeta>
 
       {/* Income */}
       <div className='mt-9 flex flex-wrap items-center justify-center gap-4 text-white'>

@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
     const accounts = await AccountModel.find(filter)
       .populate({
         path: 'type',
-        select: 'title images category',
+        select: 'title images category slug',
         populate: {
           path: 'category',
           select: 'title',
@@ -103,6 +103,8 @@ export async function GET(req: NextRequest) {
         select: 'title',
       })
       .lean()
+
+    console.log(accounts)
 
     // return response
     return NextResponse.json({ accounts, amount, types }, { status: 200 })

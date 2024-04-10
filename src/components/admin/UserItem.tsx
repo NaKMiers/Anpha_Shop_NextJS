@@ -36,7 +36,7 @@ function UserItem({
   // functions
   handleDeleteUsers,
 }: UserItemProps) {
-  // hook
+  // hooks
   const { data: session } = useSession()
   const curUser: any = session?.user
 

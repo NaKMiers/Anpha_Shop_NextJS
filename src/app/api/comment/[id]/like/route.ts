@@ -24,27 +24,53 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
       return NextResponse.json({ message: 'Người dùng không tồn tại' }, { status: 401 })
     }
 
-    let comment: any = null
+    let updatedComment: any = null
     if (value === 'y') {
       // like
-      comment = await CommentModel.findByIdAndUpdate(id, { $addToSet: { likes: userId } }, { new: true })
+      updatedComment = await CommentModel.findByIdAndUpdate(
+        id,
+        { $addToSet: { likes: userId } },
+        { new: true }
+      )
         .populate('userId')
+        .populate({
+          path: 'replied',
+          populate: {
+            path: 'userId',
+          },
+        })
         .lean()
     } else if (value === 'n') {
       // dislike
-      comment = await CommentModel.findByIdAndUpdate(id, { $pull: { likes: userId } }, { new: true })
+      updatedComment = await CommentModel.findByIdAndUpdate(
+        id,
+        { $pull: { likes: userId } },
+        { new: true }
+      )
         .populate('userId')
+        .populate({
+          path: 'replied',
+          populate: {
+            path: 'userId',
+          },
+          options: { sort: { likes: -1, createdAt: -1 }, limit: 6 },
+        })
         .lean()
     }
 
-    if (!comment) {
+    if (!updatedComment) {
       return NextResponse.json({ message: 'Bình luận không tồn tại' }, { status: 404 })
     }
 
-    comment = {
-      ...comment,
-      userId: comment.userId._id,
-      user: comment.userId,
+    const comment: FullyComment = {
+      ...updatedComment,
+      userId: updatedComment.userId._id,
+      user: updatedComment.userId,
+      replied: updatedComment.replied.map((c: any) => ({
+        ...c,
+        userId: c.userId._id,
+        user: c.userId,
+      })),
     }
 
     // return response

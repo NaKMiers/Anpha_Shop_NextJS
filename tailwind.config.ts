@@ -59,6 +59,21 @@ const config: Config = {
       fill: {
         light: '#fff',
       },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
+        'scale-wiggle': {
+          '0%, 100%': { transform: 'rotate(-3deg) scale(1.2)' },
+          '50%': { transform: 'rotate(3deg) scale(1.2)' },
+        },
+      },
+      animation: {
+        'spin-slow': 'spin 2s linear infinite',
+        wiggle: 'wiggle 0.8s ease-in-out infinite',
+        'scale-wiggle': 'scale-wiggle 0.8s ease-in-out infinite 0.2s',
+      },
     },
   },
   plugins: [],

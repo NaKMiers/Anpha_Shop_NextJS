@@ -110,7 +110,7 @@ function OrderItem({
               <div className='relative rounded-lg shadow-md overflow-hidden' key={item._id}>
                 <Image
                   className='aspect-video'
-                  src={item.product.images[0]}
+                  src={item.product.images[0] || '/images/not-found.jpg'}
                   height={120}
                   width={120}
                   alt='thumbnail'

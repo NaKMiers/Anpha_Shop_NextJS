@@ -71,9 +71,10 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
       {!hideTop && (
         <div className={`flex ${!bestSeller ? 'justify-between' : 'justify-end'} px-6`}>
           {!bestSeller && (
-            <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
+            <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90 group'>
               <div className='aspect-square items-center w-6 h-6'>
                 <Image
+                  className='wiggle'
                   src={`/images/${category?.slug}-icon.jpg`}
                   width={200}
                   height={200}
@@ -103,14 +104,14 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
       {!isExpaned && (
         <>
           <button
-            className='flex items-center justify-center absolute -left-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
+            className='group flex items-center justify-center absolute -left-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
             onClick={handlePrev}>
-            <FaChevronLeft size={18} className='group-hover:scale-125 common-transition text-dark' />
+            <FaChevronLeft size={18} className='wiggle text-dark' />
           </button>
           <button
-            className='flex items-center justify-center absolute -right-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
+            className='group flex items-center justify-center absolute -right-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
             onClick={handleNext}>
-            <FaChevronRight size={18} className='group-hover:scale-125 common-transition text-dark' />
+            <FaChevronRight size={18} className='wiggle text-dark' />
           </button>
         </>
       )}
@@ -137,7 +138,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
                 }`}>
                 {bestSeller && (
                   <div
-                    className='absolute z-10 right-1 font-[700] rotate-[10deg]'
+                    className='absolute z-20 right-1 font-[700] rotate-[10deg]'
                     style={{
                       color,
                       fontSize:

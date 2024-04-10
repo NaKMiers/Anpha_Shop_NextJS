@@ -1,10 +1,24 @@
+'use client'
+
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useCallback } from 'react'
+import toast from 'react-hot-toast'
 
 function RechargePage() {
+  const { data: session } = useSession()
+  const curUser: any = session?.user
+
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Đã sao chép: ' + text)
+  }, [])
+
   return (
     <div className='bg-white rounded-medium shadow-medium mt-20 p-21'>
       <h1 className='text-center font-semibold text-4xl mb-2'>Nạp tiền vào tài khoản</h1>
-      <p className='text-center'>
+      <p className='text-center font-[500]'>
         Để mua tài khoản, hãy nạp tiền vào tài khoản qua 2 hình thức sau nhá!
       </p>
 
@@ -22,7 +36,7 @@ function RechargePage() {
               <br />
               <p>
                 - Bấm vào link sau:{' '}
-                <a className='text-sky-500' href='https://me.momo.vn/anphashop'>
+                <a className='text-[#a1396c]' href='https://me.momo.vn/anphashop'>
                   https://me.momo.vn/anphashop
                 </a>
               </p>
@@ -31,7 +45,12 @@ function RechargePage() {
             </li>
             <li>Nhập số tiền bạn muốn nạp</li>
             <li>
-              Nhập nội dung chuyển tiền: <span className='text-primary'>NAP diwas118151@gmail.com</span>
+              Nhập nội dung chuyển tiền:{' '}
+              <span
+                className='text-orange-600 cursor-pointer'
+                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
+                NAP {curUser?.email}
+              </span>
             </li>
             <li>
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
@@ -61,10 +80,20 @@ function RechargePage() {
 
           <div className='border border-slate-400 py-2 px-4 rounded-md mb-2'>
             <p>
-              Số tài khoản Momo: <span className='text-[#a1396c] font-semibold'>0899320427</span>
+              Số tài khoản Momo:{' '}
+              <span
+                className='text-[#a1396c] font-semibold cursor-pointer'
+                onClick={() => handleCopy('0899320427')}>
+                0899320427
+              </span>
             </p>
             <p>
-              Nội dung chuyển khoản: <span className='text-yellow-400 font-semibold'>B09E9</span>
+              Nội dung chuyển khoản:{' '}
+              <span
+                className='text-orange-600 cursor-pointer'
+                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
+                NAP {curUser?.email}
+              </span>
             </p>
           </div>
 
@@ -86,7 +115,12 @@ function RechargePage() {
             <li>Quét mã QR bên dưới</li>
             <li>Nhập số tiền bạn muốn nạp</li>
             <li>
-              Nhập nội dung chuyển tiền: <span className='text-primary'>NAP diwas118151@gmail.com</span>
+              Nhập nội dung chuyển tiền:{' '}
+              <span
+                className='text-orange-600 cursor-pointer'
+                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
+                NAP {curUser?.email}
+              </span>
             </li>
             <li>
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
@@ -116,13 +150,28 @@ function RechargePage() {
 
           <div className='border border-slate-400 py-2 px-4 rounded-md mb-2'>
             <p>
-              Ngân hàng: <span className='text-[#399162] font-semibold'>Vietcombank</span>
+              Ngân hàng:{' '}
+              <span
+                className='text-[#399162] font-semibold cursor-pointer'
+                onClick={() => handleCopy('Vietcombank')}>
+                Vietcombank
+              </span>
             </p>
             <p>
-              Số tài khoản: <span className='text-secondary font-semibold'>1040587211</span>
+              Số tài khoản:{' '}
+              <span
+                className='text-secondary font-semibold cursor-pointer'
+                onClick={() => handleCopy('1040587211')}>
+                1040587211
+              </span>
             </p>
             <p>
-              Nội dung chuyển khoản: <span className='text-yellow-400 font-semibold'>B09E9</span>
+              Nội dung chuyển khoản:{' '}
+              <span
+                className='text-orange-600 cursor-pointer'
+                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
+                NAP {curUser?.email}
+              </span>
             </p>
           </div>
 

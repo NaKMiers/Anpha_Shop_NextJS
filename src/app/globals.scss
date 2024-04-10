@@ -34,6 +34,33 @@
   @apply transition-all duration-200 ease-in-out;
 }
 
+.wiggle {
+  @apply group-hover:animate-scale-wiggle common-transition group-hover:scale-[1.2];
+  @apply hover:animate-scale-wiggle common-transition hover:scale-[1.2];
+  transform-origin: center;
+}
+
+.wiggle-0 {
+  @apply group-hover:animate-wiggle common-transition;
+  @apply hover:animate-wiggle common-transition;
+  transform-origin: center;
+}
+
+.wiggle-1 {
+  @apply hover:animate-scale-wiggle common-transition hover:scale-[1.2];
+  transform-origin: center;
+}
+
+.spin {
+  @apply animate-spin-slow text-primary/40;
+  animation-play-state: paused;
+
+  &:hover {
+    box-shadow: 0 0px 8px 2px currentColor;
+    animation-play-state: running;
+  }
+}
+
 .number-input::-webkit-inner-spin-button,
 .number-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -102,41 +129,5 @@
     border-radius: 50%;
     background: #25dbe6;
     cursor: pointer;
-  }
-}
-
-.underline {
-  @include underline--after(var(--background-light));
-}
-
-.underline-darker {
-  @include underline--after(var(--background-darker));
-}
-
-.underline-dark {
-  @include underline--after(var(--text-dark));
-}
-
-.underline-repeat {
-  @include underline--after(var(--background-light), true);
-}
-
-.underline-repeat-darker {
-  @include underline--after(var(--background-darker), true);
-}
-
-.underline-repeat-dark {
-  @include underline--after(var(--background-dark), true);
-}
-
-@keyframes underline-repeat {
-  0% {
-    width: 0%;
-  }
-  50% {
-    width: 100%;
-  }
-  100% {
-    width: 100%;
   }
 }

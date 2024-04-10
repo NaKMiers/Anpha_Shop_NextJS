@@ -155,12 +155,12 @@ function Slider({ time, hideControls, children, thumbs = [], className = '' }: S
           <button
             className='group md:-translate-x-full group-hover:translate-x-0 absolute flex items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 common-transition h-full w-12 left-0 top-0'
             onClick={prevSlide}>
-            <FaChevronLeft size={16} className='group-hover:scale-125 common-transition text-white' />
+            <FaChevronLeft size={16} className='wiggle text-white' />
           </button>
           <button
             className='group md:translate-x-full group-hover:translate-x-0 absolute flex items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 common-transition h-full w-12 right-0 top-0'
             onClick={nextSlide}>
-            <FaChevronRight size={16} className='group-hover:scale-125 common-transition text-white' />
+            <FaChevronRight size={16} className='wiggle text-white' />
           </button>
         </>
       )}

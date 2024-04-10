@@ -1,7 +1,7 @@
 'use client'
 
 import { handleQuery } from '@/utils/handleQuery'
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 interface PaginationProps {
   searchParams: { [key: string]: string[] } | undefined
@@ -19,10 +19,12 @@ function Pagination({
   // hook
   const pathname = usePathname()
   const router = useRouter()
+  const queryParams = useSearchParams()
+  const page = queryParams.get('page')
 
   // calculate page amount
   const pageAmount = Math.ceil(amount / itemsPerPage)
-  const currentPage = searchParams.page ? +searchParams.page : 1
+  const currentPage = page ? +page : 1
 
   const handlePage = (page: number, next: number = 0) => {
     // get page from searchParams

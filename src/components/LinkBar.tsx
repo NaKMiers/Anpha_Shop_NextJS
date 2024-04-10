@@ -12,6 +12,7 @@ interface LinkBarProps {
 function LinkBar({ link, className = '' }: LinkBarProps) {
   const [isCopied, setIsCopied] = useState(false)
 
+  // handle copy
   const handleCopy = useCallback(() => {
     if (!isCopied) {
       navigator.clipboard.writeText(link)
@@ -30,9 +31,9 @@ function LinkBar({ link, className = '' }: LinkBarProps) {
       disabled={isCopied}>
       <div className={`${isCopied ? 'bg-slate-400' : 'bg-secondary'} px-[10px] py-[10px]`}>
         {isCopied ? (
-          <FaCheck size={18} className='text-white group-hover:scale-110 common-transition' />
+          <FaCheck size={18} className='text-white wiggle' />
         ) : (
-          <FaCopy size={18} className='text-white group-hover:scale-110 common-transition' />
+          <FaCopy size={18} className='text-white wiggle' />
         )}
       </div>
       <p

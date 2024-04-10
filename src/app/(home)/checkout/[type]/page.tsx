@@ -12,11 +12,12 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { IoIosHelpCircle } from 'react-icons/io'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
   const type: string = params.type
 
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const router = useRouter()
   const cartItems = useAppSelector(state => state.cart.items)
@@ -26,19 +27,27 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
   // states
   const [confirmed, setConfirmed] = useState(false)
-  const [checkout, setCheckout] = useState<any | null>(null)
+  const [checkout, setCheckout] = useState<any>(null)
 
+  // get checkout from local storage
   useEffect(() => {
     const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
 
     if (!checkout && !confirmed) {
+      // start page loading for redirecting
+      dispatch(setPageLoading(true))
       toast.error('Đang quay lại giỏ hàng...')
-
       router.push('/cart')
     } else {
       setCheckout(checkout)
     }
   }, [confirmed, router, dispatch])
+
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Đã sao chép: ' + text)
+  }, [])
 
   // handle confirm payment
   const handleConfirmPayment = useCallback(async () => {
@@ -46,14 +55,14 @@ function CheckoutPage({ params }: { params: { type: string } }) {
     if (checkout) {
       setConfirmed(true)
 
-      const { selectedCartItems, total, voucher, discount, code, email } = checkout
+      const { selectedItems, total, voucher, discount, code, email } = checkout
 
       // start page loading
       dispatch(setPageLoading(true))
 
       try {
         // handle confirm payment
-        const items = selectedCartItems.map((cartItem: FullyCartItem) => ({
+        const items = selectedItems.map((cartItem: FullyCartItem) => ({
           _id: cartItem._id,
           product: cartItem.product,
           quantity: cartItem.quantity,
@@ -70,6 +79,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           type
         )
 
+        toast.success('Đã xác nhận thanh toán')
+
         if (curUser) {
           // userId exists => cart is DATABASE cart => remove cart items
           dispatch(setCartItems(cartItems.filter(item => !removedCartItems.includes(item._id))))
@@ -82,9 +93,11 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
         // show success message
         toast.success(message)
+        toast.success('Đang chuyển hướng')
 
         // redirect to order history page
         if (curUser) {
+          // redirect to order history page
           router.push('/user/order-history')
         } else {
           router.push('/cart')
@@ -95,7 +108,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
-      } finally {
+
         // stop page loading
         dispatch(setPageLoading(false))
       }
@@ -115,8 +128,9 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='pt-4' />
 
         <p className='text-secondary font-semibold mb-2'>
-          * Hãy chuyển vào tài khoản bên dưới với nội dung sau:
+          * Hãy chuyển vào tài khoản bên dưới với nội dung sau:{' '}
         </p>
+
         {type === 'momo' && (
           <a href='https://me.momo.vn/anphashop'>
             Ấn vào link sau để chuyển nhanh:{' '}
@@ -124,40 +138,73 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </a>
         )}
 
-        <div className='border border-slate-400 py-2 px-4 rounded-md mb-2'>
+        <div className='border border-slate-400 py-2 px-4 rounded-md'>
           {type === 'banking' && (
             <p>
-              Ngân hàng: <span className='text-[#399162] font-semibold'>Vietcombank</span>
+              Ngân hàng:{' '}
+              <span
+                className='text-[#399162] font-semibold cursor-pointer'
+                onClick={() => handleCopy('Vietcombank')}>
+                Vietcombank
+              </span>
             </p>
           )}
           {type === 'momo' ? (
             <p>
-              Số tài khoản Momo: <span className='text-[#a1396c] font-semibold'>0899320427</span>
+              Số tài khoản Momo:{' '}
+              <span
+                className='text-[#a1396c] font-semibold cursor-pointer'
+                onClick={() => handleCopy('0899320427')}>
+                0899320427
+              </span>
             </p>
           ) : (
             <p>
-              Số tài khoản: <span className='text-secondary font-semibold'>1040587211</span>
+              Số tài khoản:{' '}
+              <span
+                className='text-secondary font-semibold cursor-pointer'
+                onClick={() => handleCopy('1040587211')}>
+                1040587211
+              </span>
             </p>
           )}
           <p>
-            Số tiền chuyển: <span className='text-green-500 font-semibold'>{formatPrice(1000)}</span>
+            Số tiền chuyển:{' '}
+            <span
+              className='text-green-500 font-semibold cursor-pointer'
+              onClick={() => handleCopy(checkout?.total)}>
+              {formatPrice(checkout?.total)}
+            </span>
           </p>
           <p>
             Nội dung chuyển khoản:{' '}
-            <span className='text-rose-500 underline underline-offset-1 font-semibold'>
+            <span
+              className='text-rose-500 underline underline-offset-1 font-semibold cursor-pointer'
+              onClick={() => handleCopy(checkout?.code)}>
               {checkout?.code}
             </span>
           </p>
         </div>
+        <p className='flex items-center gap-1 text-slate-500 mb-1'>
+          <IoIosHelpCircle size={20} /> Ấn để sao chép
+        </p>
 
         <p className=''>
           Tài khoản sẽ được gửi cho bạn qua email:{' '}
-          <span className='text-green-500'>{checkout?.email}</span>
+          <span
+            className='text-green-500 underline cursor-pointer'
+            onClick={() => handleCopy(checkout?.email)}>
+            {checkout?.email}
+          </span>
         </p>
 
         <p className='italic text-sky-500'>
           Lưu ý: nhấn vào nút{' '}
-          <span className='text-secondary underline animate-pulse'>xác nhận thanh toán</span> bên dưới
+          <span
+            className='text-secondary underline animate-pulse cursor-pointer'
+            onClick={handleConfirmPayment}>
+            xác nhận thanh toán
+          </span>{' '}
           sau khi đã chuyển khoản để có thể nhận Email.
         </p>
 
@@ -168,12 +215,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           width={350}
           alt='momo-qr'
         />
-
-        <button
-          className='mt-12 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
-          onClick={handleConfirmPayment}>
-          <span className=''>Xác nhận thanh toán</span>
-        </button>
       </div>
 
       {/* Cart items */}
@@ -183,7 +224,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='pt-5' />
 
         <div>
-          {checkout?.selectedCartItems.map((cartItem: FullyCartItem, index: number) => (
+          {checkout?.selectedItems.map((cartItem: FullyCartItem, index: number) => (
             <CartItem
               cartItem={cartItem}
               className={index != 0 ? 'mt-4' : ''}
@@ -210,6 +251,12 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               {formatPrice(checkout?.total || 0)}
             </span>
           </div>
+
+          <button
+            className='mt-6 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
+            onClick={handleConfirmPayment}>
+            <span className=''>Xác nhận thanh toán</span>
+          </button>
         </div>
       </div>
     </div>

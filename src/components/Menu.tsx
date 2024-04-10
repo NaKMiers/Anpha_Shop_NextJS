@@ -18,8 +18,7 @@ interface MenuProps {
 }
 
 function Menu({ open, setOpen, className = '' }: MenuProps) {
-  // hook
-  const dispatch = useAppDispatch()
+  // hooks
   const cartItems = useAppSelector(state => state.cart.items)
   const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
@@ -68,9 +67,9 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
         }  w-full h-[calc(100vh_-_72px)] overflow-hidden transition-all duration-300 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}>
         {curUser?._id ? (
           <>
-            <li className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+            <li className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'>
               <Image
-                className='aspect-square rounded-full'
+                className='aspect-square rounded-full wiggle-0'
                 src={curUser?.avatar || '/images/default-avatar.jpg'}
                 height={40}
                 width={40}
@@ -90,23 +89,23 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 className='group flex-shrink-0 rounded-full ml-1 border-2 border-primary p-[2px] hover:scale-110 common-transition'
                 href='/recharge'
                 onClick={() => setOpen(false)}>
-                <FaPlus size={14} className='text-primary common-transition' />
+                <FaPlus size={11} className='text-primary common-transition' />
               </Link>
             </li>
 
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/user'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaUser size={18} className='' />
+                <FaUser size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
               </Link>
             </li>
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/cart'
                 className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaCartShopping size={18} />
+                <FaCartShopping size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                 {!!cartLength && (
                   <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
@@ -115,50 +114,50 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 )}
               </Link>
             </li>
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/user/order-history'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaHistory size={18} className='' />
+                <FaHistory size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
               </Link>
             </li>
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <a
                 href='https://www.messenger.com/t/170660996137305'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaPhone size={18} className='' />
+                <FaPhone size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
               </a>
             </li>
             {curUser?.role !== 'user' && (
-              <li onClick={() => setOpen(false)}>
+              <li className='group' onClick={() => setOpen(false)}>
                 <Link
                   href='/admin'
                   className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                  <FaUserSecret size={18} />
+                  <FaUserSecret size={18} className='wiggle' />
                   <span className='font-body tracking-wide text-[15px] text-primary'>
                     {curUser?.role}
                   </span>
                 </Link>
               </li>
             )}
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <button
                 className='flex items-center w-full gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
                 onClick={() => signOut()}>
-                <TbLogout size={18} className='' />
+                <TbLogout size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
               </button>
             </li>
           </>
         ) : (
           <>
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/cart'
                 className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaCartShopping size={18} className='' />
+                <FaCartShopping size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                 {!!cartLength && (
                   <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
@@ -167,19 +166,19 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 )}
               </Link>
             </li>
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/auth/login'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FiLogIn size={18} className='' />
+                <FiLogIn size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng nhập</span>
               </Link>
             </li>
-            <li onClick={() => setOpen(false)}>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/auth/register'
                 className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <FaUserPlus size={18} className='' />
+                <FaUserPlus size={18} className='wiggle' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng ký</span>
               </Link>
             </li>

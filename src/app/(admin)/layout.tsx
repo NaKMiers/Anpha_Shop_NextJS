@@ -1,4 +1,4 @@
-import AdminMenu from '@/components/AdminMenu'
+import AdminMenu from '@/components/admin/AdminMenu'
 import Header from '@/components/Header'
 import PageLoading from '@/components/PageLoading'
 import StoreProvider from '@/libs/StoreProvider'

@@ -11,6 +11,9 @@ import CarouselProduct from './CarouselProduct'
 import Header from './Header'
 import Slider from './Slider'
 import Carousel from './Carousel'
+import { FaTag } from 'react-icons/fa'
+import { MdCategory } from 'react-icons/md'
+import { BiSolidCategoryAlt } from 'react-icons/bi'
 
 interface BannerProps {
   categories: ICategory[]
@@ -39,17 +42,15 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             {/* Tag */}
             <ul className='hidden lg:block min-w-[200px] bg-white p-2 pt-0 rounded-lg overflow-y-scroll'>
               <h5 className='pt-2 sticky top-0 bg-white text-[20px] font-semibold text-center text-dark'>
-                Tags
+                Tag
               </h5>
 
               {tags?.map(tag => (
                 <li
-                  key={tag.title}
-                  className='rounded-extra-small text-dark hover:bg-primary common-transition'>
+                  className='group rounded-extra-small text-dark hover:bg-primary common-transition'
+                  key={tag.title}>
                   <Link className='flex items-center px-[10px] py-[6px]' href={`/tag?tag=${tag.slug}`}>
-                    <svg xmlns='http://www.w3.org/2000/svg' height='1.3em' viewBox='0 0 448 512'>
-                      <path d='M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'></path>
-                    </svg>
+                    <FaTag size={16} className='wiggle' />
                     <span className='ms-2'>{tag.title}</span>
                   </Link>
                 </li>
@@ -60,10 +61,22 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             <Slider
               time={5000}
               thumbs={[
+                '/images/grammarly-banner.jpg',
                 '/images/capcut-banner.jpg',
                 '/images/netflix-banner.jpg',
-                '/images/grammarly-banner.jpg',
               ]}>
+              <Image
+                src='/images/grammarly-banner.jpg'
+                alt='netflix'
+                width={1200}
+                height={768}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
               <Image
                 src='/images/capcut-banner.jpg'
                 alt='netflix'
@@ -88,50 +101,27 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                   objectFit: 'cover',
                 }}
               />
-              <Image
-                src='/images/grammarly-banner.jpg'
-                alt='netflix'
-                width={1200}
-                height={768}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
             </Slider>
 
             {/* Category */}
             <ul className='hidden lg:block min-w-[200px] bg-white p-2 rounded-lg overflow-y-scroll'>
-              <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Categories</h5>
+              <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Thể loại</h5>
 
-              <li className='rounded-extra-small text-dark hover:bg-primary common-transition'>
+              <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>
                 <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>
-                  <svg
-                    className='animate-bounce'
-                    xmlns='http://www.w3.org/2000/svg'
-                    height='16'
-                    width='12'
-                    viewBox='0 0 384 512'>
-                    <path
-                      className='fill-secondary'
-                      d='M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.5-1.7 9.5L208 160H347.3c20.2 0 36.7 16.4 36.7 36.7c0 7.4-2.2 14.6-6.4 20.7l-192.2 281c-5.9 8.6-15.6 13.7-25.9 13.7h-2.9c-15.7 0-28.5-12.8-28.5-28.5c0-2.3 .3-4.6 .9-6.9L176 288H32c-17.7 0-32-14.3-32-32z'></path>
-                  </svg>
+                  <FaBoltLightning size={16} className='wiggle text-secondary' />
                   <span className='font-bold text-secondary'>FLASHSALES</span>
                 </Link>
               </li>
 
               {categories?.map(category => (
                 <li
-                  key={category.title}
-                  className='rounded-extra-small text-dark hover:bg-primary common-transition'>
+                  className='group rounded-extra-small text-dark hover:bg-primary common-transition'
+                  key={category.title}>
                   <Link
                     className='flex items-center px-[10px] py-[6px]'
                     href={`/category?ctg=${category.slug}`}>
-                    <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'>
-                      <path d='M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z'></path>
-                    </svg>
+                    <BiSolidCategoryAlt size={17} className='wiggle' />
                     <span className='ms-2'>{category.title}</span>
                   </Link>
                 </li>
@@ -176,12 +166,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
               {tags?.map(tag => (
                 <li
-                  key={tag.title}
-                  className='rounded-extra-small text-dark hover:bg-primary common-transition'>
+                  className='group rounded-extra-small text-dark hover:bg-primary common-transition'
+                  key={tag.title}>
                   <Link className='flex items-center px-[10px] py-[6px]' href={`/tag?tag=${tag.slug}`}>
-                    <svg xmlns='http://www.w3.org/2000/svg' height='1.3em' viewBox='0 0 448 512'>
-                      <path d='M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'></path>
-                    </svg>
+                    <FaTag size={16} className='wiggle' />
                     <span className='ms-2'>{tag.title}</span>
                   </Link>
                 </li>
@@ -191,26 +179,24 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             {/* Category */}
             <ul className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'>
               <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
-                Categories
+                Thể loại
               </h5>
 
-              <li className='rounded-extra-small text-dark hover:bg-primary common-transition'>
+              <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>
                 <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>
-                  <FaBoltLightning size={16} className='text-secondary animate-bounce' />
+                  <FaBoltLightning size={16} className='wiggle text-secondary' />
                   <span className='font-bold text-secondary'>FLASHSALES</span>
                 </Link>
               </li>
 
               {categories?.map(category => (
                 <li
-                  key={category.title}
-                  className='rounded-extra-small text-dark hover:bg-primary common-transition'>
+                  className='group rounded-extra-small text-dark hover:bg-primary common-transition'
+                  key={category.title}>
                   <Link
                     className='flex items-center px-[10px] py-[6px]'
                     href={`/category?ctg=${category.slug}`}>
-                    <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'>
-                      <path d='M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z'></path>
-                    </svg>
+                    <BiSolidCategoryAlt size={17} className='wiggle' />
                     <span className='ms-2'>{category.title}</span>
                   </Link>
                 </li>

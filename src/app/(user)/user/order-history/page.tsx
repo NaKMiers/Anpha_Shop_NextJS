@@ -20,7 +20,7 @@ import { FaCalendar, FaCaretDown, FaFilter, FaSearch, FaSort } from 'react-icons
 import { IoMdCode } from 'react-icons/io'
 
 function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const pathname = usePathname()
   const router = useRouter()
@@ -161,7 +161,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
         <button
           onClick={() => setIsShowFilter(!isShowFilter)}
           className='px-3 py-[2px] bg-dark-100 text-white rounded-md shadow-lg ml-auto group hover:bg-primary common-transition mb-3'>
-          <BsThreeDots size={28} className='common-transition' />
+          <BsThreeDots size={28} className='wiggle' />
         </button>
       </div>
 
@@ -271,7 +271,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               title='Alt + Enter'
               onClick={handleSubmit(handleFilter)}>
               Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
+              <FaFilter size={14} className='ml-[6px] wiggle' />
             </button>
 
             {/* Reset Button */}
@@ -280,7 +280,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               title='Alt + R'
               onClick={handleResetFilter}>
               Reset
-              <BiReset size={24} className='ml-1 common-transition' />
+              <BiReset size={22} className='ml-1 wiggle' />
             </button>
           </div>
         </div>

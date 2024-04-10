@@ -19,6 +19,7 @@ import { BiReset } from 'react-icons/bi'
 import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
 import { GroupTypes } from '../add/page'
+import AdminMeta from '@/components/admin/AdminMeta'
 
 export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
 
@@ -213,18 +214,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
-
-      // Alt + F (Filter)
-      if (e.altKey && e.key === 'f') {
-        e.preventDefault()
-        handleSubmit(handleFilter)()
-      }
-
-      // Alt + R (Reset)
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault()
-        handleResetFilter()
-      }
     }
 
     // Add the event listener
@@ -249,279 +238,255 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          {/* Search */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <Input
-              className='md:max-w-[450px]'
-              id='search'
-              label='Search'
-              disabled={false}
-              register={register}
-              errors={errors}
-              type='text'
-              icon={FaSearch}
-            />
-          </div>
-
-          {/* Type Selection */}
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12 md:col-span-8'>
-            <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                types.length === selectedTypes.length
-                  ? 'bg-dark-100 text-white border-dark-100'
-                  : 'border-slate-300'
-              }`}
-              title='All Types'
-              onClick={() =>
-                setSelectedTypes(
-                  types.length === selectedTypes.length ? [] : types.map(type => type._id)
-                )
-              }>
-              All
-            </div>
-            {Object.keys(groupTypes).map(key => (
-              <Fragment key={key}>
-                <div
-                  className={`ml-2 overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                    checkAllTypesOfCategorySelected(groupTypes[key])
-                      ? 'bg-dark-100 text-white border-dark-100'
-                      : 'border-slate-300 bg-slate-200'
-                  }`}
-                  title={key}
-                  onClick={() =>
-                    checkAllTypesOfCategorySelected(groupTypes[key])
-                      ? // remove all types of category
-                        setSelectedTypes(prev =>
-                          prev.filter(id => !groupTypes[key].map(type => type._id).includes(id))
-                        )
-                      : // add all types of category
-                        setSelectedTypes(prev => [...prev, ...groupTypes[key].map(type => type._id)])
-                  }>
-                  {key}
-                </div>
-                {groupTypes[key].map(type => (
-                  <div
-                    className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
-                      selectedTypes.includes(type._id)
-                        ? 'bg-secondary text-white border-secondary'
-                        : 'border-slate-300'
-                    }`}
-                    title={type.title}
-                    key={type._id}
-                    onClick={
-                      selectedTypes.includes(type._id)
-                        ? () => setSelectedTypes(prev => prev.filter(id => id !== type._id))
-                        : () => setSelectedTypes(prev => [...prev, type._id])
-                    }>
-                    {type.title}
-                  </div>
-                ))}
-              </Fragment>
-            ))}
-          </div>
-
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
-            {/* Sort */}
-            <Input
-              id='sort'
-              label='Sort'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: 'createdAt|-1',
-                  label: 'Newest',
-                },
-                {
-                  value: 'createdAt|1',
-                  label: 'Oldest',
-                },
-                {
-                  value: 'updatedAt|-1',
-                  label: 'Latest',
-                  selected: true,
-                },
-                {
-                  value: 'updatedAt|1',
-                  label: 'Earliest',
-                },
-              ]}
-            />
-
-            {/* Active */}
-            <Input
-              id='active'
-              label='Active'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: true,
-                  label: 'On',
-                },
-                {
-                  value: false,
-                  label: 'Off',
-                },
-              ]}
-            />
-
-            {/* Using */}
-            <Input
-              id='usingUser'
-              label='Using'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: true,
-                  label: 'Using',
-                },
-                {
-                  value: false,
-                  label: 'Empty',
-                },
-              ]}
-            />
-
-            {/* Expire */}
-            <Input
-              id='expire'
-              label='Expire'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: true,
-                  label: 'Expired',
-                },
-                {
-                  value: false,
-                  label: 'Normal',
-                },
-              ]}
-            />
-
-            {/* Renew */}
-            <Input
-              id='renew'
-              label='Renew'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: true,
-                  label: 'Expired',
-                },
-                {
-                  value: false,
-                  label: 'Normal',
-                },
-              ]}
-            />
-          </div>
-
-          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
-            {/* Filter Button */}
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
-              Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
-            </button>
-
-            {/* Reset Button */}
-            <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
-              onClick={handleResetFilter}>
-              Reset
-              <BiReset size={24} className='ml-1 common-transition' />
-            </button>
-          </div>
-
-          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
-              title='Alt + A'
-              onClick={() =>
-                setSelectedAccounts(
-                  selectedAccounts.length > 0 ? [] : accounts.map(account => account._id)
-                )
-              }>
-              {selectedAccounts.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
-
-            {/* Activate Many Button */}
-            {selectedAccounts.some(id => !accounts.find(account => account._id === id)?.active) && (
-              <button
-                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
-                onClick={() => handleActivateAccounts(selectedAccounts, true)}>
-                Activate
-              </button>
-            )}
-
-            {/* Deactivate Many Button */}
-            {selectedAccounts.some(id => accounts.find(account => account._id === id)?.active) && (
-              <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => handleActivateAccounts(selectedAccounts, false)}>
-                Deactivate
-              </button>
-            )}
-
-            {/* Delete Many Button */}
-            {!!selectedAccounts.length && (
-              <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                title='Alt + Delete'
-                onClick={() => setIsOpenConfirmModal(true)}>
-                Delete
-              </button>
-            )}
-          </div>
+      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+        {/* Search */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <Input
+            className='md:max-w-[450px]'
+            id='search'
+            label='Search'
+            disabled={false}
+            register={register}
+            errors={errors}
+            type='text'
+            icon={FaSearch}
+          />
         </div>
-      </div>
+
+        {/* Type Selection */}
+        <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12 md:col-span-8'>
+          <div
+            className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+              types.length === selectedTypes.length
+                ? 'bg-dark-100 text-white border-dark-100'
+                : 'border-slate-300'
+            }`}
+            title='All Types'
+            onClick={() =>
+              setSelectedTypes(types.length === selectedTypes.length ? [] : types.map(type => type._id))
+            }>
+            All
+          </div>
+          {Object.keys(groupTypes).map(key => (
+            <Fragment key={key}>
+              <div
+                className={`ml-2 overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                  checkAllTypesOfCategorySelected(groupTypes[key])
+                    ? 'bg-dark-100 text-white border-dark-100'
+                    : 'border-slate-300 bg-slate-200'
+                }`}
+                title={key}
+                onClick={() =>
+                  checkAllTypesOfCategorySelected(groupTypes[key])
+                    ? // remove all types of category
+                      setSelectedTypes(prev =>
+                        prev.filter(id => !groupTypes[key].map(type => type._id).includes(id))
+                      )
+                    : // add all types of category
+                      setSelectedTypes(prev => [...prev, ...groupTypes[key].map(type => type._id)])
+                }>
+                {key}
+              </div>
+              {groupTypes[key].map(type => (
+                <div
+                  className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                    selectedTypes.includes(type._id)
+                      ? 'bg-secondary text-white border-secondary'
+                      : 'border-slate-300'
+                  }`}
+                  title={type.title}
+                  key={type._id}
+                  onClick={
+                    selectedTypes.includes(type._id)
+                      ? () => setSelectedTypes(prev => prev.filter(id => id !== type._id))
+                      : () => setSelectedTypes(prev => [...prev, type._id])
+                  }>
+                  {type.title}
+                </div>
+              ))}
+            </Fragment>
+          ))}
+        </div>
+
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+          {/* Sort */}
+          <Input
+            id='sort'
+            label='Sort'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: 'createdAt|-1',
+                label: 'Newest',
+              },
+              {
+                value: 'createdAt|1',
+                label: 'Oldest',
+              },
+              {
+                value: 'updatedAt|-1',
+                label: 'Latest',
+                selected: true,
+              },
+              {
+                value: 'updatedAt|1',
+                label: 'Earliest',
+              },
+            ]}
+          />
+
+          {/* Active */}
+          <Input
+            id='active'
+            label='Active'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: true,
+                label: 'On',
+              },
+              {
+                value: false,
+                label: 'Off',
+              },
+            ]}
+          />
+
+          {/* Using */}
+          <Input
+            id='usingUser'
+            label='Using'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: true,
+                label: 'Using',
+              },
+              {
+                value: false,
+                label: 'Empty',
+              },
+            ]}
+          />
+
+          {/* Expire */}
+          <Input
+            id='expire'
+            label='Expire'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: true,
+                label: 'Expired',
+              },
+              {
+                value: false,
+                label: 'Normal',
+              },
+            ]}
+          />
+
+          {/* Renew */}
+          <Input
+            id='renew'
+            label='Renew'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: true,
+                label: 'Expired',
+              },
+              {
+                value: false,
+                label: 'Normal',
+              },
+            ]}
+          />
+        </div>
+
+        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            title='Alt + A'
+            onClick={() =>
+              setSelectedAccounts(
+                selectedAccounts.length > 0 ? [] : accounts.map(account => account._id)
+              )
+            }>
+            {selectedAccounts.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
+
+          {/* Activate Many Button */}
+          {selectedAccounts.some(id => !accounts.find(account => account._id === id)?.active) && (
+            <button
+              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+              onClick={() => handleActivateAccounts(selectedAccounts, true)}>
+              Activate
+            </button>
+          )}
+
+          {/* Deactivate Many Button */}
+          {selectedAccounts.some(id => accounts.find(account => account._id === id)?.active) && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => handleActivateAccounts(selectedAccounts, false)}>
+              Deactivate
+            </button>
+          )}
+
+          {/* Delete Many Button */}
+          {!!selectedAccounts.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              title='Alt + Delete'
+              onClick={() => setIsOpenConfirmModal(true)}>
+              Delete
+            </button>
+          )}
+        </div>
+      </AdminMeta>
 
       {/* Confirm Dialog */}
       <ConfirmDialog

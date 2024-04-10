@@ -47,12 +47,12 @@ function AccountItem({
         <div className='w-full'>
           {/* Thumbnails */}
           <Link
-            href={`/${data.type.slug}`}
+            href={`/${data.type?.slug || ''}`}
             className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
             <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
               <Image
-                className='aspect-video flex-shrink-0 snap-start'
-                src={data.type.images[0]}
+                className='aspect-video flex-shrink-0 snap-start object-cover w-full h-full'
+                src={data.type?.images[0] || '/images/not-found.jpg'}
                 height={200}
                 width={200}
                 alt='thumbnail'
@@ -62,7 +62,7 @@ function AccountItem({
 
           {/* Using User */}
           <div
-            className={`absolute z-10 -top-2 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark  px-2 py-[2px] select-none rounded-lg font-body ${
+            className={`absolute z-10 -top-3 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark  px-2 py-[2px] select-none rounded-lg font-body ${
               data.usingUser ? 'bg-secondary text-white' : 'bg-slate-300 text-slate-400'
             }`}>
             {data.usingUser ? data.usingUser : '___'}
@@ -75,7 +75,7 @@ function AccountItem({
             <span className='shadow-md text-xs text-dark bg-yellow-400 px-2 py-px select-none rounded-md font-body'>
               Netflix
             </span>
-            {data.type.title}
+            {data.type?.title}
           </p>
 
           {/* Begin */}

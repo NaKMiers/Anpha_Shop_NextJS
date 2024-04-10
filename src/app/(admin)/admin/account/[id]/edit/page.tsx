@@ -23,7 +23,7 @@ export type GroupTypes = {
 }
 
 function AddAccountPage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const router = useRouter()

@@ -23,7 +23,7 @@ interface CarouselProductProps {
 }
 
 function CarouselProduct({ product, className = '' }: CarouselProductProps) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
@@ -194,17 +194,15 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
             Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>
           </p>
           {/* Action Buttons */}
-          <div
-            className='flex items-center gap-2 h-[26px] justify-center'
-            onClick={e => e.preventDefault()}>
+          <div className='flex items-center gap-2 justify-center' onClick={e => e.preventDefault()}>
             <button
-              className='bg-secondary rounded-[4px] text-[12px] text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
+              className='h-[26px] md:h-[30px] px-2 bg-secondary rounded-[4px] text-[12px] text-white font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
               onClick={handleBuyNow}
               disabled={isLoading}>
               MUA NGAY
             </button>
             <button
-              className={`bg-primary rounded-[4px] p-[6px] group hover:bg-primary-600 common-transition hover:bg-secondary ${
+              className={`h-[26px] md:h-[30px] px-2 bg-primary rounded-[4px] hover:bg-primary-600 common-transition hover:bg-secondary ${
                 isLoading ? 'pointer-events-none bg-slate-200' : ''
               }`}
               onClick={handleAddToCart}
@@ -212,7 +210,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
               {isLoading ? (
                 <RiDonutChartFill size={13} className='animate-spin text-white' />
               ) : (
-                <FaCartPlus size={13} className='text-white group-hover:scale-110 common-transition' />
+                <FaCartPlus size={16} className='text-white wiggle-1' />
               )}
             </button>
           </div>

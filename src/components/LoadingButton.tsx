@@ -11,7 +11,7 @@ function LoadingButton({ text, isLoading, onClick, className = '' }: LoadingButt
   return (
     <button
       className={`${
-        isLoading ? 'bg-slate-300 pointer-events-none flex justify-center' : ''
+        isLoading ? 'bg-slate-200 pointer-events-none flex justify-center' : ''
       } ${className}`}
       disabled={isLoading}
       onClick={onClick}>

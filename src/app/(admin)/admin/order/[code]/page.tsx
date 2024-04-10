@@ -12,7 +12,7 @@ import { Fragment, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
 
   // states

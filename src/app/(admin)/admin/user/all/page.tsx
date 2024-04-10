@@ -4,6 +4,7 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import UserItem from '@/components/admin/UserItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -19,7 +20,7 @@ import { BiReset } from 'react-icons/bi'
 import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 
 function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const pathname = usePathname()
   const router = useRouter()
@@ -181,18 +182,6 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
-
-      // Alt + F (Filter)
-      if (e.altKey && e.key === 'f') {
-        e.preventDefault()
-        handleSubmit(handleFilter)()
-      }
-
-      // Alt + R (Reset)
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault()
-        handleResetFilter()
-      }
     }
 
     // Add the event listener
@@ -209,168 +198,148 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <Input
-              className='md:max-w-[450px]'
-              id='search'
-              label='Search'
-              disabled={false}
-              register={register}
-              errors={errors}
-              type='text'
-              icon={FaSearch}
-            />
-          </div>
-
-          {/* Balance */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='balance'>
-              <span className='font-bold'>Balance: </span>
-              <span>{formatPrice(balance)}</span> - <span>{formatPrice(maxBalance)}</span>
-            </label>
-            <input
-              id='balance'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minBalance || 0}
-              max={maxBalance || 0}
-              value={balance}
-              onChange={e => setBalance(+e.target.value)}
-            />
-          </div>
-
-          {/* Accumulated */}
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='accumulated'>
-              <span className='font-bold'>Accumulated: </span>
-              <span>{formatPrice(accumulated || maxAccumulated)}</span> -{' '}
-              <span>{formatPrice(maxAccumulated)}</span>
-            </label>
-            <input
-              id='accumulated'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minAccumulated || 0}
-              max={maxAccumulated || 0}
-              value={accumulated}
-              onChange={e => setAccumulated(+e.target.value)}
-            />
-          </div>
-
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
-            {/* Select */}
-
-            {/* Sort */}
-            <Input
-              id='sort'
-              label='Sort'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: 'createdAt|-1',
-                  label: 'Newest',
-                },
-                {
-                  value: 'createdAt|1',
-                  label: 'Oldest',
-                },
-                {
-                  value: 'updatedAt|-1',
-                  label: 'Latest',
-                  selected: true,
-                },
-                {
-                  value: 'updatedAt|1',
-                  label: 'Earliest',
-                },
-              ]}
-            />
-
-            {/* role */}
-            <Input
-              id='role'
-              label='Role'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: '',
-                  label: 'All',
-                  selected: true,
-                },
-                {
-                  value: 'admin',
-                  label: 'Admin',
-                },
-                {
-                  value: 'editor',
-                  label: 'Editor',
-                },
-                {
-                  value: 'collaborator',
-                  label: 'Collaborator',
-                },
-                {
-                  value: 'user',
-                  label: 'User',
-                },
-              ]}
-            />
-          </div>
-
-          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
-            {/* Filter Button */}
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
-              Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
-            </button>
-
-            {/* Reset Button */}
-            <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
-              onClick={handleResetFilter}>
-              Reset
-              <BiReset size={24} className='ml-1 common-transition' />
-            </button>
-          </div>
-
-          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
-              onClick={handleSelectAllUsers}>
-              {selectedUsers.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
-
-            {/* Delete Many Button */}
-            {!!selectedUsers.length && (
-              <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => setIsOpenConfirmModal(true)}>
-                Delete
-              </button>
-            )}
-          </div>
+      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+        {/* Search */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <Input
+            className='md:max-w-[450px]'
+            id='search'
+            label='Search'
+            disabled={false}
+            register={register}
+            errors={errors}
+            type='text'
+            icon={FaSearch}
+          />
         </div>
-      </div>
+
+        {/* Balance */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='balance'>
+            <span className='font-bold'>Balance: </span>
+            <span>{formatPrice(balance)}</span> - <span>{formatPrice(maxBalance)}</span>
+          </label>
+          <input
+            id='balance'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minBalance || 0}
+            max={maxBalance || 0}
+            value={balance}
+            onChange={e => setBalance(+e.target.value)}
+          />
+        </div>
+
+        {/* Accumulated */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='accumulated'>
+            <span className='font-bold'>Accumulated: </span>
+            <span>{formatPrice(accumulated || maxAccumulated)}</span> -{' '}
+            <span>{formatPrice(maxAccumulated)}</span>
+          </label>
+          <input
+            id='accumulated'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minAccumulated || 0}
+            max={maxAccumulated || 0}
+            value={accumulated}
+            onChange={e => setAccumulated(+e.target.value)}
+          />
+        </div>
+
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+          {/* Select */}
+
+          {/* Sort */}
+          <Input
+            id='sort'
+            label='Sort'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: 'createdAt|-1',
+                label: 'Newest',
+              },
+              {
+                value: 'createdAt|1',
+                label: 'Oldest',
+              },
+              {
+                value: 'updatedAt|-1',
+                label: 'Latest',
+                selected: true,
+              },
+              {
+                value: 'updatedAt|1',
+                label: 'Earliest',
+              },
+            ]}
+          />
+
+          {/* role */}
+          <Input
+            id='role'
+            label='Role'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'admin',
+                label: 'Admin',
+              },
+              {
+                value: 'editor',
+                label: 'Editor',
+              },
+              {
+                value: 'collaborator',
+                label: 'Collaborator',
+              },
+              {
+                value: 'user',
+                label: 'User',
+              },
+            ]}
+          />
+        </div>
+
+        {/* Action Button */}
+        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            onClick={handleSelectAllUsers}>
+            {selectedUsers.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
+
+          {/* Delete Many Button */}
+          {!!selectedUsers.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => setIsOpenConfirmModal(true)}>
+              Delete
+            </button>
+          )}
+        </div>
+      </AdminMeta>
 
       {/* Confirm Dialog */}
       <ConfirmDialog

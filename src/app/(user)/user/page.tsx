@@ -18,7 +18,7 @@ import { FaCamera, FaPlus } from 'react-icons/fa'
 import { HiLightningBolt } from 'react-icons/hi'
 
 function UserPage() {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()
@@ -47,9 +47,12 @@ function UserPage() {
   useEffect(() => {
     const getCurUser = async () => {
       const session = await getSession()
+
       // get user from session
       const curUser: any = session?.user
       setUser(curUser)
+
+      console.log(curUser)
 
       // set form values
       setValue('firstname', curUser?.firstname)
@@ -65,6 +68,9 @@ function UserPage() {
   }, [user?._id, setValue])
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    console.log(data)
+
+    // start loading
     dispatch(setLoading(true))
 
     try {
@@ -101,7 +107,7 @@ function UserPage() {
               alt='avatar'
             />
             <div className='absolute top-0 left-0 flex opacity-0 group-hover:opacity-100 items-center justify-center bg-primary w-full h-full bg-opacity-50 common-transition'>
-              <FaCamera size={52} className='text-white' />
+              <FaCamera size={52} className='text-white wiggle-0' />
             </div>
           </div>
 
@@ -138,7 +144,7 @@ function UserPage() {
                   href='/recharge'>
                   <FaPlus
                     size={10}
-                    className='text-primary common-transition group-hover:text-secondary'
+                    className='text-primary common-transition wiggle group-hover:text-secondary'
                   />
                 </Link>
               </div>
@@ -168,7 +174,7 @@ function UserPage() {
         <h3 className='text-2xl font-semibold mb-5'>
           Thông tin chi tiết{' '}
           <button
-            className={`text-sky-600 text-base font-normal group ${isEditing ? 'text-yellow-400' : ''}`}
+            className={`text-sky-500 text-base font-normal group ${isEditing ? 'text-slate-600' : ''}`}
             onClick={() => setIsEditing(!isEditing)}>
             (<span className='group-hover:underline'>{!isEditing ? 'chỉnh sửa' : 'hủy'}</span>)
           </button>

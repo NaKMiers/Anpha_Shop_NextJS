@@ -4,6 +4,7 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import CategoryItem from '@/components/admin/CategoryItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -14,8 +15,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { BiReset } from 'react-icons/bi'
-import { FaFilter, FaSort } from 'react-icons/fa'
+import { FaSort } from 'react-icons/fa'
 
 export type EditingValues = {
   _id: string
@@ -210,18 +210,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
-
-      // Alt + F (Filter)
-      if (e.altKey && e.key === 'f') {
-        e.preventDefault()
-        handleSubmit(handleFilter)()
-      }
-
-      // Alt + R (Reset)
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault()
-        handleResetFilter()
-      }
     }
 
     // Add the event listener
@@ -229,14 +217,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [
-    categories,
-    selectedCategories,
-    handleDeleteCategories,
-    handleFilter,
-    handleSubmit,
-    handleResetFilter,
-  ])
+  }, [categories, selectedCategories, handleDeleteCategories, handleSubmit])
 
   return (
     <div className='w-full'>
@@ -245,134 +226,108 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
       {/* Filter */}
-      <div className='mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-ful'>
-        <div className='grid grid-cols-12 gap-21'>
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='productQuantity'>
-              <span className='font-bold'>Product Quantity: </span>
-              <span>{productQuantity}</span> - <span>{maxPQ}</span>
-            </label>
-            <input
-              id='productQuantity'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
-              disabled={false}
-              type='range'
-              min={minPQ || 0}
-              max={maxPQ || 0}
-              value={productQuantity}
-              onChange={e => setProductQuantity(+e.target.value)}
-            />
-          </div>
-
-          {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
-            {/* Sort */}
-            <Input
-              id='sort'
-              label='Sort'
-              disabled={false}
-              register={register}
-              errors={errors}
-              icon={FaSort}
-              type='select'
-              options={[
-                {
-                  value: 'createdAt|-1',
-                  label: 'Newest',
-                },
-                {
-                  value: 'createdAt|1',
-                  label: 'Oldest',
-                },
-                {
-                  value: 'updatedAt|-1',
-                  label: 'Latest',
-                  selected: true,
-                },
-                {
-                  value: 'updatedAt|1',
-                  label: 'Earliest',
-                },
-              ]}
-            />
-          </div>
-
-          {/* Filter Buttons */}
-          <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
-            {/* Filter Button */}
-            <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
-              Filter
-              <FaFilter size={16} className='ml-1 common-transition' />
-            </button>
-
-            {/* Reset Button */}
-            <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
-              onClick={handleResetFilter}>
-              Reset
-              <BiReset size={24} className='ml-1 common-transition' />
-            </button>
-          </div>
-
-          {/* Acction Buttons */}
-          <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
-            {/* Select All Button */}
-            <button
-              className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
-              onClick={() =>
-                setSelectedCategories(
-                  selectedCategories.length > 0 ? [] : categories.map(tag => tag._id)
-                )
-              }>
-              {selectedCategories.length > 0 ? 'Unselect All' : 'Select All'}
-            </button>
-
-            {!!editingCategories.filter(id => selectedCategories.includes(id)).length && (
-              <>
-                {/* Save Many Button */}
-                <button
-                  className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
-                  onClick={() =>
-                    handleSaveEditingCategories(
-                      editingValues.filter(value => selectedCategories.includes(value._id))
-                    )
-                  }>
-                  Save All
-                </button>
-
-                {/* Cancel Many Button */}
-                <button
-                  className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
-                  onClick={() => {
-                    // cancel editing values are selected
-                    setEditingCategories(
-                      editingCategories.filter(id => !selectedCategories.includes(id))
-                    )
-                    setEditingValues(
-                      editingValues.filter(value => !selectedCategories.includes(value._id))
-                    )
-                  }}>
-                  Cancel
-                </button>
-              </>
-            )}
-
-            {/* Delete Many Button */}
-            {!!selectedCategories.length && (
-              <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-                onClick={() => setIsOpenConfirmModal(true)}>
-                Delete
-              </button>
-            )}
-          </div>
+      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+        {/* Product Quantity */}
+        <div className='flex flex-col col-span-12 md:col-span-4'>
+          <label htmlFor='productQuantity'>
+            <span className='font-bold'>Product Quantity: </span>
+            <span>{productQuantity}</span> - <span>{maxPQ}</span>
+          </label>
+          <input
+            id='productQuantity'
+            className='input-range h-2 bg-slate-200 rounded-lg my-2'
+            placeholder=' '
+            disabled={false}
+            type='range'
+            min={minPQ || 0}
+            max={maxPQ || 0}
+            value={productQuantity}
+            onChange={e => setProductQuantity(+e.target.value)}
+          />
         </div>
-      </div>
+
+        {/* Select Filter */}
+        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
+          {/* Sort */}
+          <Input
+            id='sort'
+            label='Sort'
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type='select'
+            options={[
+              {
+                value: 'createdAt|-1',
+                label: 'Newest',
+              },
+              {
+                value: 'createdAt|1',
+                label: 'Oldest',
+              },
+              {
+                value: 'updatedAt|-1',
+                label: 'Latest',
+                selected: true,
+              },
+              {
+                value: 'updatedAt|1',
+                label: 'Earliest',
+              },
+            ]}
+          />
+        </div>
+
+        {/* Acction Buttons */}
+        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+          {/* Select All Button */}
+          <button
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            onClick={() =>
+              setSelectedCategories(selectedCategories.length > 0 ? [] : categories.map(tag => tag._id))
+            }>
+            {selectedCategories.length > 0 ? 'Unselect All' : 'Select All'}
+          </button>
+
+          {!!editingCategories.filter(id => selectedCategories.includes(id)).length && (
+            <>
+              {/* Save Many Button */}
+              <button
+                className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
+                onClick={() =>
+                  handleSaveEditingCategories(
+                    editingValues.filter(value => selectedCategories.includes(value._id))
+                  )
+                }>
+                Save All
+              </button>
+
+              {/* Cancel Many Button */}
+              <button
+                className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
+                onClick={() => {
+                  // cancel editing values are selected
+                  setEditingCategories(editingCategories.filter(id => !selectedCategories.includes(id)))
+                  setEditingValues(
+                    editingValues.filter(value => !selectedCategories.includes(value._id))
+                  )
+                }}>
+                Cancel
+              </button>
+            </>
+          )}
+
+          {/* Delete Many Button */}
+          {!!selectedCategories.length && (
+            <button
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              onClick={() => setIsOpenConfirmModal(true)}>
+              Delete
+            </button>
+          )}
+        </div>
+      </AdminMeta>
 
       {/* Confirm Dialog */}
       <ConfirmDialog

@@ -17,7 +17,7 @@ interface BuyActionWithQuantityProps {
 }
 
 function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantityProps) {
-  // hook
+  // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const router = useRouter()
@@ -106,7 +106,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
       {/* Quantity */}
       <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
         <button
-          className={`flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
+          className={`group flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
             quantity <= 1
               ? 'pointer-events-none border-slate-100 bg-slate-100'
               : 'border border-secondary'
@@ -115,7 +115,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           onClick={() => handleQuantity(-1)}>
           <FaMinus
             size={16}
-            className={`group-hover:text-white group-hover:scale-110 common-transition ${
+            className={`group-hover:text-white wiggle ${
               quantity <= 1 ? 'text-slate-300' : 'text-secondary'
             }`}
           />
@@ -130,7 +130,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           onBlur={e => handleQuantity(+e.target.value, true)}
         />
         <button
-          className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
+          className={`group flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
             quantity >= product?.stock!
               ? 'pointer-events-none border-slate-100 bg-slate-100'
               : ' border-secondary'
@@ -139,7 +139,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           onClick={() => handleQuantity(1)}>
           <FaPlus
             size={16}
-            className={`group-hover:text-white group-hover:scale-110 common-transition ${
+            className={`group-hover:text-white wiggle ${
               quantity >= product?.stock! ? 'text-slate-300' : 'text-secondary'
             }`}
           />
@@ -155,7 +155,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           MUA NGAY
         </button>
         <button
-          className={`bg-primary rounded-md p-2 group hover:bg-primary-600 common-transition ${
+          className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 common-transition ${
             isLoading ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddProductToCart}
@@ -163,7 +163,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           {isLoading ? (
             <RiDonutChartFill size={22} className='animate-spin text-white' />
           ) : (
-            <FaCartPlus size={22} className='text-white group-hover:scale-110 common-transition' />
+            <FaCartPlus size={22} className='text-white wiggle' />
           )}
         </button>
       </div>

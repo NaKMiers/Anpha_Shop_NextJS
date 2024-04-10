@@ -17,7 +17,7 @@ interface CommentItemProps {
 }
 
 function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
-  // hook
+  // hooks
   const { data: session } = useSession()
   const curUser: any = session?.user
 
@@ -33,7 +33,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       comment: '',
@@ -43,26 +43,46 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
   // handle reply comment
   const replyComment: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      setIsLoading(true)
+      // check login
+      if (!curUser) return toast.error('Bạn cần đăng nhập để thực hiện chức năng này')
 
-      console.log(data)
+      // check if comment is valid
+      if (comment._id && curUser?._id) {
+        setIsLoading(true)
 
-      try {
-        // send request to add comment
-        const { newComment } = await replyCommentApi(comment._id, data.comment)
-        newComment.user = curUser
+        console.log(data)
 
-        // add new comment to list
-        setCmts(prev => [newComment, ...prev])
-      } catch (err: any) {
-        toast.error(err.message)
-        console.log(err)
-      } finally {
-        // reset loading state
-        setIsLoading(false)
+        try {
+          // send request to add comment
+          const { newComment, parentComment } = await replyCommentApi(comment._id, data.comment)
+          newComment.user = curUser
+
+          console.log('newComment: ', newComment)
+
+          // add new comment to list
+          setCmts(prev =>
+            prev.map(comment =>
+              comment._id === parentComment._id
+                ? {
+                    ...comment,
+                    replied: [newComment, ...comment.replied],
+                  }
+                : comment
+            )
+          )
+
+          // reset form
+          reset()
+        } catch (err: any) {
+          toast.error(err.message)
+          console.log(err)
+        } finally {
+          // reset loading state
+          setIsLoading(false)
+        }
       }
     },
-    [comment._id, setCmts, curUser]
+    [comment._id, setCmts, curUser, reset]
   )
 
   // like / unlike comment
@@ -72,8 +92,30 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         // send request to like / dislike comment
         const { comment: cmt } = await likeCommentApi(comment._id, value)
 
-        // update comment
-        setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
+        console.log(cmt)
+
+        // like / dislike comment / replied comment
+        if (!cmt.productId) {
+          // replied comment
+          console.log('replied comment')
+
+          setCmts(prev =>
+            prev.map(c =>
+              c.replied.map((reply: FullyComment) => reply._id).includes(cmt._id)
+                ? {
+                    ...c,
+                    replied: c.replied.map((reply: FullyComment) =>
+                      reply._id === cmt._id ? cmt : reply
+                    ),
+                  }
+                : c
+            )
+          )
+        } else {
+          // normal comment
+          console.log('normal comment')
+          setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
+        }
       } catch (err: any) {
         toast.error(err.message)
         console.log(err)
@@ -84,91 +126,123 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
 
   // hide / show comment
   const hideComment = useCallback(
-    async (value: 'y' | 'n') => {
+    async (id: string, value: 'y' | 'n') => {
       try {
         // send request to hide / show comment
-        const { comment: cmt } = await hideCommentApi(comment._id, value)
+        const { comment: cmt } = await hideCommentApi(id, value)
+        console.log(cmt)
 
-        // update comment
-        setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
+        // hide / show comment / replied comment
+        if (!cmt.productId) {
+          // replied comment
+          console.log('replied comment')
+
+          setCmts(prev =>
+            prev.map(c => {
+              console.log(c.replied.map((reply: FullyComment) => reply._id))
+
+              return c.replied.map((reply: FullyComment) => reply._id).includes(cmt._id)
+                ? {
+                    ...c,
+                    replied: c.replied.map((reply: FullyComment) =>
+                      reply._id === cmt._id ? cmt : reply
+                    ),
+                  }
+                : c
+            })
+          )
+        } else {
+          // normal comment
+          console.log('normal comment')
+          setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
+        }
       } catch (err: any) {
         toast.error(err.message)
         console.log(err)
       }
     },
-    [comment._id, setCmts]
+    [setCmts]
   )
 
   return (
-    <div className='w-full flex items-start gap-3'>
+    <div className={`w-full flex items-start gap-3 ${className}`}>
+      {/* Avatar */}
       <Image
-        className={`rounded-full shadow-lg ${className}`}
-        src={user.avatar || '/images/default-avatar.jpg'}
+        className='rounded-full shadow-lg'
+        src={user?.avatar || '/images/default-avatar.jpg'}
         width={40}
         height={40}
         alt='avatar'
       />
 
+      {/* Headline */}
       <div className='w-full'>
         <div className=''>
           <span className='font-semibold'>
-            {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username}
+            {user?.firstname && user?.lastname ? `${user?.firstname} ${user?.lastname}` : user?.username}
           </span>{' '}
           - <span className='text-slate-500 text-sm'>{format(comment.createdAt)}</span>{' '}
-          <button
-            className={`ml-2 px-[6px] py-[1px] rounded-[4px] text-sm border ${
-              comment.hide
-                ? 'border-rose-500 hover:bg-rose-500 text-rose-500'
-                : 'border-green-500 hover:bg-green-500 text-green-500'
-            } hover:text-white common-transition`}
-            onClick={() => hideComment(comment.hide ? 'n' : 'y')}>
-            {comment.hide ? 'hiding' : 'showing'}
-          </button>
+          {curUser?.role !== 'user' && (
+            <button
+              className={`ml-2 px-[6px] py-[1px] rounded-[4px] text-sm border ${
+                comment.hide
+                  ? 'border-rose-500 hover:bg-rose-500 text-rose-500'
+                  : 'border-green-500 hover:bg-green-500 text-green-500'
+              } hover:text-white common-transition`}
+              onClick={() => hideComment(comment._id, comment.hide ? 'n' : 'y')}>
+              {comment.hide ? 'hiding' : 'showing'}
+            </button>
+          )}
         </div>
 
+        {/* Content */}
         <p className='font-body tracking-tide'>{comment.content}</p>
 
+        {/* Actions */}
         <div className='flex items-center gap-3 text-sm'>
-          <div className='flex items-center font-semibold gap-1'>
+          <div className='group flex items-center font-semibold gap-1'>
             {comment.likes.includes(curUser?._id) ? (
               <FaHeart
                 size={14}
-                className='h-[14px] text-secondary cursor-pointer hover:scale-110 common-transition'
+                className='h-[14px] text-secondary cursor-pointer wiggle'
                 onClick={() => likeComment('n')}
               />
             ) : (
               <FaRegHeart
                 size={14}
-                className='w-4 h-[14px] text-secondary cursor-pointer hover:scale-110 common-transition'
+                className='w-4 h-[14px] text-secondary cursor-pointer wiggle'
                 onClick={() => likeComment('y')}
               />
             )}{' '}
-            <span>0</span>
+            <span>{comment.likes.length}</span>
           </div>
 
-          <div
-            className='flex font-semibold text-primary gap-1 cursor-pointer select-none'
-            onClick={() => setIsOpenReply(prev => !prev)}>
-            <span>0</span>
-            <span className=''>Phản hồi</span>
-            <FaSortDown />
-          </div>
+          {comment.productId && (
+            <div
+              className='flex font-semibold text-primary gap-1 cursor-pointer select-none'
+              onClick={() => setIsOpenReply(prev => !prev)}>
+              <span>{comment.replied.length}</span>
+              <span className=''>Phản hồi</span>
+              <FaSortDown />
+            </div>
+          )}
         </div>
 
         {/* Reply Section */}
         <div
           className={`${
-            isOpenReply ? 'max-h-[300px]' : 'max-h-0'
+            isOpenReply ? 'max-h-[350px]' : 'max-h-0'
           } relative h-full overflow-y-scroll common-transition mt-1 `}>
+          {/* Input */}
           <div className='sticky z-10 top-0 flex items-start gap-2 bg-white'>
             <Image
               className={`rounded-full shadow-lg ${className}`}
-              src={'/images/default-avatar.jpg'}
+              src={curUser?.avatar || '/images/default-avatar.jpg'}
               width={24}
               height={24}
               alt='avatar'
             />
-            <div className='w-full'>
+            <div className='w-full flex flex-col items-end sm:flex-row sm:items-center'>
               <input
                 id='comment'
                 className='px-2 py-1 border-b w-full text-sm text-dark focus:outline-none focus:ring-0 peer'
@@ -183,7 +257,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
                   Hủy
                 </button>
                 <LoadingButton
-                  className='h-[30px] text-sm px-3 border border-primary hover:bg-primary text-primary hover:text-white rounded-lg common-transition'
+                  className='h-[30px] flex items-center text-sm px-3 border border-primary hover:bg-primary text-primary hover:text-white rounded-lg common-transition'
                   onClick={handleSubmit(replyComment)}
                   text='Gửi'
                   isLoading={isLoading}
@@ -193,28 +267,9 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           </div>
 
           {/* Replied Comments */}
-          <div className='relative flex flex-col gap-3 pl-21 mt-1'>
+          <div className='relative flex flex-col gap-3 mt-1'>
             {comment.replied.map((comment: FullyComment) => (
-              <div key={comment._id} className='flex items-start gap-3'>
-                <Image
-                  className={`rounded-full shadow-lg ${className}`}
-                  src={'/images/default-avatar.jpg'}
-                  width={24}
-                  height={24}
-                  alt='avatar'
-                />
-                <div className='w-full'>
-                  <div className='flex items-center gap-1'>
-                    <span className='font-semibold'>
-                      {user.firstname && user.lastname
-                        ? `${user.firstname} ${user.lastname}`
-                        : user.username}
-                    </span>{' '}
-                    -<span className='text-sm text-slate-500'>{format(comment.createdAt)}</span>
-                  </div>
-                  <p className='font-body tracking-tide'>{comment.content}</p>
-                </div>
-              </div>
+              <CommentItem setCmts={setCmts} comment={comment} key={comment._id} />
             ))}
           </div>
         </div>
