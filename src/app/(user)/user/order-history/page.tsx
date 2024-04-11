@@ -36,6 +36,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   // filter
   const [isShowFilter, setIsShowFilter] = useState(false)
 
+  console.log(orders)
   // Form
   const {
     register,

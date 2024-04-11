@@ -41,6 +41,21 @@ export const updateProfileApi = async (data: any) => {
   return await res.json()
 }
 
+// [PUT]
+export const changeAvatarApi = async (data: FormData) => {
+  const res = await fetch('/api/user/change-avatar', {
+    method: 'PUT',
+    body: data,
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [PATCH]
 export const changePasswordApi = async (data: any) => {
   const res = await fetch('/api/user/change-password', {

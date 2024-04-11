@@ -15,6 +15,19 @@ export const getAllCagetoriesApi = async (query: string = '') => {
   return await res.json()
 }
 
+// [GET]
+export const getForceAllCagetoriesApi = async () => {
+  // no cache
+  const res = await fetch(`/api/admin/category/force-all`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [POST]
 export const addCategoryApi = async (data: any) => {
   const res = await fetch('/api/admin/category/add', {

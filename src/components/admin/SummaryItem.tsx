@@ -1,5 +1,6 @@
 import { UserWithVouchers } from '@/app/api/admin/summary/all/route'
 import { formatPrice } from '@/utils/number'
+import { formatDate } from '@/utils/time'
 import React from 'react'
 import { IoIosSend } from 'react-icons/io'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -56,15 +57,29 @@ function SummaryItem({
           </span>
         </div>
 
-        <p className='font-semibold'>
-          All Income: <span className='text-xl text-rose-500'>{formatPrice(data.totalIncome)}</span>
+        <p className='font-semibold text-sm'>
+          All Income: <span className='text-lg text-rose-500'>{formatPrice(data.totalIncome)}</span>
         </p>
-        <p className='font-semibold'>
+        <p className='font-semibold text-sm'>
           Month Income:{' '}
-          <span className='text-xl text-sky-500'>
+          <span className='text-lg text-sky-500'>
             {formatPrice(data.vouchers.reduce((total, voucher) => total + voucher.accumulated, 0))}
           </span>
         </p>
+        <div className='text-sm'>
+          Vouchers:{' '}
+          <p className='font-semibold'>
+            {data.vouchers.map((voucher, index) => (
+              <span
+                title={`${voucher.type} | ${voucher.value} | ${voucher.timesLeft} | ${
+                  voucher.expire ? formatDate(voucher.expire) : 'no-expire'
+                } | ${formatPrice(voucher.minTotal)} | ${formatPrice(voucher.maxReduce)}`}
+                key={voucher.code}>
+                {voucher.code} {index === data.vouchers.length - 1 ? '' : ', '}
+              </span>
+            ))}
+          </p>
+        </div>
       </div>
 
       <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>

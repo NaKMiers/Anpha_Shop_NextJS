@@ -17,9 +17,13 @@ interface GroupProductsProps {
 }
 
 function GroupProducts({ category, products, hideTop, bestSeller, className = '' }: GroupProductsProps) {
+  // states
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [categoryImage, setCategoryImage] = useState<string>(`/images/${category?.slug}-icon.jpg`)
+
+  // ref
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
   const handleDraging = useCallback(
@@ -75,10 +79,11 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
               <div className='aspect-square items-center w-6 h-6'>
                 <Image
                   className='wiggle'
-                  src={`/images/${category?.slug}-icon.jpg`}
+                  src={categoryImage}
+                  onError={() => setCategoryImage('/images/category-icon.jpg')}
                   width={200}
                   height={200}
-                  alt='netflix'
+                  alt={category?.title || 'icon'}
                 />
               </div>
               <span className='font-semibold'>{category?.title}</span>

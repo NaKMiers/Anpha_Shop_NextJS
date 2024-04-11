@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
-import { addProductApi, getAllCagetoriesApi, getAllTagsApi } from '@/requests'
+import { addProductApi, getForceAllCagetoriesApi, getForceAllTagsApi } from '@/requests'
 import Image from 'next/image'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -55,7 +55,7 @@ function AddVoucherPage() {
     const getTags = async () => {
       try {
         // send request to server to get all tags
-        const { tags } = await getAllTagsApi() // cache: no-store
+        const { tags } = await getForceAllTagsApi() // cache: no-store
         setTags(tags)
       } catch (err: any) {
         console.log(err)
@@ -65,7 +65,7 @@ function AddVoucherPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const { categories } = await getAllCagetoriesApi() // cache: no-store
+        const { categories } = await getForceAllCagetoriesApi() // cache: no-store
         setCategories(categories)
       } catch (err: any) {
         console.log(err)

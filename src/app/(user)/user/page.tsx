@@ -4,13 +4,14 @@ import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
-import { updateProfileApi } from '@/requests'
+import { changeAvatarApi, updateProfileApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatDate } from '@/utils/time'
 import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { CiHashtag } from 'react-icons/ci'
@@ -21,11 +22,18 @@ function UserPage() {
   // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
-  const { data: session } = useSession()
+  const { data: session, update } = useSession()
+  const router = useRouter()
 
   // states
   const [user, setUser] = useState<any>(session?.user)
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [file, setFile] = useState<File | null>(null)
+  const [isChangingAvatar, setIsChangingAvatar] = useState<boolean>(false)
+
+  // refs
+  const avatarInputRef = useRef<HTMLInputElement>(null)
 
   // Form
   const {
@@ -68,16 +76,6 @@ function UserPage() {
     }
   }, [user?._id, setValue])
 
-  // validate form
-  // const handleValidate: SubmitHandler<FieldValues> = useCallback(
-  //   data => {
-  //     let isValid = true
-
-  //     return isValid
-  //   },
-  //   [setError]
-  // )
-
   // handle update profile
   const updateProfile: SubmitHandler<FieldValues> = async data => {
     console.log(data)
@@ -104,28 +102,109 @@ function UserPage() {
     }
   }
 
+  // handle add files when user select files
+  const handleAddFiles = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const file = e.target.files[0]
+        setFile(file)
+        if (imageUrl) {
+          URL.revokeObjectURL(imageUrl)
+        }
+        setImageUrl(URL.createObjectURL(file))
+
+        e.target.value = ''
+        e.target.files = null
+      }
+    },
+    [imageUrl]
+  )
+
+  // update avatar
+  const handleSaveAvatar = useCallback(async () => {
+    if (file) {
+      // start changing avatar
+      setIsChangingAvatar(true)
+
+      try {
+        const formData = new FormData()
+        formData.append('avatar', file)
+
+        // send request to server to update avatar
+        const { updatedUser, message } = await changeAvatarApi(formData)
+
+        console.log('updatedUser: ', updatedUser)
+
+        // request server to update user session
+        await update()
+
+        // show success message
+        toast.success(message)
+
+        // reset form
+        setFile(null)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop changing avatar
+        setIsChangingAvatar(false)
+      }
+    }
+  }, [file, update])
+
+  // revoke blob url when component unmount
+  useEffect(() => {
+    return () => URL.revokeObjectURL(imageUrl)
+  }, [imageUrl])
+
   return (
     <div>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>TÀI KHOẢN CỦA TÔI</h1>
 
       <div className='grid grid-cols-12 gap-21'>
-        <div className='col-span-12 sm:col-span-5 lg:col-span-3 sm:border-r border-slate-400 p-2'>
+        {/* Avatar */}
+        <div className='flex flex-col items-center col-span-12 sm:col-span-5 lg:col-span-3 sm:border-r border-slate-400 p-2'>
           <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden cursor-pointer p-3 group'>
             <Image
               className='rounded-full common-transition'
-              src={user?.avatar || '/images/default-avatar.jpg'}
+              src={imageUrl || user?.avatar || '/images/default-avatar.jpg'}
               width={160}
               height={160}
               alt='avatar'
             />
-            <div className='absolute top-0 left-0 flex opacity-0 group-hover:opacity-100 items-center justify-center bg-primary w-full h-full bg-opacity-50 common-transition'>
-              <FaCamera size={52} className='text-white wiggle-0' />
-            </div>
+            <input
+              id='images'
+              hidden
+              placeholder=' '
+              disabled={isLoading}
+              type='file'
+              onChange={handleAddFiles}
+              ref={avatarInputRef}
+            />
+            {user?.authType === 'local' && (
+              <div
+                className='absolute top-0 left-0 flex opacity-0 group-hover:opacity-100 items-center justify-center bg-primary w-full h-full bg-opacity-50 common-transition'
+                onClick={() => avatarInputRef.current?.click()}>
+                <FaCamera size={52} className='text-white wiggle-0' />
+              </div>
+            )}
           </div>
+
+          {/* Save Avatar Button */}
+          {user?.authType === 'local' && file && (
+            <LoadingButton
+              className='mt-1.5 rounded-lg border border-green-500 text-green-500 text-sm py-[6px] px-3 font-semibold hover:bg-green-500 hover:text-white common-transition'
+              onClick={handleSaveAvatar}
+              text='Lưu'
+              isLoading={isChangingAvatar}
+            />
+          )}
 
           <div className='sm:hidden border-b border-slate-400 max-w-[200px] mx-auto mt-3 -mb-2' />
         </div>
 
+        {/* Basic Info */}
         <div className='col-span-12 text-center sm:text-start sm:col-span-7 lg:col-span-9 grid grid-cols-12'>
           <div className='col-span-12 md:col-span-7'>
             {user?.username && (

@@ -15,6 +15,19 @@ export const getAllTagsApi = async (query: string = '') => {
   return await res.json()
 }
 
+// [GET]
+export const getForceAllTagsApi = async () => {
+  // no-store to bypass cache
+  const res = await fetch(`/api/admin/tag/force-all`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [POST]
 export const addTagApi = async (data: any) => {
   const res = await fetch('/api/admin/tag/add', {

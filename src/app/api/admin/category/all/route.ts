@@ -3,7 +3,7 @@ import CategoryModel from '@/models/CategoryModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
-// [GET]: /admin/tag/all
+// [GET]: /admin/category/all
 export async function GET(req: NextRequest) {
   console.log('- Get All Categories -')
 

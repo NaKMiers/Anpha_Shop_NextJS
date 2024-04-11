@@ -47,6 +47,8 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         { productId: product._id, quantity: 1 },
       ])
 
+      console.log(cartItems)
+
       // show toast success
       if (message) {
         toast.success(message)
@@ -79,6 +81,8 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       const { cartItems, message, errors } = await addToCartApi([
         { productId: product._id, quantity: 1 },
       ])
+
+      console.log(cartItems)
 
       // show toast success
       if (message) {

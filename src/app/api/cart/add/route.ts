@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
         await newCartItem.save()
 
         return {
-          ...newCartItem,
+          ...newCartItem._doc,
           product: foundProduct,
         }
       }
