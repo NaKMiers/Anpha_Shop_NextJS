@@ -330,7 +330,12 @@ function CartItem({
         ) : (
           <>
             {/* Price & Stock */}
-            <Price price={cartItem.product.price} oldPrice={cartItem.product.oldPrice} />
+            <Price
+              price={cartItem.product.price}
+              oldPrice={cartItem.product.oldPrice}
+              stock={cartItem.product.stock}
+              flashSale={cartItem.product.flashsale}
+            />
             <div className='flex items-center gap-1 mt-2 text-[16px]'>
               <TbPackages className='text-darker' size={22} />
               <span className='text-darker font-bold text-nowrap font-body tracking-wide'>Còn lại:</span>

@@ -7,7 +7,7 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
 import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
-import { countPercent } from '@/utils/number'
+import { applyFlashSalePrice, countPercent } from '@/utils/number'
 import mongoose from 'mongoose'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -19,9 +19,10 @@ import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { RiDonutChartFill } from 'react-icons/ri'
 import Price from './Price'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 
 interface ProductCardProps {
-  product: IProduct
+  product: FullyProduct
   className?: string
 }
 
@@ -227,9 +228,9 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       </Link>
 
       {/* Badge */}
-      {product.oldPrice && (
-        <div className='absolute -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-light font-semibold font-body text-center text-[13px] leading-4'>
-          Giảm {countPercent(product.price, product.oldPrice)}
+      {product.oldPrice && product.stock > 0 && (
+        <div className='absolute z-10 -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-light font-semibold font-body text-center text-[13px] leading-4'>
+          Giảm {countPercent(applyFlashSalePrice(product.flashsale, product.price), product.oldPrice)}
         </div>
       )}
 
@@ -243,7 +244,13 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       </Link>
 
       {/* Price */}
-      <Price price={product.price} oldPrice={product.oldPrice} className='mb-2' />
+      <Price
+        price={product.price}
+        oldPrice={product.oldPrice}
+        flashSale={product.flashsale}
+        stock={product.stock}
+        className='mb-2'
+      />
 
       {/* Basic Information */}
       <div className='flex items-center font-body tracking-wide'>

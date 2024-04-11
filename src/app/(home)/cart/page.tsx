@@ -14,7 +14,7 @@ import {
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
 import { addToCartApi, applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
-import { calcPercentage, formatPrice } from '@/utils/number'
+import { applyFlashSalePrice, calcPercentage, formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -85,10 +85,15 @@ function CartPage() {
 
   // calc total, discount, subTotal
   useEffect(() => {
+    console.log('selectedItems: ', selectedItems)
+
     const subTotal = selectedItems.reduce((total, cartItem) => {
       const item: any = items.find(cI => cI._id === cartItem._id)
 
-      return total + (item?.quantity ?? 0) * (item?.product.price ?? 0)
+      return (
+        total +
+        (item?.quantity ?? 0) * (applyFlashSalePrice(item?.product.flashsale, item?.product.price) ?? 0)
+      )
     }, 0)
     setSubTotal(subTotal)
 

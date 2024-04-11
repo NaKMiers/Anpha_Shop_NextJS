@@ -1,22 +1,154 @@
+'use client'
+
+import { IFlashsale } from '@/models/FlashsaleModel'
 import { countPercent, formatPrice } from '@/utils/number'
+import { useEffect, useState } from 'react'
+import CounterItem from './CounterItem'
 
 interface PriceProps {
   price: number
   oldPrice?: number
   className?: string
+  stock: number
+  flashSale: IFlashsale | undefined
 }
 
-function Price({ price, oldPrice, className = '' }: PriceProps) {
+function Price({ price, oldPrice, stock, flashSale, className = '' }: PriceProps) {
+  // states
+  const [isValidFS, setIsValidFS] = useState<boolean>(false)
+  const [timeLeft, setTimeLeft] = useState<number[]>([0, 0, 0])
+  const [newPrice, setNewPrice] = useState<number>(price)
+
+  // count down
+  useEffect(() => {
+    // check flahsale
+    if (!flashSale) return
+
+    let interval: NodeJS.Timeout
+
+    // get hours, minutes, seconds left
+    const getTimesLeft = () => {
+      // target time
+      const now = new Date().getTime()
+      let targetTime: any
+
+      // check time type
+      if (flashSale.timeType === 'once' && flashSale.expire) {
+        targetTime = new Date(flashSale.expire)
+      } else if (flashSale.timeType === 'loop' && flashSale.duration) {
+        const begin = new Date(flashSale.begin).getTime()
+
+        const a = (now - begin) / 1000 / 60 // time distance in minute
+        const d = flashSale.duration // duration in minute
+        const b = a / d
+        const c = Math.ceil(b) * d
+        const t = new Date(begin)
+        t.setMinutes(t.getMinutes() + c)
+        targetTime = t
+      }
+
+      let timeDifference = targetTime - now
+
+      let seconds = 0
+      let minutes = 0
+      let hours = 0
+      if (timeDifference > 0) {
+        seconds = Math.floor((timeDifference / 1000) % 60)
+        minutes = Math.floor((timeDifference / (1000 * 60)) % 60)
+        hours = Math.floor(timeDifference / (1000 * 60 * 60))
+      }
+
+      // return hours, minutes, seconds left
+      return [hours, minutes, seconds]
+    }
+
+    // start count down
+    interval = setInterval(() => {
+      setTimeLeft(getTimesLeft())
+
+      // check if time is up
+      if (timeLeft[0] === 0 && timeLeft[1] === 0 && timeLeft[2] === 0) {
+        clearInterval(interval)
+      }
+    }, 1000)
+
+    // clean up
+    return () => clearInterval(interval)
+  }, [flashSale, timeLeft])
+
+  // check flash sale is valid
+  useEffect(() => {
+    if (stock > 0 && flashSale) {
+      const now = new Date()
+
+      if (now > new Date(flashSale.begin)) {
+        if (flashSale.timeType === 'once') {
+          if (flashSale.expire && now < new Date(flashSale.expire)) {
+            setIsValidFS(true)
+          }
+        } else if (flashSale.timeType === 'loop') {
+          setIsValidFS(true)
+        }
+
+        switch (flashSale.type) {
+          case 'fixed-reduce':
+            setNewPrice(price + +flashSale.value >= 0 ? price + +flashSale.value : 0)
+            break
+          case 'fixed':
+            setNewPrice(+flashSale.value)
+            break
+          case 'percentage':
+            setNewPrice(price + Math.floor((price * parseFloat(flashSale.value)) / 100))
+            break
+        }
+
+        console.log(flashSale)
+      }
+    }
+  }, [flashSale, price, stock])
+
   return (
-    <div
-      className={`flex items-center rounded-md flex-wrap justify-evenly px-[6px] py-[5px] bg-slate-100 font-body gap-2 ${className}`}>
-      <div className='text-secondary text-[22px] tracking-wide leading-7'>{formatPrice(price)}</div>
-      {oldPrice && <div className='text-gray-400 text-[14px] line-through'>{formatPrice(oldPrice)}</div>}
-      {oldPrice && (
-        <div className='bg-yellow-400 text-[13px] font-semibold rounded-md px-1 py-[2px] text-light font-sans'>
-          -{countPercent(price, oldPrice)}
+    <div className={`rounded-md overflow-hidden ${className}`}>
+      {isValidFS && (
+        <div className='flex items-center justify-between flex-wrap px-3 py-2 bg-secondary text-white font-body text-[18px] font-bold tracking-wider'>
+          <span className=''>Flash sale</span>
+
+          {/* Counter */}
+          <div className='flex shrink-0 gap-1'>
+            {/* Hours */}
+            <div className='flex items-center bg-dark-100 rounded-sm pl-[2px] pr-[1px]'>
+              <CounterItem value={Math.floor(timeLeft[0] / 10)} max={9} />
+              <CounterItem value={timeLeft[0] % 10} max={9} />
+            </div>
+            <span>:</span>
+
+            {/* Minutes */}
+            <div className='flex items-center bg-dark-100 rounded-sm pl-[2px] pr-[1px]'>
+              <CounterItem value={Math.floor(timeLeft[1] / 10)} max={5} />
+              <CounterItem value={timeLeft[1] % 10} max={9} />
+            </div>
+            <span>:</span>
+
+            {/* Seconds */}
+            <div className='flex items-center bg-dark-100 rounded-sm pl-[2px] pr-[1px]'>
+              <CounterItem value={Math.floor(timeLeft[2] / 10)} max={5} />
+              <CounterItem value={timeLeft[2] % 10} max={9} />
+            </div>
+          </div>
         </div>
       )}
+
+      <div className='flex items-center justify-evenly flex-wrap gap-2 px-[6px] py-2 bg-slate-100 font-body'>
+        <div className='text-secondary text-[22px] tracking-wide leading-7'>{formatPrice(newPrice)}</div>
+        {oldPrice && (
+          <div className='text-gray-400 text-[14px] line-through'>{formatPrice(oldPrice)}</div>
+        )}
+        {oldPrice && (
+          <div className='bg-yellow-400 text-[13px] font-semibold rounded-md px-1 py-[2px] text-light font-sans'>
+            -{countPercent(newPrice, oldPrice)}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

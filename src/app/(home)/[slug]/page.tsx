@@ -115,7 +115,12 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           </h1>
 
           {/* Price */}
-          <Price price={product?.price || 0} oldPrice={product?.oldPrice} />
+          <Price
+            price={product?.price || 0}
+            oldPrice={product?.oldPrice}
+            stock={product?.stock || 0}
+            flashSale={product?.flashsale}
+          />
 
           <div className='flex flex-col gap-3 text-xl font-body tracking-wide mt-5'>
             {/* Category */}
