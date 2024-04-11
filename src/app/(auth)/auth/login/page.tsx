@@ -4,7 +4,7 @@ import Input from '@/components/Input'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -62,6 +62,21 @@ function LoginPage() {
     },
     [setError, router]
   )
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSubmit(onSubmit)()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }, [handleSubmit, onSubmit])
 
   return (
     <div className='relative w-full min-h-screen'>

@@ -62,7 +62,7 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Meta */}
-      <Meta title={`Flash Sale}`} searchParams={searchParams} type='flash-sale' chops={chops} />
+      <Meta title={`Flash Sale`} searchParams={searchParams} type='flash-sale' chops={chops} />
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>

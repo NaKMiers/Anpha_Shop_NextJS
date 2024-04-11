@@ -26,14 +26,28 @@ export async function GET() {
       .populate('flashsale')
       .lean()
 
-    // get all categories from database
-    let originalCategories: ICategory[] = await CategoryModel.find().lean()
-    const sequenceCategory = process.env.SEQUENCE_CATEGORIES!.split(' ')
-    originalCategories = originalCategories.sort(
-      (a, b) =>
-        sequenceCategory.indexOf(a.title.toLowerCase()) - sequenceCategory.indexOf(b.title.toLowerCase())
+    // get all categories from products to make sure that no category with empty products
+    let categories: ICategory[] = Array.from(
+      new Set(
+        products.reduce((categories: ICategory[], product: FullyProduct) => {
+          if (product.category && product.category._id) {
+            categories.push(product.category)
+          }
+          return categories
+        }, [])
+      )
     )
-    // get all tags
+
+    // sort category by sequence
+    const sequenceCategory = process.env.SEQUENCE_CATEGORIES!.split(' ')
+    categories = categories.sort((a, b) => {
+      const indexA = sequenceCategory.indexOf(a.title.toLowerCase())
+      const indexB = sequenceCategory.indexOf(b.title.toLowerCase())
+
+      return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB)
+    })
+
+    // get all tags from products to make sure that no tag with empty products
     const tags: ITag[] = Array.from(
       new Set(
         products.reduce((tags: ITag[], product: FullyProduct) => {
@@ -45,7 +59,7 @@ export async function GET() {
       )
     )
     // create category list with corresponding products
-    const productsByCategoryGroups = originalCategories
+    const productsByCategoryGroups = categories
       .map(category => {
         const productsByCtg = products
           .filter(product => product.category._id.toString() === category._id.toString())
@@ -74,7 +88,7 @@ export async function GET() {
         productsByCategoryGroups,
         bestSellerProducts,
         flashsaleProducts,
-        categories: originalCategories,
+        categories: categories,
         tags,
         carouselProducts,
       },

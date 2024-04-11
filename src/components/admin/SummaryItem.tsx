@@ -68,14 +68,17 @@ function SummaryItem({
         </p>
         <div className='text-sm'>
           Vouchers:{' '}
-          <p className='font-semibold'>
+          <p className='font-semibold inline'>
             {data.vouchers.map((voucher, index) => (
               <span
-                title={`${voucher.type} | ${voucher.value} | ${voucher.timesLeft} | ${
+                title={`${voucher.type} | ${
+                  voucher.type !== 'percentage' ? formatPrice(+voucher.value) : voucher.value
+                } | ${voucher.timesLeft} | ${
                   voucher.expire ? formatDate(voucher.expire) : 'no-expire'
                 } | ${formatPrice(voucher.minTotal)} | ${formatPrice(voucher.maxReduce)}`}
                 key={voucher.code}>
-                {voucher.code} {index === data.vouchers.length - 1 ? '' : ', '}
+                {voucher.code}
+                {index === data.vouchers.length - 1 ? '' : ', '}
               </span>
             ))}
           </p>

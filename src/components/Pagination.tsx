@@ -1,7 +1,9 @@
 'use client'
 
 import { handleQuery } from '@/utils/handleQuery'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect } from 'react'
 
 interface PaginationProps {
   searchParams: { [key: string]: string[] } | undefined
@@ -26,63 +28,73 @@ function Pagination({
   const pageAmount = Math.ceil(amount / itemsPerPage)
   const currentPage = page ? +page : 1
 
-  const handlePage = (page: number, next: number = 0) => {
-    // get page from searchParams
-    if (searchParams.page) {
-      delete searchParams.page
+  // set page link
+  const getPageLink = useCallback(
+    (value: number) => {
+      // get page from searchParams
+      if (searchParams.page) {
+        delete searchParams.page
+      }
+      searchParams.page = [value.toString()]
+
+      return pathname + handleQuery(searchParams)
+    },
+    [searchParams, pathname]
+  )
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      // left arrow
+      if (e.key === 'ArrowLeft' && currentPage > 1) {
+        router.push(getPageLink(currentPage - 1))
+      }
+
+      // right arrow
+      if (e.key === 'ArrowRight' && currentPage < pageAmount) {
+        router.push(getPageLink(currentPage + 1))
+      }
     }
 
-    // add page to searchParams
-    searchParams.page = [
-      (next != 0
-        ? currentPage + next < 1
-          ? 1
-          : currentPage + next > pageAmount
-          ? pageAmount
-          : currentPage + next
-        : page
-      ).toString(),
-    ]
+    window.addEventListener('keydown', handleKeydown)
 
-    // handle query
-    const query = handleQuery(searchParams)
-
-    // push to router
-    router.push(pathname + query)
-  }
+    return () => {
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }, [currentPage, pageAmount, router, getPageLink])
 
   return (
     pageAmount > 1 && (
       <div className={`flex font-semibold gap-2 justify-center ${className}`}>
         {currentPage != 1 && (
-          <button
+          <Link
+            href={getPageLink(currentPage <= 1 ? 1 : currentPage - 1)}
             className='rounded-lg border-2 py-[6px] px-2 bg-white hover:bg-secondary hover:text-light common-transition border-white'
-            title='👈 Previous'
-            onClick={() => handlePage(0, -1)}>
+            title={`👈 Trang ${currentPage <= 1 ? 1 : currentPage - 1}`}>
             Trước
-          </button>
+          </Link>
         )}
 
         <div className='flex gap-2 no-scrollbar overflow-x-scroll'>
           {Array.from({ length: pageAmount }).map((_, index) => (
-            <button
+            <Link
+              href={getPageLink(index + 1)}
               className={`rounded-lg border-2 py-[6px] px-4 hover:bg-secondary hover:text-light common-transition border-white text-dark ${
                 currentPage === index + 1 ? 'bg-primary border-primary' : 'bg-white'
               }`}
-              key={index}
-              onClick={() => handlePage(index + 1)}>
+              key={index}>
               {index + 1}
-            </button>
+            </Link>
           ))}
         </div>
 
         {currentPage != pageAmount && (
-          <button
+          <Link
+            href={getPageLink(currentPage >= pageAmount ? pageAmount : currentPage + 1)}
             className='rounded-lg border-2 py-[6px] px-2 bg-white hover:bg-secondary hover:text-light common-transition border-white'
-            title='👉 Next'
-            onClick={() => handlePage(0, 1)}>
+            title={`👉 Trang ${currentPage >= pageAmount ? pageAmount : currentPage + 1}`}>
             Sau
-          </button>
+          </Link>
         )}
       </div>
     )

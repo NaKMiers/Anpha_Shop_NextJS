@@ -34,7 +34,7 @@ function sendMail(to: string, subject: string, html: string) {
 }
 
 // send order notification to admin
-async function notifyNewOrderToAdmin(newOrder: any) {
+export async function notifyNewOrderToAdmin(newOrder: any) {
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyOrderMail.pug')
 
@@ -58,7 +58,7 @@ async function notifyNewOrderToAdmin(newOrder: any) {
 }
 
 // notify shortage account to admin
-async function notifyShortageAccount(message: any) {
+export async function notifyShortageAccount(message: any) {
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/ShortageAccountMail.pug')
 
@@ -82,7 +82,7 @@ async function notifyShortageAccount(message: any) {
 }
 
 // re-deliver notification
-async function notifyDeliveryOrder(email: string, orderData: any) {
+export async function notifyDeliveryOrder(email: string, orderData: any) {
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/OrderMail.pug')
 
@@ -100,7 +100,7 @@ async function notifyDeliveryOrder(email: string, orderData: any) {
 }
 
 // notify account updated
-async function notifyAccountUpdated(email: string, data: any) {
+export async function notifyAccountUpdated(email: string, data: any) {
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/UpdateAccountMail.pug')
 
@@ -117,7 +117,7 @@ async function notifyAccountUpdated(email: string, data: any) {
 }
 
 // summary notification
-async function summaryNotification(email: string, summary: any) {
+export async function summaryNotification(email: string, summary: any) {
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/SummaryMail.pug')
 
@@ -131,14 +131,25 @@ async function summaryNotification(email: string, summary: any) {
 
   // Render template với dữ liệu
   const html = compiledTemplate(summary)
+
   sendMail(email, 'Monthly Summary', html)
 }
 
-export {
-  notifyAccountUpdated,
-  notifyDeliveryOrder,
-  notifyNewOrderToAdmin,
-  notifyShortageAccount,
-  sendMail,
-  summaryNotification,
+// reset password email
+export async function sendResetPasswordEmail(email: string, link: string) {
+  // get email interface path
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/ResetPasswordMail.pug')
+
+  // get email interface file
+  const templateContent = fs.readFileSync(templatePath, 'utf-8')
+
+  // Compile template
+  const compiledTemplate = pug.compile(templateContent, {
+    filename: templatePath,
+  })
+
+  // Render template với dữ liệu
+  const html = compiledTemplate({ link })
+
+  sendMail(email, 'Khôi phục mật khẩu', html)
 }

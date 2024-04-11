@@ -16,7 +16,7 @@ body(style='font-family: Arial')
                const minutes = date.getMinutes()
                const seconds = date.getSeconds()
 
-            span= `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+            span= `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`
 
       div(style='width: 100%;')
          p(style='margin-bottom: 4px;')

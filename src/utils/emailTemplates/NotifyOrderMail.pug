@@ -24,7 +24,7 @@ body(style='font-family: Arial;')
                      const minutes = date.getMinutes()
                      const seconds = date.getSeconds()
 
-                  span= `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
+                  span= `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`
 
       div(style='display: block; width: 100%; margin-top: 24px;') 
          a(href="https://anpha.shop/admin/order/all" style='border-radius: 8px; background: #01dbe5; color: #fff; font-weight: 600; font-size: 20px; margin: 0; padding: 16px 24px;') Deliver Now 

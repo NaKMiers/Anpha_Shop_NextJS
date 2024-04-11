@@ -47,6 +47,7 @@ function ForgotPasswordPage() {
     },
   })
 
+  // forgot-password
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       setIsLoading(true)
@@ -73,6 +74,21 @@ function ForgotPasswordPage() {
     },
     [setError]
   )
+
+  // keyboard event
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSubmit(onSubmit)()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }, [handleSubmit, onSubmit])
 
   return (
     <div className='relative w-full min-h-screen'>

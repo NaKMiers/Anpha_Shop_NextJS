@@ -1,0 +1,46 @@
+- const commentData = {
+  senderName: "John Doe",
+  senderEmail: "john.doe@example.com",
+  receiver: "Admin",
+  content: "This is a great post! Thanks for sharing.",
+  time: "2024-04-12T10:30:00Z"
+}
+
+body(style='font-family: Arial;')
+  div(style='max-width: 1200px; width: 100%; margin: 0 auto; text-align: center;')
+    div(style='padding-top: 40px;')
+
+    h1(style='color: blueviolet;')= receiver ? "Bình luận của bạn vừa được phản hồi" : "Có bình luận mới trên website của bạn" 
+
+    p(style='color: #333; font-size: 18px; margin-top: 16px;')= 'Hi ' + (commentData.receiver || 'Admin')
+
+    p(style='color: #333; font-size: 18px; margin-top: 16px;') Thông tin chi tiết ở đây:
+
+    table(style='border: 1x solid #eee; border-radius: 16px; padding: 21px; width: 100%; margin-top: 16px;')
+      thead(style='text-align: center;')
+        tr
+          th(style='padding: 8px; border: 1px solid #333;') Người bình luận
+          th(style='padding: 8px; border: 1px solid #333;') Email
+          th(style='padding: 8px; border: 1px solid #333;') Nội dung
+          th(style='padding: 8px; border: 1px solid #333;') Thời gian
+      tbody(style='text-align: center;')
+        tr
+          td(style='padding: 8px; border: 1px solid #333;')= commentData.senderName
+          td(style='padding: 8px; border: 1px solid #333;')= commentData.senderEmail
+          td(style='padding: 8px; border: 1px solid #333;')= commentData.content
+          td(style='padding: 8px; border: 1px solid #333;')
+            - 
+              const date = new Date(commentData.time)
+              const day = date.getDate()
+              const month = date.getMonth() + 1
+              const year = date.getFullYear()
+              const hours = date.getHours()
+              const minutes = date.getMinutes()
+              const seconds = date.getSeconds()
+
+            span= `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`
+
+    div(style='display: block; width: 100%; margin-top: 24px;') 
+      a(href="https://yourwebsite.com/admin/comments" style='border-radius: 8px; background: #01dbe5; color: #fff; font-weight: 600; font-size: 20px; margin: 0; padding: 16px 24px;') View Comments 
+
+    div(style='padding-top: 40px;')

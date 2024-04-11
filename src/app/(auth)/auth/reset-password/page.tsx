@@ -3,7 +3,7 @@
 import Input from '@/components/Input'
 import { resetPassword } from '@/requests'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -29,38 +29,57 @@ function ResetPasswordPage() {
     },
   })
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    setIsLoading(true)
+  // reset-password
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      setIsLoading(true)
 
-    try {
-      // check if new password and re-new password are match
-      if (data.newPassword !== data.reNewPassword) {
-        setError('reNewPassword', { type: 'manual', message: 'Mật khẩu không khớp' }) // add this line
-        return
+      try {
+        // check if new password and re-new password are match
+        if (data.newPassword !== data.reNewPassword) {
+          setError('reNewPassword', { type: 'manual', message: 'Mật khẩu không khớp' }) // add this line
+          return
+        }
+
+        // get email and token from query
+        const url = new URL(window.location.href)
+        const email = url.searchParams.get('email')
+        const token = url.searchParams.get('token')
+
+        // send request to server
+        const { message } = await resetPassword(email!, token!, data.newPassword)
+
+        // show success message
+        toast.success(message)
+
+        // redirect to login page
+        router.push('/auth/login')
+      } catch (err: any) {
+        // show error message
+        toast.error(err.message)
+        console.log(err)
+      } finally {
+        // reset loading state
+        setIsLoading(false)
       }
+    },
+    [setError, router]
+  )
 
-      // get email and token from query
-      const url = new URL(window.location.href)
-      const email = url.searchParams.get('email')
-      const token = url.searchParams.get('token')
-
-      // send request to server
-      const { message } = await resetPassword(email!, token!, data.newPassword)
-
-      // show success message
-      toast.success(message)
-
-      // redirect to login page
-      router.push('/auth/login')
-    } catch (err: any) {
-      // show error message
-      toast.error(err.message)
-      console.log(err)
-    } finally {
-      // reset loading state
-      setIsLoading(false)
+  // keyboard event
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSubmit(onSubmit)()
+      }
     }
-  }
+
+    window.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }, [handleSubmit, onSubmit])
 
   return (
     <div className='relative w-full min-h-screen'>

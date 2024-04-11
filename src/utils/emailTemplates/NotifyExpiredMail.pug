@@ -1,0 +1,52 @@
+body(style='font-family: Arial;')
+  div(style='max-width: 600px; width: 100%; margin: 0 auto; text-align: center;')
+    div(style='padding-top: 32px;')
+      h2(style='margin-bottom: 16px; margin-top: 0; text-align: center;') Đơn hàng gần hết hạn
+
+      hr
+
+      div(style='text-align: center;')
+        div(style='width: 100%;')
+          p(style='margin-bottom: 4px;')
+            span(style='font-weight: 600;') Ngày đặt hàng: 
+            span= orderDate
+
+        div(style='width: 100%;')
+          p(style='margin-bottom: 4px;')
+            span(style='font-weight: 600;') Trạng thái: 
+            span(style='font-weight: 600; color: #E76F51;') Gần hết hạn
+
+        div(style='width: 100%;')
+          p(style='margin-bottom: 4px;')
+            span(style='font-weight: 600;') Code: 
+            span(style='color: #0DCAF0;')= orderCode
+
+        div(style='width: 100%;')
+          p(style='margin-bottom: 4px;')
+            span(style='font-weight: 600;') Tổng tiền: 
+            span(style='font-weight: 600;')= totalAmount
+
+        div(style='width: 100%;')
+          p(style='margin-bottom: 4px;')
+            span(style='font-weight: 600;') Email:  
+            span= customerEmail
+
+      div(style='padding-top: 20px;')
+      p(style='text-align: left; margin-top: 0; font-size: 26px; font-weight: 700;') Sản phẩm
+      each item, index in orderItems
+        div(style= index && 'margin-top: 21px;')
+          div(style='border: 1px solid #eee; border-radius: 12px; overflow: hidden;')
+            h2(style='margin: 12px 16px 0px 16px; font-size: 18px;')
+              = item.productName
+              span(style='font-weight: 600; margin-left: 4px;')= `(x${item.quantity})`
+            div
+              div(style='white-space: pre; text-align: left; padding: 16px 21px;')
+                p(style='margin-bottom: 16px; white-space: pre;')= item.details
+                if index !== orderItems.length - 1
+                  hr
+
+      div(style='padding-top: 20px;')
+      div(style='margin: 0; padding: 0; text-align: center;')
+        a(href="https://yourwebsite.com/my-account/orders" style='border-radius: 8px; background: #01dbe5; color: #fff; font-weight: 600; font-size: 20px; margin: 0; padding: 16px 24px; text-decoration: none;') Xem chi tiết đơn hàng
+
+      div(style='padding-top: 32px;')
