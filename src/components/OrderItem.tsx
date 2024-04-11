@@ -1,8 +1,15 @@
+import { useAppDispatch } from '@/libs/hooks'
+import { addCartItem } from '@/libs/reducers/cartReducer'
 import { IOrder } from '@/models/OrderModel'
+import { addToCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import CartItem from './CartItem'
+import LoadingButton from './LoadingButton'
 
 interface OrderItemProps {
   order: IOrder
@@ -10,8 +17,55 @@ interface OrderItemProps {
 }
 
 function OrderItem({ order, className = '' }: OrderItemProps) {
+  // hooks
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  // states
+  const [isReBuying, setIsReBuying] = useState<boolean>(false)
+
+  // handle re-buying
+  const handleReBuying = useCallback(async () => {
+    // start loading
+    setIsReBuying(true)
+
+    try {
+      // send request to add product to cart
+      const { cartItems, message, errors } = await addToCartApi(
+        order.items.map(item => ({
+          productId: item.product._id,
+          quantity: item.quantity,
+        }))
+      )
+
+      // show toast success
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart item to state
+      dispatch(addCartItem(cartItems))
+
+      // move to cart page
+      router.push(`/cart`)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      setIsReBuying(false)
+    }
+  }, [dispatch, order.items, router])
+
   return (
     <div className={`border rounded-medium px-21 py-4 ${className}`}>
+      {/* Head Info */}
       <div className='flex flex-wrap items-center justify-between gap-x-3'>
         <div>
           <span className='font-semibold'>Mã hó đơn: </span>
@@ -75,15 +129,20 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
 
       <hr className='mt-8 mb-3' />
 
+      {/* Total */}
       <div className='flex justify-end items-center gap-2 mb-2'>
         <span>Tổng: </span>
         <span className='text-green-500 font-semibold text-2xl'>{formatPrice(order.total)}</span>
       </div>
 
+      {/* Action Buttons */}
       <div className='flex justify-end gap-2'>
-        <button className='px-[14px] py-[6px] rounded-md font-semibold bg-secondary hover:bg-primary text-white hover:text-dark common-transition'>
-          Mua lại
-        </button>
+        <LoadingButton
+          className='px-[14px] py-[6px] rounded-md font-semibold bg-secondary hover:bg-primary text-white hover:text-dark common-transition'
+          onClick={handleReBuying}
+          text='Mua lại'
+          isLoading={isReBuying}
+        />
         <Link
           href={`/user/order/${order.code}`}
           className='px-[14px] py-[6px] rounded-md font-semibold bg-primary hover:bg-secondary hover:text-white common-transition'>

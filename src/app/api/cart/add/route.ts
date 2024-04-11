@@ -4,118 +4,132 @@ import ProductModel, { IProduct } from '@/models/ProductModel'
 import { IUser } from '@/models/UserModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+import { FullyCartItem } from '../route'
 
 export type UserWithCart = IUser & { cart: ICartItem[]; cartLength: number }
 export type CartItemWithProduct = ICartItem & { product: IProduct }
 
+export type CartItemToAdd = {
+  productId: string
+  quantity: number
+}
+
 // [POST]: /cart/add
 export async function POST(req: NextRequest) {
-  console.log(' - Add Product To Cart - ')
+  console.log(' - Add Products To Cart - ')
 
   try {
-    // connect to database
+    // Connect to database
     await connectDatabase()
 
-    // get product data to add to cart
-    const { productId, quantity } = await req.json()
+    // Get product data to add to cart
+    const { products }: { products: CartItemToAdd[] } = await req.json()
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
     const userId: any = token?._id
 
-    // check if user logged in
+    // Check if user logged in
     if (!userId) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
-    }
-    // get product to check stock
-    const product: IProduct | null = await ProductModel.findById(productId).lean()
-
-    if (!product) {
-      return NextResponse.json({ message: 'Product not found' }, { status: 404 })
+      return NextResponse.json({ message: 'Người dùng không tồn tại' }, { status: 401 })
     }
 
-    // get user's cart
-    let cart: ICartItem[] = await CartItemModel.find({ userId }).lean()
+    // Fetch all products from database
+    const productData = await ProductModel.find({
+      _id: { $in: products.map((product: any) => product.productId) },
+    }).lean()
 
-    // check if user exist
-    // check if product already in cart
-    const existingCartItem = cart.find((item: ICartItem) => item.productId.toString() === productId)
+    // no product to add
+    if (!productData.length) {
+      return NextResponse.json({ message: 'Sản phẩm không tồn tại' }, { status: 404 })
+    }
 
-    // product has already existed in cart
-    if (existingCartItem) {
-      // if not enough products in stock
-      if (existingCartItem.quantity + quantity > product.stock) {
-        return NextResponse.json(
-          {
-            message: 'Hiện không đủ sản phẩm để thêm vào giỏ hàng của bạn. Xin lỗi vì sự bất tiện này',
-          },
-          { status: 400 }
-        )
+    // errors
+    const errors: any = {
+      notFound: [],
+      notEnough: [],
+    }
+
+    // Create an array to store promises for adding products to cart
+    const promises = products.map(async (product: any) => {
+      const { productId, quantity } = product
+
+      // Find the product in fetched data
+      const foundProduct = productData.find((p: any) => p._id.toString() === productId)
+
+      // not found product
+      if (!foundProduct) {
+        errors.notFound.push('Sản phẩm không tồn tại')
+        return null
       }
 
-      // still have enough products in stock
-      let cartItem: any = await CartItemModel.findByIdAndUpdate(
-        existingCartItem._id,
-        {
-          $inc: { quantity },
-        },
-        { new: true }
-      )
-        .populate('productId')
-        .lean()
+      // Find existing cart item for the product
+      let existingCartItem: ICartItem | null = await CartItemModel.findOne({ userId, productId }).lean()
 
-      // add product field to cart item
-      cartItem = {
-        ...cartItem,
-        productId: cartItem.productId._id,
-        product: cartItem.productId,
+      if (existingCartItem) {
+        // not enough product to add
+        if (foundProduct.stock < existingCartItem.quantity + quantity) {
+          errors.notEnough.push(foundProduct.title)
+
+          // current quantity is max
+          if (foundProduct.stock === existingCartItem.quantity) {
+            return
+          }
+        }
+
+        // If product already exists in cart, update quantity
+        const newQuantity = Math.min(existingCartItem.quantity + quantity, foundProduct.stock)
+        await CartItemModel.findByIdAndUpdate(existingCartItem._id, { quantity: newQuantity })
+
+        return {
+          ...existingCartItem,
+          quantity: newQuantity,
+          product: foundProduct,
+        } as FullyCartItem
+      } else {
+        // not enough product to add
+        if (foundProduct.stock < quantity) {
+          errors.notEnough.push(foundProduct.title)
+
+          // current quantity is max
+          if (foundProduct.stock === quantity) {
+            return
+          }
+        }
+
+        // If product does not exist in cart, create new cart item
+        const newCartItem = new CartItemModel({
+          userId,
+          productId,
+          quantity: Math.min(quantity, foundProduct.stock),
+        })
+        await newCartItem.save()
+
+        return {
+          ...newCartItem,
+          product: foundProduct,
+        }
       }
-
-      // calculate user cart length
-      const cartLength = cart.reduce((total, cartItem) => total + cartItem.quantity, 0) + quantity
-
-      // return data
-      return NextResponse.json(
-        {
-          cartItem,
-          cartLength,
-          message: `Đã thêm ${quantity} gói "${product.title}" vào giỏ hàng`,
-        },
-        { status: 201 }
-      )
-    }
-
-    // product has not existed in user cart
-    // if not enough products in stock
-    if (quantity > product.stock) {
-      return NextResponse.json(
-        {
-          message: 'Hiện không đủ sản phẩm để thêm vào giỏ hàng của bạn. Xin lỗi vì sự bất tiện này',
-        },
-        { status: 400 }
-      )
-    }
-
-    // still have enough products in stock
-    // create new cart item
-    const newCartItem = new CartItemModel({
-      userId,
-      productId: product._id,
-      quantity,
     })
-    // save cart item to database
-    await newCartItem.save()
 
-    const copiedCartItem = newCartItem.toObject()
-    copiedCartItem.product = product
+    // Execute all promises in parallel and remove null product
+    let addedItems: any[] = (await Promise.all(promises.filter(Boolean))).filter(item => item)
 
-    // calculate user cart length
-    const cartLength = cart.reduce((total, cartItem) => total + cartItem.quantity, 0) + quantity
+    // Calculate total cart length
+    const cartLength = addedItems.reduce((total, item) => total + (item?.quantity || 0), 0)
 
-    // return data
+    // Return response with errors, if any
     return NextResponse.json(
       {
-        cartItem: copiedCartItem,
+        cartItems: addedItems,
         cartLength,
-        message: `Đã thêm ${quantity} gói ${product.title} vào giỏ hàng`,
+        message: !!addedItems.length
+          ? 'Đã thêm vào giỏ hàng:\n' + addedItems.map(item => item.product.title).join(',\n')
+          : null,
+        errors: {
+          notFound: !!errors.notFound.length ? `Không tồn tại ${errors.notFound.length} sản phẩm` : null,
+          notEnough: !!errors.notEnough.length
+            ? 'Thiếu sản phẩm:\n' + errors.notEnough.join('\n')
+            : null,
+        },
       },
       { status: 201 }
     )

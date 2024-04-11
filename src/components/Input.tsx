@@ -16,6 +16,8 @@ interface InputProps {
   errors: FieldErrors
   options?: any[]
   rows?: number
+  minDate?: string
+  maxDate?: string
   onClick?: (e?: any) => void
 }
 
@@ -32,6 +34,8 @@ function Input({
   options,
   rows,
   onClick,
+  minDate,
+  maxDate,
   className = '',
 }: InputProps) {
   const [isShowPassword, setIsShowPassword] = useState(false)
@@ -95,7 +99,8 @@ function Input({
             <input
               id={id}
               className='block h-[46px] px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer number-input'
-              placeholder=' '
+              min={type === 'date' ? minDate : undefined}
+              max={type === 'date' ? maxDate : undefined}
               disabled={disabled}
               type={type === 'password' ? (isShowPassword ? 'text' : 'password') : type}
               {...register(id, { required })}

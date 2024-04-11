@@ -1,5 +1,7 @@
 // Cart
 
+import { CartItemToAdd } from '@/app/api/cart/add/route'
+
 // [GET]
 export const getCartApi = async () => {
   // no cache
@@ -29,10 +31,10 @@ export const updateProductsInLocalCartApi = async (ids: string[]) => {
 }
 
 // [POST]
-export const addToCartApi = async (productId: string, quantity: number) => {
+export const addToCartApi = async (products: CartItemToAdd[]) => {
   const res = await fetch('/api/cart/add', {
     method: 'POST',
-    body: JSON.stringify({ productId, quantity }),
+    body: JSON.stringify({ products }),
   })
 
   // check status

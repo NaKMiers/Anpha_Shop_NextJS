@@ -85,13 +85,26 @@ function CartItem({
 
     try {
       // send request to add product to cart
-      const { cartItem: cI, message } = await addToCartApi(cartItem.productId, cartItem.quantity)
-
-      // add cart item to state
-      dispatch(addCartItem(cI))
+      const { cartItems, message, errors } = await addToCartApi([
+        { productId: cartItem.productId, quantity: cartItem.quantity },
+      ])
 
       // show toast success
-      toast.success(message)
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart item to state
+      dispatch(addCartItem(cartItems))
+
+      // delete local cart item
+      handleDeleteLocalCartItem()
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
@@ -99,9 +112,6 @@ function CartItem({
       // stop loading
       setIsLoading(false)
     }
-
-    // delete local cart item
-    handleDeleteLocalCartItem()
   }, [handleDeleteLocalCartItem, cartItem.productId, dispatch, setIsLoading, cartItem.quantity])
 
   // update cart item quantity in database
@@ -240,20 +250,20 @@ function CartItem({
 
       {/* Local action buttons */}
       {localCartItem && !isCheckout && (
-        <div className='absolute z-10 top-1 right-4  flex flex-col gap-2'>
+        <div className='absolute z-10 top-1 right-4 group flex flex-col gap-2'>
           {isLoading ? (
             <RiDonutChartFill size={24} className='animate-spin text-slate-300' />
           ) : (
             <FaPlusSquare // add to database cart
               size={21}
-              className='text-primary cursor-pointer hover:scale-110 common-transition'
+              className='text-primary cursor-pointer wiggle-1'
               onClick={handleMoveLocalToGlobalCartItem}
             />
           )}
 
           <FaTrashAlt // delete
             size={21}
-            className='text-secondary cursor-pointer hover:scale-110 common-transition'
+            className='text-secondary cursor-pointer wiggle-1'
             onClick={handleDeleteLocalCartItem}
           />
         </div>

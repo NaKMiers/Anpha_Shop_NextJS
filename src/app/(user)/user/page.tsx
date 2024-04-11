@@ -10,7 +10,7 @@ import { formatDate } from '@/utils/time'
 import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { CiHashtag } from 'react-icons/ci'
@@ -33,6 +33,7 @@ function UserPage() {
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
   } = useForm<FieldValues>({
     defaultValues: {
       firstname: '',
@@ -67,7 +68,18 @@ function UserPage() {
     }
   }, [user?._id, setValue])
 
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
+  // validate form
+  // const handleValidate: SubmitHandler<FieldValues> = useCallback(
+  //   data => {
+  //     let isValid = true
+
+  //     return isValid
+  //   },
+  //   [setError]
+  // )
+
+  // handle update profile
+  const updateProfile: SubmitHandler<FieldValues> = async data => {
     console.log(data)
 
     // start loading
@@ -230,6 +242,8 @@ function UserPage() {
                 errors={errors}
                 icon={CiHashtag}
                 type='date'
+                maxDate={new Date().toISOString().split('T')[0]}
+                minDate='1900-01-01'
               />
             ) : (
               <>
@@ -281,7 +295,7 @@ function UserPage() {
         {isEditing && (
           <LoadingButton
             className='mt-5 mb-5 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmit(updateProfile)}
             text='Lưu'
             isLoading={isLoading}
           />

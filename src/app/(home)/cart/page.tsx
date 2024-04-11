@@ -4,15 +4,21 @@ import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import Input from '@/components/Input'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setCartItems, setSelectedItems } from '@/libs/reducers/cartReducer'
+import {
+  addCartItem,
+  deleteLocalCartItem,
+  setCartItems,
+  setLocalCartItems,
+  setSelectedItems,
+} from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
-import { applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
+import { addToCartApi, applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
 import { calcPercentage, formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -29,6 +35,7 @@ function CartPage() {
   let cartItems = useAppSelector(state => state.cart.items)
   const selectedItems = useAppSelector(state => state.cart.selectedItems)
   const router = useRouter()
+  const queryParams = useSearchParams()
   const { data: session } = useSession()
   const curUser: any = session?.user
 
@@ -135,6 +142,7 @@ function CartPage() {
     [dispatch, selectedItems.length, subTotal]
   )
 
+  // validate before checkout
   const handleValidateBeforeCheckout = useCallback(() => {
     let isValid = true
     if (!selectedItems.length) {
@@ -256,6 +264,45 @@ function CartPage() {
     discount,
   ])
 
+  // move all local items to global items
+  const handleMoveAllLocalToGlobalCartItem = useCallback(async () => {
+    // start loading
+    dispatch(setLoading(true))
+
+    try {
+      // send request to add product to cart
+      const { cartItems, message, errors } = await addToCartApi(
+        localItems.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        }))
+      )
+
+      // show toast success
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart item to state
+      dispatch(addCartItem(cartItems))
+
+      // delete local cart item
+      dispatch(setLocalCartItems([]))
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      dispatch(setLoading(false))
+    }
+  }, [dispatch, localItems])
+
   return (
     <div className='mt-20 grid grid-cols-1 md:grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
       {/* Cart Items */}
@@ -272,20 +319,31 @@ function CartPage() {
 
         {/* Local cart items */}
         {!!localItems.length && curUser && (
-          <div className='border border-slate-400 p-4 rounded-medium'>
+          <div className='border border-slate-400 rounded-medium p-4'>
             <p className='text-primary italic mb-3'>
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
               <FaPlusSquare size={19} className='inline-block wiggle' /> bên dưới để thêm vào giỏ hàng.
             </p>
 
-            {localItems.map((cartItem, index) => (
-              <CartItem
-                cartItem={cartItem}
-                className={index != 0 ? 'mt-4' : ''}
-                key={index}
-                localCartItem
-              />
-            ))}
+            <div className='flex justify-end mb-3'>
+              <div
+                className='flex gap-2 items-center group cursor-pointer'
+                onClick={handleMoveAllLocalToGlobalCartItem}>
+                <span>Thêm tất cả</span>
+                <FaPlusSquare size={21} className='inline-block wiggle text-primary' />
+              </div>
+            </div>
+
+            <div className='max-h-[386px] overflow-y-auto '>
+              {localItems.map((cartItem, index) => (
+                <CartItem
+                  cartItem={cartItem}
+                  className={index != 0 ? 'mt-4' : ''}
+                  key={index}
+                  localCartItem
+                />
+              ))}
+            </div>
           </div>
         )}
 

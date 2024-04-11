@@ -43,13 +43,23 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
     try {
       // send request to add product to cart
-      const { cartItem, message } = await addToCartApi(product._id, 1)
-
-      // add cart item to state
-      dispatch(addCartItem(cartItem))
+      const { cartItems, message, errors } = await addToCartApi([
+        { productId: product._id, quantity: 1 },
+      ])
 
       // show toast success
-      toast.success(message)
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart items to state
+      dispatch(addCartItem(cartItems))
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
@@ -63,15 +73,26 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   const buyNow = useCallback(async () => {
     // start page loading
     dispatch(setPageLoading(true))
+
     try {
       // send request to add product to cart
-      const { cartItem, message } = await addToCartApi(product._id, 1)
-
-      // add cart item to state
-      dispatch(addCartItem(cartItem))
+      const { cartItems, message, errors } = await addToCartApi([
+        { productId: product._id, quantity: 1 },
+      ])
 
       // show toast success
-      toast.success(message)
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart items to state
+      dispatch(addCartItem(cartItems))
 
       // move to cart page
       router.push(`/cart?product=${product.slug}`)

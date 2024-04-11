@@ -27,22 +27,30 @@ export const cart = createSlice({
         items: action.payload,
       }
     },
-    addCartItem: (state, action: PayloadAction<FullyCartItem>) => {
-      // if cart item has already existed in cart -> increase quantity
-      const existedCartItem = state.items.find(item => item._id === action.payload._id)
-      if (existedCartItem) {
-        return {
-          ...state,
-          items: state.items.map(item =>
-            item._id === action.payload._id ? { ...item, quantity: action.payload.quantity } : item
-          ),
-        }
-      }
+    addCartItem: (state, action: PayloadAction<FullyCartItem[]>) => {
+      console.log('action.payload: ', action.payload)
 
-      // if cart item does not exist in cart -> add to cart
+      // Initialize an array to store updated items
+      let updatedItems: FullyCartItem[] = [...state.items]
+
+      // Loop through each item in the payload
+      action.payload.forEach(item => {
+        // Check if the item already exists in the cart
+        const existingCartItemIndex = state.items.findIndex(cartItem => cartItem._id === item._id)
+
+        // If the item exists, update its quantity
+        if (existingCartItemIndex !== -1) {
+          updatedItems[existingCartItemIndex] = item
+        } else {
+          // If the item does not exist, add it to the cart
+          updatedItems.push(item)
+        }
+      })
+
+      // Return the updated state with the new items
       return {
         ...state,
-        items: [...state.items, action.payload],
+        items: updatedItems,
       }
     },
     deleteCartItem: (state, action: PayloadAction<string>) => {

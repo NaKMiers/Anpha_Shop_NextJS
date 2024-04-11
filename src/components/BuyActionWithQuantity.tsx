@@ -33,13 +33,19 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
 
       try {
         // send request to add product to cart
-        const { cartItem, message } = await addToCartApi(product._id, quantity)
-
-        // add cart item to state
-        dispatch(addCartItem(cartItem))
+        const { cartItems, message, errors } = await addToCartApi([{ productId: product._id, quantity }])
 
         // show toast success
         toast.success(message)
+        if (errors.notEnough) {
+          toast.error(errors.notEnough)
+        }
+        if (errors.notFound) {
+          toast.error(errors.notFound)
+        }
+
+        // add cart item to state
+        dispatch(addCartItem(cartItems))
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -58,13 +64,19 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
 
       try {
         // send request to add product to cart
-        const { cartItem, message } = await addToCartApi(product._id, quantity)
-
-        // add cart item to state
-        dispatch(addCartItem(cartItem))
+        const { cartItems, message, errors } = await addToCartApi([{ productId: product._id, quantity }])
 
         // show toast success
         toast.success(message)
+        if (errors.notEnough) {
+          toast.error(errors.notEnough)
+        }
+        if (errors.notFound) {
+          toast.error(errors.notFound)
+        }
+
+        // add cart item to state
+        dispatch(addCartItem(cartItems))
 
         // move to cart page
         router.push(`/cart?product=${product?.slug}`)
