@@ -12,7 +12,7 @@ import { caclIncomeApi, cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } fro
 import { formatPrice } from '@/utils/number'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
@@ -41,13 +41,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const [total, setTotal] = useState<number>(0)
 
   // Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FieldValues>({
-    defaultValues: {
+  const defaultValues: FieldValues = useMemo<FieldValues>(
+    () => ({
       search: '',
       sort: 'updatedAt|-1',
       userId: '',
@@ -56,7 +51,18 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       paymentMethod: '',
       from: '',
       to: '',
-    },
+    }),
+    []
+  )
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue,
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues,
   })
 
   // get all orders
@@ -74,6 +80,18 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         // update orders from state
         setOrders(orders)
         setAmount(amount)
+
+        // sync search params with states
+        setValue('search', searchParams?.search || getValues('search'))
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('userId', searchParams?.userId || getValues('userId'))
+        setValue('voucherApplied', searchParams?.voucherApplied || getValues('voucherApplied'))
+        setValue('status', searchParams?.status || getValues('status'))
+        setValue('paymentMethod', searchParams?.paymentMethod || getValues('paymentMethod'))
+        setValue('from', searchParams?.from || getValues('from'))
+        setValue('to', searchParams?.to || getValues('to'))
+
+        // set min - max - total
         setMinTotal(chops.minTotal)
         setMaxTotal(chops.maxTotal)
         setTotal(searchParams?.total ? +searchParams.total : chops.maxTotal)
@@ -86,7 +104,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       }
     }
     getAllTags()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // cancel orders
   const handleCancelOrders = useCallback(async (ids: string[]) => {
@@ -155,12 +173,14 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -173,7 +193,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
 
       return { ...rest, total: total === maxTotal ? [] : [total.toString()] }
     },
-    [maxTotal, total, searchParams]
+    [maxTotal, total, searchParams, defaultValues]
   )
 
   // handle submit filter

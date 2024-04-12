@@ -5,7 +5,7 @@ import { FullyCartItem } from '@/app/api/cart/route'
 // [GET]
 export const getAllOrdersApi = async (query: string = '') => {
   // no-store to bypass cache
-  const res = await fetch(`/api/admin/order/all${query}`, { cache: 'no-store' })
+  const res = await fetch(`/api/admin/order/all${query}`, { cache: 'no-store', next: { revalidate: 0 } })
 
   // check status
   if (!res.ok) {
@@ -18,7 +18,10 @@ export const getAllOrdersApi = async (query: string = '') => {
 // [GET]
 export const getOrderHistoryApi = async (query: string) => {
   // no-store to bypass cache
-  const res = await fetch(`/api/user/order-history${query}`, { cache: 'no-store' })
+  const res = await fetch(`/api/user/order-history${query}`, {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  })
 
   // check status
   if (!res.ok) {
@@ -31,7 +34,7 @@ export const getOrderHistoryApi = async (query: string) => {
 // [GET]
 export const getOrderApi = async (code: string) => {
   // no-store to bypass cache
-  const res = await fetch(`/api/order/${code}`, { cache: 'no-store' })
+  const res = await fetch(`/api/order/${code}`, { cache: 'no-store', next: { revalidate: 0 } })
 
   // check status
   if (!res.ok) {
@@ -44,7 +47,10 @@ export const getOrderApi = async (code: string) => {
 // [GET]
 export const generateOrderCodeApi = async () => {
   // no cache
-  const res = await fetch('/api/order/generate-order-code', { cache: 'no-store' })
+  const res = await fetch('/api/order/generate-order-code', {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  })
 
   // check status
   if (!res.ok) {

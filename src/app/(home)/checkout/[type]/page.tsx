@@ -215,6 +215,12 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           width={350}
           alt='momo-qr'
         />
+
+        <button
+          className='lg:hidden mt-10 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
+          onClick={handleConfirmPayment}>
+          <span className=''>Xác nhận thanh toán</span>
+        </button>
       </div>
 
       {/* Cart items */}

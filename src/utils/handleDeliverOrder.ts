@@ -1,15 +1,22 @@
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import AccountModel from '@/models/AccountModel'
-import OrderModel, { IOrder } from '@/models/OrderModel'
+import OrderModel from '@/models/OrderModel'
 import ProductModel from '@/models/ProductModel'
-import UserModel, { IUser } from '@/models/UserModel'
-import VoucherModel, { IVoucher } from '@/models/VoucherModel'
+import UserModel from '@/models/UserModel'
+import VoucherModel from '@/models/VoucherModel'
 import { notifyDeliveryOrder, notifyShortageAccount } from '@/utils/sendMail'
 import { NextResponse } from 'next/server'
 import { calcExpireTime } from '.'
 
 export default async function handleDeliverOrder(id: string) {
   // get order from database to deliver
-  const order: IOrder | null = await OrderModel.findById(id).lean()
+  const order: FullyOrder | null = await OrderModel.findById(id)
+    .populate({
+      path: 'voucherApplied',
+      select: 'code',
+      populate: 'owner',
+    })
+    .lean()
 
   // check order exist
   if (!order) {
@@ -24,6 +31,7 @@ export default async function handleDeliverOrder(id: string) {
   // get items and applied voucher
   const { items, voucherApplied, email, paymentMethod, total } = order
 
+  // error state
   let orderError = {
     error: false,
     message: '',
@@ -89,6 +97,7 @@ export default async function handleDeliverOrder(id: string) {
   }
   const accountDataList = await handleItemsToAccounts()
 
+  // check if shortage accounts
   if (orderError.error) {
     notifyShortageAccount(orderError.message)
 
@@ -135,43 +144,36 @@ export default async function handleDeliverOrder(id: string) {
 
   // VOUCHER
   // get voucher form database
-  let voucherDescription
-  if (voucherApplied) {
-    const voucher: IVoucher | null = await VoucherModel.findOne({
-      code: voucherApplied,
-    }).lean()
-    voucherDescription = voucher && voucher.desc
+  console.log('voucherApplied: ', order.voucherApplied)
+  const voucher = order.voucherApplied
+
+  if (voucher) {
+    console.log('in here')
+
+    const commission: any = voucher.owner.commission
+    let extraAccumulated = 0
+
+    switch (commission.type) {
+      case 'fixed': {
+        extraAccumulated = commission.value
+        break
+      }
+      case 'percentage': {
+        extraAccumulated = (order.total * parseFloat(commission.value)) / 100
+        break
+      }
+    }
 
     // update voucher
-    if (voucher) {
-      // get voucher owner to get commission
-      const voucherOwner: IUser | null = await UserModel.findById(voucher.owner).lean()
-      if (!voucherOwner) {
-        return NextResponse.json({ message: 'Voucher owner not found' }, { status: 404 })
-      }
+    await VoucherModel.findByIdAndUpdate(voucher._id, {
+      $addToSet: { usedUsers: email },
+      $inc: {
+        accumulated: extraAccumulated,
+        timesLeft: -1,
+      },
+    })
 
-      const commission: any = voucherOwner.commission
-      let extraAccumulated = 0
-
-      switch (commission.type) {
-        case 'fixed': {
-          extraAccumulated = commission.value
-          break
-        }
-        case 'percentage': {
-          extraAccumulated = (order.total * parseFloat(commission.value)) / 100
-          break
-        }
-      }
-
-      await VoucherModel.findByIdAndUpdate(voucher._id, {
-        $addToSet: { usedUsers: email },
-        $inc: {
-          accumulated: extraAccumulated,
-          timesLeft: -1,
-        },
-      })
-    }
+    console.log('voucher updated')
   }
 
   // USER
@@ -186,7 +188,7 @@ export default async function handleDeliverOrder(id: string) {
   const orderData = {
     ...order,
     accounts: accountDataList,
-    discount: voucherDescription,
+    discount: order.discount || 0,
   }
 
   // EMAIL

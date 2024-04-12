@@ -12,7 +12,7 @@ import { IProduct } from '@/models/ProductModel'
 import { activateAccountsApi, deleteAccountsApi, getAllAccountsApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
@@ -23,7 +23,7 @@ import AdminMeta from '@/components/admin/AdminMeta'
 
 export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
 
-function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: string[] | string } }) {
   // store
   const dispatch = useAppDispatch()
   const pathname = usePathname()
@@ -45,20 +45,26 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   const itemPerPage = 9
 
   // Form
+  const defaultValues = useMemo<FieldValues>(() => {
+    return {
+      search: '',
+      sort: 'updatedAt|-1',
+      active: true,
+      usingUser: true,
+      expire: '',
+      renew: '',
+    }
+  }, [])
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      search: '',
-      sort: 'updatedAt|-1',
-      active: '',
-      usingUser: '',
-      expire: '',
-      renew: '',
-    },
+    defaultValues,
   })
 
   // get all accounts at first time
@@ -88,11 +94,19 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         setAmount(amount)
         setGroupTypes(groupTypes)
         setTypes(types)
+
+        // sync search params with states
         setSelectedTypes(
           []
             .concat((searchParams?.type || types.map((type: IProduct) => type._id)) as [])
             .map(type => type)
         )
+        setValue('search', searchParams?.search || getValues('search'))
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('active', searchParams?.active || getValues('active'))
+        setValue('usingUser', searchParams?.usingUser || getValues('usingUser'))
+        setValue('expire', searchParams?.expire || getValues('expire'))
+        setValue('renew', searchParams?.renew || getValues('renew'))
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -102,7 +116,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       }
     }
     getAllAccounts()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, getValues, setValue])
 
   // activate account
   const handleActivateAccounts = useCallback(async (ids: string[], value: boolean) => {
@@ -168,18 +182,24 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
-      return { ...data, type: selectedTypes.length === types.length ? [] : selectedTypes }
+      return {
+        ...searchParams,
+        ...data,
+        type: selectedTypes.length === types.length ? [] : selectedTypes,
+      }
     },
-    [selectedTypes, types, searchParams]
+    [selectedTypes, types, searchParams, defaultValues]
   )
 
   // handle submit filter
@@ -188,13 +208,13 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       const params: any = handleOptimizeFilter(data)
 
       // handle query
-      const query = handleQuery({ ...searchParams, ...params })
+      const query = handleQuery(params)
 
       // push to new url
       console.log(query)
       router.push(pathname + query)
     },
-    [handleOptimizeFilter, searchParams, router, pathname]
+    [handleOptimizeFilter, router, pathname]
   )
 
   // handle reset filter
@@ -358,11 +378,11 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
               {
                 value: '',
                 label: 'All',
-                selected: true,
               },
               {
                 value: true,
                 label: 'On',
+                selected: true,
               },
               {
                 value: false,
@@ -384,11 +404,11 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
               {
                 value: '',
                 label: 'All',
-                selected: true,
               },
               {
                 value: true,
                 label: 'Using',
+                selected: true,
               },
               {
                 value: false,
@@ -400,7 +420,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Expire */}
           <Input
             id='expire'
-            label='Expire'
+            label='Expiry'
             disabled={false}
             register={register}
             errors={errors}

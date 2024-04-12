@@ -12,7 +12,7 @@ import { ICategory } from '@/models/CategoryModel'
 import { deleteCategoriesApi, getAllCagetoriesApi, updateCategoriesApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaSort } from 'react-icons/fa'
@@ -47,15 +47,21 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const [productQuantity, setProductQuantity] = useState<number>(0)
 
   // Form
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
+      sort: 'updatedAt|-1',
+    }),
+    []
+  )
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      sort: 'updatedAt|-1',
-    },
+    defaultValues,
   })
 
   // get all categories
@@ -75,6 +81,9 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         setCategories(categories)
         setAmount(amount)
 
+        // sync search params with states
+        setValue('sort', searchParams?.sort || getValues('sort'))
+
         // set min and max
         setMinPQ(chops.minProductQuantity)
         setMaxPQ(chops.maxProductQuantity)
@@ -90,7 +99,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
       }
     }
     getAllCategories()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // delete category
   const handleDeleteCategories = useCallback(async (ids: string[]) => {
@@ -158,12 +167,14 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -172,7 +183,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         productQuantity: productQuantity === maxPQ ? [] : [productQuantity.toString()],
       }
     },
-    [productQuantity, maxPQ, searchParams]
+    [productQuantity, maxPQ, searchParams, defaultValues]
   )
 
   // handle submit filter

@@ -13,7 +13,7 @@ import { activateVouchersApi, deleteVouchersApi, getAllVouchersApi } from '@/req
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCalendar, FaSearch, FaSort } from 'react-icons/fa'
@@ -46,13 +46,8 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
   const [maxReduce, setMaxReduce] = useState<number>(0)
 
   // Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FieldValues>({
-    defaultValues: {
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
       search: '',
       sort: 'updatedAt|-1',
       type: '',
@@ -62,7 +57,18 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       beginTo: '',
       expireFrom: '',
       expireTo: '',
-    },
+    }),
+    []
+  )
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue,
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues,
   })
 
   // get all vouchers
@@ -81,6 +87,17 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         setVouchers(vouchers)
         setAmount(amount)
 
+        // sync search params with states
+        setValue('search', searchParams?.search || getValues('search'))
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('type', searchParams?.type || getValues('type'))
+        setValue('active', searchParams?.active || getValues('active'))
+        setValue('timesLeft', searchParams?.timesLeft || getValues('timesLeft'))
+        setValue('beginFrom', searchParams?.beginFrom || getValues('beginFrom'))
+        setValue('beginTo', searchParams?.beginTo || getValues('beginTo'))
+        setValue('expireFrom', searchParams?.expireFrom || getValues('expireFrom'))
+        setValue('expireTo', searchParams?.expireTo || getValues('expireTo'))
+
         // get min - max
         setMinMinTotal(chops.minMinTotal)
         setMaxMinTotal(chops.maxMinTotal)
@@ -97,7 +114,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       }
     }
     getAllVouchers()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // activate voucher
   const handleActivateVouchers = useCallback(async (ids: string[], value: boolean) => {
@@ -156,12 +173,14 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -176,7 +195,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         maxReduce: maxReduce === maxMaxReduce ? [] : [maxReduce.toString()],
       }
     },
-    [minTotal, maxMinTotal, maxReduce, maxMaxReduce, searchParams]
+    [minTotal, maxMinTotal, maxReduce, maxMaxReduce, searchParams, defaultValues]
   )
 
   // handle submit filter

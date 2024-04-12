@@ -4,6 +4,7 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import ProductItem from '@/components/admin/ProductItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -11,19 +12,17 @@ import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { activateProductsApi, deleteProductsApi, getAllProductsApi } from '@/requests'
-import { formatPrice } from '@/utils/number'
 import { handleQuery } from '@/utils/handleQuery'
+import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { BiReset } from 'react-icons/bi'
-import { FaFilter, FaSort } from 'react-icons/fa'
-import AdminMeta from '@/components/admin/AdminMeta'
+import { FaSort } from 'react-icons/fa'
 
 export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: ICategory }
 
-function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: string[] | string } }) {
   // store
   const dispatch = useAppDispatch()
   const pathname = usePathname()
@@ -57,17 +56,23 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
   const [stock, setStock] = useState<number>(0)
 
   // Form
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
+      sort: 'updatedAt|-1',
+      active: '',
+      flashsale: '',
+    }),
+    []
+  )
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      sort: 'updatedAt|-1',
-      active: '',
-      flashsale: '',
-    },
+    defaultValues,
   })
 
   // get all products
@@ -99,6 +104,11 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           [].concat((searchParams?.tag || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
         )
 
+        // sync search params with states
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('active', searchParams?.active || getValues('active'))
+        setValue('flashsale', searchParams?.flashsale || getValues('flashsale'))
+
         // get min - max
         setMinPrice(chops.minPrice)
         setMaxPrice(chops.maxPrice)
@@ -120,7 +130,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       }
     }
     getAllProducts()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // activate product
   const handleActivateProducts = useCallback(async (ids: string[], value: boolean) => {
@@ -182,12 +192,14 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -212,6 +224,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       stock,
       tgs,
       searchParams,
+      defaultValues,
     ]
   )
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { formatPrice } from '@/utils/number'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Input from './Input'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
@@ -14,7 +14,7 @@ import { ICategory } from '@/models/CategoryModel'
 
 interface MetaProps {
   title?: string
-  searchParams: { [key: string]: string[] } | undefined
+  searchParams: { [key: string]: string[] | string } | undefined
   type: 'tag' | 'ctg' | 'flash-sale'
   items?: ITag[] | ICategory[]
   chops: { [key: string]: number } | null
@@ -46,16 +46,21 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   )
 
   // Form
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
+      search: '',
+      sort: 'updatedAt|-1',
+    }),
+    []
+  )
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      search: '',
-      sort: 'updatedAt|-1',
-    },
+    defaultValues,
   })
 
   // handle opimize filter
@@ -66,12 +71,14 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -82,7 +89,17 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
         [type]: selectedFilterItems.length === items.length ? [] : selectedFilterItems,
       }
     },
-    [items.length, maxPrice, maxStock, price, searchParams, selectedFilterItems, stock, type]
+    [
+      items.length,
+      maxPrice,
+      maxStock,
+      price,
+      searchParams,
+      selectedFilterItems,
+      stock,
+      type,
+      defaultValues,
+    ]
   )
 
   // handle submit filter

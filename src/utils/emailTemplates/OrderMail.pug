@@ -25,7 +25,7 @@ body(style='font-family: Arial')
 
       div(style='width: 100%;')
          p(style='margin-bottom: 4px;')
-            span(style='font-weight: 600;') Code: 
+            span(style='font-weight: 600;') Mã đơn hàng: 
             span(style='color: #0DCAF0;')= code
 
       div(style='width: 100%;')
@@ -42,7 +42,7 @@ body(style='font-family: Arial')
          div(style='width: 100%;')
             p(style='margin-bottom: 4px;')
                span(style='font-weight: 600;') Giảm giá:  
-               span= discount
+               span= Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(discount)
 
    div(style='padding-top: 20px;')
    p(style='text-align: left; margin-top: 0; font-size: 26px; font-weight: 700;') Sản phẩm

@@ -1,16 +1,16 @@
 'use client'
 
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import Input from '@/components/Input'
 import OrderItem from '@/components/OrderItem'
 import Pagination from '@/components/Pagination'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
-import { IOrder } from '@/models/OrderModel'
 import { getOrderHistoryApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
@@ -24,7 +24,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   const router = useRouter()
 
   // states
-  const [orders, setOrders] = useState<IOrder[]>([])
+  const [orders, setOrders] = useState<FullyOrder[]>([])
   const [amount, setAmount] = useState<number>(0)
 
   // values
@@ -36,20 +36,24 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   // filter
   const [isShowFilter, setIsShowFilter] = useState(false)
 
-  console.log(orders)
   // Form
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
+      search: '',
+      sort: 'updatedAt|-1',
+      from: '',
+      to: '',
+    }),
+    []
+  )
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      search: '',
-      sort: 'updatedAt|-1',
-      from: '',
-      to: '',
-    },
+    defaultValues,
   })
 
   // get user's order
@@ -83,6 +87,8 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     getOrderHistory()
   }, [dispatch, searchParams])
 
+  console.log('orders: ', orders)
+
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
@@ -91,12 +97,14 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -109,7 +117,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
 
       return { ...rest, total: total === maxTotal ? [] : [total.toString()] }
     },
-    [searchParams, total, maxTotal]
+    [searchParams, total, maxTotal, defaultValues]
   )
 
   // handle submit filter

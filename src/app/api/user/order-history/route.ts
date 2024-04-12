@@ -1,11 +1,21 @@
 import { connectDatabase } from '@/config/databse'
-import OrderModel from '@/models/OrderModel'
+import OrderModel, { IOrder } from '@/models/OrderModel'
+import { IUser } from '@/models/UserModel'
 import '@/models/VoucherModel'
+import { IVoucher } from '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
+
+export type FullyVoucher = IVoucher & {
+  owner: IUser
+}
+
+export type FullyOrder = IOrder & {
+  voucherApplied: FullyVoucher | null
+}
 
 // [GET]: /admin/order/all
 export async function GET(req: NextRequest) {
@@ -106,11 +116,14 @@ export async function GET(req: NextRequest) {
     })
 
     // get all order from database
-    const orders = await OrderModel.find({
+    const orders: FullyOrder[] = await OrderModel.find({
       userId,
       ...filter,
     })
-      .populate('voucherApplied', 'code')
+      .populate({
+        path: 'voucherApplied',
+        select: 'code desc',
+      })
       .sort(sort)
       .skip(skip)
       .limit(itemPerPage)

@@ -12,7 +12,7 @@ import { ITag } from '@/models/TagModel'
 import { deleteTagsApi, featureTagsApi, getAllTagsApi, updateTagsApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaSort } from 'react-icons/fa'
@@ -46,16 +46,23 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   const [productQuantity, setProductQuantity] = useState<number>(0)
 
   // Form
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
+      sort: 'updatedAt|-1',
+      isFeatured: '',
+    }),
+    []
+  )
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      sort: 'updatedAt|-1',
-      isFeatured: '',
-    },
+    defaultValues,
   })
 
   // get all tags
@@ -75,6 +82,10 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         setTags(tags)
         setAmount(amount)
 
+        // sync search params with states
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('isFeatured', searchParams?.isFeatured || getValues('isFeatured'))
+
         // set min and max
         setMinPQ(chops.minProductQuantity)
         setMaxPQ(chops.maxProductQuantity)
@@ -90,7 +101,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
       }
     }
     getAllTags()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // delete tag
   const handleDeleteTags = useCallback(async (ids: string[]) => {
@@ -171,12 +182,14 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -185,7 +198,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         productQuantity: productQuantity === maxPQ ? [] : [productQuantity.toString()],
       }
     },
-    [productQuantity, maxPQ, searchParams]
+    [productQuantity, maxPQ, searchParams, defaultValues]
   )
 
   // handle submit filter

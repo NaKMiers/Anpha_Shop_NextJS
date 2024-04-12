@@ -76,9 +76,11 @@ const UserSchema = new Schema(
       type: {
         type: String,
         enum: ['percentage', 'fixed'],
+        default: '',
       },
       value: {
         type: String,
+        default: '0',
       },
     },
     totalIncome: {

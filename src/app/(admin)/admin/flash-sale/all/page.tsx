@@ -13,7 +13,7 @@ import { IProduct } from '@/models/ProductModel'
 import { deleteFlashSalesApi, getAllFlashSalesApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCalendar, FaSort } from 'react-icons/fa'
@@ -39,17 +39,23 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
   const itemPerPage = 9
 
   // Form
+  const defaultValues: FieldValues = useMemo(
+    () => ({
+      sort: 'updatedAt|-1',
+      type: '',
+      timeType: '',
+    }),
+    []
+  )
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      sort: 'updatedAt|-1',
-      type: '',
-      timeType: '',
-    },
+    defaultValues,
   })
 
   // get all flash sales
@@ -68,6 +74,11 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         // set vouchers to state
         setFlashSales(flashSales)
         setAmount(amount)
+
+        // sync search params with states
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('type', searchParams?.type || getValues('type'))
+        setValue('timeType', searchParams?.timeType || getValues('timeType'))
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -78,7 +89,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     }
 
     getAllFlashSales()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // delete voucher
   const handleDeleteFlashSales = useCallback(
@@ -126,12 +137,14 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -150,7 +163,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         ...rest,
       }
     },
-    [searchParams]
+    [searchParams, defaultValues]
   )
 
   // handle submit filter

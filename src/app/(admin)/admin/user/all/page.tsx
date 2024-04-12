@@ -13,11 +13,10 @@ import { deleteUsersApi, getAllUsersApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { BiReset } from 'react-icons/bi'
-import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
+import { FaSearch, FaSort } from 'react-icons/fa'
 
 function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // hooks
@@ -44,17 +43,24 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
   const [accumulated, setAccumulated] = useState<number>(0)
 
   // Form
+  const defaultValues = useMemo<FieldValues>(
+    () => ({
+      search: '',
+      sort: 'updatedAt|-1',
+      role: '',
+    }),
+    []
+  )
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
-    defaultValues: {
-      search: '',
-      sort: 'updatedAt|-1',
-      role: '',
-    },
+    defaultValues,
   })
 
   // get all users
@@ -73,6 +79,11 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
         setUsers(users)
         setAmount(amount)
 
+        // sync search params with states
+        setValue('search', searchParams?.search || getValues('search'))
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue('role', searchParams?.role || getValues('role'))
+
         // set balance
         setMinBalance(chops.minBalance)
         setMaxBalance(chops.maxBalance)
@@ -90,7 +101,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
       }
     }
     getAllUsers()
-  }, [dispatch, searchParams])
+  }, [dispatch, searchParams, setValue, getValues])
 
   // delete user
   const handleDeleteUsers = useCallback(async (ids: string[]) => {
@@ -131,12 +142,14 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
         delete searchParams.page
       }
 
-      // prevent sort default
-      if (data.sort === 'updatedAt|-1') {
-        if (Object.keys(searchParams || {}).length) {
-          data.sort = ''
-        } else {
-          delete data.sort
+      // loop through data to prevent filter default
+      for (let key in data) {
+        if (data[key] === defaultValues[key]) {
+          if (!searchParams?.[key]) {
+            delete data[key]
+          } else {
+            data[key] = ''
+          }
         }
       }
 
@@ -146,7 +159,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
         accumulated: accumulated === maxAccumulated ? [] : [accumulated.toString()],
       }
     },
-    [accumulated, balance, maxBalance, maxAccumulated, searchParams]
+    [accumulated, balance, maxBalance, maxAccumulated, searchParams, defaultValues]
   )
 
   // handle submit filter

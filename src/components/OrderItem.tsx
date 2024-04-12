@@ -10,9 +10,10 @@ import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import CartItem from './CartItem'
 import LoadingButton from './LoadingButton'
+import { FullyOrder } from '@/app/api/user/order-history/route'
 
 interface OrderItemProps {
-  order: IOrder
+  order: FullyOrder
   className?: string
 }
 
@@ -114,11 +115,13 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         <div className='flex flex-wrap items-center justify-between gap-x-3'>
           <div>
             <span className='font-semibold'>Voucher: </span>
-            <span>{order.voucherApplied}</span>
+            <span title={order.voucherApplied.desc} className='font-semibold text-slate-400'>
+              {order.voucherApplied.code}
+            </span>
           </div>
           <div>
             <span className='font-semibold'>Giảm giá: </span>
-            <span>{formatPrice(order.discount)}</span>
+            <span className='text-secondary'>{formatPrice(order.discount)}</span>
           </div>
         </div>
       )}
@@ -144,7 +147,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
           isLoading={isReBuying}
         />
         <Link
-          href={`/user/order/${order.code}`}
+          href={`/user/order/${order?.code}`}
           className='px-[14px] py-[6px] rounded-md font-semibold bg-primary hover:bg-secondary hover:text-white common-transition'>
           Chi tiết
         </Link>

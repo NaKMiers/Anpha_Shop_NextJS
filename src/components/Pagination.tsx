@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
 
 interface PaginationProps {
-  searchParams: { [key: string]: string[] } | undefined
+  searchParams: { [key: string]: string[] | string } | undefined
   amount: number
   itemsPerPage: number
   className?: string

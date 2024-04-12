@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
     const voucher: IVoucher | null = await VoucherModel.findOne({ code }).lean()
 
     // if voucher does not exist
-    if (!voucher) {
+    if (!voucher || !voucher.active) {
       return NextResponse.json({ message: 'Voucher không tồn tại' }, { status: 404 })
     }
 
