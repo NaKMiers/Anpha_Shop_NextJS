@@ -256,7 +256,6 @@ function AddFlashSalePage() {
 
         {/* Ready to apply products */}
         <p className='text-light font-semibold text-xl mb-1'>Select Products</p>
-
         <div className='max-h-[300px] overflow-y-auto flex flex-wrap rounded-lg bg-white p-3 gap-2 mb-5'>
           {products.map(product => (
             <div

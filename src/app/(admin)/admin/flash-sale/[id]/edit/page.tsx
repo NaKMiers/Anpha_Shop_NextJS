@@ -6,7 +6,7 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
-import { getAllProductsApi, getFlashSaleApi, updateFlashSaleApi } from '@/requests'
+import { getFlashSaleApi, getForceAllProductsApi, updateFlashSaleApi } from '@/requests'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -14,7 +14,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaPause, FaPlay } from 'react-icons/fa6'
 import { IoReload } from 'react-icons/io5'
-
 import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
@@ -36,7 +35,6 @@ function AddFlashSalePage() {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
     setError,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -60,8 +58,11 @@ function AddFlashSalePage() {
         setValue('type', flashSale.type)
         setValue('value', flashSale.value)
         setValue('begin', new Date(flashSale.begin).toISOString().split('T')[0])
-        setValue('expire', new Date(flashSale.expire).toISOString().split('T')[0])
-        setValue('duration', flashSale.duration)
+        setValue(
+          'expire',
+          flashSale.expire ? new Date(flashSale.expire).toISOString().split('T')[0] : ''
+        )
+        setValue('duration', flashSale.duration || 120)
         setValue('timeType', flashSale.timeType)
         setTimeType(flashSale.timeType)
 
@@ -79,7 +80,7 @@ function AddFlashSalePage() {
     const getAllProducts = async () => {
       try {
         // send request to server
-        const { products } = await getAllProductsApi()
+        const { products } = await getForceAllProductsApi()
 
         // set products to state
         setProducts(products)
@@ -120,10 +121,11 @@ function AddFlashSalePage() {
       }
 
       // if expire is less than begin
-      if (new Date(data.expire).getTime() <= new Date(data.begin).getTime()) {
+      if (data.expire && new Date(data.expire) <= new Date(data.begin)) {
         setError('expire', { type: 'manual', message: 'Expire must be > begin' })
         isValid = false
       }
+      console.log(isValid)
 
       return isValid
     },
@@ -132,6 +134,8 @@ function AddFlashSalePage() {
 
   // handle send request to server to edit flash sale
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    console.log(data)
+
     // validate form
     if (!handleValidate(data)) return
 
@@ -275,17 +279,17 @@ function AddFlashSalePage() {
 
         {/* Ready to apply products */}
         <p className='text-light font-semibold text-xl mb-1'>Select Products</p>
-
-        <div className='flex flex-wrap rounded-lg bg-white p-3 gap-2 mb-5'>
+        <div className='max-h-[300px] overflow-y-auto flex flex-wrap rounded-lg bg-white p-3 gap-2 mb-5'>
           {products.map(product => (
             <div
-              className={`border-2 border-slate-300 rounded-lg flex items-center p-2 gap-2 cursor-pointer common-transition ${
+              className={`max-w-[250px] border-2 border-slate-300 rounded-lg flex items-center py-1 px-2 gap-2 cursor-pointer common-transition ${
                 selectedProducts.includes(product._id)
                   ? 'bg-secondary border-white text-white'
                   : product.flashsale
-                  ? 'bg-slate-300'
+                  ? 'bg-slate-200'
                   : ''
               }`}
+              title={product.title}
               onClick={() =>
                 selectedProducts.includes(product._id)
                   ? setSelectedProducts(prev => prev.filter(id => id !== product._id))
@@ -299,7 +303,9 @@ function AddFlashSalePage() {
                 width={60}
                 alt='thumbnail'
               />
-              <span>{product.title}</span>
+              <span className='block text-sm text-ellipsis line-clamp-1 text-nowrap'>
+                {product.title}
+              </span>
             </div>
           ))}
         </div>

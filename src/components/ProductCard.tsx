@@ -195,7 +195,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
   return (
     <div
-      className={`relative w-full h-full p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}>
+      className={`relative w-full h-full min-h-[430px] p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}>
       {/* Sold out */}
       {product.stock <= 0 && (
         <div className='absolute z-10 top-4 left-4 right-4 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
@@ -213,10 +213,10 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       <Link
         href={`/${product.slug}`}
         className='relative aspect-video rounded-lg overflow-hidden shadow-lg block'>
-        <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
+        <div className='flex w-full overflow-x-scroll snap-x snap-mandatory'>
           {product.images.map(src => (
             <Image
-              className='flex-shrink-0 snap-start w-full h-full object-cover hover:scale-105 duration-500 transition-all'
+              className='flex-shrink-0 snap-start w-full h-full object-cover'
               src={src}
               width={250}
               height={250}

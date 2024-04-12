@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     await connectDatabase()
 
     // get all categories from database
-    const categories = await CategoryModel.find().sort({ createdAt: -1 }).lean()
+    const categories = await CategoryModel.find().select('title').sort({ createdAt: -1 }).lean()
 
     return NextResponse.json({ categories }, { status: 200 })
   } catch (err: any) {

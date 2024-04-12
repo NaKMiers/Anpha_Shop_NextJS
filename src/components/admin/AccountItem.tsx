@@ -49,7 +49,7 @@ function AccountItem({
           <Link
             href={`/${data.type?.slug || ''}`}
             className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
-            <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
+            <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
               <Image
                 className='aspect-video flex-shrink-0 snap-start object-cover w-full h-full'
                 src={data.type?.images[0] || '/images/not-found.jpg'}
@@ -100,6 +100,17 @@ function AccountItem({
             <span className='font-semibold'>Renew: </span>
             <span className={`${new Date() > new Date(data.renew) ? 'text-red-500' : ''}`}>
               {formatTime(data.renew)}
+            </span>
+          </p>
+
+          {/* Updated  */}
+          <p className='text-sm' title='Expire (d/m/y)'>
+            <span className='font-semibold'>Updated: </span>
+            <span
+              className={`${
+                +new Date() - +new Date(data.updatedAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
+              }`}>
+              {formatTime(data.updatedAt)}
             </span>
           </p>
 

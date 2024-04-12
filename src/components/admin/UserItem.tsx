@@ -213,7 +213,7 @@ function UserItem({
             title={userData.email}>
             {userData.email}
           </p>
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center gap-2 text-sm'>
             <p>
               <span className='font-semibold'>Balance: </span>
               <span className='text-green-500'>{formatPrice(userData.balance)}</span>
@@ -228,53 +228,63 @@ function UserItem({
               />
             </button>
           </div>
-          <p>
+          <p className='text-sm'>
             <span className='font-semibold'>Accumulated: </span>
             <span>{formatPrice(userData.accumulated)}</span>
           </p>
           {userData.username && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Username: </span>
               <span>{userData.username}</span>
             </p>
           )}
           {(userData.firstname || userData.lastname) && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Fullname: </span>
               <span>{userData.firstname + ' ' + userData.lastname}</span>
             </p>
           )}
           {userData.birthday && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Birthday: </span>
               <span>{formatDate(userData.birthday)}</span>
             </p>
           )}
           {userData.phone && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Phone: </span>
               <span>{userData.phone}</span>
             </p>
           )}
           {userData.address && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Address: </span>
               <span>{userData.address}</span>
             </p>
           )}
           {userData.job && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Job: </span>
               <span>{userData.job}</span>
             </p>
           )}
-          <p>
+          <p className='text-sm'>
             <span className='font-semibold'>Created At: </span>
-            <span>{formatTime(userData.createdAt)}</span>
+            <span
+              className={`${
+                +new Date() - +new Date(data.createdAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
+              }`}>
+              {formatTime(userData.createdAt)}
+            </span>
           </p>
-          <p>
+          <p className='text-sm'>
             <span className='font-semibold'>Updated At: </span>
-            <span>{formatTime(userData.updatedAt)}</span>
+            <span
+              className={`${
+                +new Date() - +new Date(data.updatedAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
+              }`}>
+              {formatTime(userData.updatedAt)}
+            </span>
           </p>
         </div>
 

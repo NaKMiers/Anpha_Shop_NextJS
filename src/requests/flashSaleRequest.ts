@@ -43,6 +43,8 @@ export const addFlashSaleApi = async (data: any) => {
 
 // [PUT]
 export const updateFlashSaleApi = async (id: string, data: any, appliedProducts: string[]) => {
+  console.log('12312312')
+
   const res = await fetch(`/api/admin/flash-sale/${id}/edit`, {
     method: 'PUT',
     body: JSON.stringify({

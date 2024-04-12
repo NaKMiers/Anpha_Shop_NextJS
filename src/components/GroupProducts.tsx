@@ -122,7 +122,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
       )}
 
       {/* Slider */}
-      <div className='flex flex-wrap min-h-[500px] px-21/2 bg-white bg-opacity-90 rounded-medium shadow-medium'>
+      <div className='flex flex-wrap min-h-[490px] px-21/2 bg-white bg-opacity-90 rounded-medium shadow-medium'>
         <div
           className={`flex ${isExpaned ? 'flex-wrap gap-y-21' : ''} w-full py-21 overflow-x-auto ${
             !isDragging ? 'snap-x snap-mandatory' : ''

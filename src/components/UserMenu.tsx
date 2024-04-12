@@ -2,9 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React from 'react'
 import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
-import { HiLightningBolt } from 'react-icons/hi'
 
 const data = [
   {
@@ -22,11 +20,6 @@ const data = [
     title: 'Mật khẩu - Bảo mật',
     href: '/user/security',
     Icon: FaUserLock,
-  },
-  {
-    title: 'Nạp tiền vào tài khoản',
-    href: '/recharge',
-    Icon: HiLightningBolt,
   },
 ]
 

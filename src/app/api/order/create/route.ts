@@ -75,13 +75,6 @@ export async function POST(req: NextRequest) {
     let response: any = null
     if (process.env.IS_AUTO_DELIVER === 'YES' || paymentMethod === 'balance') {
       response = await handleDeliverOrder(newOrder._id)
-
-      // update user balance
-      if (paymentMethod === 'balance' && !response.isError) {
-        await UserModel.findByIdAndUpdate(userId, {
-          $inc: { balance: -total },
-        })
-      }
     }
 
     // return new order

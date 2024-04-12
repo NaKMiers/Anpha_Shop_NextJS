@@ -43,13 +43,16 @@ function FlashSaleItem({
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }>
+        {/* Value - Time Type */}
         <div className='font-semibold' title='netflix'>
           <span title='Value' className='font-semibold text-primary mr-2'>
             {data.type === 'percentage' ? data.value : formatPrice(+data.value)}
           </span>
+
           <span title='Time Type'>{data.timeType}</span>
         </div>
 
+        {/* Type - Duration */}
         <div className='font-semibold' title='netflix'>
           <span className='mr-2' title='Type'>
             {data.type}
@@ -61,19 +64,22 @@ function FlashSaleItem({
           )}
         </div>
 
+        {/* Begin - Expire */}
         <div>
           <span title='Begin (d/m/y)'>{formatTime(data.begin)}</span>
           {data.timeType === 'once' && data.expire && (
-            <span title='Begin (d/m/y)'>
+            <span title='Expire (d/m/y)'>
               {' - '} {formatTime(data.expire)}
             </span>
           )}
         </div>
 
+        {/* Product Quantity */}
         <p className='font-semibold'>
           <span>Product Quantity:</span> <span className='text-primary'>{data.productQuantity}</span>
         </p>
 
+        {/* Applying Products */}
         <div className='flex flex-wrap rounded-lg gap-2 max-h-[300px] overflow-y-auto mb-3'>
           {data.products.map(product => (
             <div
@@ -86,11 +92,14 @@ function FlashSaleItem({
                 width={80}
                 alt='thumbnail'
               />
-              <span>{product.title}</span>
+              <span className='text-ellipsis line-clamp-2' title={product.title}>
+                {product.title}
+              </span>
             </div>
           ))}
         </div>
 
+        {/* Action Buttons */}
         <div className='flex self-end border border-dark text-dark rounded-lg px-3 py-2 gap-4'>
           {/* Edit Button Link */}
           <Link

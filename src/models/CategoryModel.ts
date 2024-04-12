@@ -38,4 +38,6 @@ export interface ICategory {
   title: string
   slug: string
   productQuantity: number
+  createdAt: string
+  updatedAt: string
 }

@@ -228,13 +228,25 @@ function CartItem({
 
   return (
     <div
-      className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 ${className} ${
-        localCartItem ? '' : 'rounded-medium border border-slate-400 p-21'
-      }`}>
+      className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 cursor-pointer common-transition ${className} ${
+        localCartItem ? '' : 'rounded-medium border p-21'
+      } ${
+        !!selectedCartItems.find(cI => cI._id === cartItem._id) ? 'border-primary' : 'border-slate-400'
+      }`}
+      onClick={() =>
+        dispatch(
+          setSelectedItems(
+            selectedCartItems.find(cI => cI._id === cartItem._id)
+              ? selectedCartItems.filter(cI => cI._id !== cartItem._id)
+              : [...selectedCartItems, cartItem]
+          )
+        )
+      }>
       <Link
         href={`/${cartItem.product.slug}`}
-        className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'>
-        <div className='flex w-full overflow-x-scroll snap-x no-scrollbar'>
+        className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
+        onClick={e => e.stopPropagation()}>
+        <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
           {cartItem.product.images.map(src => (
             <Image
               className='flex-shrink w-full snap-start hover:scale-105 duration-300 transition-all'
@@ -290,7 +302,7 @@ function CartItem({
       {/* Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
-        <Link href={`/${cartItem.product.slug}`}>
+        <Link href={`/${cartItem.product.slug}`} onClick={e => e.stopPropagation()}>
           <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
             {cartItem.product.title}
           </h2>
@@ -352,7 +364,7 @@ function CartItem({
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
                   quantity <= 1 || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
-                    : 'border border-secondary'
+                    : 'border border-secondary bg-white'
                 }`}
                 disabled={quantity <= 1 || isLoading}
                 onClick={() => updateQuantity('button', -1)}>
@@ -382,7 +394,7 @@ function CartItem({
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
                   quantity >= cartItem.product?.stock! || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
-                    : ' border-secondary'
+                    : ' border-secondary bg-white'
                 }`}
                 disabled={quantity >= cartItem.product?.stock! || isLoading}
                 onClick={() => updateQuantity('button', 1)}>

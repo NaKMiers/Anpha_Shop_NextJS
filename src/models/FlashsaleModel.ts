@@ -57,4 +57,6 @@ export interface IFlashsale {
   duration?: number
   expire?: string
   productQuantity: number
+  createdAt: string
+  updatedAt: string
 }

@@ -35,7 +35,9 @@ export async function POST(req: NextRequest) {
     // Fetch all products from database
     const productData = await ProductModel.find({
       _id: { $in: products.map((product: any) => product.productId) },
-    }).lean()
+    })
+      .populate('flashsale')
+      .lean()
 
     // no product to add
     if (!productData.length) {

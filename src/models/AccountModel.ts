@@ -82,4 +82,6 @@ export interface IAccount {
     minutes: number
     seconds: number
   }
+  createdAt: string
+  updatedAt: string
 }

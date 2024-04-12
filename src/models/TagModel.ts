@@ -43,4 +43,6 @@ export interface ITag {
   slug: string
   isFeatured: boolean
   productQuantity: number
+  createdAt: string
+  updatedAt: string
 }

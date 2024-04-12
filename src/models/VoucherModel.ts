@@ -92,4 +92,6 @@ export interface IVoucher {
   usedUsers: string[]
   active: boolean
   accumulated: number
+  createdAt: string
+  updatedAt: string
 }

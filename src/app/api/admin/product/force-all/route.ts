@@ -15,7 +15,20 @@ export async function GET() {
     await connectDatabase()
 
     // get all products from database
-    const products = await ProductModel.find().populate('tags category').sort({ createdAt: -1 }).lean()
+    const products = await ProductModel.find()
+      .select('title images')
+      .populate({
+        path: 'tags',
+        select: 'title',
+      })
+      .populate({
+        path: 'category',
+        select: 'title',
+      })
+      .sort({ createdAt: -1 })
+      .lean()
+
+    console.log('products: ', products)
 
     // return all products
     return NextResponse.json({ products }, { status: 200 })

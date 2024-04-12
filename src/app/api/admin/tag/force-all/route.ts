@@ -13,7 +13,7 @@ export async function GET() {
     await connectDatabase()
 
     // get all tags from database
-    const tags = await TagModel.find().sort({ createdAt: -1 }).lean()
+    const tags = await TagModel.find().select('title').sort({ createdAt: -1 }).lean()
 
     return NextResponse.json({ tags }, { status: 200 })
   } catch (err: any) {

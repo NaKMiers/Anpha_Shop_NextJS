@@ -178,7 +178,7 @@ export default async function handleDeliverOrder(id: string) {
   // check balance payment method
   if (paymentMethod === 'balance') {
     await UserModel.findByIdAndUpdate(order.userId, {
-      $inc: { balance: -1 * total },
+      $inc: { balance: -total },
     })
   }
 

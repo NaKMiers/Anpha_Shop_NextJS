@@ -32,4 +32,6 @@ export interface ICartItem {
   userId: string
   productId: string
   quantity: number
+  createdAt: string
+  updatedAt: string
 }

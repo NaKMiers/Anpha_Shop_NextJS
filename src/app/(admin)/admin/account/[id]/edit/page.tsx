@@ -12,7 +12,7 @@ import { ImClock } from 'react-icons/im'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
-import { getAccountApi, getAllProductsApi, updateAccountApi } from '@/requests'
+import { getAccountApi, getForceAllProductsApi, updateAccountApi } from '@/requests'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
@@ -92,7 +92,7 @@ function AddAccountPage() {
     const getAllTypes = async () => {
       try {
         // send request to server to get all products
-        const { products } = await getAllProductsApi()
+        const { products } = await getForceAllProductsApi()
 
         // group product be category.title
         const groupTypes: GroupTypes = {}

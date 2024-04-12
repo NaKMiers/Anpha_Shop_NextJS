@@ -62,21 +62,23 @@ function ConfirmDialog({
   // keyboard event
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // ESC
-      if (e.key === 'Escape') {
-        setOpen(false)
-      }
+      if (open) {
+        // ESC
+        if (e.key === 'Escape') {
+          setOpen(false)
+        }
 
-      // Enter
-      if (e.key === 'Enter') {
-        onAccept()
-        setOpen(false)
+        // Enter
+        if (e.key === 'Enter') {
+          onAccept()
+          setOpen(false)
+        }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [setOpen, onAccept])
+  }, [setOpen, onAccept, open])
 
   return (
     <div

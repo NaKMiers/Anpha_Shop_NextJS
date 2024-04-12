@@ -94,7 +94,7 @@ function ProductItem({
             href={`/${data.slug}`}
             className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'
             onClick={e => e.stopPropagation()}>
-            <div className='flex items-center w-full overflow-x-scroll snap-x no-scrollbar'>
+            <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
               {data.images.map((src, index) => (
                 <Image
                   key={index}

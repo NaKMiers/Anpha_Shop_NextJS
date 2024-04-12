@@ -121,6 +121,7 @@ function CartPage() {
       if (selectedItems.length) {
         // start loading
         dispatch(setLoading(true))
+
         try {
           // send request to server
           const { voucher, message } = await applyVoucherApi(data.code, data.email, subTotal)
@@ -495,7 +496,7 @@ function CartPage() {
               className={`flex items-center justify-center rounded-xl gap-1 border py-2 px-3 group border-primary hover:bg-primary common-transition ${
                 isBuying ? 'pointer-events-none' : ''
               }`}
-              disabled={isBuying}
+              disabled={isBuying || isLoading}
               onClick={handleBuyWithBalance}>
               {isBuying ? (
                 <RiDonutChartFill size={32} className='animate-spin text-slate-200' />
@@ -508,8 +509,11 @@ function CartPage() {
             </button>
 
             <button
-              className='flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition'
-              onClick={() => handleCheckout('momo')}>
+              className={`flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition ${
+                isBuying || isLoading ? 'pointer-events-none' : ''
+              }`}
+              onClick={() => handleCheckout('momo')}
+              disabled={isBuying || isLoading}>
               <Image
                 className='group-hover:border-white rounded-md border-2 wiggle-0'
                 src='/images/momo-icon.jpg'
@@ -521,8 +525,11 @@ function CartPage() {
             </button>
 
             <button
-              className='flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition'
-              onClick={() => handleCheckout('banking')}>
+              className={`flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition ${
+                isBuying || isLoading ? 'pointer-events-none' : ''
+              }`}
+              onClick={() => handleCheckout('banking')}
+              disabled={isBuying || isLoading}>
               <Image
                 className='wiggle-0'
                 src='/images/banking-icon.jpg'

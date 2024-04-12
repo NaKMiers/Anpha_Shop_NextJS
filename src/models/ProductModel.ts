@@ -103,4 +103,6 @@ export interface IProduct {
   stock: number
   slug: string
   active: boolean
+  createdAt: string
+  updatedAt: string
 }

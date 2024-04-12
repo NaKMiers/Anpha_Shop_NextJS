@@ -1,4 +1,5 @@
 import { connectDatabase } from '@/config/databse'
+import AccountModel from '@/models/AccountModel'
 import CategoryModel from '@/models/CategoryModel'
 import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
@@ -41,6 +42,7 @@ export async function DELETE(req: NextRequest) {
             },
           }
         )
+
         // decrease related tags product quantity
         await TagModel.updateMany(
           { _id: { $in: product.tags } },
@@ -50,6 +52,7 @@ export async function DELETE(req: NextRequest) {
             },
           }
         )
+
         // decrease related flashsales product quantity
         if (product.flashsale) {
           await FlashsaleModel.updateOne(
@@ -61,8 +64,15 @@ export async function DELETE(req: NextRequest) {
             }
           )
         }
+
         // delete the images associated with each product
         await Promise.all(product.images.map(deleteFile))
+
+        // delete all accounts which associalted with each product and has empty using user
+        await AccountModel.deleteMany({
+          type: product._id,
+          usingUser: { $exists: false },
+        })
       })
     )
 

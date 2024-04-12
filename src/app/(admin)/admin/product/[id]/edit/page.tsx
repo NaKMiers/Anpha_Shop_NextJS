@@ -7,7 +7,12 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
-import { getAllCagetoriesApi, getAllTagsApi, getProductApi, updateProductApi } from '@/requests'
+import {
+  getForceAllCagetoriesApi,
+  getForceAllTagsApi,
+  getProductApi,
+  updateProductApi,
+} from '@/requests'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
@@ -31,7 +36,6 @@ function AddProductPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [categories, setCategories] = useState<ICategory[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [isChecked, setIsChecked] = useState<boolean>(true)
 
   const [originalImages, setOriginalImages] = useState<string[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
@@ -42,6 +46,7 @@ function AddProductPage() {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
     setError,
     reset,
@@ -51,7 +56,7 @@ function AddProductPage() {
       price: '',
       oldPrice: '',
       description: '',
-      isActive: true,
+      active: true,
     },
   })
 
@@ -67,8 +72,7 @@ function AddProductPage() {
         setValue('price', product.price)
         setValue('oldPrice', product.oldPrice)
         setValue('description', product.description)
-        setValue('isActive', product.active)
-        setIsChecked(product.active)
+        setValue('active', product.active)
 
         setSelectedTags(product.tags)
         setSelectedCategory(product.category)
@@ -86,7 +90,7 @@ function AddProductPage() {
     const getTags = async () => {
       try {
         // send request to server to get all tags
-        const { tags } = await getAllTagsApi() // cache: no-store
+        const { tags } = await getForceAllTagsApi() // cache: no-store
         setTags(tags)
       } catch (err: any) {
         console.log(err)
@@ -96,7 +100,7 @@ function AddProductPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const { categories } = await getAllCagetoriesApi() // cache: no-store
+        const { categories } = await getForceAllCagetoriesApi() // cache: no-store
         setCategories(categories)
       } catch (err: any) {
         console.log(err)
@@ -182,6 +186,8 @@ function AddProductPage() {
 
   // send data to server to create new product
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    console.log(data)
+
     if (!handleValidate(data)) return
 
     dispatch(setLoading(true))
@@ -194,7 +200,7 @@ function AddProductPage() {
       formData.append('price', data.price)
       formData.append('oldPrice', data.oldPrice)
       formData.append('description', data.description)
-      formData.append('isActive', data.isActive)
+      formData.append('active', data.active)
       formData.append('tags', JSON.stringify(selectedTags))
       formData.append('category', selectedCategory)
       formData.append('originalImages', JSON.stringify(originalImages))
@@ -235,6 +241,7 @@ function AddProductPage() {
           className='mb-5'
         />
 
+        {/* Prices */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Price */}
           <Input
@@ -278,15 +285,19 @@ function AddProductPage() {
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaPlay size={16} className='text-secondary' />
           </div>
+          <input
+            checked={getValues('active')}
+            className='peer'
+            type='checkbox'
+            id='active'
+            hidden
+            {...register('active', { required: false })}
+          />
           <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition  ${
-              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
-            }`}
-            htmlFor='isActive'
-            onClick={() => setIsChecked(!isChecked)}>
+            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition bg-white text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
+            htmlFor='active'>
             Active
           </label>
-          <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
         </div>
 
         {/* Tags */}
@@ -372,6 +383,7 @@ function AddProductPage() {
           </div>
         </div>
 
+        {/* Image Urls */}
         {(!!imageUrls.length || !!originalImages.length) && (
           <div className='flex flex-wrap gap-3 rounded-lg bg-white p-3 mb-5'>
             {originalImages.map(url => (
