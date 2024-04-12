@@ -115,7 +115,9 @@ function AccountItem({
           </p>
 
           {/* Info */}
-          <p className='w-full mt-2 max-h-[200px] font-body tracking-wide overflow-auto'>{data.info}</p>
+          <p className='w-full mt-2 max-h-[200px] p-2 border rounded-lg text-sm font-body tracking-wide overflow-auto'>
+            {data.info}
+          </p>
         </div>
 
         <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>

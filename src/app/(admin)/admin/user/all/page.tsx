@@ -126,6 +126,11 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
+      // reset page
+      if (searchParams?.page) {
+        delete searchParams.page
+      }
+
       // prevent sort default
       if (data.sort === 'updatedAt|-1') {
         if (Object.keys(searchParams || {}).length) {

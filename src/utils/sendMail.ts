@@ -150,6 +150,24 @@ export async function sendResetPasswordEmail(email: string, link: string) {
 
   // Render template với dữ liệu
   const html = compiledTemplate({ link })
-
   sendMail(email, 'Khôi phục mật khẩu', html)
+}
+
+// notify expired account
+export async function notifyExpiredAccount(email: string, data: any) {
+  // get email interface path
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyExpiredMail.pug')
+
+  // get email interface file
+  const templateContent = fs.readFileSync(templatePath, 'utf-8')
+
+  // Compile template
+  const compiledTemplate = pug.compile(templateContent, {
+    filename: templatePath,
+  })
+
+  // render template with new data
+  const html = compiledTemplate(data)
+  console.log('html: ', html)
+  sendMail(email, 'Tài khoản sắp hết hạn', html)
 }

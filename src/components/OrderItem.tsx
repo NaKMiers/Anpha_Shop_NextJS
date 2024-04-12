@@ -68,7 +68,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
       {/* Head Info */}
       <div className='flex flex-wrap items-center justify-between gap-x-3'>
         <div>
-          <span className='font-semibold'>Mã hó đơn: </span>
+          <span className='font-semibold'>Mã hóa đơn: </span>
           <span className='text-primary font-semibold'>{order.code}</span>
         </div>
         <div>

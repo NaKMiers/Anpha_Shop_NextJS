@@ -47,7 +47,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   return (
     <div className=''>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
-        CHI TIẾT HÓA ĐƠN: <span className='text-rose-500 font-sans'>{order?.code}</span>
+        CHI TIẾT HÓA ĐƠN: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
 
       <hr className='my-5' />
@@ -63,7 +63,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
           <span className='font-semibold text-green-500'>{order?.status}</span>
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Người nhận: </span>
+          <span className='font-semibold'>Email: </span>
           <span className='text-sky-500'>{order?.email}</span>
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>

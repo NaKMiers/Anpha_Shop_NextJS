@@ -47,7 +47,7 @@ function RechargePage() {
             <li>
               Nhập nội dung chuyển tiền:{' '}
               <span
-                className='text-orange-600 cursor-pointer'
+                className='text-yellow-500 cursor-pointer'
                 onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
                 NAP {curUser?.email}
               </span>

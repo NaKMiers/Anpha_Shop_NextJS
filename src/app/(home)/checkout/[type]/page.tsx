@@ -179,7 +179,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           <p>
             Nội dung chuyển khoản:{' '}
             <span
-              className='text-rose-500 underline underline-offset-1 font-semibold cursor-pointer'
+              className='text-yellow-500 underline-offset-1 font-semibold cursor-pointer'
               onClick={() => handleCopy(checkout?.code)}>
               {checkout?.code}
             </span>

@@ -214,7 +214,7 @@ function CartPage() {
   const handleBuyWithBalance = useCallback(async () => {
     // check user
     if (!curUser) {
-      router.push('/')
+      toast.error('Hãy đăng nhập để thực hiện chức năng này')
       return
     }
 
