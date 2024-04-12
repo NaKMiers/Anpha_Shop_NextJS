@@ -23,7 +23,6 @@ interface MetaProps {
 
 function Meta({ title, type, searchParams, items = [], chops, className = '' }: MetaProps) {
   // store
-  const dispatch = useAppDispatch()
   const pathname = usePathname()
   const router = useRouter()
 
@@ -48,10 +47,10 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   // Form
   const defaultValues = useMemo<FieldValues>(
     () => ({
-      search: '',
-      sort: 'updatedAt|-1',
+      search: searchParams?.search || '',
+      sort: searchParams?.sort || 'updatedAt|-1',
     }),
-    []
+    [searchParams]
   )
 
   const {
