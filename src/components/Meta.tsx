@@ -1,16 +1,15 @@
 'use client'
 
-import { formatPrice } from '@/utils/number'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import Input from './Input'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
-import { BiReset } from 'react-icons/bi'
-import { useAppDispatch } from '@/libs/hooks'
-import { usePathname, useRouter } from 'next/navigation'
-import { handleQuery } from '@/utils/handleQuery'
-import { ITag } from '@/models/TagModel'
 import { ICategory } from '@/models/CategoryModel'
+import { ITag } from '@/models/TagModel'
+import { handleQuery } from '@/utils/handleQuery'
+import { formatPrice } from '@/utils/number'
+import { usePathname, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import { BiReset } from 'react-icons/bi'
+import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
+import Input from './Input'
 
 interface MetaProps {
   title?: string
@@ -47,20 +46,28 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   // Form
   const defaultValues = useMemo<FieldValues>(
     () => ({
-      search: searchParams?.search || '',
-      sort: searchParams?.sort || 'updatedAt|-1',
+      search: '',
+      sort: 'updatedAt|-1',
     }),
-    [searchParams]
+    []
   )
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
     reset,
   } = useForm<FieldValues>({
     defaultValues,
   })
+
+  useEffect(() => {
+    // sync search params with states
+    setValue('search', searchParams?.search || getValues('search'))
+    setValue('sort', searchParams?.sort || getValues('sort'))
+  }, [getValues, searchParams, setValue])
 
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
