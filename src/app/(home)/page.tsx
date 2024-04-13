@@ -101,9 +101,6 @@ async function HomePage() {
       {/* Choose Me */}
       <Heading title='Tại sao chọn tôi' />
       <ChooseMe />
-
-      {/* Sidebar */}
-      <Sidebar categories={categories} />
     </div>
   )
 }

@@ -1,6 +1,8 @@
 'use client'
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
+import { ICategory } from '@/models/CategoryModel'
+import { getForceAllCagetoriesApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -25,7 +27,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
   const curUser: any = session?.user
 
   // states
-  const [cartLength, setCartlength] = useState(0)
+  const [cartLength, setCartlength] = useState<number>(0)
+  const [categories, setCategories] = useState<ICategory[]>([])
 
   // get cart length
   useEffect(() => {
@@ -35,6 +38,18 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
         : cartLocalItems.reduce((total, item) => total + item.quantity, 0)
     )
   }, [cartItems, cartLocalItems, curUser])
+
+  // get categories
+  useEffect(() => {
+    const getCategories = async () => {
+      const { categories } = await getForceAllCagetoriesApi('?exist-product=true')
+
+      setCategories(
+        categories.sort((a: ICategory, b: ICategory) => b.productQuantity - a.productQuantity)
+      )
+    }
+    getCategories()
+  }, [])
 
   // key board event
   useEffect(() => {
@@ -53,12 +68,15 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
 
   return (
     <>
+      {/* Overlay */}
       <div
         className={`${
           open ? 'block' : 'hidden'
         } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30 ${className}`}
         onClick={() => setOpen(false)}
       />
+
+      {/* Menu */}
       <ul
         className={`${
           open
@@ -188,6 +206,23 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             </li>
           </>
         )}
+
+        <div className='sm:hidden mt-5 flex justify-center flex-wrap w-full max-h-[calc(42px_*_3)] px-7 overflow-y-auto overflow-x-hidden'>
+          {categories.map(category => (
+            <Link
+              href={category.slug}
+              className='flex-shrink-0 group rounded-lg overflow-hidden p-2'
+              key={category.slug}>
+              <Image
+                className='wiggle'
+                src={`/images/${category.slug}-icon.jpg`}
+                height={25}
+                width={25}
+                alt={category.slug}
+              />
+            </Link>
+          ))}
+        </div>
       </ul>
     </>
   )

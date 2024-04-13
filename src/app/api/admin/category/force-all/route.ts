@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import CategoryModel from '@/models/CategoryModel'
+import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
 // [GET]: /admin/category/force-all
@@ -10,8 +11,30 @@ export async function GET(req: NextRequest) {
     // connect to database
     await connectDatabase()
 
+    // get query params
+    const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
+
+    // options
+    const filter: { [key: string]: any } = {}
+
+    // build filter
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        if (key === 'exist-product') {
+          // exist-product: true mean productQuantity field must be > 0
+          filter.productQuantity = { $gt: 0 }
+          continue
+        }
+
+        // Normal Cases ---------------------
+        filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
+      }
+    }
+
+    console.log('filter: ', filter)
+
     // get all categories from database
-    const categories = await CategoryModel.find().select('title').sort({ createdAt: -1 }).lean()
+    const categories = await CategoryModel.find(filter).sort({ createdAt: -1 }).lean()
 
     return NextResponse.json({ categories }, { status: 200 })
   } catch (err: any) {
