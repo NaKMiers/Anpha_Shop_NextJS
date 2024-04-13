@@ -32,12 +32,13 @@ function Pagination({
   const getPageLink = useCallback(
     (value: number) => {
       // get page from searchParams
-      if (searchParams.page) {
-        delete searchParams.page
+      const params = { ...searchParams }
+      if (params.page) {
+        delete params.page
       }
-      searchParams.page = [value.toString()]
+      params.page = [value.toString()]
 
-      return pathname + handleQuery(searchParams)
+      return pathname + handleQuery(params)
     },
     [searchParams, pathname]
   )

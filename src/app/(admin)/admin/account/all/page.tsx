@@ -29,6 +29,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   const pathname = usePathname()
   const router = useRouter()
 
+  console.log(searchParams)
+
   // states
   const [accounts, setAccounts] = useState<AccountWithProduct[]>([])
   const [amount, setAmount] = useState<number>(0)
@@ -66,6 +68,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   } = useForm<FieldValues>({
     defaultValues,
   })
+
+  console.log(searchParams)
 
   // get all accounts at first time
   useEffect(() => {

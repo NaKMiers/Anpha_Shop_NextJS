@@ -28,6 +28,8 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const pathname = usePathname()
   const router = useRouter()
 
+  console.log(searchParams)
+
   // states
   const [categories, setCategories] = useState<ICategory[]>([])
   const [amount, setAmount] = useState<number>(0)
