@@ -159,7 +159,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
       </div>
 
       {/* Action Buttons */}
-      <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-1'>
+      <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-2'>
         <button
           className='bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition'
           onClick={handleBuyNow}

@@ -31,6 +31,9 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
   // get checkout from local storage
   useEffect(() => {
+    // stop page loading initially
+    dispatch(setPageLoading(false))
+
     const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
 
     if (!checkout && !confirmed) {

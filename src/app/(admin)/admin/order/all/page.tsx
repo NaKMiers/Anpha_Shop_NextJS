@@ -18,6 +18,7 @@ import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 import AdminMeta from '@/components/admin/AdminMeta'
+import { FullyOrder } from '@/app/api/user/order-history/route'
 
 function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
@@ -26,7 +27,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const router = useRouter()
 
   // states
-  const [orders, setOrders] = useState<IOrder[]>([])
+  const [orders, setOrders] = useState<FullyOrder[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
 

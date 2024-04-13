@@ -1,4 +1,4 @@
-import { IOrder } from '@/models/OrderModel'
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import { deliverOrderApi, reDeliverOrder } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime, isToday } from '@/utils/time'
@@ -13,11 +13,11 @@ import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
 
 interface OrderItemProps {
-  data: IOrder
+  data: FullyOrder
   loadingOrders: string[]
   className?: string
 
-  setOrders: React.Dispatch<React.SetStateAction<IOrder[]>>
+  setOrders: React.Dispatch<React.SetStateAction<FullyOrder[]>>
   selectedOrders: string[]
   setSelectedOrders: React.Dispatch<React.SetStateAction<string[]>>
 
@@ -41,7 +41,10 @@ function OrderItem({
 }: OrderItemProps) {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [confirmType, setConfirmType] = useState<'deliver' | 're-deliver' | 'delete'>('delete')
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  console.log(data)
 
   // handle deliver order
   const handleDeliverOrder = useCallback(async () => {
@@ -172,6 +175,15 @@ function OrderItem({
             </span>
           </p>
 
+          {data.voucherApplied && data.discount && (
+            <p
+              className='font-semibold text-slate-400 text-sm'
+              title={`voucherApplied: ${data.voucherApplied.desc}`}>
+              {data.voucherApplied.code}{' '}
+              <span className='text-secondary font-normal'>({formatPrice(data.discount)})</span>
+            </p>
+          )}
+
           {/* Created */}
           <div className='flex flex-wrap gap-x-2'>
             <p className='text-sm' title='Created (d/m/y)'>
@@ -207,7 +219,8 @@ function OrderItem({
               disabled={loadingOrders.includes(data._id) || isLoading}
               onClick={e => {
                 e.stopPropagation()
-                handleDeliverOrder()
+                setConfirmType('deliver')
+                setIsOpenConfirmModal(true)
               }}>
               {isLoading ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
@@ -228,7 +241,8 @@ function OrderItem({
               disabled={loadingOrders.includes(data._id) || isLoading}
               onClick={e => {
                 e.stopPropagation()
-                handleReDeliverOrder()
+                setConfirmType('re-deliver')
+                setIsOpenConfirmModal(true)
               }}>
               {isLoading ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
@@ -261,6 +275,7 @@ function OrderItem({
             disabled={loadingOrders.includes(data._id) || isLoading}
             onClick={e => {
               e.stopPropagation()
+              setConfirmType('delete')
               setIsOpenConfirmModal(true)
             }}>
             {loadingOrders.includes(data._id) ? (
@@ -279,10 +294,17 @@ function OrderItem({
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Order'
-        content='Are you sure that you want to delete this order?'
-        onAccept={() => handleDeleteOrders([data._id])}
-        isLoading={loadingOrders.includes(data._id)}
+        title={`${confirmType.charAt(0).toUpperCase() + confirmType.slice(1)} Order`}
+        content={`Are you sure that you want to ${confirmType} this order?`}
+        onAccept={() =>
+          confirmType === 'deliver'
+            ? handleDeliverOrder()
+            : confirmType === 're-deliver'
+            ? handleReDeliverOrder()
+            : handleDeleteOrders([data._id])
+        }
+        isLoading={loadingOrders.includes(data._id) || isLoading}
+        color={confirmType === 'deliver' ? 'yellow' : confirmType === 're-deliver' ? 'sky' : 'rose'}
       />
     </>
   )

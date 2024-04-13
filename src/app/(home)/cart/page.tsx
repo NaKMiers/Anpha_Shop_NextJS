@@ -22,7 +22,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaPlusSquare } from 'react-icons/fa'
+import { FaArrowCircleDown, FaPlusSquare } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
@@ -192,9 +192,6 @@ function CartPage() {
         router.push(`/checkout/${type}`)
       } catch (err: any) {
         console.log(err)
-      } finally {
-        // stop page loading
-        dispatch(setPageLoading(false))
       }
     },
     [
@@ -325,19 +322,17 @@ function CartPage() {
 
         {/* Local cart items */}
         {!!localItems.length && curUser && (
-          <div className='border border-slate-400 rounded-medium p-4'>
+          <div className='border border-slate-400 rounded-medium p-3'>
             <p className='text-primary italic mb-3'>
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
               <FaPlusSquare size={19} className='inline-block wiggle' /> bên dưới để thêm vào giỏ hàng.
             </p>
 
-            <div className='flex justify-end mb-3'>
-              <div
-                className='flex gap-2 items-center group cursor-pointer'
-                onClick={handleMoveAllLocalToGlobalCartItem}>
-                <span>Thêm tất cả</span>
-                <FaPlusSquare size={21} className='inline-block wiggle text-primary' />
-              </div>
+            <div
+              className='flex justify-center items-center gap-2 group cursor-pointer bg-dark-200 mb-4 text-white rounded-lg p-1 hover:bg-primary common-transition'
+              onClick={handleMoveAllLocalToGlobalCartItem}>
+              <span>Thêm tất cả</span>
+              <FaArrowCircleDown size={21} className='inline-block wiggle-0' />
             </div>
 
             <div className='max-h-[386px] overflow-y-auto '>

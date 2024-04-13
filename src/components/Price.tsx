@@ -10,10 +10,11 @@ interface PriceProps {
   oldPrice?: number
   className?: string
   stock: number
+  big?: boolean
   flashSale: IFlashsale | undefined
 }
 
-function Price({ price, oldPrice, stock, flashSale, className = '' }: PriceProps) {
+function Price({ price, oldPrice, stock, flashSale, big, className = '' }: PriceProps) {
   // states
   const [isValidFS, setIsValidFS] = useState<boolean>(false)
   const [timeLeft, setTimeLeft] = useState<number[]>([0, 0, 0])
@@ -111,7 +112,7 @@ function Price({ price, oldPrice, stock, flashSale, className = '' }: PriceProps
     <div className={`rounded-md overflow-hidden ${className}`}>
       {isValidFS && (
         <div className='flex items-center justify-between flex-wrap px-3 py-2 bg-secondary text-white font-body text-[18px] font-bold tracking-wider'>
-          <span className=''>Flash sale</span>
+          <span className={`${big ? 'sm:text-[22px]' : ''} text-[16px]`}>Flash sale</span>
 
           {/* Counter */}
           <div className='flex shrink-0 gap-1'>
@@ -138,13 +139,29 @@ function Price({ price, oldPrice, stock, flashSale, className = '' }: PriceProps
         </div>
       )}
 
-      <div className='flex items-center justify-evenly flex-wrap gap-2 px-[6px] py-2 bg-slate-100 font-body'>
-        <div className='text-secondary text-[22px] tracking-wide leading-7'>{formatPrice(newPrice)}</div>
+      <div
+        className={`flex items-center justify-evenly gap-2 px-1.5 py-2 ${
+          big ? 'sm:justify-start sm:gap-3 sm:py-4 sm:px-21' : ''
+        } flex-wrap bg-slate-100 font-body`}>
+        <div
+          className={`text-secondary ${
+            big ? 'text-[30px] tracking-wide' : 'text-[22px] tracking-wider'
+          }  leading-7`}>
+          {formatPrice(newPrice)}
+        </div>
         {oldPrice && (
-          <div className='text-gray-400 text-[14px] line-through'>{formatPrice(oldPrice)}</div>
+          <div
+            className={`text-gray-400 ${
+              big ? 'text-[16px] tracking-wider' : 'text-[14px]'
+            } line-through`}>
+            {formatPrice(oldPrice)}
+          </div>
         )}
         {oldPrice && (
-          <div className='bg-yellow-400 text-[13px] font-semibold rounded-md px-1 py-[2px] text-light font-sans'>
+          <div
+            className={`bg-yellow-400 ${
+              big ? 'text-[16px]' : 'text-[13px]'
+            } font-semibold rounded-md px-1 py-[2px] text-light font-sans`}>
             -{countPercent(newPrice, oldPrice)}
           </div>
         )}

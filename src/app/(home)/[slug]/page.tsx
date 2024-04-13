@@ -6,7 +6,6 @@ import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
 import Slider from '@/components/Slider'
-import { IComment } from '@/models/CommentModel'
 import { ITag } from '@/models/TagModel'
 import { getProductPageApi } from '@/requests'
 import { Metadata } from 'next'
@@ -85,7 +84,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
       {/* Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <section className='bg-white p-8 flex flex-col gap-21 md:flex-row rounded-medium shadow-medium'>
+      <section className='bg-white p-8 flex flex-col gap-x-21 gap-y-21/2 md:flex-row rounded-medium shadow-medium'>
         {/* Thumbnails */}
         <div className='w-full md:w-[45%] md:max-w-[500px]'>
           <div className='aspect-video shadow-xl rounded-md'>
@@ -110,7 +109,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         {/* Basic Product Info */}
         <div className='md:w-[55%]'>
           {/* Title */}
-          <h1 className='text-[28px] text-dark font-semibold mb-3' title={product?.title}>
+          <h1 className='text-[28px] text-dark font-semibold mb-3 leading-8' title={product?.title}>
             {product?.title}
           </h1>
 
@@ -120,6 +119,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             oldPrice={product?.oldPrice}
             stock={product?.stock || 0}
             flashSale={product?.flashsale}
+            big
           />
 
           <div className='flex flex-col gap-3 text-xl font-body tracking-wide mt-5'>

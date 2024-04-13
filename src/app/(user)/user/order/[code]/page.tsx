@@ -1,24 +1,23 @@
 'use client'
 
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import CartItem from '@/components/CartItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
-import { IOrder } from '@/models/OrderModel'
 import { getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
 import { Fragment, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { IoIosHelpCircle } from 'react-icons/io'
 
 function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // hooks
   const dispatch = useAppDispatch()
 
   // states
-  const [order, setOrder] = useState<IOrder | null>(null)
-
-  console.log(order)
+  const [order, setOrder] = useState<FullyOrder | null>(null)
 
   useEffect(() => {
     const getOrder = async () => {
@@ -45,7 +44,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   }, [code, dispatch])
 
   return (
-    <div className=''>
+    <>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
         CHI TIẾT HÓA ĐƠN: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
@@ -54,22 +53,36 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
 
       {/* Info */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-2 items-start'>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Ngày mua: </span>
           {order && <span className=''>{formatTime(order.createdAt)}</span>}
         </div>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Trạng thái: </span>
           <span className='font-semibold text-green-500'>{order?.status}</span>
         </div>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Email: </span>
           <span className='text-sky-500'>{order?.email}</span>
         </div>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Tổng tiền: </span>
-          <span className='text-secondary font-semibold'>{formatPrice(order?.total)}</span>
+          <span className='text-green-500 font-semibold'>{formatPrice(order?.total)}</span>
         </div>
+        {order?.voucherApplied && (
+          <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+            <span className='font-semibold'>Voucher: </span>
+            <span className='text-slate-400 font-semibold' title={order?.voucherApplied.desc}>
+              {order?.voucherApplied.code}
+            </span>
+          </div>
+        )}
+        {!!order?.discount && (
+          <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+            <span className='font-semibold'>Giảm giá: </span>
+            <span className='text-secondary font-semibold'>{formatPrice(order?.discount)}</span>
+          </div>
+        )}
       </div>
 
       <div className='pt-6' />
@@ -112,10 +125,16 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
                 {order.status === 'pending' ? 'Đang chờ xử lí' : 'Đã hủy'}
               </p>
             )}
+
+            {order.status === 'done' && (
+              <p className='flex items-center gap-1 text-slate-500 mt-2'>
+                <IoIosHelpCircle size={20} /> Ấn để sao chép từng phần
+              </p>
+            )}
           </div>
         </div>
       ))}
-    </div>
+    </>
   )
 }
 

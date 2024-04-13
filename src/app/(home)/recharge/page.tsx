@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
+import { IoIosHelpCircle } from 'react-icons/io'
 
 function RechargePage() {
   const { data: session } = useSession()
@@ -47,14 +48,19 @@ function RechargePage() {
             <li>
               Nhập nội dung chuyển tiền:{' '}
               <span
-                className='text-yellow-500 cursor-pointer'
+                className='text-orange-600 cursor-pointer'
                 onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
                 NAP {curUser?.email}
               </span>
             </li>
             <li>
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
-              <span className='text-green-500'>Nguyễn Anh Khoa</span>)
+              <span
+                className='text-green-500 cursor-pointer'
+                onClick={() => handleCopy('Nguyễn Anh Khoa')}>
+                Nguyễn Anh Khoa
+              </span>
+              )
             </li>
           </ul>
 
@@ -78,7 +84,7 @@ function RechargePage() {
             *Nếu không quét được thì bạn có thể nhập thông tin chuyển khoản tại đây:
           </p>
 
-          <div className='border border-slate-400 py-2 px-4 rounded-md mb-2'>
+          <div className='border border-slate-400 py-2 px-4 rounded-md mb-1'>
             <p>
               Số tài khoản Momo:{' '}
               <span
@@ -96,6 +102,9 @@ function RechargePage() {
               </span>
             </p>
           </div>
+          <p className='flex items-center gap-1 text-slate-500 mb-1'>
+            <IoIosHelpCircle size={20} /> Ấn để sao chép
+          </p>
 
           <p>
             *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}
@@ -124,7 +133,11 @@ function RechargePage() {
             </li>
             <li>
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
-              <span className='text-green-500'>Nguyễn Anh Khoa</span>)
+              <span
+                className='text-green-500 cursor-pointer'
+                onClick={() => handleCopy('Nguyễn Anh Khoa')}>
+                Nguyễn Anh Khoa
+              </span>
             </li>
           </ul>
 
@@ -148,7 +161,7 @@ function RechargePage() {
             *Nếu không quét được thì bạn có thể nhập thông tin chuyển khoản tại đây:
           </p>
 
-          <div className='border border-slate-400 py-2 px-4 rounded-md mb-2'>
+          <div className='border border-slate-400 py-2 px-4 rounded-md mb-1'>
             <p>
               Ngân hàng:{' '}
               <span
@@ -174,6 +187,9 @@ function RechargePage() {
               </span>
             </p>
           </div>
+          <p className='flex items-center gap-1 text-slate-500 mb-1'>
+            <IoIosHelpCircle size={20} /> Ấn để sao chép
+          </p>
 
           <p>
             *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}

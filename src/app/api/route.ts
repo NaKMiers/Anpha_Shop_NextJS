@@ -80,14 +80,10 @@ export async function GET() {
     // get best seller
     const bestSellerProducts = products.sort((a, b) => b.sold - a.sold).slice(0, 10)
 
-    // get products are currently on flash sale
-    const flashsaleProducts = products.filter(product => product.flashsale)
-
     return NextResponse.json(
       {
         productsByCategoryGroups,
         bestSellerProducts,
-        flashsaleProducts,
         categories: categories,
         tags,
         carouselProducts,

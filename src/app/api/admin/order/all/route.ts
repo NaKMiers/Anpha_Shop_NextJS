@@ -1,5 +1,6 @@
 import { connectDatabase } from '@/config/databse'
 import OrderModel from '@/models/OrderModel'
+import '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -92,7 +93,15 @@ export async function GET(req: NextRequest) {
     const amount = await OrderModel.countDocuments(filter)
 
     // get all order from database
-    const orders = await OrderModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
+    const orders = await OrderModel.find(filter)
+      .populate({
+        path: 'voucherApplied',
+        select: 'code desc',
+      })
+      .sort(sort)
+      .skip(skip)
+      .limit(itemPerPage)
+      .lean()
 
     // get all order without filter
     const chops = await OrderModel.aggregate([

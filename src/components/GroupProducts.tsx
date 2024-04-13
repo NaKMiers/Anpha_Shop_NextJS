@@ -21,7 +21,6 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
   const [isExpaned, setIsExpaned] = useState(false)
   const [isMedium, setIsMedium] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [categoryImage, setCategoryImage] = useState<string>(`/images/${category?.slug}-icon.jpg`)
 
   // ref
   const slideTrackRef = useRef<HTMLDivElement>(null)
@@ -79,10 +78,9 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
               <div className='aspect-square items-center w-6 h-6'>
                 <Image
                   className='wiggle'
-                  src={categoryImage}
-                  onError={() => setCategoryImage('/images/category-icon.jpg')}
-                  width={200}
-                  height={200}
+                  src={`/images/${category?.slug}-icon.jpg`}
+                  width={32}
+                  height={32}
                   alt={category?.title || 'icon'}
                 />
               </div>

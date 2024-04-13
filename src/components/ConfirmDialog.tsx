@@ -9,8 +9,9 @@ interface ConfirmDialogProps {
   acceeptLabel?: string
   cancelLabel?: string
   onAccept: () => void
-  className?: string
   isLoading?: boolean
+  color?: string
+  className?: string
 }
 
 function ConfirmDialog({
@@ -22,6 +23,7 @@ function ConfirmDialog({
   cancelLabel,
   onAccept,
   isLoading = false,
+  color = 'rose',
   className = '',
 }: ConfirmDialogProps) {
   // ref
@@ -106,8 +108,8 @@ function ConfirmDialog({
             {cancelLabel || 'Hủy'}
           </button>
           <button
-            className={`rounded-lg shadow-lg px-3 py-2 border text-rose-500 hover:bg-rose-400 hover:text-white common-transition ${
-              isLoading ? 'pointer-events-none border-slate-300' : 'border-rose-500'
+            className={`rounded-lg shadow-lg px-3 py-2 border text-${color}-500 hover:bg-${color}-400 hover:text-white common-transition ${
+              isLoading ? 'pointer-events-none border-slate-300' : `border-${color}-500`
             }`}
             onClick={() => {
               onAccept()

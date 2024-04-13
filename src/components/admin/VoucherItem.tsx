@@ -60,7 +60,7 @@ function VoucherItem({
             </p>
           </div>
 
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-3 text-sm'>
             {/* Min Totals */}
             <p>
               <span className='font-semibold'>Min Total: </span>
@@ -75,14 +75,14 @@ function VoucherItem({
           </div>
 
           {/* Begin */}
-          <p title='Begin (d/m/y)'>
+          <p className='text-sm' title='Begin (d/m/y)'>
             <span className='font-semibold'>Begin: </span>
             <span>{formatTime(data.begin)}</span>
           </p>
 
           {/* Expire */}
           {data.expire && (
-            <p title='Expire (d/m/y)'>
+            <p className='text-sm' title='Expire (d/m/y)'>
               <span className='font-semibold'>Expire: </span>
               <span>{formatTime(data.expire)}</span>
             </p>
@@ -90,21 +90,21 @@ function VoucherItem({
 
           {/* Desc */}
           {data.desc?.trim() && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Desc: </span>
               <span>{data.desc}</span>
             </p>
           )}
 
           {/* Owner */}
-          <p>
+          <p className='text-sm'>
             <span className='font-semibold'>Owner: </span>
             <span>{data.owner?.firstname + ' ' + data.owner?.lastname}</span>
           </p>
 
           {/* Used Users */}
           {!!data.usedUsers.length && (
-            <p>
+            <p className='text-sm'>
               <span className='font-semibold'>Used users: </span>
               {data.usedUsers.map((email, index) => (
                 <span key={email}>
@@ -115,7 +115,7 @@ function VoucherItem({
           )}
 
           {/* Accumulated */}
-          <p className='font-semibold'>
+          <p className='font-semibold text-sm'>
             <span>Accumulated: </span>
             <span className='text-rose-700'>{formatPrice(data.accumulated)}</span>
           </p>

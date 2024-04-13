@@ -8,6 +8,7 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
+import Sidebar from '@/components/Sidebar'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
@@ -18,7 +19,6 @@ export const metadata: Metadata = {
 async function HomePage() {
   let productsByCategoryGroups: any[] = []
   let bestSellerProducts: FullyProduct[] = []
-  // let flashsaleProducts: FullyProduct[] = []
   let categories: ICategory[] = []
   let tags: ITag[] = []
   let carouselProducts: FullyProduct[] = []
@@ -101,6 +101,9 @@ async function HomePage() {
       {/* Choose Me */}
       <Heading title='Tại sao chọn tôi' />
       <ChooseMe />
+
+      {/* Sidebar */}
+      <Sidebar categories={categories} />
     </div>
   )
 }

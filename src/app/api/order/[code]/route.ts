@@ -14,7 +14,12 @@ export async function GET(req: NextRequest, { params: { code } }: { params: { co
     await connectDatabase()
 
     // get order from database
-    const order = await OrderModel.findOne({ code }).lean()
+    const order = await OrderModel.findOne({ code })
+      .populate({
+        path: 'voucherApplied',
+        select: 'code desc',
+      })
+      .lean()
     // check order
     if (!order) {
       return NextResponse.json({ message: 'Order not found' }, { status: 404 })
