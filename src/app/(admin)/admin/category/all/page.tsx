@@ -357,10 +357,8 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
-        {itemPerPage * +(searchParams?.page || 1) > amount
-          ? amount
-          : itemPerPage * +(searchParams?.page || 1)}
-        /{amount} {amount > 1 ? 'categories' : 'category'}
+        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount}{' '}
+        {amount > 1 ? 'categories' : 'category'}
       </div>
 
       {/* Category List */}

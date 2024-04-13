@@ -397,10 +397,8 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
-        {itemPerPage * +(searchParams?.page || 1) > amount
-          ? amount
-          : itemPerPage * +(searchParams?.page || 1)}
-        /{amount} flash sale{amount > 1 ? 's' : ''}
+        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} flash sale
+        {amount > 1 ? 's' : ''}
       </div>
 
       {/* MAIN LIST */}

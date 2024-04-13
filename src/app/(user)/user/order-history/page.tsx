@@ -300,10 +300,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-dark font-semibold'>
-        {itemPerPage * +(searchParams?.page || 1) > amount
-          ? amount
-          : itemPerPage * +(searchParams?.page || 1)}
-        /{amount} đơn hàng
+        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} đơn hàng
       </div>
 
       {/* Order items */}

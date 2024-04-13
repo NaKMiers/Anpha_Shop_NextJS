@@ -497,10 +497,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
-        {itemPerPage * +(searchParams?.page || 1) > amount
-          ? amount
-          : itemPerPage * +(searchParams?.page || 1)}
-        /{amount} order{amount > 1 ? 's' : ''}
+        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} order
+        {amount > 1 ? 's' : ''}
       </div>
 
       {/* MAIN LIST */}

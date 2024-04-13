@@ -371,10 +371,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
-        {itemPerPage * +(searchParams?.page || 1) > amount
-          ? amount
-          : itemPerPage * +(searchParams?.page || 1)}
-        /{amount} user{amount > 1 && 's'}
+        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} user{amount > 1 && 's'}
       </div>
 
       {/* MAIN LIST */}
