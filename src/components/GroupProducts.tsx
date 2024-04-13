@@ -69,7 +69,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
   }, [])
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} id={bestSeller ? 'best-seller' : category?.slug}>
       {/* Top Ears */}
       {!hideTop && (
         <div className={`flex ${!bestSeller ? 'justify-between' : 'justify-end'} px-6`}>
