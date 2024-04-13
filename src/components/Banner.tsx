@@ -49,7 +49,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
         className='flex flex-col h-full w-full max-w-1200 mx-auto rounded-medium shadow-medium overflow-hidden bg-white bg-opacity-90'
         style={{ height: 'calc(100vh - 2 * 21px)' }}>
         {/* Header in Banner */}
-        <Header />
+        <Header isStatic />
 
         {/* Banner Content */}
         <div
