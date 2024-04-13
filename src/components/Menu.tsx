@@ -210,7 +210,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
         <div className='sm:hidden mt-5 flex justify-center flex-wrap w-full max-h-[calc(42px_*_3)] px-7 overflow-y-auto overflow-x-hidden'>
           {categories.map(category => (
             <Link
-              href={category.slug}
+              href={`/category?ctg=${category.slug}`}
               className='flex-shrink-0 group rounded-lg overflow-hidden p-2'
               key={category.slug}>
               <Image

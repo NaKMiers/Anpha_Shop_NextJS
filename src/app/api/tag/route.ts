@@ -3,7 +3,9 @@ import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import TagModel, { ITag } from '@/models/TagModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
+import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
+import { FullyProduct } from '../product/[slug]/route'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,7 +23,7 @@ export async function GET(req: NextRequest) {
     // options
     let skip = 0
     let itemPerPage = 8
-    const filter: { [key: string]: any } = {}
+    const filter: { [key: string]: any } = { active: true }
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
     // build filter
@@ -55,8 +57,12 @@ export async function GET(req: NextRequest) {
           continue
         }
 
-        if (['price', 'stock'].includes(key)) {
+        if (key === 'stock') {
           filter[key] = { $lte: +params[key][0] }
+          continue
+        }
+
+        if (key === 'price') {
           continue
         }
 
@@ -78,16 +84,45 @@ export async function GET(req: NextRequest) {
       .lean()
     const tagIds = tags.map(tag => tag._id)
 
-    // find products by tag ids
-    const products = await ProductModel.find({ active: true, tags: { $in: tagIds }, ...filter })
-      .populate('tags flashsale')
-      .sort(sort)
-      .skip(skip)
-      .limit(itemPerPage)
-      .lean()
+    let products: FullyProduct[] = []
+    let amount: number = 0
 
-    // get amount of account
-    const amount = await ProductModel.countDocuments({ tags: { $in: tagIds }, ...filter })
+    if (params.price) {
+      // find products by tag ids
+      products = await ProductModel.find({ tags: { $in: tagIds }, ...filter })
+        .populate('tags flashsale')
+        .sort(sort)
+        .lean()
+
+      products = products
+        .map(product => {
+          if (!product.flashsale) return product
+
+          const appliedPrice = applyFlashSalePrice(product.flashsale, product.price)
+          return { ...product, price: appliedPrice }
+        })
+        .filter(product => product.price <= +params.price[0])
+        .slice(skip, skip + itemPerPage)
+
+      amount = products.length
+    } else {
+      console.log('no-price-filter')
+
+      // find products by tag ids
+      products = await ProductModel.find({ tags: { $in: tagIds }, ...filter })
+        .populate('tags flashsale')
+        .sort(sort)
+        .skip(skip)
+        .limit(itemPerPage)
+        .lean()
+
+      console.log('products: ', products.length)
+
+      // get amount of account
+      amount = await ProductModel.countDocuments({ tags: { $in: tagIds }, ...filter })
+
+      console.log('amount: ', amount)
+    }
 
     // get all tags without filter
     const allTags: ITag[] = await TagModel.find().select('title slug').lean()

@@ -3,6 +3,8 @@ import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
+import { FullyProduct } from '../product/[slug]/route'
+import { applyFlashSalePrice } from '@/utils/number'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +22,7 @@ export async function GET(req: NextRequest) {
     // options
     let skip = 0
     let itemPerPage = 8
-    const filter: { [key: string]: any } = {}
+    const filter: { [key: string]: any } = { active: true }
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
     // build filter
@@ -49,13 +51,12 @@ export async function GET(req: NextRequest) {
           continue
         }
 
-        if (key === 'ctg') {
-          filter.slug = { $in: params[key] }
+        if (key === 'stock') {
+          filter[key] = { $lte: +params[key][0] }
           continue
         }
 
-        if (['price', 'stock'].includes(key)) {
-          filter[key] = { $lte: +params[key][0] }
+        if (key === 'price') {
           continue
         }
 
@@ -67,28 +68,48 @@ export async function GET(req: NextRequest) {
     console.log('filter: ', filter)
     console.log('sort: ', sort)
 
-    // get slug to filter categories
-    const { slug } = filter
-    delete filter.slug
+    let products: FullyProduct[] = []
+    let amount: number = 0
+    if (params.price) {
+      console.log('price-filter')
 
-    // get all products from database
-    const products = await ProductModel.find({
-      active: true,
-      flashsale: { $exists: true, $ne: null },
-      ...filter,
-    })
-      .populate('flashsale')
-      .sort(sort)
-      .skip(skip)
-      .limit(itemPerPage)
-      .lean()
+      // get all products from database
+      products = await ProductModel.find({
+        flashsale: { $exists: true, $ne: null },
+        ...filter,
+      })
+        .populate('flashsale')
+        .sort(sort)
+        .lean()
 
-    // get amount of account
-    const amount = await ProductModel.countDocuments({
-      active: true,
-      flashsale: { $exists: true, $ne: null },
-      ...filter,
-    })
+      products = products
+        .map(product => {
+          const appliedPrice = applyFlashSalePrice(product.flashsale, product.price)
+          return { ...product, price: appliedPrice }
+        })
+        .filter(product => product.price <= +params.price[0])
+        .slice(skip, skip + itemPerPage)
+
+      amount = products.length
+    } else {
+      console.log('no-price-filter')
+      // get all products
+      products = await ProductModel.find({
+        flashsale: { $exists: true, $ne: null },
+        ...filter,
+      })
+        .populate('flashsale')
+        .sort(sort)
+        .skip(skip)
+        .limit(itemPerPage)
+        .lean()
+
+      // get amount of account
+      amount = await ProductModel.countDocuments({
+        flashsale: { $exists: true, $ne: null },
+        ...filter,
+      })
+    }
 
     // get min - max values
     const chops = await ProductModel.aggregate([
@@ -102,6 +123,8 @@ export async function GET(req: NextRequest) {
         },
       },
     ])
+
+    console.log('amount: ', amount)
 
     // return flashsale products
     return NextResponse.json({ products, amount, chops: chops[0] }, { status: 200 })

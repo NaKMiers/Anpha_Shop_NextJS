@@ -66,10 +66,7 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
 
       {/* Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
-        {itemPerPage * +(searchParams?.page || 1) > amount
-          ? amount
-          : itemPerPage * +(searchParams?.page || 1)}
-        /{amount} sản phẩm
+        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} sản phẩm
       </div>
 
       {/* products */}

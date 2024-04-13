@@ -112,7 +112,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
     <div className={`rounded-md overflow-hidden ${className}`}>
       {isValidFS && (
         <div className='flex items-center justify-between flex-wrap px-3 py-2 bg-secondary text-white font-body text-[18px] font-bold tracking-wider'>
-          <span className={`${big ? 'sm:text-[22px]' : ''} text-[16px]`}>Flash sale</span>
+          <span className={`${big ? 'sm:text-[22px]' : ''} text-[18px]`}>Flash sale</span>
 
           {/* Counter */}
           <div className='flex shrink-0 gap-1'>

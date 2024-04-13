@@ -347,6 +347,7 @@ function CartItem({
               oldPrice={cartItem.product.oldPrice}
               stock={cartItem.product.stock}
               flashSale={cartItem.product.flashsale}
+              big
             />
             <div className='flex items-center gap-1 mt-2 text-[16px]'>
               <TbPackages className='text-darker' size={22} />
