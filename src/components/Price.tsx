@@ -141,7 +141,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
 
       <div
         className={`flex items-center justify-evenly gap-2 px-1.5 py-2 ${
-          big ? 'sm:justify-start sm:gap-3 sm:py-4 sm:px-21' : ''
+          big ? 'sm:justify-start sm:gap-4 sm:py-4 sm:px-21' : ''
         } flex-wrap bg-slate-100 font-body`}>
         <div
           className={`text-secondary ${

@@ -123,7 +123,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
               ? 'pointer-events-none border-slate-100 bg-slate-100'
               : 'border border-secondary'
           }`}
-          disabled={quantity <= 1 || isLoading}
+          disabled={quantity <= 1 || isLoading || (product?.stock || 0) <= 0}
           onClick={() => handleQuantity(-1)}>
           <FaMinus
             size={16}
@@ -137,7 +137,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           type='text'
           inputMode='numeric'
           value={quantity}
-          disabled={isLoading}
+          disabled={isLoading || (product?.stock || 0) <= 0}
           onChange={e => setQuantity(+e.target.value || 0)}
           onBlur={e => handleQuantity(+e.target.value, true)}
         />
@@ -147,7 +147,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
               ? 'pointer-events-none border-slate-100 bg-slate-100'
               : ' border-secondary'
           }`}
-          disabled={quantity === product?.stock || isLoading}
+          disabled={quantity === product?.stock || isLoading || (product?.stock || 0) <= 0}
           onClick={() => handleQuantity(1)}>
           <FaPlus
             size={16}
@@ -161,17 +161,19 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
       {/* Action Buttons */}
       <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-2'>
         <button
-          className='bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition'
+          className={`bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition  ${
+            isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
+          }`}
           onClick={handleBuyNow}
-          disabled={isLoading}>
+          disabled={isLoading || (product?.stock || 0) <= 0}>
           MUA NGAY
         </button>
         <button
           className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 common-transition ${
-            isLoading ? 'pointer-events-none bg-slate-200' : ''
+            isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddProductToCart}
-          disabled={isLoading}>
+          disabled={isLoading || (product?.stock || 0) <= 0}>
           {isLoading ? (
             <RiDonutChartFill size={22} className='animate-spin text-white' />
           ) : (

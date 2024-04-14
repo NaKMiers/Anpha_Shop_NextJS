@@ -5,6 +5,7 @@ import AspectRatio from '@mui/joy/AspectRatio'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Divider from '@mui/joy/Divider'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -137,12 +138,12 @@ function Footer() {
                     <FaChevronRight size={14} className='text-primary' />
                     <p className=''>Lịch sử mua hàng</p>
                   </Link>
-                  <Link
-                    href='/user/order-history'
-                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                  <button
+                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'
+                    onClick={() => signOut()}>
                     <PiSignOutBold size={15} className='ml-1 text-yellow-400' />
-                    <p className=''>Logout</p>
-                  </Link>
+                    <p className=''>Đăng xuất</p>
+                  </button>
                 </ul>
               </div>
 
