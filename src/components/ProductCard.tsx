@@ -198,7 +198,9 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       className={`relative w-full h-full min-h-[430px] p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}>
       {/* Sold out */}
       {product.stock <= 0 && (
-        <div className='absolute z-10 top-4 left-4 right-4 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+        <Link
+          href={`/${product.slug}`}
+          className='absolute z-10 top-4 left-4 right-4 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
           <Image
             className='animate-wiggle -mt-1'
             src='/images/sold-out.jpg'
@@ -206,7 +208,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
             height={60}
             alt='sold-out'
           />
-        </div>
+        </Link>
       )}
 
       {/* Thumbnails */}

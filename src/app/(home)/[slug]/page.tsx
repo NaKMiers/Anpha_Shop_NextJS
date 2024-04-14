@@ -31,6 +31,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     // revalidate every 1 minute
     const data = await getProductPageApi(slug)
 
+    console.log('data--: ', data)
+
     product = data.product
     relatedProducts = data.relatedProducts
     comments = data.comments
