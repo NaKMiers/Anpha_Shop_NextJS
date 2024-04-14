@@ -44,7 +44,6 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     const relatedProducts: IProduct[] = await ProductModel.find({
       _id: { $ne: product._id },
       category: product.category,
-      active: true,
     })
       .populate('flashsale')
       .lean()
