@@ -2,11 +2,12 @@ import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
 import { formatTime } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FaCheck, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import toast from 'react-hot-toast'
 
 interface AccountItemProps {
   data: AccountWithProduct
@@ -31,12 +32,19 @@ function AccountItem({
   handleActivateAccounts,
   handleDeleteAccounts,
 }: AccountItemProps) {
+  // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Đã sao chép: ' + text)
+  }, [])
 
   return (
     <>
       <div
-        className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
+        className={`relative w-full flex items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
           selectedAccounts.includes(data._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
         }  ${className}`}
         onClick={() =>
@@ -44,7 +52,7 @@ function AccountItem({
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }>
-        <div className='w-full'>
+        <div className='w-[calc(100%_-_42px)]'>
           {/* Thumbnails */}
           <Link
             href={`/${data.type?.slug || ''}`}
@@ -116,8 +124,22 @@ function AccountItem({
           </p>
 
           {/* Info */}
-          <p className='w-full mt-2 max-h-[200px] p-2 border rounded-lg text-sm font-body tracking-wide overflow-auto'>
-            {data.info}
+          <p className='w-full mt-2 max-h-[200px] p-2 border rounded-lg text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+            {data.info.split('\n').map((line, index) => (
+              <span key={index} className='block'>
+                {line.split(' ').map((word, index) => (
+                  <span
+                    key={index}
+                    className='inline-block'
+                    onClick={e => {
+                      e.stopPropagation()
+                      handleCopy(word)
+                    }}>
+                    {word}{' '}
+                  </span>
+                ))}
+              </span>
+            ))}
           </p>
         </div>
 

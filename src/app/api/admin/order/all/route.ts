@@ -86,6 +86,8 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    console.log('sort', sort)
+
     // get amount of account
     const amount = await OrderModel.countDocuments(filter)
 
@@ -99,8 +101,6 @@ export async function GET(req: NextRequest) {
       .skip(skip)
       .limit(itemPerPage)
       .lean()
-
-    console.log('orders', orders)
 
     // get all order without filter
     const chops = await OrderModel.aggregate([

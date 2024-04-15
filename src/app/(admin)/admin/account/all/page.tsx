@@ -97,7 +97,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         // sync search params with states
         setSelectedTypes(
           []
-            .concat((searchParams?.type || types.map((type: IProduct) => type._id)) as [])
+            .concat((searchParams?.product || types.map((type: IProduct) => type._id)) as [])
             .map(type => type)
         )
         setValue('search', searchParams?.search || getValues('search'))
@@ -195,7 +195,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       return {
         ...searchParams,
         ...data,
-        type: selectedTypes.length === types.length ? [] : selectedTypes,
+        product: selectedTypes.length === types.length ? [] : selectedTypes,
       }
     },
     [selectedTypes, types, searchParams, defaultValues]
