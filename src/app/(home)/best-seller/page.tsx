@@ -57,7 +57,7 @@ async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Meta */}
-      <Meta title={`Danh Sách Bạn Chạy`} searchParams={searchParams} type='ctg' chops={chops} />
+      <Meta title={`Danh Sách Bán Chạy`} searchParams={searchParams} type='ctg' chops={chops} />
 
       {/* products */}
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4 mt-8'>

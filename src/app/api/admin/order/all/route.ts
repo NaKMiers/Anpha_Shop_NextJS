@@ -100,6 +100,8 @@ export async function GET(req: NextRequest) {
       .limit(itemPerPage)
       .lean()
 
+    console.log('orders', orders)
+
     // get all order without filter
     const chops = await OrderModel.aggregate([
       {

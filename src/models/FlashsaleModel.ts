@@ -15,7 +15,6 @@ const FlashsaleSchema = new Schema(
     },
     begin: {
       type: Date,
-      // required: true,
       default: Date.now(),
     },
     timeType: {

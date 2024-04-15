@@ -52,18 +52,6 @@ const OrderSchema = new Schema(
   }
 )
 
-// // generate order code before save
-// OrderSchema.pre('save', async function (next) {
-//    let orderCode = generateCode(5)
-
-//    // check unique
-//    while (await this.constructor.findOne({ code: orderCode })) {
-//       orderCode = generateCode(5)
-//    }
-//    this.code = orderCode
-//    next()
-// })
-
 const OrderModel = mongoose.models.order || mongoose.model('order', OrderSchema)
 
 export default OrderModel
