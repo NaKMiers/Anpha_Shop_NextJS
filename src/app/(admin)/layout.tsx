@@ -28,8 +28,6 @@ export default async function AdminLayout({
 }>) {
   const session = await getServerSession()
 
-  //
-
   return (
     <html lang='vi'>
       <body className='text-dark' suppressHydrationWarning={true}>
