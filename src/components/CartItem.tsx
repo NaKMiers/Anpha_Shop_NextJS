@@ -162,8 +162,9 @@ function CartItem({
               })
             )
           }
-        } else if (value === 1) {
-          // increase
+        }
+        // increase
+        else if (value === 1) {
           if (quantity >= cartItem.product.stock) return
           if (curUser) {
             dispatch(
@@ -187,7 +188,13 @@ function CartItem({
       if (type === 'input') {
         // start input
         inputRef.current.isInputing = true
-        dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: value }))
+
+        console.log(curUser)
+        if (curUser) {
+          dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: value }))
+        } else {
+          dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: value }))
+        }
 
         // continue input
         clearTimeout(inputRef.current.timeOut)
@@ -201,15 +208,20 @@ function CartItem({
         setTimeout(() => {
           if (!inputRef.current.isInputing) {
             if (value <= 1) {
-              console.log(111)
+              console.log('<1')
               if (curUser) {
                 dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
-                updateQuantityGlobal(1)
+                setTimeout(() => {
+                  updateQuantityGlobal(1)
+                }, 1000)
               } else {
-                dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+                setTimeout(() => {
+                  dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: 1 }))
+                }, 0)
               }
             }
-            if (value >= cartItem.product.stock) {
+            if (value > cartItem.product.stock) {
+              console.log('>>>>')
               if (curUser) {
                 dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
                 updateQuantityGlobal(cartItem.product.stock)
@@ -219,7 +231,11 @@ function CartItem({
                 )
               }
             } else {
-              updateQuantityGlobal(value)
+              if (curUser) {
+                updateQuantityGlobal(value)
+              } else {
+                dispatch(updateLocalCartItemQuantity({ id: cartItem._id, quantity: value }))
+              }
             }
           }
         }, 1010)
