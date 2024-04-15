@@ -114,8 +114,6 @@ function CartPage() {
 
   // auto select cart item
   useEffect(() => {
-    console.log(queryParams.getAll('product'))
-
     const selectedItems = items.filter(item => queryParams.getAll('product').includes(item.product.slug))
 
     dispatch(setSelectedItems(selectedItems))

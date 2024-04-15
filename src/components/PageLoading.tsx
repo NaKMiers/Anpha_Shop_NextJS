@@ -9,9 +9,12 @@ function Loading() {
   return (
     <div
       className={`${
-        isPageLoading ? 'flex' : 'hidden'
+        !isPageLoading ? 'flex' : 'hidden'
       } items-center justify-center fixed z-50 w-screen h-screen top-0 left-0 right-0 bottom-0 bg-black bg-opacity-30`}>
-      <AiOutlineLoading3Quarters size={48} className='text-light animate-spin' />
+      <div className='relative flex justify-center items-center'>
+        <AiOutlineLoading3Quarters size={60} className='text-light animate-spin' />
+        <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white w-10 h-10 animate-pulse' />
+      </div>
     </div>
   )
 }
