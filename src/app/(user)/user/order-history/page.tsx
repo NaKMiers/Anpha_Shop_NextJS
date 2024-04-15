@@ -77,7 +77,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
         setMaxTotal(chops.maxTotal)
         setTotal(searchParams?.total ? +searchParams.total : chops.maxTotal)
       } catch (err: any) {
-        console.log(err)
         toast.error(err.message)
       } finally {
         // stop page loading
@@ -86,8 +85,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     }
     getOrderHistory()
   }, [dispatch, searchParams])
-
-  console.log('orders: ', orders)
 
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
@@ -129,7 +126,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
       const query = handleQuery({ ...searchParams, ...params })
 
       // push to new url
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]

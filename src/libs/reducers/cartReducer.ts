@@ -28,8 +28,6 @@ export const cart = createSlice({
       }
     },
     addCartItem: (state, action: PayloadAction<FullyCartItem[]>) => {
-      console.log('action.payload: ', action.payload)
-
       // Initialize an array to store updated items
       let updatedItems: FullyCartItem[] = [...state.items]
 

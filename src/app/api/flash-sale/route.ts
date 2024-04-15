@@ -65,14 +65,9 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('filter: ', filter)
-    console.log('sort: ', sort)
-
     let products: FullyProduct[] = []
     let amount: number = 0
     if (params.price) {
-      console.log('price-filter')
-
       // get all products from database
       products = await ProductModel.find({
         flashsale: { $exists: true, $ne: null },
@@ -92,7 +87,6 @@ export async function GET(req: NextRequest) {
 
       amount = products.length
     } else {
-      console.log('no-price-filter')
       // get all products
       products = await ProductModel.find({
         flashsale: { $exists: true, $ne: null },
@@ -123,8 +117,6 @@ export async function GET(req: NextRequest) {
         },
       },
     ])
-
-    console.log('amount: ', amount)
 
     // return flashsale products
     return NextResponse.json({ products, amount, chops: chops[0] }, { status: 200 })

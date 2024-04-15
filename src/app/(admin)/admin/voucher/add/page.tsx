@@ -133,6 +133,12 @@ function AddVoucherPage() {
         isValid = false
       }
 
+      // if type if percentage, value must have % at the end
+      if (data.type === 'percentage' && !data.value.endsWith('%')) {
+        setError('value', { type: 'manual', message: 'Value must have %' })
+        isValid = false
+      }
+
       return isValid
     },
     [setError]

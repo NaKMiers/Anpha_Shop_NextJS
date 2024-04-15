@@ -105,7 +105,8 @@ function FlashSaleItem({
           <Link
             href={`/admin/flash-sale/${data._id}/edit`}
             className='block group'
-            onClick={e => e.stopPropagation()}>
+            onClick={e => e.stopPropagation()}
+            title='Edit'>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
           </Link>
 
@@ -116,7 +117,8 @@ function FlashSaleItem({
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
-            disabled={loadingFlashSales.includes(data._id)}>
+            disabled={loadingFlashSales.includes(data._id)}
+            title='Delete'>
             {loadingFlashSales.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (

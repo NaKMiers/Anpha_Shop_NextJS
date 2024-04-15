@@ -31,8 +31,6 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     // revalidate every 1 minute
     const data = await getProductPageApi(slug)
 
-    console.log('data--: ', data)
-
     product = data.product
     relatedProducts = data.relatedProducts
     comments = data.comments
@@ -78,7 +76,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
       },
     ],
     image: product?.images[0],
-    url: `${process.env.APP_URL}/${product?.slug}`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/${product?.slug}`,
   }
 
   return (
@@ -119,7 +117,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           </div>
 
           {/* Link */}
-          <LinkBar className='mt-21' link={`${process.env.APP_URL}/${slug}`} />
+          <LinkBar className='mt-21' link={`${process.env.NEXT_PUBLIC_APP_URL}/${slug}`} />
         </div>
 
         {/* Basic Product Info */}
@@ -187,21 +185,191 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
       {/* Detail */}
       <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
+        <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>
+
         <div className='flex flex-wrap w-full -mx-21/2'>
-          <div className='w-full px-21/2 mb-12'>
-            <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>
-            <p className='font-semibold text-lg font-body mb-1'>
-              Chào mừng bạn đến với <span className='text-red-500'>Netflix</span> - Ứng dụng giải trí số
-              1 thế giới!
-            </p>
-            <p className='font-semibold text-lg font-body leading-6'>
-              Khám phá thế giới phim và series truyền hình độc đáo, đỉnh cao với
-              <span className='text-red-500'> Netflix</span> . Đặc biệt, bạn sẽ được tận hưởng trải
-              nghiệm xem phim linh hoạt trên mọi thiết bị. Hãy bắt đầu hành trình giải trí của bạn ngay
-              hôm nay và không bỏ lỡ những thước phim độc quyền chỉ có tại
-              <span className='text-red-500'> Netflix</span> . 🍿🌟🎬
-            </p>
-          </div>
+          {product?.category.slug === 'netflix' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='/https://www.netflix.com' className='text-[#e50914]'>
+                  Netflix
+                </a>{' '}
+                - Ứng dụng giải trí số 1 thế giới!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Khám phá thế giới phim và series truyền hình độc đáo, đỉnh cao với{' '}
+                <a href='/https://www.netflix.com' className='text-[#e50914]'>
+                  Netflix
+                </a>
+                . Đặc biệt, bạn sẽ được tận hưởng trải nghiệm xem phim linh hoạt trên mọi thiết bị. Hãy
+                bắt đầu hành trình giải trí của bạn ngay hôm nay và không bỏ lỡ những thước phim độc
+                quyền chỉ có tại{' '}
+                <a href='/https://www.netflix.com' className='text-[#e50914]'>
+                  Netflix
+                </a>
+                . 🍿🌟🎬
+              </p>
+            </div>
+          )}
+
+          {product?.category.slug === 'capcut' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='https://www.capcut.com' className='text-[#596ef4]'>
+                  CapCut
+                </a>{' '}
+                - Ứng dụng chỉnh sửa video hàng đầu!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Khám phá thế giới của sáng tạo video với{' '}
+                <a href='https://www.capcut.com' className='text-[#596ef4]'>
+                  CapCut
+                </a>
+                . Tận hưởng công cụ chỉnh sửa linh hoạt trên mọi thiết bị của bạn và biến những ý tưởng
+                thành hiện thực một cách dễ dàng. Bắt đầu hành trình sáng tạo của bạn ngay hôm nay và
+                khám phá các tính năng độc đáo chỉ có trong{' '}
+                <a href='https://www.capcut.com' className='text-[#596ef4]'>
+                  CapCut
+                </a>
+                . 🎥✨🎬
+              </p>
+            </div>
+          )}
+
+          {product?.category.slug === 'chatgpt' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='https://chat.openai.com' className='text-[#1da484]'>
+                  ChatGPT
+                </a>{' '}
+                - Trợ lý thông minh của bạn! 🌟💬
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Khám phá thế giới của việc trò chuyện một cách tự nhiên và linh hoạt với Khám phá thế
+                <a href='https://chat.openai.com' className='text-[#1da484]'>
+                  ChatGPT
+                </a>
+                . Hãy đặt câu hỏi, tìm kiếm thông tin, hoặc đơn giản là trò chuyện để giải trí -{' '}
+                <a href='https://chat.openai.com' className='text-[#1da484]'>
+                  ChatGPT
+                </a>{' '}
+                sẽ là đối tác tin cậy của bạn. 🤖🗨️
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Dễ dàng sử dụng và luôn sẵn lòng hỗ trợ, ChatGPT là công cụ độc đáo để giải quyết mọi
+                tình huống. Bắt đầu cuộc trò chuyện ngay bây giờ và khám phá sức mạnh của trí tuệ nhân
+                tạo ngay trên đầu ngón tay của bạn! 💻🌐✨
+              </p>
+            </div>
+          )}
+
+          {product?.category.slug === 'youtube' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='https://www.youtube.com' className='text-[#ff0000]'>
+                  Youtube
+                </a>{' '}
+                - Nền tảng giải trí vượt trội, nơi bạn sẽ khám phá thế giới qua những video độc đáo và
+                thú vị hơn mọi khi!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Tận hưởng trải nghiệm xem video mượt mà, dễ dàng tìm kiếm, và khám phá những nội dung mới
+                mẻ. 🎥✨
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Hãy tham gia{' '}
+                <a href='https://www.youtube.com' className='text-[#ff0000]'>
+                  Youtube
+                </a>{' '}
+                ngay hôm nay để trải nghiệm sự khác biệt và sự đa dạng trong thế giới giải trí trực
+                tuyến! 🌟🚀
+              </p>
+            </div>
+          )}
+
+          {product?.category.slug === 'spotify' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='https://open.spotify.com' className='text-[#1ed760]'>
+                  Spotify🎵🌐
+                </a>{' '}
+                - Nền tảng âm nhạc tuyệt vời, nơi bạn sẽ khám phá âm nhạc với trải nghiệm nghe nhạc độc
+                đáo và thú vị hơn mọi khi!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Tận hưởng âm thanh chất lượng cao, tìm kiếm và khám phá hàng triệu bản nhạc, playlist và
+                podcast. 🎶✨
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Hãy tham gia{' '}
+                <a href='https://open.spotify.com' className='text-[#1ed760]'>
+                  Spotify🎵🌐
+                </a>{' '}
+                ngay hôm nay để trải nghiệm sự đa dạng và sự hòa mình vào thế giới âm nhạc mới mẻ! 🌟🎧🚀
+              </p>
+            </div>
+          )}
+
+          {product?.category.slug === 'grammarly' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='https://www.grammarly.com' className='text-[#15c39a]'>
+                  Grammarly📝✨
+                </a>{' '}
+                - Trợ lý văn bản thông minh, nơi bạn sẽ trải nghiệm công nghệ kiểm tra và cải thiện ngôn
+                ngữ một cách nhanh chóng và hiệu quả!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Với{' '}
+                <a href='https://www.grammarly.com' className='text-[#15c39a]'>
+                  Grammarly
+                </a>
+                , việc viết sẽ trở nên dễ dàng hơn bao giờ hết. Hãy để chúng tôi giúp bạn tạo ra văn bản
+                hoàn hảo và chuyên nghiệp. 🚀📚
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Hãy tham gia{' '}
+                <a href='https://www.grammarly.com' className='text-[#15c39a]'>
+                  Grammarly
+                </a>{' '}
+                ngay hôm nay để trải nghiệm sự thuận tiện và nâng cao kỹ năng viết của bạn! 🌟💻🔍
+              </p>
+            </div>
+          )}
+
+          {product?.category.slug === 'canva' && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với{' '}
+                <a href='https://www.canva.com' className='text-[#04bdcc]'>
+                  Canva🎨✨
+                </a>{' '}
+                - Nền tảng thiết kế sáng tạo, nơi bạn có thể biến ý tưởng thành hình ảnh và thiết kế độc
+                đáo một cách dễ dàng!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Sử dụng{' '}
+                <a href='https://www.canva.com' className='text-[#04bdcc]'>
+                  Canva
+                </a>{' '}
+                để tạo hình ảnh, thiệp mời, poster, và nhiều nội dung sáng tạo khác mà không cần kỹ năng
+                thiết kế chuyên sâu. 🌈💻
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Hãy tham gia{' '}
+                <a href='https://www.canva.com' className='text-[#04bdcc]'>
+                  Canva
+                </a>{' '}
+                ngay hôm nay để khám phá không gian sáng tạo và biến ý tưởng của bạn thành hiện thực!
+              </p>
+            </div>
+          )}
 
           <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
             <h3 className='text-[28px] text-dark'>Mô tả sản phẩm</h3>
@@ -326,16 +494,13 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <li>
                 <p className='font-semibold'>Có thể đổi mã pin profile được không?</p>
                 <p>
-                  Được! Bạn không chỉ có thể đổi mã pin profile mà còn có thể đổi avatar và ngôn ngữ.
+                  Không! Bạn không được phép thay đổi mã pin và cả tên profile, nếu không tài khoản của
+                  bạn sẽ bị thu hồi
                 </p>
-                <p>
-                  *Tuy nhiên tuyệt đối không được đổi tên profile, nếu không bạn sẽ bị thu hồi tài khoản.
-                </p>
+                <p>*Nhưng bạn có thể tùy ý thay đổi ảnh profile nào mà bạn thích.</p>
               </li>
               <li>
-                <p className='font-semibold'>
-                  Bị quá tải thiết bị trong quá trình sử dụng (Đối với các account shared) thì làm sao?
-                </p>
+                <p className='font-semibold'>Bị quá tải thiết bị trong quá trình sử dụng thì làm sao?</p>
                 <p>
                   Hãy chờ trong khoảng 1 - 2 tiếng sau đó quay lại hoặc liên hệ người bán thông qua{' '}
                   <a
@@ -360,6 +525,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           </div>
         </div>
 
+        {/* Choose Me */}
         <div className='mb-10'>
           <h3 className='w-full text-dark text-[28px] tracking-wide'>Tại sao chọn tôi</h3>
 

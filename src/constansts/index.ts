@@ -121,3 +121,38 @@ export const adminLinks = [
     ],
   },
 ]
+
+export const admins = {
+  KHOA: {
+    momo: {
+      account: process.env.NEXT_PUBLIC_ADMIN_PHONE!,
+      receiver: process.env.NEXT_PUBLIC_ADMIN_NAME!,
+      link: process.env.NEXT_PUBLIC_MOMO_LINK!,
+      image: '/images/momo-qr.jpg',
+    },
+    banking: {
+      name: process.env.NEXT_PUBLIC_BANK_NAME!,
+      account: process.env.NEXT_PUBLIC_BANK_ACCOUNT!,
+      receiver: process.env.NEXT_PUBLIC_ADMIN_NAME!,
+      image: '/images/banking-qr.jpg',
+    },
+    zalo: process.env.NEXT_PUBLIC_ZALO!,
+    messenger: process.env.NEXT_PUBLIC_MESSENGER!,
+  },
+  TRAM: {
+    momo: {
+      account: process.env.NEXT_PUBLIC_ADMIN_PHONE_2!,
+      receiver: process.env.NEXT_PUBLIC_ADMIN_NAME!,
+      link: process.env.NEXT_PUBLIC_MOMO_LINK_2!,
+      image: '/images/momo-qr-2.jpg',
+    },
+    banking: {
+      name: process.env.NEXT_PUBLIC_BANK_NAME_2!,
+      account: process.env.NEXT_PUBLIC_BANK_ACCOUNT_2!,
+      receiver: process.env.NEXT_PUBLIC_ADMIN_NAME_2!,
+      image: '/images/banking-qr-2.jpg',
+    },
+    zalo: process.env.NEXT_PUBLIC_ZALO_2!,
+    messenger: process.env.NEXT_PUBLIC_MESSENGER!,
+  },
+}

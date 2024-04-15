@@ -18,7 +18,6 @@ function CounterItem({ max, value, size = 25, className }: CounterItem) {
       let slide = max - value
 
       if (slide === 0) {
-        console.log('max')
         slideTrackRef.current.style.marginTop = `calc(-${size}px * ${max + 1})`
 
         setTimeout(() => {

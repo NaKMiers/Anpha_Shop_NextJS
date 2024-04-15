@@ -47,11 +47,13 @@ function VoucherItem({
         <div>
           <div className='flex items-center gap-3'>
             {/* Code */}
-            <p className='font-semibold text-secondary'>{data.code}</p>
+            <p className='font-semibold text-secondary' title='code'>
+              {data.code}
+            </p>
 
             {/* Value */}
-            <p title={data.type} className='font-semibold text-primary'>
-              {data.value}
+            <p className='font-semibold text-primary' title='value'>
+              {data.type === 'percentage' ? data.value : formatPrice(+data.value)}
             </p>
 
             {/* Times Left */}
@@ -63,26 +65,30 @@ function VoucherItem({
           <div className='flex items-center gap-3 text-sm'>
             {/* Min Totals */}
             <p>
-              <span className='font-semibold'>Min Total: </span>
+              <span className='font-semibold' title='minTotal'>
+                Min Total:{' '}
+              </span>
               {formatPrice(data.minTotal)}
             </p>
 
             {/* Max Reduce */}
             <p>
-              <span className='font-semibold'>Max Reduce: </span>
+              <span className='font-semibold' title='maxReduce'>
+                Max Reduce:{' '}
+              </span>
               {formatPrice(data.maxReduce)}
             </p>
           </div>
 
           {/* Begin */}
-          <p className='text-sm' title='Begin (d/m/y)'>
+          <p className='text-sm' title='begin (d/m/y)'>
             <span className='font-semibold'>Begin: </span>
             <span>{formatTime(data.begin)}</span>
           </p>
 
           {/* Expire */}
           {data.expire && (
-            <p className='text-sm' title='Expire (d/m/y)'>
+            <p className='text-sm' title='expire (d/m/y)'>
               <span className='font-semibold'>Expire: </span>
               <span>{formatTime(data.expire)}</span>
             </p>
@@ -90,21 +96,21 @@ function VoucherItem({
 
           {/* Desc */}
           {data.desc?.trim() && (
-            <p className='text-sm'>
+            <p className='text-sm' title='desc'>
               <span className='font-semibold'>Desc: </span>
               <span>{data.desc}</span>
             </p>
           )}
 
           {/* Owner */}
-          <p className='text-sm'>
+          <p className='text-sm' title='owner'>
             <span className='font-semibold'>Owner: </span>
             <span>{data.owner?.firstname + ' ' + data.owner?.lastname}</span>
           </p>
 
           {/* Used Users */}
           {!!data.usedUsers.length && (
-            <p className='text-sm'>
+            <p className='text-sm' title='usedUsers'>
               <span className='font-semibold'>Used users: </span>
               {data.usedUsers.map((email, index) => (
                 <span key={email}>
@@ -115,7 +121,7 @@ function VoucherItem({
           )}
 
           {/* Accumulated */}
-          <p className='font-semibold text-sm'>
+          <p className='font-semibold text-sm' title='accumulated'>
             <span>Accumulated: </span>
             <span className='text-rose-700'>{formatPrice(data.accumulated)}</span>
           </p>
@@ -128,7 +134,8 @@ function VoucherItem({
             onClick={e => {
               e.stopPropagation()
               handleActivateVouchers([data._id], !data.active)
-            }}>
+            }}
+            title={data.active ? 'Deactivate' : 'Activate'}>
             <FaCheck
               size={18}
               className={`group-hover:scale-125 common-transition ${
@@ -141,7 +148,8 @@ function VoucherItem({
           <Link
             href={`/admin/voucher/${data.code}/edit`}
             className='block group'
-            onClick={e => e.stopPropagation()}>
+            onClick={e => e.stopPropagation()}
+            title='Edit'>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
           </Link>
 
@@ -152,7 +160,8 @@ function VoucherItem({
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
-            disabled={loadingVouchers.includes(data._id)}>
+            disabled={loadingVouchers.includes(data._id)}
+            title='Delete'>
             {loadingVouchers.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (

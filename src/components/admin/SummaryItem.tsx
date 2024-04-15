@@ -93,7 +93,8 @@ function SummaryItem({
             e.stopPropagation()
             handleSendSummaries([data._id])
           }}
-          disabled={loadingSummaries.includes(data._id)}>
+          disabled={loadingSummaries.includes(data._id)}
+          title='Send'>
           {loadingSummaries.includes(data._id) ? (
             <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
           ) : (

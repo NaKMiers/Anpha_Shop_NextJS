@@ -20,9 +20,6 @@ export async function PUT(req: NextRequest) {
     const formData = await req.formData()
     let avatar = formData.get('avatar')
 
-    console.log('formData', formData)
-    console.log('avatar', avatar)
-
     // check userId
     if (!userId) {
       return NextResponse.json({ message: 'Người dùng không tồn tại' }, { status: 401 })
@@ -35,7 +32,6 @@ export async function PUT(req: NextRequest) {
 
     // upload avatar and get imageUrl from AWS S3 Bucket
     const imageUrl = await uploadFile(avatar, '1:1')
-    console.log('imageUrl', imageUrl)
 
     // update user
     const updatedUser = await UserModel.findByIdAndUpdate(

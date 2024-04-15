@@ -174,7 +174,6 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
       })
 
       // push to router
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]
@@ -339,8 +338,8 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
           />
         </div>
 
-        {/* Action Button */}
-        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+        {/* Action Buttons */}
+        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'

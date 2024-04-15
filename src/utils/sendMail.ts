@@ -9,7 +9,7 @@ const transporter = nodeMailer.createTransport({
   service: 'gmail',
   secure: true,
   auth: {
-    user: process.env.MAIL,
+    user: process.env.NEXT_PUBLIC_MAIL,
     pass: process.env.MAIL_APP_PASSWORD,
   },
 })
@@ -50,7 +50,7 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
   const admins: any[] = await UserModel.find({
     role: { $in: ['admin', 'editor'] },
   }).lean()
-  let emails: string = admins.map(admin => admin.email).join(' ') + ' ' + process.env.MAIL!
+  let emails: string = admins.map(admin => admin.email).join(' ') + ' ' + process.env.NEXT_PUBLIC_MAIL!
 
   // render template with new order data
   const html = compiledTemplate(newOrder)
@@ -74,7 +74,7 @@ export async function notifyShortageAccount(message: any) {
   const admins: any[] = await UserModel.find({
     role: { $in: ['admin', 'editor'] },
   }).lean()
-  let emails: string = admins.map(admin => admin.email).join(' ') + ' ' + process.env.MAIL!
+  let emails: string = admins.map(admin => admin.email).join(' ') + ' ' + process.env.NEXT_PUBLIC_MAIL!
 
   // render template with new order data
   const html = compiledTemplate({ message })
@@ -168,6 +168,5 @@ export async function notifyExpiredAccount(email: string, data: any) {
 
   // render template with new data
   const html = compiledTemplate(data)
-  console.log('html: ', html)
   sendMail(email, 'Tài khoản sắp hết hạn', html)
 }

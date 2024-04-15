@@ -44,8 +44,6 @@ function OrderItem({
   const [confirmType, setConfirmType] = useState<'deliver' | 're-deliver' | 'delete'>('delete')
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
-  console.log(data)
-
   // handle deliver order
   const handleDeliverOrder = useCallback(async () => {
     // start loading
@@ -206,8 +204,8 @@ function OrderItem({
           <Link
             href={`/admin/order/${data.code}`}
             className='block group'
-            title='Detail'
-            onClick={e => e.stopPropagation()}>
+            onClick={e => e.stopPropagation()}
+            title='Detail'>
             <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
           </Link>
 
@@ -215,13 +213,13 @@ function OrderItem({
           {data.status !== 'done' && (
             <button
               className='block group'
-              title='Deliver'
               disabled={loadingOrders.includes(data._id) || isLoading}
               onClick={e => {
                 e.stopPropagation()
                 setConfirmType('deliver')
                 setIsOpenConfirmModal(true)
-              }}>
+              }}
+              title='Deliver'>
               {isLoading ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -237,13 +235,13 @@ function OrderItem({
           {data.status === 'done' && (
             <button
               className='block group'
-              title='Re-Deliver'
               disabled={loadingOrders.includes(data._id) || isLoading}
               onClick={e => {
                 e.stopPropagation()
                 setConfirmType('re-deliver')
                 setIsOpenConfirmModal(true)
-              }}>
+              }}
+              title='Re-Deliver'>
               {isLoading ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -256,12 +254,12 @@ function OrderItem({
           {data.status === 'pending' && (
             <button
               className='block group'
-              title='Cancel'
               disabled={loadingOrders.includes(data._id) || isLoading}
               onClick={e => {
                 e.stopPropagation()
                 handleCancelOrders([data._id])
-              }}>
+              }}
+              title='Cancel'>
               <ImCancelCircle
                 size={18}
                 className='text-slate-300 group-hover:scale-125 common-transition'
@@ -277,7 +275,8 @@ function OrderItem({
               e.stopPropagation()
               setConfirmType('delete')
               setIsOpenConfirmModal(true)
-            }}>
+            }}
+            title='Delete'>
             {loadingOrders.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (

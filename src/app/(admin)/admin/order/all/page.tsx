@@ -1,24 +1,23 @@
 'use client'
 
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import OrderItem from '@/components/admin/OrderItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IOrder } from '@/models/OrderModel'
 import { caclIncomeApi, cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
-import { formatPrice } from '@/utils/number'
 import { handleQuery } from '@/utils/handleQuery'
+import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { BiReset } from 'react-icons/bi'
-import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
-import AdminMeta from '@/components/admin/AdminMeta'
-import { FullyOrder } from '@/app/api/user/order-history/route'
+import { FaCalendar, FaSearch, FaSort } from 'react-icons/fa'
 
 function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
@@ -209,7 +208,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       })
 
       // push to router
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]
@@ -426,7 +424,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         </div>
 
         {/* Action Buttons */}
-        <div className='flex justify-end items-center gap-2 col-span-12'>
+        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'

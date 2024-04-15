@@ -16,10 +16,7 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
     const userId = token?._id
 
     // get product id and content to add comment
-    const asd = await req.json()
-    const { content } = asd
-
-    console.log('asd', asd)
+    const { content } = await req.json()
 
     // user does not exist
     if (!userId) {

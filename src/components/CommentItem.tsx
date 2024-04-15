@@ -57,8 +57,6 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           const { newComment, parentComment } = await replyCommentApi(comment._id, data.comment)
           newComment.user = curUser
 
-          console.log('newComment: ', newComment)
-
           // add new comment to list
           setCmts(prev =>
             prev.map(comment =>
@@ -92,12 +90,9 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         // send request to like / dislike comment
         const { comment: cmt } = await likeCommentApi(comment._id, value)
 
-        console.log(cmt)
-
         // like / dislike comment / replied comment
         if (!cmt.productId) {
           // replied comment
-          console.log('replied comment')
 
           setCmts(prev =>
             prev.map(c =>
@@ -113,7 +108,6 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )
         } else {
           // normal comment
-          console.log('normal comment')
           setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
         }
       } catch (err: any) {
@@ -130,17 +124,13 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
       try {
         // send request to hide / show comment
         const { comment: cmt } = await hideCommentApi(id, value)
-        console.log(cmt)
 
         // hide / show comment / replied comment
         if (!cmt.productId) {
           // replied comment
-          console.log('replied comment')
 
           setCmts(prev =>
             prev.map(c => {
-              console.log(c.replied.map((reply: FullyComment) => reply._id))
-
               return c.replied.map((reply: FullyComment) => reply._id).includes(cmt._id)
                 ? {
                     ...c,
@@ -153,12 +143,11 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )
         } else {
           // normal comment
-          console.log('normal comment')
           setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
         }
       } catch (err: any) {
-        toast.error(err.message)
         console.log(err)
+        toast.error(err.message)
       }
     },
     [setCmts]
@@ -169,7 +158,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
       {/* Avatar */}
       <Image
         className='rounded-full shadow-lg'
-        src={user?.avatar || '/images/default-avatar.jpg'}
+        src={user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
         width={40}
         height={40}
         alt='avatar'
@@ -237,7 +226,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           <div className='sticky z-10 top-0 flex items-start gap-2 bg-white'>
             <Image
               className={`rounded-full shadow-lg ${className}`}
-              src={curUser?.avatar || '/images/default-avatar.jpg'}
+              src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
               width={24}
               height={24}
               alt='avatar'

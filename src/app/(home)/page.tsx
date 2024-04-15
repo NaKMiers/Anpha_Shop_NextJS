@@ -17,92 +17,94 @@ export const metadata: Metadata = {
 }
 
 async function HomePage() {
-  let productsByCategoryGroups: any[] = []
-  let bestSellerProducts: FullyProduct[] = []
-  let categories: ICategory[] = []
-  let tags: ITag[] = []
-  let carouselProducts: FullyProduct[] = []
+  // let productsByCategoryGroups: any[] = []
+  // let bestSellerProducts: FullyProduct[] = []
+  // let categories: ICategory[] = []
+  // let tags: ITag[] = []
+  // let carouselProducts: FullyProduct[] = []
 
-  try {
-    // revalidate every 1 minute
-    const data = await getHomeApi()
+  // try {
+  //   // revalidate every 1 minute
+  //   const data = await getHomeApi()
 
-    // For Banner
-    tags = data.tags
-    categories = data.categories
-    carouselProducts = data.carouselProducts
+  //   // For Banner
+  //   tags = data.tags
+  //   categories = data.categories
+  //   carouselProducts = data.carouselProducts
 
-    // For Top #10
-    bestSellerProducts = data.bestSellerProducts
+  //   // For Top #10
+  //   bestSellerProducts = data.bestSellerProducts
 
-    // For Products
-    productsByCategoryGroups = data.productsByCategoryGroups
-  } catch (err: any) {
-    console.log(err)
-  }
+  //   // For Products
+  //   productsByCategoryGroups = data.productsByCategoryGroups
+  // } catch (err: any) {
+  //   console.log(err)
+  // }
 
-  // jsonLD
-  const jsonLd = {
-    '@context': 'http://schema.org',
-    '@type': 'WebSite',
-    name: 'Anpha Shop',
-    logo: `${process.env.APP_URL}/logo.jpg`,
-    url: `${process.env.APP_URL}`,
-    inLanguage: 'vi',
-    description:
-      'Anpha Shop - Shop tài khoản uy tín, chất lượng hàng đầu tại Việt Nam. Đặc biệt, Account tại Anpha Shop hiện là đang là gói account có giá cạnh nhất hàng đầu - chỉ là 9.000VND/tháng',
-    publisher: {
-      '@type': 'Organization',
-      name: 'Anpha Shop',
-    },
-  }
+  // // jsonLD
+  // const jsonLd = {
+  //   '@context': 'http://schema.org',
+  //   '@type': 'WebSite',
+  //   name: 'Anpha Shop',
+  //   logo: `${process.env.NEXT_PUBLIC_APP_URL}/logo.jpg`,
+  //   url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+  //   inLanguage: 'vi',
+  //   description:
+  //     'Anpha Shop - Shop tài khoản uy tín, chất lượng hàng đầu tại Việt Nam. Đặc biệt, Account tại Anpha Shop hiện là đang là gói account có giá cạnh nhất hàng đầu - chỉ là 9.000VND/tháng',
+  //   publisher: {
+  //     '@type': 'Organization',
+  //     name: 'Anpha Shop',
+  //   },
+  // }
 
-  return (
-    <div className='min-h-screen'>
-      {/* Add JSON-LD */}
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+  return null
 
-      {/* Banner */}
-      <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
+  // return (
+  //   <div className='min-h-screen'>
+  //     {/* Add JSON-LD */}
+  //     <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className='pt-28' />
+  //     {/* Banner */}
+  //     <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
 
-      {/* About */}
-      <Heading title='Về Anpha Shop' />
-      <About />
+  //     <div className='pt-28' />
 
-      <div className='pt-28' />
+  //     {/* About */}
+  //     <Heading title='Về Anpha Shop' />
+  //     <About />
 
-      {/* Top #10 */}
-      <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
-        Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
-      </h2>
-      <section className='max-w-1200 mx-auto px-4'>
-        <GroupProducts products={bestSellerProducts} bestSeller />
-      </section>
+  //     <div className='pt-28' />
 
-      <div className='pt-28' />
+  //     {/* Top #10 */}
+  //     <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
+  //       Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
+  //     </h2>
+  //     <section className='max-w-1200 mx-auto px-4'>
+  //       <GroupProducts products={bestSellerProducts} bestSeller />
+  //     </section>
 
-      {/* Products */}
-      <Heading title='Sản phẩm' />
-      <section className='max-w-1200 mx-auto px-4'>
-        {productsByCategoryGroups.map((group, index) => (
-          <GroupProducts
-            category={group.category}
-            className={index !== productsByCategoryGroups.length - 1 ? 'mb-20' : ''}
-            products={group.products}
-            key={group.category._id}
-          />
-        ))}
-      </section>
+  //     <div className='pt-28' />
 
-      <div className='pt-28' />
+  //     {/* Products */}
+  //     <Heading title='Sản phẩm' />
+  //     <section className='max-w-1200 mx-auto px-4'>
+  //       {productsByCategoryGroups.map((group, index) => (
+  //         <GroupProducts
+  //           category={group.category}
+  //           className={index !== productsByCategoryGroups.length - 1 ? 'mb-20' : ''}
+  //           products={group.products}
+  //           key={group.category._id}
+  //         />
+  //       ))}
+  //     </section>
 
-      {/* Choose Me */}
-      <Heading title='Tại sao chọn tôi' />
-      <ChooseMe />
-    </div>
-  )
+  //     <div className='pt-28' />
+
+  //     {/* Choose Me */}
+  //     <Heading title='Tại sao chọn tôi' />
+  //     <ChooseMe />
+  //   </div>
+  // )
 }
 
 export default HomePage

@@ -24,8 +24,6 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
   const [width, setWidth] = useState<number>(0)
 
-  console.log('width: ', width)
-
   // set width
   useEffect(() => {
     // handle resize
@@ -176,7 +174,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
           {/* Menu Button */}
           <button
-            className={`absolute top-0 right-0 p-2 bg-white rounded-bl-lg group transition-all duration-300 delay-300 ${
+            className={`lg:hidden absolute top-0 right-0 p-2 bg-white rounded-bl-lg group transition-all duration-300 delay-200 ${
               isMenuOpen ? 'opacity-0' : 'opacity-100'
             }`}
             onClick={() => setIsMenuOpen(true)}>
@@ -185,12 +183,14 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             </div>
           </button>
 
-          {/* Menu Absolute */}
+          {/* Menu */}
           <>
+            {/* Overlay */}
             <div
               className={`fixed top-0 left-0 right-0 bottom-0 ${!isMenuOpen ? 'hidden' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             />
+            {/* Main */}
             <div
               className={`lg:hidden absolute z-10 top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 flex flex-col sm:flex-row justify-evenly items-start md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden ${
                 isMenuOpen ? 'max-h-[calc(100vh_-_72px_-_21px*2)] px-21 py-9' : 'max-h-0'

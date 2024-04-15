@@ -102,8 +102,6 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
             setNewPrice(price + Math.floor((price * parseFloat(flashSale.value)) / 100))
             break
         }
-
-        console.log(flashSale)
       }
     }
   }, [flashSale, price, stock])

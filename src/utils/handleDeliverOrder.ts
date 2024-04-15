@@ -144,12 +144,9 @@ export default async function handleDeliverOrder(id: string) {
 
   // VOUCHER
   // get voucher form database
-  console.log('voucherApplied: ', order.voucherApplied)
   const voucher = order.voucherApplied
 
   if (voucher) {
-    console.log('in here')
-
     const commission: any = voucher.owner.commission
     let extraAccumulated = 0
 

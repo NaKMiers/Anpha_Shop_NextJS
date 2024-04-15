@@ -55,10 +55,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (key === 'timesLeft') {
-          filter[key] =
-            params[key][0] === 'true'
-              ? { $exists: true, $ne: null, $gte: 1 }
-              : { $exists: false, $eq: null, $lte: 0 }
+          filter[key] = params[key][0] === 'true' ? { $gt: 0 } : { $lte: 0 }
           continue
         }
 
@@ -87,9 +84,6 @@ export async function GET(req: NextRequest) {
         filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
     }
-
-    console.log('filter: ', filter)
-    console.log('sort: ', sort)
 
     // get amount of account
     const amount = await VoucherModel.countDocuments(filter)

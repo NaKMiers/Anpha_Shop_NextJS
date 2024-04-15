@@ -5,7 +5,7 @@ import { handleQuery } from '@/utils/handleQuery'
 // [GET]
 export const getHomeApi = async () => {
   // revalidate every 1 minute
-  const res = await fetch(`${process.env.APP_URL}/api`, { next: { revalidate: 60 } })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api`, { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {
@@ -18,7 +18,9 @@ export const getHomeApi = async () => {
 // [GET]
 export const getProductPageApi = async (slug: string) => {
   // revalidate every 1 minute
-  const res = await fetch(`${process.env.APP_URL}/api/product/${slug}`, { next: { revalidate: 60 } })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/product/${slug}`, {
+    next: { revalidate: 60 },
+  })
 
   // check status
   if (!res.ok) {
@@ -31,7 +33,7 @@ export const getProductPageApi = async (slug: string) => {
 // [GET]
 export const getTagsPageApi = async (query: string = '') => {
   // no cache for filter
-  const res = await fetch(`${process.env.APP_URL}/api/tag${query}`, { cache: 'no-store' })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/tag${query}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {
@@ -44,7 +46,9 @@ export const getTagsPageApi = async (query: string = '') => {
 // [GET]
 export const getCategoriesPageApi = async (query: string = '') => {
   // no cache for filter
-  const res = await fetch(`${process.env.APP_URL}/api/category${query}`, { cache: 'no-store' })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/category${query}`, {
+    cache: 'no-store',
+  })
 
   // check status
   if (!res.ok) {
@@ -57,7 +61,9 @@ export const getCategoriesPageApi = async (query: string = '') => {
 // [GET]
 export const getFlashSalePageApi = async (query: string = '') => {
   // no cache for filter
-  const res = await fetch(`${process.env.APP_URL}/api/flash-sale${query}`, { cache: 'no-store' })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/flash-sale${query}`, {
+    cache: 'no-store',
+  })
 
   // check status
   if (!res.ok) {
@@ -70,7 +76,9 @@ export const getFlashSalePageApi = async (query: string = '') => {
 // [GET]
 export const getBestSellerPageApi = async (query: string = '') => {
   // no cache for filter
-  const res = await fetch(`${process.env.APP_URL}/api/best-seller${query}`, { cache: 'no-store' })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/best-seller${query}`, {
+    cache: 'no-store',
+  })
 
   // check status
   if (!res.ok) {

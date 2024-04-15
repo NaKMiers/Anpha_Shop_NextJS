@@ -76,7 +76,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <li className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'>
                 <Image
                   className='aspect-square rounded-full wiggle-0'
-                  src={curUser?.avatar || '/images/default-avatar.jpg'}
+                  src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
                   height={40}
                   width={40}
                   alt='avatar'

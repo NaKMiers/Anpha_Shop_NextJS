@@ -71,9 +71,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('filter: ', filter)
-    console.log('sort: ', sort)
-
     // get slug to filter tags
     const { slug } = filter
     delete filter.slug
@@ -106,8 +103,6 @@ export async function GET(req: NextRequest) {
 
       amount = products.length
     } else {
-      console.log('no-price-filter')
-
       // find products by tag ids
       products = await ProductModel.find({ tags: { $in: tagIds }, ...filter })
         .populate('tags flashsale')
@@ -116,12 +111,8 @@ export async function GET(req: NextRequest) {
         .limit(itemPerPage)
         .lean()
 
-      console.log('products: ', products.length)
-
       // get amount of account
       amount = await ProductModel.countDocuments({ tags: { $in: tagIds }, ...filter })
-
-      console.log('amount: ', amount)
     }
 
     // get all tags without filter

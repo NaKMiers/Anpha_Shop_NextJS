@@ -2,6 +2,7 @@
 
 import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
+import { admins } from '@/constansts'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
@@ -15,8 +16,6 @@ import toast from 'react-hot-toast'
 import { IoIosHelpCircle } from 'react-icons/io'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
-  const type: string = params.type
-
   // hooks
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -28,6 +27,10 @@ function CheckoutPage({ params }: { params: { type: string } }) {
   // states
   const [confirmed, setConfirmed] = useState(false)
   const [checkout, setCheckout] = useState<any>(null)
+
+  // values
+  const admin = admins[(process.env.NEXT_PUBLIC_ADMIN! as keyof typeof admins) || 'KHOA']
+  const type: string = params.type
 
   // get checkout from local storage
   useEffect(() => {
@@ -136,8 +139,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
         {type === 'momo' && (
           <a href='https://me.momo.vn/anphashop'>
-            Ấn vào link sau để chuyển nhanh:{' '}
-            <span className='text-[#a1396c]'>https://me.momo.vn/anphashop</span>
+            Ấn vào link sau để chuyển nhanh: <span className='text-[#a1396c]'>{admin.momo.link}</span>
           </a>
         )}
 
@@ -147,8 +149,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               Ngân hàng:{' '}
               <span
                 className='text-[#399162] font-semibold cursor-pointer'
-                onClick={() => handleCopy('Vietcombank')}>
-                Vietcombank
+                onClick={() => handleCopy(admin.banking.name)}>
+                {admin.banking.name}
               </span>
             </p>
           )}
@@ -157,8 +159,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               Số tài khoản Momo:{' '}
               <span
                 className='text-[#a1396c] font-semibold cursor-pointer'
-                onClick={() => handleCopy('0899320427')}>
-                0899320427
+                onClick={() => handleCopy(admin.momo.account)}>
+                {admin.momo.account}
               </span>
             </p>
           ) : (
@@ -166,8 +168,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               Số tài khoản:{' '}
               <span
                 className='text-secondary font-semibold cursor-pointer'
-                onClick={() => handleCopy('1040587211')}>
-                1040587211
+                onClick={() => handleCopy(admin.banking.account)}>
+                {admin.banking.account}
               </span>
             </p>
           )}
@@ -213,10 +215,10 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
         <Image
           className='mx-auto mt-6 rounded-lg shadow-medium duration-300 transition hover:-translate-y-2'
-          src={type === 'momo' ? '/images/momo-qr.jpg' : '/images/banking-qr.jpg'}
+          src={type === 'momo' ? admin.momo.image : admin.banking.image}
           height={700}
           width={350}
-          alt='momo-qr'
+          alt={type === 'momo' ? 'momo-qr' : 'banking-qr'}
         />
 
         <button

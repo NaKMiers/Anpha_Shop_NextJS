@@ -74,9 +74,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('filter: ', filter)
-    console.log('sort: ', sort)
-
     // get amount of account
     const amount = await AccountModel.countDocuments(filter)
 
@@ -103,8 +100,6 @@ export async function GET(req: NextRequest) {
         select: 'title',
       })
       .lean()
-
-    console.log(accounts)
 
     // return response
     return NextResponse.json({ accounts, amount, types }, { status: 200 })

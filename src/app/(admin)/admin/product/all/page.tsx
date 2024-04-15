@@ -11,7 +11,12 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
-import { activateProductsApi, deleteProductsApi, getAllProductsApi } from '@/requests'
+import {
+  activateProductsApi,
+  deleteProductsApi,
+  getAllProductsApi,
+  removeApplyingFlashSalesApi,
+} from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
@@ -155,6 +160,29 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     }
   }, [])
 
+  // remove applying flashsales
+  const hanldeRemoveApplyingFlashsales = useCallback(async (ids: string[]) => {
+    try {
+      // send request to server
+      const { updatedProducts, message } = await removeApplyingFlashSalesApi(ids)
+
+      // update products from state
+      setProducts(prev =>
+        prev.map(product =>
+          updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
+            ? { ...product, flashsale: undefined }
+            : product
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    }
+  }, [])
+
   // delete product
   const handleDeleteProducts = useCallback(async (ids: string[]) => {
     setLoadingProducts(ids)
@@ -240,7 +268,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       })
 
       // push to router
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]
@@ -498,7 +525,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Action Buttons */}
-        <div className='flex justify-end items-center col-span-12 gap-2'>
+        <div className='flex flex-wrap justify-end items-center col-span-12 gap-2'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
@@ -533,15 +560,16 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             )}
 
           {/* Remove Flash Sale Many Button */}
-          {!!selectedProducts.length && (
-            <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
-              onClick={() => {
-                handleDeleteProducts(selectedProducts)
-              }}>
-              Remove Flash Sale
-            </button>
-          )}
+          {!!selectedProducts.length &&
+            selectedProducts.some(id => products.find(product => product._id === id)?.flashsale) && (
+              <button
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                onClick={() => {
+                  hanldeRemoveApplyingFlashsales(selectedProducts)
+                }}>
+                Remove Flash Sale
+              </button>
+            )}
 
           {/* Delete Many Button */}
           {!!selectedProducts.length && (
@@ -581,6 +609,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             setSelectedProducts={setSelectedProducts}
             // functions
             handleActivateProducts={handleActivateProducts}
+            hanldeRemoveApplyingFlashsales={hanldeRemoveApplyingFlashsales}
             handleDeleteProducts={handleDeleteProducts}
             key={product._id}
           />

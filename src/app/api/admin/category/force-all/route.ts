@@ -31,8 +31,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('filter: ', filter)
-
     // get all categories from database
     const categories = await CategoryModel.find(filter).sort({ createdAt: -1 }).lean()
 

@@ -151,13 +151,11 @@ function AddVoucherPage() {
 
   // send data to server to create new product
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
     if (!handleValidate(data)) return
 
     dispatch(setLoading(true))
 
     try {
-      console.log(data)
       const formData = new FormData()
 
       formData.append('title', data.title)

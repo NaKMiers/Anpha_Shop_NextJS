@@ -87,12 +87,12 @@ function TagItem({
           {!editingTags.includes(data._id) && (
             <button
               className='block group'
-              title='isFeatured'
               onClick={e => {
                 e.stopPropagation()
                 handleFeatureTags([data._id], !data.isFeatured)
               }}
-              disabled={loadingTags.includes(data._id)}>
+              disabled={loadingTags.includes(data._id)}
+              title={data.isFeatured ? 'Mark Featured' : 'Mark Unfeatured'}>
               <FaCheck
                 size={18}
                 className={`group-hover:scale-125 common-transition ${
@@ -114,7 +114,8 @@ function TagItem({
                     ? [...prev, { _id: data._id, title: data.title }]
                     : prev
                 )
-              }}>
+              }}
+              title='Edit'>
               <MdEdit size={18} className='group-hover:scale-125 common-transition' />
             </button>
           )}
@@ -127,7 +128,8 @@ function TagItem({
                 e.stopPropagation()
                 handleSaveEditingTags([editingValues.find(cate => cate._id === data._id)] as any[])
               }}
-              disabled={loadingTags.includes(data._id)}>
+              disabled={loadingTags.includes(data._id)}
+              title='Save'>
               {loadingTags.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -146,7 +148,8 @@ function TagItem({
                   prev.includes(data._id) ? prev.filter(id => id !== data._id) : prev
                 )
                 setEditingValues(prev => prev.filter(cate => cate._id !== data._id))
-              }}>
+              }}
+              title='Cancel'>
               <MdCancel size={20} className='group-hover:scale-125 common-transition text-slate-300' />
             </button>
           )}
@@ -159,7 +162,8 @@ function TagItem({
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
-              disabled={loadingTags.includes(data._id)}>
+              disabled={loadingTags.includes(data._id)}
+              title='Delete'>
               {loadingTags.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (

@@ -28,8 +28,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const pathname = usePathname()
   const router = useRouter()
 
-  console.log(searchParams)
-
   // states
   const [categories, setCategories] = useState<ICategory[]>([])
   const [amount, setAmount] = useState<number>(0)
@@ -200,7 +198,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
       })
 
       // push to router
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]
@@ -297,8 +294,8 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           />
         </div>
 
-        {/* Acction Buttons */}
-        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+        {/* Action Buttons */}
+        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'

@@ -86,7 +86,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
       <div className={`flex items-center justify-between gap-3 ${className}`}>
         <Image
           className='rounded-full shadow-lg'
-          src={curUser?.avatar || '/images/default-avatar.jpg'}
+          src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
           width={40}
           height={40}
           alt='avatar'

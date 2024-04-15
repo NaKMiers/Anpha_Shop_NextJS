@@ -95,7 +95,8 @@ function CategoryItem({
                     ? [...prev, { _id: data._id, title: data.title }]
                     : prev
                 )
-              }}>
+              }}
+              title='Edit'>
               <MdEdit size={18} className='group-hover:scale-125 common-transition' />
             </button>
           )}
@@ -108,7 +109,8 @@ function CategoryItem({
                 e.stopPropagation()
                 handleSaveEditingCategories([editingValues.find(cate => cate._id === data._id)] as any[])
               }}
-              disabled={loadingCategories.includes(data._id)}>
+              disabled={loadingCategories.includes(data._id)}
+              title='Save'>
               {loadingCategories.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -127,7 +129,8 @@ function CategoryItem({
                   prev.includes(data._id) ? prev.filter(id => id !== data._id) : prev
                 )
                 setEditingValues(prev => prev.filter(cate => cate._id !== data._id))
-              }}>
+              }}
+              title='Cancel'>
               <MdCancel size={20} className='group-hover:scale-125 common-transition text-slate-300' />
             </button>
           )}
@@ -140,7 +143,8 @@ function CategoryItem({
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
-              disabled={loadingCategories.includes(data._id)}>
+              disabled={loadingCategories.includes(data._id)}
+              title='Delete'>
               {loadingCategories.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (

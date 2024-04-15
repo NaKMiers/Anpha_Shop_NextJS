@@ -61,8 +61,6 @@ function UserPage() {
       const curUser: any = session?.user
       setUser(curUser)
 
-      console.log(curUser)
-
       // set form values
       setValue('firstname', curUser?.firstname)
       setValue('lastname', curUser?.lastname)
@@ -78,8 +76,6 @@ function UserPage() {
 
   // handle update profile
   const updateProfile: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
-
     // start loading
     dispatch(setLoading(true))
 
@@ -133,7 +129,6 @@ function UserPage() {
         // send request to server to update avatar
         const { updatedUser, message } = await changeAvatarApi(formData)
 
-        console.log('updatedUser: ', updatedUser)
 
         // request server to update user session
         await update()
@@ -144,7 +139,6 @@ function UserPage() {
         // reset form
         setFile(null)
       } catch (err: any) {
-        console.log(err)
         toast.error(err.message)
       } finally {
         // stop changing avatar
@@ -168,7 +162,7 @@ function UserPage() {
           <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden p-3 group'>
             <Image
               className='rounded-full common-transition'
-              src={imageUrl || user?.avatar || '/images/default-avatar.jpg'}
+              src={imageUrl || user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
               width={160}
               height={160}
               alt='avatar'

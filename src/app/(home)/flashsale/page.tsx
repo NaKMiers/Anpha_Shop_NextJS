@@ -36,14 +36,14 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
     '@context': 'http://schema.org',
     '@type': 'ItemList',
     name: `Flash Sale`,
-    url: `${process.env.APP_URL}/category${query}`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/category${query}`,
     itemListElement: products.map((product, index) => ({
       '@type': 'ListItem',
       position: `${index + 1}`,
       item: {
         '@type': 'Product',
         name: product.title,
-        url: `${process.env.APP_URL}/${product.slug}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/${product.slug}`,
         image: product.images[0],
         description: product.description,
         offers: {

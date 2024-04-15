@@ -1,8 +1,8 @@
 'use client'
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
-import { getCartApi, updateProductsInLocalCartApi } from '@/requests'
+import { setCartItems } from '@/libs/reducers/cartReducer'
+import { getCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -13,8 +13,6 @@ import { FaBars, FaCartShopping } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
 import Menu from './Menu'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
-import { FullyCartItem } from '@/app/api/cart/route'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -26,68 +24,42 @@ function Header({ isStatic }: HeaderProps) {
   const cartItems = useAppSelector(state => state.cart.items)
   const localCartItems = useAppSelector(state => state.cart.localItems)
   const { data: session, update } = useSession()
+  const curUser: any = session?.user
+
+  console.log('Header render')
 
   // states
-  const [curUser, setCurUser] = useState<any>(session?.user)
+  // const [curUser, setCurUser] = useState<any>(session?.user)
   const [isShow, setIsShow] = useState<boolean>(false)
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false)
   const lastScrollTop = useRef(0)
   const [cartLength, setCartlength] = useState<number>(0)
-  const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
 
-  // get user session
+  // // get user session
+  // useEffect(() => {
+  //   const getCurUser = async () => {
+  //     console.log('re-get user session')
+  //     const session = await getSession()
+  //     setCurUser(session?.user)
+
+  //     await update()
+  //   }
+
+  //   if (!curUser?._id) {
+  //     getCurUser()
+  //   }
+  // }, [curUser?._id, update])
+
+  // update user session
   useEffect(() => {
-    const getCurUser = async () => {
+    const updateUser = async () => {
       console.log('re-get user session')
-      const session = await getSession()
-      setCurUser(session?.user)
-
       await update()
     }
-
     if (!curUser?._id) {
-      getCurUser()
+      updateUser()
     }
-  }, [curUser?._id, update])
-
-  // update products in local cart
-  useEffect(() => {
-    const getCorrespondingProducts = async () => {
-      try {
-        // send product ids to get corresponding cart items
-        const { products } = await updateProductsInLocalCartApi(
-          localCartItems.map(item => item.product._id)
-        )
-
-        const updatedLocalCartItems = localCartItems
-          .map(cartItem => {
-            const product = products.find(
-              (product: FullyProduct) => product._id === cartItem.product._id
-            )
-
-            return product
-              ? {
-                  ...cartItem,
-                  product,
-                }
-              : null
-          })
-          .filter(cartItem => cartItem) as FullyCartItem[]
-
-        console.log('updatedLocalCartItems: ', updatedLocalCartItems)
-
-        dispatch(setLocalCartItems(updatedLocalCartItems))
-        setIsLocalCartUpdated(true)
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
-      }
-    }
-
-    if (!curUser?._id && !isLocalCartUpdated) {
-      getCorrespondingProducts()
-    }
-  }, [curUser?._id, dispatch, localCartItems, isLocalCartUpdated])
+  }, [update, curUser?._id])
 
   // get cart length
   useEffect(() => {
@@ -101,6 +73,8 @@ function Header({ isStatic }: HeaderProps) {
   // get user's cart
   useEffect(() => {
     const getUserCart = async () => {
+      console.log('getUserCart')
+
       if (curUser?._id) {
         try {
           // send request to get user's cart
@@ -199,7 +173,7 @@ function Header({ isStatic }: HeaderProps) {
                 onClick={() => setIsOpenMenu(prev => !prev)}>
                 <Image
                   className='aspect-square rounded-full wiggle-0'
-                  src={curUser?.avatar || '/images/default-avatar.jpg'}
+                  src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
                   width={40}
                   height={40}
                   alt='avatar'

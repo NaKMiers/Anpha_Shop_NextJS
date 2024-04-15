@@ -55,7 +55,7 @@ function AdminMenu() {
         <Link href='/user' className='group flex items-center gap-2 mb-3 cursor-pointer'>
           <Image
             className='rounded-full shadow-md wiggle-0'
-            src={curUser?.avatar || '/images/default-avatar.jpg'}
+            src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
             height={40}
             width={40}
             alt='avatar'

@@ -11,6 +11,7 @@ import { FaBoltLightning } from 'react-icons/fa6'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import { PiLightningFill, PiLightningSlashFill } from 'react-icons/pi'
 
 interface ProductItemProps {
   data: ProductWithTagsAndCategory
@@ -21,6 +22,7 @@ interface ProductItemProps {
   setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>
 
   handleActivateProducts: (ids: string[], active: boolean) => void
+  hanldeRemoveApplyingFlashsales: (ids: string[]) => void
   handleDeleteProducts: (ids: string[]) => void
 }
 
@@ -33,6 +35,7 @@ function ProductItem({
   setSelectedProducts,
   // functions
   handleActivateProducts,
+  hanldeRemoveApplyingFlashsales,
   handleDeleteProducts,
 }: ProductItemProps) {
   // states
@@ -49,6 +52,7 @@ function ProductItem({
     sold: false,
   })
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+  const [confirmType, setConfirmType] = useState<'deactivate' | 'delete'>('delete')
 
   // handle update product property
   const handleUpdateProductProperty = useCallback(
@@ -108,12 +112,11 @@ function ProductItem({
             </div>
           </Link>
 
-          {/* Infomation */}
           {/* Flash sale */}
           {data.flashsale && (
-            <FaBoltLightning
-              className='absolute -top-1 -left-1 text-yellow-400 animate-bounce'
-              size={22}
+            <PiLightningFill
+              className='absolute -top-1.5 left-1 text-yellow-400 animate-bounce'
+              size={25}
             />
           )}
 
@@ -211,27 +214,48 @@ function ProductItem({
         </div>
 
         <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
-          {/* Edit Button Link */}
-          <Link
-            href={`/admin/product/${data._id}/edit`}
-            className='block group'
-            onClick={e => e.stopPropagation()}>
-            <MdEdit size={18} className='group-hover:scale-125 common-transition' />
-          </Link>
-
           {/* Active Button */}
           <button
             className='block group'
             onClick={e => {
               e.stopPropagation()
-              handleActivateProducts([data._id], !data.active)
-            }}>
+              // is being active
+              if (data.active) {
+                setIsOpenConfirmModal(true)
+                setConfirmType('deactivate')
+              } else {
+                handleActivateProducts([data._id], true)
+              }
+            }}
+            title={data.active ? 'Deactivate' : 'Activate'}>
             {data.active ? (
               <FaEye size={18} className='group-hover:scale-125 common-transition text-green-500' />
             ) : (
               <FaEyeSlash size={18} className='group-hover:scale-125 common-transition text-slate-300' />
             )}
           </button>
+
+          {/* Remove Flashsale Button */}
+          {data.flashsale && (
+            <button
+              className='block group'
+              onClick={e => {
+                e.stopPropagation()
+                hanldeRemoveApplyingFlashsales([data._id])
+              }}
+              title='Remove Flash Sale'>
+              <PiLightningSlashFill size={18} className='group-hover:scale-125 common-transition' />
+            </button>
+          )}
+
+          {/* Edit Button Link */}
+          <Link
+            href={`/admin/product/${data._id}/edit`}
+            className='block group'
+            onClick={e => e.stopPropagation()}
+            title='Edit'>
+            <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+          </Link>
 
           {/* Delete Button */}
           <button
@@ -240,7 +264,8 @@ function ProductItem({
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
-            disabled={loadingProducts.includes(data._id)}>
+            disabled={loadingProducts.includes(data._id)}
+            title='Delete'>
             {loadingProducts.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (
@@ -254,9 +279,13 @@ function ProductItem({
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Product'
-        content='Are you sure that you want to delete this product?'
-        onAccept={() => handleDeleteProducts([data._id])}
+        title={`${confirmType.charAt(0).toUpperCase() + confirmType.slice(1)} Product`}
+        content={`Are you sure that you want to ${confirmType} this product?`}
+        onAccept={() =>
+          confirmType === 'deactivate'
+            ? handleActivateProducts([data._id], false)
+            : handleDeleteProducts([data._id])
+        }
         isLoading={loadingProducts.includes(data._id)}
       />
     </>

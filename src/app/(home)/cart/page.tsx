@@ -1,6 +1,7 @@
 'use client'
 
 import { FullyCartItem } from '@/app/api/cart/route'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import CartItem from '@/components/CartItem'
 import Input from '@/components/Input'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
@@ -13,7 +14,13 @@ import {
 } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
-import { addToCartApi, applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
+import {
+  addToCartApi,
+  applyVoucherApi,
+  createOrderApi,
+  generateOrderCodeApi,
+  updateProductsInLocalCartApi,
+} from '@/requests'
 import { applyFlashSalePrice, calcPercentage, formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -53,6 +60,7 @@ function CartPage() {
   // loading and showing
   const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
   const [isBuying, setIsBuying] = useState<boolean>(false)
+  const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
 
   // Form
   const {
@@ -67,6 +75,44 @@ function CartPage() {
       code: '',
     },
   })
+
+  // update products in local cart
+  useEffect(() => {
+    const getCorrespondingProducts = async () => {
+      console.log('getCorrespondingProducts')
+      try {
+        // send product ids to get corresponding cart items
+        const { products } = await updateProductsInLocalCartApi(
+          localCartItems.map(item => item.product._id)
+        )
+
+        const updatedLocalCartItems = localCartItems
+          .map(cartItem => {
+            const product = products.find(
+              (product: FullyProduct) => product._id === cartItem.product._id
+            )
+
+            return product
+              ? {
+                  ...cartItem,
+                  product,
+                }
+              : null
+          })
+          .filter(cartItem => cartItem) as FullyCartItem[]
+
+        dispatch(setLocalCartItems(updatedLocalCartItems))
+        setIsLocalCartUpdated(true)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      }
+    }
+
+    if (!curUser?._id && !isLocalCartUpdated) {
+      getCorrespondingProducts()
+    }
+  }, [curUser?._id, dispatch, localCartItems, isLocalCartUpdated])
 
   // get cart length
   useEffect(() => {
@@ -85,8 +131,6 @@ function CartPage() {
 
   // calc total, discount, subTotal
   useEffect(() => {
-    console.log('selectedItems: ', selectedItems)
-
     const subTotal = selectedItems.reduce((total, cartItem) => {
       const item: any = items.find(cI => cI._id === cartItem._id)
 

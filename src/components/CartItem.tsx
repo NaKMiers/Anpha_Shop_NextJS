@@ -117,8 +117,6 @@ function CartItem({
   // update cart item quantity in database
   const updateQuantityGlobal = useCallback(
     async (value: number) => {
-      console.log('update quantity global: ', value)
-
       try {
         // start loading
         setIsLoading(true)
@@ -249,7 +247,7 @@ function CartItem({
         <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
           {cartItem.product.images.map(src => (
             <Image
-              className='flex-shrink w-full snap-start hover:scale-105 duration-300 transition-all'
+              className='flex-shrink w-full snap-start'
               src={src}
               width={150}
               height={150}

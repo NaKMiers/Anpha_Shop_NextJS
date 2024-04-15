@@ -5,7 +5,7 @@ import { CartItemToAdd } from '@/app/api/cart/add/route'
 // [GET]
 export const getCartApi = async () => {
   // no cache
-  const res = await fetch('/api/cart', { cache: 'no-store' })
+  const res = await fetch('/api/cart', { next: { revalidate: 60 } })
 
   // check status
   if (!res.ok) {

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     // ready for sending email
     const mailHashed = await bcrypt.hash(email, +process.env.BCRYPT_SALT_ROUND! || 10)
-    const url = `${process.env.APP_URL}/auth/reset-password?email=${email}&token=${mailHashed}`
+    const url = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?email=${email}&token=${mailHashed}`
 
     sendResetPasswordEmail(email, url)
 

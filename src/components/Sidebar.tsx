@@ -52,7 +52,7 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
         <Link href='/user' className='border-b pb-3'>
           <Image
             className='aspect-square rounded-full wiggle-0'
-            src={curUser.avatar || '/images/default-avatar.jpg'}
+            src={curUser.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
             width={36}
             height={36}
             alt='logo'

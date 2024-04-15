@@ -118,7 +118,7 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'></div>
 
         {/* Action Buttons */}
-        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'

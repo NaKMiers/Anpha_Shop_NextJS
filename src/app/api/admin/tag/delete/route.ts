@@ -12,7 +12,6 @@ export async function DELETE(req: NextRequest) {
 
     // get tag ids to delete
     const { ids } = await req.json()
-    console.log(ids)
 
     // get delete tags
     const deletedTags = await TagModel.find({ _id: { $in: ids } }).lean()

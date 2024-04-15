@@ -186,8 +186,6 @@ function AddProductPage() {
 
   // send data to server to create new product
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
-
     if (!handleValidate(data)) return
 
     dispatch(setLoading(true))

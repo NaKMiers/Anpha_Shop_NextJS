@@ -47,11 +47,14 @@ export async function GET(req: NextRequest) {
         ...account,
         title: account.type.title,
         message: `Đơn hàng của bạn sẽ hết hạn sau 2 giờ nữa. Vui lòng gia hạn để tiếp tục sử dụng dịch vụ.`,
-        reBuyLink: `${process.env.APP_URL}/${account.type.slug}`,
+        reBuyLink: `${process.env.NEXT_PUBLIC_APP_URL}/${account.type.slug}`,
       })
     })
 
-    return NextResponse.json({ message: 'You are not allow to visit this page!' }, { status: 200 })
+    return NextResponse.json(
+      { notifyAccounts: [], message: 'You are not allow to visit this page!' },
+      { status: 200 }
+    )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

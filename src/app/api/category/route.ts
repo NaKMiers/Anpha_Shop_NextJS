@@ -71,9 +71,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('filter: ', filter)
-    console.log('sort: ', sort)
-
     // get slug to filter categories
     const { slug } = filter
     delete filter.slug

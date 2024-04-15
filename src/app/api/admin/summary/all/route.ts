@@ -45,9 +45,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('filter: ', filter)
-    console.log('sort: ', sort)
-
     // get amount of collaborators
     const amount = await UserModel.countDocuments(filter)
 

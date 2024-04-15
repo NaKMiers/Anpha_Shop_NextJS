@@ -5,6 +5,7 @@ import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
 import AccountItem from '@/components/admin/AccountItem'
 import AdminHeader from '@/components/admin/AdminHeader'
+import AdminMeta from '@/components/admin/AdminMeta'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
@@ -15,11 +16,9 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { BiReset } from 'react-icons/bi'
-import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
+import { FaSearch, FaSort } from 'react-icons/fa'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
 import { GroupTypes } from '../add/page'
-import AdminMeta from '@/components/admin/AdminMeta'
 
 export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
 
@@ -28,8 +27,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   const dispatch = useAppDispatch()
   const pathname = usePathname()
   const router = useRouter()
-
-  console.log(searchParams)
 
   // states
   const [accounts, setAccounts] = useState<AccountWithProduct[]>([])
@@ -68,8 +65,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   } = useForm<FieldValues>({
     defaultValues,
   })
-
-  console.log(searchParams)
 
   // get all accounts at first time
   useEffect(() => {
@@ -215,7 +210,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       const query = handleQuery(params)
 
       // push to new url
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, pathname]
@@ -474,7 +468,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           />
         </div>
 
-        <div className='flex justify-end flex-wrap items-center gap-2 col-span-12'>
+        {/* Action Buttons */}
+        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'

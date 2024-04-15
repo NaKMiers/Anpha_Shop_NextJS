@@ -185,9 +185,13 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       }
 
       const { beginFrom, beginTo, expireFrom, expireTo, ...rest } = data
+      if (beginFrom || beginTo) {
+        rest.begin = (beginFrom || '') + '|' + (beginTo || '')
+      }
 
-      rest.begin = (beginFrom || '') + '|' + (beginTo || '')
-      rest.expire = (expireFrom || '') + '|' + (expireTo || '')
+      if (expireFrom || expireTo) {
+        rest.expire = (expireFrom || '') + '|' + (expireTo || '')
+      }
 
       return {
         ...rest,
@@ -210,7 +214,6 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       })
 
       // push to router
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]
@@ -474,7 +477,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Action Buttons */}
-        <div className='flex justify-end items-center gap-2 col-span-12'>
+        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
             className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'

@@ -125,7 +125,6 @@ function AddFlashSalePage() {
         setError('expire', { type: 'manual', message: 'Expire must be > begin' })
         isValid = false
       }
-      console.log(isValid)
 
       return isValid
     },
@@ -134,8 +133,6 @@ function AddFlashSalePage() {
 
   // handle send request to server to edit flash sale
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log(data)
-
     // validate form
     if (!handleValidate(data)) return
 

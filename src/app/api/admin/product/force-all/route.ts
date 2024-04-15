@@ -28,8 +28,6 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .lean()
 
-    console.log('products: ', products)
-
     // return all products
     return NextResponse.json({ products }, { status: 200 })
   } catch (err: any) {

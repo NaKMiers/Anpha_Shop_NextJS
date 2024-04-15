@@ -53,7 +53,7 @@ const UserSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: process.env.DEFAULT_AVATAR,
+      default: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,
     },
     firstname: {
       type: String,

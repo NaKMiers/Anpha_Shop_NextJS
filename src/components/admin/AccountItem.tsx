@@ -127,7 +127,8 @@ function AccountItem({
             onClick={e => {
               e.stopPropagation()
               handleActivateAccounts([data._id], !data.active)
-            }}>
+            }}
+            title={data.active ? 'Deactivate' : 'Activate'}>
             <FaCheck
               size={18}
               className={`group-hover:scale-125 common-transition ${
@@ -140,6 +141,7 @@ function AccountItem({
           <Link
             href={`/admin/account/${data._id}/edit`}
             className='block group'
+            title='Edit'
             onClick={e => e.stopPropagation()}>
             <MdEdit size={18} className='group-hover:scale-125 common-transition' />
           </Link>
@@ -151,7 +153,8 @@ function AccountItem({
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
-            disabled={loadingAccounts.includes(data._id)}>
+            disabled={loadingAccounts.includes(data._id)}
+            title='Delete'>
             {loadingAccounts.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (

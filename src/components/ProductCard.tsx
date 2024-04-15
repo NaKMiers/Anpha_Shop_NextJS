@@ -1,11 +1,11 @@
 'use client'
 
 import { FullyCartItem } from '@/app/api/cart/route'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
-import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import { applyFlashSalePrice, countPercent } from '@/utils/number'
 import mongoose from 'mongoose'
@@ -19,7 +19,6 @@ import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { RiDonutChartFill } from 'react-icons/ri'
 import Price from './Price'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 
 interface ProductCardProps {
   product: FullyProduct
@@ -47,8 +46,6 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       const { cartItems, message, errors } = await addToCartApi([
         { productId: product._id, quantity: 1 },
       ])
-
-      console.log(cartItems)
 
       // show toast success
       if (message) {
@@ -82,8 +79,6 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       const { cartItems, message, errors } = await addToCartApi([
         { productId: product._id, quantity: 1 },
       ])
-
-      console.log(cartItems)
 
       // show toast success
       if (message) {

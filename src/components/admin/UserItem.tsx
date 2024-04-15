@@ -128,8 +128,6 @@ function UserItem({
 
     setIsLoadingSetCollaborator(true)
 
-    console.log(formData)
-
     try {
       // send request to server
       const { user, message } = await setCollaboratorApi(
@@ -173,7 +171,6 @@ function UserItem({
       reset()
       setIsOpenSetCollaborator(false)
     } catch (err: any) {
-      console.log(213213)
       toast.error(err.response.userData.message)
     } finally {
       setIsDemoting(false)
@@ -388,7 +385,8 @@ function UserItem({
                   ? setIsOpenDemoteCollboratorConfirmationDialog(true)
                   : setIsOpenSetCollaborator(true)
               }}
-              disabled={loadingUsers.includes(userData._id) || isDemoting}>
+              disabled={loadingUsers.includes(userData._id) || isDemoting}
+              title={userData.role === 'collaborator' ? 'Demote' : 'Promote'}>
               {isDemoting ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -408,7 +406,8 @@ function UserItem({
                 e.stopPropagation()
                 setIsOpenRecharge(true)
               }}
-              disabled={loadingUsers.includes(userData._id) || isDemoting}>
+              disabled={loadingUsers.includes(userData._id) || isDemoting}
+              title='Recharge'>
               <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
             </button>
 
@@ -419,7 +418,8 @@ function UserItem({
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
-              disabled={loadingUsers.includes(userData._id) || isDemoting}>
+              disabled={loadingUsers.includes(userData._id) || isDemoting}
+              title='Delete'>
               {loadingUsers.includes(userData._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (

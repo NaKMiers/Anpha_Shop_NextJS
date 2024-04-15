@@ -120,7 +120,6 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
       })
 
       // push to router
-      console.log(query)
       router.push(pathname + query)
     },
     [handleOptimizeFilter, router, searchParams, pathname]
