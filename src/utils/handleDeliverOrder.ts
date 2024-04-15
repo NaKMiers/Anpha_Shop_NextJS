@@ -169,8 +169,6 @@ export default async function handleDeliverOrder(id: string) {
         timesLeft: -1,
       },
     })
-
-    console.log('voucher updated')
   }
 
   // USER

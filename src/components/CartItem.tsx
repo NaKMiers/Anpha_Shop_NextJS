@@ -124,8 +124,6 @@ function CartItem({
         // send request to update cart quantity
         const { updatedCartItem } = await updateCartQuantityApi(cartItem._id, value)
 
-        console.log('updatedCartItem---: ', updatedCartItem)
-
         // update cart item in store
         dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
       } catch (err: any) {
@@ -208,7 +206,6 @@ function CartItem({
         setTimeout(() => {
           if (!inputRef.current.isInputing) {
             if (value <= 1) {
-              console.log('<1')
               if (curUser) {
                 dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
                 setTimeout(() => {
@@ -221,7 +218,6 @@ function CartItem({
               }
             }
             if (value > cartItem.product.stock) {
-              console.log('>>>>')
               if (curUser) {
                 dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
                 updateQuantityGlobal(cartItem.product.stock)

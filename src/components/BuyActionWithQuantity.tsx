@@ -82,9 +82,6 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
         router.push(`/cart?product=${product?.slug}`)
       } catch (err: any) {
         console.log(err)
-      } finally {
-        // stop page loading
-        dispatch(setPageLoading(false))
       }
     }
   }, [product, dispatch, quantity, router])

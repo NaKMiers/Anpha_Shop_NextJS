@@ -94,8 +94,6 @@ const UserSchema = new Schema(
 )
 
 UserSchema.pre('save', async function (next) {
-  console.log('- UserSchema Pre-Save -')
-
   // check authType & username before saving
   if (this.authType !== 'local' || !this.isModified('password')) {
     return next()

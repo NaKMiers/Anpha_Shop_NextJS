@@ -17,7 +17,7 @@ import { applyFlashSalePrice, calcPercentage, formatPrice } from '@/utils/number
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -33,6 +33,7 @@ function CartPage() {
   let localCartItems = useAppSelector(state => state.cart.localItems)
   let cartItems = useAppSelector(state => state.cart.items)
   const selectedItems = useAppSelector(state => state.cart.selectedItems)
+  const queryParams = useSearchParams()
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -110,6 +111,15 @@ function CartPage() {
     setDiscount(discount)
     setTotal(finalTotal)
   }, [selectedItems, voucher, items])
+
+  // auto select cart item
+  useEffect(() => {
+    console.log(queryParams.getAll('product'))
+
+    const selectedItems = items.filter(item => queryParams.getAll('product').includes(item.product.slug))
+
+    dispatch(setSelectedItems(selectedItems))
+  }, [queryParams, items, dispatch])
 
   // send request to server to check voucher
   const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
@@ -342,7 +352,7 @@ function CartPage() {
               className='flex justify-center items-center gap-2 group cursor-pointer bg-dark-200 mb-4 text-white rounded-lg p-1 hover:bg-primary common-transition'
               onClick={handleMoveAllLocalToGlobalCartItem}>
               <span>Thêm tất cả</span>
-              <FaArrowCircleDown size={21} className='inline-block wiggle-0' />
+              <FaArrowCircleDown size={18} className='inline-block wiggle-0' />
             </div>
 
             <div className='max-h-[386px] overflow-y-auto '>

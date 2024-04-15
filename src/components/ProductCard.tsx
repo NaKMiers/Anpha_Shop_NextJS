@@ -98,9 +98,6 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       router.push(`/cart?product=${product.slug}`)
     } catch (err: any) {
       console.log(err)
-    } finally {
-      // stop page loading
-      dispatch(setPageLoading(false))
     }
   }, [product._id, dispatch, product.slug, router])
 
@@ -261,7 +258,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       {/* Action Buttons */}
       <div className='flex items-center justify-end md:justify-start gap-2 mt-2'>
         <button
-          className={`bg-secondary rounded-md text-white px-2 py-1 font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition ${
+          className={`bg-secondary rounded-md text-white px-2 py-[5px] font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition ${
             product.stock <= 0 ? 'bg-slate-200 pointer-events-none' : ''
           }`}
           onClick={handleBuyNow}

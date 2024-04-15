@@ -22,8 +22,6 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
   // refs
   const timeOutRef = useRef<any>(null)
 
-  console.log(show)
-
   // handle show and hide header on scroll
   useEffect(() => {
     const handleScroll = () => {

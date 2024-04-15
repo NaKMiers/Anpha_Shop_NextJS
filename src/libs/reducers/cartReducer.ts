@@ -120,8 +120,6 @@ export const cart = createSlice({
       }
     },
     updateLocalCartItemQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
-      console.log('action.payload: ', action.payload)
-
       // update localStorage
       localStorage.setItem(
         'localCart',

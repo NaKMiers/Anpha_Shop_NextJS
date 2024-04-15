@@ -28,8 +28,6 @@ function Header({ isStatic }: HeaderProps) {
   const { data: session, update } = useSession()
   const curUser: any = session?.user
 
-  console.log('Header render')
-
   // states
   // const [curUser, setCurUser] = useState<any>(session?.user)
   const [isShow, setIsShow] = useState<boolean>(false)
@@ -41,7 +39,6 @@ function Header({ isStatic }: HeaderProps) {
   // update user session
   useEffect(() => {
     const updateUser = async () => {
-      console.log('re-get user session')
       await update()
     }
     if (!curUser?._id) {
@@ -61,8 +58,6 @@ function Header({ isStatic }: HeaderProps) {
   // update products in local cart
   useEffect(() => {
     const getCorrespondingProducts = async () => {
-      console.log('getCorrespondingProducts')
-
       try {
         // send product ids to get corresponding cart items
         const { products } = await updateProductsInLocalCartApi(
@@ -100,8 +95,6 @@ function Header({ isStatic }: HeaderProps) {
   // get user's cart
   useEffect(() => {
     const getUserCart = async () => {
-      console.log('getUserCart')
-
       if (curUser?._id) {
         try {
           // send request to get user's cart

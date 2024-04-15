@@ -94,9 +94,6 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
       router.push(`/cart?product=${product.slug}`)
     } catch (err: any) {
       console.log(err)
-    } finally {
-      // stop page loading
-      dispatch(setPageLoading(false))
     }
   }, [product._id, dispatch, product.slug, router])
 

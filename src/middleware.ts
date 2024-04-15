@@ -41,8 +41,6 @@ const requireAdmin = async (req: NextRequest, token: JWT | null) => {
 export default async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
-  // console.log('token', token)
-
   if (req.nextUrl.pathname.startsWith('/admin')) {
     return requireAdmin(req, token)
   } else if (req.nextUrl.pathname.startsWith('/user') || req.nextUrl.pathname.startsWith('/recharge')) {
