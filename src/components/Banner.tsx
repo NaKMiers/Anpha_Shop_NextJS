@@ -92,6 +92,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                     ]
               }>
               <Image
+                className='hover:scale-105 transition-all duration-700'
                 src={
                   width < 576 && width > 0
                     ? '/images/netflix-banner-mobile.jpg'
@@ -108,6 +109,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 }}
               />
               <Image
+                className='hover:scale-105 transition-all duration-700'
                 src={
                   width < 576 && width > 0
                     ? '/images/grammarly-banner-mobile.jpg'
@@ -124,6 +126,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 }}
               />
               <Image
+                className='hover:scale-105 transition-all duration-700'
                 src={
                   width < 576 && width > 0
                     ? '/images/capcut-banner-mobile.jpg'

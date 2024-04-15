@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
 
     // get product ids to get corresponding cart items
     const { ids } = await req.json()
+
     // get produts to update cart
     const products = await ProductModel.find({ _id: { $in: ids } })
       .populate('flashsale')

@@ -47,6 +47,10 @@ export async function GET(req: NextRequest) {
               ...cartItem,
               product: cartItem.productId,
               productId: cartItem.productId._id,
+              quantity:
+                cartItem.quantity > cartItem.productId.stock
+                  ? cartItem.productId.stock
+                  : cartItem.quantity,
             }
           : null
       )
