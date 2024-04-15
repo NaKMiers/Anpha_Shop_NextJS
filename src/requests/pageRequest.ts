@@ -1,7 +1,5 @@
 // Page -------------------------------------
 
-import { handleQuery } from '@/utils/handleQuery'
-
 // [GET]
 export const getHomeApi = async () => {
   // revalidate every 1 minute

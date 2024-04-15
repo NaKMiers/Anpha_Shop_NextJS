@@ -8,7 +8,6 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
-import Sidebar from '@/components/Sidebar'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
