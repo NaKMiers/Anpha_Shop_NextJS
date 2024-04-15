@@ -110,6 +110,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <li className='group' onClick={() => setOpen(false)}>
                 <Link
                   href='/cart'
+                  prefetch={false}
                   className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
                   <FaCartShopping size={18} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>

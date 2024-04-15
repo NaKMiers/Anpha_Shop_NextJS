@@ -500,7 +500,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       </div>
 
       {/* MAIN LIST */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3 items-start'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>
         {orders.map(order => (
           <OrderItem
             data={order}

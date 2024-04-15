@@ -1,5 +1,6 @@
 import OrderModel from '@/models/OrderModel'
 import crypto from 'crypto'
+import toast from 'react-hot-toast'
 import slugify from 'slugify'
 import unidecode from 'unidecode'
 
@@ -96,29 +97,3 @@ export const calcExpireTime = (d = 0, h = 0, m = 0, s = 0) => {
 
 // create a unique random image name
 export const randomFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
-
-// apply voucher to product
-export const productPriceAfterAppliedFlashsale = (product: any) => {
-  let price = product.price
-
-  const { flashsale } = product
-
-  if (flashsale) {
-    const now = new Date()
-    if (now > new Date(flashsale.begin)) {
-      switch (flashsale.type) {
-        case 'fixed-reduce':
-          price = price + +flashsale.value >= 0 ? price + +flashsale.value : 0
-          break
-        case 'fixed':
-          price = flashsale.value
-          break
-        case 'percentage':
-          price = price + Math.floor((price * parseFloat(flashsale.value)) / 100)
-          break
-      }
-    }
-  }
-
-  return price
-}

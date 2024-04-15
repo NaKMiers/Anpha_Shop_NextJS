@@ -143,6 +143,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <span className='text-darker font-bold text-nowrap'>Thể loại:</span>
               <Link
                 href={`/category?ctg=${product?.category.slug}`}
+                prefetch={false}
                 className='text-orange-500 hover:underline'>
                 {product?.category.title}
               </Link>
@@ -153,7 +154,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <FaTags className='w-7 text-darker' size={20} />
               <span className='text-darker font-bold text-nowrap'>Tags:</span>
               {product?.tags.map((tag: ITag, index) => (
-                <Link href={`/tags?ctg=${tag.slug}`} className='text-dark' key={tag.slug}>
+                <Link
+                  href={`/tags?ctg=${tag.slug}`}
+                  prefetch={false}
+                  className='text-dark'
+                  key={tag.slug}>
                   {tag.title + (index !== product!.tags.length - 1 ? ', ' : '')}
                 </Link>
               ))}

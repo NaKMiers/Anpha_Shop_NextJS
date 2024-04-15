@@ -24,7 +24,7 @@ function Carousel({ products, className = '' }: CarouselProps) {
       const deltaTime = timestamp - lastTimestamp
       lastTimestamp = timestamp
 
-      const deltaScroll = (deltaTime / 1000) * itemWidth * 0.3
+      const deltaScroll = (deltaTime / 1000) * itemWidth * 0.2
 
       const newPosition = container.scrollLeft + deltaScroll
 

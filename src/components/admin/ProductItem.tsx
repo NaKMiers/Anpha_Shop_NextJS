@@ -96,6 +96,7 @@ function ProductItem({
           {/* Thumbnails */}
           <Link
             href={`/${data.slug}`}
+            prefetch={false}
             className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'
             onClick={e => e.stopPropagation()}>
             <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
@@ -144,6 +145,11 @@ function ProductItem({
                 setFieldEditing(prev => ({ ...prev, sold: !prev.sold }))
                 handleUpdateProductProperty(data._id, 'sold')
               }}
+              onBlur={e => {
+                e.stopPropagation()
+                setFieldEditing(prev => ({ ...prev, sold: !prev.sold }))
+                handleUpdateProductProperty(data._id, 'sold')
+              }}
               onClick={e => e.stopPropagation()}>
               <span className='font-semibold'>
                 {fieldLoading.sold ? (
@@ -169,6 +175,11 @@ function ProductItem({
             <div
               className='flex items-center gap-1 cursor-pointer select-none'
               onDoubleClick={e => {
+                e.stopPropagation()
+                setFieldEditing(prev => ({ ...prev, stock: !prev.stock }))
+                handleUpdateProductProperty(data._id, 'stock')
+              }}
+              onBlur={e => {
                 e.stopPropagation()
                 setFieldEditing(prev => ({ ...prev, stock: !prev.stock }))
                 handleUpdateProductProperty(data._id, 'stock')

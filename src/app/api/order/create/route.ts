@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../../cart/route'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
 import UserModel, { IUser } from '@/models/UserModel'
+import { generateOrderCode } from '@/utils'
 
 // [POST]: /order/create
 export async function POST(req: NextRequest) {
@@ -17,7 +18,8 @@ export async function POST(req: NextRequest) {
     await connectDatabase()
 
     // get data to create order
-    const { code, email, total, voucherApplied, discount, items, paymentMethod } = await req.json()
+    const code = await generateOrderCode(5)
+    const { email, total, voucherApplied, discount, items, paymentMethod } = await req.json()
 
     // get user id
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
@@ -83,7 +85,7 @@ export async function POST(req: NextRequest) {
         ? 'Đơn hàng đang được xử lý, xin vui lòng chờ'
         : 'Đơn hàng đã được gửi qua email ' + email
 
-    return NextResponse.json({ removedCartItems, message }, { status: 201 })
+    return NextResponse.json({ code, removedCartItems, message }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

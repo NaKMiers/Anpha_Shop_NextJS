@@ -66,23 +66,22 @@ function SummaryItem({
             {formatPrice(data.vouchers.reduce((total, voucher) => total + voucher.accumulated, 0))}
           </span>
         </p>
-        <div className='text-sm'>
+        <p className='font-semibold text-sm'>
           Vouchers:{' '}
-          <p className='font-semibold inline'>
-            {data.vouchers.map((voucher, index) => (
-              <span
-                title={`${voucher.type} | ${
-                  voucher.type !== 'percentage' ? formatPrice(+voucher.value) : voucher.value
-                } | ${voucher.timesLeft} | ${
-                  voucher.expire ? formatDate(voucher.expire) : 'no-expire'
-                } | ${formatPrice(voucher.minTotal)} | ${formatPrice(voucher.maxReduce)}`}
-                key={voucher.code}>
-                {voucher.code}
-                {index === data.vouchers.length - 1 ? '' : ', '}
-              </span>
-            ))}
-          </p>
-        </div>
+          {data.vouchers.map((voucher, index) => (
+            <span
+              className='text-lg text-slate-400'
+              title={`${voucher.type} | ${
+                voucher.type !== 'percentage' ? formatPrice(+voucher.value) : voucher.value
+              } | ${voucher.timesLeft} | ${
+                voucher.expire ? formatDate(voucher.expire) : 'no-expire'
+              } | ${formatPrice(voucher.minTotal)} | ${formatPrice(voucher.maxReduce)}`}
+              key={voucher.code}>
+              {voucher.code}
+              {index === data.vouchers.length - 1 ? '' : ', '}
+            </span>
+          ))}
+        </p>
       </div>
 
       <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>

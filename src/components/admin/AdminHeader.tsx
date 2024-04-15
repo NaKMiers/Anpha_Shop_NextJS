@@ -22,8 +22,8 @@ function AdminHeader({ title, addLink, backLink, className = '' }: AdminHeaderPr
       </div>
       {backLink && (
         <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href={backLink}>
+          href={backLink}
+          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'>
           <FaArrowLeft />
           Back
         </Link>
@@ -31,8 +31,8 @@ function AdminHeader({ title, addLink, backLink, className = '' }: AdminHeaderPr
 
       {addLink && (
         <Link
-          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'
-          href={addLink}>
+          href={addLink}
+          className='flex items-center gap-1 bg-slate-200 py-2 px-3 rounded-lg common-transition hover:bg-yellow-300 hover:text-secondary'>
           <FaPlus />
           Add
         </Link>

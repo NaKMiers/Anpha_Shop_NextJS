@@ -401,7 +401,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
       </div>
 
       {/* MAIN LIST */}
-      <div className='grid items-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21 '>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21 '>
         {flashSales.map(flashSale => (
           <FlashSaleItem
             data={flashSale}

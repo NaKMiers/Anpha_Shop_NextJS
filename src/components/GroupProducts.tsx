@@ -95,6 +95,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
             ) : (
               <Link
                 href={bestSeller ? '/best-seller' : `/category/?ctg=${category?.slug}`}
+                prefetch={false}
                 className='underline text-sky-600 hover:text-green-600 common-transition'>
                 Tất cả
               </Link>

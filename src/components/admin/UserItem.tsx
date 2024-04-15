@@ -207,7 +207,7 @@ function UserItem({
             {userData.role}
           </div>
           <p
-            className='inline font-semibold text-[18px] leading-4 font-body tracking-wide text-secondary'
+            className='block font-semibold text-[18px] font-body tracking-wide text-secondary text-ellipsis line-clamp-1'
             title={userData.email}>
             {userData.email}
           </p>

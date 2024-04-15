@@ -46,7 +46,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   return (
     <>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
-        CHI TIẾT HÓA ĐƠN: <span className='text-secondary font-sans'>{order?.code}</span>
+        CHI TIẾT ĐƠN HÀNG: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
 
       <hr className='my-5' />
@@ -59,7 +59,20 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
         </div>
         <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Trạng thái: </span>
-          <span className='font-semibold text-green-500'>{order?.status}</span>
+          <span
+            className={`${
+              order?.status === 'pending'
+                ? 'text-yellow-500'
+                : order?.status === 'done'
+                ? 'text-green-500'
+                : 'text-slate-400'
+            }`}>
+            {order?.status === 'pending'
+              ? 'Đang xử lí'
+              : order?.status === 'done'
+              ? 'Hoàn tất'
+              : 'Đã hủy'}
+          </span>
         </div>
         <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Email: </span>
@@ -122,7 +135,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
                 className={`mt-3 text-center italic ${
                   order.status === 'pending' ? 'text-yellow-500' : 'text-slate-400'
                 } border-t border-slate-200`}>
-                {order.status === 'pending' ? 'Đang chờ xử lí' : 'Đã hủy'}
+                {order.status === 'pending' ? 'Đang xử lí' : 'Đã hủy'}
               </p>
             )}
 

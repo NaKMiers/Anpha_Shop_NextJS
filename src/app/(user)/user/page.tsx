@@ -129,7 +129,6 @@ function UserPage() {
         // send request to server to update avatar
         const { updatedUser, message } = await changeAvatarApi(formData)
 
-
         // request server to update user session
         await update()
 

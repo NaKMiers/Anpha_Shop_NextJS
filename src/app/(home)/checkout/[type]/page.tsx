@@ -3,29 +3,26 @@
 import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import { admins } from '@/constansts'
-import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
+import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
-import { createOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { IoIosHelpCircle } from 'react-icons/io'
+import { FaBookOpen } from 'react-icons/fa'
+import { IoIosHelpCircle, IoMdArrowRoundBack } from 'react-icons/io'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
   // hooks
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const cartItems = useAppSelector(state => state.cart.items)
-  const localCartItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
   const curUser: any = session?.user
 
   // states
-  const [confirmed, setConfirmed] = useState(false)
   const [checkout, setCheckout] = useState<any>(null)
 
   // values
@@ -39,7 +36,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
     const checkout = JSON.parse(localStorage.getItem('checkout') ?? 'null')
 
-    if (!checkout && !confirmed) {
+    if (!checkout) {
       // start page loading for redirecting
       dispatch(setPageLoading(true))
       toast.error('Đang quay lại giỏ hàng...')
@@ -47,7 +44,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
     } else {
       setCheckout(checkout)
     }
-  }, [confirmed, router, dispatch])
+  }, [router, dispatch])
 
   // handle copy
   const handleCopy = useCallback((text: string) => {
@@ -55,74 +52,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
     toast.success('Đã sao chép: ' + text)
   }, [])
 
-  // handle confirm payment
-  const handleConfirmPayment = useCallback(async () => {
-    // check if checkout exists
-    if (checkout) {
-      setConfirmed(true)
-
-      const { selectedItems, total, voucher, discount, code, email } = checkout
-
-      // start page loading
-      dispatch(setPageLoading(true))
-
-      try {
-        // handle confirm payment
-        const items = selectedItems.map((cartItem: FullyCartItem) => ({
-          _id: cartItem._id,
-          product: cartItem.product,
-          quantity: cartItem.quantity,
-        }))
-
-        // send request to server to create order
-        const { removedCartItems, message } = await createOrderApi(
-          code,
-          email,
-          total,
-          voucher?._id,
-          discount,
-          items,
-          type
-        )
-
-        toast.success('Đã xác nhận thanh toán')
-
-        if (curUser) {
-          // userId exists => cart is DATABASE cart => remove cart items
-          dispatch(setCartItems(cartItems.filter(item => !removedCartItems.includes(item._id))))
-        } else {
-          // userId does not exist => cart is LOCAL cart => remove LOCAL cart items
-          dispatch(
-            setLocalCartItems(localCartItems.filter(item => !removedCartItems.includes(item._id)))
-          )
-        }
-
-        // show success message
-        toast.success(message)
-        toast.success('Đang chuyển hướng')
-
-        // redirect to order history page
-        if (curUser) {
-          // redirect to order history page
-          router.push('/user/order-history')
-        } else {
-          router.push('/cart')
-        }
-
-        // clear checkout (local storage)
-        localStorage.removeItem('checkout')
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
-
-        // stop page loading
-        dispatch(setPageLoading(false))
-      }
-    }
-  }, [checkout, type, dispatch, router, curUser, cartItems, localCartItems])
-
   return (
-    <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
+    <div className='mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark overflow-x-auto'>
       {/* Payment info */}
       <div className='col-span-1 lg:col-span-7 order-2 lg:order-first'>
         {type === 'momo' ? (
@@ -203,16 +134,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </span>
         </p>
 
-        <p className='italic text-sky-500'>
-          Lưu ý: nhấn vào nút{' '}
-          <span
-            className='text-secondary underline animate-pulse cursor-pointer'
-            onClick={handleConfirmPayment}>
-            xác nhận thanh toán
-          </span>{' '}
-          sau khi đã chuyển khoản để có thể nhận Email.
-        </p>
-
         <Image
           className='mx-auto mt-6 rounded-lg shadow-medium duration-300 transition hover:-translate-y-2'
           src={type === 'momo' ? admin.momo.image : admin.banking.image}
@@ -220,12 +141,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           width={350}
           alt={type === 'momo' ? 'momo-qr' : 'banking-qr'}
         />
-
-        <button
-          className='lg:hidden mt-10 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
-          onClick={handleConfirmPayment}>
-          <span className=''>Xác nhận thanh toán</span>
-        </button>
       </div>
 
       {/* Cart items */}
@@ -235,7 +150,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='pt-5' />
 
         <div>
-          {checkout?.selectedItems.map((cartItem: FullyCartItem, index: number) => (
+          {checkout?.items.map((cartItem: FullyCartItem, index: number) => (
             <CartItem
               cartItem={cartItem}
               className={index != 0 ? 'mt-4' : ''}
@@ -263,11 +178,31 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             </span>
           </div>
 
-          <button
-            className='mt-6 text-xl font-semibold rounded-lg w-full px-2 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
-            onClick={handleConfirmPayment}>
-            <span className=''>Xác nhận thanh toán</span>
-          </button>
+          <div className='flex justify-center flex-wrap mt-6 gap-x-21 gap-y-21/2 font-body tracking-wide'>
+            <Link
+              href={`/user/order/${checkout?.code}`}
+              className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
+              onClick={e => {
+                if (!curUser?._id) {
+                  e.preventDefault()
+                  toast.error('Bạn cần có tài khoản để có thể xem thông tin đơn hàng ngay khi mua')
+                } else {
+                  localStorage.removeItem('checkout')
+                }
+              }}
+              title='Xem đơn hàng ngay'>
+              <FaBookOpen size={18} className='wiggle mb-[-2px] flex-shrink-0' />
+              <span className='text-ellipsis line-clamp-1'>Xem đơn hàng ngay</span>
+            </Link>
+            <a
+              href={`/cart`}
+              className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-slate-300 hover:bg-secondary hover:text-light common-transition'
+              title='Quay lại giỏ hàng'
+              onClick={() => localStorage.removeItem('checkout')}>
+              <IoMdArrowRoundBack size={18} className='wiggle mb-[-2px] flex-shrink-0' />
+              <span className='text-ellipsis line-clamp-1'>Quay lại giỏ hàng</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

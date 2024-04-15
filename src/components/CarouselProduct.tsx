@@ -189,6 +189,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
   return (
     <Link
       href={`/${product.slug}`}
+      prefetch={false}
       className={`aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2 ${className}`}>
       <div className='relative rounded-small overflow-hidden group'>
         {/* Thumbnail */}

@@ -38,7 +38,7 @@ function Footer() {
         <div className='p-21'>
           {/* Top */}
           <div className='flex flex-col px-4 -mx-4 sm:flex-row items-center justify-between gap-3 group'>
-            <Link href='/' className='flex items-center'>
+            <Link href='/' prefetch={false} className='flex items-center'>
               <div className='rounded-full spin'>
                 <Image
                   className='aspect-square rounded-full'
@@ -84,6 +84,7 @@ function Footer() {
               {bestSellerProducts.map((product, index) => (
                 <Link
                   href={`/${product.slug}`}
+                  prefetch={false}
                   className='block w-[230px] shrink-0 px-2 group snap-start group'
                   key={index}>
                   <Card className='text-dark' variant='soft'>
@@ -128,6 +129,7 @@ function Footer() {
                   </Link>
                   <Link
                     href='/cart'
+                    prefetch={false}
                     className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
                     <FaChevronRight size={14} className='text-primary' />
                     <p className=''>Giỏ hàng</p>

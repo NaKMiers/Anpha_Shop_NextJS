@@ -147,7 +147,7 @@ function CartPage() {
   // validate before checkout
   const handleValidateBeforeCheckout = useCallback(() => {
     let isValid = true
-    if (!selectedItems.length) {
+    if (!selectedItems.length || !total) {
       toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
       isValid = false
     }
@@ -158,7 +158,7 @@ function CartPage() {
     }
 
     return isValid
-  }, [curUser, getValues, selectedItems.length, setError])
+  }, [curUser, getValues, selectedItems.length, setError, total])
 
   // handle checkout
   const handleCheckout = useCallback(
@@ -169,14 +169,28 @@ function CartPage() {
       // start page loading
       dispatch(setPageLoading(true))
 
-      // generate order code
       try {
-        const { orderCode } = await generateOrderCodeApi() // cache: no-store
+        // handle confirm payment
+        const items = (selectedItems as any).map((cartItem: FullyCartItem) => ({
+          _id: cartItem._id,
+          product: cartItem.product,
+          quantity: cartItem.quantity,
+        }))
+
+        // send request to server to create order
+        const { code, removedCartItems, message } = await createOrderApi(
+          curUser?.email || getValues('email'),
+          total,
+          voucher?._id,
+          discount,
+          items,
+          type
+        )
 
         // create checkout
         const checkout = {
-          selectedItems,
-          code: orderCode,
+          items,
+          code,
           email: curUser?.email || getValues('email'),
           voucher,
           discount,
@@ -218,7 +232,7 @@ function CartPage() {
     setIsBuying(true)
 
     try {
-      const { orderCode } = await generateOrderCodeApi() // cache: no-store
+      // const { orderCode } = await generateOrderCodeApi() // cache: no-store
 
       const items = selectedItems.map((cartItem: FullyCartItem) => ({
         _id: cartItem._id,
@@ -228,7 +242,7 @@ function CartPage() {
 
       // send request to server to create order
       const { removedCartItems, message } = await createOrderApi(
-        orderCode,
+        // orderCode,
         curUser.email,
         total,
         voucher?._id,
@@ -303,9 +317,9 @@ function CartPage() {
   }, [dispatch, localItems])
 
   return (
-    <div className='mt-20 grid grid-cols-1 md:grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
+    <div className='mt-20 grid grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
       {/* Cart Items */}
-      <div className='col-span-1 md:col-span-2'>
+      <div className='col-span-3 lg:col-span-2'>
         <h1 className='flex items-center gap-2 font-semibold font-body text-3xl'>
           <FaCartShopping size={30} className='text-dark wiggle' />
           <span>Giỏ hàng</span>
@@ -376,11 +390,11 @@ function CartPage() {
         ) : (
           <p className='text-center'>
             Chưa có sản phẩm nào trong giỏ hàng của hàng. Hãy ấn vào{' '}
-            <Link href='/' className='text-sky-500 underline'>
+            <Link href='/' prefetch={false} className='text-sky-500 underline'>
               đây
             </Link>{' '}
             để bắt đầu mua hàng.{' '}
-            <Link className='text-sky-500 underline italic' href='/'>
+            <Link href='/' prefetch={false} className='text-sky-500 underline italic'>
               Quay lại
             </Link>
           </p>
@@ -388,8 +402,8 @@ function CartPage() {
       </div>
 
       {/* Order Summary */}
-      <div className='col-span-1'>
-        <div className='border-2 border-primary rounded-medium shadow-lg p-4 sticky mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
+      <div className='col-span-3 lg:col-span-1'>
+        <div className='border-2 border-primary rounded-medium shadow-lg p-4 sticky  lg:mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
           {!curUser && (
             <>
               <p className='mb-2'>

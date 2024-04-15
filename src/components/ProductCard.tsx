@@ -195,6 +195,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       {product.stock <= 0 && (
         <Link
           href={`/${product.slug}`}
+          prefetch={false}
           className='absolute z-10 top-4 left-4 right-4 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
           <Image
             className='animate-wiggle -mt-1'
@@ -209,6 +210,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       {/* Thumbnails */}
       <Link
         href={`/${product.slug}`}
+        prefetch={false}
         className='relative aspect-video rounded-lg overflow-hidden shadow-lg block'>
         <div className='flex w-full overflow-x-scroll snap-x snap-mandatory'>
           {product.images.map(src => (
@@ -232,7 +234,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       )}
 
       {/* Title */}
-      <Link href={`/${product.slug}`}>
+      <Link href={`/${product.slug}`} prefetch={false}>
         <h3
           className='font-body text-[18px] text-dark tracking-wide leading-[22px] my-3'
           title={product.title}>

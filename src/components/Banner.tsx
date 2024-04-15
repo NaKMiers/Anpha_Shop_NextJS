@@ -66,7 +66,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 <li
                   className='group rounded-extra-small text-dark hover:bg-primary common-transition'
                   key={tag.title}>
-                  <Link className='flex items-center px-[10px] py-[6px]' href={`/tag?tag=${tag.slug}`}>
+                  <Link
+                    href={`/tag?tag=${tag.slug}`}
+                    prefetch={false}
+                    className='flex items-center px-[10px] py-[6px]'>
                     <FaTag size={16} className='wiggle' />
                     <span className='ms-2'>{tag.title}</span>
                   </Link>
@@ -149,7 +152,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Thể loại</h5>
 
               <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>
-                <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>
+                <Link
+                  href='/flashsale'
+                  prefetch={false}
+                  className='flex items-center px-[10px] py-[6px] gap-2'>
                   <FaBoltLightning size={16} className='wiggle text-secondary' />
                   <span className='font-bold text-secondary'>FLASHSALES</span>
                 </Link>
@@ -160,8 +166,9 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                   className='group rounded-extra-small text-dark hover:bg-primary common-transition'
                   key={category.title}>
                   <Link
-                    className='flex items-center px-[10px] py-[6px]'
-                    href={`/category?ctg=${category.slug}`}>
+                    href={`/category?ctg=${category.slug}`}
+                    prefetch={false}
+                    className='flex items-center px-[10px] py-[6px]'>
                     <BiSolidCategoryAlt size={17} className='wiggle' />
                     <span className='ms-2'>{category.title}</span>
                   </Link>
@@ -217,7 +224,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                   <li
                     className='group rounded-extra-small text-dark hover:bg-primary common-transition'
                     key={tag.title}>
-                    <Link className='flex items-center px-[10px] py-[6px]' href={`/tag?tag=${tag.slug}`}>
+                    <Link
+                      href={`/tag?tag=${tag.slug}`}
+                      prefetch={false}
+                      className='flex items-center px-[10px] py-[6px]'>
                       <FaTag size={16} className='wiggle' />
                       <span className='ms-2'>{tag.title}</span>
                     </Link>
@@ -234,7 +244,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 </h5>
 
                 <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>
-                  <Link className='flex items-center px-[10px] py-[6px] gap-2' href='/flashsale'>
+                  <Link
+                    href='/flashsale'
+                    prefetch={false}
+                    className='flex items-center px-[10px] py-[6px] gap-2'>
                     <FaBoltLightning size={16} className='wiggle text-secondary' />
                     <span className='font-bold text-secondary'>FLASHSALES</span>
                   </Link>
@@ -245,8 +258,9 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                     className='group rounded-extra-small text-dark hover:bg-primary common-transition'
                     key={category.title}>
                     <Link
-                      className='flex items-center px-[10px] py-[6px]'
-                      href={`/category?ctg=${category.slug}`}>
+                      href={`/category?ctg=${category.slug}`}
+                      prefetch={false}
+                      className='flex items-center px-[10px] py-[6px]'>
                       <BiSolidCategoryAlt size={17} className='wiggle' />
                       <span className='ms-2'>{category.title}</span>
                     </Link>

@@ -73,8 +73,8 @@ function AdminMenu() {
             <li className='flex items-center gap-2' key={title}>
               {/* "All" Link */}
               <Link
-                className='group flex flex-grow items-center gap-2 group rounded-lg p-2 common-transition hover:bg-secondary font-body tracking-wide'
                 href={links[0].href}
+                className='group flex flex-grow items-center gap-2 group rounded-lg p-2 common-transition hover:bg-secondary font-body tracking-wide'
                 onClick={() => setOpen(false)}>
                 <Icon size={18} className='wiggle' />
                 {links[0].title}
@@ -83,8 +83,8 @@ function AdminMenu() {
               {/* "Add" Link */}
               {links[1] && (
                 <Link
-                  className='group flex justify-center items-center flex-shrink-0 rounded-full border-2 border-white p-[3px] hover:scale-110 common-transition hover:border-primary'
                   href={links[1].href}
+                  className='group flex justify-center items-center flex-shrink-0 rounded-full border-2 border-white p-[3px] hover:scale-110 common-transition hover:border-primary'
                   onClick={() => setOpen(false)}>
                   <FaPlus size={10} className='group-hover:text-primary wiggle' />
                 </Link>

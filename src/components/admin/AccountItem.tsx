@@ -48,6 +48,7 @@ function AccountItem({
           {/* Thumbnails */}
           <Link
             href={`/${data.type?.slug || ''}`}
+            prefetch={false}
             className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
             <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
               <Image

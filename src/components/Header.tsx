@@ -38,21 +38,6 @@ function Header({ isStatic }: HeaderProps) {
   const [cartLength, setCartlength] = useState<number>(0)
   const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
 
-  // // get user session
-  // useEffect(() => {
-  //   const getCurUser = async () => {
-  //     console.log('re-get user session')
-  //     const session = await getSession()
-  //     setCurUser(session?.user)
-
-  //     await update()
-  //   }
-
-  //   if (!curUser?._id) {
-  //     getCurUser()
-  //   }
-  // }, [curUser?._id, update])
-
   // update user session
   useEffect(() => {
     const updateUser = async () => {
@@ -172,7 +157,10 @@ function Header({ isStatic }: HeaderProps) {
       <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* Brand */}
         <div className='pl-4 -ml-4 flex items-center max-w-[300px] w-[90%] h-full overflow-x-scroll no-scrollbar'>
-          <Link href='/' className='hidden sm:block shrink-0 rounded-full common-transition spin'>
+          <Link
+            href='/'
+            prefetch={false}
+            className='hidden sm:block shrink-0 rounded-full common-transition spin'>
             <Image
               className='aspect-square rounded-full'
               src='/images/logo.jpg'
@@ -181,7 +169,7 @@ function Header({ isStatic }: HeaderProps) {
               alt='logo'
             />
           </Link>
-          <Link href='/' className='text-2xl font-bold'>
+          <Link href='/' prefetch={false} className='text-2xl font-bold'>
             .AnphaShop
           </Link>
           <Link
@@ -199,7 +187,7 @@ function Header({ isStatic }: HeaderProps) {
 
         {/* Nav */}
         <div className='hidden md:flex items-center gap-4'>
-          <Link href='/cart' className='relative wiggle'>
+          <Link href='/cart' prefetch={false} className='relative wiggle'>
             <FaCartShopping size={24} />
             {!!cartLength && (
               <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>

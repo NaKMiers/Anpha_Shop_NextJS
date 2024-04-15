@@ -13,13 +13,14 @@ import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
 import { TbPackages } from 'react-icons/tb'
 import ConfirmDialog from './ConfirmDialog'
 import Price from './Price'
+import { useSearchParams } from 'next/navigation'
 
 interface CartItemProps {
   cartItem: FullyCartItem
@@ -123,6 +124,8 @@ function CartItem({
         // send request to update cart quantity
         const { updatedCartItem } = await updateCartQuantityApi(cartItem._id, value)
 
+        console.log('updatedCartItem---: ', updatedCartItem)
+
         // update cart item in store
         dispatch(updateCartItemQuantity({ id: updatedCartItem._id, quantity: updatedCartItem.quantity }))
       } catch (err: any) {
@@ -198,6 +201,7 @@ function CartItem({
         setTimeout(() => {
           if (!inputRef.current.isInputing) {
             if (value <= 1) {
+              console.log(111)
               if (curUser) {
                 dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: 1 }))
                 updateQuantityGlobal(1)
@@ -242,6 +246,7 @@ function CartItem({
       }>
       <Link
         href={`/${cartItem.product.slug}`}
+        prefetch={false}
         className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
         onClick={e => e.stopPropagation()}>
         <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
@@ -300,7 +305,7 @@ function CartItem({
       {/* Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
-        <Link href={`/${cartItem.product.slug}`} onClick={e => e.stopPropagation()}>
+        <Link href={`/${cartItem.product.slug}`} prefetch={false} onClick={e => e.stopPropagation()}>
           <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
             {cartItem.product.title}
           </h2>

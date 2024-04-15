@@ -27,14 +27,31 @@ export async function PATCH(req: NextRequest) {
     // decrease/increase stock of relative products
     await Promise.all(
       accounts.map(async account => {
-        await ProductModel.updateOne(
-          { _id: account.type },
-          {
-            $inc: {
-              stock: value ? 1 : -1,
-            },
+        if (!account.usingUser) {
+          // check product stock if descrease stock
+          const product = await ProductModel.findById(account.type)
+          if (value) {
+            await ProductModel.updateOne(
+              { _id: account.type },
+              {
+                $inc: {
+                  stock: 1,
+                },
+              }
+            )
+          } else {
+            if (product.stock > 0) {
+              await ProductModel.updateOne(
+                { _id: account.type },
+                {
+                  $inc: {
+                    stock: -1,
+                  },
+                }
+              )
+            }
           }
-        )
+        }
       })
     )
 
