@@ -48,7 +48,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
   return (
     <div className='bg-white py-21 px-4 rounded-medium shadow-medium-light'>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
-        Order Detail: <span className='text-rose-500 font-sans'>{order?.code}</span>
+        Order Detail: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
 
       <hr className='my-5' />
@@ -104,16 +104,21 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                 <Fragment key={account._id}>
                   <hr className='mt-5 mb-3' />
 
-                  <div className='border border-slate-300 rounded-xl p-4'>
-                    {account.info.split(' ').map((word, index) => (
-                      <span
-                        key={index}
-                        className='cursor-pointer'
-                        onClick={() => {
-                          navigator.clipboard.writeText(word)
-                          toast.success('Copied: ' + word)
-                        }}>
-                        {word + ' '}
+                  <div className='border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                    {account.info.split('\n').map((line, index) => (
+                      <span key={index} className='block'>
+                        {line.split(' ').map((word, index) => (
+                          <span
+                            key={index}
+                            className='inline-block cursor-pointer'
+                            onClick={e => {
+                              e.stopPropagation()
+                              navigator.clipboard.writeText(word)
+                              toast.success('Copied: ' + word)
+                            }}>
+                            {word}{' '}
+                          </span>
+                        ))}
                       </span>
                     ))}
                   </div>
@@ -123,7 +128,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
               <p
                 className={`mt-3 text-center italic ${
                   order.status === 'pending' ? 'text-yellow-500' : 'text-slate-400'
-                } border-t border-slate-200`}>
+                } border-t border-slate-200 pt-2`}>
                 {order.status}
               </p>
             )}

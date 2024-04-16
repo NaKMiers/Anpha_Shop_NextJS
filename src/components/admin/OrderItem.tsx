@@ -104,7 +104,7 @@ function OrderItem({
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }>
-        <div className='w-full'>
+        <div className='w-[calc(100%_-_44px)]'>
           {/* MARK: Thumbnails */}
           <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[145px] overflow-y-auto '>
             {data.items.map((item: any) => (
@@ -157,7 +157,7 @@ function OrderItem({
           </div>
 
           {/* Email */}
-          <p className='underline' title='email'>
+          <p className='block underline text-ellipsis line-clamp-1' title={'Email: ' + data.email}>
             {data.email}
           </p>
 

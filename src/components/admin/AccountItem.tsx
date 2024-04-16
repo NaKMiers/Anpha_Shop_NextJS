@@ -73,7 +73,11 @@ function AccountItem({
           <div
             className={`absolute z-10 -top-3 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark  px-2 py-[2px] select-none rounded-lg font-body ${
               data.usingUser ? 'bg-secondary text-white' : 'bg-slate-300 text-slate-400'
-            }`}>
+            }`}
+            onClick={e => {
+              e.stopPropagation()
+              data.usingUser && handleCopy(data.usingUser)
+            }}>
             {data.usingUser ? data.usingUser : '___'}
           </div>
 
@@ -133,7 +137,7 @@ function AccountItem({
                 {line.split(' ').map((word, index) => (
                   <span
                     key={index}
-                    className='inline-block'
+                    className='inline-block cursor-pointer'
                     onClick={e => {
                       e.stopPropagation()
                       handleCopy(word)

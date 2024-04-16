@@ -112,20 +112,25 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
             <CartItem cartItem={item} isCheckout localCartItem isOrderDetailProduct />
 
             {order.status === 'done' ? (
-              item?.accounts.map((account: IAccount) => (
+              item.accounts.map((account: IAccount) => (
                 <Fragment key={account._id}>
                   <hr className='mt-5 mb-3' />
 
-                  <div className='border border-slate-300 rounded-xl p-4'>
-                    {account.info.split(' ').map((word, index) => (
-                      <span
-                        key={index}
-                        className='cursor-pointer'
-                        onClick={() => {
-                          navigator.clipboard.writeText(word)
-                          toast.success('Copied: ' + word)
-                        }}>
-                        {word + ' '}
+                  <div className='border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                    {account.info.split('\n').map((line, index) => (
+                      <span key={index} className='block'>
+                        {line.split(' ').map((word, index) => (
+                          <span
+                            key={index}
+                            className='inline-block cursor-pointer'
+                            onClick={e => {
+                              e.stopPropagation()
+                              navigator.clipboard.writeText(word)
+                              toast.success('Đã sao chép: ' + word)
+                            }}>
+                            {word}{' '}
+                          </span>
+                        ))}
                       </span>
                     ))}
                   </div>
@@ -133,9 +138,9 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
               ))
             ) : (
               <p
-                className={`mt-3 text-center italic ${
+                className={`mt-6 text-center italic ${
                   order.status === 'pending' ? 'text-yellow-500' : 'text-slate-400'
-                } border-t border-slate-200`}>
+                } border-t border-slate-200 pt-2`}>
                 {order.status === 'pending' ? 'Đang xử lí' : 'Đã hủy'}
               </p>
             )}
