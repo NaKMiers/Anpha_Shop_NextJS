@@ -27,7 +27,8 @@ export async function DELETE(req: NextRequest) {
     // decrease stock of relative products
     await Promise.all(
       accounts.map(async account => {
-        if (account.usingUser) {
+        // account is not using
+        if (!account.usingUser) {
           // check product stock before descrease stock
           const product = await ProductModel.findById(account.type)
           if (product.stock > 0) {
