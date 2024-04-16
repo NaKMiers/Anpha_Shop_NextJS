@@ -41,7 +41,7 @@ function AddProductPage() {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [files, setFiles] = useState<File[]>([])
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -60,6 +60,7 @@ function AddProductPage() {
     },
   })
 
+  // MARK: Get Data
   // get product by id
   useEffect(() => {
     const getProduct = async () => {
@@ -118,6 +119,7 @@ function AddProductPage() {
     }
   }, [imageUrls])
 
+  // MARK: Handlers
   // handle add files when user select files
   const handleAddFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -184,6 +186,7 @@ function AddProductPage() {
     [setError, selectedCategory, selectedTags, files, originalImages]
   )
 
+  // MARK: Submit
   // send data to server to create new product
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
@@ -209,8 +212,8 @@ function AddProductPage() {
       // show success message
       toast.success(message)
 
-      // redirect to product page
-      router.push('/admin/product/all')
+      // redirect to back
+      router.back()
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
@@ -221,11 +224,10 @@ function AddProductPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Edit Product' backLink='/admin/product/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      <div className='mt-5'>
         {/* Title */}
         <Input
           id='title'
@@ -354,7 +356,7 @@ function AddProductPage() {
           </div>
         </div>
 
-        {/* Images */}
+        {/* MARK: Images */}
         <div className='mb-5'>
           <div className='flex'>
             <span className='inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 border-slate-200 bg-slate-100'>
@@ -409,6 +411,7 @@ function AddProductPage() {
           </div>
         )}
 
+        {/* MARK: Save Button */}
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}

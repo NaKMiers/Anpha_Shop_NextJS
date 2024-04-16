@@ -1,5 +1,6 @@
 'use client'
 
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import AdminHeader from '@/components/admin/AdminHeader'
@@ -17,7 +18,7 @@ import { IoReload } from 'react-icons/io5'
 import { MdNumbers } from 'react-icons/md'
 import { RiCharacterRecognitionLine } from 'react-icons/ri'
 
-function AddFlashSalePage() {
+function EditFlashSalePage() {
   // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
@@ -29,7 +30,7 @@ function AddFlashSalePage() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [timeType, setTimeType] = useState<'loop' | 'once'>('loop')
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -47,6 +48,7 @@ function AddFlashSalePage() {
     },
   })
 
+  // MARK: Get Data
   // get flash sale by id
   useEffect(() => {
     const getProduct = async () => {
@@ -82,8 +84,19 @@ function AddFlashSalePage() {
         // send request to server
         const { products } = await getForceAllProductsApi()
 
+        // categorize products
+        const categorizedProductsObj = products.reduce((acc: any, product: FullyProduct) => {
+          if (!acc[product.category.title]) {
+            acc[product.category.title] = []
+          }
+          acc[product.category.title].push(product)
+          return acc
+        }, {})
+
+        const categorizedProducts = Object.values(categorizedProductsObj).flat() as FullyProduct[]
+
         // set products to state
-        setProducts(products)
+        setProducts(categorizedProducts)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -131,6 +144,7 @@ function AddFlashSalePage() {
     [setError]
   )
 
+  // MARK: Submit
   // handle send request to server to edit flash sale
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     // validate form
@@ -158,11 +172,10 @@ function AddFlashSalePage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* Admin Header */}
       <AdminHeader title='Edit Flash Sale' backLink='/admin/flash-sale/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      <div className='pt-5'>
         {/* Type */}
         <Input
           id='type'
@@ -219,8 +232,8 @@ function AddFlashSalePage() {
           className='mb-5'
         />
 
+        {/* Time Type */}
         <div className='grid grid-col-1 lg:grid-cols-2 gap-5 mb-5'>
-          {/* Time Type */}
           <Input
             id='timeType'
             label='Time Type'
@@ -274,7 +287,7 @@ function AddFlashSalePage() {
           )}
         </div>
 
-        {/* Ready to apply products */}
+        {/* MARK: Ready to apply products */}
         <p className='text-light font-semibold text-xl mb-1'>Select Products</p>
         <div className='max-h-[300px] overflow-y-auto flex flex-wrap rounded-lg bg-white p-3 gap-2 mb-5'>
           {products.map(product => (
@@ -307,6 +320,7 @@ function AddFlashSalePage() {
           ))}
         </div>
 
+        {/* MARK: Save Button */}
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
@@ -318,4 +332,4 @@ function AddFlashSalePage() {
   )
 }
 
-export default AddFlashSalePage
+export default EditFlashSalePage

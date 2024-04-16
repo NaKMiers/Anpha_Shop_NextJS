@@ -19,6 +19,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // states
   const [order, setOrder] = useState<FullyOrder | null>(null)
 
+  // get order
   useEffect(() => {
     const getOrder = async () => {
       // start page loading
@@ -44,7 +45,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   }, [code, dispatch])
 
   return (
-    <>
+    <div className='-m-3'>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
         CHI TIẾT ĐƠN HÀNG: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
@@ -104,10 +105,10 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
       <h3 className='text-2xl font-semibold mb-4'>SẢN PHẨM</h3>
 
       {order?.items.map(item => (
-        <div className='pl-5 relative mb-5' key={item.product._id}>
+        <div className='pl-21/2 relative mb-5' key={item.product._id}>
           <div className='absolute top-1/2 -translate-y-1/2 left-0 h-[88%] w-px bg-slate-200' />
 
-          <div className='rounded-medium border border-slate-300 shadow-lg p-21'>
+          <div className='rounded-medium border border-slate-300 shadow-lg p-21/2'>
             <CartItem cartItem={item} isCheckout localCartItem isOrderDetailProduct />
 
             {order.status === 'done' ? (
@@ -147,7 +148,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
           </div>
         </div>
       ))}
-    </>
+    </div>
   )
 }
 

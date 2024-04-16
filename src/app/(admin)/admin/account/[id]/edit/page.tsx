@@ -33,7 +33,7 @@ function AddAccountPage() {
   const [account, setAccount] = useState<IAccount | null>(null)
   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -55,6 +55,7 @@ function AddAccountPage() {
     },
   })
 
+  // MARK: Get Data
   // get account to edit
   useEffect(() => {
     const getAccount = async () => {
@@ -146,6 +147,7 @@ function AddAccountPage() {
     [setError]
   )
 
+  // MARK: Submit
   // send request to server to edit account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
@@ -162,6 +164,8 @@ function AddAccountPage() {
       // reset form
       reset()
       dispatch(setPageLoading(false))
+
+      // redirect back
       router.back()
     } catch (err: any) {
       console.log(err)
@@ -174,12 +178,10 @@ function AddAccountPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Edit Account' backLink='/admin/account/all' />
 
-      <div className='pt-5' />
-
-      <div>
-        {/* Using User */}
+      <div className='mt-5'>
         <div className='flex mb-5'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaUser size={16} className='text-secondary' />
@@ -190,7 +192,6 @@ function AddAccountPage() {
           </p>
         </div>
 
-        {/* Type */}
         <div className='mb-5'>
           <div className={`flex`}>
             <span
@@ -235,7 +236,6 @@ function AddAccountPage() {
           )}
         </div>
 
-        {/* Info */}
         <Input
           id='info'
           label='Info'
@@ -249,7 +249,6 @@ function AddAccountPage() {
           className='mb-5'
         />
 
-        {/* Review Time */}
         <Input
           id='renew'
           label='Renew'
@@ -262,6 +261,7 @@ function AddAccountPage() {
           className='mb-5'
         />
 
+        {/* Mark: Date */}
         <div className='grid grid-cols-2 md:grid-cols-4 mb-5 gap-1 md:gap-0'>
           {/* Days */}
           <Input
@@ -325,7 +325,7 @@ function AddAccountPage() {
           </label>
         </div>
 
-        {/* Notify */}
+        {/* MARK: Notify */}
         <div className='flex mb-5'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaCheck size={16} className='text-secondary' />

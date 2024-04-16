@@ -52,7 +52,7 @@ function ProductItem({
     sold: false,
   })
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
-  const [confirmType, setConfirmType] = useState<'deactivate' | 'delete'>('delete')
+  const [confirmType, setConfirmType] = useState<'deactivate' | 'Remove Flash Sale' | 'delete'>('delete')
 
   // handle update product property
   const handleUpdateProductProperty = useCallback(
@@ -97,7 +97,7 @@ function ProductItem({
           <Link
             href={`/${data.slug}`}
             prefetch={false}
-            className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'
+            className='relative flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'
             onClick={e => e.stopPropagation()}>
             <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
               {data.images.map((src, index) => (
@@ -111,6 +111,22 @@ function ProductItem({
                 />
               ))}
             </div>
+
+            {/* MARK: Sold out */}
+            {data.stock <= 0 && (
+              <Link
+                href={`/${data.slug}`}
+                prefetch={false}
+                className='absolute z-10 top-0 left-0 right-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+                <Image
+                  className='animate-wiggle -mt-1'
+                  src='/images/sold-out.jpg'
+                  width={60}
+                  height={60}
+                  alt='sold-out'
+                />
+              </Link>
+            )}
           </Link>
 
           {/* Flash sale */}
@@ -253,10 +269,14 @@ function ProductItem({
               className='block group'
               onClick={e => {
                 e.stopPropagation()
-                hanldeRemoveApplyingFlashsales([data._id])
+                setIsOpenConfirmModal(true)
+                setConfirmType('Remove Flash Sale')
               }}
               title='Remove Flash Sale'>
-              <PiLightningSlashFill size={18} className='group-hover:scale-125 common-transition' />
+              <PiLightningSlashFill
+                size={18}
+                className='group-hover:scale-125 text-yellow-400 common-transition'
+              />
             </button>
           )}
 
@@ -296,6 +316,8 @@ function ProductItem({
         onAccept={() =>
           confirmType === 'deactivate'
             ? handleActivateProducts([data._id], false)
+            : confirmType === 'Remove Flash Sale'
+            ? hanldeRemoveApplyingFlashsales([data._id])
             : handleDeleteProducts([data._id])
         }
         isLoading={loadingProducts.includes(data._id)}

@@ -1,5 +1,7 @@
 import { connectDatabase } from '@/config/database'
+import CategoryModel from '@/models/CategoryModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
+import TagModel from '@/models/TagModel'
 import { generateSlug } from '@/utils'
 import { deleteFile, uploadFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
@@ -22,6 +24,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
 
     // get product from database to edit
     const product: IProduct | null = await ProductModel.findById(id).lean()
+
     // product does exist
     if (!product) {
       return NextResponse.json({ message: 'Product does not exist' }, { status: 404 })
@@ -55,6 +58,25 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
         slug: generateSlug(title as string, id),
       },
     })
+
+    // get tags that need to be increased and decreased
+    const oldTags = product.tags
+    const newTags = tags
+
+    const tagsToIncrease = newTags.filter((tag: string) => !oldTags.includes(tag))
+    const tagsToDecrease = oldTags.filter((tag: string) => !newTags.includes(tag))
+
+    // get category that need to be increased and decreased
+    const oldCategory = product.category
+    const newCategory = category
+
+    // increase related category and tags product quantity
+    await Promise.all([
+      TagModel.updateMany({ _id: { $in: tagsToIncrease } }, { $inc: { productQuantity: 1 } }),
+      TagModel.updateMany({ _id: { $in: tagsToDecrease } }, { $inc: { productQuantity: -1 } }),
+      CategoryModel.findByIdAndUpdate(newCategory, { $inc: { productQuantity: 1 } }),
+      CategoryModel.findByIdAndUpdate(oldCategory, { $inc: { productQuantity: -1 } }),
+    ])
 
     // return response
     return NextResponse.json({ message: `Product ${product.title} has been updated` }, { status: 200 })

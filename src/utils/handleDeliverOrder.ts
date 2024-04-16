@@ -6,7 +6,7 @@ import UserModel from '@/models/UserModel'
 import VoucherModel from '@/models/VoucherModel'
 import { notifyDeliveryOrder, notifyShortageAccount } from '@/utils/sendMail'
 import { NextResponse } from 'next/server'
-import { calcExpireTime } from '.'
+import { calcExpireTime } from '@/utils/time'
 
 export default async function handleDeliverOrder(id: string) {
   // get order from database to deliver

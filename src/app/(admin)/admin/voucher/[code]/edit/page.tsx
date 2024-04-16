@@ -29,12 +29,11 @@ function EditVoucherPage() {
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
   const [roleUsers, setRoleUsers] = useState<IUser[]>([])
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
     setError,
     reset,
@@ -54,6 +53,7 @@ function EditVoucherPage() {
     },
   })
 
+  // MARK: Get Data
   // get voucher by id
   useEffect(() => {
     const getVoucher = async () => {
@@ -166,6 +166,7 @@ function EditVoucherPage() {
     [setError]
   )
 
+  // MARK: Submit
   // handle send request to server to add voucher
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
@@ -184,6 +185,8 @@ function EditVoucherPage() {
         // reset form
         reset()
         dispatch(setPageLoading(false))
+
+        // redirect back
         router.back()
       } catch (err: any) {
         console.log(err)
@@ -207,11 +210,10 @@ function EditVoucherPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title={`Edit Voucher: ${voucher?.code}`} backLink='/admin/voucher/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      <div className='mt-5'>
         <div className='b-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Code */}
           <Input
@@ -258,6 +260,7 @@ function EditVoucherPage() {
           className='mb-5'
         />
 
+        {/* MARK: Begin - Expire */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Begin */}
           <Input
@@ -283,6 +286,7 @@ function EditVoucherPage() {
           />
         </div>
 
+        {/* MARK: Min - Max */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Min Total */}
           <Input
@@ -309,6 +313,7 @@ function EditVoucherPage() {
           />
         </div>
 
+        {/* MARK: Type - Value */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Type */}
           <Input
@@ -362,6 +367,7 @@ function EditVoucherPage() {
           className='mb-5'
         />
 
+        {/* Active */}
         <div className='flex'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaPlay size={16} className='text-secondary' />
@@ -382,6 +388,7 @@ function EditVoucherPage() {
           </label>
         </div>
 
+        {/* MARK: Save Button */}
         <LoadingButton
           className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}

@@ -1,6 +1,6 @@
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import OrderModel from '@/models/OrderModel'
 import crypto from 'crypto'
-import toast from 'react-hot-toast'
 import slugify from 'slugify'
 import unidecode from 'unidecode'
 
@@ -51,48 +51,6 @@ export const shuffleArray = (array: any[]): any[] => {
     ;[array[i], array[j]] = [array[j], array[i]]
   }
   return array
-}
-
-// get times
-export const getTimes = (d = 0, h = 0, m = 0, s = 0) => {
-  // convert all to seconds
-  const totalSeconds = h * 3600 + m * 60 + s
-
-  // calc days, hours, minutes, seconds
-  const days = Math.floor(totalSeconds / (24 * 3600))
-  const remainingSeconds = totalSeconds % (24 * 3600)
-  const hours = Math.floor(remainingSeconds / 3600)
-  const remainingSecondsAfterHours = remainingSeconds % 3600
-  const minutes = Math.floor(remainingSecondsAfterHours / 60)
-  const seconds = remainingSecondsAfterHours % 60
-
-  return {
-    days: days + d,
-    hours,
-    minutes,
-    seconds,
-  }
-}
-
-// from numbers of (day, hour, minute, second) => expire time
-export const calcExpireTime = (d = 0, h = 0, m = 0, s = 0) => {
-  // calc days, hours, minutes, seconds
-  const { days, hours, minutes, seconds } = getTimes(d, h, m, s)
-
-  // get current time
-  const currentTime = new Date()
-
-  // add time to current time
-  const expireTime = new Date(
-    currentTime.getFullYear(),
-    currentTime.getMonth(),
-    currentTime.getDate() + days,
-    currentTime.getHours() + hours,
-    currentTime.getMinutes() + minutes,
-    currentTime.getSeconds() + seconds
-  )
-
-  return expireTime
 }
 
 // create a unique random image name

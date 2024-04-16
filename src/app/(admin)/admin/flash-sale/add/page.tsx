@@ -1,5 +1,6 @@
 'use client'
 
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import AdminHeader from '@/components/admin/AdminHeader'
@@ -53,8 +54,19 @@ function AddFlashSalePage() {
         // send request to server
         const { products } = await getForceAllProductsApi()
 
+        // categorize products
+        const categorizedProductsObj = products.reduce((acc: any, product: FullyProduct) => {
+          if (!acc[product.category.title]) {
+            acc[product.category.title] = []
+          }
+          acc[product.category.title].push(product)
+          return acc
+        }, {})
+
+        const categorizedProducts = Object.values(categorizedProductsObj).flat() as FullyProduct[]
+
         // set products to state
-        setProducts(products)
+        setProducts(categorizedProducts)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
