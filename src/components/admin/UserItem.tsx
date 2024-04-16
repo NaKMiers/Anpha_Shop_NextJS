@@ -51,9 +51,10 @@ function UserItem({
   const [isOpenDemoteCollboratorConfirmationDialog, setIsOpenDemoteCollboratorConfirmationDialog] =
     useState<boolean>(false)
 
+  // values
   const isCurUser = data._id === curUser?._id
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -68,6 +69,7 @@ function UserItem({
     },
   })
 
+  // MARK: Handlers
   // submit recharge form
   const onRechargeSubmit: SubmitHandler<FieldValues> = async formData => {
     setIsLoadingRecharge(true)
@@ -191,6 +193,7 @@ function UserItem({
               : [...prev, userData._id]
           )
         }>
+        {/* MARK: Body */}
         <div>
           {/* Avatar */}
           <Image
@@ -286,7 +289,7 @@ function UserItem({
           </p>
         </div>
 
-        {/* Recharge Modal */}
+        {/* MARK: Recharge Modal */}
         {isOpenRecharge && (
           <div
             className='absolute z-20 p-21 top-0 left-0 w-full h-full flex items-center justify-center gap-2 rounded-md bg-secondary bg-opacity-80'
@@ -318,7 +321,7 @@ function UserItem({
           </div>
         )}
 
-        {/* Set Collaborator Modal */}
+        {/* MARK: Set Collaborator Modal */}
         {isOpenSetCollaborator && (
           <div
             className='absolute z-20 p-21 top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 rounded-md bg-yellow-400 bg-opacity-80'
@@ -374,6 +377,7 @@ function UserItem({
           </div>
         )}
 
+        {/* MARK: Action Buttons*/}
         {!isCurUser && (
           <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
             {/* Promote User Button */}

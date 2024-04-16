@@ -18,13 +18,14 @@ interface GroupProductsProps {
 
 function GroupProducts({ category, products, hideTop, bestSeller, className = '' }: GroupProductsProps) {
   // states
-  const [isExpaned, setIsExpaned] = useState(false)
-  const [isMedium, setIsMedium] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
+  const [isExpaned, setIsExpaned] = useState<boolean>(false)
+  const [isMedium, setIsMedium] = useState<boolean>(false)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
 
   // ref
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
+  // MARK: Handlers
   const handleDraging = useCallback(
     (e: React.MouseEvent) => {
       if (isDragging && !isExpaned && slideTrackRef.current) {
@@ -35,7 +36,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
   )
 
   // prev slide
-  const handlePrev = useCallback(() => {
+  const prevSlide = useCallback(() => {
     if (slideTrackRef.current) {
       slideTrackRef.current.scrollTo({
         left: slideTrackRef.current.scrollLeft - slideTrackRef.current.children[0].clientWidth,
@@ -45,7 +46,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
   }, [])
 
   // next slide
-  const handleNext = useCallback(() => {
+  const nextSlide = useCallback(() => {
     if (slideTrackRef.current) {
       slideTrackRef.current.scrollTo({
         left: slideTrackRef.current.scrollLeft + slideTrackRef.current.children[0].clientWidth,
@@ -70,7 +71,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
 
   return (
     <div className={`relative ${className}`} id={bestSeller ? 'best-seller' : category?.slug}>
-      {/* Top Ears */}
+      {/* MARK: Ears */}
       {!hideTop && (
         <div className={`flex ${!bestSeller ? 'justify-between' : 'justify-end'} px-6`}>
           {!bestSeller && (
@@ -104,23 +105,23 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
         </div>
       )}
 
-      {/* Next - Previous Buttons */}
+      {/* MARK: Next - Previous */}
       {!isExpaned && (
         <>
           <button
             className='group flex items-center justify-center absolute -left-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md common-transition hover:bg-opacity-100 group'
-            onClick={handlePrev}>
+            onClick={prevSlide}>
             <FaChevronLeft size={18} className='wiggle text-dark' />
           </button>
           <button
             className='group flex items-center justify-center absolute -right-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md common-transition hover:bg-opacity-100 group'
-            onClick={handleNext}>
+            onClick={nextSlide}>
             <FaChevronRight size={18} className='wiggle text-dark' />
           </button>
         </>
       )}
 
-      {/* Slider */}
+      {/* MARK: Slider */}
       <div className='flex flex-wrap min-h-[490px] px-21/2 bg-white bg-opacity-90 rounded-medium shadow-medium'>
         <div
           className={`flex ${isExpaned ? 'flex-wrap gap-y-21' : ''} w-full py-21 overflow-x-auto ${

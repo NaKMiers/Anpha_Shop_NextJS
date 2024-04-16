@@ -1,14 +1,13 @@
-import { IUser } from '@/models/UserModel'
+import { hideCommentApi, likeCommentApi, replyCommentApi } from '@/requests/commentRequest'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import React, { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaEye, FaEyeSlash, FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
-import LoadingButton from './LoadingButton'
 import toast from 'react-hot-toast'
-import { FullyComment } from './Comment'
+import { FaEye, FaEyeSlash, FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
 import { format } from 'timeago.js'
-import { hideCommentApi, likeCommentApi, replyCommentApi } from '@/requests/commentRequest'
-import { useSession } from 'next-auth/react'
+import { FullyComment } from './Comment'
+import LoadingButton from './LoadingButton'
 
 interface CommentItemProps {
   comment: FullyComment
@@ -28,7 +27,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
   // values
   const user = comment.user
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -40,7 +39,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
     },
   })
 
-  // handle reply comment
+  // MARK: Handlers
+  // reply comment
   const replyComment: SubmitHandler<FieldValues> = useCallback(
     async data => {
       // check login
@@ -164,8 +164,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         alt='avatar'
       />
 
-      {/* Headline */}
       <div className='w-full'>
+        {/* MARK: Headline */}
         <div className=''>
           <span className='font-semibold'>
             {user?.firstname && user?.lastname ? `${user?.firstname} ${user?.lastname}` : user?.username}
@@ -184,10 +184,10 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )}
         </div>
 
-        {/* Content */}
+        {/* MARK: Content */}
         <p className='font-body tracking-tide'>{comment.content}</p>
 
-        {/* Actions */}
+        {/* MARK: Actions */}
         <div className='flex items-center gap-3 text-sm'>
           <div className='group flex items-center font-semibold gap-1'>
             {comment.likes.includes(curUser?._id) ? (
@@ -217,12 +217,12 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )}
         </div>
 
-        {/* Reply Section */}
+        {/* MARK: Reply Section */}
         <div
           className={`${
             isOpenReply ? 'max-h-[350px]' : 'max-h-0'
           } relative h-full overflow-y-scroll common-transition mt-1 `}>
-          {/* Input */}
+          {/* MARK: Input */}
           <div className='sticky z-10 top-0 flex items-start gap-2 bg-white'>
             <Image
               className={`rounded-full shadow-lg ${className}`}
@@ -255,7 +255,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
             </div>
           </div>
 
-          {/* Replied Comments */}
+          {/* MARK: Replied Comments */}
           <div className='relative flex flex-col gap-3 mt-1'>
             {comment.replied.map((comment: FullyComment) => (
               <CommentItem setCmts={setCmts} comment={comment} key={comment._id} />

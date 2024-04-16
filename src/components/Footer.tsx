@@ -8,7 +8,7 @@ import Divider from '@mui/joy/Divider'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaCheck, FaChevronRight } from 'react-icons/fa6'
 import { PiSignOutBold } from 'react-icons/pi'
 
@@ -36,8 +36,9 @@ function Footer() {
     <div className='mb-10 mt-36 px-21'>
       <div className='max-w-1200 mx-auto bg-dark-100 text-light shadow-medium rounded-medium'>
         <div className='p-21'>
-          {/* Top */}
+          {/* MARK: Top */}
           <div className='flex flex-col px-4 -mx-4 sm:flex-row items-center justify-between gap-3 group'>
+            {/* Logo */}
             <Link href='/' prefetch={false} className='flex items-center'>
               <div className='rounded-full spin'>
                 <Image
@@ -77,7 +78,7 @@ function Footer() {
 
           <Divider sx={{ my: 2 }} />
 
-          {/* Center */}
+          {/* MARK: Center */}
           <div className='flex flex-col md:flex-row justify-start md:justify-between flex-wrap overflow-hidden'>
             {/* Slider */}
             <div className='flex w-full overflow-x-scroll flex-1 md:mr-5 -mx-1 relative select-none cursor-pointer snap-mandatory no-scrollbar md:show-scrollbar'>
@@ -175,7 +176,7 @@ function Footer() {
 
           <Divider sx={{ my: 2 }} />
 
-          {/* Bottom */}
+          {/* MARK: Bottom */}
           <div className='flex flex-wrap items-center justify-center md:justify-between gap-x-5 gap-y-1 text-center'>
             <p className='text-[14px] transition-all duration-300 hover:tracking-wide'>
               © <span className='text-primary font-semibold'>Anpha.shop</span>. All rights reserved

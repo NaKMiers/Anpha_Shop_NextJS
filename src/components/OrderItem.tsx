@@ -1,6 +1,6 @@
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import { useAppDispatch } from '@/libs/hooks'
 import { addCartItem } from '@/libs/reducers/cartReducer'
-import { IOrder } from '@/models/OrderModel'
 import { addToCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
@@ -10,7 +10,6 @@ import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import CartItem from './CartItem'
 import LoadingButton from './LoadingButton'
-import { FullyOrder } from '@/app/api/user/order-history/route'
 
 interface OrderItemProps {
   order: FullyOrder
@@ -66,7 +65,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
 
   return (
     <div className={`border rounded-medium px-21 py-4 ${className}`}>
-      {/* Head Info */}
+      {/* MARK: Head Info */}
       <div className='flex flex-wrap items-center justify-between gap-x-3'>
         <div>
           <span className='font-semibold'>Mã hóa đơn: </span>
@@ -126,6 +125,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         </div>
       )}
 
+      {/* MARK:  Items */}
       {order.items.map(item => (
         <CartItem cartItem={item} localCartItem isCheckout className='mt-4' key={item.product._id} />
       ))}
@@ -138,7 +138,7 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         <span className='text-green-500 font-semibold text-2xl'>{formatPrice(order.total)}</span>
       </div>
 
-      {/* Action Buttons */}
+      {/* MARK: Action Buttons */}
       <div className='flex justify-end gap-2'>
         <LoadingButton
           className='px-[14px] py-[6px] rounded-md font-semibold bg-secondary hover:bg-primary text-white hover:text-dark common-transition'

@@ -473,6 +473,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
                 label: 'Off',
               },
             ]}
+            className='min-w-[108px]'
           />
         </div>
 

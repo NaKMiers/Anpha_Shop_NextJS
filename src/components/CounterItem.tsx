@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface CounterItem {
   max: number
@@ -10,6 +10,7 @@ interface CounterItem {
 }
 
 function CounterItem({ max, value, size = 25, className }: CounterItem) {
+  // refs
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
   // change slide main function

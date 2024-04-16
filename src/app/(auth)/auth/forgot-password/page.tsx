@@ -12,10 +12,10 @@ const time = 60
 
 function ForgotPasswordPage() {
   // states
-  const [isSent, setIsSent] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isCounting, setIsCounting] = useState(false)
-  const [countDown, setCountDown] = useState(time)
+  const [isSent, setIsSent] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isCounting, setIsCounting] = useState<boolean>(false)
+  const [countDown, setCountDown] = useState<number>(time)
 
   useEffect(() => {
     if (isSent) {

@@ -42,6 +42,7 @@ function TagItem({
   handleDeleteTags,
   handleFeatureTags,
 }: TagItemProps) {
+  // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   return (
@@ -56,6 +57,7 @@ function TagItem({
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }>
+        {/* MARK: Body */}
         {editingTags.includes(data._id) ? (
           // Tag Title Input
           <input
@@ -82,6 +84,7 @@ function TagItem({
           <span>Pr.Q:</span> <span className='text-primary'>{data.productQuantity}</span>
         </p>
 
+        {/* MARK: Action Buttons */}
         <div className='flex self-end border border-dark rounded-lg px-3 py-2 gap-4'>
           {/* Feature Button */}
           {!editingTags.includes(data._id) && (

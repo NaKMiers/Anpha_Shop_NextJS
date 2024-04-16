@@ -1,5 +1,5 @@
 import { EditingValues } from '@/app/(admin)/admin/category/all/page'
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import CategoryModel from '@/models/CategoryModel'
 import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'

@@ -17,9 +17,11 @@ function AdminHeader({ title, addLink, backLink, className = '' }: AdminHeaderPr
         <FaArrowLeft />
         Admin
       </Link>
+
       <div className='py-2 px-3 text-light border border-slate-300 rounded-lg text-lg text-center'>
         {title}
       </div>
+
       {backLink && (
         <Link
           href={backLink}

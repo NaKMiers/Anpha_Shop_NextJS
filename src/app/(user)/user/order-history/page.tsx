@@ -34,7 +34,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   const [total, setTotal] = useState<number>(0)
 
   // filter
-  const [isShowFilter, setIsShowFilter] = useState(false)
+  const [isShowFilter, setIsShowFilter] = useState<boolean>(false)
 
   // Form
   const defaultValues = useMemo<FieldValues>(

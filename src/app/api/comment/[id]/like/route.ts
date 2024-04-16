@@ -1,5 +1,5 @@
 import { FullyComment } from '@/components/Comment'
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import CommentModel from '@/models/CommentModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'

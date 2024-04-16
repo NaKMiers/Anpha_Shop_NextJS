@@ -20,6 +20,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
   const [timeLeft, setTimeLeft] = useState<number[]>([0, 0, 0])
   const [newPrice, setNewPrice] = useState<number>(price)
 
+  // MARK: Effects
   // count down
   useEffect(() => {
     // check flahsale
@@ -108,6 +109,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
 
   return (
     <div className={`rounded-md overflow-hidden ${className}`}>
+      {/* MARK: Flash Sale */}
       {isValidFS && (
         <div className='flex items-center justify-between flex-wrap px-3 py-2 bg-secondary text-white font-body text-[18px] font-bold tracking-wider'>
           <span className={`${big ? 'sm:text-[22px]' : ''} text-[18px]`}>Flash sale</span>
@@ -137,6 +139,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
         </div>
       )}
 
+      {/* MARK: Price */}
       <div
         className={`flex items-center justify-evenly gap-2 px-1.5 py-2 ${
           big ? 'sm:justify-start sm:gap-4 sm:py-4 sm:px-21' : ''

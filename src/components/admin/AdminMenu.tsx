@@ -14,7 +14,7 @@ function AdminMenu() {
   const curUser: any = session?.user
 
   // states
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
 
   // key board event
   useEffect(() => {
@@ -33,12 +33,15 @@ function AdminMenu() {
 
   return (
     <>
+      {/* MARK: Overlay */}
       <div
         className={`${
           open ? 'block' : 'hidden'
         } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30`}
         onClick={() => setOpen(false)}
       />
+
+      {/* MARK: Open Button */}
       <button
         className={`fixed top-[20%] z-20 right-0 p-[5px] pl-2 bg-dark-100 text-white rounded-tl-md rounded-bl-md shadow-md common-transition hover:bg-primary ${
           !open ? 'translate-x-0' : 'translate-x-full'
@@ -46,6 +49,8 @@ function AdminMenu() {
         onClick={() => setOpen(!open)}>
         <FaBarsStaggered size={20} />
       </button>
+
+      {/* MARK: Main */}
       <div
         className={`fixed top-[20%] z-${
           open ? 30 : 20

@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import CartItemModel, { ICartItem } from '@/models/CartItemModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { IUser } from '@/models/UserModel'

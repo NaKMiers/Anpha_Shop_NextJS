@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import AccountModel from '@/models/AccountModel'
 import CategoryModel from '@/models/CategoryModel'
 import FlashsaleModel from '@/models/FlashsaleModel'

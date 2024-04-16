@@ -93,7 +93,7 @@ function ProductItem({
           )
         }>
         <div className='flex-grow'>
-          {/* Thumbnails */}
+          {/* MARK: Thumbnails */}
           <Link
             href={`/${data.slug}`}
             prefetch={false}
@@ -206,7 +206,7 @@ function ProductItem({
             </div>
           </div>
 
-          {/* Tags */}
+          {/* MARK: Tags */}
           <p className='text-slate-500'>
             <span className='text-dark font-semibold'>Tags: </span>
             {data.tags.map((tag: ITag, index) => (
@@ -217,13 +217,14 @@ function ProductItem({
             ))}
           </p>
 
-          {/* Category */}
+          {/* MARK: Category */}
           <p className='text-orange-600'>
             <span className='font-semibold text-dark'>Category: </span>{' '}
             <span>{data.category.title}</span>
           </p>
         </div>
 
+        {/* MARK: Action Buttons */}
         <div className='flex flex-col border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
           {/* Active Button */}
           <button

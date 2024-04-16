@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import OrderModel from '@/models/OrderModel'
 import '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
@@ -99,6 +99,8 @@ export async function GET(req: NextRequest) {
       .skip(skip)
       .limit(itemPerPage)
       .lean()
+
+    console.log('orders: ', orders)
 
     // get all order without filter
     const chops = await OrderModel.aggregate([

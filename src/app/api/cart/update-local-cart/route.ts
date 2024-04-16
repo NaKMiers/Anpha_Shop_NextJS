@@ -1,7 +1,7 @@
 import ProductModel from '@/models/ProductModel'
 import '@/models/FlashsaleModel'
 import { NextRequest, NextResponse } from 'next/server'
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 
 // [POST]: /cart/update-local-cart
 export async function POST(req: NextRequest) {

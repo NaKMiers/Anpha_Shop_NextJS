@@ -36,7 +36,8 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  // handle add product to cart - DATABASE
+  // MARK: Add
+  // add product to cart - DATABASE
   const addProductToCart = useCallback(async () => {
     // start loading
     setIsLoading(true)
@@ -68,38 +69,6 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       setIsLoading(false)
     }
   }, [dispatch, product._id])
-
-  // handle buy now (add to cart and move to cart) - DATABASE
-  const buyNow = useCallback(async () => {
-    // start page loading
-    dispatch(setPageLoading(true))
-
-    try {
-      // send request to add product to cart
-      const { cartItems, message, errors } = await addToCartApi([
-        { productId: product._id, quantity: 1 },
-      ])
-
-      // show toast success
-      if (message) {
-        toast.success(message)
-      }
-      if (errors.notEnough) {
-        toast.error(errors.notEnough)
-      }
-      if (errors.notFound) {
-        toast.error(errors.notFound)
-      }
-
-      // add cart items to state
-      dispatch(addCartItem(cartItems))
-
-      // move to cart page
-      router.push(`/cart?product=${product.slug}`)
-    } catch (err: any) {
-      console.log(err)
-    }
-  }, [product._id, dispatch, product.slug, router])
 
   // handle add product to cart - LOCAL
   const addProductToLocalCart = useCallback(() => {
@@ -149,6 +118,39 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
     return
   }, [curUser?._id, dispatch, localCart, product])
 
+  // MARK: Buy
+  // handle buy now (add to cart and move to cart) - DATABASE
+  const buyNow = useCallback(async () => {
+    // start page loading
+    dispatch(setPageLoading(true))
+
+    try {
+      // send request to add product to cart
+      const { cartItems, message, errors } = await addToCartApi([
+        { productId: product._id, quantity: 1 },
+      ])
+
+      // show toast success
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart items to state
+      dispatch(addCartItem(cartItems))
+
+      // move to cart page
+      router.push(`/cart?product=${product.slug}`)
+    } catch (err: any) {
+      console.log(err)
+    }
+  }, [product._id, dispatch, product.slug, router])
+
   // handle buy now (add to cart and move to cart) - LOCAL
   const buyNowLocal = useCallback(() => {
     addProductToLocalCart()
@@ -157,6 +159,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
     router.push(`/cart?product=${product.slug}`)
   }, [addProductToLocalCart, product.slug, router])
 
+  // MARK: Handlers
   // handle add product to cart
   const handleAddToCart = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -188,7 +191,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   return (
     <div
       className={`relative w-full h-full min-h-[430px] p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}>
-      {/* Sold out */}
+      {/* MARK: Sold out */}
       {product.stock <= 0 && (
         <Link
           href={`/${product.slug}`}
@@ -204,7 +207,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         </Link>
       )}
 
-      {/* Thumbnails */}
+      {/* MARK: Thumbnails */}
       <Link
         href={`/${product.slug}`}
         prefetch={false}
@@ -255,7 +258,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         <span className='text-red-500 ml-1'>{product.sold}</span>
       </div>
 
-      {/* Action Buttons */}
+      {/* MARK: Action Buttons */}
       <div className='flex items-center justify-end md:justify-start gap-2 mt-2'>
         <button
           className={`bg-secondary rounded-md text-white px-2 py-[5px] font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition ${

@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import CartItemModel from '@/models/CartItemModel'
 import OrderModel from '@/models/OrderModel'
 import { notifyNewOrderToAdmin } from '@/utils/sendMail'

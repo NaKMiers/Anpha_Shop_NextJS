@@ -1,15 +1,15 @@
 'use client'
 
+import { IComment } from '@/models/CommentModel'
+import { IUser } from '@/models/UserModel'
+import { addCommentApi } from '@/requests/commentRequest'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import LoadingButton from './LoadingButton'
 import CommentItem from './CommentItem'
-import { IComment } from '@/models/CommentModel'
-import { IUser } from '@/models/UserModel'
-import { addCommentApi } from '@/requests/commentRequest'
+import LoadingButton from './LoadingButton'
 
 export type FullyComment = IComment & {
   user: IUser
@@ -29,16 +29,15 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
 
   // states
   const [cmts, setCmts] = useState<FullyComment[]>(comments || [])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   console.log(cmts)
 
-  // Form
+  // forms
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -82,7 +81,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
 
   return (
     <div>
-      {/* Input */}
+      {/* MARK: Input */}
       <div className={`flex items-center justify-between gap-3 ${className}`}>
         <Image
           className='rounded-full shadow-lg'
@@ -125,7 +124,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
         <span className='text-sm text-rose-400 ml-[60px]'>{errors.comment?.message?.toString()}</span>
       )}
 
-      {/* Comment List */}
+      {/* MARK: Comment List */}
       <div className='flex flex-col mt-5 gap-3 max-h-[500px] overflow-y-scroll'>
         {cmts
           .filter(comment => !comment.hide || comment.userId === curUser?._id)

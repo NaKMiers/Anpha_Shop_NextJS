@@ -21,7 +21,7 @@ interface MetaProps {
 }
 
 function Meta({ title, type, searchParams, items = [], chops, className = '' }: MetaProps) {
-  // store
+  // hooks
   const pathname = usePathname()
   const router = useRouter()
 
@@ -36,14 +36,13 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   const [price, setPrice] = useState<number>(
     searchParams?.price ? +searchParams.price : chops?.maxPrice || 0
   )
-
   const minStock: number = chops?.minStock || 0
   const maxStock: number = chops?.maxStock || 0
   const [stock, setStock] = useState<number>(
     searchParams?.stock ? +searchParams.stock : chops?.maxStock || 0
   )
 
-  // Form
+  // form
   const defaultValues = useMemo<FieldValues>(
     () => ({
       search: '',
@@ -51,7 +50,6 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
     }),
     []
   )
-
   const {
     register,
     handleSubmit,
@@ -63,12 +61,14 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
     defaultValues,
   })
 
+  // sync search params with states
   useEffect(() => {
     // sync search params with states
     setValue('search', searchParams?.search || getValues('search'))
     setValue('sort', searchParams?.sort || getValues('sort'))
   }, [getValues, searchParams, setValue])
 
+  // MARK: Handlers
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
@@ -157,10 +157,10 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
   return (
     <div
       className={`bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 ${className}`}>
-      {/* Title */}
+      {/* MARK: Title */}
       <h2 className='text-2xl font-semibold mb-21'>{title}</h2>
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <div className='grid grid-cols-12 gap-21'>
         {/* Search */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
@@ -214,7 +214,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
           />
         </div>
 
-        {/* Item Selection */}
+        {/* MARK: Item Selection */}
         {!!items.length && (
           <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
             <div
@@ -251,7 +251,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
           </div>
         )}
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
           {/* Sort */}
           <Input
@@ -284,7 +284,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
           />
         </div>
 
-        {/* Filter Buttons */}
+        {/* MARK: Filter Buttons */}
         <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
           {/* Filter Button */}
           <button

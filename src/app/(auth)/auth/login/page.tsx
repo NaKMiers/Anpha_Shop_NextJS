@@ -15,7 +15,7 @@ function LoginPage() {
   const router = useRouter()
 
   // states
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // Form
   const {

@@ -40,6 +40,7 @@ function CategoryItem({
   handleSaveEditingCategories,
   handleDeleteCategories,
 }: CategoryItemProps) {
+  // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   return (
@@ -54,6 +55,7 @@ function CategoryItem({
           )
         }
         key={data._id}>
+        {/* MARK: Body */}
         {editingCategories.includes(data._id) ? (
           // Category Title Input
           <input
@@ -82,6 +84,7 @@ function CategoryItem({
           <span>Pr.Q:</span> <span className='text-primary'>{data.productQuantity}</span>
         </p>
 
+        {/* MARK: Action Buttson */}
         <div className='flex self-end border overflow-x-auto max-w-full border-dark rounded-lg px-3 py-2 gap-4'>
           {/* Edit Button */}
           {!editingCategories.includes(data._id) && (

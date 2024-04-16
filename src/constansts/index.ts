@@ -3,8 +3,7 @@ import { FaBoltLightning, FaCubes, FaGift, FaListCheck, FaTags, FaUser } from 'r
 import { MdCategory } from 'react-icons/md'
 import { RiBillFill } from 'react-icons/ri'
 
-export const redPathnameList = ['/auth']
-
+// MARK: Admin Links
 export const adminLinks = [
   {
     title: 'Order',
@@ -122,6 +121,7 @@ export const adminLinks = [
   },
 ]
 
+// MARK: Admin List
 export const admins = {
   KHOA: {
     momo: {

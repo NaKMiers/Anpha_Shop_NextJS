@@ -31,6 +31,7 @@ function VoucherItem({
   handleActivateVouchers,
   handleDeleteVouchers,
 }: VoucherItemProps) {
+  // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   return (
@@ -44,6 +45,7 @@ function VoucherItem({
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }>
+        {/* MARK: Body */}
         <div>
           <div className='flex items-center gap-3'>
             {/* Code */}
@@ -127,6 +129,7 @@ function VoucherItem({
           </p>
         </div>
 
+        {/* MARK: Action Buttons */}
         <div className='flex flex-col border border-dark rounded-lg px-2 py-3 gap-4'>
           {/* Active Button */}
           <button

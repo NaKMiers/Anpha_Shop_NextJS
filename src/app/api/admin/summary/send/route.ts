@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import UserModel, { IUser } from '@/models/UserModel'
 import VoucherModel from '@/models/VoucherModel'
 import { summaryNotification } from '@/utils/sendMail'

@@ -327,6 +327,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
                 label: 'Once',
               },
             ]}
+            className='min-w-[128px]'
           />
 
           {/* type */}

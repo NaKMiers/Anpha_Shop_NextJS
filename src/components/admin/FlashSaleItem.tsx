@@ -30,6 +30,7 @@ function FlashSaleItem({
   // functions
   handleDeleteFlashSales,
 }: FlashSaleItemProps) {
+  // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   return (
@@ -43,6 +44,7 @@ function FlashSaleItem({
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }>
+        {/* MARK: Body */}
         {/* Value - Time Type */}
         <div className='font-semibold' title='netflix'>
           <span title='Value' className='font-semibold text-primary mr-2'>
@@ -99,7 +101,7 @@ function FlashSaleItem({
           ))}
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex self-end border border-dark text-dark rounded-lg px-3 py-2 gap-4'>
           {/* Edit Button Link */}
           <Link

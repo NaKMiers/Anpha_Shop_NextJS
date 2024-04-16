@@ -13,6 +13,7 @@ import { IoClose } from 'react-icons/io5'
 import Carousel from './Carousel'
 import Header from './Header'
 import Slider from './Slider'
+import BannerMenu from './BannerMenu'
 
 interface BannerProps {
   categories: ICategory[]
@@ -21,6 +22,7 @@ interface BannerProps {
 }
 
 function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerProps) {
+  // states
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
   const [width, setWidth] = useState<number>(0)
 
@@ -47,14 +49,14 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
       <div
         className='flex flex-col h-full w-full max-w-1200 mx-auto rounded-medium shadow-medium overflow-hidden bg-white bg-opacity-90'
         style={{ height: 'calc(100vh - 2 * 21px)' }}>
-        {/* Header in Banner */}
+        {/* MARK: Header in Banner */}
         <Header isStatic />
 
         {/* Banner Content */}
         <div
           className='relative flex flex-col gap-21 p-21 overflow-hidden'
           style={{ height: 'calc(100% - 72px)' }}>
-          {/* Top */}
+          {/* MARK: Top */}
           <div className='flex flex-grow h-2/3 justify-between gap-21'>
             {/* Tag */}
             <ul className='hidden lg:block min-w-[200px] bg-white p-2 pt-0 rounded-lg overflow-y-scroll'>
@@ -177,11 +179,12 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             </ul>
           </div>
 
-          {/* Bottom */}
+          {/* MARK: Bottom */}
           <div className='relative shrink-0 -mb-4'>
             <Carousel products={carouselProducts} />
           </div>
 
+          {/* MARK: Menu Section */}
           {/* Menu Button */}
           <button
             className={`lg:hidden absolute top-0 right-0 p-2 bg-white rounded-bl-lg group transition-all duration-300 delay-200 ${
@@ -194,81 +197,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
           </button>
 
           {/* Menu */}
-          <>
-            {/* Overlay */}
-            <div
-              className={`fixed top-0 left-0 right-0 bottom-0 ${!isMenuOpen ? 'hidden' : ''}`}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            {/* Main */}
-            <div
-              className={`lg:hidden absolute z-10 top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 flex flex-col sm:flex-row justify-evenly items-start md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden ${
-                isMenuOpen ? 'max-h-[calc(100vh_-_72px_-_21px*2)] px-21 py-9' : 'max-h-0'
-              }`}
-              onClick={() => setIsMenuOpen(false)}>
-              <button
-                className='absolute top-0 right-0 rounded-lg group p-2'
-                onClick={() => setIsMenuOpen(false)}>
-                <IoClose size={24} className='text-white wiggle' />
-              </button>
-
-              {/* Tag */}
-              <ul
-                className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'
-                onClick={e => e.stopPropagation()}>
-                <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
-                  Tags
-                </h5>
-
-                {tags?.map(tag => (
-                  <li
-                    className='group rounded-extra-small text-dark hover:bg-primary common-transition'
-                    key={tag.title}>
-                    <Link
-                      href={`/tag?tag=${tag.slug}`}
-                      prefetch={false}
-                      className='flex items-center px-[10px] py-[6px]'>
-                      <FaTag size={16} className='wiggle' />
-                      <span className='ms-2'>{tag.title}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Category */}
-              <ul
-                className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'
-                onClick={e => e.stopPropagation()}>
-                <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
-                  Thể loại
-                </h5>
-
-                <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>
-                  <Link
-                    href='/flashsale'
-                    prefetch={false}
-                    className='flex items-center px-[10px] py-[6px] gap-2'>
-                    <FaBoltLightning size={16} className='wiggle text-secondary' />
-                    <span className='font-bold text-secondary'>FLASHSALES</span>
-                  </Link>
-                </li>
-
-                {categories?.map(category => (
-                  <li
-                    className='group rounded-extra-small text-dark hover:bg-primary common-transition'
-                    key={category.title}>
-                    <Link
-                      href={`/category?ctg=${category.slug}`}
-                      prefetch={false}
-                      className='flex items-center px-[10px] py-[6px]'>
-                      <BiSolidCategoryAlt size={17} className='wiggle' />
-                      <span className='ms-2'>{category.title}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </>
+          <BannerMenu open={isMenuOpen} setOpen={setIsMenuOpen} categories={categories} tags={tags} />
         </div>
       </div>
     </section>

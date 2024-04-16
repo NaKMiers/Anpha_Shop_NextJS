@@ -330,6 +330,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
                 label: 'Off',
               },
             ]}
+            className='min-w-[120px]'
           />
         </div>
 

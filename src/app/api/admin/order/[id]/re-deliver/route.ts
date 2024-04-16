@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import OrderModel, { IOrder } from '@/models/OrderModel'
 import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { notifyDeliveryOrder } from '@/utils/sendMail'

@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import UserModel from '@/models/UserModel'
 import { NextRequest, NextResponse } from 'next/server'
 

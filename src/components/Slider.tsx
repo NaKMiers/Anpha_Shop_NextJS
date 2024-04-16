@@ -15,16 +15,18 @@ interface SliderProps {
 
 function Slider({ time, hideControls, children, thumbs = [], mobile, className = '' }: SliderProps) {
   // states
-  const [slide, setSlide] = useState(1)
-  const [isSliding, setIsSliding] = useState(false)
-  const [touchStartX, setTouchStartX] = useState(0)
-  const [touchEndX, setTouchEndX] = useState(0)
+  const [slide, setSlide] = useState<number>(1)
+  const [isSliding, setIsSliding] = useState<boolean>(false)
+  const [touchStartX, setTouchStartX] = useState<number>(0)
+  const [touchEndX, setTouchEndX] = useState<number>(0)
+
   // refs
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
   // values
   const childrenAmount = Children.count(children)
 
+  // MARK: Slide Functions
   // change slide main function
   useEffect(() => {
     if (slideTrackRef.current) {
@@ -109,7 +111,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
     }
   }, [time, nextSlide])
 
-  // Touch Events ----
+  // MARK: Touch Events
   const handleTouchStart = (event: React.TouchEvent) => {
     setTouchStartX(event.touches[0].clientX)
   }
@@ -126,7 +128,6 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       prevSlide() // Swiped right
     }
   }
-  // --- Touch Events
 
   return (
     <div
@@ -134,7 +135,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}>
-      {/* Slide Track */}
+      {/* MARK: Slide Track */}
       <div
         className={`flex w-full h-full cursor-pointer no-scrollbar transition-all ease-linear duration-300`}
         style={{ marginLeft: '-100%' }}
@@ -150,7 +151,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         ))}
       </div>
 
-      {/* Next - Previous */}
+      {/* MARK: Next - Previous */}
       {!hideControls && childrenAmount >= 2 && (
         <>
           <button
@@ -166,7 +167,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         </>
       )}
 
-      {/* Indicators */}
+      {/* MARK: Indicators */}
       {thumbs.length >= 2 && (
         <div
           className={`absolute z-10 w-full px-21 ${

@@ -37,10 +37,10 @@ function AdminMeta({ handleFilter, handleResetFilter, className = '', children }
     <div
       className={`mt-8 bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 max-w-full ${className}`}>
       <div className='grid grid-cols-12 gap-21'>
-        {/* children 1 -> n - 1 */}
+        {/* MARK: children 1 -> n - 1 */}
         {Children.toArray(children).slice(0, -1)}
 
-        {/* Filter Buttons */}
+        {/* MARK: Filter Buttons */}
         <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
           {/* Filter Button */}
           <button
@@ -61,7 +61,7 @@ function AdminMeta({ handleFilter, handleResetFilter, className = '', children }
           </button>
         </div>
 
-        {/* children n */}
+        {/* MARK: children n */}
         {Children.toArray(children).slice(-1)}
       </div>
     </div>

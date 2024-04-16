@@ -364,6 +364,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
                 label: 'No',
               },
             ]}
+            className='min-w-[110px]'
           />
 
           {/* Voucher Applied */}
@@ -390,6 +391,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
                 label: 'Off',
               },
             ]}
+            className='min-w-[112px]'
           />
 
           {/* Status */}

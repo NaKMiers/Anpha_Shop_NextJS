@@ -32,7 +32,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   // states
   const [quantity, setQuantity] = useState<number>(product && product.stock > 0 ? 1 : 0)
 
-  // handle add product to cart
+  // MARK: Add
+  // add product to cart
   const addProductToCart = useCallback(async () => {
     if (product) {
       // start loading
@@ -63,7 +64,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     }
   }, [dispatch, product, quantity])
 
-  // handle add product to cart - LOCAL
+  // add product to cart - LOCAL
   const addProductToLocalCart = useCallback(() => {
     // add product to local cart
     // create cart item from product
@@ -111,6 +112,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     return
   }, [curUser?._id, dispatch, localCart, product])
 
+  // MARK: Buy
   // handle buy now (add to cart and move to cart)
   const buyNow = useCallback(async () => {
     if (product) {
@@ -149,30 +151,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     router.push(`/cart?product=${product?.slug}`)
   }, [addProductToLocalCart, product?.slug, router])
 
-  // handle quantity
-  const handleQuantity = useCallback(
-    (value: number, isCustom: boolean = false) => {
-      if (!isCustom) {
-        // quantity must be > 0
-        if (quantity + value <= 0) return
-
-        // quantity must be <= product stock
-        if (quantity + value > product?.stock!) return
-
-        setQuantity(quantity + value)
-      } else {
-        // quantity must be > 0
-        if (value < 1) value = 1
-
-        // quantity must be <= product stock
-        if (value > product?.stock!) value = product?.stock!
-
-        setQuantity(value)
-      }
-    },
-    [product?.stock, quantity]
-  )
-
+  // MARK: handlers
   // handle add product to cart
   const handleAddToCart = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -201,9 +180,34 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     [curUser, buyNow, buyNowLocal]
   )
 
+  // MARK: Quantity
+  // handle quantity
+  const handleQuantity = useCallback(
+    (value: number, isCustom: boolean = false) => {
+      if (!isCustom) {
+        // quantity must be > 0
+        if (quantity + value <= 0) return
+
+        // quantity must be <= product stock
+        if (quantity + value > product?.stock!) return
+
+        setQuantity(quantity + value)
+      } else {
+        // quantity must be > 0
+        if (value < 1) value = 1
+
+        // quantity must be <= product stock
+        if (value > product?.stock!) value = product?.stock!
+
+        setQuantity(value)
+      }
+    },
+    [product?.stock, quantity]
+  )
+
   return (
     <>
-      {/* Quantity */}
+      {/* MARK: Main */}
       <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
         <button
           className={`group flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
@@ -246,7 +250,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
         </button>
       </div>
 
-      {/* Action Buttons */}
+      {/* MARK: Action Buttons */}
       <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-2'>
         <button
           className={`bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition  ${

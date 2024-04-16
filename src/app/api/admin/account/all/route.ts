@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import AccountModel from '@/models/AccountModel'
 import '@/models/CategoryModel'
 import '@/models/ProductModel'
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     // options
     let skip = 0
     let itemPerPage = 9
-    const filter: { [key: string]: any } = {}
+    const filter: { [key: string]: any } = { active: true, usingUser: { $exists: true, $ne: null } }
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
     // build filter

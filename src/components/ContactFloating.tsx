@@ -8,7 +8,8 @@ interface ContactFloatingProps {
 }
 
 function ContactFloating({ className = '' }: ContactFloatingProps) {
-  const [open, setOpen] = useState(false)
+  // states
+  const [open, setOpen] = useState<boolean>(false)
 
   // key board event
   useEffect(() => {

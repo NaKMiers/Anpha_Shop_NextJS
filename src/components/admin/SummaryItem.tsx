@@ -36,6 +36,7 @@ function SummaryItem({
           prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
         )
       }>
+      {/* MARK: Body */}
       <div className='w-full'>
         <p>
           <span className='font-semibold'>Email: </span>
@@ -84,6 +85,7 @@ function SummaryItem({
         </p>
       </div>
 
+      {/* MARK: Action Buttons */}
       <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
         {/* Send Summary Button */}
         <button

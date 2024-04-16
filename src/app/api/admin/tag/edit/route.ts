@@ -1,5 +1,5 @@
 import { EditingValues } from '@/app/(admin)/admin/tag/all/page'
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import TagModel from '@/models/TagModel'
 import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'

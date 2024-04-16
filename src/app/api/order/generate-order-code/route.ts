@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import { generateOrderCode } from '@/utils'
 import { NextResponse } from 'next/server'
 

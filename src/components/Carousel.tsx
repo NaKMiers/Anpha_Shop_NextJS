@@ -8,9 +8,14 @@ interface CarouselProps {
 }
 
 function Carousel({ products, className = '' }: CarouselProps) {
-  const [isHovered, setIsHovered] = useState(false)
+  // states
+  const [isHovered, setIsHovered] = useState<boolean>(false)
+
+  // refs
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // MARK: Effects
+  // auto scroll effect
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
@@ -47,6 +52,7 @@ function Carousel({ products, className = '' }: CarouselProps) {
     return () => cancelAnimationFrame(animationId)
   }, [products, isHovered])
 
+  // reset scroll position when reach the end
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
@@ -61,6 +67,7 @@ function Carousel({ products, className = '' }: CarouselProps) {
     return () => container.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // MARK: Handlers
   const handleMouseEnter = () => {
     setIsHovered(true)
   }

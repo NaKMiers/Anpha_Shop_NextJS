@@ -495,6 +495,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
                 label: 'Off',
               },
             ]}
+            className='min-w-[104px]'
           />
 
           {/* Flash Sale */}
@@ -521,6 +522,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
                 label: 'Off',
               },
             ]}
+            className='min-w-[124px]'
           />
         </div>
 

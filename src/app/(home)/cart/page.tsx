@@ -44,7 +44,7 @@ function CartPage() {
   const [subTotal, setSubTotal] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
-  const [cartLength, setCartlength] = useState(0)
+  const [cartLength, setCartlength] = useState<number>(0)
 
   const [items, setItems] = useState<FullyCartItem[]>([])
   const [localItems, setLocalItems] = useState<FullyCartItem[]>([])

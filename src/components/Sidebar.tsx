@@ -46,6 +46,7 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
       className={`flex flex-col items-center py-3 gap-3 fixed z-40 top-1/2 -translate-y-1/2 bg-dark-100 rounded-lg shadow-medium-light transition-all duration-300 ${
         show ? 'right-3 opacity-1' : 'right-0 translate-x-full opacity-0'
       }  ${className}`}>
+      {/* MARK: Avatar */}
       {curUser?._id && (
         <Link href='/user' className='border-b pb-3'>
           <Image
@@ -58,12 +59,14 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
         </Link>
       )}
 
+      {/* MARK: Best Seller */}
       <Link href='/#best-seller' className='rounded-full group'>
         <span className='text-[24px] font-semibold text-orange-500 italic wiggle block leading-5'>
           1st
         </span>
       </Link>
 
+      {/* MARK: Categories */}
       <div className='flex flex-col -mt-3 pt-3 px-3 gap-3 max-h-[230px] overflow-y-scroll no-scrollbar'>
         {categories.map(category => (
           <Link

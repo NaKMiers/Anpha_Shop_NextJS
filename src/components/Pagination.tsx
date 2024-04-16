@@ -18,14 +18,14 @@ function Pagination({
   itemsPerPage = 9, // default item/page
   className = '',
 }: PaginationProps) {
-  // hook
+  // hooks
   const pathname = usePathname()
   const router = useRouter()
   const queryParams = useSearchParams()
   const page = queryParams.get('page')
 
-  // calculate page amount
-  const pageAmount = Math.ceil(amount / itemsPerPage)
+  // values
+  const pageAmount = Math.ceil(amount / itemsPerPage) // calculate page amount
   const currentPage = page ? +page : 1
 
   // set page link
@@ -67,6 +67,7 @@ function Pagination({
   return (
     pageAmount > 1 && (
       <div className={`flex font-semibold gap-2 justify-center ${className}`}>
+        {/* MARK: Prev */}
         {currentPage != 1 && (
           <Link
             href={getPageLink(currentPage <= 1 ? 1 : currentPage - 1)}
@@ -76,6 +77,7 @@ function Pagination({
           </Link>
         )}
 
+        {/* MARK: 1 ... n */}
         <div className='flex gap-2 no-scrollbar overflow-x-scroll'>
           {Array.from({ length: pageAmount }).map((_, index) => (
             <Link
@@ -89,6 +91,7 @@ function Pagination({
           ))}
         </div>
 
+        {/* MARK: Next */}
         {currentPage != pageAmount && (
           <Link
             href={getPageLink(currentPage >= pageAmount ? pageAmount : currentPage + 1)}

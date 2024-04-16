@@ -1,10 +1,12 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
+import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
 import { getCartApi, updateProductsInLocalCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -13,8 +15,6 @@ import { FaBars, FaCartShopping } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
 import Menu from './Menu'
-import { FullyCartItem } from '@/app/api/cart/route'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -29,13 +29,13 @@ function Header({ isStatic }: HeaderProps) {
   const curUser: any = session?.user
 
   // states
-  // const [curUser, setCurUser] = useState<any>(session?.user)
   const [isShow, setIsShow] = useState<boolean>(false)
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false)
-  const lastScrollTop = useRef(0)
+  const lastScrollTop = useRef<number>(0)
   const [cartLength, setCartlength] = useState<number>(0)
   const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
 
+  // MARK: Side Effects
   // update user session
   useEffect(() => {
     const updateUser = async () => {
@@ -111,7 +111,7 @@ function Header({ isStatic }: HeaderProps) {
     getUserCart()
   }, [dispatch, curUser?._id])
 
-  // handle show and hide header on scroll
+  // show and hide header on scroll
   useEffect(() => {
     const handleScroll = () => {
       let scrollTop = window.scrollY
@@ -148,7 +148,7 @@ function Header({ isStatic }: HeaderProps) {
       }`}>
       {/* Main Header */}
       <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
-        {/* Brand */}
+        {/* MARK: Brand */}
         <div className='pl-4 -ml-4 flex items-center max-w-[300px] w-[90%] h-full overflow-x-scroll no-scrollbar'>
           <Link
             href='/'
@@ -178,7 +178,7 @@ function Header({ isStatic }: HeaderProps) {
           </Link>
         </div>
 
-        {/* Nav */}
+        {/* MARK: Nav */}
         <div className='hidden md:flex items-center gap-4'>
           <Link href='/cart' prefetch={false} className='relative wiggle'>
             <FaCartShopping size={24} />
@@ -216,13 +216,14 @@ function Header({ isStatic }: HeaderProps) {
           )}
         </div>
 
+        {/* Menu Button */}
         <div className='md:hidden flex items-center' onClick={() => setIsOpenMenu(prev => !prev)}>
           <button className='flex justify-center items-center w-[40px] h-[40px]'>
             <FaBars size={22} className='common-transition wiggle' />
           </button>
         </div>
 
-        {/* Menu */}
+        {/* MARK: Menu */}
         <Menu open={isOpenMenu} setOpen={setIsOpenMenu} />
       </div>
     </header>

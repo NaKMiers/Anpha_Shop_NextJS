@@ -53,7 +53,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
 
   return (
     <>
-      {/* Overlay */}
+      {/* MARK: Overlay */}
       <div
         className={`${
           open ? 'block' : 'hidden'
@@ -61,7 +61,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
         onClick={() => setOpen(false)}
       />
 
-      {/* Menu */}
+      {/* MARK: Main */}
       <ul
         className={`${
           open
@@ -71,6 +71,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
           curUser && !curUser?._id ? 'hidden' : ''
         } w-full h-[calc(100vh_-_72px)] sm:h-auto overflow-hidden transition-all duration-300 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}>
         {curUser ? (
+          // MARK: User Logged In
           curUser?._id && (
             <>
               <li className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'>
@@ -160,6 +161,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             </>
           )
         ) : (
+          // MARK: User Not Logged In
           <>
             <li className='group' onClick={() => setOpen(false)}>
               <Link

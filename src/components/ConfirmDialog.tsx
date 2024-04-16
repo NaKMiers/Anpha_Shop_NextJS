@@ -108,7 +108,7 @@ function ConfirmDialog({
             {cancelLabel || 'Hủy'}
           </button>
           <button
-            className={`rounded-lg shadow-lg px-3 py-2 border text-${color}-500 hover:bg-${color}-400 hover:text-white common-transition ${
+            className={`rounded-lg shadow-lg px-3 py-2 border text-${color}-500 hover:bg-secondary hover:border-secondary hover:text-white common-transition ${
               isLoading ? 'pointer-events-none border-slate-300' : `border-${color}-500`
             }`}
             onClick={() => {

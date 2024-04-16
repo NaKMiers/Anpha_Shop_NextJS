@@ -1,4 +1,4 @@
-import { connectDatabase } from '@/config/databse'
+import { connectDatabase } from '@/config/database'
 import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { formatPrice } from '@/utils/number'
 import { getToken } from 'next-auth/jwt'

@@ -105,7 +105,7 @@ function OrderItem({
           )
         }>
         <div className='w-full'>
-          {/* Thumbnails */}
+          {/* MARK: Thumbnails */}
           <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[145px] overflow-y-auto '>
             {data.items.map((item: any) => (
               <div className='relative rounded-lg shadow-md overflow-hidden' key={item._id}>
@@ -123,7 +123,7 @@ function OrderItem({
             ))}
           </div>
 
-          {/* Information */}
+          {/* MARK: Information */}
           <div className='flex gap-2 flex-wrap items-center'>
             {/* Status */}
             <p
@@ -199,6 +199,7 @@ function OrderItem({
           </div>
         </div>
 
+        {/* MARK: Action Buttons */}
         <div className='flex flex-col flex-shrink-0 border bg-white border-dark text-dark rounded-lg px-2 py-3 gap-4'>
           {/* Detail Button */}
           <Link

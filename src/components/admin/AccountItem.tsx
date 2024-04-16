@@ -1,13 +1,13 @@
 import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
-import { formatTime } from '@/utils/time'
+import { formatTime, getTimeRemaining } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaCheck, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
-import toast from 'react-hot-toast'
 
 interface AccountItemProps {
   data: AccountWithProduct
@@ -53,7 +53,7 @@ function AccountItem({
           )
         }>
         <div className='w-[calc(100%_-_42px)]'>
-          {/* Thumbnails */}
+          {/* MARK: Thumbnails */}
           <Link
             href={`/${data.type?.slug || ''}`}
             prefetch={false}
@@ -101,6 +101,9 @@ function AccountItem({
             <span className='font-semibold'>Expire: </span>
             <span className={`${new Date() > new Date(data.expire || '') ? 'text-red-500' : ''}`}>
               {data.expire ? formatTime(data.expire) : '-'}
+            </span>{' '}
+            <span className='font-semibold text-orange-500 text-xs'>
+              {data.expire && getTimeRemaining(data.expire) ? `(${getTimeRemaining(data.expire)})` : ''}
             </span>
           </p>
 
@@ -143,6 +146,7 @@ function AccountItem({
           </p>
         </div>
 
+        {/* MARK: Action Buttons */}
         <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
           {/* Active Button */}
           <button

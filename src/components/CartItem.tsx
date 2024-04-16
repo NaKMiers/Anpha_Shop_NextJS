@@ -13,14 +13,13 @@ import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
 import { TbPackages } from 'react-icons/tb'
 import ConfirmDialog from './ConfirmDialog'
 import Price from './Price'
-import { useSearchParams } from 'next/navigation'
 
 interface CartItemProps {
   cartItem: FullyCartItem
@@ -52,6 +51,7 @@ function CartItem({
   const inputRef = useRef<any>({})
   const quantity = cartItem.quantity
 
+  // MARK: Delete
   // handle delete cart item
   const handleDeleteCartItem = useCallback(async () => {
     // start deleting
@@ -78,6 +78,7 @@ function CartItem({
     dispatch(deleteLocalCartItem(cartItem._id))
   }, [cartItem._id, dispatch])
 
+  // MARK: Sync
   // handle move local cart item to global cart
   const handleMoveLocalToGlobalCartItem = useCallback(async () => {
     // add to database cart
@@ -115,6 +116,7 @@ function CartItem({
     }
   }, [handleDeleteLocalCartItem, cartItem.productId, dispatch, setIsLoading, cartItem.quantity])
 
+  // MARK: Update Quantity
   // update cart item quantity in database
   const updateQuantityGlobal = useCallback(
     async (value: number) => {
@@ -137,7 +139,7 @@ function CartItem({
     [cartItem._id, dispatch]
   )
 
-  // handle update cart quantity
+  // update cart quantity
   const updateQuantity = useCallback(
     async (type: 'input' | 'button', value: number) => {
       if (type === 'button') {
@@ -256,6 +258,7 @@ function CartItem({
           )
         )
       }>
+      {/* MARK: Thumbnails */}
       <Link
         href={`/${cartItem.product.slug}`}
         prefetch={false}
@@ -296,7 +299,7 @@ function CartItem({
         </div>
       )}
 
-      {/* Checkbox */}
+      {/* MARK: Checkbox */}
       {!localCartItem && (
         <input
           type='checkbox'
@@ -314,7 +317,7 @@ function CartItem({
         />
       )}
 
-      {/* Body */}
+      {/* MARK: Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
         <Link href={`/${cartItem.product.slug}`} prefetch={false} onClick={e => e.stopPropagation()}>
@@ -372,7 +375,7 @@ function CartItem({
           </>
         )}
 
-        {/* Quantity Updater */}
+        {/* MARK: Quantity */}
         {!localCartItem && (
           <div className='flex items-center justify-between'>
             <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
@@ -429,6 +432,12 @@ function CartItem({
               </button>
             </div>
 
+            <FaTrashAlt
+              size={21}
+              className='text-secondary cursor-pointer hover:scale-110 common-transition wiggle'
+              onClick={() => setIsOpenConfirmModal(true)}
+            />
+
             {/* Confirm Dialog */}
             <ConfirmDialog
               open={isOpenConfirmModal}
@@ -437,12 +446,6 @@ function CartItem({
               content='Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?'
               onAccept={() => (curUser ? handleDeleteCartItem() : handleDeleteLocalCartItem())}
               isLoading={isDeleting}
-            />
-
-            <FaTrashAlt
-              size={21}
-              className='text-secondary cursor-pointer hover:scale-110 common-transition wiggle'
-              onClick={() => setIsOpenConfirmModal(true)}
             />
           </div>
         )}
