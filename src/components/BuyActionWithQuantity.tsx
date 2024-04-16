@@ -1,10 +1,14 @@
 'use client'
 
+import { FullyCartItem } from '@/app/api/cart/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { addCartItem } from '@/libs/reducers/cartReducer'
+import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
+import { ICartItem } from '@/models/CartItemModel'
 import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
+import mongoose from 'mongoose'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -20,13 +24,16 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
+  const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
+  const { data: session } = useSession()
+  const curUser: any = session?.user
 
   // states
   const [quantity, setQuantity] = useState<number>(product && product.stock > 0 ? 1 : 0)
 
   // handle add product to cart
-  const handleAddProductToCart = useCallback(async () => {
+  const addProductToCart = useCallback(async () => {
     if (product) {
       // start loading
       dispatch(setLoading(true))
@@ -56,8 +63,56 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     }
   }, [dispatch, product, quantity])
 
+  // handle add product to cart - LOCAL
+  const addProductToLocalCart = useCallback(() => {
+    // add product to local cart
+    // create cart item from product
+    const existingCartItem = localCart.find(
+      (item: ICartItem) => item.productId.toString() === product?._id
+    )
+
+    // product has already existed in cart
+    if (existingCartItem) {
+      // if not enough products in stock
+      if (existingCartItem.quantity + 1 > (product?.stock || 0)) {
+        toast.error('Hiện không đủ sản phẩm để thêm vào giỏ hàng của bạn. Xin lỗi vì sự bất tiện này')
+        return
+      }
+
+      dispatch(addLocalCartItem({ ...existingCartItem, quantity: existingCartItem.quantity + 1 }))
+
+      // success toast
+      toast.success(`Đã thêm gói "${product?.title}" vào giỏ hàng`)
+      return
+    }
+
+    // product has not existed in user cart
+    // if not enough products in stock
+    if (1 > (product?.stock || 0)) {
+      toast.error('Hiện không đủ sản phẩm để thêm vào giỏ hàng của bạn. Xin lỗi vì sự bất tiện này')
+      return
+    }
+
+    // still have enough products in stock
+    // create new cart item
+    const newCartItem = {
+      _id: new mongoose.Types.ObjectId().toHexString(),
+      userId: curUser?._id,
+      productId: product?._id,
+      product,
+      quantity: 1,
+    }
+
+    // add new cart item to local cart
+    dispatch(addLocalCartItem(newCartItem as FullyCartItem))
+
+    // success toast
+    toast.success(`Đã thêm gói "${product?.title}" vào giỏ hàng`)
+    return
+  }, [curUser?._id, dispatch, localCart, product])
+
   // handle buy now (add to cart and move to cart)
-  const handleBuyNow = useCallback(async () => {
+  const buyNow = useCallback(async () => {
     if (product) {
       // start page loading
       dispatch(setPageLoading(true))
@@ -86,6 +141,14 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     }
   }, [product, dispatch, quantity, router])
 
+  // handle buy now (add to cart and move to cart) - LOCAL
+  const buyNowLocal = useCallback(() => {
+    addProductToLocalCart()
+
+    // move to cart page
+    router.push(`/cart?product=${product?.slug}`)
+  }, [addProductToLocalCart, product?.slug, router])
+
   // handle quantity
   const handleQuantity = useCallback(
     (value: number, isCustom: boolean = false) => {
@@ -108,6 +171,34 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
       }
     },
     [product?.stock, quantity]
+  )
+
+  // handle add product to cart
+  const handleAddToCart = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+
+      if (curUser) {
+        addProductToCart()
+      } else {
+        addProductToLocalCart()
+      }
+    },
+    [curUser, addProductToCart, addProductToLocalCart]
+  )
+
+  // handle buy now
+  const handleBuyNow = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+
+      if (curUser) {
+        buyNow()
+      } else {
+        buyNowLocal()
+      }
+    },
+    [curUser, buyNow, buyNowLocal]
   )
 
   return (
@@ -169,7 +260,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 common-transition ${
             isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
-          onClick={handleAddProductToCart}
+          onClick={handleAddToCart}
           disabled={isLoading || (product?.stock || 0) <= 0}>
           {isLoading ? (
             <RiDonutChartFill size={22} className='animate-spin text-white' />

@@ -41,7 +41,7 @@ export const cart = createSlice({
           updatedItems[existingCartItemIndex] = item
         } else {
           // If the item does not exist, add it to the cart
-          updatedItems.push(item)
+          updatedItems.unshift(item)
         }
       })
 
@@ -99,12 +99,12 @@ export const cart = createSlice({
       }
 
       // update localStorage
-      localStorage.setItem('localCart', JSON.stringify([...state.localItems, action.payload]))
+      localStorage.setItem('localCart', JSON.stringify([action.payload, ...state.localItems]))
 
       // if cart item does not exist in cart -> add to cart
       return {
         ...state,
-        localItems: [...state.localItems, action.payload],
+        localItems: [action.payload, ...state.localItems],
       }
     },
     deleteLocalCartItem: (state, action: PayloadAction<string>) => {

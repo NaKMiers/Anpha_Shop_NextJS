@@ -38,6 +38,7 @@ export async function GET(req: NextRequest) {
           model: 'flashsale',
         },
       })
+      .sort({ createdAt: -1 })
       .lean()
 
     cart = cart
@@ -55,6 +56,8 @@ export async function GET(req: NextRequest) {
           : null
       )
       .filter(cartItem => cartItem) as FullyCartItem[]
+
+    console.log('cart', cart)
 
     // return user's cart
     return NextResponse.json({ cart }, { status: 200 })
