@@ -156,3 +156,23 @@ export const admins = {
     messenger: process.env.NEXT_PUBLIC_MESSENGER!,
   },
 }
+
+// MARK: Choose Me
+export const chooseMeList = [
+  {
+    title: 'Đa dạng sản phẩm',
+    image: '/images/choose-me-1.jpg',
+  },
+  {
+    title: 'Rẻ nhất thị trường',
+    image: '/images/choose-me-2.jpg',
+  },
+  {
+    title: 'Thanh toán lập tức',
+    image: '/images/choose-me-3.jpg',
+  },
+  {
+    title: 'Bảo hành uy tín',
+    image: '/images/choose-me-4.jpg',
+  },
+]

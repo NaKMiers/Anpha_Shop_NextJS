@@ -91,7 +91,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
           alt='avatar'
         />
         <div
-          className={`relative w-full rounded-lg border-[2px] bg-white${
+          className={`relative w-full rounded-lg border-[2px] bg-white ${
             errors.comment ? 'border-rose-400' : 'border-slate-200'
           }`}>
           <input

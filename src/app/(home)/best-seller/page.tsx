@@ -1,6 +1,5 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
-import Pagination from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { getBestSellerPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'

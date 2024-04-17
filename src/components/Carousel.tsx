@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import CarouselProduct from './CarouselProduct'
 import { FullyProduct } from '@/app/api/product/[slug]/route'
+import { useEffect, useRef, useState } from 'react'
+import CarouselProduct from './CarouselProduct'
 
 interface CarouselProps {
   products: FullyProduct[]

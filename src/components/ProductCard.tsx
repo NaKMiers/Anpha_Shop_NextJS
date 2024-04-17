@@ -36,6 +36,9 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  // values
+  const isDisabled = isLoading || product.stock <= 0 || !curUser?._id
+
   // MARK: Add
   // add product to cart - DATABASE
   const addProductToCart = useCallback(async () => {
@@ -262,18 +265,18 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       <div className='flex items-center justify-end md:justify-start gap-2 mt-2'>
         <button
           className={`bg-secondary rounded-md text-white px-2 py-[5px] font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition ${
-            product.stock <= 0 ? 'bg-slate-200 pointer-events-none' : ''
+            isDisabled ? 'bg-slate-200 pointer-events-none' : ''
           }`}
           onClick={handleBuyNow}
-          disabled={isLoading || product.stock <= 0}>
+          disabled={isDisabled}>
           MUA NGAY
         </button>
         <button
           className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 hover:bg-secondary common-transition ${
-            isLoading || product.stock <= 0 ? 'pointer-events-none bg-slate-200' : ''
+            isDisabled ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}
-          disabled={isLoading || product.stock <= 0}>
+          disabled={isDisabled}>
           {isLoading ? (
             <RiDonutChartFill size={18} className='animate-spin text-white' />
           ) : (

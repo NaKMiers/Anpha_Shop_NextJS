@@ -1,6 +1,7 @@
 import About from '@/components/About'
 import Banner from '@/components/Banner'
 import ChooseMe from '@/components/ChooseMe'
+import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
 import { ICategory } from '@/models/CategoryModel'
@@ -8,7 +9,6 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
-import Divider from '@/components/Divider'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',

@@ -61,6 +61,10 @@
   }
 }
 
+.loading {
+  @apply bg-loading animate-pulse;
+}
+
 .number-input::-webkit-inner-spin-button,
 .number-input::-webkit-outer-spin-button {
   -webkit-appearance: none;

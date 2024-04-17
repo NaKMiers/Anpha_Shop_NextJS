@@ -9,11 +9,10 @@ import { useEffect, useState } from 'react'
 import { BiSolidCategoryAlt } from 'react-icons/bi'
 import { FaChevronDown, FaTag } from 'react-icons/fa'
 import { FaBoltLightning } from 'react-icons/fa6'
-import { IoClose } from 'react-icons/io5'
+import BannerMenu from './BannerMenu'
 import Carousel from './Carousel'
 import Header from './Header'
 import Slider from './Slider'
-import BannerMenu from './BannerMenu'
 
 interface BannerProps {
   categories: ICategory[]
@@ -59,7 +58,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
           {/* MARK: Top */}
           <div className='flex flex-grow h-2/3 justify-between gap-21'>
             {/* Tag */}
-            <ul className='hidden lg:block min-w-[200px] bg-white p-2 pt-0 rounded-lg overflow-y-scroll'>
+            <ul className='hidden lg:block min-w-[200px] bg-white p-2 pt-0 rounded-lg overflow-y-auto'>
               <h5 className='pt-2 sticky top-0 bg-white text-[20px] font-semibold text-center text-dark'>
                 Tag
               </h5>
@@ -150,7 +149,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             </Slider>
 
             {/* Category */}
-            <ul className='hidden lg:block min-w-[200px] bg-white p-2 rounded-lg overflow-y-scroll'>
+            <ul className='hidden lg:block min-w-[200px] bg-white p-2 rounded-lg overflow-y-auto'>
               <h5 className='ml-2 text-[20px] font-semibold text-center text-dark'>Thể loại</h5>
 
               <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>

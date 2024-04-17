@@ -1,4 +1,3 @@
-import { text } from 'stream/consumers'
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -14,6 +13,7 @@ const config: Config = {
         secondary: '#7655e6',
         dark: '#333',
         light: '#fff',
+        loading: '#334155',
       },
       fontFamily: {
         sans: ['Montserrat', 'sans-serif'],
