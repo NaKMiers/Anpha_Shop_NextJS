@@ -32,7 +32,10 @@ export default async function AdminLayout({
     <html lang='vi'>
       <body className='text-dark' suppressHydrationWarning={true}>
         <StoreProvider session={session}>
+          {/* Background */}
           <div className='background-app fixed w-screen h-screen top-0 left-0 -z-10' />
+
+          {/* Toast */}
           <Toaster
             toastOptions={{
               style: {
@@ -42,11 +45,16 @@ export default async function AdminLayout({
             }}
           />
 
+          {/* Header */}
           <Header isStatic />
 
+          {/* Menu */}
           <AdminMenu />
+
+          {/* Loading */}
           <PageLoading />
 
+          {/* Main */}
           <main className='px-21 py-20'>{children}</main>
         </StoreProvider>
       </body>

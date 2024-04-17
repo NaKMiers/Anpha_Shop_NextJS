@@ -28,7 +28,7 @@ function AddFlashSalePage() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [timeType, setTimeType] = useState<'loop' | 'once'>('loop')
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -47,6 +47,7 @@ function AddFlashSalePage() {
     },
   })
 
+  // MARK: Get Data
   // get all products to apply
   useEffect(() => {
     const getAllProducts = async () => {
@@ -115,6 +116,7 @@ function AddFlashSalePage() {
     [setError]
   )
 
+  // MARK: Submit
   // handle send request to server to add flash sale
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
@@ -149,11 +151,10 @@ function AddFlashSalePage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Add Flash Sale' backLink='/admin/flash-sale/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      <div className='mt-5'>
         {/* Type */}
         <Input
           id='type'
@@ -210,6 +211,7 @@ function AddFlashSalePage() {
           className='mb-5'
         />
 
+        {/* MARK: Time */}
         <div className='grid grid-col-1 lg:grid-cols-2 gap-5 mb-5'>
           {/* Time Type */}
           <Input
@@ -266,6 +268,7 @@ function AddFlashSalePage() {
           )}
         </div>
 
+        {/* MARK: Apply */}
         {/* Ready to apply products */}
         <p className='text-light font-semibold text-xl mb-1'>Select Products</p>
         <div className='max-h-[300px] overflow-y-auto flex flex-wrap rounded-lg bg-white p-3 gap-2 mb-5'>
@@ -299,6 +302,7 @@ function AddFlashSalePage() {
           ))}
         </div>
 
+        {/* MARK: Add Button */}
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}

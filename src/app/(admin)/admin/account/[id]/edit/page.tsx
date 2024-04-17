@@ -182,6 +182,7 @@ function AddAccountPage() {
       <AdminHeader title='Edit Account' backLink='/admin/account/all' />
 
       <div className='mt-5'>
+        {/* MARK: Using User */}
         <div className='flex mb-5'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaUser size={16} className='text-secondary' />
@@ -192,6 +193,7 @@ function AddAccountPage() {
           </p>
         </div>
 
+        {/* Type */}
         <div className='mb-5'>
           <div className={`flex`}>
             <span
@@ -236,6 +238,7 @@ function AddAccountPage() {
           )}
         </div>
 
+        {/* Info */}
         <Input
           id='info'
           label='Info'
@@ -249,6 +252,7 @@ function AddAccountPage() {
           className='mb-5'
         />
 
+        {/* Renew */}
         <Input
           id='renew'
           label='Renew'
@@ -261,7 +265,7 @@ function AddAccountPage() {
           className='mb-5'
         />
 
-        {/* Mark: Date */}
+        {/* MARK: Date */}
         <div className='grid grid-cols-2 md:grid-cols-4 mb-5 gap-1 md:gap-0'>
           {/* Days */}
           <Input

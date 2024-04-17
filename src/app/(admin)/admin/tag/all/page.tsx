@@ -45,7 +45,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   const [maxPQ, setMaxPQ] = useState<number>(0)
   const [productQuantity, setProductQuantity] = useState<number>(0)
 
-  // Form
+  // form
   const defaultValues = useMemo<FieldValues>(
     () => ({
       sort: 'updatedAt|-1',
@@ -65,6 +65,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     defaultValues,
   })
 
+  // MARK: Get Data
   // get all tags
   useEffect(() => {
     // get all tags
@@ -103,6 +104,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     getAllTags()
   }, [dispatch, searchParams, setValue, getValues])
 
+  // MARK: Handlers
   // delete tag
   const handleDeleteTags = useCallback(async (ids: string[]) => {
     setLoadingTags(ids)
@@ -249,11 +251,11 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Tags' addLink='/admin/tag/add' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
         {/* Product Quantity */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
@@ -274,7 +276,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           />
         </div>
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
           {/* Sort */}
           <Input
@@ -334,7 +336,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           />
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -407,12 +409,12 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         isLoading={loadingTags.length > 0}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} tag{amount > 1 ? 's' : ''}
       </div>
 
-      {/* MAIN (LIST) */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-3 gap-21 lg:grid-cols-5'>
         {tags.map(tag => (
           <TagItem

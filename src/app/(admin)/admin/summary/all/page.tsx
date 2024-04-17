@@ -27,6 +27,7 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
   // values
   const itemPerPage = 9
 
+  // MARK: Get Data
   // get all summaries
   useEffect(() => {
     // get all summaries
@@ -54,6 +55,7 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
     getAllSummaries()
   }, [dispatch, searchParams])
 
+  // MARK: Handlers
   // sent summaries
   const handleSendSummaries = useCallback(async (ids: string[]) => {
     // set loading
@@ -108,16 +110,16 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Summaries' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={() => {}} handleResetFilter={() => {}}>
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'></div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -143,13 +145,13 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
         </div>
       </AdminMeta>
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} collaborator
         {amount > 1 ? 's' : ''}
       </div>
 
-      {/* MAIN LIST */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>
         {summaries.map(user => (
           <SummaryItem

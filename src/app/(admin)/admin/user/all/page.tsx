@@ -42,7 +42,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
   const [maxAccumulated, setMaxAccumulated] = useState<number>(0)
   const [accumulated, setAccumulated] = useState<number>(0)
 
-  // Form
+  // form
   const defaultValues = useMemo<FieldValues>(
     () => ({
       search: '',
@@ -63,6 +63,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
     defaultValues,
   })
 
+  // MARK: Get Data
   // get all users
   useEffect(() => {
     // get all users
@@ -103,6 +104,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
     getAllUsers()
   }, [dispatch, searchParams, setValue, getValues])
 
+  // MARK: Handlers
   // delete user
   const handleDeleteUsers = useCallback(async (ids: string[]) => {
     setLoadingUsers(ids)
@@ -210,11 +212,11 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Users' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
         {/* Search */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
@@ -269,7 +271,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
           />
         </div>
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
           {/* Select */}
 
@@ -338,7 +340,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
           />
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -368,12 +370,12 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
         isLoading={loadingUsers.length > 0}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} user{amount > 1 && 's'}
       </div>
 
-      {/* MAIN LIST */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21'>
         {users.map(user => (
           <UserItem

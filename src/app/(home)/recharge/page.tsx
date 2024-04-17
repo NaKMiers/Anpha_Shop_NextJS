@@ -1,5 +1,6 @@
 'use client'
 
+import Divider from '@/components/Divider'
 import { admins } from '@/constansts'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -28,7 +29,7 @@ function RechargePage() {
         Để mua tài khoản, hãy nạp tiền vào tài khoản qua 2 hình thức sau nhá!
       </p>
 
-      <div className='pt-12' />
+      <Divider size={12} />
 
       <div className='grid grid-cols-1 gap-21 lg:grid-cols-2 font-semibold pb-16'>
         {/* MARK: Momo */}

@@ -38,19 +38,19 @@ function SummaryItem({
       }>
       {/* MARK: Body */}
       <div className='w-full'>
-        <p>
+        <p className='text-sm'>
           <span className='font-semibold'>Email: </span>
           <span>{data.email}</span>
         </p>
 
         <div className='flex items-center font-semibold' title='netflix'>
-          <span title='Collaborator' className='font-semibold text-xl text-secondary mr-2 '>
+          <span title='Collaborator' className='font-semibold text-secondary mr-2 '>
             {data.firstname && data.lastname
               ? `${data.firstname} ${data.lastname}`
               : data.username || 'No name'}
           </span>
           <span
-            className='px-[6px] py-[2px] bg-sky-200 border border-dark rounded-lg shadow-lg text-sm hover:bg-sky-300 common-transition'
+            className='px-[6px] py-[2px] bg-sky-200 border border-dark rounded-lg shadow-lg text-xs hover:bg-sky-300 common-transition'
             title='Commission'>
             {data.commission?.type === 'percentage'
               ? data.commission.value
@@ -59,11 +59,11 @@ function SummaryItem({
         </div>
 
         <p className='font-semibold text-sm'>
-          All Income: <span className='text-lg text-rose-500'>{formatPrice(data.totalIncome)}</span>
+          All Income: <span className='text-rose-500'>{formatPrice(data.totalIncome)}</span>
         </p>
         <p className='font-semibold text-sm'>
           Month Income:{' '}
-          <span className='text-lg text-sky-500'>
+          <span className='text-sky-500'>
             {formatPrice(data.vouchers.reduce((total, voucher) => total + voucher.accumulated, 0))}
           </span>
         </p>
@@ -71,7 +71,7 @@ function SummaryItem({
           Vouchers:{' '}
           {data.vouchers.map((voucher, index) => (
             <span
-              className='text-lg text-slate-400'
+              className='text-slate-500'
               title={`${voucher.type} | ${
                 voucher.type !== 'percentage' ? formatPrice(+voucher.value) : voucher.value
               } | ${voucher.timesLeft} | ${
@@ -86,7 +86,7 @@ function SummaryItem({
       </div>
 
       {/* MARK: Action Buttons */}
-      <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+      <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg p-2 gap-4'>
         {/* Send Summary Button */}
         <button
           className='block group'

@@ -38,7 +38,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
   // values
   const itemPerPage = 9
 
-  // Form
+  // form
   const defaultValues: FieldValues = useMemo(
     () => ({
       sort: 'updatedAt|-1',
@@ -58,6 +58,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     defaultValues,
   })
 
+  // MARK: Get Data
   // get all flash sales
   useEffect(() => {
     // get all flash sales
@@ -91,6 +92,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     getAllFlashSales()
   }, [dispatch, searchParams, setValue, getValues])
 
+  // MARK: Handlers
   // delete voucher
   const handleDeleteFlashSales = useCallback(
     async (ids: string[]) => {
@@ -215,11 +217,11 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Flash Sales' addLink='/admin/flash-sale/add' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
         {/* Begin */}
         <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
@@ -271,7 +273,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
           />
         </div>
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
           {/* Sort */}
           <Input
@@ -361,7 +363,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
           />
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -395,13 +397,13 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         isLoading={loadingFlashSales.length > 0}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} flash sale
         {amount > 1 ? 's' : ''}
       </div>
 
-      {/* MAIN LIST */}
+      {/* MARK: MAIN LIST */}
       <div className='grid items-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21 '>
         {flashSales.map(flashSale => (
           <FlashSaleItem

@@ -17,7 +17,7 @@ function AddTagPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -30,6 +30,7 @@ function AddTagPage() {
     },
   })
 
+  // MARK: Submit
   // add new tag
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
@@ -66,11 +67,11 @@ function AddTagPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Add Tag' backLink='/admin/tag/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      {/* MARK: Body */}
+      <div className='mt-5'>
         <Input
           id='title'
           label='Title'
@@ -101,6 +102,7 @@ function AddTagPage() {
           </label>
         </div>
 
+        {/* MARK: Add Button */}
         <LoadingButton
           className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}

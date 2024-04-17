@@ -43,7 +43,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   // values
   const itemPerPage = 9
 
-  // Form
+  // form
   const defaultValues = useMemo<FieldValues>(() => {
     return {
       search: '',
@@ -66,6 +66,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     defaultValues,
   })
 
+  // MARK: Get Data
   // get all accounts at first time
   useEffect(() => {
     // get all accounts
@@ -117,6 +118,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     getAllAccounts()
   }, [dispatch, searchParams, getValues, setValue])
 
+  // MARK: Handlers
   // activate account
   const handleActivateAccounts = useCallback(async (ids: string[], value: boolean) => {
     try {
@@ -256,11 +258,11 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Accounts' addLink='/admin/account/add' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
         {/* Search */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
@@ -331,7 +333,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           ))}
         </div>
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
           {/* Sort */}
           <Input
@@ -468,7 +470,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           />
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -522,12 +524,12 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         isLoading={loadingAccounts.length > 0}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} account{amount > 1 && 's'}
       </div>
 
-      {/* MAIN LIST */}
+      {/* MARK: MAIN LIST */}
       <div className='grid gap-21 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
         {accounts.map(account => (
           <AccountItem

@@ -21,7 +21,7 @@ function SecurityPage() {
   // states
   const isLocalAuth = curUser?.authType === 'local'
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -67,6 +67,7 @@ function SecurityPage() {
     [setError]
   )
 
+  // MARK: Submit
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     // validate form
     if (!handleValidate(data)) return
@@ -110,6 +111,7 @@ function SecurityPage() {
         </p>
       )}
 
+      {/* MARK: Change Password */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-21 pb-5'>
         <div className='col-span-1 flex flex-col gap-4'>
           <Input
@@ -154,6 +156,7 @@ function SecurityPage() {
           )}
         </div>
 
+        {/* MARK: Check List */}
         <div className='col-span-1'>
           <h4 className='text-2xl mb-2'>Mật khẩu</h4>
           <ul>

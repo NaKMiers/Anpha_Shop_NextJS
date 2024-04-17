@@ -59,6 +59,8 @@ export async function GET(req: NextRequest) {
       })
     )
 
+    console.log('collaboratorsWithVouchers: ', collaboratorsWithVouchers)
+
     // return all collaborators
     return NextResponse.json({ collaborators: collaboratorsWithVouchers, amount }, { status: 200 })
   } catch (err: any) {

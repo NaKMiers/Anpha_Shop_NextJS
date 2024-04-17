@@ -16,7 +16,7 @@ function ResetPasswordPage() {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -29,7 +29,7 @@ function ResetPasswordPage() {
     },
   })
 
-  // reset-password
+  // MARK: Reset Password Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       setIsLoading(true)

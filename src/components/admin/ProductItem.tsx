@@ -141,6 +141,12 @@ function ProductItem({
           <p
             className='inline font-semibold text-[18px] mr-2 leading-4 font-body tracking-wide'
             title={data.title}>
+            <span
+              className={`shadow-md text-xs ${
+                data.category.title ? 'bg-yellow-300 text-dark' : 'bg-slate-200 text-slate-400'
+              } px-2 py-px select-none rounded-md font-body mr-2`}>
+              {data.category.title || 'empty'}
+            </span>
             {data.title}
           </p>
 
@@ -231,12 +237,6 @@ function ProductItem({
                 {index < data.tags.length - 1 ? ', ' : ''}
               </span>
             ))}
-          </p>
-
-          {/* MARK: Category */}
-          <p className='text-orange-600'>
-            <span className='font-semibold text-dark'>Category: </span>{' '}
-            <span>{data.category.title}</span>
           </p>
         </div>
 

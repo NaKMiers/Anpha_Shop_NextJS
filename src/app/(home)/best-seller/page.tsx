@@ -6,11 +6,13 @@ import { getBestSellerPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 
 async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  // Data
   let products: FullyProduct[] = []
   let amount: number = 0
   let chops: { [key: string]: number } | null = null
   let query = ''
 
+  // MARK: Get Data
   try {
     // get query
     query = handleQuery(searchParams)
@@ -53,13 +55,13 @@ async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]
 
   return (
     <div className='pt-16'>
-      {/* Add JSON-LD */}
+      {/* MARK: Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Meta */}
+      {/* MARK: Meta */}
       <Meta title={`Danh Sách Bán Chạy`} searchParams={searchParams} type='ctg' chops={chops} />
 
-      {/* products */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4 mt-8'>
         {products.map(product => (
           <ProductCard product={product} key={product._id} />

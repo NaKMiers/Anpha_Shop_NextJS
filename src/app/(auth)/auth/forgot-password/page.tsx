@@ -35,7 +35,7 @@ function ForgotPasswordPage() {
     }
   }, [isSent, countDown])
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -47,7 +47,7 @@ function ForgotPasswordPage() {
     },
   })
 
-  // forgot-password
+  // MARK: Forgot Password Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       setIsLoading(true)
@@ -132,6 +132,7 @@ function ForgotPasswordPage() {
           </a>
         </div>
 
+        {/* MARK: Send Button */}
         <div className='flex items-center justify-end gap-3'>
           <button
             onClick={handleSubmit(onSubmit)}

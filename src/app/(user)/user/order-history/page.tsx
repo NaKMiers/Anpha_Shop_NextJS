@@ -26,6 +26,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   // states
   const [orders, setOrders] = useState<FullyOrder[]>([])
   const [amount, setAmount] = useState<number>(0)
+  const [isShowFilter, setIsShowFilter] = useState<boolean>(false)
 
   // values
   const itemPerPage = 6
@@ -33,10 +34,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   const [maxTotal, setMaxTotal] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
 
-  // filter
-  const [isShowFilter, setIsShowFilter] = useState<boolean>(false)
-
-  // Form
+  // form
   const defaultValues = useMemo<FieldValues>(
     () => ({
       search: '',
@@ -46,7 +44,6 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     }),
     []
   )
-
   const {
     register,
     handleSubmit,
@@ -56,6 +53,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     defaultValues,
   })
 
+  // MARK: Get Data
   // get user's order
   useEffect(() => {
     const getOrderHistory = async () => {
@@ -86,6 +84,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     getOrderHistory()
   }, [dispatch, searchParams])
 
+  // MARK: Handlers
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
@@ -164,6 +163,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     <div className='flex flex-col'>
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>LỊCH SỬ MUA HÀNG CỦA TÔI</h1>
 
+      {/* MARK: Filter */}
       {/* Open Filter */}
       <div className='flex justify-end'>
         <button
@@ -294,16 +294,17 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
         </div>
       </div>
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-dark font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} đơn hàng
       </div>
 
-      {/* Order items */}
+      {/* MARK: Items */}
       {orders.map((order, index) => (
         <OrderItem order={order} className={index !== 0 ? 'mt-4' : ''} key={order._id} />
       ))}
 
+      {/* MARK: Pagination */}
       <Pagination
         searchParams={searchParams}
         amount={amount}

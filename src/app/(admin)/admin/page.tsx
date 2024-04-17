@@ -6,9 +6,8 @@ import { FaPlus } from 'react-icons/fa'
 function AdminPage() {
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Heading */}
       <Heading title='Admin' className='mt-0' />
-
-      <div className='pt-2' />
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-21 gap-21 rounded-medium shadow-medium-light bg-white'>
         {adminLinks.map(({ title, Icon, links }) => (

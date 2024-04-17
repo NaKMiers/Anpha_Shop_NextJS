@@ -29,7 +29,7 @@ function AddAccountPage() {
   // states
   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -48,6 +48,7 @@ function AddAccountPage() {
     },
   })
 
+  // MARK: Get Data
   // get all types (products)
   useEffect(() => {
     const getAllTypes = async () => {
@@ -107,6 +108,7 @@ function AddAccountPage() {
     [setError]
   )
 
+  // MARK: Submit
   // send request to server to add account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     if (!handleValidate(data)) return
@@ -131,11 +133,10 @@ function AddAccountPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Add Account' backLink='/admin/account/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      <div className='mt-5'>
         {/* Type */}
         <div className='mb-5'>
           <div className={`flex`}>
@@ -208,6 +209,7 @@ function AddAccountPage() {
           className='mb-5'
         />
 
+        {/* MARK: Date */}
         <div className='grid grid-cols-2 md:grid-cols-4 mb-5 gap-1 md:gap-0'>
           {/* Days */}
           <Input
@@ -271,6 +273,7 @@ function AddAccountPage() {
           </label>
         </div>
 
+        {/* MARK: Add Button */}
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}

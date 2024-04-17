@@ -2,6 +2,7 @@
 
 import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
+import Divider from '@/components/Divider'
 import Input from '@/components/Input'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
@@ -12,7 +13,7 @@ import {
 } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IVoucher } from '@/models/VoucherModel'
-import { addToCartApi, applyVoucherApi, createOrderApi, generateOrderCodeApi } from '@/requests'
+import { addToCartApi, applyVoucherApi, createOrderApi } from '@/requests'
 import { applyFlashSalePrice, calcPercentage, formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -45,7 +46,6 @@ function CartPage() {
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
   const [cartLength, setCartlength] = useState<number>(0)
-
   const [items, setItems] = useState<FullyCartItem[]>([])
   const [localItems, setLocalItems] = useState<FullyCartItem[]>([])
 
@@ -53,7 +53,7 @@ function CartPage() {
   const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
   const [isBuying, setIsBuying] = useState<boolean>(false)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -67,7 +67,8 @@ function CartPage() {
     },
   })
 
-  // get cart length
+  // MARK: Auto functions
+  // auto get cart length
   useEffect(() => {
     // stop page loading
     dispatch(setPageLoading(false))
@@ -82,7 +83,7 @@ function CartPage() {
     }
   }, [cartItems, localCartItems, curUser, dispatch])
 
-  // calc total, discount, subTotal
+  // auto calc total, discount, subTotal
   useEffect(() => {
     const subTotal = selectedItems.reduce((total, cartItem) => {
       const item: any = items.find(cI => cI._id === cartItem._id)
@@ -119,6 +120,7 @@ function CartPage() {
     dispatch(setSelectedItems(selectedItems))
   }, [queryParams, items, dispatch])
 
+  // MARK: Api functions
   // send request to server to check voucher
   const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
     async data => {
@@ -152,6 +154,45 @@ function CartPage() {
     [dispatch, selectedItems.length, subTotal]
   )
 
+  // move all local items to global items
+  const handleMoveAllLocalToGlobalCartItem = useCallback(async () => {
+    // start loading
+    dispatch(setLoading(true))
+
+    try {
+      // send request to add product to cart
+      const { cartItems, message, errors } = await addToCartApi(
+        localItems.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        }))
+      )
+
+      // show toast success
+      if (message) {
+        toast.success(message)
+      }
+      if (errors.notEnough) {
+        toast.error(errors.notEnough)
+      }
+      if (errors.notFound) {
+        toast.error(errors.notFound)
+      }
+
+      // add cart item to state
+      dispatch(addCartItem(cartItems))
+
+      // delete local cart item
+      dispatch(setLocalCartItems([]))
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop loading
+      dispatch(setLoading(false))
+    }
+  }, [dispatch, localItems])
+
   // validate before checkout
   const handleValidateBeforeCheckout = useCallback(() => {
     let isValid = true
@@ -168,6 +209,7 @@ function CartPage() {
     return isValid
   }, [curUser, getValues, selectedItems.length, setError, total])
 
+  // MARK: Checkout
   // handle checkout
   const handleCheckout = useCallback(
     async (type: string) => {
@@ -285,48 +327,8 @@ function CartPage() {
     discount,
   ])
 
-  // move all local items to global items
-  const handleMoveAllLocalToGlobalCartItem = useCallback(async () => {
-    // start loading
-    dispatch(setLoading(true))
-
-    try {
-      // send request to add product to cart
-      const { cartItems, message, errors } = await addToCartApi(
-        localItems.map(item => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        }))
-      )
-
-      // show toast success
-      if (message) {
-        toast.success(message)
-      }
-      if (errors.notEnough) {
-        toast.error(errors.notEnough)
-      }
-      if (errors.notFound) {
-        toast.error(errors.notFound)
-      }
-
-      // add cart item to state
-      dispatch(addCartItem(cartItems))
-
-      // delete local cart item
-      dispatch(setLocalCartItems([]))
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      // stop loading
-      dispatch(setLoading(false))
-    }
-  }, [dispatch, localItems])
-
   return (
     <div className='mt-20 grid grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
-      {/* Cart Items */}
       <div className='col-span-3 lg:col-span-2'>
         <h1 className='flex items-center gap-2 font-semibold font-body text-3xl'>
           <FaCartShopping size={30} className='text-dark wiggle' />
@@ -336,9 +338,9 @@ function CartPage() {
           </span>
         </h1>
 
-        <div className='pt-6' />
+        <Divider size={6} />
 
-        {/* Local cart items */}
+        {/* MARK: Local Cart */}
         {!!localItems.length && curUser && (
           <div className='border border-slate-400 rounded-medium p-3'>
             <p className='text-primary italic mb-3'>
@@ -366,9 +368,9 @@ function CartPage() {
           </div>
         )}
 
-        <div className='pt-4' />
+        <Divider size={4} />
 
-        {/* Checkbox All */}
+        {/* MARK: Cart */}
         {items.length ? (
           <div>
             <div className='flex items-center justify-end gap-2 pr-21 select-none'>
@@ -409,9 +411,10 @@ function CartPage() {
         )}
       </div>
 
-      {/* Order Summary */}
+      {/* MARK: Summary */}
       <div className='col-span-3 lg:col-span-1'>
         <div className='border-2 border-primary rounded-medium shadow-lg p-4 sticky  lg:mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
+          {/* Email */}
           {!curUser && (
             <>
               <p className='mb-2'>
@@ -434,6 +437,7 @@ function CartPage() {
             </>
           )}
 
+          {/* Voucher */}
           <div className='mb-2'>
             Bạn có voucher?{' '}
             <p className='text-nowrap inline'>
@@ -476,10 +480,11 @@ function CartPage() {
               )}
             </button>
           </div>
-
           {voucherMessage && (
             <p className={`${voucher ? 'text-green-500' : 'text-rose-500'} mb-2`}>{voucherMessage}</p>
           )}
+
+          {/* Total */}
           <div className='flex items-center justify-between mb-2 gap-3'>
             <span>Tổng tiền:</span>
             <span className='font-semibold'>{formatPrice(subTotal)}</span>
@@ -495,15 +500,17 @@ function CartPage() {
             </div>
           )}
 
-          <div className='pt-2' />
+          <Divider size={2} />
           <hr />
-          <div className='pt-2' />
+          <Divider size={2} />
 
+          {/* Final Total */}
           <div className='flex items-end justify-between mb-4 gap-x-3'>
             <span className='font-semibold text-xl'>Thành tiền:</span>
             <span className='font-semibold text-3xl text-green-500'>{formatPrice(total)}</span>
           </div>
 
+          {/* Payment Methods */}
           <div className='flex flex-col gap-3 select-none'>
             <button
               className={`flex items-center justify-center rounded-xl gap-1 border py-2 px-3 group border-primary hover:bg-primary common-transition ${

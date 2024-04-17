@@ -106,7 +106,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         )
 
         setSelectedFilterTags(
-          [].concat((searchParams?.tag || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
+          [].concat((searchParams?.tags || tgs.map((tag: ITag) => tag._id)) as []).map(type => type)
         )
 
         // sync search params with states

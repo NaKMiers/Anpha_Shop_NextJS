@@ -199,8 +199,8 @@ function UserItem({
           <Image
             className='aspect-square float-start mr-3 rounded-md'
             src={userData.avatar}
-            height={68}
-            width={68}
+            height={65}
+            width={65}
             alt='thumbnail'
             title={userData._id}
           />

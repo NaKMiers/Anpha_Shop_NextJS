@@ -2,6 +2,7 @@ import { FullyProduct } from '@/app/api/product/[slug]/route'
 import BuyActionWithQuantity from '@/components/BuyActionWithQuantity'
 import ChooseMe from '@/components/ChooseMe'
 import Comment, { FullyComment } from '@/components/Comment'
+import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
@@ -23,10 +24,12 @@ export const metadata: Metadata = {
 }
 
 async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
+  // Data
   let product: FullyProduct | null = null
   let relatedProducts: FullyProduct[] = []
   let comments: FullyComment[] = []
 
+  // MARK: Get Data
   try {
     // revalidate every 1 minute
     const data = await getProductPageApi(slug)
@@ -81,11 +84,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
   return (
     <div className='pt-9'>
-      {/* Add JSON-LD */}
+      {/* MARL: Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <section className='bg-white p-8 flex flex-col gap-x-21 gap-y-21/2 md:flex-row rounded-medium shadow-medium'>
-        {/* Thumbnails */}
+        {/* MARK: Thumbnails */}
         <div className='w-full md:w-[45%] md:max-w-[500px]'>
           <div className='relative aspect-video shadow-xl rounded-md'>
             {/* Sold out */}
@@ -120,7 +123,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           <LinkBar className='mt-21' link={`${process.env.NEXT_PUBLIC_APP_URL}/${slug}`} />
         </div>
 
-        {/* Basic Product Info */}
+        {/* MARK: Basic Product Info */}
         <div className='md:w-[55%]'>
           {/* Title */}
           <h1 className='text-[28px] text-dark font-semibold mb-3 leading-8' title={product?.title}>
@@ -179,19 +182,21 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         </div>
       </section>
 
-      <div className='pt-9' />
+      <Divider size={9} />
 
-      {/* Related Products */}
+      {/* MARK: Related Products */}
       {relatedProducts.length!! && (
-        <section className='mb-9 max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
+        <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
           <GroupProducts products={relatedProducts} hideTop />
         </section>
       )}
 
-      {/* Detail */}
-      <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
-        <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>
+      <Divider size={9} />
 
+      {/* MARK: Detail */}
+      <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
+        {/* MARK: Introduction */}
+        <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>
         <div className='flex flex-wrap w-full -mx-21/2'>
           {product?.category.slug === 'netflix' && (
             <div className='w-full px-21/2 mb-12'>
@@ -530,17 +535,16 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           </div>
         </div>
 
-        {/* Choose Me */}
+        {/* MARK: Choose Me */}
         <div className='mb-10'>
           <h3 className='w-full text-dark text-[28px] tracking-wide'>Tại sao chọn tôi</h3>
-
           <ChooseMe className='mx-[-16px]' />
         </div>
       </section>
 
-      <div className='pt-9' />
+      <Divider size={9} />
 
-      {/* Comment */}
+      {/* MARK: Comment */}
       <section className='max-w-1200 mx-auto bg-white p-21 rounded-medium shadow-medium'>
         <h3 className='text-[24px] font-semibold text-dark'>Bình luận gần đây</h3>
 

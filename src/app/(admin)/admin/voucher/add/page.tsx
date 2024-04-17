@@ -21,15 +21,15 @@ function AddVoucherPage() {
   // store
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
-  const [isChecked, setIsChecked] = useState<boolean>(true)
   const [roleUsers, setRoleUsers] = useState<IUser[]>([])
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     setError,
     reset,
   } = useForm<FieldValues>({
@@ -45,10 +45,11 @@ function AddVoucherPage() {
       value: '',
       timesLeft: 1,
       owner: '',
-      isActive: true,
+      active: true,
     },
   })
 
+  // MARK: Get Data
   // get roleUsers, admins, editors
   useEffect(() => {
     const getRoleUsers = async () => {
@@ -144,34 +145,36 @@ function AddVoucherPage() {
     [setError]
   )
 
+  // MARK: Submit
   // handle send request to server to add voucher
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      // validate form
-      if (!handleValidate(data)) return
+      console.log(data)
+      // // validate form
+      // if (!handleValidate(data)) return
 
-      dispatch(setLoading(true))
+      // dispatch(setLoading(true))
 
-      try {
-        // send request to server to add voucher
-        const { message } = await addVoucherApi(data)
+      // try {
+      //   // send request to server to add voucher
+      //   const { message } = await addVoucherApi(data)
 
-        // show success message
-        toast.success(message)
+      //   // show success message
+      //   toast.success(message)
 
-        // reset form
-        reset()
-        setValue('code', generateRandomString(5).toUpperCase())
-        const adminUser = roleUsers.find((user: IUser) => user.role === 'admin')
-        if (adminUser) {
-          setValue('onwer', adminUser._id)
-        }
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
-      } finally {
-        dispatch(setLoading(false))
-      }
+      //   // reset form
+      //   reset()
+      //   setValue('code', generateRandomString(5).toUpperCase())
+      //   const adminUser = roleUsers.find((user: IUser) => user.role === 'admin')
+      //   if (adminUser) {
+      //     setValue('onwer', adminUser._id)
+      //   }
+      // } catch (err: any) {
+      //   console.log(err)
+      //   toast.error(err.message)
+      // } finally {
+      //   dispatch(setLoading(false))
+      // }
     },
     [handleValidate, reset, dispatch, setValue, roleUsers]
   )
@@ -188,11 +191,10 @@ function AddVoucherPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Add Voucher' backLink='/admin/voucher/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      <div className='mt-5'>
         <div className='b-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Code */}
           <Input
@@ -239,6 +241,7 @@ function AddVoucherPage() {
           className='mb-5'
         />
 
+        {/* MARK: Begin - End */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Begin */}
           <Input
@@ -264,6 +267,7 @@ function AddVoucherPage() {
           />
         </div>
 
+        {/* MARK: Min - Max */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Min Total */}
           <Input
@@ -290,6 +294,7 @@ function AddVoucherPage() {
           />
         </div>
 
+        {/* MARK: Type - Value */}
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Type */}
           <Input
@@ -343,21 +348,26 @@ function AddVoucherPage() {
           className='mb-5'
         />
 
+        {/* Active */}
         <div className='flex'>
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaPlay size={16} className='text-secondary' />
           </div>
+          <input
+            className='peer'
+            type='checkbox'
+            id='active'
+            hidden
+            {...register('active', { required: false })}
+          />
           <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition  ${
-              isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
-            }`}
-            htmlFor='isActive'
-            onClick={() => setIsChecked(!isChecked)}>
+            className='select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition peer-checked:bg-green-500 peer-checked:text-white bg-white text-green-500'
+            htmlFor='active'>
             Active
           </label>
-          <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
         </div>
 
+        {/* MARK: Add Butoton */}
         <LoadingButton
           className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}

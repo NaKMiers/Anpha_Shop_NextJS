@@ -32,7 +32,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const [categories, setCategories] = useState<ICategory[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-
   const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // loading and confirming
@@ -46,7 +45,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const [maxPQ, setMaxPQ] = useState<number>(0)
   const [productQuantity, setProductQuantity] = useState<number>(0)
 
-  // Form
+  // form
   const defaultValues = useMemo<FieldValues>(
     () => ({
       sort: 'updatedAt|-1',
@@ -64,6 +63,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     defaultValues,
   })
 
+  // MARK: Get Data
   // get all categories
   useEffect(() => {
     // get all categories
@@ -101,7 +101,8 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     getAllCategories()
   }, [dispatch, searchParams, setValue, getValues])
 
-  // delete category
+  // MARK: Handlers
+  // handle delete category
   const handleDeleteCategories = useCallback(async (ids: string[]) => {
     setLoadingCategories(ids)
 
@@ -236,11 +237,11 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Categories' addLink='/admin/category/add' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
         {/* Product Quantity */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
@@ -261,7 +262,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           />
         </div>
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
           {/* Sort */}
           <Input
@@ -294,7 +295,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           />
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -354,13 +355,13 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         isLoading={loadingCategories.length > 0}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount}{' '}
         {amount > 1 ? 'categories' : 'category'}
       </div>
 
-      {/* Category List */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-21'>
         {categories.map(category => (
           <CategoryItem

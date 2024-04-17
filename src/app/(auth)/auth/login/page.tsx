@@ -17,7 +17,7 @@ function LoginPage() {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -30,6 +30,7 @@ function LoginPage() {
     },
   })
 
+  // MARK: Login Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       setIsLoading(true)
@@ -115,7 +116,7 @@ function LoginPage() {
           </a>
         </div>
 
-        <div className='flex items-center justify-end gap-3'>
+        <div className='flex items-center justify-end gap-3 mb-4'>
           <a href='/auth/register' className='underline text-sky-500'>
             Đăng ký
           </a>
@@ -137,15 +138,10 @@ function LoginPage() {
           </button>
         </div>
 
-        <div className='pt-4' />
-
         <hr />
 
-        <div className='pt-4' />
-
-        <p className='text-center text-slate-500 font-body text-lg'>Hoặc đăng nhập với</p>
-
-        <div className='pt-4' />
+        {/* MARK: Social Login */}
+        <p className='text-center text-slate-500 font-body text-lg py-4'>Hoặc đăng nhập với</p>
 
         <div className='flex items-center justify-center gap-4'>
           <button

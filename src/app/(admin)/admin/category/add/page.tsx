@@ -16,7 +16,7 @@ function AddCategoryPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -28,6 +28,7 @@ function AddCategoryPage() {
     },
   })
 
+  // MARK: Submit
   // add new category
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
@@ -64,11 +65,11 @@ function AddCategoryPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
+      {/* MARK: Admin Header */}
       <AdminHeader title='Add Category' backLink='/admin/category/all' />
 
-      <div className='pt-5' />
-
-      <div>
+      {/* MARK: Body */}
+      <div className='mt-5'>
         <Input
           id='title'
           label='Title'

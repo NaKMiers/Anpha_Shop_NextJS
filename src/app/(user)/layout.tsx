@@ -34,7 +34,10 @@ export default async function UserLayout({
     <html lang='vi'>
       <body className='text-dark' suppressHydrationWarning={true}>
         <StoreProvider session={session}>
+          {/* Background */}
           <div className='background-app fixed w-screen h-screen top-0 left-0 -z-10' />
+
+          {/* Toast */}
           <Toaster
             toastOptions={{
               style: {
@@ -44,9 +47,14 @@ export default async function UserLayout({
             }}
           />
 
+          {/* Header */}
           <Header isStatic />
-          <PageLoading />
 
+          {/* Utils */}
+          <PageLoading />
+          <ContactFloating />
+
+          {/* Madin */}
           <main className='px-21'>
             <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
               {/* Sidebar */}
@@ -57,8 +65,7 @@ export default async function UserLayout({
             </div>
           </main>
 
-          <ContactFloating />
-
+          {/* Footer */}
           <Footer />
         </StoreProvider>
       </body>

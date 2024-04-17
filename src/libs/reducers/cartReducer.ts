@@ -3,13 +3,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a function to access localStorage safely
 const getLocalCartItems = (): FullyCartItem[] => {
-  if (typeof window !== 'undefined') {
-    // Access localStorage only if window (browser) is defined
-    return JSON.parse(localStorage.getItem('localCart') ?? '[]') as FullyCartItem[]
-  } else {
-    // Return empty array if running on server-side or in environments where localStorage is not available
-    return []
-  }
+  return typeof window !== 'undefined'
+    ? (JSON.parse(localStorage.getItem('localCart') ?? '[]') as FullyCartItem[])
+    : []
 }
 
 export const cart = createSlice({
@@ -20,7 +16,7 @@ export const cart = createSlice({
     selectedItems: [] as FullyCartItem[],
   },
   reducers: {
-    // database cart
+    // MARK: GLOCAL CART
     setCartItems: (state, action: PayloadAction<FullyCartItem[]>) => {
       return {
         ...state,
@@ -66,7 +62,7 @@ export const cart = createSlice({
       }
     },
 
-    // local cart
+    // MARK: LOCAL CART
     setLocalCartItems: (state, action: PayloadAction<FullyCartItem[]>) => {
       // set localStorage
       localStorage.setItem('localCart', JSON.stringify(action.payload))
@@ -138,7 +134,7 @@ export const cart = createSlice({
       }
     },
 
-    // checkout
+    // MARK: Checkout
     setSelectedItems: (state, action: PayloadAction<FullyCartItem[]>) => {
       return {
         ...state,

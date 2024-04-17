@@ -65,6 +65,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
     defaultValues,
   })
 
+  // MARK: Get Data
   // get all orders
   useEffect(() => {
     const getAllTags = async () => {
@@ -106,6 +107,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
     getAllTags()
   }, [dispatch, searchParams, setValue, getValues])
 
+  // MARK: Handlers
   // cancel orders
   const handleCancelOrders = useCallback(async (ids: string[]) => {
     try {
@@ -244,11 +246,11 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
 
   return (
     <div className='w-full'>
-      {/* Top & Pagination */}
+      {/* MARK: Top & Pagination */}
       <AdminHeader title='All Orders' />
       <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
 
-      {/* Filter */}
+      {/* MARK: Filter */}
       <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
         {/* Search */}
         <div className='flex flex-col col-span-12 md:col-span-6'>
@@ -308,7 +310,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           />
         </div>
 
-        {/* Select Filter */}
+        {/* MARK: Select Filter */}
         <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
           {/* Sort */}
           <Input
@@ -425,7 +427,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           />
         </div>
 
-        {/* Action Buttons */}
+        {/* MARK: Action Buttons */}
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
@@ -457,7 +459,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         </div>
       </AdminMeta>
 
-      {/* Income */}
+      {/* MARK: Income */}
       <div className='mt-9 flex flex-wrap items-center justify-center gap-4 text-white'>
         <div className='flex items-center gap-2'>
           <span className='font-semibold'>From: </span>
@@ -495,13 +497,13 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         isLoading={loadingOrders.length > 0}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} order
         {amount > 1 ? 's' : ''}
       </div>
 
-      {/* MAIN LIST */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>
         {orders.map(order => (
           <OrderItem

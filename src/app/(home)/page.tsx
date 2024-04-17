@@ -8,6 +8,7 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
+import Divider from '@/components/Divider'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
@@ -16,25 +17,27 @@ export const metadata: Metadata = {
 }
 
 async function HomePage() {
+  // Data
   let productsByCategoryGroups: any[] = []
   let bestSellerProducts: FullyProduct[] = []
   let categories: ICategory[] = []
   let tags: ITag[] = []
   let carouselProducts: FullyProduct[] = []
 
+  // MARK: Get Data
   try {
     // revalidate every 1 minute
     const data = await getHomeApi()
 
-    // For Banner
+    // for Banner
     tags = data.tags
     categories = data.categories
     carouselProducts = data.carouselProducts
 
-    // For Top #10
+    // for top #10
     bestSellerProducts = data.bestSellerProducts
 
-    // For Products
+    // for products
     productsByCategoryGroups = data.productsByCategoryGroups
   } catch (err: any) {
     console.log(err)
@@ -58,21 +61,21 @@ async function HomePage() {
 
   return (
     <div className='min-h-screen'>
-      {/* Add JSON-LD */}
+      {/* MARK: Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Banner */}
+      {/* MARK: Banner */}
       <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
 
-      <div className='pt-28' />
+      <Divider size={28} />
 
-      {/* About */}
+      {/* MARK: About */}
       <Heading title='Về Anpha Shop' />
       <About />
 
-      <div className='pt-28' />
+      <Divider size={28} />
 
-      {/* Top #10 */}
+      {/* MARK: Top #10 */}
       <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
         Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
       </h2>
@@ -80,9 +83,9 @@ async function HomePage() {
         <GroupProducts products={bestSellerProducts} bestSeller />
       </section>
 
-      <div className='pt-28' />
+      <Divider size={28} />
 
-      {/* Products */}
+      {/* MARK: Products */}
       <Heading title='Sản phẩm' />
       <section className='max-w-1200 mx-auto px-4'>
         {productsByCategoryGroups.map((group, index) => (
@@ -95,9 +98,9 @@ async function HomePage() {
         ))}
       </section>
 
-      <div className='pt-28' />
+      <Divider size={28} />
 
-      {/* Choose Me */}
+      {/* MARK: Choose Me */}
       <Heading title='Tại sao chọn tôi' />
       <ChooseMe />
     </div>

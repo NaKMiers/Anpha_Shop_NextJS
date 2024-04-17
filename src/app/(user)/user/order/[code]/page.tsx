@@ -2,6 +2,7 @@
 
 import { FullyOrder } from '@/app/api/user/order-history/route'
 import CartItem from '@/components/CartItem'
+import Divider from '@/components/Divider'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
@@ -19,6 +20,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // states
   const [order, setOrder] = useState<FullyOrder | null>(null)
 
+  // MARK: Get Data
   // get order
   useEffect(() => {
     const getOrder = async () => {
@@ -50,9 +52,9 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
         CHI TIẾT ĐƠN HÀNG: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
 
-      <hr className='my-5' />
+      <Divider size={5} border />
 
-      {/* Info */}
+      {/* MARK: Info */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-2 items-start'>
         <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Ngày mua: </span>
@@ -99,9 +101,9 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
         )}
       </div>
 
-      <div className='pt-6' />
+      <Divider size={6} />
 
-      {/* Product */}
+      {/* MARK: Product */}
       <h3 className='text-2xl font-semibold mb-4'>SẢN PHẨM</h3>
 
       {order?.items.map(item => (

@@ -19,7 +19,7 @@ function ResgiterPage() {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -79,7 +79,7 @@ function ResgiterPage() {
     [setError]
   )
 
-  // register
+  // MARK: Register Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       // validate form
@@ -190,7 +190,7 @@ function ResgiterPage() {
           className='mb-5'
         />
 
-        <div className='flex items-center justify-end gap-3'>
+        <div className='flex items-center justify-end gap-3 mb-4'>
           <a href='/auth/login' className='underline text-sky-500'>
             Đăng nhập
           </a>
@@ -212,16 +212,11 @@ function ResgiterPage() {
           </button>
         </div>
 
-        <div className='pt-4' />
-
         <hr />
 
-        <div className='pt-4' />
+        <p className='text-center text-slate-500 font-body text-lg py-4'>Hoặc đăng nhập với</p>
 
-        <p className='text-center text-slate-500 font-body text-lg'>Hoặc đăng nhập với</p>
-
-        <div className='pt-4' />
-
+        {/* MARK: Social Login */}
         <div className='flex items-center justify-center gap-4'>
           <button
             className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'

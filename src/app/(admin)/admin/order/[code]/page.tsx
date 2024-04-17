@@ -20,6 +20,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
   // states
   const [order, setOrder] = useState<FullyOrder | null>(null)
 
+  // MARK: Get Data
   // get order
   useEffect(() => {
     const getOrder = async () => {
@@ -51,10 +52,8 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         Order Detail: <span className='text-secondary font-sans'>{order?.code}</span>
       </h1>
 
-      <hr className='my-5' />
-
-      {/* Info */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+      {/* MARK: Info */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-5'>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Date: </span>
           {order && <span className=''>{formatTime(order.createdAt)}</span>}
@@ -87,11 +86,12 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         )}
       </div>
 
-      <div className='pt-6' />
-
       {/* Product */}
-      <h3 className='text-2xl font-semibold mb-4'>Product{(order?.items.length || 0) > 1 ? 's' : ''}</h3>
+      <h3 className='text-2xl font-semibold mb-4 mt-6'>
+        Product{(order?.items.length || 0) > 1 ? 's' : ''}
+      </h3>
 
+      {/* MARK: Items */}
       {order?.items.map(item => (
         <div className='pl-21/2 relative mb-5' key={item.product._id}>
           <div className='absolute top-1/2 -translate-y-1/2 left-0 h-[88%] w-px bg-slate-200' />

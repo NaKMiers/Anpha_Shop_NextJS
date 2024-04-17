@@ -7,6 +7,7 @@ import { getCategoriesPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 
 async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+  // Data
   let categories: ICategory[] = []
   let products: FullyProduct[] = []
   let amount: number = 0
@@ -16,6 +17,7 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
   // values
   const itemPerPage = 8
 
+  // MARK: Get Data
   try {
     // get query
     query = handleQuery(searchParams)
@@ -59,10 +61,10 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
 
   return (
     <div className='pt-16'>
-      {/* Add JSON-LD */}
+      {/* MARK: Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Meta */}
+      {/* MARK: Meta */}
       <Meta
         title={`Danh Mục Sản Phẩm`}
         searchParams={searchParams}
@@ -71,18 +73,19 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
         chops={chops}
       />
 
-      {/* Amount */}
+      {/* MARK: Amount */}
       <div className='p-3 text-sm text-right text-white font-semibold'>
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} sản phẩm
       </div>
 
-      {/* products */}
+      {/* MARK: MAIN LIST */}
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4'>
         {products.map(product => (
           <ProductCard product={product} key={product._id} />
         ))}
       </div>
 
+      {/* MARK: Pagination */}
       <Pagination
         searchParams={searchParams}
         amount={amount}

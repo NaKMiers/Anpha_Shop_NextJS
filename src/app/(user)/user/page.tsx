@@ -1,5 +1,6 @@
 'use client'
 
+import Divider from '@/components/Divider'
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
@@ -35,7 +36,7 @@ function UserPage() {
   // refs
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
-  // Form
+  // form
   const {
     register,
     handleSubmit,
@@ -74,6 +75,7 @@ function UserPage() {
     }
   }, [user?._id, setValue])
 
+  // MARK: Submit
   // handle update profile
   const updateProfile: SubmitHandler<FieldValues> = async data => {
     // start loading
@@ -98,6 +100,7 @@ function UserPage() {
     }
   }
 
+  // MARK: Handlers
   // handle add files when user select files
   const handleAddFiles = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +159,7 @@ function UserPage() {
       <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>TÀI KHOẢN CỦA TÔI</h1>
 
       <div className='grid grid-cols-12 gap-21'>
-        {/* Avatar */}
+        {/* MARK: Avatar */}
         <div className='flex flex-col items-center col-span-12 sm:col-span-5 lg:col-span-3 sm:border-r border-slate-400 p-2'>
           <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden p-3 group'>
             <Image
@@ -197,7 +200,7 @@ function UserPage() {
           <div className='sm:hidden border-b border-slate-400 max-w-[200px] mx-auto mt-3 -mb-2' />
         </div>
 
-        {/* Basic Info */}
+        {/* MARK: Basic Info */}
         <div className='col-span-12 text-center sm:text-start sm:col-span-7 lg:col-span-9 grid grid-cols-12'>
           <div className='col-span-12 md:col-span-7'>
             {user?.username && (
@@ -252,8 +255,9 @@ function UserPage() {
         </div>
       </div>
 
-      <div className='pt-6' />
+      <Divider size={6} />
 
+      {/* MARK: Detail */}
       <div>
         <h3 className='text-2xl font-semibold mb-5'>
           Thông tin chi tiết{' '}
@@ -364,6 +368,7 @@ function UserPage() {
           </div>
         </div>
 
+        {/* MARK: Save */}
         {isEditing && (
           <LoadingButton
             className='mt-5 mb-5 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
