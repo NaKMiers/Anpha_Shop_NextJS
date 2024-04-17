@@ -39,6 +39,7 @@ export async function DELETE(req: NextRequest) {
             },
           }
         )
+
         // decrease related tags product quantity
         await TagModel.updateMany(
           { _id: { $in: product.tags } },
@@ -48,6 +49,7 @@ export async function DELETE(req: NextRequest) {
             },
           }
         )
+
         // decrease related flashsales product quantity
         if (product.flashsale) {
           await FlashsaleModel.updateOne(

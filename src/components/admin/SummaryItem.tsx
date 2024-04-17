@@ -62,7 +62,7 @@ function SummaryItem({
           All Income: <span className='text-rose-500'>{formatPrice(data.totalIncome)}</span>
         </p>
         <p className='font-semibold text-sm'>
-          Month Income:{' '}
+          Temporary Income:{' '}
           <span className='text-sky-500'>
             {formatPrice(data.vouchers.reduce((total, voucher) => total + voucher.accumulated, 0))}
           </span>

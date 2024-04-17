@@ -149,32 +149,30 @@ function AddVoucherPage() {
   // handle send request to server to add voucher
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      console.log(data)
-      // // validate form
-      // if (!handleValidate(data)) return
+      // validate form
+      if (!handleValidate(data)) return
 
-      // dispatch(setLoading(true))
+      dispatch(setLoading(true))
 
-      // try {
-      //   // send request to server to add voucher
-      //   const { message } = await addVoucherApi(data)
+      try {
+        // send request to server to add voucher
+        const { message } = await addVoucherApi(data)
 
-      //   // show success message
-      //   toast.success(message)
-
-      //   // reset form
-      //   reset()
-      //   setValue('code', generateRandomString(5).toUpperCase())
-      //   const adminUser = roleUsers.find((user: IUser) => user.role === 'admin')
-      //   if (adminUser) {
-      //     setValue('onwer', adminUser._id)
-      //   }
-      // } catch (err: any) {
-      //   console.log(err)
-      //   toast.error(err.message)
-      // } finally {
-      //   dispatch(setLoading(false))
-      // }
+        // show success message
+        toast.success(message)
+        // reset form
+        reset()
+        setValue('code', generateRandomString(5).toUpperCase())
+        const adminUser = roleUsers.find((user: IUser) => user.role === 'admin')
+        if (adminUser) {
+          setValue('onwer', adminUser._id)
+        }
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        dispatch(setLoading(false))
+      }
     },
     [handleValidate, reset, dispatch, setValue, roleUsers]
   )
@@ -193,7 +191,6 @@ function AddVoucherPage() {
     <div className='max-w-1200 mx-auto'>
       {/* MARK: Admin Header */}
       <AdminHeader title='Add Voucher' backLink='/admin/voucher/all' />
-
       <div className='mt-5'>
         <div className='b-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* Code */}
