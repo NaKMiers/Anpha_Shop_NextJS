@@ -208,7 +208,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </div>
 
           {/* MARK: Action Buttons */}
-          <div className='flex justify-center flex-wrap mt-6 gap-x-21 gap-y-21/2 font-body tracking-wide'>
+          <div className='hidden sm:flex justify-center flex-wrap mt-6 gap-x-21 gap-y-21/2 font-body tracking-wide'>
             <Link
               href={`/user/order/${checkout?.code}`}
               className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
