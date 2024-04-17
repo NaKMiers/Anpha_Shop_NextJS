@@ -185,13 +185,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
       <Divider size={9} />
 
       {/* MARK: Related Products */}
-      {relatedProducts.length!! && (
-        <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
+      {!!relatedProducts.length && (
+        <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden mb-9'>
           <GroupProducts products={relatedProducts} hideTop />
         </section>
       )}
-
-      <Divider size={9} />
 
       {/* MARK: Detail */}
       <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>

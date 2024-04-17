@@ -1,4 +1,5 @@
 import OrderModel from '@/models/OrderModel'
+import '@/models/VoucherModel'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
