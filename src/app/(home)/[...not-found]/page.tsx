@@ -4,7 +4,7 @@ import Link from 'next/link'
 function NotFoundPage() {
   return (
     <div className='pt-20 text-center text-white font-body tracking-wider'>
-      <h1 className='mb-5 text-3xl font-semibold'>Không tìm thấy sản phẩm.</h1>
+      <h1 className='mb-5 text-3xl font-semibold'>Không tìm thấy trang.</h1>
 
       <Link href='/' className='flex justify-center'>
         <Image

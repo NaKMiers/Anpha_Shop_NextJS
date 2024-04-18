@@ -12,7 +12,7 @@ import { getProductPageApi } from '@/requests'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { FaCircleCheck, FaTags } from 'react-icons/fa6'
 import { MdCategory } from 'react-icons/md'
 import { TbPackages } from 'react-icons/tb'
@@ -39,7 +39,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     comments = data.comments
   } catch (err: any) {
     // redirect home
-    redirect('/')
+    // redirect('/')
+    return notFound()
   }
 
   // jsonLD
