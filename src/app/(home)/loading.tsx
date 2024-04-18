@@ -1,9 +1,9 @@
-import ChooseMe from '@/components/ChooseMe'
 import Divider from '@/components/Divider'
-import Heading from '@/components/Heading'
 import LoadingAbout from '@/components/loading/LoadingAbout'
 import LoadingBanner from '@/components/loading/LoadingBanner'
+import LoadingChooseMe from '@/components/loading/LoadingChooseMe'
 import LoadingGroupProducts from '@/components/loading/LoadingGroupProducts'
+import LoadingHeading from '@/components/loading/LoadingHeading'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -21,16 +21,14 @@ async function LoadingHomePage() {
       <Divider size={28} />
 
       {/* MARK: About */}
-      <Heading title='Về Anpha Shop' />
+      <LoadingHeading size={300} />
       {/* <About /> */}
       <LoadingAbout />
 
       <Divider size={28} />
 
       {/* MARK: Top #10 */}
-      <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
-        Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
-      </h2>
+      <LoadingHeading size={175} />
       <section className='max-w-1200 mx-auto px-4'>
         <LoadingGroupProducts />
       </section>
@@ -38,7 +36,7 @@ async function LoadingHomePage() {
       <Divider size={28} />
 
       {/* MARK: Products */}
-      <Heading title='Sản phẩm' />
+      <LoadingHeading />
       <section className='max-w-1200 mx-auto px-4'>
         {Array.from({ length: 6 }).map((_, index) => (
           <LoadingGroupProducts className={index !== 6 - 1 ? 'mb-20' : ''} key={index} />
@@ -48,8 +46,8 @@ async function LoadingHomePage() {
       <Divider size={28} />
 
       {/* MARK: Choose Me */}
-      <Heading title='Tại sao chọn tôi' />
-      <ChooseMe />
+      <LoadingHeading size={300} />
+      <LoadingChooseMe />
     </div>
   )
 }

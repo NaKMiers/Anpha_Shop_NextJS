@@ -6,7 +6,15 @@ interface DividerProps {
 }
 
 function Divider({ size, border }: DividerProps) {
-  return border ? <div className={`border mt-${size} mb-${size}`} /> : <div className={`pt-${size}`} />
+  return border ? (
+    <div className='border' style={{ marginTop: size * 4, marginBottom: size * 4 }} />
+  ) : (
+    <div
+      style={{
+        paddingTop: size * 4,
+      }}
+    />
+  )
 }
 
 export default Divider

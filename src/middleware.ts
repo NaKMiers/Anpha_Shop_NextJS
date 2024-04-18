@@ -14,7 +14,7 @@ const requireAuth = async (req: NextRequest, token: JWT | null) => {
 }
 
 // Require UnAuth
-const requireUnAuth = async (req: NextRequest, token: JWT | null) => {
+const requireUnauth = async (req: NextRequest, token: JWT | null) => {
   console.log('- Require UnAuth -')
 
   // check auth
@@ -39,17 +39,25 @@ const requireAdmin = async (req: NextRequest, token: JWT | null) => {
 
 // Middleware
 export default async function middleware(req: NextRequest) {
+  console.log('- Middleware -')
+  console.log('req.nextUrl.pathname:', req.nextUrl.pathname)
+
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
-  if (req.nextUrl.pathname.startsWith('/admin')) {
+  // require admin
+  if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/api/admin')) {
     return requireAdmin(req, token)
-  } else if (req.nextUrl.pathname.startsWith('/user') || req.nextUrl.pathname.startsWith('/recharge')) {
+  }
+  // require auth
+  else if (req.nextUrl.pathname.startsWith('/user') || req.nextUrl.pathname.startsWith('/recharge')) {
     return requireAuth(req, token)
-  } else if (req.nextUrl.pathname.startsWith('/auth')) {
-    return requireUnAuth(req, token)
+  }
+  // require unauth
+  else if (req.nextUrl.pathname.startsWith('/auth')) {
+    return requireUnauth(req, token)
   }
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/user/:path*', '/recharge', '/auth/:path*'],
+  matcher: ['/admin/:path*', '/api/admin/:path*', '/user/:path*', '/recharge', '/auth/:path*'],
 }

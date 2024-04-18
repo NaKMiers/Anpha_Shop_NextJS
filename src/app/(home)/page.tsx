@@ -9,6 +9,7 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
+import LoadingHeading from '@/components/loading/LoadingHeading'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
@@ -79,6 +80,7 @@ async function HomePage() {
       <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-light font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
         Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
       </h2>
+
       <section className='max-w-1200 mx-auto px-4'>
         <GroupProducts products={bestSellerProducts} bestSeller />
       </section>
