@@ -510,7 +510,7 @@ function CartPage() {
             <span className='font-semibold text-3xl text-green-500'>{formatPrice(total)}</span>
           </div>
 
-          {/* Payment Methods */}
+          {/* MARK: Payment Methods */}
           <div className='flex flex-col gap-3 select-none'>
             <button
               className={`flex items-center justify-center rounded-xl gap-1 border py-2 px-3 group border-primary hover:bg-primary common-transition ${
@@ -557,7 +557,7 @@ function CartPage() {
                 width={32}
                 alt='logo'
               />
-              <span className='font-semibold group-hover:text-light'>Mua ngay với BANKING</span>
+              <span className='font-semibold group-hover:text-light'>Mua ngay với Banking</span>
             </button>
           </div>
         </div>

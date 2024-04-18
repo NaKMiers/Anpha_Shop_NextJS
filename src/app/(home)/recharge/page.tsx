@@ -31,7 +31,7 @@ function RechargePage() {
 
       <Divider size={12} />
 
-      <div className='grid grid-cols-1 gap-21 lg:grid-cols-2 font-semibold pb-16'>
+      <div className='grid grid-cols-1 gap-7 lg:grid-cols-2 font-semibold pb-16'>
         {/* MARK: Momo */}
         <div className='col-span-1'>
           <h2 className='text-2xl text-[#a1396c] text-center mb-3'>Chuyển khoản Momo</h2>
