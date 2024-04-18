@@ -7,6 +7,7 @@ import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import { Toaster } from 'react-hot-toast'
 import '../globals.scss'
+import Background from '@/components/Background'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -34,7 +35,7 @@ export default async function RootLayout({
       <body className='text-dark' suppressHydrationWarning={true}>
         <StoreProvider session={session}>
           {/* Background */}
-          <div className='background-app fixed w-screen h-screen top-0 left-0 -z-10' />
+          <Background />
 
           {/* Toast */}
           <Toaster
