@@ -14,7 +14,7 @@ const transporter = nodeMailer.createTransport({
   },
 })
 
-function sendMail(to: string, subject: string, html: string) {
+export function sendMail(to: string, subject: string, html: string) {
   transporter.sendMail(
     {
       from: 'Anpha Shop',
