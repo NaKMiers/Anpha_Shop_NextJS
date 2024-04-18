@@ -37,6 +37,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // values
+  // const isDisabled = isLoading || product.stock <= 0 || !curUser?._id
   const isDisabled = isLoading || product.stock <= 0
 
   // MARK: Add

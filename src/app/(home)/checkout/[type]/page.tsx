@@ -133,7 +133,8 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             className='text-green-500 underline cursor-pointer'
             onClick={() => handleCopy(checkout?.email)}>
             {checkout?.email}
-          </span>
+          </span>{' '}
+          sau khi đã thanh toán.
         </p>
 
         <Image
