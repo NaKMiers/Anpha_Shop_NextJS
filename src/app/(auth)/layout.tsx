@@ -31,7 +31,7 @@ export default async function RootLayout({
       <body className='text-dark' suppressHydrationWarning={true}>
         <StoreProvider session={session}>
           {/* Background */}
-          <Background />
+          <Background noBeta />
 
           {/* Toast */}
           <Toaster
