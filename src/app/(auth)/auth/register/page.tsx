@@ -224,9 +224,9 @@ function ResgiterPage() {
             <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
           </button>
 
-          <button className='p-2 rounded-full border-2 border-sky-300 group hover:bg-sky-300 common-transition'>
+          {/* <button className='p-2 rounded-full border-2 border-sky-300 group hover:bg-sky-300 common-transition'>
             <Image className='wiggle' src='/images/facebook.jpg' height={25} width={25} alt='facebook' />
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
