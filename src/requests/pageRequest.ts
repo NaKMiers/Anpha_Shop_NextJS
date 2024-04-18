@@ -15,9 +15,10 @@ export const getHomeApi = async () => {
 
 // [GET]
 export const getProductPageApi = async (slug: string) => {
-  // revalidate every 1 minute
+  // no cache
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/product/${slug}`, {
-    next: { revalidate: 60 },
+    cache: 'no-store',
+    next: { revalidate: 0 },
   })
 
   // check status
