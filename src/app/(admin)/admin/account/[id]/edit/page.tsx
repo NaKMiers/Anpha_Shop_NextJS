@@ -187,10 +187,12 @@ function AddAccountPage() {
           <div className='bg-white rounded-lg px-3 flex items-center'>
             <FaUser size={16} className='text-secondary' />
           </div>
-          <p
-            className={`select-none cursor-pointer border border-dark px-4 py-2 rounded-lg common-transition bg-white text-dark`}>
-            diwas118151@gmail.com
-          </p>
+          {account?.usingUser && (
+            <p
+              className={`select-none cursor-pointer border border-dark px-4 py-2 rounded-lg common-transition bg-white text-dark`}>
+              {account.usingUser}
+            </p>
+          )}
         </div>
 
         {/* Type */}

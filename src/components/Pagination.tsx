@@ -66,7 +66,8 @@ function Pagination({
 
   return (
     pageAmount > 1 && (
-      <div className={`flex font-semibold gap-2 justify-center ${className}`}>
+      <div
+        className={`flex font-semibold gap-2 justify-center w-full max-w-[491px] mx-auto ${className}`}>
         {/* MARK: Prev */}
         {currentPage != 1 && (
           <Link

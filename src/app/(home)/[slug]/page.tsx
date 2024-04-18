@@ -91,10 +91,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
       <section className='bg-white p-8 flex flex-col gap-x-21 gap-y-21/2 md:flex-row rounded-medium shadow-medium'>
         {/* MARK: Thumbnails */}
         <div className='w-full md:w-[45%] md:max-w-[500px]'>
-          <div className='relative aspect-video shadow-xl rounded-md'>
+          <div className='relative aspect-video shadow-xl rounded-md overflow-hidden'>
             {/* Sold out */}
             {(product?.stock || 0) <= 0 && (
-              <div className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+              <div className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start bg-white rounded-lg bg-opacity-50'>
                 <Image
                   className='animate-wiggle -mt-1'
                   src='/images/sold-out.jpg'
