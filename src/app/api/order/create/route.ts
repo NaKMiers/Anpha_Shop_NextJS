@@ -1,13 +1,18 @@
 import { connectDatabase } from '@/config/database'
 import CartItemModel from '@/models/CartItemModel'
 import OrderModel from '@/models/OrderModel'
+import UserModel, { IUser } from '@/models/UserModel'
+import { generateOrderCode } from '@/utils'
+import handleDeliverOrder from '@/utils/handleDeliverOrder'
 import { notifyNewOrderToAdmin } from '@/utils/sendMail'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../../cart/route'
-import handleDeliverOrder from '@/utils/handleDeliverOrder'
-import UserModel, { IUser } from '@/models/UserModel'
-import { generateOrderCode } from '@/utils'
+
+// Models: User, CartItem, Order
+import '@/models/CartItemModel'
+import '@/models/OrderModel'
+import '@/models/UserModel'
 
 // [POST]: /order/create
 export async function POST(req: NextRequest) {

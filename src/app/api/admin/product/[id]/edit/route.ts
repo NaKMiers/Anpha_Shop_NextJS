@@ -6,6 +6,11 @@ import { generateSlug } from '@/utils'
 import { deleteFile, uploadFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product, Category, Tag
+import '@/models/CategoryModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
+
 // [PUT]: /api/admin/tag/:code/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Product -')

@@ -1,11 +1,14 @@
 import { connectDatabase } from '@/config/database'
 import OrderModel, { IOrder } from '@/models/OrderModel'
 import { IUser } from '@/models/UserModel'
-import '@/models/VoucherModel'
 import { IVoucher } from '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: Order, Voucher
+import '@/models/OrderModel'
+import '@/models/VoucherModel'
 
 export const dynamic = 'force-dynamic'
 

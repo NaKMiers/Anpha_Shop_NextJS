@@ -1,7 +1,10 @@
 import { connectDatabase } from '@/config/database'
 import AccountModel from '@/models/AccountModel'
-import { NextRequest, NextResponse } from 'next/server'
 import '@/models/UserModel'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Models: Account
+import '@/models/AccountModel'
 
 export const dynamic = 'force-dynamic'
 

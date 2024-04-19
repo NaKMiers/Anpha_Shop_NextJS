@@ -5,6 +5,11 @@ import TagModel from '@/models/TagModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Category, Tag, Product
+import '@/models/CategoryModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/product/all

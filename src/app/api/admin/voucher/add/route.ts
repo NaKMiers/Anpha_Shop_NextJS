@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Voucher
+import '@/models/VoucherModel'
+
 // [POST]: /admin/voucher/add
 export async function POST(req: NextRequest) {
   console.log('- Add Voucher -')

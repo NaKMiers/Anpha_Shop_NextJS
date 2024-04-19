@@ -1,8 +1,12 @@
 import { connectDatabase } from '@/config/database'
-import VoucherModel from '@/models/VoucherModel'
-import { NextRequest, NextResponse } from 'next/server'
 import '@/models/UserModel'
+import VoucherModel from '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Models: Voucher, User
+import '@/models/UserModel'
+import '@/models/VoucherModel'
 
 export const dynamic = 'force-dynamic'
 

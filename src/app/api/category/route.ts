@@ -7,6 +7,11 @@ import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyProduct } from '../product/[slug]/route'
 
+// Models: Product, Flash Sale, Category
+import '@/models/CategoryModel'
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /category?ctg=slug1&ctg?=slug2...

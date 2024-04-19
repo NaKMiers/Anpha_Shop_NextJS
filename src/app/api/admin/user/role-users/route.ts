@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import UserModel from '@/models/UserModel'
 import { NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/user/role-users

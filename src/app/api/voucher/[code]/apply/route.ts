@@ -4,6 +4,9 @@ import { formatPrice } from '@/utils/number'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Voucher
+import '@/models/VoucherModel'
+
 // [POST]: /voucher/:code/apply
 export async function POST(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Apply Voucher -')

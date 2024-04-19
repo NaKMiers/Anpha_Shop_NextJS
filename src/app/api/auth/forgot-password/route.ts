@@ -4,6 +4,9 @@ import { sendResetPasswordEmail } from '@/utils/sendMail'
 import bcrypt from 'bcrypt'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 // [POST]: /auth/forgot-password
 export async function POST(req: NextRequest) {
   console.log('- Forgot Password -')

@@ -6,6 +6,12 @@ import TagModel from '@/models/TagModel'
 import { deleteFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product, Category, Tag, Flashsale
+import '@/models/CategoryModel'
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
+
 // [DELETE]: /admin/product/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Products - ')

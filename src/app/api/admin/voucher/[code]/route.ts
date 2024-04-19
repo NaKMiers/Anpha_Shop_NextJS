@@ -3,6 +3,10 @@ import '@/models/UserModel'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Voucher, User
+import '@/models/UserModel'
+import '@/models/VoucherModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /voucher/:id

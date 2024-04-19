@@ -4,6 +4,10 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product, Flash Sale
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /flash-sale/:id

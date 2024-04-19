@@ -3,6 +3,9 @@ import CommentModel from '@/models/CommentModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Comment
+import '@/models/CommentModel'
+
 // [POST]: /comment/add
 export async function POST(req: NextRequest) {
   console.log('- Add Comment - ')

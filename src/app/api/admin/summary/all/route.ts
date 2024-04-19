@@ -4,6 +4,10 @@ import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User, Voucher
+import '@/models/UserModel'
+import '@/models/VoucherModel'
+
 export type UserWithVouchers = IUser & { vouchers: IVoucher[] }
 
 // [GET]: /admin/summary/all

@@ -4,6 +4,10 @@ import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { notifyDeliveryOrder } from '@/utils/sendMail'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Order, Voucher
+import '@/models/OrderModel'
+import '@/models/VoucherModel'
+
 // [PATCH]: /admin/order/:id/re-deliver
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Re-Deliver Order -')

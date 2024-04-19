@@ -3,6 +3,10 @@ import OrderModel from '@/models/OrderModel'
 import '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Order, Voucher
+import '@/models/OrderModel'
+import '@/models/VoucherModel'
+
 // [GET]: /admin/order/:id/user
 export async function GET(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Get User Order -')

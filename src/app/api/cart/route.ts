@@ -6,6 +6,10 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyProduct } from '../product/[slug]/route'
 
+// Models: CartItem, Product
+import '@/models/CartItemModel'
+import '@/models/ProductModel'
+
 export const dynamic = 'force-dynamic'
 
 export type FullyCartItem = ICartItem & {

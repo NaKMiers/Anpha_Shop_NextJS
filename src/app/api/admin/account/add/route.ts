@@ -4,6 +4,10 @@ import ProductModel from '@/models/ProductModel'
 import { getTimes } from '@/utils/time'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Account, Product
+import '@/models/AccountModel'
+import '@/models/ProductModel'
+
 // [POST]: /admin/account/add
 export async function POST(req: NextRequest) {
   console.log('- Add Account - ')

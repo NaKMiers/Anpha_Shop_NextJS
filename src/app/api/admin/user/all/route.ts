@@ -3,6 +3,9 @@ import UserModel from '@/models/UserModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET] /admin/user/all

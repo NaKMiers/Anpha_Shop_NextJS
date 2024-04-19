@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Voucher
+import '@/models/VoucherModel'
+
 // [PATCH]: /admin/voucher/feature
 export async function PATCH(req: NextRequest) {
   console.log('- Activate Vouchers - ')

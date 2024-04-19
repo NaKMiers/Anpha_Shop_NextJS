@@ -4,6 +4,10 @@ import CommentModel from '@/models/CommentModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Comment, User
+import '@/models/CommentModel'
+import '@/models/UserModel'
+
 // [PATCH]: /comment/:id/like
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Hide Comment -')

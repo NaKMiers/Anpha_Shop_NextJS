@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Order
+import '@/models/OrderModel'
+
 // [PATCH]: /admin/order/cancel
 export async function PATCH(req: NextRequest) {
   console.log('- Cancel Orders -')

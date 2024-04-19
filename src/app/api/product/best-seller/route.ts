@@ -3,6 +3,10 @@ import '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import { NextResponse } from 'next/server'
 
+// Models: Product, Category
+import '@/models/ProductModel'
+import '@/models/CategoryModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /product/best-seller

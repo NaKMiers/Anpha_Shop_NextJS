@@ -4,6 +4,9 @@ import { uploadFile } from '@/utils/uploadFile'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 // [PUT]: /user/change-avatar
 export async function PUT(req: NextRequest) {
   console.log('- Change Avatar -')

@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Voucher
+import '@/models/VoucherModel'
+
 // [DELETE]: /admin/voucher/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Voucheres - ')

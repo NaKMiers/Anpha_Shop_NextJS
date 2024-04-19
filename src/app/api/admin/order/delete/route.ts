@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Order
+import '@/models/OrderModel'
+
 // [DELETE]: /admin/order/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Orders - ')

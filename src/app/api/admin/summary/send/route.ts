@@ -4,6 +4,10 @@ import VoucherModel from '@/models/VoucherModel'
 import { summaryNotification } from '@/utils/sendMail'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User, Voucher
+import '@/models/UserModel'
+import '@/models/VoucherModel'
+
 // [POST]: /admin/summary/send
 export async function POST(req: NextRequest) {
   console.log('- Send Summaries')

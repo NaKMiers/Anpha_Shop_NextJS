@@ -3,6 +3,9 @@ import UserModel from '@/models/UserModel'
 import { JWT, getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 // [PUT]: /user/update-profile
 export async function PUT(req: NextRequest) {
   console.log('- Update Profile -')

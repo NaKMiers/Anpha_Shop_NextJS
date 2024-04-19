@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import UserModel from '@/models/UserModel'
 import { NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 // [DELETE]: /admin/user/delete
 export async function DELETE(req: Request) {
   console.log('- Delete Users - ')

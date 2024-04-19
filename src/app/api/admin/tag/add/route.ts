@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Tag
+import '@/models/TagModel'
+
 // [POST]: /admin/tag/add
 export async function POST(req: NextRequest) {
   console.log('- Add Tag -')

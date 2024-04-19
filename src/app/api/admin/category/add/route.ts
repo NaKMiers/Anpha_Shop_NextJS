@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import CategoryModel from '@/models/CategoryModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Category
+import '@/models/CategoryModel'
+
 // [POST]: /admin/tag/add
 export async function POST(req: NextRequest) {
   console.log('- Add Category -')

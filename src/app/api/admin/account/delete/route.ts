@@ -3,6 +3,10 @@ import AccountModel, { IAccount } from '@/models/AccountModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Account, Product
+import '@/models/AccountModel'
+import '@/models/ProductModel'
+
 // [DELETE]: /admin/account/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Accounts - ')

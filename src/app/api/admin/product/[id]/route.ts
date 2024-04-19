@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product
+import '@/models/ProductModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /product/:id

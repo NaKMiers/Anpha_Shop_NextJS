@@ -2,6 +2,8 @@ import { connectDatabase } from '@/config/database'
 import { generateOrderCode } from '@/utils'
 import { NextResponse } from 'next/server'
 
+// Models: empty
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /api/order/generate-order-code

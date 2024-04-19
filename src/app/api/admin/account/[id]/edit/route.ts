@@ -1,11 +1,14 @@
 import { connectDatabase } from '@/config/database'
 import AccountModel, { IAccount } from '@/models/AccountModel'
 import OrderModel, { IOrder } from '@/models/OrderModel'
-import '@/models/UserModel'
 import { notifyAccountUpdated } from '@/utils/sendMail'
 import { getTimes } from '@/utils/time'
 import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: Account, Order
+import '@/models/AccountModel'
+import '@/models/OrderModel'
 
 // [PUT]: /account/:id/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {

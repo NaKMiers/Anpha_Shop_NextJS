@@ -6,6 +6,11 @@ import { uploadFile } from '@/utils/uploadFile'
 import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product, Tag, Category
+import '@/models/CategoryModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
+
 // [POST]: /admin/product/add
 export async function POST(req: NextRequest) {
   console.log('- Add Product -')

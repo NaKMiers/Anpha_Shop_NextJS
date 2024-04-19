@@ -3,6 +3,10 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product, Flash Sale
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+
 // [PUT]: /api/admin/flash-sale/:id/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Flash sale -')

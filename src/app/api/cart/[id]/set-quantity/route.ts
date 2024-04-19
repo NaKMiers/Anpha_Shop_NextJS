@@ -1,9 +1,11 @@
 import { connectDatabase } from '@/config/database'
 import CartItemModel from '@/models/CartItemModel'
-import '@/models/ProductModel'
-import { IProduct } from '@/models/ProductModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: CartItem, Product
+import '@/models/CartItemModel'
+import '@/models/ProductModel'
 
 // [PATCH]: /cart/:id/set-quantity
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
@@ -17,6 +19,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
     const userId = token?._id
 
+    // get data to set cart item quantity
     const { quantity } = await req.json()
 
     // check if user is authenticated
@@ -26,18 +29,6 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
 
     // get cart item to update
     let cartItem: any = await CartItemModel.findById(id).populate('productId').lean()
-
-    const product: IProduct = cartItem?.productId
-
-    // // quantity must be > 0
-    // if (quantity < 1) {
-    //   return NextResponse.json({ message: 'Số lượng tối thiểu là 1' }, { status: 400 })
-    // }
-
-    // // quantity must be <= product stock
-    // if (quantity > product?.stock) {
-    //   return NextResponse.json({ message: 'Số lượng sản phẩm không đủ' }, { status: 400 })
-    // }
 
     // update cart item
     const updatedCartItem = await CartItemModel.findByIdAndUpdate(

@@ -6,6 +6,11 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyCartItem } from '../route'
 
+// Models: CartItem, Product, Flash Sale
+import '@/models/CartItemModel'
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+
 export type UserWithCart = IUser & { cart: ICartItem[]; cartLength: number }
 export type CartItemWithProduct = ICartItem & { product: IProduct }
 

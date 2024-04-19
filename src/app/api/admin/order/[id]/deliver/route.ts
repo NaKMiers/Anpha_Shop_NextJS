@@ -2,6 +2,8 @@ import { connectDatabase } from '@/config/database'
 import handleDeliverOrder from '@/utils/handleDeliverOrder'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: empty
+
 // [PATCH]: /admin/order/:id/deliver
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Deliver Order -')

@@ -1,13 +1,16 @@
 import { connectDatabase } from '@/config/database'
-import CategoryModel, { ICategory } from '@/models/CategoryModel'
-import '@/models/FlashsaleModel'
-import '@/models/TagModel'
-import '@/models/CategoryModel'
+import { ICategory } from '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { shuffleArray } from '@/utils'
 import { NextResponse } from 'next/server'
 import { FullyProduct } from './product/[slug]/route'
+
+// Models: Product, Tag, Category, Flashsale
+import '@/models/CategoryModel'
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
 
 export const dynamic = 'force-dynamic'
 

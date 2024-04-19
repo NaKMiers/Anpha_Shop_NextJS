@@ -4,6 +4,9 @@ import TagModel from '@/models/TagModel'
 import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Tag
+import '@/models/TagModel'
+
 // [PUT]: /api/admin/tag/edit
 export async function PUT(req: NextRequest) {
   console.log('- Edit Tags -')

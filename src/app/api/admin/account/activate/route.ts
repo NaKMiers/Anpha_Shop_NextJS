@@ -3,6 +3,10 @@ import AccountModel, { IAccount } from '@/models/AccountModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Account, Product
+import '@/models/AccountModel'
+import '@/models/ProductModel'
+
 // [PATCH]: /admin/account/feature
 export async function PATCH(req: NextRequest) {
   console.log('- Activate Accounts - ')

@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import VoucherModel from '@/models/VoucherModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Voucher
+import '@/models/VoucherModel'
+
 // [PUT]: /api/admin/tag/:code/edit
 export async function PUT(req: NextRequest, { params: { code } }: { params: { code: string } }) {
   console.log('- Edit Voucher -')

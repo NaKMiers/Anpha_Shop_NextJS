@@ -2,6 +2,10 @@ import OrderModel from '@/models/OrderModel'
 import '@/models/VoucherModel'
 import { NextResponse } from 'next/server'
 
+// Models: Order, Voucher
+import '@/models/OrderModel'
+import '@/models/VoucherModel'
+
 export const dynamic = 'force-dynamic'
 
 export async function GET() {

@@ -3,6 +3,10 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Flash Sale, Product
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+
 // [POST]: /admin/flash-sale/add
 export async function POST(req: NextRequest) {
   console.log('- Add Flash Sale -')

@@ -1,7 +1,10 @@
 import { connectDatabase } from '@/config/database'
-import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcrypt'
 import UserModel from '@/models/UserModel'
+import bcrypt from 'bcrypt'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Models: User
+import '@/models/UserModel'
 
 // [PATHC]: /auth/reset-password
 export async function PATCH(req: NextRequest) {

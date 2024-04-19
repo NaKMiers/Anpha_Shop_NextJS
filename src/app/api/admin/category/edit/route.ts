@@ -4,6 +4,9 @@ import CategoryModel from '@/models/CategoryModel'
 import { generateSlug } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Category
+import '@/models/CategoryModel'
+
 // [PUT]: /admin/categories/edit
 export async function PUT(req: NextRequest) {
   console.log('- Edit Categories -')

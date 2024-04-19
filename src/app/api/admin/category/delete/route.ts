@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import CategoryModel from '@/models/CategoryModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Category
+import '@/models/CategoryModel'
+
 // [DELETE]: /admin/category/delete
 export async function DELETE(req: NextRequest) {
   console.log('- Delete Categories - ')

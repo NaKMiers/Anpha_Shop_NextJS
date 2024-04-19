@@ -1,8 +1,11 @@
 import { connectDatabase } from '@/config/database'
-import '@/models/CategoryModel'
 import ProductModel from '@/models/ProductModel'
-import '@/models/TagModel'
 import { NextResponse } from 'next/server'
+
+// Models: Product, Tag, Category
+import '@/models/CategoryModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
 
 export const dynamic = 'force-dynamic'
 

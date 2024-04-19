@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import UserModel from '@/models/UserModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: User
+import '@/models/UserModel'
+
 // [POST]: /auth/register
 export async function POST(req: NextRequest) {
   console.log('- Register -')

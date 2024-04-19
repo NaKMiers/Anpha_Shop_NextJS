@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import TagModel from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Tag
+import '@/models/TagModel'
+
 // [PATCH]: /admin/tag/feature
 export async function PATCH(req: NextRequest) {
   console.log('- Feature Tags - ')

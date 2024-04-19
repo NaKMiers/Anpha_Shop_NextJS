@@ -1,11 +1,13 @@
+import { connectDatabase } from '@/config/database'
+import UserModel, { IUser } from '@/models/UserModel'
 import bcrypt from 'bcrypt'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import FacebookProvider from 'next-auth/providers/facebook'
 import GoogleProvider from 'next-auth/providers/google'
 
-import { connectDatabase } from '@/config/database'
-import UserModel, { IUser } from '@/models/UserModel'
+// Models: User
+import '@/models/UserModel'
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET!,

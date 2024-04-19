@@ -2,6 +2,9 @@ import { connectDatabase } from '@/config/database'
 import TagModel from '@/models/TagModel'
 import { NextResponse } from 'next/server'
 
+// Models: Tag
+import '@/models/TagModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/tag/force-all

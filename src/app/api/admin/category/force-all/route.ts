@@ -3,6 +3,9 @@ import CategoryModel from '@/models/CategoryModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Category
+import '@/models/CategoryModel'
+
 // [GET]: /admin/category/force-all
 export async function GET(req: NextRequest) {
   console.log('- Get Force All Categories -')

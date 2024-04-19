@@ -3,6 +3,10 @@ import FlashsaleModel from '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Product, Flashsale
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+
 // [PATCH]: /admin/product/activate
 export async function PATCH(req: NextRequest) {
   console.log('- Activate Products - ')

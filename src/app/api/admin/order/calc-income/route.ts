@@ -1,6 +1,9 @@
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Order
+import '@/models/OrderModel'
+
 export const dynamic = 'force-dynamic'
 
 // [POST]: /admin/order/calc-income

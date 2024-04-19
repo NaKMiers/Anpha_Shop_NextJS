@@ -4,9 +4,15 @@ import CommentModel from '@/models/CommentModel'
 import { IFlashsale } from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
-import '@/models/UserModel'
-import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: Product, Tag, Category, Flashsale, Comment, User,
+import '@/models/CategoryModel'
+import '@/models/CommentModel'
+import '@/models/FlashsaleModel'
+import '@/models/ProductModel'
+import '@/models/TagModel'
+import '@/models/UserModel'
 
 export const dynamic = 'force-dynamic'
 

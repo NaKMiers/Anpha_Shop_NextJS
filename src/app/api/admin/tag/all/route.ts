@@ -3,6 +3,9 @@ import TagModel from '@/models/TagModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Models: Tag
+import '@/models/TagModel'
+
 export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/tag/all

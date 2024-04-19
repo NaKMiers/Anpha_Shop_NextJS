@@ -1,8 +1,11 @@
 import { connectDatabase } from '@/config/database'
 import CartItemModel from '@/models/CartItemModel'
-import '@/models/ProductModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: CartItem, Product
+import '@/models/CartItemModel'
+import '@/models/ProductModel'
 
 // [DELETE]: /cart/:id/delete
 export async function DELETE(req: NextRequest, { params: { id } }: { params: { id: string } }) {

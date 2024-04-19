@@ -1,7 +1,9 @@
 import { connectDatabase } from '@/config/database'
 import UserModel from '@/models/UserModel'
-import { formatPrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: User
+import '@/models/UserModel'
 
 // [PATCH]: /admin/user/:id/set-collaborator
 export async function PATCH(req: NextRequest, { params: { id } }: { params: { id: string } }) {
