@@ -183,17 +183,17 @@ function AddAccountPage() {
 
       <div className='mt-5'>
         {/* MARK: Using User */}
-        <div className='flex mb-5'>
-          <div className='bg-white rounded-lg px-3 flex items-center'>
-            <FaUser size={16} className='text-secondary' />
-          </div>
-          {account?.usingUser && (
+        {account?.usingUser && (
+          <div className='flex mb-5'>
+            <div className='bg-white rounded-lg px-3 flex items-center'>
+              <FaUser size={16} className='text-secondary' />
+            </div>
             <p
               className={`select-none cursor-pointer border border-dark px-4 py-2 rounded-lg common-transition bg-white text-dark`}>
               {account.usingUser}
             </p>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Type */}
         <div className='mb-5'>
@@ -217,7 +217,10 @@ function AddAccountPage() {
                 {Object.keys(groupTypes)?.map(key => (
                   <optgroup label={key} key={key}>
                     {groupTypes[key].map(product => (
-                      <option value={product._id} key={product._id}>
+                      <option
+                        value={product._id}
+                        selected={product._id === account?.type}
+                        key={product._id}>
                         {product.title}
                       </option>
                     ))}

@@ -1,10 +1,10 @@
 import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
-import { formatTime, getTimeRemaining } from '@/utils/time'
+import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaCheck, FaTrash } from 'react-icons/fa'
+import { FaCheck, FaCopy, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
@@ -103,18 +103,37 @@ function AccountItem({
           {/* Expire */}
           <p className='text-sm' title='Expire (d/m/y)'>
             <span className='font-semibold'>Expire: </span>
-            <span className={`${new Date() > new Date(data.expire || '') ? 'text-red-500' : ''}`}>
+            <span
+              className={`${
+                new Date() > new Date(data.expire || '') ? 'text-red-500 font-semibold' : ''
+              }`}>
               {data.expire ? formatTime(data.expire) : '-'}
             </span>{' '}
-            <span className='font-semibold text-orange-500 text-xs'>
-              {data.expire && getTimeRemaining(data.expire) ? `(${getTimeRemaining(data.expire)})` : ''}
-            </span>
+            {data?.begin && data?.expire && usingPercentage(data.begin, data.expire) <= 100 && (
+              <span
+                className={`font-semibold text-xs ${getColorClass(data.begin, data.expire)}`}
+                title={`${
+                  usingPercentage(data.begin, data.expire) >= 93
+                    ? '>= 93'
+                    : usingPercentage(data.begin, data.expire) >= 80
+                    ? '>= 80'
+                    : ''
+                }`}>
+                (<span>{usingPercentage(data.begin, data.expire) + '%'}</span>{' '}
+                <span>
+                  {data.expire && getTimeRemaining(data.expire)
+                    ? `(${getTimeRemaining(data.expire)})`
+                    : 'Expired'}
+                </span>
+                )
+              </span>
+            )}{' '}
           </p>
 
           {/* Renew */}
           <p className='text-sm' title='Expire (d/m/y)'>
             <span className='font-semibold'>Renew: </span>
-            <span className={`${new Date() > new Date(data.renew) ? 'text-red-500' : ''}`}>
+            <span className={`${new Date() > new Date(data.renew) ? 'text-red-500 font-semibold' : ''}`}>
               {formatTime(data.renew)}
             </span>
           </p>
@@ -131,7 +150,15 @@ function AccountItem({
           </p>
 
           {/* Info */}
-          <p className='w-full mt-2 max-h-[200px] p-2 border rounded-lg text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+          <div className='relative w-full mt-2 max-h-[200px] p-2 border rounded-lg text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+            <button
+              className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500'
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(data.info)
+              }}>
+              <FaCopy size={16} className='wiggle' />
+            </button>
             {data.info.split('\n').map((line, index) => (
               <span key={index} className='block'>
                 {line.split(' ').map((word, index) => (
@@ -147,7 +174,7 @@ function AccountItem({
                 ))}
               </span>
             ))}
-          </p>
+          </div>
         </div>
 
         {/* MARK: Action Buttons */}

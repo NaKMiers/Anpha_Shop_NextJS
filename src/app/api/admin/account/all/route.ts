@@ -107,6 +107,7 @@ export async function GET(req: NextRequest) {
         path: 'category',
         select: 'title',
       })
+      .sort({ sold: -1 })
       .lean()
 
     // return response

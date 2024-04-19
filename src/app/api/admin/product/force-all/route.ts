@@ -28,7 +28,7 @@ export async function GET() {
         path: 'category',
         select: 'title',
       })
-      .sort({ createdAt: -1 })
+      .sort({ sold: -1 })
       .lean()
 
     // return all products

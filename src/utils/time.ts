@@ -21,26 +21,60 @@ export const isToday = (date: Date): boolean => {
   return isSameDate(date, new Date())
 }
 
+// return time remaining: 1d:2h:3m
 export const getTimeRemaining = (expireDate: Date | string): string => {
   const now = moment()
   const expirationDate = moment(expireDate)
 
-  const diffInDays = expirationDate.diff(now, 'days')
-  if (diffInDays > 0) {
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''}`
+  const diff = moment.duration(expirationDate.diff(now))
+
+  const days = diff.days()
+  const hours = diff.hours()
+  const minutes = diff.minutes()
+
+  let timeRemaining = ''
+
+  if (days > 0) {
+    timeRemaining += `${days}d:`
   }
 
-  const diffInHours = expirationDate.diff(now, 'hours')
-  if (diffInHours > 0) {
-    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''}`
+  if (hours > 0) {
+    timeRemaining += `${hours}h:`
   }
 
-  const diffInMinutes = expirationDate.diff(now, 'minutes')
-  if (diffInMinutes > 0) {
-    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''}`
+  if (minutes > 0) {
+    timeRemaining += `${minutes}m`
   }
 
-  return ''
+  // Remove trailing comma and space if they exist
+  if (timeRemaining.endsWith(', ')) {
+    timeRemaining = timeRemaining.slice(0, -2)
+  }
+
+  return timeRemaining
+}
+
+// return percent of using time
+export const usingPercentage = (begin: Date | string, expire: Date | string): number => {
+  const now = moment()
+  const beginDate = moment(begin)
+  const expirationDate = moment(expire)
+
+  const total = expirationDate.diff(beginDate)
+  const remaining = expirationDate.diff(now)
+
+  return Math.round((1 - remaining / total) * 100)
+}
+
+export const getColorClass = (begin: Date | string, expire: Date | string) => {
+  const percentage = usingPercentage(begin, expire)
+  if (percentage >= 93) {
+    return 'text-red-500'
+  } else if (percentage >= 80) {
+    return 'text-yellow-500'
+  } else {
+    return 'text-green-500'
+  }
 }
 
 // get times

@@ -38,8 +38,6 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     relatedProducts = data.relatedProducts
     comments = data.comments
   } catch (err: any) {
-    // redirect home
-    // redirect('/')
     return notFound()
   }
 
