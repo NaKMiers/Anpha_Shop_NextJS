@@ -226,7 +226,7 @@ function EditVoucherPage() {
             required
             type='text'
             icon={RiCharacterRecognitionLine}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('code')}
           />
 
           {/* Owner */}
@@ -238,7 +238,7 @@ function EditVoucherPage() {
             errors={errors}
             required
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('owner')}
             options={roleUsers.map(user => ({
               value: user._id,
               label: `${user.firstname} ${user.lastname} - (${
@@ -261,7 +261,7 @@ function EditVoucherPage() {
           type='textarea'
           icon={FaQuoteRight}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('desc')}
         />
 
         {/* MARK: Begin - Expire */}
@@ -276,7 +276,7 @@ function EditVoucherPage() {
             required
             type='date'
             icon={FaPlay}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('begin')}
           />
 
           {/* Expire */}
@@ -288,7 +288,7 @@ function EditVoucherPage() {
             errors={errors}
             type='date'
             icon={FaPause}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('expire')}
           />
         </div>
 
@@ -304,7 +304,7 @@ function EditVoucherPage() {
             required
             type='number'
             icon={FaMinus}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('minTotal')}
           />
 
           {/* Max Reduce */}
@@ -317,7 +317,7 @@ function EditVoucherPage() {
             required
             type='number'
             icon={FaWindowMaximize}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('maxReduce')}
           />
         </div>
 
@@ -332,7 +332,7 @@ function EditVoucherPage() {
             errors={errors}
             icon={RiCheckboxMultipleBlankLine}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('type')}
             options={[
               {
                 value: 'fixed-reduce',
@@ -360,7 +360,7 @@ function EditVoucherPage() {
             required
             type='text'
             icon={MdNumbers}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('value')}
           />
         </div>
 
@@ -375,7 +375,7 @@ function EditVoucherPage() {
           type='number'
           icon={FaArrowCircleLeft}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('timesLeft')}
         />
 
         {/* Active */}

@@ -206,7 +206,7 @@ function AddVoucherPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('title')}
         />
 
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
@@ -220,7 +220,7 @@ function AddVoucherPage() {
             required
             type='number'
             icon={FaMoneyBillAlt}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('price')}
           />
 
           {/* Old Price */}
@@ -232,7 +232,7 @@ function AddVoucherPage() {
             errors={errors}
             type='number'
             icon={FaMoneyBillAlt}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('oldPrice')}
           />
         </div>
 
@@ -247,7 +247,7 @@ function AddVoucherPage() {
           rows={10}
           icon={MdNumbers}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('description')}
         />
 
         <div className='flex mb-4'>

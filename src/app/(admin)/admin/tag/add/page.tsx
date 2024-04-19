@@ -83,7 +83,7 @@ function AddTagPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('title')}
         />
 
         <div className='flex'>

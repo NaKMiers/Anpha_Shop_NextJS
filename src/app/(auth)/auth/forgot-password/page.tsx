@@ -98,7 +98,7 @@ function ForgotPasswordPage() {
           Quên Mật Khẩu
         </h1>
 
-        <p className='mb-1 font-body tracking-wider'>
+        <p className='mb-1.5 font-body tracking-wider'>
           *Vui lòng nhập email để nhận mã khôi phục mật khẩu.
         </p>
 
@@ -124,7 +124,7 @@ function ForgotPasswordPage() {
             type='email'
             icon={MdEmail}
             className='mb-5'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('email')}
           />
         )}
 

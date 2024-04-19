@@ -165,7 +165,7 @@ function AddFlashSalePage() {
           errors={errors}
           required
           type='select'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('type')}
           options={[
             {
               label: 'Percentage',
@@ -198,7 +198,7 @@ function AddFlashSalePage() {
           type='text'
           icon={MdNumbers}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('value')}
         />
 
         {/* Begin */}
@@ -212,7 +212,7 @@ function AddFlashSalePage() {
           type='date'
           icon={FaPlay}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('begin')}
         />
 
         {/* MARK: Time */}
@@ -226,7 +226,7 @@ function AddFlashSalePage() {
             errors={errors}
             required
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('timeType')}
             onChange={e => {
               setValue('timeType', e.target.value)
               setTimeType(e.target.value as 'loop' | 'once')
@@ -257,7 +257,7 @@ function AddFlashSalePage() {
               required
               type='number'
               icon={IoReload}
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('duration')}
             />
           ) : (
             // Expire
@@ -270,7 +270,7 @@ function AddFlashSalePage() {
               required
               type='date'
               icon={FaPause}
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('expire')}
             />
           )}
         </div>

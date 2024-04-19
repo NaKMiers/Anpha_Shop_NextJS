@@ -81,7 +81,7 @@ function AddCategoryPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('title')}
         />
 
         <LoadingButton

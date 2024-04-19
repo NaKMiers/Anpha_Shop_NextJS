@@ -270,7 +270,7 @@ function AddAccountPage() {
           type='date'
           icon={FaPlay}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('renew')}
         />
 
         {/* MARK: Date */}
@@ -285,7 +285,7 @@ function AddAccountPage() {
             required
             type='number'
             icon={ImClock}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('days')}
           />
           {/* Hours */}
           <Input
@@ -296,7 +296,7 @@ function AddAccountPage() {
             errors={errors}
             required
             type='number'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('hours')}
           />
           {/* Minutes */}
           <Input
@@ -307,7 +307,7 @@ function AddAccountPage() {
             errors={errors}
             required
             type='number'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('minutes')}
           />
           {/* Seconds */}
           <Input
@@ -318,7 +318,7 @@ function AddAccountPage() {
             errors={errors}
             required
             type='number'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('seconds')}
           />
         </div>
 

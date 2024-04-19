@@ -44,11 +44,10 @@ function ResetPasswordPage() {
 
         // get email and token from query
         const url = new URL(window.location.href)
-        const email = url.searchParams.get('email')
         const token = url.searchParams.get('token')
 
         // send request to server
-        const { message } = await resetPassword(email!, token!, data.newPassword)
+        const { message } = await resetPassword(token!, data.newPassword)
 
         // show success message
         toast.success(message)
@@ -99,7 +98,7 @@ function ResetPasswordPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('newPassword')}
         />
 
         <Input
@@ -112,7 +111,7 @@ function ResetPasswordPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('reNewPassword')}
         />
 
         <div className='flex justify-end mb-3 -mt-3'>

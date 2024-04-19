@@ -5,7 +5,6 @@ export const getAllAccountsApi = async (query: string = '') => {
   // no-store to bypass cache
   const res = await fetch(`/api/admin/account/all${query}`, {
     cache: 'no-store',
-    next: { revalidate: 0 },
   })
 
   // check status
@@ -19,7 +18,7 @@ export const getAllAccountsApi = async (query: string = '') => {
 // [GET]
 export const getAccountApi = async (id: string) => {
   // no-cache
-  const res = await fetch(`/api/admin/account/${id}`, { cache: 'no-store', next: { revalidate: 0 } })
+  const res = await fetch(`/api/admin/account/${id}`, { cache: 'no-store' })
 
   // check status
   if (!res.ok) {

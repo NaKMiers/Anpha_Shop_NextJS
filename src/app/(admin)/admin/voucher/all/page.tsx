@@ -272,7 +272,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             type='text'
             icon={FaSearch}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('search')}
           />
         </div>
 
@@ -326,7 +326,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('beginFrom')}
           />
 
           <Input
@@ -338,7 +338,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('beginTo')}
           />
         </div>
 
@@ -353,7 +353,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('expireFrom')}
           />
 
           <Input
@@ -365,7 +365,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('expireTo')}
           />
         </div>
 
@@ -380,7 +380,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('sort')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -411,7 +411,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('timesLeft')}
             options={[
               {
                 value: '',
@@ -438,7 +438,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('type')}
             options={[
               {
                 value: '',
@@ -469,7 +469,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('active')}
             options={[
               {
                 value: '',

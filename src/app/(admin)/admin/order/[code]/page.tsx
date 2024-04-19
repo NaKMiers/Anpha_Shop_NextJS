@@ -9,8 +9,9 @@ import { IOrder } from '@/models/OrderModel'
 import { getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { FaCopy } from 'react-icons/fa'
 import { IoIosHelpCircle } from 'react-icons/io'
 
 function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }) {
@@ -45,6 +46,12 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
       getOrder()
     }
   }, [code, dispatch])
+
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Đã sao chép: ' + text)
+  }, [])
 
   return (
     <div className='bg-white py-21 px-4 rounded-medium shadow-medium-light'>
@@ -104,7 +111,16 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                 <Fragment key={account._id}>
                   <hr className='mt-5 mb-3' />
 
-                  <div className='border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                  <div className='relative border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                    <button
+                      className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500'
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleCopy(account.info)
+                      }}>
+                      <FaCopy size={16} className='wiggle' />
+                    </button>
+
                     {account.info.split('\n').map((line, index) => (
                       <span key={index} className='block'>
                         {line.split(' ').map((word, index) => (

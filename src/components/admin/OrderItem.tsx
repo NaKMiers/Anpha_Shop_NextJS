@@ -92,7 +92,7 @@ function OrderItem({
       <div
         className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
           selectedOrders.includes(data._id)
-            ? 'bg-sky-50 -translate-y-1'
+            ? 'bg-violet-50 -translate-y-1'
             : data.status === 'done'
             ? 'bg-green-100'
             : data.status === 'pending'

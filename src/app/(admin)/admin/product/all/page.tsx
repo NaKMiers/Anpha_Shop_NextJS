@@ -451,7 +451,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('sort')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -482,7 +482,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('active')}
             options={[
               {
                 value: '',
@@ -510,7 +510,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('flashsale')}
             options={[
               {
                 value: '',

@@ -166,15 +166,15 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
         {/* Search */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
           <Input
-            className='md:max-w-[450px]'
             id='search'
+            className='md:max-w-[450px]'
             label='Search'
             disabled={false}
             register={register}
             errors={errors}
             type='text'
             icon={FaSearch}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('search')}
           />
         </div>
 
@@ -264,7 +264,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('sort')}
             options={[
               {
                 value: 'createdAt|-1',

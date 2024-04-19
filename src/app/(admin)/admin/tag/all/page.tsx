@@ -288,7 +288,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('sort')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -319,7 +319,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('isFeatured')}
             options={[
               {
                 value: '',

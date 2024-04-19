@@ -29,7 +29,7 @@ function SummaryItem({
   return (
     <div
       className={`relative w-full flex justify items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
-        selectedSummaries.includes(data._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
+        selectedSummaries.includes(data._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
       }  ${className}`}
       onClick={() =>
         setSelectedSummaries(prev =>

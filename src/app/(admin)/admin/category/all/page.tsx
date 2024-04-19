@@ -274,7 +274,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('sort')}
             options={[
               {
                 value: 'createdAt|-1',

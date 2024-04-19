@@ -18,7 +18,6 @@ export const getProductPageApi = async (slug: string) => {
   // no cache
   const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/product/${slug}`, {
     cache: 'no-store',
-    next: { revalidate: 0 },
   })
 
   // check status

@@ -31,8 +31,8 @@ export const forgotPasswordApi = async (data: any) => {
 }
 
 // [PATCH]
-export const resetPassword = async (email: string, token: string, newPassword: string) => {
-  const res = await fetch(`/api/auth/reset-password?email=${email}&token=${token}`, {
+export const resetPassword = async (token: string, newPassword: string) => {
+  const res = await fetch(`/api/auth/reset-password?token=${token}`, {
     method: 'PATCH',
     body: JSON.stringify({ newPassword }),
   })

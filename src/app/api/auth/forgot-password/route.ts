@@ -1,7 +1,7 @@
 import { connectDatabase } from '@/config/database'
 import UserModel from '@/models/UserModel'
 import { sendResetPasswordEmail } from '@/utils/sendMail'
-import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: User
@@ -37,13 +37,10 @@ export async function POST(req: NextRequest) {
     }
 
     // ready for sending email
-    const mailHashed = await bcrypt.hash(email, +process.env.BCRYPT_SALT_ROUND! || 10)
-    const url = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?email=${email}&token=${mailHashed}`
+    const token = jwt.sign({ email }, process.env.JWT_SECRET!, { expiresIn: '2h' })
+    const url = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}`
 
     sendResetPasswordEmail(email, url)
-
-    // // send email
-    // sendMail(email, 'Khôi phục mật khẩu', `<a href="${url}"> Đặt lại mật khẩu </a>`)
 
     // return response
     return NextResponse.json({

@@ -85,7 +85,7 @@ function ProductItem({
     <>
       <div
         className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
-          selectedProducts.includes(data._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
+          selectedProducts.includes(data._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
         }  ${className}`}
         onClick={() =>
           setSelectedProducts(prev =>

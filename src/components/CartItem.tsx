@@ -434,7 +434,10 @@ function CartItem({
             <FaTrashAlt
               size={21}
               className='text-secondary cursor-pointer hover:scale-110 common-transition wiggle'
-              onClick={() => setIsOpenConfirmModal(true)}
+              onClick={e => {
+                e.stopPropagation()
+                setIsOpenConfirmModal(true)
+              }}
             />
 
             {/* Confirm Dialog */}

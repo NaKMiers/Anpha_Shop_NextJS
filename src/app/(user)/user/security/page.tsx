@@ -124,7 +124,7 @@ function SecurityPage() {
             icon={FaEyeSlash}
             required
             type='password'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('oldPassword')}
           />
 
           <Input
@@ -136,7 +136,7 @@ function SecurityPage() {
             icon={FaEyeSlash}
             required
             type='password'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('newPassword')}
           />
 
           <Input
@@ -148,7 +148,7 @@ function SecurityPage() {
             icon={FaEyeSlash}
             required
             type='password'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('reNewPassword')}
           />
 
           {isLocalAuth && (

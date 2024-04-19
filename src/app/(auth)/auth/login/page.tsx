@@ -97,7 +97,7 @@ function LoginPage() {
           type='text'
           icon={FaCircleUser}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('usernameOrEmail')}
         />
 
         <Input
@@ -110,7 +110,7 @@ function LoginPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('password')}
         />
 
         <div className='flex justify-end mb-3 -mt-3'>

@@ -184,7 +184,7 @@ function UserItem({
     <>
       <div
         className={`relative flex justify-between items-start gap-2 p-4 rounded-lg shadow-lg common-transition select-none  ${
-          selectedUsers.includes(userData._id) ? 'bg-sky-50 -translate-y-1' : 'bg-white'
+          selectedUsers.includes(userData._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
         } ${!isCurUser ? 'cursor-pointer' : ''} ${className}`}
         onClick={() =>
           !isCurUser &&
@@ -309,7 +309,7 @@ function UserItem({
               icon={HiLightningBolt}
               className='w-full shadow-lg'
               onClick={e => e.stopPropagation()}
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('recharge')}
             />
             <LoadingButton
               className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
@@ -342,7 +342,7 @@ function UserItem({
               type='select'
               className='w-full'
               onClick={e => e.stopPropagation()}
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('type')}
               options={[
                 {
                   value: 'percentage',
@@ -366,7 +366,7 @@ function UserItem({
                 icon={HiLightningBolt}
                 className='w-full shadow-lg'
                 onClick={e => e.stopPropagation()}
-                onFocus={() => clearErrors('info')}
+                onFocus={() => clearErrors('value-' + data._id)}
               />
               <LoadingButton
                 className='px-4 h-[46px] flex items-center justify-center shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'

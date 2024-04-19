@@ -193,7 +193,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               errors={errors}
               type='text'
               icon={FaSearch}
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('search')}
             />
           </div>
 
@@ -227,7 +227,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               type='date'
               icon={FaCalendar}
               className='w-full'
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('from')}
             />
 
             <Input
@@ -239,7 +239,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               type='date'
               icon={FaCalendar}
               className='w-full'
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('to')}
             />
           </div>
 
@@ -254,7 +254,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               errors={errors}
               icon={FaSort}
               type='select'
-              onFocus={() => clearErrors('info')}
+              onFocus={() => clearErrors('sort')}
               options={[
                 {
                   value: 'createdAt|-1',

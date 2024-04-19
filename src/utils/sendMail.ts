@@ -96,13 +96,13 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
 
   // render template with order data
   const html = compiledTemplate(orderData)
-
   console.log('html', html)
   sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
 }
 
 // notify account updated
 export async function notifyAccountUpdated(email: string, data: any) {
+  console.log('- Notify Account Updated -')
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/UpdateAccountMail.pug')
 
@@ -133,7 +133,6 @@ export async function summaryNotification(email: string, summary: any) {
 
   // Render template với dữ liệu
   const html = compiledTemplate(summary)
-
   sendMail(email, 'Monthly Summary', html)
 }
 

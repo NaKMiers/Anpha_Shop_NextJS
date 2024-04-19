@@ -153,7 +153,7 @@ function ResgiterPage() {
           type='text'
           icon={FaCircleUser}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('username')}
         />
 
         <Input
@@ -166,7 +166,7 @@ function ResgiterPage() {
           type='email'
           icon={MdEmail}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('email')}
         />
 
         <Input
@@ -179,7 +179,7 @@ function ResgiterPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('password')}
         />
 
         <Input
@@ -192,8 +192,14 @@ function ResgiterPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('rePassword')}
         />
+
+        <div className='flex justify-end mb-3 -mt-3'>
+          <a href='/auth/forgot-password' className='text-dark hover:underline'>
+            Quên mật khẩu?
+          </a>
+        </div>
 
         <div className='flex items-center justify-end gap-3 mb-4'>
           <a href='/auth/login' className='underline text-sky-500'>

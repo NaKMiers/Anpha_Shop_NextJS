@@ -239,7 +239,7 @@ function AddProductPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('title')}
         />
 
         {/* Prices */}
@@ -254,7 +254,7 @@ function AddProductPage() {
             required
             type='number'
             icon={FaMoneyBillAlt}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('price')}
           />
 
           {/* Old Price */}
@@ -266,7 +266,7 @@ function AddProductPage() {
             errors={errors}
             type='number'
             icon={FaMoneyBillAlt}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('oldPrice')}
           />
         </div>
 
@@ -281,7 +281,7 @@ function AddProductPage() {
           rows={10}
           icon={MdNumbers}
           className='mb-5'
-          onFocus={() => clearErrors('info')}
+          onFocus={() => clearErrors('description')}
         />
 
         {/* Active */}

@@ -256,15 +256,15 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         {/* Search */}
         <div className='flex flex-col col-span-12 md:col-span-6'>
           <Input
-            className='md:max-w-[450px]'
             id='search'
+            className='md:max-w-[450px]'
             label='Search'
             disabled={false}
             register={register}
             errors={errors}
             type='text'
             icon={FaSearch}
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('search')}
           />
         </div>
 
@@ -298,7 +298,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('from')}
           />
 
           <Input
@@ -310,7 +310,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('to')}
           />
         </div>
 
@@ -325,7 +325,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -356,7 +356,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('')}
             options={[
               {
                 value: '',
@@ -384,7 +384,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('')}
             options={[
               {
                 value: '',
@@ -412,7 +412,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('')}
             options={[
               {
                 value: '',

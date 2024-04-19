@@ -272,15 +272,15 @@ function UserPage() {
           <div className='col-span-1'>
             {isEditing ? (
               <Input
-                className='mt-2'
                 id='lastname'
+                className='mt-2'
                 label='Họ'
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
-                onFocus={() => clearErrors('info')}
+                onFocus={() => clearErrors('lastname')}
               />
             ) : (
               <>
@@ -292,15 +292,15 @@ function UserPage() {
           <div className='col-span-1'>
             {isEditing ? (
               <Input
-                className='mt-2'
                 id='firstname'
+                className='mt-2'
                 label='Tên'
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
-                onFocus={() => clearErrors('info')}
+                onFocus={() => clearErrors('firstname')}
               />
             ) : (
               <>
@@ -312,8 +312,8 @@ function UserPage() {
           <div className='col-span-1'>
             {isEditing ? (
               <Input
-                className='mt-2'
                 id='birthday'
+                className='mt-2'
                 label='Ngày sinh'
                 disabled={false}
                 register={register}
@@ -322,7 +322,7 @@ function UserPage() {
                 type='date'
                 maxDate={new Date().toISOString().split('T')[0]}
                 minDate='1900-01-01'
-                onFocus={() => clearErrors('info')}
+                onFocus={() => clearErrors('birthday')}
               />
             ) : (
               <>
@@ -334,15 +334,15 @@ function UserPage() {
           <div className='col-span-1'>
             {isEditing ? (
               <Input
-                className='mt-2'
                 id='job'
+                className='mt-2'
                 label='Nghề nghiệp'
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
-                onFocus={() => clearErrors('info')}
+                onFocus={() => clearErrors('job')}
               />
             ) : (
               <>
@@ -362,7 +362,7 @@ function UserPage() {
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
-                onFocus={() => clearErrors('info')}
+                onFocus={() => clearErrors('address')}
               />
             ) : (
               <>

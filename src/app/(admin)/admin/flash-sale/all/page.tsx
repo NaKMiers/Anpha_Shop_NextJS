@@ -235,7 +235,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('beginFrom')}
           />
 
           <Input
@@ -247,7 +247,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('beginTo')}
           />
         </div>
 
@@ -262,7 +262,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('expireFrom')}
           />
 
           <Input
@@ -274,7 +274,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('expireTo')}
           />
         </div>
 
@@ -289,7 +289,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('sort')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -320,7 +320,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('timeType')}
             options={[
               {
                 value: '',
@@ -348,7 +348,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
-            onFocus={() => clearErrors('info')}
+            onFocus={() => clearErrors('type')}
             options={[
               {
                 value: '',
