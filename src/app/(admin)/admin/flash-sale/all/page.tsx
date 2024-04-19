@@ -54,6 +54,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -234,6 +235,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
 
           <Input
@@ -245,6 +247,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -259,6 +262,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
 
           <Input
@@ -270,6 +274,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -284,6 +289,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -314,6 +320,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -341,6 +348,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

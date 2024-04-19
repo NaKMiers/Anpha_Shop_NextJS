@@ -59,6 +59,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -273,6 +274,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',

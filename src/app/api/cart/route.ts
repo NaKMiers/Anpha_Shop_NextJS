@@ -61,8 +61,6 @@ export async function GET(req: NextRequest) {
       )
       .filter(cartItem => cartItem) as FullyCartItem[]
 
-    console.log('cart', cart)
-
     // return user's cart
     return NextResponse.json({ cart }, { status: 200 })
   } catch (err: any) {

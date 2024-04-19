@@ -22,6 +22,7 @@ function AddCategoryPage() {
     handleSubmit,
     formState: { errors },
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       title: '',
@@ -80,6 +81,7 @@ function AddCategoryPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <LoadingButton

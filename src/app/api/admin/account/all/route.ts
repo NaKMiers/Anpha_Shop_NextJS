@@ -59,9 +59,16 @@ export async function GET(req: NextRequest) {
 
           continue
         }
+
+        if (key === 'active') {
+          if (params[key][0] === 'all') delete filter[key]
+          else filter[key] = false
+          continue
+        }
+
         if (key === 'usingUser') {
-          filter[key] =
-            params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
+          if (params[key][0] === 'all') delete filter[key]
+          else filter[key] = { $exists: false, $eq: null }
           continue
         }
 
@@ -81,6 +88,8 @@ export async function GET(req: NextRequest) {
         filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
     }
+
+    console.log('Filter:', filter)
 
     // get amount of account
     const amount = await AccountModel.countDocuments(filter)

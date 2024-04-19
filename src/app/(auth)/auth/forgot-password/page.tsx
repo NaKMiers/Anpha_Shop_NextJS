@@ -41,6 +41,7 @@ function ForgotPasswordPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       email: '',
@@ -123,6 +124,7 @@ function ForgotPasswordPage() {
             type='email'
             icon={MdEmail}
             className='mb-5'
+            onFocus={() => clearErrors('info')}
           />
         )}
 

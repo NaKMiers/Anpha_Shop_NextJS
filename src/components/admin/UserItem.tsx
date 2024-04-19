@@ -61,6 +61,7 @@ function UserItem({
     formState: { errors },
     reset,
     setError,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       recharge: '',
@@ -308,6 +309,7 @@ function UserItem({
               icon={HiLightningBolt}
               className='w-full shadow-lg'
               onClick={e => e.stopPropagation()}
+              onFocus={() => clearErrors('info')}
             />
             <LoadingButton
               className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
@@ -340,6 +342,7 @@ function UserItem({
               type='select'
               className='w-full'
               onClick={e => e.stopPropagation()}
+              onFocus={() => clearErrors('info')}
               options={[
                 {
                   value: 'percentage',
@@ -363,6 +366,7 @@ function UserItem({
                 icon={HiLightningBolt}
                 className='w-full shadow-lg'
                 onClick={e => e.stopPropagation()}
+                onFocus={() => clearErrors('info')}
               />
               <LoadingButton
                 className='px-4 h-[46px] flex items-center justify-center shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'

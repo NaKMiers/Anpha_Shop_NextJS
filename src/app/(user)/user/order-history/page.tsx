@@ -49,6 +49,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     handleSubmit,
     formState: { errors },
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -192,6 +193,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               errors={errors}
               type='text'
               icon={FaSearch}
+              onFocus={() => clearErrors('info')}
             />
           </div>
 
@@ -225,6 +227,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               type='date'
               icon={FaCalendar}
               className='w-full'
+              onFocus={() => clearErrors('info')}
             />
 
             <Input
@@ -236,6 +239,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               type='date'
               icon={FaCalendar}
               className='w-full'
+              onFocus={() => clearErrors('info')}
             />
           </div>
 
@@ -250,6 +254,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               errors={errors}
               icon={FaSort}
               type='select'
+              onFocus={() => clearErrors('info')}
               options={[
                 {
                   value: 'createdAt|-1',

@@ -37,6 +37,7 @@ function EditVoucherPage() {
     setValue,
     setError,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       code: '',
@@ -225,6 +226,7 @@ function EditVoucherPage() {
             required
             type='text'
             icon={RiCharacterRecognitionLine}
+            onFocus={() => clearErrors('info')}
           />
 
           {/* Owner */}
@@ -236,6 +238,7 @@ function EditVoucherPage() {
             errors={errors}
             required
             type='select'
+            onFocus={() => clearErrors('info')}
             options={roleUsers.map(user => ({
               value: user._id,
               label: `${user.firstname} ${user.lastname} - (${
@@ -258,6 +261,7 @@ function EditVoucherPage() {
           type='textarea'
           icon={FaQuoteRight}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* MARK: Begin - Expire */}
@@ -272,6 +276,7 @@ function EditVoucherPage() {
             required
             type='date'
             icon={FaPlay}
+            onFocus={() => clearErrors('info')}
           />
 
           {/* Expire */}
@@ -283,6 +288,7 @@ function EditVoucherPage() {
             errors={errors}
             type='date'
             icon={FaPause}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -298,6 +304,7 @@ function EditVoucherPage() {
             required
             type='number'
             icon={FaMinus}
+            onFocus={() => clearErrors('info')}
           />
 
           {/* Max Reduce */}
@@ -310,6 +317,7 @@ function EditVoucherPage() {
             required
             type='number'
             icon={FaWindowMaximize}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -324,6 +332,7 @@ function EditVoucherPage() {
             errors={errors}
             icon={RiCheckboxMultipleBlankLine}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'fixed-reduce',
@@ -351,6 +360,7 @@ function EditVoucherPage() {
             required
             type='text'
             icon={MdNumbers}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -365,6 +375,7 @@ function EditVoucherPage() {
           type='number'
           icon={FaArrowCircleLeft}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* Active */}

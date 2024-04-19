@@ -67,6 +67,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -271,6 +272,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             type='text'
             icon={FaSearch}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -324,6 +326,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
 
           <Input
@@ -335,6 +338,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -349,6 +353,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
 
           <Input
@@ -360,6 +365,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -374,6 +380,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -404,6 +411,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -430,6 +438,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -460,6 +469,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

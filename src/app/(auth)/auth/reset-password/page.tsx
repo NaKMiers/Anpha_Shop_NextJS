@@ -22,6 +22,7 @@ function ResetPasswordPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       newPassword: '',
@@ -98,6 +99,7 @@ function ResetPasswordPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <Input
@@ -110,6 +112,7 @@ function ResetPasswordPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <div className='flex justify-end mb-3 -mt-3'>

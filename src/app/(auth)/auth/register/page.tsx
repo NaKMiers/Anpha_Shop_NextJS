@@ -25,6 +25,7 @@ function ResgiterPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       usernameOrEmail: '',
@@ -152,6 +153,7 @@ function ResgiterPage() {
           type='text'
           icon={FaCircleUser}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <Input
@@ -164,6 +166,7 @@ function ResgiterPage() {
           type='email'
           icon={MdEmail}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <Input
@@ -176,6 +179,7 @@ function ResgiterPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <Input
@@ -188,6 +192,7 @@ function ResgiterPage() {
           type='password'
           icon={FaEyeSlash}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <div className='flex items-center justify-end gap-3 mb-4'>

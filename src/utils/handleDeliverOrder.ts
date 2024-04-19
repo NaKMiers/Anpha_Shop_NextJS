@@ -29,7 +29,7 @@ export default async function handleDeliverOrder(id: string) {
   }
 
   // get items and applied voucher
-  const { items, voucherApplied, email, paymentMethod, total } = order
+  const { items, email, paymentMethod, total } = order
 
   // error state
   let orderError = {

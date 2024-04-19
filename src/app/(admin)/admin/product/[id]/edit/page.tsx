@@ -49,7 +49,7 @@ function AddProductPage() {
     getValues,
     setValue,
     setError,
-    reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       title: '',
@@ -239,6 +239,7 @@ function AddProductPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* Prices */}
@@ -253,6 +254,7 @@ function AddProductPage() {
             required
             type='number'
             icon={FaMoneyBillAlt}
+            onFocus={() => clearErrors('info')}
           />
 
           {/* Old Price */}
@@ -264,6 +266,7 @@ function AddProductPage() {
             errors={errors}
             type='number'
             icon={FaMoneyBillAlt}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -278,6 +281,7 @@ function AddProductPage() {
           rows={10}
           icon={MdNumbers}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* Active */}

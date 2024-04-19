@@ -57,6 +57,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -173,6 +174,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             errors={errors}
             type='text'
             icon={FaSearch}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -262,6 +264,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',

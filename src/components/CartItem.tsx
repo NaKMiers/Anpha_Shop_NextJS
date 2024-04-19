@@ -189,7 +189,6 @@ function CartItem({
         // start input
         inputRef.current.isInputing = true
 
-        console.log(curUser)
         if (curUser) {
           dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: value }))
         } else {

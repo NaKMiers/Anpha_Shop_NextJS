@@ -48,8 +48,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     return {
       search: '',
       sort: 'updatedAt|-1',
-      active: true,
-      usingUser: true,
+      active: 'true',
+      usingUser: 'true',
       expire: '',
       renew: '',
     }
@@ -61,6 +61,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     formState: { errors },
     getValues,
     setValue,
+    clearErrors,
     reset,
   } = useForm<FieldValues>({
     defaultValues,
@@ -103,8 +104,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         )
         setValue('search', searchParams?.search || getValues('search'))
         setValue('sort', searchParams?.sort || getValues('sort'))
-        setValue('active', searchParams?.active || getValues('active'))
-        setValue('usingUser', searchParams?.usingUser || getValues('usingUser'))
+        setValue('active', searchParams?.active || getValues('active').toString())
+        setValue('usingUser', searchParams?.usingUser || getValues('usingUser').toString())
         setValue('expire', searchParams?.expire || getValues('expire'))
         setValue('renew', searchParams?.renew || getValues('renew'))
       } catch (err: any) {
@@ -178,6 +179,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
+      console.log('data', data)
+
       // reset page
       if (searchParams?.page) {
         delete searchParams.page
@@ -275,6 +278,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             type='text'
             icon={FaSearch}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -344,6 +348,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -374,9 +379,10 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
-                value: '',
+                value: 'all',
                 label: 'All',
               },
               {
@@ -400,9 +406,10 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
-                value: '',
+                value: 'all',
                 label: 'All',
               },
               {
@@ -426,6 +433,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -452,6 +460,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

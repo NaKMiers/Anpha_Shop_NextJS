@@ -61,6 +61,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -263,6 +264,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             type='text'
             icon={FaSearch}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -296,6 +298,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
 
           <Input
@@ -307,6 +310,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             type='date'
             icon={FaCalendar}
             className='w-full'
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -321,6 +325,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -351,6 +356,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -378,6 +384,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -405,6 +412,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

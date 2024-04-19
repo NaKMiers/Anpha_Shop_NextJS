@@ -40,6 +40,7 @@ function AddVoucherPage() {
     formState: { errors },
     setError,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       title: '',
@@ -205,6 +206,7 @@ function AddVoucherPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
@@ -218,6 +220,7 @@ function AddVoucherPage() {
             required
             type='number'
             icon={FaMoneyBillAlt}
+            onFocus={() => clearErrors('info')}
           />
 
           {/* Old Price */}
@@ -229,6 +232,7 @@ function AddVoucherPage() {
             errors={errors}
             type='number'
             icon={FaMoneyBillAlt}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -243,6 +247,7 @@ function AddVoucherPage() {
           rows={10}
           icon={MdNumbers}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <div className='flex mb-4'>

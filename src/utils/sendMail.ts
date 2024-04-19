@@ -96,6 +96,8 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
 
   // render template with order data
   const html = compiledTemplate(orderData)
+
+  console.log('html', html)
   sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
 }
 

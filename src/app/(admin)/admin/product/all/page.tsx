@@ -76,6 +76,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -450,6 +451,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -480,6 +482,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',
@@ -507,6 +510,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

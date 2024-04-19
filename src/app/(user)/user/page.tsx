@@ -42,7 +42,7 @@ function UserPage() {
     handleSubmit,
     formState: { errors },
     setValue,
-    setError,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       firstname: '',
@@ -280,6 +280,7 @@ function UserPage() {
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
+                onFocus={() => clearErrors('info')}
               />
             ) : (
               <>
@@ -299,6 +300,7 @@ function UserPage() {
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
+                onFocus={() => clearErrors('info')}
               />
             ) : (
               <>
@@ -320,6 +322,7 @@ function UserPage() {
                 type='date'
                 maxDate={new Date().toISOString().split('T')[0]}
                 minDate='1900-01-01'
+                onFocus={() => clearErrors('info')}
               />
             ) : (
               <>
@@ -339,6 +342,7 @@ function UserPage() {
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
+                onFocus={() => clearErrors('info')}
               />
             ) : (
               <>
@@ -358,6 +362,7 @@ function UserPage() {
                 errors={errors}
                 icon={CiHashtag}
                 type='text'
+                onFocus={() => clearErrors('info')}
               />
             ) : (
               <>

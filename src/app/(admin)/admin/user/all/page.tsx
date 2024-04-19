@@ -59,6 +59,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -229,6 +230,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
             errors={errors}
             type='text'
             icon={FaSearch}
+            onFocus={() => clearErrors('info')}
           />
         </div>
 
@@ -284,6 +286,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -314,6 +317,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

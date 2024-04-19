@@ -37,6 +37,7 @@ function EditFlashSalePage() {
     formState: { errors },
     setValue,
     setError,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       type: 'percentage',
@@ -185,6 +186,7 @@ function EditFlashSalePage() {
           errors={errors}
           required
           type='select'
+          onFocus={() => clearErrors('info')}
           options={[
             {
               label: 'Percentage',
@@ -217,6 +219,7 @@ function EditFlashSalePage() {
           type='text'
           icon={MdNumbers}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* Begin */}
@@ -230,6 +233,7 @@ function EditFlashSalePage() {
           type='date'
           icon={FaPlay}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* Time Type */}
@@ -246,6 +250,7 @@ function EditFlashSalePage() {
               setValue('timeType', e.target.value)
               setTimeType(e.target.value as 'loop' | 'once')
             }}
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 label: 'Loop',
@@ -271,6 +276,7 @@ function EditFlashSalePage() {
               required
               type='number'
               icon={IoReload}
+              onFocus={() => clearErrors('info')}
             />
           )}
           {timeType === 'once' && (
@@ -283,6 +289,7 @@ function EditFlashSalePage() {
               required
               type='date'
               icon={FaPause}
+              onFocus={() => clearErrors('info')}
             />
           )}
         </div>

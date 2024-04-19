@@ -50,8 +50,6 @@ export async function GET() {
       return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB)
     })
 
-    console.log('')
-
     // get all tags from products to make sure that no tag with empty products
     const tags: ITag[] = Array.from(
       new Set(

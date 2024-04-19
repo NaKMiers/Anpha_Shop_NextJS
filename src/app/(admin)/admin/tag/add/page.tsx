@@ -23,6 +23,7 @@ function AddTagPage() {
     handleSubmit,
     formState: { errors },
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       title: '',
@@ -82,6 +83,7 @@ function AddTagPage() {
           type='text'
           icon={RiCharacterRecognitionLine}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         <div className='flex'>

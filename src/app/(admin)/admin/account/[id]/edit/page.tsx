@@ -41,6 +41,7 @@ function AddAccountPage() {
     setError,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       type: '',
@@ -255,6 +256,7 @@ function AddAccountPage() {
           rows={8}
           icon={FaInfo}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* Renew */}
@@ -268,6 +270,7 @@ function AddAccountPage() {
           type='date'
           icon={FaPlay}
           className='mb-5'
+          onFocus={() => clearErrors('info')}
         />
 
         {/* MARK: Date */}
@@ -282,6 +285,7 @@ function AddAccountPage() {
             required
             type='number'
             icon={ImClock}
+            onFocus={() => clearErrors('info')}
           />
           {/* Hours */}
           <Input
@@ -292,6 +296,7 @@ function AddAccountPage() {
             errors={errors}
             required
             type='number'
+            onFocus={() => clearErrors('info')}
           />
           {/* Minutes */}
           <Input
@@ -302,6 +307,7 @@ function AddAccountPage() {
             errors={errors}
             required
             type='number'
+            onFocus={() => clearErrors('info')}
           />
           {/* Seconds */}
           <Input
@@ -312,6 +318,7 @@ function AddAccountPage() {
             errors={errors}
             required
             type='number'
+            onFocus={() => clearErrors('info')}
           />
         </div>
 

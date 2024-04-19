@@ -60,6 +60,7 @@ function CartPage() {
     formState: { errors },
     setError,
     getValues,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       email: curUser?.email || '',
@@ -433,6 +434,7 @@ function CartPage() {
                 type='email'
                 icon={MdEmail}
                 className='mb-2'
+                onFocus={() => clearErrors('email')}
               />
             </>
           )}
@@ -463,6 +465,7 @@ function CartPage() {
               required
               type='text'
               icon={RiCoupon2Fill}
+              onFocus={() => clearErrors('code')}
               className='w-full'
             />
             <button

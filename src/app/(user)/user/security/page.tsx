@@ -28,6 +28,7 @@ function SecurityPage() {
     formState: { errors },
     setError,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
       oldPassword: '',
@@ -123,6 +124,7 @@ function SecurityPage() {
             icon={FaEyeSlash}
             required
             type='password'
+            onFocus={() => clearErrors('info')}
           />
 
           <Input
@@ -134,7 +136,9 @@ function SecurityPage() {
             icon={FaEyeSlash}
             required
             type='password'
+            onFocus={() => clearErrors('info')}
           />
+
           <Input
             id='reNewPassword'
             label='Nhập lại mật khẩu mới'
@@ -144,6 +148,7 @@ function SecurityPage() {
             icon={FaEyeSlash}
             required
             type='password'
+            onFocus={() => clearErrors('info')}
           />
 
           {isLocalAuth && (

@@ -61,6 +61,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     getValues,
     setValue,
     reset,
+    clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
   })
@@ -287,6 +288,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: 'createdAt|-1',
@@ -317,6 +319,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             errors={errors}
             icon={FaSort}
             type='select'
+            onFocus={() => clearErrors('info')}
             options={[
               {
                 value: '',

@@ -19,6 +19,7 @@ interface InputProps {
   minDate?: string
   maxDate?: string
   onClick?: (e?: any) => void
+  onFocus?: (e?: any) => void
 }
 
 function Input({
@@ -34,6 +35,7 @@ function Input({
   options,
   rows,
   onClick,
+  onFocus,
   minDate,
   maxDate,
   className = '',
@@ -47,7 +49,7 @@ function Input({
   }, [])
 
   return (
-    <div className={`${className}`} onClick={onClick}>
+    <div className={`${className}`} onClick={onClick} onFocus={onFocus}>
       <div className={`flex`}>
         {/* MARK: Icon */}
         {Icon && (
