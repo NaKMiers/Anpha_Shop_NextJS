@@ -363,23 +363,25 @@ function AddAccountPage() {
         </div>
 
         {/* MARK: Notify */}
-        <div className='flex mb-5'>
-          <div className='bg-white rounded-lg px-3 flex items-center'>
-            <FaCheck size={16} className='text-secondary' />
+        {account?.usingUser && (
+          <div className='flex mb-5'>
+            <div className='bg-white rounded-lg px-3 flex items-center'>
+              <FaCheck size={16} className='text-secondary' />
+            </div>
+            <input
+              className='peer'
+              type='checkbox'
+              id='notify'
+              hidden
+              {...register('notify', { required: false })}
+            />
+            <label
+              className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition bg-white text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
+              htmlFor='notify'>
+              Notify
+            </label>
           </div>
-          <input
-            className='peer'
-            type='checkbox'
-            id='notify'
-            hidden
-            {...register('notify', { required: false })}
-          />
-          <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition bg-white text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
-            htmlFor='notify'>
-            Notify
-          </label>
-        </div>
+        )}
 
         {/* Save Button */}
         <LoadingButton
