@@ -44,3 +44,32 @@ export const resetPassword = async (token: string, newPassword: string) => {
 
   return await res.json()
 }
+
+// [POST]
+export const verifyEmailApi = async (email: string, token: string = '') => {
+  const res = await fetch('/api/auth/verify-email' + (token ? '?token=' + token : ''), {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+export const verifyPhoneApi = async (phone: string) => {
+  const res = await fetch('/api/auth/verify-phone', {
+    method: 'POST',
+    body: JSON.stringify({ phone }),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}

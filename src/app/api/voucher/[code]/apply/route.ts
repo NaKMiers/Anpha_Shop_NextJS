@@ -4,8 +4,10 @@ import { formatPrice } from '@/utils/number'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Voucher
+// Models: Voucher, User
 import '@/models/VoucherModel'
+import '@/models/UserModel'
+import { FullyVoucher } from '@/app/api/user/order-history/route'
 
 // [POST]: /voucher/:code/apply
 export async function POST(req: NextRequest, { params: { code } }: { params: { code: string } }) {
@@ -23,11 +25,19 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
     const { email, total } = await req.json()
 
     // get voucher from database to apply
-    const voucher: IVoucher | null = await VoucherModel.findOne({ code }).lean()
+    const voucher: FullyVoucher | null = await VoucherModel.findOne({ code }).populate('owner').lean()
 
     // if voucher does not exist
     if (!voucher || !voucher.active) {
       return NextResponse.json({ message: 'Voucher không tồn tại' }, { status: 404 })
+    }
+
+    // prevent user use their own voucher
+    if (voucher.owner.email === email || voucher.owner.email === userEmail) {
+      return NextResponse.json(
+        { message: 'Bạn không thể sử dụng voucher của chính mình' },
+        { status: 401 }
+      )
     }
 
     // voucher has been used by you

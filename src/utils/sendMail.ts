@@ -4,7 +4,7 @@ import nodeMailer from 'nodemailer'
 import path from 'path'
 import pug from 'pug'
 
-// SENDMAIL CORE
+// SEND MAIL CORE
 const transporter = nodeMailer.createTransport({
   service: 'gmail',
   secure: true,
@@ -13,6 +13,9 @@ const transporter = nodeMailer.createTransport({
     pass: process.env.MAIL_APP_PASSWORD,
   },
 })
+
+// SEND SMS CORE
+const twilio = async () => {}
 
 export function sendMail(to: string, subject: string, html: string) {
   transporter.sendMail(
@@ -190,6 +193,21 @@ export async function notifyExpiredAccount(email: string, data: any) {
 // verify email
 export async function sendVerifyEmail(email: string, link: string) {
   console.log('- Send Verify Email -')
+
+  // get email interface path
+  const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/VerifyEmailMail.pug')
+
+  // get email interface file
+  const templateContent = fs.readFileSync(templatePath, 'utf-8')
+
+  // Compile template
+  const compiledTemplate = pug.compile(templateContent, {
+    filename: templatePath,
+  })
+
+  // Render template với dữ liệu
+  const html = compiledTemplate({ link })
+  sendMail(email, 'Xác minh email', html)
 }
 
 // verify phone

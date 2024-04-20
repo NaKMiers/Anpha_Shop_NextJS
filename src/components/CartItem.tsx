@@ -319,11 +319,7 @@ function CartItem({
       {/* MARK: Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
-        <Link href={`/${cartItem.product.slug}`} prefetch={false} onClick={e => e.stopPropagation()}>
-          <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`} title={cartItem.product.title}>
-            {cartItem.product.title}
-          </h2>
-        </Link>
+        <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`}>{cartItem.product.title}</h2>
 
         {/* Info */}
         {isOrderDetailProduct && (

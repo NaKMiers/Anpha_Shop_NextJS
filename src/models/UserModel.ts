@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 
 const UserSchema = new Schema(
   {
+    // Authentication
     username: {
       type: String,
       required: function (this: { authType: string }) {
@@ -24,6 +25,24 @@ const UserSchema = new Schema(
         message: 'Email không hợp lệ',
       },
     },
+    phone: {
+      type: String,
+      unique: true,
+      validate: {
+        validator: function (value: string) {
+          return /^0\d{9,10}$/.test(value)
+        },
+        message: 'Số điện thoại không hợp lệ',
+      },
+    },
+    verifiedEmail: {
+      type: Boolean,
+      default: false,
+    },
+    verifiedPhone: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
       required: function (this: { authType: string }) {
@@ -36,21 +55,18 @@ const UserSchema = new Schema(
         message: 'Mật khẩu không hợp lệ',
       },
     },
-    balance: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    accumulated: {
-      type: Number,
-      default: 0,
-      min: 0,
+    authType: {
+      type: String,
+      enum: ['local', 'google', 'facebook'],
+      default: 'local',
     },
     role: {
       type: String,
       enum: ['admin', 'user', 'editor', 'collaborator'],
       default: 'user',
     },
+
+    // Infomation
     avatar: {
       type: String,
       default: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,
@@ -64,13 +80,23 @@ const UserSchema = new Schema(
       default: '',
     },
     birthday: Date,
-    phone: String,
     address: String,
     job: String,
-    authType: {
-      type: String,
-      enum: ['local', 'google', 'facebook'],
-      default: 'local',
+
+    // Others
+    balance: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    accumulated: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalIncome: {
+      type: Number,
+      default: 0,
     },
     commission: {
       type: {
@@ -82,10 +108,6 @@ const UserSchema = new Schema(
         type: String,
         default: '0',
       },
-    },
-    totalIncome: {
-      type: Number,
-      default: 0,
     },
   },
   {
@@ -134,6 +156,8 @@ export interface IUser {
     value: string
   }
   totalIncome?: number
+  verifiedEmail: boolean
+  verifiedPhone: boolean
   createdAt: string
   updatedAt: string
 }

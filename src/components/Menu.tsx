@@ -74,7 +74,9 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
           // MARK: User Logged In
           curUser?._id && (
             <>
-              <li className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'>
+              <Link
+                href='/user'
+                className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'>
                 <Image
                   className='aspect-square rounded-full wiggle-0'
                   src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
@@ -87,7 +89,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                     ? curUser?.username
                     : curUser?.firstname + ' ' + curUser?.lastname}
                 </span>
-              </li>
+              </Link>
 
               <li className='flex items-center gap-1 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
                 <span className='font-semibold'>Số dư: </span>

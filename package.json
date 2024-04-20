@@ -38,6 +38,7 @@
     "sharp": "^0.32.6",
     "slugify": "^1.6.6",
     "timeago.js": "^4.0.2",
+    "twilio": "^5.0.4",
     "unidecode": "^1.0.1"
   },
   "devDependencies": {

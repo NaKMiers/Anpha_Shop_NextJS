@@ -1,3 +1,4 @@
+import UserModel from '@/models/UserModel'
 import { sendMail } from '@/utils/sendMail'
 import { NextRequest, NextResponse } from 'next/server'
 

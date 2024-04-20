@@ -5,33 +5,41 @@ import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
-import { changeAvatarApi, updateProfileApi } from '@/requests'
+import { changeAvatarApi, updateProfileApi, verifyEmailApi, verifyPhoneApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatDate } from '@/utils/time'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { CiHashtag } from 'react-icons/ci'
-import { FaCamera, FaPlus } from 'react-icons/fa'
+import { FaCamera, FaCircleNotch, FaPhone, FaPlus } from 'react-icons/fa'
+import { FaLocationDot } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
+import { IoText } from 'react-icons/io5'
+import { MdDateRange, MdWork } from 'react-icons/md'
 
 function UserPage() {
   // hooks
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session, update } = useSession()
+  const queryParams = useSearchParams()
   const router = useRouter()
+  const user: any = session?.user
 
   // states
-  const [user, setUser] = useState<any>(session?.user)
+  // const [user, setUser] = useState<any>(session?.user)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [imageUrl, setImageUrl] = useState<string>('')
   const [file, setFile] = useState<File | null>(null)
   const [isChangingAvatar, setIsChangingAvatar] = useState<boolean>(false)
+  const [countDownEmail, setCountDownEmail] = useState<number>(0)
+  const [countDownPhone, setCountDownPhone] = useState<number>(0)
+  const [isConfirmEmail, setIsConfirmEmail] = useState<boolean>(false)
+  const [isConfirmPhone, setIsConfirmPhone] = useState<boolean>(false)
 
   // refs
   const avatarInputRef = useRef<HTMLInputElement>(null)
@@ -50,30 +58,51 @@ function UserPage() {
       birthday: '',
       job: '',
       address: '',
+      phone: '',
     },
   })
 
   // get user session
   useEffect(() => {
     const getCurUser = async () => {
-      const session = await getSession()
+      // const session = await getSession()
 
       // get user from session
-      const curUser: any = session?.user
-      setUser(curUser)
+      // const curUser: any = session?.user
+      // setUser(curUser)
 
       // set form values
-      setValue('firstname', curUser?.firstname)
-      setValue('lastname', curUser?.lastname)
-      setValue('birthday', curUser?.birthday)
-      setValue('job', curUser?.job)
-      setValue('address', curUser?.address)
+      setValue('firstname', user?.firstname)
+      setValue('lastname', user?.lastname)
+      setValue('birthday', user?.birthday)
+      setValue('job', user?.job)
+      setValue('address', user?.address)
+      setValue('phone', user?.phone)
     }
 
-    if (!user?._id) {
-      getCurUser()
+    getCurUser()
+  }, [setValue, user])
+
+  // auto confirm verify email
+  useEffect(() => {
+    const token = queryParams.get('token')
+
+    const confirmVerifyEmail = async () => {
+      try {
+        const { message } = await verifyEmailApi(user.email, token || '')
+        toast.success(message)
+        setIsConfirmEmail(true)
+        router.push('/user')
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      }
     }
-  }, [user?._id, setValue])
+
+    if (token && !isConfirmEmail) {
+      confirmVerifyEmail()
+    }
+  }, [update, router, queryParams, user.email, isConfirmEmail])
 
   // MARK: Submit
   // handle update profile
@@ -83,8 +112,10 @@ function UserPage() {
 
     try {
       // send request to server to update profile
-      const { updatedUser, message } = await updateProfileApi(data)
-      setUser(updatedUser)
+      const { message } = await updateProfileApi(data)
+
+      // update user session
+      await update()
 
       // turn off editing mode
       setIsEditing(false)
@@ -119,6 +150,58 @@ function UserPage() {
     [imageUrl]
   )
 
+  const handleVerifyEmail = useCallback(async () => {
+    // start count down
+    setCountDownEmail(60)
+
+    try {
+      const { message } = await verifyEmailApi(user.email)
+
+      toast.success(message)
+    } catch (err: any) {
+      console.log('err', err)
+      toast.error(err.message)
+      setCountDownEmail(0)
+    }
+  }, [user])
+
+  const handleVerifyPhone = useCallback(async () => {
+    // start count down
+    setCountDownPhone(60)
+
+    try {
+      const { message } = await verifyPhoneApi(user.phone)
+
+      toast.success(message)
+    } catch (err: any) {
+      console.log('err', err)
+      toast.error(err.message)
+      setCountDownPhone(0)
+    }
+  }, [user])
+
+  // count down email
+  useEffect(() => {
+    if (countDownEmail > 0) {
+      const timer = setTimeout(() => {
+        setCountDownEmail(countDownEmail - 1)
+      }, 1000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [countDownEmail])
+
+  // count down phone
+  useEffect(() => {
+    if (countDownPhone > 0) {
+      const timer = setTimeout(() => {
+        setCountDownPhone(countDownPhone - 1)
+      }, 1000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [countDownPhone])
+
   // update avatar
   const handleSaveAvatar = useCallback(async () => {
     if (file) {
@@ -132,7 +215,7 @@ function UserPage() {
         // send request to server to update avatar
         const { updatedUser, message } = await changeAvatarApi(formData)
 
-        // request server to update user session
+        // update user session
         await update()
 
         // show success message
@@ -160,7 +243,7 @@ function UserPage() {
 
       <div className='grid grid-cols-12 gap-21'>
         {/* MARK: Avatar */}
-        <div className='flex flex-col items-center col-span-12 sm:col-span-5 lg:col-span-3 sm:border-r border-slate-400 p-2'>
+        <div className='flex flex-col items-center col-span-12 sm:col-span-6 lg:col-span-3 sm:border-r border-slate-400 p-2'>
           <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden p-3 group'>
             <Image
               className='rounded-full common-transition'
@@ -201,43 +284,42 @@ function UserPage() {
         </div>
 
         {/* MARK: Basic Info */}
-        <div className='col-span-12 text-center sm:text-start sm:col-span-7 lg:col-span-9 grid grid-cols-12'>
-          <div className='col-span-12 md:col-span-7'>
-            {user?.username && (
-              <div className='mb-3'>
-                <p className='font-semibold'>Username</p>
-                <p>{user?.username}</p>
-              </div>
-            )}
-
-            <div className='mb-3'>
-              <p className='font-semibold'>Email</p>
-              <p>{user?.email}</p>
-            </div>
-
-            <div className='mb-3'>
-              <p className='font-semibold'>Tổng tích lũy</p>
-              {user?.accumulated >= 0 && <span>{formatPrice(user?.accumulated)}</span>}
-            </div>
+        <div className='col-span-12 text-center sm:text-start sm:col-span-6 lg:col-span-9 grid grid-cols-12 gap-x-21'>
+          {/* Email */}
+          <div className='col-span-12 md:col-span-6 mb-3'>
+            <p className='font-semibold'>
+              Email{' '}
+              {countDownEmail === 0 ? (
+                user.verifiedEmail ? (
+                  <span className='text-green-500 text-sm font-normal'>(Đã xác minh)</span>
+                ) : (
+                  <span
+                    className='text-yellow-500 text-sm font-normal cursor-pointer'
+                    onClick={handleVerifyEmail}>
+                    (Xác minh ngay)
+                  </span>
+                )
+              ) : (
+                <span className='inlineitems-block text-slate-400 font-normal text-sm'>
+                  <FaCircleNotch size={14} className='-mt-1 animate-spin inline' /> {countDownEmail}
+                </span>
+              )}
+            </p>
+            <p>{user?.email}</p>
           </div>
 
-          <div className='col-span-12 md:col-span-5'>
-            <div className='mb-3'>
-              <p className='font-semibold'>Số dư tài khoản</p>
-              <div className='flex items-center gap-2 justify-center sm:justify-normal'>
-                {user?.balance >= 0 && <p className='text-green-500'>{formatPrice(user?.balance)}</p>}
-                <Link
-                  className='group flex-shrink-0 rounded-full border-2 border-primary hover:border-secondary p-[2px] hover:scale-110 common-transition'
-                  href='/recharge'>
-                  <FaPlus
-                    size={10}
-                    className='text-primary common-transition wiggle group-hover:text-secondary'
-                  />
-                </Link>
-              </div>
+          {/* Username */}
+          {user?.username ? (
+            <div className='col-span-12 md:col-span-6 mb-3'>
+              {user?.username && (
+                <>
+                  <p className='font-semibold'>Username</p>
+                  <p>{user?.username}</p>
+                </>
+              )}
             </div>
-
-            <div className='mb-3'>
+          ) : (
+            <div className='col-span-12 md:col-span-6 mb-3'>
               <p className='font-semibold mb-1'>Nạp tiền</p>
               <Link
                 href='/recharge'
@@ -251,7 +333,47 @@ function UserPage() {
                 />
               </Link>
             </div>
+          )}
+
+          {/* Accumulated */}
+          <div className='col-span-12 md:col-span-6 mb-3'>
+            <p className='font-semibold'>Tổng tích lũy</p>
+            {user?.accumulated >= 0 && formatPrice(user?.accumulated)}
           </div>
+
+          {/* Balance */}
+          <div className='col-span-12 md:col-span-6 mb-3'>
+            <p className='font-semibold'>Số dư tài khoản</p>
+            <div className='flex items-center gap-2 justify-center sm:justify-normal'>
+              {user?.balance >= 0 && <p className='text-green-500'>{formatPrice(user?.balance)}</p>}
+              <Link
+                className='group flex-shrink-0 rounded-full border-2 border-primary hover:border-secondary p-[2px] hover:scale-110 common-transition'
+                href='/recharge'>
+                <FaPlus
+                  size={10}
+                  className='text-primary common-transition wiggle group-hover:text-secondary'
+                />
+              </Link>
+            </div>
+          </div>
+
+          {/* Introduction Code */}
+          {/* <div className='col-span-12 md:col-span-10 mb-3'>
+            <p className='font-semibold'>
+              Mã giới thiệu{' '}
+              <span className='text-slate-500 text-sm font-normal cursor-pointer'>
+                (Xác minh số điện thoại để áp dụng)
+              </span>
+            </p>
+            <p>
+              &ldquo;<span className='text-secondary font-body tracking-wider'>{user?.phone}</span>
+              &rdquo;
+            </p>
+            <p className='font-body tracking-wide text-[13px] text-slate-400'>
+              Hãy để bạn bè của bạn nhập mã này vào ô &#34;Voucher&#34; khi toán để được cộng{' '}
+              <span className='text-green-500'>10%</span> giá trị đơn hàng vào số dư ngay.
+            </p>
+          </div> */}
         </div>
       </div>
 
@@ -278,14 +400,14 @@ function UserPage() {
                 disabled={false}
                 register={register}
                 errors={errors}
-                icon={CiHashtag}
+                icon={IoText}
                 type='text'
                 onFocus={() => clearErrors('lastname')}
               />
             ) : (
               <>
                 <span className='font-semibold'>Họ: </span>
-                <span>{user?.lastname}</span>
+                <span className={!user?.lastname ? 'text-slate-400' : ''}>{user?.lastname}</span>
               </>
             )}
           </div>
@@ -298,14 +420,14 @@ function UserPage() {
                 disabled={false}
                 register={register}
                 errors={errors}
-                icon={CiHashtag}
+                icon={IoText}
                 type='text'
                 onFocus={() => clearErrors('firstname')}
               />
             ) : (
               <>
                 <span className='font-semibold'>Tên: </span>
-                <span>{user?.firstname}</span>
+                <span className={!user?.firstname ? 'text-slate-400' : ''}>{user?.firstname}</span>
               </>
             )}
           </div>
@@ -318,7 +440,7 @@ function UserPage() {
                 disabled={false}
                 register={register}
                 errors={errors}
-                icon={CiHashtag}
+                icon={MdDateRange}
                 type='date'
                 maxDate={new Date().toISOString().split('T')[0]}
                 minDate='1900-01-01'
@@ -327,7 +449,9 @@ function UserPage() {
             ) : (
               <>
                 <span className='font-semibold'>Ngày sinh: </span>
-                <span>{formatDate(user?.birthday)}</span>
+                <span className={!user?.birthday ? 'text-slate-400' : ''}>
+                  {formatDate(user?.birthday)}
+                </span>
               </>
             )}
           </div>
@@ -340,14 +464,14 @@ function UserPage() {
                 disabled={false}
                 register={register}
                 errors={errors}
-                icon={CiHashtag}
+                icon={MdWork}
                 type='text'
                 onFocus={() => clearErrors('job')}
               />
             ) : (
               <>
                 <span className='font-semibold'>Nghề nghiệp: </span>
-                <span>{user?.job}</span>
+                <span className={!user?.job ? 'text-slate-400' : ''}>{user?.job}</span>
               </>
             )}
           </div>
@@ -360,14 +484,51 @@ function UserPage() {
                 disabled={false}
                 register={register}
                 errors={errors}
-                icon={CiHashtag}
+                icon={FaLocationDot}
                 type='text'
                 onFocus={() => clearErrors('address')}
               />
             ) : (
               <>
                 <span className='font-semibold'>Địa chỉ: </span>
-                <span>{user?.address}</span>
+                <span className={!user?.address ? 'text-slate-400' : ''}>{user?.address}</span>
+              </>
+            )}
+          </div>
+          <div className='col-span-1'>
+            {isEditing ? (
+              <Input
+                className='mt-2'
+                id='phone'
+                label='Số điện thoại'
+                disabled={false}
+                register={register}
+                errors={errors}
+                icon={FaPhone}
+                type='number'
+                onFocus={() => clearErrors('phone')}
+              />
+            ) : (
+              <>
+                <span className='font-semibold'>Số điện thoại: </span>
+                <span className={!user?.phone ? 'text-slate-400' : ''}>
+                  {user?.phone || 'Chưa có thông tin'}
+                </span>{' '}
+                {/* {countDownPhone === 0 ? (
+                  user.verifiedPhone ? (
+                    <span className='text-green-500 text-sm font-normal'>(Đã xác minh)</span>
+                  ) : (
+                    <span
+                      className='text-yellow-500 text-sm font-normal cursor-pointer'
+                      onClick={handleVerifyPhone}>
+                      (Xác minh ngay)
+                    </span>
+                  )
+                ) : (
+                  <span className='inlineitems-block text-slate-400 font-normal text-sm'>
+                    <FaCircleNotch size={14} className='-mt-1 animate-spin inline' /> {countDownPhone}
+                  </span>
+                )} */}
               </>
             )}
           </div>
