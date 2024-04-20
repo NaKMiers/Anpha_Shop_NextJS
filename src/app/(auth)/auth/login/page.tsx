@@ -148,7 +148,7 @@ function LoginPage() {
 
         <div className='flex items-center justify-center gap-4'>
           <button
-            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-200 common-transition'
+            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
             onClick={() => signIn('google', { callbackUrl: '/' })}>
             <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
           </button>
@@ -158,6 +158,12 @@ function LoginPage() {
             onClick={() => signIn('facebook')}>
             <Image className='wiggle' src='/images/facebook.jpg' height={25} width={25} alt='facebook' />
           </button> */}
+
+          <button
+            className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
+            onClick={() => signIn('github', { callbackUrl: '/' })}>
+            <Image className='wiggle' src='/images/github.jpg' height={25} width={25} alt='github' />
+          </button>
         </div>
       </div>
     </div>

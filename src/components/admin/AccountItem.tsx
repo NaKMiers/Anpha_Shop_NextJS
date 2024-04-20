@@ -119,10 +119,11 @@ function AccountItem({
                     ? '>= 80'
                     : ''
                 }`}>
-                (<span>{usingPercentage(data.begin, data.expire) + '%'}</span>{' '}
+                (<span>{usingPercentage(data.begin, data.expire) + '%'}</span>
+                {' - '}
                 <span>
                   {data.expire && getTimeRemaining(data.expire)
-                    ? `(${getTimeRemaining(data.expire)})`
+                    ? `${getTimeRemaining(data.expire)}`
                     : 'Expired'}
                 </span>
                 )

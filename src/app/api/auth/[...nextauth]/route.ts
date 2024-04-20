@@ -2,8 +2,11 @@ import { connectDatabase } from '@/config/database'
 import UserModel, { IUser } from '@/models/UserModel'
 import bcrypt from 'bcrypt'
 import NextAuth from 'next-auth'
+
+// Providers
 import CredentialsProvider from 'next-auth/providers/credentials'
 import FacebookProvider from 'next-auth/providers/facebook'
+import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 
 // Models: User
@@ -25,12 +28,16 @@ const handler = NextAuth({
     }),
 
     // FACEBOOK
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-    }),
+    // FacebookProvider({
+    //   clientId: process.env.FACEBOOK_CLIENT_ID!,
+    //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+    // }),
 
-    // TIKTOK
+    // GITHUB
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
 
     // CREDENTIALS
     CredentialsProvider({
@@ -124,45 +131,66 @@ const handler = NextAuth({
     async signIn({ user, account, profile }: any) {
       console.log('- Sign In -')
 
-      // connect to database
-      await connectDatabase()
+      console.log('user', user)
+      console.log('account', account)
 
-      if (account && account.provider === 'google') {
-        if (!user || !profile) {
-          return false
+      try {
+        // connect to database
+        await connectDatabase()
+
+        if (account) {
+          if (!user || !profile) {
+            return false
+          }
+
+          // get data for authentication
+          const email = user.email
+          const avatar = user.image
+          let firstname: string = ''
+          let lastname: string = ''
+
+          if (account.provider === 'google') {
+            firstname = profile.given_name
+            lastname = profile.family_name
+          } else if (account.provider === 'github') {
+            console.log('github')
+            firstname = profile.name
+            lastname = ''
+          }
+
+          // get user from database to check exist
+          const existingUser: any = await UserModel.findOneAndUpdate(
+            { email },
+            { $set: { avatar } },
+            { new: true }
+          ).lean()
+
+          console.log('Existing User:', existingUser)
+
+          // check whether user exists
+          if (existingUser) {
+            return true
+          }
+
+          // create new user with google infomation (auto verified email)
+          const newUser = new UserModel({
+            email,
+            avatar,
+            firstname,
+            lastname,
+            authType: account.provider,
+            verifiedEmail: true,
+          })
+
+          console.log('New User Created!', newUser)
+          await newUser.save()
         }
-        // get data for authentication
-        const id = user.id
-        const email = user.email
-        const avatar = user.image
-        const firstname = profile.given_name
-        const lastname = profile.family_name
 
-        // get user from database to check exist
-        const existingUser: any = await UserModel.findOne({ email }).lean()
-
-        // check whether user exists
-        if (existingUser) {
-          // update user in case user change the google account info
-          await UserModel.findByIdAndUpdate(existingUser._id, { $set: { avatar } })
-
-          return true
-        }
-
-        // create new user with google infomation (auto verified email)
-        const newUser = new UserModel({
-          email: email,
-          avatar,
-          firstname,
-          lastname,
-          authType: 'google',
-          authGoogleId: id,
-          verifiedEmail: true,
-        })
-
-        await newUser.save()
+        return true
+      } catch (err: any) {
+        console.log('err', err)
+        return false
       }
-      return true
     },
   },
 })

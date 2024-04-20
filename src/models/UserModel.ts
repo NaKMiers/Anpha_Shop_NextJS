@@ -28,6 +28,7 @@ const UserSchema = new Schema(
     phone: {
       type: String,
       unique: true,
+      sparse: true,
       validate: {
         validator: function (value: string) {
           return /^0\d{9,10}$/.test(value)
@@ -57,7 +58,7 @@ const UserSchema = new Schema(
     },
     authType: {
       type: String,
-      enum: ['local', 'google', 'facebook'],
+      enum: ['local', 'google', 'facebook', 'github'],
       default: 'local',
     },
     role: {
@@ -102,7 +103,7 @@ const UserSchema = new Schema(
       type: {
         type: String,
         enum: ['percentage', 'fixed'],
-        default: '',
+        default: 'fixed',
       },
       value: {
         type: String,
@@ -116,6 +117,7 @@ const UserSchema = new Schema(
 )
 
 UserSchema.pre('save', async function (next) {
+  console.log('- Pre Save User -')
   // check authType & username before saving
   if (this.authType !== 'local' || !this.isModified('password')) {
     return next()
