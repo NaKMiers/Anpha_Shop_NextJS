@@ -35,6 +35,8 @@ export function sendMail(to: string, subject: string, html: string) {
 
 // send order notification to admin
 export async function notifyNewOrderToAdmin(newOrder: any) {
+  console.log('- Notify New Order To Admin -')
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyOrderMail.pug')
 
@@ -59,6 +61,8 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
 
 // notify shortage account to admin
 export async function notifyShortageAccount(message: any) {
+  console.log('- Notify Shortage Account -')
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/ShortageAccountMail.pug')
 
@@ -83,6 +87,11 @@ export async function notifyShortageAccount(message: any) {
 
 // re-deliver notification
 export async function notifyDeliveryOrder(email: string, orderData: any) {
+  console.log('- Notify Delivery Order -')
+
+  console.log('email', email)
+  console.log('orderData', orderData)
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/OrderMail.pug')
 
@@ -120,6 +129,8 @@ export async function notifyAccountUpdated(email: string, data: any) {
 
 // summary notification
 export async function summaryNotification(email: string, summary: any) {
+  console.log('- Summary Notification -')
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/SummaryMail.pug')
 
@@ -138,6 +149,8 @@ export async function summaryNotification(email: string, summary: any) {
 
 // reset password email
 export async function sendResetPasswordEmail(email: string, link: string) {
+  console.log('- Send Reset Password Email -')
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/ResetPasswordMail.pug')
 
@@ -156,6 +169,8 @@ export async function sendResetPasswordEmail(email: string, link: string) {
 
 // notify expired account
 export async function notifyExpiredAccount(email: string, data: any) {
+  console.log('- Notify Expired Account -')
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyExpiredMail.pug')
 
@@ -170,4 +185,19 @@ export async function notifyExpiredAccount(email: string, data: any) {
   // render template with new data
   const html = compiledTemplate(data)
   sendMail(email, 'Tài khoản sắp hết hạn', html)
+}
+
+// verify email
+export async function sendVerifyEmail(email: string, link: string) {
+  console.log('- Send Verify Email -')
+}
+
+// verify phone
+export async function sendVerifyPhone(phone: string, code: string) {
+  console.log('- Send Verify Phone -')
+}
+
+// notify that your introduce code has been used
+export async function notifyUsedIntroduceCode(email: string, data: any) {
+  console.log('- Notify Used Introduce Code -')
 }

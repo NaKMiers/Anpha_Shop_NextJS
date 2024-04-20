@@ -1,12 +1,13 @@
 import { connectDatabase } from '@/config/database'
 import AccountModel, { IAccount } from '@/models/AccountModel'
-import OrderModel, { IOrder } from '@/models/OrderModel'
+import OrderModel from '@/models/OrderModel'
 import { notifyAccountUpdated } from '@/utils/sendMail'
 import { getTimes } from '@/utils/time'
 import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Account, Order
+import { FullyOrder } from '@/app/api/user/order-history/route'
 import '@/models/AccountModel'
 import '@/models/OrderModel'
 
@@ -14,12 +15,15 @@ import '@/models/OrderModel'
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Account -')
 
+  console.log('id: ', id)
+
   try {
     // connect to database
     await connectDatabase()
 
     // get data to edit account
-    const { type, info, renew, active, days, hours, minutes, seconds, notify } = await req.json()
+    const { usingUser, type, info, renew, active, days, hours, minutes, seconds, notify } =
+      await req.json()
     const times = getTimes(+days, +hours, +minutes, +seconds)
 
     // update account
@@ -37,16 +41,47 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
       { new: true }
     )
 
-    // notify to user about the change of account infomation
-    if (notify && updatedAccount && new Date(updatedAccount.expire || '') > new Date()) {
+    const isChangedUsingUser = updatedAccount?.usingUser !== usingUser
+
+    let order: FullyOrder | null = null
+
+    if (isChangedUsingUser) {
       // get order from database to update account
-      const order: IOrder | null = await OrderModel.findOne({
+      order = await OrderModel.findOne({
         'items.accounts._id': new mongoose.Types.ObjectId(id),
       }).lean()
 
-      console.log('Order: ', order)
+      console.log('order', order)
 
-      // order exists
+      // check if order exists
+      if (order) {
+        // get related account from order
+        const accounts: string[] = order?.items
+          .reduce((acc, item) => [...acc, ...item.accounts], [])
+          .map((acc: IAccount) => acc._id)
+
+        // update related account's usingUser
+        await AccountModel.updateMany({ _id: { $in: accounts } }, { $set: { usingUser } })
+
+        // update order email
+        order = await OrderModel.findByIdAndUpdate(
+          { _id: order._id },
+          { $set: { email: usingUser } },
+          { new: true }
+        )
+      }
+    }
+
+    // notify to user about the change of account infomation
+    if (notify && updatedAccount && new Date(updatedAccount.expire || '') > new Date()) {
+      // get order from database to update account
+      if (!order) {
+        order = await OrderModel.findOne({
+          'items.accounts._id': new mongoose.Types.ObjectId(id),
+        }).lean()
+      }
+
+      // check if order exists
       if (order) {
         // get account infomation
         let accountInfo: any = null

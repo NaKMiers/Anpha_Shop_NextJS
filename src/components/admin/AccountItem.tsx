@@ -45,7 +45,7 @@ function AccountItem({
     <>
       <div
         className={`relative w-full flex items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
-          selectedAccounts.includes(data._id) ? 'bg-orange-50 -translate-y-1' : 'bg-white'
+          selectedAccounts.includes(data._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
         }  ${className}`}
         onClick={() =>
           setSelectedAccounts(prev =>

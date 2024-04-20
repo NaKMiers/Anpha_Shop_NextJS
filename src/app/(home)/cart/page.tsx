@@ -183,7 +183,7 @@ function CartPage() {
       // add cart item to state
       dispatch(addCartItem(cartItems))
 
-      // delete local cart item
+      // clear LOCAL cart item
       dispatch(setLocalCartItems([]))
     } catch (err: any) {
       console.log(err)
@@ -229,7 +229,7 @@ function CartPage() {
         }))
 
         // send request to server to create order
-        const { code, removedCartItems, message } = await createOrderApi(
+        const { code } = await createOrderApi(
           curUser?.email || getValues('email'),
           total,
           voucher?._id,
@@ -249,6 +249,17 @@ function CartPage() {
         }
         localStorage.setItem('checkout', JSON.stringify(checkout))
 
+        // remove cart items if is LOCAL cart
+        console.log('21030182093120912092901980120982908902190t893075690759834767437687346790')
+        console.log('localCartItems', localCartItems)
+        const asd = localCartItems.filter(
+          (item: FullyCartItem) => !selectedItems.map(i => i._id).includes(item._id)
+        )
+
+        if (!curUser?._id) {
+          dispatch(setLocalCartItems(asd))
+        }
+
         // move to checkout page
         router.push(`/checkout/${type}`)
       } catch (err: any) {
@@ -256,7 +267,6 @@ function CartPage() {
       }
     },
     [
-      curUser?.email,
       dispatch,
       getValues,
       handleValidateBeforeCheckout,
@@ -265,6 +275,8 @@ function CartPage() {
       voucher,
       discount,
       total,
+      curUser,
+      localCartItems,
     ]
   )
 

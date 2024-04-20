@@ -1,5 +1,5 @@
 import { FullyOrder } from '@/app/api/user/order-history/route'
-import AccountModel from '@/models/AccountModel'
+import AccountModel, { IAccount } from '@/models/AccountModel'
 import OrderModel from '@/models/OrderModel'
 import ProductModel from '@/models/ProductModel'
 import UserModel from '@/models/UserModel'
@@ -14,6 +14,12 @@ import '@/models/OrderModel'
 import '@/models/ProductModel'
 import '@/models/UserModel'
 import '@/models/VoucherModel'
+
+interface AccountListItem {
+  productId: string
+  quantity: number
+  accounts: any[]
+}
 
 export default async function handleDeliverOrder(id: string) {
   // get order from database to deliver
@@ -50,7 +56,7 @@ export default async function handleDeliverOrder(id: string) {
 
     return await AccountModel.find({
       type: productId, // corresponding product
-      renew: { $gte: currentDate }, // still in time of use
+      renew: { $gte: currentDate }, // still in time of using
       $and: [
         {
           $or: [
@@ -80,7 +86,7 @@ export default async function handleDeliverOrder(id: string) {
 
   // get accountsList
   const handleItemsToAccounts = async () => {
-    const results = []
+    const results: AccountListItem[] = []
 
     for (const { product, quantity } of items) {
       const accounts = await getAccounts(product._id, +quantity)
@@ -102,7 +108,7 @@ export default async function handleDeliverOrder(id: string) {
 
     return results
   }
-  const accountDataList = await handleItemsToAccounts()
+  const accountDataList: AccountListItem[] = await handleItemsToAccounts()
 
   // check if shortage accounts
   if (orderError.error) {
@@ -186,16 +192,6 @@ export default async function handleDeliverOrder(id: string) {
     })
   }
 
-  // data transfering to email
-  const orderData = {
-    ...order,
-    accounts: accountDataList,
-    discount: order.discount || 0,
-  }
-
-  // EMAIL
-  notifyDeliveryOrder(email, orderData)
-
   // update order items with accounts
   const updatedItems = items.map(item => {
     let accounts = accountDataList.find(acc => acc.productId.toString() === item.product._id.toString())
@@ -216,6 +212,16 @@ export default async function handleDeliverOrder(id: string) {
   await OrderModel.findByIdAndUpdate(order._id, {
     $set: { items: updatedItems },
   })
+
+  // data transfering to email
+  const orderData = {
+    ...order,
+    accounts: accountDataList,
+    discount: order.discount || 0,
+  }
+
+  // EMAIL
+  notifyDeliveryOrder(email, orderData)
 
   return { order, isError: orderError.error }
 }

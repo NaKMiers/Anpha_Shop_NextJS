@@ -339,7 +339,9 @@ function CartItem({
             <div className='flex items-center gap-1 text-[16px]'>
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Giá:</span>
-              <span className='text-green-500'>{formatPrice(cartItem.product.price)}</span>
+              <span className='text-green-500'>
+                {formatPrice(cartItem.product.price * cartItem.quantity)}
+              </span>
             </div>
           </div>
         )}

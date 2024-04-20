@@ -32,6 +32,7 @@ function AddAccountPage() {
   // states
   const [account, setAccount] = useState<IAccount | null>(null)
   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
+  const [isEditingUsingUser, setIsEditingUsingUser] = useState<boolean>(false)
 
   // form
   const {
@@ -53,6 +54,7 @@ function AddAccountPage() {
       seconds: 0,
       active: true,
       notify: true,
+      usingUser: '',
     },
   })
 
@@ -78,6 +80,7 @@ function AddAccountPage() {
         setValue('minutes', account.times.minutes)
         setValue('seconds', account.times.seconds)
         setValue('active', account.active)
+        setValue('usingUser', account.usingUser)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -151,6 +154,8 @@ function AddAccountPage() {
   // MARK: Submit
   // send request to server to edit account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    console.log('data', data)
+
     if (!handleValidate(data)) return
 
     // start loading
@@ -185,14 +190,30 @@ function AddAccountPage() {
       <div className='mt-5'>
         {/* MARK: Using User */}
         {account?.usingUser && (
-          <div className='flex mb-5'>
+          <div
+            className='flex mb-5 min-h-[42px] cursor-pointer'
+            onDoubleClick={() => setIsEditingUsingUser(prev => !prev)}>
             <div className='bg-white rounded-lg px-3 flex items-center'>
               <FaUser size={16} className='text-secondary' />
             </div>
-            <p
-              className={`select-none cursor-pointer border border-dark px-4 py-2 rounded-lg common-transition bg-white text-dark`}>
-              {account.usingUser}
-            </p>
+            {!isEditingUsingUser ? (
+              <p
+                className={`select-none cursor-pointer border border-dark px-4 py-2 rounded-lg common-transition bg-white text-dark`}>
+                {account.usingUser}
+              </p>
+            ) : (
+              <Input
+                id='usingUser'
+                label='Using User'
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+                type='text'
+                onFocus={() => clearErrors('usingUser')}
+                className='w-full max-w-[350px]'
+              />
+            )}
           </div>
         )}
 
