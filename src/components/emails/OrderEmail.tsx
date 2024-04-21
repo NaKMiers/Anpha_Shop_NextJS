@@ -1,5 +1,6 @@
 import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
+import { Session } from 'inspector'
 
 export function OrderEmail({ order }: { order: any }) {
   return (
@@ -76,22 +77,30 @@ export function OrderEmail({ order }: { order: any }) {
           },
         },
       }}>
-      <Body className='bg-[#333] font-sans p-21'>
-        <Container className='bg-white rounded-medium shadow-medium p-21'>
-          <div className='flex items-center justify-center p-4'>
-            <a href='/'>
-              <Img
-                className='aspect-square rounded-full'
-                src={`${'https://anpha.shop'}/images/logo.jpg`}
-                width={50}
-                height={50}
-                alt='logo'
-              />
-            </a>
-            <a href='/' className='text-3xl font-bold tracking-[0.3px] no-underline text-dark'>
-              .AnphaShop
-            </a>
-          </div>
+      <Body className='bg-[#333] font-sans'>
+        <Container className='bg-white p-4'>
+          <Section className='inline-block mx-auto'>
+            <Row className='mb-3 w-full'>
+              <Column>
+                <a href='https://anpha.shop'>
+                  <Img
+                    className='aspect-square rounded-full'
+                    src={`${'https://anpha.shop'}/images/logo.jpg`}
+                    width={35}
+                    height={35}
+                    alt='logo'
+                  />
+                </a>
+              </Column>
+              <Column>
+                <a
+                  href='https://anpha.shop'
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  .AnphaShop
+                </a>
+              </Column>
+            </Row>
+          </Section>
 
           <Section
             className='rounded-lg'
@@ -100,8 +109,8 @@ export function OrderEmail({ order }: { order: any }) {
             }}>
             <Row className='p-4'>
               <Column className='font'>
-                <h1 className='text-3xl font-bold text-center'>Hi</h1>
-                <h2 className='text-2xl font-semibold text-center'>
+                <h1 className='text-2xl font-bold text-center'>Hi👋 </h1>
+                <h2 className='text-xl font-semibold text-center'>
                   Cảm ơn bạn đã mua hàng, chúc bạn một ngày tốt lành!
                 </h2>
 
@@ -131,7 +140,7 @@ export function OrderEmail({ order }: { order: any }) {
                   <span className='text-[#0a82ed]'>{order.email}</span>
                 </p>
 
-                <p className='text-center'>
+                <p className='text-center mt-8'>
                   <b className='text-[24px]'>Sản phẩm</b>
                 </p>
 
@@ -156,18 +165,21 @@ export function OrderEmail({ order }: { order: any }) {
               </Column>
             </Row>
 
-            <div className='flex justify-center p-4'>
-              <button className='bg-primary rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
-                Xem chi tiết
-              </button>
-            </div>
+            {order.userId && (
+              <div className='flex justify-center p-4'>
+                <a
+                  href={`https://anpha.shop/user/order/${order.code}`}
+                  className='bg-primary rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                  Xem chi tiết
+                </a>
+              </div>
+            )}
           </Section>
 
           <div className='flex justify-center pt-[45px]'>
             <Img
               className='max-w-full'
               width={620}
-              height={200}
               src={`${'https://anpha.shop'}/images/footer-banner.jpg`}
             />
           </div>
@@ -176,15 +188,19 @@ export function OrderEmail({ order }: { order: any }) {
             © 2023 | Anpha Shop - Developed by Nguyen Anh Khoa, All rights reserved.
           </p>
 
-          <div className='flex items-center justify-center gap-2 p-4'>
-            <a href='https://zalo.me/0899320427' target='_blank' rel='noreferrer' className='wiggle-1'>
+          <div className='text-center'>
+            <a
+              href='https://zalo.me/0899320427'
+              target='_blank'
+              rel='noreferrer'
+              className='inline-block'>
               <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
             </a>
             <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='wiggle-1'>
+              className='inline-block ml-2'>
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}
