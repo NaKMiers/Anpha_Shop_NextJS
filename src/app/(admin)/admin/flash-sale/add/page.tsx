@@ -210,6 +210,7 @@ function AddFlashSalePage() {
           errors={errors}
           required
           type='date'
+          minDate={new Date().toISOString().split('T')[0]}
           icon={FaPlay}
           className='mb-5'
           onFocus={() => clearErrors('begin')}

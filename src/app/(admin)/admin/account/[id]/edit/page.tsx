@@ -81,6 +81,7 @@ function AddAccountPage() {
         setValue('seconds', account.times.seconds)
         setValue('active', account.active)
         setValue('usingUser', account.usingUser)
+        setValue('notify', !!account.usingUser)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -155,7 +156,6 @@ function AddAccountPage() {
   // send request to server to edit account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     console.log('data', data)
-
     if (!handleValidate(data)) return
 
     // start loading

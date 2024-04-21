@@ -208,6 +208,7 @@ function AddAccountPage() {
           required
           type='date'
           icon={FaPlay}
+          minDate={new Date().toISOString().split('T')[0]}
           onFocus={() => clearErrors('renew')}
           className='mb-5'
         />

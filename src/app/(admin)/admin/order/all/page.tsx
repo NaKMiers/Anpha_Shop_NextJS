@@ -30,6 +30,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const [amount, setAmount] = useState<number>(0)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
 
+  console.log('orders', orders)
+
   // loading and confirming
   const [loadingOrders, setLoadingOrders] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
