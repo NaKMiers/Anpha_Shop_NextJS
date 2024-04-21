@@ -115,6 +115,8 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
 // notify account updated
 export async function notifyAccountUpdated(email: string, data: any) {
   console.log('- Notify Account Updated -')
+  console.log(data)
+
   // get email interface path
   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/UpdateAccountMail.pug')
 

@@ -1,83 +1,14 @@
 import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
-import { Session } from 'inspector'
+import { theme } from '../../../tailwind.config'
 
 export function OrderEmail({ order }: { order: any }) {
   return (
     <Tailwind
       config={{
-        theme: {
-          extend: {
-            colors: {
-              primary: '#01dbe5',
-              secondary: '#7655e6',
-              dark: '#333',
-              light: '#fff',
-              loading: '#334155',
-            },
-            fontFamily: {
-              sans: ['Montserrat', 'sans-serif'],
-              body: ['Source Sans Pro', 'sans-serif'],
-            },
-            spacing: {
-              21: '21px',
-              '21/2': '10.5px',
-            },
-            maxWidth: {
-              1200: '1200px',
-            },
-            borderRadius: {
-              large: '24px',
-              medium: '16px',
-              small: '12px',
-              'extra-small': '6px',
-            },
-            backgroundColor: {
-              dark: {
-                100: '#2f2e3e',
-                200: '#003e70',
-              },
-              light: {
-                100: '#f4f4f4',
-                200: '#fff',
-              },
-            },
-            textColor: {
-              light: '#fff',
-              darker: '#003e70',
-              dark: '#333',
-            },
-            boxShadow: {
-              'medium-light': '0px 2px 10px 1px rgba(255, 255, 255, 0.1)',
-              medium: '0px 14px 10px 5px rgba(0, 0, 0, 0.2)',
-              small: '0px 2px 10px 1px rgba(0, 0, 0, 0.1)',
-            },
-            backgroundImage: {
-              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-              'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-            },
-            fill: {
-              light: '#fff',
-            },
-            keyframes: {
-              wiggle: {
-                '0%, 100%': { transform: 'rotate(-3deg)' },
-                '50%': { transform: 'rotate(3deg)' },
-              },
-              'scale-wiggle': {
-                '0%, 100%': { transform: 'rotate(-3deg) scale(1.2)' },
-                '50%': { transform: 'rotate(3deg) scale(1.2)' },
-              },
-            },
-            animation: {
-              'spin-slow': 'spin 2s linear infinite',
-              wiggle: 'wiggle 0.8s ease-in-out infinite',
-              'scale-wiggle': 'scale-wiggle 0.8s ease-in-out infinite 0.2s',
-            },
-          },
-        },
+        theme,
       }}>
-      <Body className='bg-[#333] font-sans'>
+      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>
@@ -103,10 +34,14 @@ export function OrderEmail({ order }: { order: any }) {
           </Section>
 
           <Section
-            className='rounded-lg'
+            className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
             }}>
+            <div>
+              <Img src='https://anpha.shop/images/brand-banner.jpg' className='w-full object-cover' />
+            </div>
+
             <Row className='p-4'>
               <Column className='font'>
                 <h1 className='text-2xl font-bold text-center'>Hi👋 </h1>
@@ -114,32 +49,35 @@ export function OrderEmail({ order }: { order: any }) {
                   Cảm ơn bạn đã mua hàng, chúc bạn một ngày tốt lành!
                 </h2>
 
-                <p>
-                  <b>Mã đơn hàng: </b>
-                  <span className='text-[#7655e6]'>{order.code}</span>
-                </p>
-                <p>
-                  <b>Ngày đặt hàng: </b>
-                  {new Intl.DateTimeFormat('vi', {
-                    dateStyle: 'full',
-                    timeStyle: 'medium',
-                  })
-                    .format(new Date(order.createdAt))
-                    .replace('lúc', '')}
-                </p>
-                <p>
-                  <b>Trạng thái: </b>
-                  <span className='text-[#50C878]'>Đã giao</span>
-                </p>
-                <p>
-                  <b>Tổng tiền: </b>
-                  <b>{formatPrice(order.total)}</b>
-                </p>
-                <p>
-                  <b>Email: </b>
-                  <span className='text-[#0a82ed]'>{order.email}</span>
-                </p>
+                <div className='text-sm mt-8'>
+                  <p>
+                    <b>Mã đơn hàng: </b>
+                    <span className='text-[#7655e6]'>{order.code}</span>
+                  </p>
+                  <p>
+                    <b>Ngày đặt hàng: </b>
+                    {new Intl.DateTimeFormat('vi', {
+                      dateStyle: 'full',
+                      timeStyle: 'medium',
+                    })
+                      .format(new Date(order.createdAt))
+                      .replace('lúc', '')}
+                  </p>
+                  <p>
+                    <b>Trạng thái: </b>
+                    <span className='text-[#50C878]'>Đã giao</span>
+                  </p>
+                  <p>
+                    <b>Tổng tiền: </b>
+                    <b>{formatPrice(order.total)}</b>
+                  </p>
+                  <p>
+                    <b>Email: </b>
+                    <span className='text-[#0a82ed]'>{order.email}</span>
+                  </p>
+                </div>
 
+                {/* Product */}
                 <p className='text-center mt-8'>
                   <b className='text-[24px]'>Sản phẩm</b>
                 </p>
@@ -166,10 +104,10 @@ export function OrderEmail({ order }: { order: any }) {
             </Row>
 
             {order.userId && (
-              <div className='flex justify-center p-4'>
+              <div className='text-center p-3'>
                 <a
                   href={`https://anpha.shop/user/order/${order.code}`}
-                  className='bg-primary rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                  className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
                   Xem chi tiết
                 </a>
               </div>

@@ -1,7 +1,7 @@
 import OrderEmail from '@/components/emails/OrderEmail'
 import React from 'react'
 
-const order = {
+export const order = {
   _id: '66236a39faf0d2df956fc1be',
   code: '0D317',
   email: 'oehaao@mailto.plus',
