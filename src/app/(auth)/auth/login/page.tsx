@@ -147,12 +147,6 @@ function LoginPage() {
         <p className='text-center text-slate-500 font-body text-lg py-4'>Hoặc đăng nhập với</p>
 
         <div className='flex items-center justify-center gap-4'>
-          <button
-            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
-            onClick={() => signIn('google', { callbackUrl: '/' })}>
-            <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
-          </button>
-
           {/* <button
             className='p-2 rounded-full border-2 border-sky-300 group hover:bg-sky-300 common-transition'
             onClick={() => signIn('facebook')}>
@@ -163,6 +157,18 @@ function LoginPage() {
             className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
             onClick={() => signIn('github', { callbackUrl: '/' })}>
             <Image className='wiggle' src='/images/github.jpg' height={25} width={25} alt='github' />
+          </button>
+
+          <button
+            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
+            onClick={() => signIn('google', { callbackUrl: '/' })}>
+            <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
+          </button>
+
+          <button
+            className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
+            onClick={() => signIn('twitter', { callbackUrl: '/' })}>
+            <Image className='wiggle' src='/images/twitter.jpg' height={25} width={25} alt='github' />
           </button>
         </div>
       </div>

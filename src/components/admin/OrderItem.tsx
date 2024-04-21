@@ -108,7 +108,12 @@ function OrderItem({
           {/* MARK: Thumbnails */}
           <div className='w-full h-full flex items-center flex-wrap gap-2 mb-2 max-h-[145px] overflow-y-auto '>
             {data.items.map((item: any) => (
-              <div className='relative rounded-lg shadow-md overflow-hidden' key={item._id}>
+              <Link
+                href={`/${item.product.slug}`}
+                prefetch={false}
+                className='relative rounded-lg shadow-md overflow-hidden'
+                onClick={e => e.stopPropagation()}
+                key={item._id}>
                 <Image
                   className='aspect-video'
                   src={item.product.images[0] || '/images/not-found.jpg'}
@@ -119,7 +124,7 @@ function OrderItem({
                 <span className='py-[2px] px-[3px] rounded-full absolute top-1 right-1 bg-secondary shadow-md text-[8px] font-semibold text-light border-2 border-white'>
                   x{item.quantity}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
 

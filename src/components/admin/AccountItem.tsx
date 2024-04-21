@@ -8,6 +8,7 @@ import { FaCheck, FaCopy, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import moment from 'moment'
 
 interface AccountItemProps {
   data: AccountWithProduct
@@ -57,7 +58,8 @@ function AccountItem({
           <Link
             href={`/${data.type?.slug || ''}`}
             prefetch={false}
-            className='float-left mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
+            onClick={e => e.stopPropagation()}
+            className='mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
             <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
               <Image
                 className='aspect-video flex-shrink-0 snap-start object-cover w-full h-full'
@@ -103,32 +105,42 @@ function AccountItem({
           {/* Expire */}
           <p className='text-sm' title='Expire (d/m/y)'>
             <span className='font-semibold'>Expire: </span>
-            <span
-              className={`${
-                new Date() > new Date(data.expire || '') ? 'text-red-500 font-semibold' : ''
-              }`}>
-              {data.expire ? formatTime(data.expire) : '-'}
-            </span>{' '}
-            {data?.begin && data?.expire && usingPercentage(data.begin, data.expire) <= 100 && (
-              <span
-                className={`font-semibold text-xs ${getColorClass(data.begin, data.expire)}`}
-                title={`${
-                  usingPercentage(data.begin, data.expire) >= 93
-                    ? '>= 93'
-                    : usingPercentage(data.begin, data.expire) >= 80
-                    ? '>= 80'
-                    : ''
-                }`}>
-                (<span>{usingPercentage(data.begin, data.expire) + '%'}</span>
-                {' - '}
-                <span>
-                  {data.expire && getTimeRemaining(data.expire)
-                    ? `${getTimeRemaining(data.expire)}`
-                    : 'Expired'}
-                </span>
-                )
+            {data.expire ? (
+              <>
+                <span
+                  className={`${
+                    new Date() > new Date(data.expire || '') ? 'text-red-500 font-semibold' : ''
+                  }`}>
+                  {data.expire ? formatTime(data.expire) : '-'}
+                </span>{' '}
+                {data?.begin && data?.expire && usingPercentage(data.begin, data.expire) < 100 && (
+                  <span
+                    className={`font-semibold text-xs ${getColorClass(data.begin, data.expire)}`}
+                    title={`${
+                      usingPercentage(data.begin, data.expire) >= 93
+                        ? '>= 93'
+                        : usingPercentage(data.begin, data.expire) >= 80
+                        ? '>= 80'
+                        : ''
+                    }`}>
+                    (<span>{usingPercentage(data.begin, data.expire) + '%'}</span>
+                    {' - '}
+                    <span>
+                      {data.expire && getTimeRemaining(data.expire)
+                        ? `${getTimeRemaining(data.expire)}`
+                        : 'Expired'}
+                    </span>
+                    )
+                  </span>
+                )}{' '}
+              </>
+            ) : (
+              <span className='text-slate-500'>
+                +{data.times.days ? data.times.days + 'd' : ''}
+                {data.times.hours ? ':' + data.times.hours + 'h' : ''}
+                {data.times.minutes ? ':' + data.times.minutes + 'm' : ''}
               </span>
-            )}{' '}
+            )}
           </p>
 
           {/* Renew */}
@@ -151,7 +163,7 @@ function AccountItem({
           </p>
 
           {/* Info */}
-          <div className='relative w-full mt-2 max-h-[200px] p-2 border rounded-lg text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+          <div className='relative w-full mt-2 max-h-[200px] border rounded-lg'>
             <button
               className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500'
               onClick={e => {
@@ -160,21 +172,23 @@ function AccountItem({
               }}>
               <FaCopy size={16} className='wiggle' />
             </button>
-            {data.info.split('\n').map((line, index) => (
-              <span key={index} className='block'>
-                {line.split(' ').map((word, index) => (
-                  <span
-                    key={index}
-                    className='inline-block cursor-pointer'
-                    onClick={e => {
-                      e.stopPropagation()
-                      handleCopy(word)
-                    }}>
-                    {word}{' '}
-                  </span>
-                ))}
-              </span>
-            ))}
+            <p className='p-2 text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+              {data.info.split('\n').map((line, index) => (
+                <span key={index} className='block'>
+                  {line.split(' ').map((word, index) => (
+                    <span
+                      key={index}
+                      className='inline-block cursor-pointer'
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleCopy(word)
+                      }}>
+                      {word}{' '}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </p>
           </div>
         </div>
 

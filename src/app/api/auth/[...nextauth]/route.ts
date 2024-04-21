@@ -5,9 +5,9 @@ import NextAuth from 'next-auth'
 
 // Providers
 import CredentialsProvider from 'next-auth/providers/credentials'
-import FacebookProvider from 'next-auth/providers/facebook'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
+import TwitterProvider from 'next-auth/providers/twitter'
 
 // Models: User
 import '@/models/UserModel'
@@ -37,6 +37,12 @@ const handler = NextAuth({
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+
+    // TWITTER
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID!,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET!,
     }),
 
     // CREDENTIALS
