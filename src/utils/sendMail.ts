@@ -1,10 +1,12 @@
 import NotifyExpiredEmail from '@/components/emails/NotifyExpiredEmail'
 import NotifyOrderEmail from '@/components/emails/NotifyOrderEmail'
+import OrderEmail from '@/components/emails/OrderEmail'
 import ResetPasswordEmail from '@/components/emails/ResetPasswordEmail'
 import ShortageAccountEmail from '@/components/emails/ShortageAccountEmail'
 import SummaryEmail from '@/components/emails/SummaryEmail'
 import UpdateInfoEmail from '@/components/emails/UpdateInfoEmail'
 import VerifyEmailEmail from '@/components/emails/VerifyEmailEmail'
+import OrderModel from '@/models/OrderModel'
 import UserModel from '@/models/UserModel'
 import { render } from '@react-email/render'
 import nodeMailer from 'nodemailer'
@@ -71,7 +73,7 @@ export async function notifyShortageAccount(message: any) {
 export async function notifyDeliveryOrder(email: string, orderData: any) {
   console.log('- Notify Delivery Order -')
 
-  const html = render(NotifyOrderEmail({ order: orderData }))
+  const html = render(OrderEmail({ order: orderData }))
   sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
 }
 
