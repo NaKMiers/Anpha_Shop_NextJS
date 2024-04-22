@@ -22,7 +22,10 @@ export const isToday = (date: Date): boolean => {
 }
 
 // return time remaining: 1d:2h:3m
-export const getTimeRemaining = (expireDate: Date | string): string => {
+export const getTimeRemaining = (
+  expireDate: Date | string,
+  isReturnObject: boolean = false
+): string | { day: number; hour: number; minute: number } => {
   const now = moment()
   const expirationDate = moment(expireDate)
 
@@ -51,7 +54,13 @@ export const getTimeRemaining = (expireDate: Date | string): string => {
     timeRemaining = timeRemaining.slice(0, -2)
   }
 
-  return timeRemaining
+  return isReturnObject
+    ? {
+        day: +days,
+        hour: +hours,
+        minute: +minutes,
+      }
+    : timeRemaining
 }
 
 // return percent of using time

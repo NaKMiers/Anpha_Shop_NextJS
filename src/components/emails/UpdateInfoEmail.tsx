@@ -104,11 +104,11 @@ export function UpdateInfoEmail({ data }: { data: any }) {
                     border: '1px solid rgb(0, 0, 0, 0.1)',
                   }}
                   className='border rounded-lg p-21/2 mb-4 bg-slate-100 text-slate-500'>
-                  {/* New Info */}
+                  {/* Old Info */}
                   <p className='font-semibold m-0 mb-4 underline text-sm'>Thông tin cũ:</p>
 
                   <p className='whitespace-pre m-0 max-w-[600px] overflow-x-auto border-b '>
-                    {data.newInfo.info}
+                    {data.oldInfo.info}
                   </p>
                 </div>
 
