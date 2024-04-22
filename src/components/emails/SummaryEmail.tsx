@@ -1,14 +1,17 @@
+import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
-import { formatPrice } from '@/utils/number'
 
-export function UpdateInfoEmail({ data }: { data: any }) {
+export function SummaryEmail({ summary }: { summary: any }) {
+  const { collaborator: user, vouchers, income } = summary
+  const curMonth = new Date().getMonth() + 1
+
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[#333] text-dark font-sans'>
+      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>
@@ -44,77 +47,76 @@ export function UpdateInfoEmail({ data }: { data: any }) {
 
             <Row className='p-4'>
               <Column className='font'>
-                <h1 className='text-2xl font-bold text-center'>Hi👋</h1>
-                <h2 className='text-xl font-semibold text-center'>
-                  Cập nhật lại thông tin tài khoản vì lí do bảo mật
+                <h1 className='text-2xl font-bold text-center'>
+                  Hi{' '}
+                  {user.firstname && user.lastname
+                    ? user.firstname + ' ' + user.lastname
+                    : user.username}
+                  👋{' '}
+                </h1>
+
+                <h2 className='text-3xl text-slate-400 mt-0 font-semibold text-center'>
+                  Báo cáo thu nhập tháng {curMonth}
                 </h2>
 
                 <div className='text-sm mt-8'>
                   <p>
-                    <b>Mã đơn hàng: </b>
-                    <span className='text-secondary tracking-wider font-semibold'>{order.code}</span>
+                    <b>Cộng tác viên: </b>
+                    <span>
+                      {(user.firstname && user.lastname
+                        ? user.firstname + ' ' + user.lastname
+                        : user.username) || user.email}
+                    </span>
                   </p>
                   <p>
-                    <b>Ngày đặt hàng: </b>
-                    {new Intl.DateTimeFormat('vi', {
-                      dateStyle: 'full',
-                      timeStyle: 'medium',
-                    })
-                      .format(new Date(data.createdAt))
-                      .replace('lúc', '')}
+                    <b>Hoa hồng: </b>
+                    <span className='font-semibodl text-rose-500'>{user.commission.value}</span>
                   </p>
                   <p>
-                    <b>Trạng thái: </b>
-                    <span className='text-[#50C878]'>Đã giao</span>
+                    <b>Số lượng voucher trong tháng: </b>
+                    <span>{vouchers.length}</span>
                   </p>
                   <p>
-                    <b>Tổng tiền: </b>
-                    <b>{formatPrice(data.total)}</b>
-                  </p>
-                  <p>
-                    <b>Email: </b>
-                    <span className='text-[#0a82ed]'>{data.email}</span>
+                    <b>Thu nhập trong tháng {curMonth}: </b>
+                    <b className='text-green-500'>{formatPrice(income)}</b>
                   </p>
                 </div>
 
-                {/* Product */}
+                {/* Vouchers */}
                 <p className='text-center mt-8'>
-                  <b className='text-xl'>
-                    Sản phẩm: <span className='italic text-slate-500'>{data.product.title}</span>
-                  </b>
+                  <b className='text-[24px]'>Vouchers</b>
                 </p>
 
-                <div
-                  style={{
-                    border: '1px solid rgb(0, 0, 0, 0.1)',
-                  }}
-                  className='border rounded-lg p-21/2 mb-4 bg-sky-50'>
-                  {/* New Info */}
-                  <p className='font-semibold text-secondary m-0 mb-4 underline text-sm'>
-                    Thông tin mới:
-                  </p>
-
-                  <p className='whitespace-pre m-0 max-w-[600px] overflow-x-auto border-b '>
-                    {data.newInfo.info}
-                  </p>
+                <div className='rounded-lg' style={{ border, boxSizing: 'border-box' }}>
+                  <div
+                    className='w-full text-center p-3'
+                    style={{ borderBottom: border, boxSizing: 'border-box' }}>
+                    <div className='inline-block w-1/2 font-semibold'>Voucher</div>
+                    <div className='inline-block w-1/2 font-semibold'>
+                      <span>Tích lũy</span>
+                    </div>
+                  </div>
+                  {vouchers.map((voucher: any, index: number) => (
+                    <div
+                      className='w-full text-center p-3'
+                      style={{
+                        borderBottom: index != vouchers.length - 1 ? border : 0,
+                        boxSizing: 'border-box',
+                      }}
+                      key={voucher._id}>
+                      <div className='inline-block w-1/2'>
+                        <span className='text-secondary'>{voucher.code}</span>
+                      </div>
+                      <div className='inline-block w-1/2'>
+                        <span className='text-green-500'>{formatPrice(voucher.accumulated)}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                <div
-                  style={{
-                    border: '1px solid rgb(0, 0, 0, 0.1)',
-                  }}
-                  className='border rounded-lg p-21/2 mb-4 bg-slate-100 text-slate-500'>
-                  {/* New Info */}
-                  <p className='font-semibold m-0 mb-4 underline text-sm'>Thông tin cũ:</p>
-
-                  <p className='whitespace-pre m-0 max-w-[600px] overflow-x-auto border-b '>
-                    {data.newInfo.info}
-                  </p>
-                </div>
-
-                <p className='text-center text-sm text-slate-600'>
-                  Xin lỗi bạn vì sự bất tiện này 😢, xin vui lòng đăng nhập lại và tiếp tục sử dịch vụ.
-                  Xin chân thành cảm ơn 😊
+                <p className='text-center text-sm text-slate-500'>
+                  Xin chân thành cảm ơn bạn đã đồng hành cùng Anpha Shop trong thời gian qua. Chúc bạn
+                  một ngày tốt lành 😊
                 </p>
               </Column>
             </Row>
@@ -159,4 +161,6 @@ export function UpdateInfoEmail({ data }: { data: any }) {
   )
 }
 
-export default UpdateInfoEmail
+export default SummaryEmail
+
+const border = '1px solid rgb(0, 0, 0, 0.1)'

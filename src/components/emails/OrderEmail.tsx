@@ -52,7 +52,7 @@ export function OrderEmail({ order }: { order: any }) {
                 <div className='text-sm mt-8'>
                   <p>
                     <b>Mã đơn hàng: </b>
-                    <span className='text-[#7655e6]'>{order.code}</span>
+                    <span className='text-secondary tracking-wider font-semibold'>{order.code}</span>
                   </p>
                   <p>
                     <b>Ngày đặt hàng: </b>

@@ -1,4 +1,4 @@
-import ResetPasswordEmail from '@/components/emails/ResetPasswordMail'
+import ResetPasswordEmail from '@/components/emails/ResetPasswordEmail'
 
 function page() {
   return <ResetPasswordEmail name='Ohara' link='/asdasd' />

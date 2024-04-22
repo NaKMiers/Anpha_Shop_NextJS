@@ -42,7 +42,7 @@ function ResetPasswordEmail({ name, link }: { name: string; link: string }) {
           <Section className='px-5'>
             <p>Hi {name},</p>
             <p>
-              Bạn đã gửi yêu cầu khôi phục mật khẩu{' '}
+              Bạn đã gửi yêu cầu khôi phục mật khẩu tại{' '}
               <span className='font-semibold'>&quot;Anpha Shop&quot;</span> lúc{' '}
               {new Intl.DateTimeFormat('vi', {
                 dateStyle: 'full',
@@ -58,7 +58,7 @@ function ResetPasswordEmail({ name, link }: { name: string; link: string }) {
             <p>
               Ngược lại, nếu đây là bạn, hãy ấn nút bên dưới để{' '}
               <a href={link} className='text-blue-500'>
-                khôi phục mật khẩu
+                khôi phục mật khẩu của bạn
               </a>{' '}
               ngay.
             </p>

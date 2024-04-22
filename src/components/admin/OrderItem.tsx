@@ -169,7 +169,7 @@ function OrderItem({
           {/* Total */}
           <p
             className='flex items-center flex-wrap gap-x-2 mr-2 text-green-500 text-xl font-semibold'
-            title='email'>
+            title='total'>
             {formatPrice(data.total)}{' '}
             <span
               className='px-[7px] py-[1px] text-center text-xs rounded-full shadow-sm bg-sky-300 text-white'
