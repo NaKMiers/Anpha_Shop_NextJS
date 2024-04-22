@@ -6,7 +6,6 @@ import ShortageAccountEmail from '@/components/emails/ShortageAccountEmail'
 import SummaryEmail from '@/components/emails/SummaryEmail'
 import UpdateInfoEmail from '@/components/emails/UpdateInfoEmail'
 import VerifyEmailEmail from '@/components/emails/VerifyEmailEmail'
-import OrderModel from '@/models/OrderModel'
 import UserModel from '@/models/UserModel'
 import { render } from '@react-email/render'
 import nodeMailer from 'nodemailer'
@@ -40,7 +39,7 @@ export function sendMail(to: string | string[], subject: string, html: string) {
   )
 }
 
-// send order notification to admin
+// send order notification to admin ✅
 export async function notifyNewOrderToAdmin(newOrder: any) {
   console.log('- Notify New Order To Admin -')
 
@@ -54,7 +53,7 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
   sendMail(emails, 'New Order', html)
 }
 
-// notify shortage account to admin
+// notify shortage account to admin ✅
 export async function notifyShortageAccount(message: any) {
   console.log('- Notify Shortage Account -')
 
@@ -69,7 +68,7 @@ export async function notifyShortageAccount(message: any) {
   sendMail(emails, message, html)
 }
 
-// deliver notification
+// deliver notification ✅
 export async function notifyDeliveryOrder(email: string, orderData: any) {
   console.log('- Notify Delivery Order -')
 
@@ -77,7 +76,7 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
   sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
 }
 
-// notify account updated
+// notify account updated ✅
 export async function notifyAccountUpdated(email: string, data: any) {
   console.log('- Notify Account Updated -')
 
@@ -88,7 +87,7 @@ export async function notifyAccountUpdated(email: string, data: any) {
   sendMail(email, 'Cập nhật thông tin tài khoản', html)
 }
 
-// summary notification
+// summary notification ✅
 export async function summaryNotification(email: string, summary: any) {
   console.log('- Summary Notification -')
 
@@ -97,7 +96,7 @@ export async function summaryNotification(email: string, summary: any) {
   sendMail(email, 'Monthly Summary', html)
 }
 
-// reset password email
+// reset password email ✅
 export async function sendResetPasswordEmail(email: string, name: string, link: string) {
   console.log('- Send Reset Password Email -')
 
@@ -106,7 +105,7 @@ export async function sendResetPasswordEmail(email: string, name: string, link: 
   sendMail(email, 'Khôi phục mật khẩu', html)
 }
 
-// notify expired account
+// notify expired account ✅
 export async function notifyExpiredAccount(email: string, data: any) {
   console.log('- Notify Expired Account -')
 
@@ -115,7 +114,7 @@ export async function notifyExpiredAccount(email: string, data: any) {
   sendMail(email, 'Tài khoản sắp hết hạn', html)
 }
 
-// verify email
+// verify email ✅
 export async function sendVerifyEmail(email: string, name: string, link: string) {
   console.log('- Send Verify Email -')
 
