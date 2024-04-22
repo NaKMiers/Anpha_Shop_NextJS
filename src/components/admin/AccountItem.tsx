@@ -163,16 +163,16 @@ function AccountItem({
           </p>
 
           {/* Info */}
-          <div className='relative w-full mt-2 max-h-[200px] border rounded-lg'>
+          <div className='relative'>
             <button
-              className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500'
+              className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500 bg-white'
               onClick={e => {
                 e.stopPropagation()
                 handleCopy(data.info)
               }}>
               <FaCopy size={16} className='wiggle' />
             </button>
-            <p className='p-2 text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+            <div className='w-full mt-2 max-h-[200px] border rounded-lg p-2 text-sm font-body tracking-wide overflow-scroll whitespace-pre break-all'>
               {data.info.split('\n').map((line, index) => (
                 <span key={index} className='block'>
                   {line.split(' ').map((word, index) => (
@@ -188,7 +188,7 @@ function AccountItem({
                   ))}
                 </span>
               ))}
-            </p>
+            </div>
           </div>
         </div>
 

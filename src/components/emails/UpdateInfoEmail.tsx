@@ -52,7 +52,7 @@ export function UpdateInfoEmail({ data }: { data: any }) {
                 <div className='text-sm mt-8'>
                   <p>
                     <b>Mã đơn hàng: </b>
-                    <span className='text-secondary tracking-wider font-semibold'>{order.code}</span>
+                    <span className='text-secondary tracking-wider font-semibold'>{data.code}</span>
                   </p>
                   <p>
                     <b>Ngày đặt hàng: </b>

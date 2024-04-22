@@ -111,9 +111,9 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                 <Fragment key={account._id}>
                   <hr className='mt-5 mb-3' />
 
-                  <div className='relative border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                  <div className='relative'>
                     <button
-                      className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500'
+                      className='group absolute z-10 top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500 bg-white'
                       onClick={e => {
                         e.stopPropagation()
                         handleCopy(account.info)
@@ -121,22 +121,24 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                       <FaCopy size={16} className='wiggle' />
                     </button>
 
-                    {account.info.split('\n').map((line, index) => (
-                      <span key={index} className='block'>
-                        {line.split(' ').map((word, index) => (
-                          <span
-                            key={index}
-                            className='inline-block cursor-pointer'
-                            onClick={e => {
-                              e.stopPropagation()
-                              navigator.clipboard.writeText(word)
-                              toast.success('Copied: ' + word)
-                            }}>
-                            {word}{' '}
-                          </span>
-                        ))}
-                      </span>
-                    ))}
+                    <div className='relative border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                      {account.info.split('\n').map((line, index) => (
+                        <span key={index} className='block'>
+                          {line.split(' ').map((word, index) => (
+                            <span
+                              key={index}
+                              className='inline-block cursor-pointer'
+                              onClick={e => {
+                                e.stopPropagation()
+                                navigator.clipboard.writeText(word)
+                                toast.success('Copied: ' + word)
+                              }}>
+                              {word}{' '}
+                            </span>
+                          ))}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </Fragment>
               ))
