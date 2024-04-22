@@ -21,17 +21,17 @@ export async function POST(req: NextRequest) {
 
     console.log('user: ', user)
 
-    const accountSid = 'ACfc02f77be8b677b05ac82495e3351ce6'
-    const authToken = '626acdaa75c6d153a87de5d1243b88f1'
-    const client = require('twilio')(accountSid, authToken)
+    // const accountSid = 'ACfc02f77be8b677b05ac82495e3351ce6'
+    // const authToken = '626acdaa75c6d153a87de5d1243b88f1'
+    // const client = require('twilio')(accountSid, authToken)
 
-    const result = await client.messages.create({
-      body: 'Iu Cham',
-      from: 'Anpha Shop',
-      to: '+84899320427',
-    })
+    // const result = await client.messages.create({
+    //   body: 'Iu Cham',
+    //   from: 'Anpha Shop',
+    //   to: '+84899320427',
+    // })
 
-    console.log('result', result)
+    // console.log('result', result)
 
     return NextResponse.json(
       { message: `Mã xác minh đã được gửi tới số điện thoại ${phone}` },

@@ -206,9 +206,6 @@ const transporter = nodeMailer.createTransport({
   },
 })
 
-// SEND SMS CORE
-const twilio = async () => {}
-
 export function sendMail(to: string, subject: string, html: string) {
   transporter.sendMail(
     {
@@ -345,7 +342,7 @@ export async function summaryNotification(email: string, summary: any) {
 }
 
 // reset password email
-export async function sendResetPasswordEmail(email: string, link: string) {
+export async function sendResetPasswordEmail(email: string, name: string, link: string) {
   console.log('- Send Reset Password Email -')
 
   // get email interface path
