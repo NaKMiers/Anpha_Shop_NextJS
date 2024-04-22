@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
     //   { notifyAccounts: [], message: 'You are not allow to visit this page!' },
     //   { status: 200 }
     // )
-    // return NextResponse.json({ message: 'You are not allow to visit this page!' }, { status: 200 })
+    return NextResponse.json({ message: 'You are not allow to visit this page!' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
