@@ -60,7 +60,7 @@ function ResetPasswordEmail({ name, link }: { name: string; link: string }) {
               <a href={link} className='text-blue-500'>
                 khôi phục mật khẩu
               </a>{' '}
-              ngay lập tức.
+              ngay.
             </p>
 
             <div className='text-center p-3'>

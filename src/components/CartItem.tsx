@@ -258,24 +258,41 @@ function CartItem({
         )
       }>
       {/* MARK: Thumbnails */}
-      <Link
-        href={`/${cartItem.product.slug}`}
-        prefetch={false}
-        className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
-        onClick={e => e.stopPropagation()}>
-        <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
-          {cartItem.product.images.map(src => (
+      <div className='relative'>
+        {cartItem.product.stock <= 0 && (
+          <Link
+            href={`/${cartItem.product.slug}`}
+            prefetch={false}
+            className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
             <Image
-              className='flex-shrink w-full snap-start'
-              src={src}
-              width={150}
-              height={150}
-              alt={`/${cartItem.product.slug}`}
-              key={src}
+              className='animate-wiggle -mt-1'
+              src='/images/sold-out.jpg'
+              width={34}
+              height={34}
+              alt='sold-out'
             />
-          ))}
-        </div>
-      </Link>
+          </Link>
+        )}
+
+        <Link
+          href={`/${cartItem.product.slug}`}
+          prefetch={false}
+          className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
+          onClick={e => e.stopPropagation()}>
+          <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
+            {cartItem.product.images.map(src => (
+              <Image
+                className='flex-shrink w-full snap-start'
+                src={src}
+                width={150}
+                height={150}
+                alt={`/${cartItem.product.slug}`}
+                key={src}
+              />
+            ))}
+          </div>
+        </Link>
+      </div>
 
       {/* Local action buttons */}
       {localCartItem && !isCheckout && (

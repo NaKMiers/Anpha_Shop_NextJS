@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
               product: cartItem.productId,
               productId: cartItem.productId._id,
               quantity:
-                cartItem.quantity > cartItem.productId.stock
+                cartItem.quantity > cartItem.productId.stock // make sure quantity is not more than stock
                   ? cartItem.productId.stock
                   : cartItem.quantity,
             }

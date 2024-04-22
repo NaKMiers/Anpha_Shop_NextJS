@@ -48,7 +48,7 @@ async function uploadFile(file: any, shape?: string) {
   const resizeBuffer = await sharp(buffer).resize(size).toBuffer()
 
   // const fileName = randomFileName()
-  const filename = 'test-' + randomFileName()
+  const filename = randomFileName()
 
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,

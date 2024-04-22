@@ -70,10 +70,15 @@ function Header({ isStatic }: HeaderProps) {
               (product: FullyProduct) => product._id === cartItem.product._id
             )
 
+            // make sure quantity is not greater than stock
+            let qty = cartItem.quantity > product?.stock ? product?.stock : cartItem.quantity
+            qty = cartItem.quantity === 0 && product?.stock ? 1 : qty
+
             return product
               ? {
                   ...cartItem,
                   product,
+                  quantity: qty,
                 }
               : null
           })
