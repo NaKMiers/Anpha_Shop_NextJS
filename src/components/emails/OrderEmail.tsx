@@ -104,7 +104,7 @@ export function OrderEmail({ order }: { order: any }) {
             </Row>
 
             {order.userId && (
-              <div className='text-center p-3'>
+              <div className='text-center p-3 mb-8'>
                 <a
                   href={`https://anpha.shop/user/order/${order.code}`}
                   className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>

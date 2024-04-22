@@ -98,7 +98,7 @@ function ForgotPasswordPage() {
           Quên Mật Khẩu
         </h1>
 
-        <p className='mb-1.5 font-body tracking-wider'>
+        <p className='mb-1.5 font-body tracking-wider text-sm italic text-slate-500'>
           *Vui lòng nhập email để nhận mã khôi phục mật khẩu.
         </p>
 

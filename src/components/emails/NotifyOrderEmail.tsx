@@ -83,7 +83,7 @@ export function NotifyOrderEmail({ order }: { order: any }) {
                 <div className='mt-8'>
                   <b className='text-[24px]'>Sản phẩm: </b>
 
-                  <ul className='list-none pl-21'>
+                  <ul className='list-none'>
                     {order.items.map((item: any) => (
                       <li className='mb-2' key={item._id}>
                         <a
@@ -99,7 +99,7 @@ export function NotifyOrderEmail({ order }: { order: any }) {
                                 />
                               </Column>
                               <Column>
-                                <p className='font-semibold text-xl text-slate-600'>
+                                <p className='font-semibold text-slate-600'>
                                   {item.product.title}
                                   <span className='bg-secondary font-semibold text-xs rounded-full text-center ml-1.5 py-px px-1.5 text-white'>
                                     {item.quantity}
@@ -117,7 +117,7 @@ export function NotifyOrderEmail({ order }: { order: any }) {
             </Row>
 
             {order.userId && (
-              <div className='text-center p-3'>
+              <div className='text-center p-3 mb-8'>
                 <a
                   href={`https://anpha.shop/user/order/${order.code}`}
                   className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>

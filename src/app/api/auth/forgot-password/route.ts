@@ -40,7 +40,10 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign({ email }, process.env.JWT_SECRET!, { expiresIn: '2h' })
     const link = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}`
 
-    sendResetPasswordEmail(email, link)
+    const name =
+      (user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username) ||
+      user.email
+    sendResetPasswordEmail(email, name, link)
 
     // return response
     return NextResponse.json({

@@ -1,3 +1,195 @@
+// import NotifyOrderEmail from '@/components/emails/NotifyOrderEmail'
+// import OrderEmail from '@/components/emails/OrderEmail'
+// import ResetPasswordEmail from '@/components/emails/ResetPasswordEmail'
+// import ShortageAccountEmail from '@/components/emails/ShortageAccountEmail'
+// import UpdateInfoEmail from '@/components/emails/UpdateInfoEmail'
+// import UserModel from '@/models/UserModel'
+// import fs from 'fs'
+// import nodeMailer from 'nodemailer'
+// import path from 'path'
+// import pug from 'pug'
+// import { Resend } from 'resend'
+
+// // RESEND
+// const resend = new Resend(process.env.RESEND_SECRET)
+
+// // SEND MAIL CORE
+// const transporter = nodeMailer.createTransport({
+//   service: 'gmail',
+//   secure: true,
+//   auth: {
+//     user: process.env.NEXT_PUBLIC_MAIL,
+//     pass: process.env.MAIL_APP_PASSWORD,
+//   },
+// })
+
+// export function sendMail(to: string, subject: string, html: string) {
+//   transporter.sendMail(
+//     {
+//       from: 'Anpha Shop',
+//       to: to,
+//       subject: subject,
+//       html: html,
+//     },
+//     err => {
+//       if (err) {
+//         console.log({
+//           message: 'Error',
+//           err,
+//         })
+//       }
+//     }
+//   )
+// }
+
+// // send order notification to admin
+// export async function notifyNewOrderToAdmin(order: any) {
+//   console.log('- Notify New Order To Admin -')
+
+//   // get admin and editor mails
+//   const admins: any[] = await UserModel.find({
+//     role: { $in: ['admin', 'editor'] },
+//   }).lean()
+//   let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL!]
+//   console.log('Emails:', emails)
+//   console.log('Order:', order)
+
+//   resend.emails.send({
+//     from: 'Anpha Shop <no-reply@anpha.shop>', //
+//     to: emails,
+//     subject: 'Có đơn hàng mới',
+//     react: NotifyOrderEmail({ order }),
+//   })
+// }
+
+// // notify shortage account to admin
+// export async function notifyShortageAccount(message: any) {
+//   console.log('- Notify Shortage Account -')
+
+//   // get admin and editor mails
+//   const admins: any[] = await UserModel.find({
+//     role: { $in: ['admin', 'editor'] },
+//   }).lean()
+//   let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL!]
+
+//   resend.emails.send({
+//     from: 'Anpha Shop <no-reply@anpha.shop>',
+//     to: emails,
+//     subject: message,
+//     react: ShortageAccountEmail({ message }),
+//   })
+// }
+
+// // re-deliver notification
+// export async function notifyDeliveryOrder(email: string, order: any) {
+//   console.log('- Notify Delivery Order -')
+
+//   console.log('order', order)
+
+//   resend.emails.send({
+//     from: 'Anpha Shop <no-reply@anpha.shop>',
+//     to: email,
+
+//     subject: 'Bạn có đơn hàng từ Anpha Shop',
+//     react: OrderEmail({ order }),
+//   })
+// }
+
+// // notify account updated
+// export async function notifyAccountUpdated(email: string, data: any) {
+//   console.log('- Notify Account Updated -')
+//   console.log(data)
+
+//   resend.emails.send({
+//     from: 'Anpha Shop <no-reply@anpha.shop>', //
+//     to: email,
+//     subject: 'Cập nhật thông tin tài khoản',
+//     react: UpdateInfoEmail({ data }),
+//   })
+// }
+
+// // summary notification
+// export async function summaryNotification(email: string, summary: any) {
+//   console.log('- Summary Notification -')
+
+//   // get email interface path
+//   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/SummaryMail.pug')
+
+//   // get email interface file
+//   const templateContent = fs.readFileSync(templatePath, 'utf-8')
+
+//   // Compile template
+//   const compiledTemplate = pug.compile(templateContent, {
+//     filename: templatePath,
+//   })
+
+//   // Render template với dữ liệu
+//   const html = compiledTemplate(summary)
+//   sendMail(email, 'Monthly Summary', html)
+// }
+
+// // reset password email
+// export async function sendResetPasswordEmail(email: string, name: string, link: string) {
+//   console.log('- Send Reset Password Email -')
+
+//   resend.emails.send({
+//     from: 'Anpha Shop <no-reply@anpha.shop>', //
+//     to: email,
+//     subject: 'Khôi phục mật khẩu',
+//     react: ResetPasswordEmail({ name, link }),
+//   })
+// }
+
+// // notify expired account
+// export async function notifyExpiredAccount(email: string, data: any) {
+//   console.log('- Notify Expired Account -')
+
+//   // get email interface path
+//   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/NotifyExpiredMail.pug')
+
+//   // get email interface file
+//   const templateContent = fs.readFileSync(templatePath, 'utf-8')
+
+//   // Compile template
+//   const compiledTemplate = pug.compile(templateContent, {
+//     filename: templatePath,
+//   })
+
+//   // render template with new data
+//   const html = compiledTemplate(data)
+//   sendMail(email, 'Tài khoản sắp hết hạn', html)
+// }
+
+// // verify email
+// export async function sendVerifyEmail(email: string, link: string) {
+//   console.log('- Send Verify Email -')
+
+//   // get email interface path
+//   const templatePath = path.resolve(process.cwd(), 'src/utils/emailTemplates/VerifyEmailMail.pug')
+
+//   // get email interface file
+//   const templateContent = fs.readFileSync(templatePath, 'utf-8')
+
+//   // Compile template
+//   const compiledTemplate = pug.compile(templateContent, {
+//     filename: templatePath,
+//   })
+
+//   // Render template với dữ liệu
+//   const html = compiledTemplate({ link })
+//   sendMail(email, 'Xác minh email', html)
+// }
+
+// // verify phone
+// export async function sendVerifyPhone(phone: string, code: string) {
+//   console.log('- Send Verify Phone -')
+// }
+
+// // notify that your introduce code has been used
+// export async function notifyUsedIntroduceCode(email: string, data: any) {
+//   console.log('- Notify Used Introduce Code -')
+// }
+
 import UserModel from '@/models/UserModel'
 import fs from 'fs'
 import nodeMailer from 'nodemailer'

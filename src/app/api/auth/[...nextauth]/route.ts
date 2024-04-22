@@ -27,12 +27,6 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
 
-    // FACEBOOK
-    // FacebookProvider({
-    //   clientId: process.env.FACEBOOK_CLIENT_ID!,
-    //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-    // }),
-
     // GITHUB
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -139,12 +133,13 @@ const handler = NextAuth({
 
       console.log('user', user)
       console.log('account', account)
+      console.log('profile', profile)
 
       try {
         // connect to database
         await connectDatabase()
 
-        if (account) {
+        if (account && account.provider != 'credentials') {
           if (!user || !profile) {
             return false
           }
