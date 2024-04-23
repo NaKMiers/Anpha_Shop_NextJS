@@ -22,6 +22,7 @@ const transporter = nodeMailer.createTransport({
 
 export async function sendMail(to: string | string[], subject: string, html: string) {
   console.log('- Send Mail -')
+
   const res = await transporter.sendMail({
     from: 'Anpha Shop <no-reply@anpha.shop>',
     to: to,
@@ -29,6 +30,7 @@ export async function sendMail(to: string | string[], subject: string, html: str
     html: html,
   })
 
+  console.log('here')
   console.log('res:', res)
 }
 
@@ -44,7 +46,8 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
     let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
 
     const html = render(NotifyOrderEmail({ order: newOrder }))
-    sendMail(emails, 'New Order', html)
+    const res = await sendMail(emails, 'New Order', html)
+    console.log('res---:', res)
   } catch (err: any) {
     console.log(err)
   }
