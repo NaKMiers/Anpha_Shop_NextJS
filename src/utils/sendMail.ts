@@ -36,87 +36,119 @@ export async function sendMail(to: string | string[], subject: string, html: str
 export async function notifyNewOrderToAdmin(newOrder: any) {
   console.log('- Notify New Order To Admin -')
 
-  // get admin and editor mails
-  const admins: any[] = await UserModel.find({
-    role: { $in: ['admin', 'editor'] },
-  }).lean()
-  let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
+  try {
+    // get admin and editor mails
+    const admins: any[] = await UserModel.find({
+      role: { $in: ['admin', 'editor'] },
+    }).lean()
+    let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
 
-  const html = render(NotifyOrderEmail({ order: newOrder }))
-  sendMail(emails, 'New Order', html)
+    const html = render(NotifyOrderEmail({ order: newOrder }))
+    sendMail(emails, 'New Order', html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // notify shortage account to admin
 export async function notifyShortageAccount(message: any) {
   console.log('- Notify Shortage Account -')
 
-  // get admin and editor mails
-  const admins: any[] = await UserModel.find({
-    role: { $in: ['admin', 'editor'] },
-  }).lean()
-  let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
+  try {
+    // get admin and editor mails
+    const admins: any[] = await UserModel.find({
+      role: { $in: ['admin', 'editor'] },
+    }).lean()
+    let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
 
-  // render template with new order data
-  const html = render(ShortageAccountEmail({ message }))
-  sendMail(emails, message, html)
+    // render template with new order data
+    const html = render(ShortageAccountEmail({ message }))
+    sendMail(emails, message, html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // deliver notification
 export async function notifyDeliveryOrder(email: string, orderData: any) {
   console.log('- Notify Delivery Order -')
 
-  console.log('orderData:', orderData)
+  try {
+    console.log('orderData:', orderData)
 
-  const html = render(OrderEmail({ order: orderData }))
-  console.log('html:', html)
-  sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
+    const html = render(OrderEmail({ order: orderData }))
+    console.log('html:', html)
+    sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // notify account updated
 export async function notifyAccountUpdated(email: string, data: any) {
   console.log('- Notify Account Updated -')
 
-  console.log('Data:', data)
+  try {
+    console.log('Data:', data)
 
-  // render template with new data
-  const html = render(UpdateInfoEmail({ data }))
-  sendMail(email, 'Cập nhật thông tin tài khoản', html)
+    // render template with new data
+    const html = render(UpdateInfoEmail({ data }))
+    sendMail(email, 'Cập nhật thông tin tài khoản', html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // summary notification
 export async function summaryNotification(email: string, summary: any) {
   console.log('- Summary Notification -')
 
-  // Render template với dữ liệu
-  const html = render(SummaryEmail({ summary }))
-  sendMail(email, `Báo cáo thu nhập tháng ${new Date().getMonth() + 1}`, html)
+  try {
+    // Render template với dữ liệu
+    const html = render(SummaryEmail({ summary }))
+    sendMail(email, `Báo cáo thu nhập tháng ${new Date().getMonth() + 1}`, html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // reset password email
 export async function sendResetPasswordEmail(email: string, name: string, link: string) {
   console.log('- Send Reset Password Email -')
 
-  // Render template với dữ liệu
-  const html = render(ResetPasswordEmail({ name, link }))
-  sendMail(email, 'Khôi phục mật khẩu', html)
+  try {
+    // Render template với dữ liệu
+    const html = render(ResetPasswordEmail({ name, link }))
+    sendMail(email, 'Khôi phục mật khẩu', html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // notify expired account
 export async function notifyExpiredAccount(email: string, data: any) {
   console.log('- Notify Expired Account -')
 
-  // render template with new data
-  const html = render(NotifyExpiredEmail({ data }))
-  sendMail(email, 'Tài khoản sắp hết hạn', html)
+  try {
+    // render template with new data
+    const html = render(NotifyExpiredEmail({ data }))
+    sendMail(email, 'Tài khoản sắp hết hạn', html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // verify email
 export async function sendVerifyEmail(email: string, name: string, link: string) {
   console.log('- Send Verify Email -')
 
-  // Render template với dữ liệu
-  const html = render(VerifyEmailEmail({ name, link }))
-  sendMail(email, 'Xác minh email', html)
+  try {
+    // Render template với dữ liệu
+    const html = render(VerifyEmailEmail({ name, link }))
+    sendMail(email, 'Xác minh email', html)
+  } catch (err: any) {
+    console.log(err)
+  }
 }
 
 // verify phone
