@@ -40,11 +40,6 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    // send EMAIL to collaborators
-    summaries.forEach(async summary => {
-      summaryNotification(summary.collaborator.email, summary)
-    })
-
     // increase total income and reset income of collaborators
     await Promise.all(
       collaborators.map(collaborator => {
@@ -61,6 +56,11 @@ export async function POST(req: NextRequest) {
     // clear voucher accumulated
     const voucherIds = vouchers.map(voucher => voucher._id)
     await VoucherModel.updateMany({ _id: { $in: voucherIds } }, { $set: { accumulated: 0 } })
+
+    // send EMAIL to collaborators
+    await Promise.all(
+      summaries.map(async summary => await summaryNotification(summary.collaborator.email, summary))
+    )
 
     // return response
     return NextResponse.json({ message: 'Summary has been sent' })

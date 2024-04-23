@@ -138,7 +138,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           newInfo: { info },
         }
 
-        notifyAccountUpdated(order.email, data)
+        await notifyAccountUpdated(order.email, data)
       }
     }
 

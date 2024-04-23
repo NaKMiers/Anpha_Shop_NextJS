@@ -23,15 +23,12 @@ const transporter = nodeMailer.createTransport({
 export async function sendMail(to: string | string[], subject: string, html: string) {
   console.log('- Send Mail -')
 
-  const res = await transporter.sendMail({
+  await transporter.sendMail({
     from: 'Anpha Shop <no-reply@anpha.shop>',
     to: to,
     subject: subject,
     html: html,
   })
-
-  console.log('here')
-  console.log('res:', res)
 }
 
 // send order notification to admin
@@ -46,8 +43,7 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
     let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
 
     const html = render(NotifyOrderEmail({ order: newOrder }))
-    const res = await sendMail(emails, 'New Order', html)
-    console.log('res---:', res)
+    await sendMail(emails, 'New Order', html)
   } catch (err: any) {
     console.log(err)
   }
@@ -66,7 +62,7 @@ export async function notifyShortageAccount(message: any) {
 
     // render template with new order data
     const html = render(ShortageAccountEmail({ message }))
-    sendMail(emails, message, html)
+    await sendMail(emails, message, html)
   } catch (err: any) {
     console.log(err)
   }
@@ -81,7 +77,7 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
 
     const html = render(OrderEmail({ order: orderData }))
     console.log('html:', html)
-    sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
+    await sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
   } catch (err: any) {
     console.log(err)
   }
@@ -96,7 +92,7 @@ export async function notifyAccountUpdated(email: string, data: any) {
 
     // render template with new data
     const html = render(UpdateInfoEmail({ data }))
-    sendMail(email, 'Cập nhật thông tin tài khoản', html)
+    await sendMail(email, 'Cập nhật thông tin tài khoản', html)
   } catch (err: any) {
     console.log(err)
   }
@@ -109,7 +105,7 @@ export async function summaryNotification(email: string, summary: any) {
   try {
     // Render template với dữ liệu
     const html = render(SummaryEmail({ summary }))
-    sendMail(email, `Báo cáo thu nhập tháng ${new Date().getMonth() + 1}`, html)
+    await sendMail(email, `Báo cáo thu nhập tháng ${new Date().getMonth() + 1}`, html)
   } catch (err: any) {
     console.log(err)
   }
@@ -122,7 +118,7 @@ export async function sendResetPasswordEmail(email: string, name: string, link: 
   try {
     // Render template với dữ liệu
     const html = render(ResetPasswordEmail({ name, link }))
-    sendMail(email, 'Khôi phục mật khẩu', html)
+    await sendMail(email, 'Khôi phục mật khẩu', html)
   } catch (err: any) {
     console.log(err)
   }
@@ -135,7 +131,7 @@ export async function notifyExpiredAccount(email: string, data: any) {
   try {
     // render template with new data
     const html = render(NotifyExpiredEmail({ data }))
-    sendMail(email, 'Tài khoản sắp hết hạn', html)
+    await sendMail(email, 'Tài khoản sắp hết hạn', html)
   } catch (err: any) {
     console.log(err)
   }
@@ -148,7 +144,7 @@ export async function sendVerifyEmail(email: string, name: string, link: string)
   try {
     // Render template với dữ liệu
     const html = render(VerifyEmailEmail({ name, link }))
-    sendMail(email, 'Xác minh email', html)
+    await sendMail(email, 'Xác minh email', html)
   } catch (err: any) {
     console.log(err)
   }

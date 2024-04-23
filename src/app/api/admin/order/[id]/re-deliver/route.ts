@@ -54,7 +54,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     }
 
     // EMAIL
-    notifyDeliveryOrder(email, orderData)
+    await notifyDeliveryOrder(email, orderData)
 
     // stay in current page
     return NextResponse.json({ message: `Re-deliver Order Successfully!` }, { status: 200 })

@@ -112,7 +112,7 @@ export default async function handleDeliverOrder(id: string) {
 
   // check if shortage accounts
   if (orderError.error) {
-    notifyShortageAccount(orderError.message)
+    await notifyShortageAccount(orderError.message)
     return { order, isError: orderError.error, message: orderError.message }
   }
 
@@ -220,7 +220,7 @@ export default async function handleDeliverOrder(id: string) {
   }
 
   // EMAIL
-  notifyDeliveryOrder(email, orderData)
+  await notifyDeliveryOrder(email, orderData)
 
   return {
     order,
