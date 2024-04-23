@@ -44,6 +44,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     const isChangedUsingUser = updatedAccount?.usingUser !== usingUser
 
     let order: FullyOrder | null = null
+    let emailRes: any = null
 
     if (isChangedUsingUser) {
       // get order from database to update account
@@ -138,12 +139,18 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           newInfo: { info },
         }
 
-        notifyAccountUpdated(order.email, data)
+        emailRes = await notifyAccountUpdated(order.email, data)
       }
     }
 
     // return updated account
-    return NextResponse.json({ updatedAccount, message: 'Account has been updated' }, { status: 200 })
+    return NextResponse.json(
+      {
+        updatedAccount,
+        message: `Account has been updated ${emailRes ? `(email time: ${emailRes.messageTime})` : ''}`,
+      },
+      { status: 200 }
+    )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

@@ -131,10 +131,6 @@ const handler = NextAuth({
     async signIn({ user, account, profile }: any) {
       console.log('- Sign In -')
 
-      console.log('user', user)
-      console.log('account', account)
-      console.log('profile', profile)
-
       try {
         // connect to database
         await connectDatabase()
@@ -154,7 +150,6 @@ const handler = NextAuth({
             firstname = profile.given_name
             lastname = profile.family_name
           } else if (account.provider === 'github') {
-            console.log('github')
             firstname = profile.name
             lastname = ''
           }
@@ -165,8 +160,6 @@ const handler = NextAuth({
             { $set: { avatar } },
             { new: true }
           ).lean()
-
-          console.log('Existing User:', existingUser)
 
           // check whether user exists
           if (existingUser) {
@@ -183,13 +176,12 @@ const handler = NextAuth({
             verifiedEmail: true,
           })
 
-          console.log('New User Created!', newUser)
           await newUser.save()
         }
 
         return true
       } catch (err: any) {
-        console.log('err', err)
+        console.log(err)
         return false
       }
     },

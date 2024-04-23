@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     await newOrder.save()
 
     // notify new order to admin
-    notifyNewOrderToAdmin(newOrder)
+    const mailRes = await notifyNewOrderToAdmin(newOrder)
 
     // if user logined => cart is database cart => Delete cart items
     let removedCartItems = []
@@ -89,6 +89,8 @@ export async function POST(req: NextRequest) {
       response && response.isError
         ? 'Đơn hàng đang được xử lý, xin vui lòng chờ'
         : 'Đơn hàng đã được gửi qua email ' + email
+
+    console.log('mailRes:', mailRes)
 
     return NextResponse.json({ code, removedCartItems, message }, { status: 201 })
   } catch (err: any) {

@@ -2,7 +2,7 @@
 
 import Input from '@/components/Input'
 import { resetPassword } from '@/requests'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -12,6 +12,7 @@ import { FaCircleNotch } from 'react-icons/fa6'
 function ResetPasswordPage() {
   // hooks
   const router = useRouter()
+  const queryParams = useSearchParams()
 
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -30,6 +31,14 @@ function ResetPasswordPage() {
     },
   })
 
+  useEffect(() => {
+    // MARK: Check if token is not provided
+    if (!queryParams.get('token')) {
+      toast.error('Không có token')
+      router.push('/auth/login')
+    }
+  }, [queryParams, router])
+
   // MARK: Reset Password Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
@@ -43,8 +52,7 @@ function ResetPasswordPage() {
         }
 
         // get email and token from query
-        const url = new URL(window.location.href)
-        const token = url.searchParams.get('token')
+        const token = queryParams.get('token')
 
         // send request to server
         const { message } = await resetPassword(token!, data.newPassword)
@@ -63,7 +71,7 @@ function ResetPasswordPage() {
         setIsLoading(false)
       }
     },
-    [setError, router]
+    [setError, router, queryParams]
   )
 
   // keyboard event
@@ -124,12 +132,12 @@ function ResetPasswordPage() {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isLoading}
-            className={`group bg-secondary rounded-lg py-2 px-3 text-light hover:bg-primary hover:text-dark common-transition font-semibold ${
+            className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-light hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading ? 'bg-slate-200 pointer-events-none' : ''
             }`}>
             {isLoading ? (
               <FaCircleNotch
-                size={24}
+                size={18}
                 className='text-light group-hover:text-dark common-transition animate-spin'
               />
             ) : (

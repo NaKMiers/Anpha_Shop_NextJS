@@ -245,13 +245,15 @@ function UserPage() {
         {/* MARK: Avatar */}
         <div className='flex flex-col items-center col-span-12 sm:col-span-6 lg:col-span-3 sm:border-r border-slate-400 p-2'>
           <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden p-3 group'>
-            <Image
-              className='rounded-full common-transition'
-              src={imageUrl || user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
-              width={160}
-              height={160}
-              alt='avatar'
-            />
+            {(imageUrl || user?.avatar) && (
+              <Image
+                className='rounded-full common-transition w-full h-full object-cover'
+                src={imageUrl || user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
+                width={160}
+                height={160}
+                alt='avatar'
+              />
+            )}
             <input
               id='images'
               hidden
@@ -263,7 +265,7 @@ function UserPage() {
             />
             {user?.authType === 'local' && (
               <div
-                className='absolute top-0 left-0 flex opacity-0 group-hover:opacity-100 items-center justify-center bg-primary w-full h-full bg-opacity-50 common-transition'
+                className='absolute top-0 left-0 flex opacity-0 group-hover:opacity-100 items-center justify-center bg-primary w-full h-full bg-opacity-50 common-transition cursor-pointer'
                 onClick={() => avatarInputRef.current?.click()}>
                 <FaCamera size={52} className='text-white wiggle-0' />
               </div>

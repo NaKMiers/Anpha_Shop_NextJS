@@ -139,12 +139,12 @@ function ForgotPasswordPage() {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isSent && isCounting}
-            className={`group bg-secondary rounded-lg py-2 px-3 text-light flex gap-2 hover:bg-primary hover:text-dark common-transition font-semibold ${
+            className={`h-[40px] min-w-[48px] items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-light flex gap-2 hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading || isCounting ? 'bg-slate-200 pointer-events-none' : ''
             }`}>
             {isLoading || isCounting ? (
               <FaCircleNotch
-                size={24}
+                size={18}
                 className='text-light group-hover:text-dark common-transition animate-spin'
               />
             ) : (

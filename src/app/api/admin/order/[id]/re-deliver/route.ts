@@ -54,10 +54,14 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     }
 
     // EMAIL
-    notifyDeliveryOrder(email, orderData)
+    const mailRes: any = await notifyDeliveryOrder(email, orderData)
+    console.log('Mail Response:', mailRes)
 
     // stay in current page
-    return NextResponse.json({ message: 'Re-deliver Order Successfully!' }, { status: 200 })
+    return NextResponse.json(
+      { message: `Re-deliver Order Successfully!\n (email size: ${mailRes.messageSize})` },
+      { status: 200 }
+    )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

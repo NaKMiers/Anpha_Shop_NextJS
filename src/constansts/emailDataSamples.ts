@@ -212,6 +212,52 @@ export const order = {
       ],
     },
   ],
+  accounts: [
+    {
+      productId: '6616c512cfdc10598ab611c4',
+      quantity: 1,
+      accounts: [
+        {
+          _id: '6622afaa13c9a6df523bacba',
+          type: '6616c512cfdc10598ab611c4',
+          info: '✅Email: anphashop79@gmail.com\n✅Password: 797914\n✅Slot: A1\n✅Pin: 1179\n\n- ⚠️ Lưu ý: Tên profile sẽ do người bán đặt để tiện quản lí, nếu bạn đổi tên profile, tài khoản của bạn sẽ bị thu hồi ❌\n\n- 💀 Lưu ý: Đề phòng trường hợp những shop "lừa đảo" khác giả vờ mua hàng sau đó bán lại. Tài khoản của bạn sẽ được đổi pass từ 6 - 15 ngày 1 lần, và pass mới sẽ được gửi qua mail cho bạn. Hãy kiểm tra mail khi không thể đăng nhập. Xin chân thành cảm ơn🫡',
+          active: false,
+          renew: '2024-06-20',
+          times: {
+            days: 100,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+          },
+          createdAt: '2024-04-19T17:53:46.491Z',
+          updatedAt: '2024-04-19T17:53:46.491Z',
+          __v: 0,
+        },
+      ],
+    },
+    {
+      productId: '6616c4a9cfdc10598ab611bb',
+      quantity: 1,
+      accounts: [
+        {
+          _id: '6622afa213c9a6df523bac88',
+          type: '6616c4a9cfdc10598ab611bb',
+          info: '        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Earum quibusdam voluptate beatae aut in quia, illo accusantium fugiat eligendi nostrum aspernatur debitis suscipit ad quas ipsam nobis aliquid magni saepe similique quasi velit quo? Dignissimos molestias amet minus nesciunt id corrupti, dolorem ducimus quod nisi alias, accusantium, at nemo doloribus?',
+          active: false,
+          renew: '2024-06-20',
+          times: {
+            days: 100,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+          },
+          createdAt: '2024-04-19T17:53:38.420Z',
+          updatedAt: '2024-04-19T17:53:38.420Z',
+          __v: 0,
+        },
+      ],
+    },
+  ],
   createdAt: '2024-04-20T07:09:45.271Z',
   updatedAt: '2024-04-21T08:44:34.909Z',
   __v: 0,

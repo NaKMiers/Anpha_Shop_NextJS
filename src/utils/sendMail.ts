@@ -20,26 +20,19 @@ const transporter = nodeMailer.createTransport({
   },
 })
 
-export function sendMail(to: string | string[], subject: string, html: string) {
-  transporter.sendMail(
-    {
-      from: 'Anpha Shop <no-reply@anpha.shop>',
-      to: to,
-      subject: subject,
-      html: html,
-    },
-    err => {
-      if (err) {
-        console.log({
-          message: 'Error',
-          err,
-        })
-      }
-    }
-  )
+export async function sendMail(to: string | string[], subject: string, html: string) {
+  console.log('- Send Mail -')
+  const response = await transporter.sendMail({
+    from: 'Anpha Shop <no-reply@anpha.shop>',
+    to: to,
+    subject: subject,
+    html: html,
+  })
+
+  return response
 }
 
-// send order notification to admin ✅
+// send order notification to admin
 export async function notifyNewOrderToAdmin(newOrder: any) {
   console.log('- Notify New Order To Admin -')
 
@@ -50,10 +43,12 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
   let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
 
   const html = render(NotifyOrderEmail({ order: newOrder }))
-  sendMail(emails, 'New Order', html)
+  const res = await sendMail(emails, 'New Order', html)
+
+  return res
 }
 
-// notify shortage account to admin ✅
+// notify shortage account to admin
 export async function notifyShortageAccount(message: any) {
   console.log('- Notify Shortage Account -')
 
@@ -65,18 +60,22 @@ export async function notifyShortageAccount(message: any) {
 
   // render template with new order data
   const html = render(ShortageAccountEmail({ message }))
-  sendMail(emails, message, html)
+  const res = await sendMail(emails, message, html)
+  return res
 }
 
-// deliver notification ✅
+// deliver notification
 export async function notifyDeliveryOrder(email: string, orderData: any) {
   console.log('- Notify Delivery Order -')
 
+  console.log('orderData:', orderData)
+
   const html = render(OrderEmail({ order: orderData }))
-  sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
+  const res = await sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
+  return res
 }
 
-// notify account updated ✅
+// notify account updated
 export async function notifyAccountUpdated(email: string, data: any) {
   console.log('- Notify Account Updated -')
 
@@ -84,43 +83,48 @@ export async function notifyAccountUpdated(email: string, data: any) {
 
   // render template with new data
   const html = render(UpdateInfoEmail({ data }))
-  sendMail(email, 'Cập nhật thông tin tài khoản', html)
+  const res = await sendMail(email, 'Cập nhật thông tin tài khoản', html)
+  return res
 }
 
-// summary notification ✅
+// summary notification
 export async function summaryNotification(email: string, summary: any) {
   console.log('- Summary Notification -')
 
   // Render template với dữ liệu
   const html = render(SummaryEmail({ summary }))
-  sendMail(email, 'Monthly Summary', html)
+  const res = await sendMail(email, 'Monthly Summary', html)
+  return res
 }
 
-// reset password email ✅
+// reset password email
 export async function sendResetPasswordEmail(email: string, name: string, link: string) {
   console.log('- Send Reset Password Email -')
 
   // Render template với dữ liệu
   const html = render(ResetPasswordEmail({ name, link }))
-  sendMail(email, 'Khôi phục mật khẩu', html)
+  const res = await sendMail(email, 'Khôi phục mật khẩu', html)
+  return res
 }
 
-// notify expired account ✅
+// notify expired account
 export async function notifyExpiredAccount(email: string, data: any) {
   console.log('- Notify Expired Account -')
 
   // render template with new data
   const html = render(NotifyExpiredEmail({ data }))
-  sendMail(email, 'Tài khoản sắp hết hạn', html)
+  const res = await sendMail(email, 'Tài khoản sắp hết hạn', html)
+  return res
 }
 
-// verify email ✅
+// verify email
 export async function sendVerifyEmail(email: string, name: string, link: string) {
   console.log('- Send Verify Email -')
 
   // Render template với dữ liệu
   const html = render(VerifyEmailEmail({ name, link }))
-  sendMail(email, 'Xác minh email', html)
+  const res = await sendMail(email, 'Xác minh email', html)
+  return res
 }
 
 // verify phone
