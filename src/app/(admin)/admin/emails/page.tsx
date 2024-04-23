@@ -18,12 +18,8 @@ const types = [
     sample: { name: 'Ohara', link: 'https://anpha.shop' },
   },
   {
-    type: 'veriy-email',
+    type: 'verify-email',
     sample: { name: 'Naruto', link: 'https://anpha.shop' },
-  },
-  {
-    type: 'veriy-phone',
-    sample: { name: 'Tanjiro', link: 'https://anpha.shop' },
   },
   {
     type: 'notify-order',
@@ -32,10 +28,6 @@ const types = [
   {
     type: 'summary',
     sample: { summary },
-  },
-  {
-    type: 'notify-expired',
-    sample: { data: expiredData },
   },
   {
     type: 'shortage-account',
@@ -53,18 +45,26 @@ function EmailPage() {
   const [selectedSample, setSelectedSample] = useState<any>(null)
 
   const handleSentMail = useCallback(async (type: string) => {
-    console.log('Sent mail', type)
+    setLoading(true)
+
+    try {
+      await fetch(`/api/cron?type=${type}`)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   return (
     <div className='max-w-1200 mx-auto'>
-      <div className='grid grid-cols-5 gap-21 cursor-pointer'>
+      <div className='grid grid-cols-8 gap-21 cursor-pointer'>
         {types.map(type => (
           <div
             className='p-3 rounded-lg shaodow-lg bg-sky-50 flex flex-col items-center'
             key={type.type}
             onClick={() => setSelectedSample(type.sample)}>
-            <h1 className='mb-2 text-xl font-semibold text-center text-dark'>{type.type}</h1>
+            <h1 className='mb-2 font-semibold text-center text-dark'>{type.type}</h1>
 
             <LoadingButton
               className='w-20 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'

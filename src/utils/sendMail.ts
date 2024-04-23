@@ -89,7 +89,7 @@ export async function summaryNotification(email: string, summary: any) {
 
   // Render template với dữ liệu
   const html = render(SummaryEmail({ summary }))
-  sendMail(email, 'Monthly Summary', html)
+  sendMail(email, `Báo cáo thu nhập tháng ${new Date().getMonth() + 1}`, html)
 }
 
 // reset password email
