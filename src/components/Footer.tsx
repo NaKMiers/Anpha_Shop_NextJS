@@ -67,7 +67,7 @@ function Footer() {
                 <Image src='/images/messenger.jpg' width={30} height={30} alt='messenger' />
               </a>
               <a
-                href='mailto:anpha.pohs@gmail.com'
+                href='mailto:anphashop.beta@gmail.com'
                 target='_blank'
                 rel='noreferrer'
                 className='wiggle-1'>

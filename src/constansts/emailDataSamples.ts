@@ -2,7 +2,7 @@ export const commentData = {
   senderName: 'John Doe',
   senderEmail: 'john.doe@example.com',
   receiver: 'Admin',
-  receiverEmail: 'anpha.pohs@gmail.com',
+  receiverEmail: 'anphashop.beta@gmail.com',
   content: 'This is a great post! Thanks for sharing.',
   time: '2024-04-12T10:30:00Z',
   slug: 'https://anpha.shop/netflix-premium-1-tuan-sieu-net-sieu-tien-loi',
