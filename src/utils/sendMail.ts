@@ -10,6 +10,9 @@ import UserModel from '@/models/UserModel'
 import { render } from '@react-email/render'
 import nodeMailer from 'nodemailer'
 
+// Models: User
+import '@/models/UserModel'
+
 // SEND MAIL CORE
 const transporter = nodeMailer.createTransport({
   service: 'gmail',

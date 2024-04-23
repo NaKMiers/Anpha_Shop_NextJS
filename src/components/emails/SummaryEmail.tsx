@@ -1,8 +1,9 @@
 import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
+import { summary as summarySample } from '@/constansts/emailDataSamples'
 
-export function SummaryEmail({ summary }: { summary: any }) {
+export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
   const { collaborator: user, vouchers, income } = summary
   const curMonth = new Date().getMonth() + 1
 
@@ -11,7 +12,7 @@ export function SummaryEmail({ summary }: { summary: any }) {
       config={{
         theme,
       }}>
-      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>

@@ -1,14 +1,14 @@
-import { formatPrice } from '@/utils/number'
+import { expiredData } from '@/constansts/emailDataSamples'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 
-export function NotifyExpiredEmail({ data }: { data: any }) {
+export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>

@@ -288,7 +288,7 @@ export const summary = {
   vouchers: [
     {
       _id: '662297de390b5fe4d7f094fb',
-      code: 'HONGHUU',
+      code: 'HELLO',
       begin: '2024-04-19T00:00:00.000Z',
       expire: null,
       minTotal: 0,

@@ -1,14 +1,15 @@
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 import { formatPrice } from '@/utils/number'
+import { updateInfoData } from '@/constansts/emailDataSamples'
 
-export function UpdateInfoEmail({ data }: { data: any }) {
+export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[#333] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>

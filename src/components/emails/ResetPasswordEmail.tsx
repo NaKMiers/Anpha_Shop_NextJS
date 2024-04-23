@@ -1,13 +1,19 @@
 import { Body, Column, Container, Img, Row, Section, Tailwind } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 
-function ResetPasswordEmail({ name, link }: { name: string; link: string }) {
+function ResetPasswordEmail({
+  name = 'David Pi',
+  link = 'https://anpha.shop',
+}: {
+  name?: string
+  link?: string
+}) {
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[#333] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4 pb-6'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>

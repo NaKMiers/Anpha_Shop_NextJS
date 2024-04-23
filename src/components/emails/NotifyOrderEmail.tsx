@@ -1,14 +1,15 @@
 import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
+import { order as orderSample } from '@/constansts/emailDataSamples'
 
-export function NotifyOrderEmail({ order }: { order: any }) {
+export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>
@@ -83,7 +84,7 @@ export function NotifyOrderEmail({ order }: { order: any }) {
                 <div className='mt-8'>
                   <b className='text-[24px]'>Sản phẩm: </b>
 
-                  <ul className='list-none'>
+                  <ul className='list-none p-0'>
                     {order.items.map((item: any) => (
                       <li className='mb-2' key={item._id}>
                         <a

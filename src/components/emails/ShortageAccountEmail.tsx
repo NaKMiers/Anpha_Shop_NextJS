@@ -1,14 +1,17 @@
-import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 
-export function ShortageAccountEmail({ message }: { message: string }) {
+export function ShortageAccountEmail({
+  message = 'Thiếu sản phẩm gì gì đó rồi á',
+}: {
+  message?: string
+}) {
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>
@@ -34,7 +37,7 @@ export function ShortageAccountEmail({ message }: { message: string }) {
           </Section>
 
           <Section
-            className='rounded-lg overflow-hidden bg-rose-50'
+            className='rounded-lg overflow-hidden'
             style={{
               border: '2px solid #f44336',
             }}>
@@ -44,7 +47,7 @@ export function ShortageAccountEmail({ message }: { message: string }) {
 
             <Row className='py-4 px-8'>
               <Column className='font'>
-                <h1 className='text-2xl font-bold text-center'>Oh no😱 </h1>
+                <h1 className='text-2xl font-bold text-center'>Oh Nooooo....😱 </h1>
                 <h2
                   className='text-xl font-semibold text-center text-rose-500 rounded-lg py-21/2 px-21 bg-yellow-100'
                   style={{

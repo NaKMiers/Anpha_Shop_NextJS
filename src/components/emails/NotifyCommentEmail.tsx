@@ -1,13 +1,14 @@
 import { Body, Column, Container, Img, Row, Section, Tailwind } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
+import { commentData } from '@/constansts/emailDataSamples'
 
-export function NotifyCommentEmail({ data }: { data: any }) {
+export function NotifyCommentEmail({ data = commentData }: { data?: any }) {
   return (
     <Tailwind
       config={{
         theme,
       }}>
-      <Body className='bg-[rgb(51,51,51)] text-dark font-sans'>
+      <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
             <Row className='mb-3 w-full'>
