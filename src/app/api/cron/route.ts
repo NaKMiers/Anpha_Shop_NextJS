@@ -24,7 +24,7 @@ const transporter = nodeMailer.createTransport({
   },
 })
 
-export async function sendMail(to: string | string[], subject: string, html: string) {
+async function sendMail(to: string | string[], subject: string, html: string) {
   console.log('- Send Mail -')
   const res = await transporter.sendMail({
     from: 'Anpha Shop <no-reply@anpha.shop>',
