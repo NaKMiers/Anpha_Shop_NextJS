@@ -142,7 +142,7 @@ export const admins = {
   TRAM: {
     momo: {
       account: process.env.NEXT_PUBLIC_ADMIN_PHONE_2!,
-      receiver: process.env.NEXT_PUBLIC_ADMIN_NAME!,
+      receiver: process.env.NEXT_PUBLIC_ADMIN_NAME_2!,
       link: process.env.NEXT_PUBLIC_MOMO_LINK_2!,
       image: '/images/momo-qr-2.jpg',
     },

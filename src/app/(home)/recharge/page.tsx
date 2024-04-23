@@ -141,8 +141,8 @@ function RechargePage() {
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
               <span
                 className='text-green-500 cursor-pointer'
-                onClick={() => handleCopy('Nguyễn Anh Khoa')}>
-                Nguyễn Anh Khoa
+                onClick={() => handleCopy(admin.banking.receiver)}>
+                {admin.banking.receiver}
               </span>
             </li>
           </ul>
