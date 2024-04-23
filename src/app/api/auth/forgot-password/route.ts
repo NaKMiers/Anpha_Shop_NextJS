@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       (user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username) ||
       user.email
 
-    await sendResetPasswordEmail(email, name, link)
+    sendResetPasswordEmail(email, name, link)
 
     // return response
     return NextResponse.json({

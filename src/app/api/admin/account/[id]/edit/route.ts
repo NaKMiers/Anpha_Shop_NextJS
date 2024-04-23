@@ -139,7 +139,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           newInfo: { info },
         }
 
-        emailRes = await notifyAccountUpdated(order.email, data)
+        notifyAccountUpdated(order.email, data)
       }
     }
 
