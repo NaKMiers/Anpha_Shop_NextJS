@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     // send EMAIL to collaborators
     summaries.forEach(async summary => {
-      summaryNotification(summary.collaborator.email, summary)
+      await summaryNotification(summary.collaborator.email, summary)
     })
 
     // increase total income and reset income of collaborators

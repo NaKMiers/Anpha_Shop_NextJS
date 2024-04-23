@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       const name =
         (user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username) ||
         user.email
-      sendVerifyEmail(email, name, link)
+      await sendVerifyEmail(email, name, link)
 
       return NextResponse.json(
         {
