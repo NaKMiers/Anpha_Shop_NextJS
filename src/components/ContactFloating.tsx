@@ -59,7 +59,7 @@ function ContactFloating({ className = '' }: ContactFloatingProps) {
             <Image src='/images/messenger.jpg' width={28} height={28} alt='zalo' />
           </a>
           <a
-            href='mailto:anphashop.beta@gmail.com'
+            href={`mailto:${process.env.NEXT_PUBLIC_MAIL}`}
             target='_blank'
             rel='noreferrer'
             className='p-2 wiggle'
