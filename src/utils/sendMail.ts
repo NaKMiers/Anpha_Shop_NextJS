@@ -9,6 +9,10 @@ import VerifyEmailEmail from '@/components/emails/VerifyEmailEmail'
 import UserModel from '@/models/UserModel'
 import { render } from '@react-email/render'
 import nodeMailer from 'nodemailer'
+import { Resend } from 'resend'
+
+// Resend
+const resend = new Resend(process.env.RESEND_SECRET)
 
 // SEND MAIL CORE
 const transporter = nodeMailer.createTransport({
@@ -68,6 +72,14 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
   const html = render(OrderEmail({ order: orderData }))
   console.log('html:', html)
   sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
+
+  resend.emails.send({
+    from: 'Anpha Shop <no-reply@anpha.shop>',
+    to: email,
+
+    subject: 'Bạn có đơn hàng từ Anpha Shop',
+    react: OrderEmail({ order: orderData }),
+  })
 }
 
 // notify account updated
