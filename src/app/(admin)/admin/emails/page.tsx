@@ -33,10 +33,6 @@ const types = [
     type: 'shortage-account',
     sample: { message: 'Thiếu tài khoản Netflix 100 năm' },
   },
-  {
-    type: 'notify-comment',
-    sample: { data: commentData },
-  },
 ]
 
 function EmailPage() {
@@ -48,7 +44,10 @@ function EmailPage() {
     setLoading(true)
 
     try {
-      await fetch(`/api/cron?type=${type}`)
+      const res = await fetch(`/api/cron?type=${type}`)
+      const data = await res.json()
+
+      console.log('data: ', data.mailRes)
     } catch (error) {
       console.error(error)
     } finally {
@@ -58,7 +57,7 @@ function EmailPage() {
 
   return (
     <div className='max-w-1200 mx-auto'>
-      <div className='grid grid-cols-8 gap-21 cursor-pointer'>
+      <div className='grid grid-cols-7 gap-21 cursor-pointer'>
         {types.map(type => (
           <div
             className='p-3 rounded-lg shaodow-lg bg-sky-50 flex flex-col items-center'
