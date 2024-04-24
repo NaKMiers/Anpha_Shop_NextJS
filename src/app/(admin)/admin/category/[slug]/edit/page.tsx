@@ -73,7 +73,7 @@ function EditCategoryPage() {
         const file = e.target.files[0]
 
         // validate file type and size
-        if (!file.type.includes('image')) {
+        if (!file.type.startsWith('image/')) {
           return toast.error('Please select an image file')
         }
         if (file.size > 3 * 1024 * 1024) {

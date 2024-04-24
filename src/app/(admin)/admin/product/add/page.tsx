@@ -87,7 +87,21 @@ function AddVoucherPage() {
   // handle add files when user select files
   const handleAddFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newFiles = Array.from(e.target.files)
+      let newFiles = Array.from(e.target.files)
+
+      // validate files's type and size
+      newFiles = newFiles.filter(file => {
+        if (!file.type.startsWith('image/')) {
+          toast.error(`File ${file.name} is not an image file`)
+          return false
+        }
+        if (file.size > 3 * 1024 * 1024) {
+          toast.error(`File ${file.name} is too large. Only accept images under 3MB`)
+          return false
+        }
+        return true
+      })
+
       setFiles(prev => [...prev, ...newFiles])
 
       const urls = newFiles.map(file => URL.createObjectURL(file))
