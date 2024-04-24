@@ -51,8 +51,8 @@ function CategoryItem({
               <Image
                 className='rounded-lg aspect-square '
                 src={data.logo}
-                width={50}
-                height={50}
+                width={40}
+                height={40}
                 alt='category-logo'
               />
             </div>
