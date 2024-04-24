@@ -68,7 +68,7 @@ function UserPage() {
       // set form values
       setValue('firstname', user?.firstname)
       setValue('lastname', user?.lastname)
-      setValue('birthday', user?.birthday)
+      setValue('birthday', new Date(user?.birthday).toISOString().split('T')[0])
       setValue('job', user?.job)
       setValue('address', user?.address)
       setValue('phone', user?.phone)

@@ -32,6 +32,11 @@ export async function GET(req: NextRequest) {
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         // Special Cases ---------------------
+        if (key === 'limit') {
+          itemPerPage = +params[key][0]
+          continue
+        }
+
         if (key === 'page') {
           const page = +params[key][0]
           skip = (page - 1) * itemPerPage
@@ -62,13 +67,15 @@ export async function GET(req: NextRequest) {
 
         if (key === 'active') {
           if (params[key][0] === 'all') delete filter[key]
-          else filter[key] = false
+          else if (params[key][0] === 'true') filter[key] = true
+          else if (params[key][0] === 'false') filter[key] = false
           continue
         }
 
         if (key === 'usingUser') {
           if (params[key][0] === 'all') delete filter[key]
-          else filter[key] = { $exists: false, $eq: null }
+          else if (params[key][0] === 'true') filter[key] = { $exists: true, $ne: null }
+          else if (params[key][0] === 'false') filter[key] = { $exists: false, $eq: null }
           continue
         }
 
@@ -90,6 +97,7 @@ export async function GET(req: NextRequest) {
     }
 
     console.log('Filter:', filter)
+    console.log('Sort:', sort)
 
     // get amount of account
     const amount = await AccountModel.countDocuments(filter)

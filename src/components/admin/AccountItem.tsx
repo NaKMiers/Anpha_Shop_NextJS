@@ -8,7 +8,6 @@ import { FaCheck, FaCopy, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
-import moment from 'moment'
 
 interface AccountItemProps {
   data: AccountWithProduct
