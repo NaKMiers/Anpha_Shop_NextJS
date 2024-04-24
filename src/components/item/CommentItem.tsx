@@ -6,8 +6,8 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash, FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
 import { format } from 'timeago.js'
-import { FullyComment } from './Comment'
-import LoadingButton from './LoadingButton'
+import { FullyComment } from '../Comment'
+import LoadingButton from '../LoadingButton'
 
 interface CommentItemProps {
   comment: FullyComment

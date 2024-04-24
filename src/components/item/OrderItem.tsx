@@ -8,8 +8,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import CartItem from './CartItem'
-import LoadingButton from './LoadingButton'
+import CartItem from '../CartItem'
+import LoadingButton from '../LoadingButton'
 
 interface OrderItemProps {
   order: FullyOrder

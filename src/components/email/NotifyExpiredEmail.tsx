@@ -1,9 +1,8 @@
-import { formatPrice } from '@/utils/number'
+import { expiredData } from '@/constansts/emailDataSamples'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
-import { order as orderSample } from '@/constansts/emailDataSamples'
 
-export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
+export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
   return (
     <Tailwind
       config={{
@@ -46,86 +45,59 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
             <Row className='p-4'>
               <Column className='font'>
                 <h1 className='text-2xl font-bold text-center'>Hi👋 </h1>
-                <h2 className='text-xl font-semibold text-center'>
-                  Bạn có đơn hàng từ Anpha Shop kìa.
-                  <br />
-                  Mau giao hàng thôi nào!
-                </h2>
+                <h2 className='text-xl font-semibold text-center'>Tài khoản của bạn sắp hết hạn 🥲</h2>
 
                 <div className='text-sm mt-8'>
-                  <p>
-                    <b>Mã đơn hàng: </b>
-                    <span className='text-secondary tracking-wider font-semibold'>{order.code}</span>
-                  </p>
                   <p>
                     <b>Ngày đặt hàng: </b>
                     {new Intl.DateTimeFormat('vi', {
                       dateStyle: 'full',
                       timeStyle: 'medium',
+                      timeZone: 'Asia/Ho_Chi_Minh',
                     })
-                      .format(new Date(order.createdAt))
+                      .format(new Date(data.createdAt))
                       .replace('lúc', '')}
                   </p>
                   <p>
                     <b>Trạng thái: </b>
-                    <span className='text-yellow-500'>Chờ xử lí</span>
-                  </p>
-                  <p>
-                    <b>Tổng tiền: </b>
-                    <b>{formatPrice(order.total)}</b>
+                    <span className='text-slate-400'>Hết hạn sau {data.remainingTime} nữa.</span>
                   </p>
                   <p>
                     <b>Email: </b>
-                    <span className='text-[#0a82ed]'>{order.email}</span>
+                    <span className='text-[#0a82ed]'>{data.usingUser}</span>
                   </p>
                 </div>
 
                 {/* Product */}
-                <div className='mt-8'>
-                  <b className='text-[24px]'>Sản phẩm: </b>
+                <p className='text-center mt-8'>
+                  <b className='text-[24px]'>Sản phẩm</b>
+                </p>
 
-                  <ul className='list-none p-0'>
-                    {order.items.map((item: any) => (
-                      <li className='mb-2' key={item._id}>
-                        <a
-                          href={`https://anpha.shop/${item.product.slug}`}
-                          className='block h-full text-dark tracking-wider no-underline'>
-                          <Section>
-                            <Row>
-                              <Column className='w-[130px]'>
-                                <Img
-                                  src={item.product.images[0]}
-                                  width={120}
-                                  className='inline aspect-video rounded-lg object-cover'
-                                />
-                              </Column>
-                              <Column>
-                                <p className='font-semibold text-slate-600'>
-                                  {item.product.title}
-                                  <span className='bg-secondary font-semibold text-xs rounded-full text-center ml-1.5 py-px px-1.5 text-white'>
-                                    {item.quantity}
-                                  </span>
-                                </p>
-                              </Column>
-                            </Row>
-                          </Section>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                <div
+                  style={{
+                    border: '1px solid rgb(0, 0, 0, 0.1)',
+                  }}
+                  className='border rounded-lg p-21/2 mb-4'>
+                  <Text className='font-semibold m-0 text-slate-500'>{data.type.title}</Text>
+
+                  <p className='whitespace-pre m-0 py-4 max-w-[600px] overflow-x-auto border-b '>
+                    {data.info}
+                  </p>
                 </div>
               </Column>
             </Row>
 
-            {order.userId && (
-              <div className='text-center p-3 mb-8'>
-                <a
-                  href={`https://anpha.shop/user/order/${order.code}`}
-                  className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
-                  Xem chi tiết
-                </a>
-              </div>
-            )}
+            <p className='italic text-sm text-slate-500 text-center px-21'>
+              *Vui lòng gia hạn để tiếp tục sử dụng dịch vụ. Xin chân thành cảm ơn!
+            </p>
+
+            <div className='text-center p-3 mb-10'>
+              <a
+                href={data.reBuyLink}
+                className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                Gia hạn ngay
+              </a>
+            </div>
           </Section>
 
           <div className='flex justify-center pt-[45px]'>
@@ -167,4 +139,4 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
   )
 }
 
-export default NotifyOrderEmail
+export default NotifyExpiredEmail

@@ -5,8 +5,10 @@ import LoadingButton from '@/components/LoadingButton'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
-import { addCategoryApi } from '@/requests'
+import { ICategory } from '@/models/CategoryModel'
+import { getCategoryApi, updateCategoryApi } from '@/requests'
 import Image from 'next/image'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -14,12 +16,15 @@ import { GrRadialSelected } from 'react-icons/gr'
 import { IoIosColorPalette } from 'react-icons/io'
 import { MdTitle } from 'react-icons/md'
 
-function AddCategoryPage() {
+function EditCategoryPage() {
   // store
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(state => state.modal.isLoading)
+  const { slug } = useParams<{ slug: string }>()
+  const router = useRouter()
 
   // states
+  const [category, setCategory] = useState<ICategory | null>(null)
   const [imageUrl, setImageUrl] = useState<string>('')
   const [file, setFile] = useState<File | null>(null)
 
@@ -32,6 +37,7 @@ function AddCategoryPage() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
     clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
@@ -39,6 +45,26 @@ function AddCategoryPage() {
       color: '#000',
     },
   })
+
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const { category } = await getCategoryApi(slug)
+
+        setCategory(category)
+
+        // set values to form
+        setValue('title', category.title)
+        setValue('color', category.color)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+        router.back()
+      }
+    }
+
+    getCategory()
+  }, [setValue, slug, router])
 
   // handle add files when user select files
   const handleAddFile = useCallback(
@@ -68,10 +94,12 @@ function AddCategoryPage() {
   )
 
   // MARK: Submit
-  // add new category
+  // edit category
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      if (!file) {
+      console.log('category:', category)
+      console.log('file:', file)
+      if (!category?.logo && !file) {
         return toast.error('Please select a logo')
       }
 
@@ -86,7 +114,7 @@ function AddCategoryPage() {
         }
 
         // add new category here
-        const { message } = await addCategoryApi(formData)
+        const { message } = await updateCategoryApi(slug, formData)
 
         // show success message
         toast.success(message)
@@ -96,6 +124,9 @@ function AddCategoryPage() {
         setFile(null)
         URL.revokeObjectURL(imageUrl)
         setImageUrl('')
+
+        // redirect back
+        router.back()
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -103,7 +134,7 @@ function AddCategoryPage() {
         dispatch(setLoading(false))
       }
     },
-    [dispatch, reset, file, imageUrl]
+    [dispatch, reset, router, file, imageUrl, slug, category]
   )
 
   // revoke blob url when component unmount
@@ -132,9 +163,9 @@ function AddCategoryPage() {
           <div
             className='w-[50px] h-[50px] flex items-center justify-center bg-white rounded-lg p-1.5 cursor-pointer group'
             onClick={() => logoInputRef.current?.click()}>
-            {imageUrl ? (
+            {imageUrl || category?.logo ? (
               <Image
-                src={imageUrl}
+                src={imageUrl || category?.logo || ''}
                 width={34}
                 height={34}
                 alt='logo'
@@ -177,7 +208,7 @@ function AddCategoryPage() {
         <LoadingButton
           className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
-          text='Add'
+          text='Save'
           isLoading={isLoading}
         />
       </div>
@@ -185,4 +216,4 @@ function AddCategoryPage() {
   )
 }
 
-export default AddCategoryPage
+export default EditCategoryPage

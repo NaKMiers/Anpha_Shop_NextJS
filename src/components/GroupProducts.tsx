@@ -79,7 +79,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
               <div className='aspect-square items-center w-6 h-6'>
                 <Image
                   className='wiggle'
-                  src={`/images/${category?.slug}-icon.jpg`}
+                  src={category?.logo || '/images/category-icon.jpg'}
                   width={32}
                   height={32}
                   alt={category?.title || 'icon'}

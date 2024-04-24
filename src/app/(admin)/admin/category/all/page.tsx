@@ -32,11 +32,9 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   const [categories, setCategories] = useState<ICategory[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [editingValues, setEditingValues] = useState<EditingValues[]>([])
 
   // loading and confirming
   const [loadingCategories, setLoadingCategories] = useState<string[]>([])
-  const [editingCategories, setEditingCategories] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // values
@@ -117,37 +115,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           category =>
             !deletedCategories.map((category: ICategory) => category._id).includes(category._id)
         )
-      )
-
-      // show success message
-      toast.success(message)
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      setLoadingCategories([])
-      setSelectedCategories([])
-    }
-  }, [])
-
-  // handle submit edit category
-  const handleSaveEditingCategories = useCallback(async (editingValues: any[]) => {
-    setLoadingCategories(editingValues.map(cate => cate._id))
-
-    try {
-      // send request to server
-      const { editedCategories, message } = await updateCategoriesApi(editingValues)
-
-      // update categories from state
-      setCategories(prev =>
-        prev.map(cate =>
-          editedCategories.map((cate: ICategory) => cate._id).includes(cate._id)
-            ? editedCategories.find((cat: ICategory) => cat._id === cate._id)
-            : cate
-        )
-      )
-      setEditingCategories(prev =>
-        prev.filter(id => !editedCategories.map((cate: any) => cate._id).includes(id))
       )
 
       // show success message
@@ -308,34 +275,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             {selectedCategories.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
-          {!!editingCategories.filter(id => selectedCategories.includes(id)).length && (
-            <>
-              {/* Save Many Button */}
-              <button
-                className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-light common-transition'
-                onClick={() =>
-                  handleSaveEditingCategories(
-                    editingValues.filter(value => selectedCategories.includes(value._id))
-                  )
-                }>
-                Save All
-              </button>
-
-              {/* Cancel Many Button */}
-              <button
-                className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-light common-transition'
-                onClick={() => {
-                  // cancel editing values are selected
-                  setEditingCategories(editingCategories.filter(id => !selectedCategories.includes(id)))
-                  setEditingValues(
-                    editingValues.filter(value => !selectedCategories.includes(value._id))
-                  )
-                }}>
-                Cancel
-              </button>
-            </>
-          )}
-
           {/* Delete Many Button */}
           {!!selectedCategories.length && (
             <button
@@ -371,11 +310,6 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
             loadingCategories={loadingCategories}
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
-            editingCategories={editingCategories}
-            setEditingCategories={setEditingCategories}
-            editingValues={editingValues}
-            setEditingValues={setEditingValues}
-            handleSaveEditingCategories={handleSaveEditingCategories}
             handleDeleteCategories={handleDeleteCategories}
             key={category._id}
           />

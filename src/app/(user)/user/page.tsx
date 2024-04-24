@@ -65,12 +65,6 @@ function UserPage() {
   // get user session
   useEffect(() => {
     const getCurUser = async () => {
-      // const session = await getSession()
-
-      // get user from session
-      // const curUser: any = session?.user
-      // setUser(curUser)
-
       // set form values
       setValue('firstname', user?.firstname)
       setValue('lastname', user?.lastname)
@@ -133,10 +127,19 @@ function UserPage() {
 
   // MARK: Handlers
   // handle add files when user select files
-  const handleAddFiles = useCallback(
+  const handleAddFile = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {
         const file = e.target.files[0]
+
+        // validate file type and size
+        if (!file.type.includes('image')) {
+          return toast.error('Please select an image file')
+        }
+        if (file.size > 3 * 1024 * 1024) {
+          return toast.error('Please select an image file less than 3MB')
+        }
+
         setFile(file)
         if (imageUrl) {
           URL.revokeObjectURL(imageUrl)
@@ -150,6 +153,7 @@ function UserPage() {
     [imageUrl]
   )
 
+  // send verify email
   const handleVerifyEmail = useCallback(async () => {
     // start count down
     setCountDownEmail(60)
@@ -165,6 +169,7 @@ function UserPage() {
     }
   }, [user])
 
+  // send verify phone
   const handleVerifyPhone = useCallback(async () => {
     // start count down
     setCountDownPhone(60)
@@ -213,7 +218,7 @@ function UserPage() {
         formData.append('avatar', file)
 
         // send request to server to update avatar
-        const { updatedUser, message } = await changeAvatarApi(formData)
+        const { message } = await changeAvatarApi(formData)
 
         // update user session
         await update()
@@ -260,7 +265,7 @@ function UserPage() {
               placeholder=' '
               disabled={isLoading}
               type='file'
-              onChange={handleAddFiles}
+              onChange={handleAddFile}
               ref={avatarInputRef}
             />
             {user?.authType === 'local' && (

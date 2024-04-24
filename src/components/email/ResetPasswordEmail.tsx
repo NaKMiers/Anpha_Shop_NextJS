@@ -53,6 +53,7 @@ function ResetPasswordEmail({
               {new Intl.DateTimeFormat('vi', {
                 dateStyle: 'full',
                 timeStyle: 'medium',
+                timeZone: 'Asia/Ho_Chi_Minh',
               })
                 .format(new Date())
                 .replace('lúc', '')}

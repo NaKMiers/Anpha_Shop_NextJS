@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import CommentItem from './CommentItem'
+import CommentItem from './item/CommentItem'
 import LoadingButton from './LoadingButton'
 
 export type FullyComment = IComment & {

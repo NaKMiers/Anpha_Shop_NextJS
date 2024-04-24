@@ -60,6 +60,7 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                     {new Intl.DateTimeFormat('vi', {
                       dateStyle: 'full',
                       timeStyle: 'medium',
+                      timeZone: 'Asia/Ho_Chi_Minh',
                     })
                       .format(new Date(data.createdAt))
                       .replace('lúc', '')}

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Category
 import '@/models/CategoryModel'
+import { deleteFile } from '@/utils/uploadFile'
 
 // [DELETE]: /admin/category/delete
 export async function DELETE(req: NextRequest) {
@@ -18,6 +19,14 @@ export async function DELETE(req: NextRequest) {
 
     // get delete categories
     const deletedCategories = await CategoryModel.find({ _id: { $in: ids } }).lean()
+
+    // delete the images associated with each category
+    await Promise.all(
+      deletedCategories
+        .map(category => category.logo)
+        .filter(logo => logo)
+        .map(deleteFile)
+    )
 
     // delete category from database
     await CategoryModel.deleteMany({ _id: { $in: ids } })

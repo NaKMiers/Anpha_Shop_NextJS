@@ -3,7 +3,7 @@
 import { IFlashsale } from '@/models/FlashsaleModel'
 import { countPercent, formatPrice } from '@/utils/number'
 import { useEffect, useState } from 'react'
-import CounterItem from './CounterItem'
+import CounterItem from './item/CounterItem'
 
 interface PriceProps {
   price: number

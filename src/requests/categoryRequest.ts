@@ -28,11 +28,24 @@ export const getForceAllCagetoriesApi = async () => {
   return await res.json()
 }
 
+// [GET]
+export const getCategoryApi = async (slug: string) => {
+  // no cache
+  const res = await fetch(`/api/admin/category/${slug}`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [POST]
-export const addCategoryApi = async (data: any) => {
+export const addCategoryApi = async (data: FormData) => {
   const res = await fetch('/api/admin/category/add', {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   })
 
   // check status
@@ -44,10 +57,10 @@ export const addCategoryApi = async (data: any) => {
 }
 
 // [PUT]
-export const updateCategoriesApi = async (editingValues: EditingValues[]) => {
-  const res = await fetch('/api/admin/category/edit', {
+export const updateCategoryApi = async (slug: string, data: FormData) => {
+  const res = await fetch(`/api/admin/category/${slug}/edit`, {
     method: 'PUT',
-    body: JSON.stringify({ editingValues }),
+    body: data,
   })
 
   // check status
@@ -57,6 +70,21 @@ export const updateCategoriesApi = async (editingValues: EditingValues[]) => {
 
   return await res.json()
 }
+
+// [PUT]
+// export const updateCategoriesApi = async (editingValues: EditingValues[]) => {
+//   const res = await fetch('/api/admin/category/edit', {
+//     method: 'PUT',
+//     body: JSON.stringify({ editingValues }),
+//   })
+
+//   // check status
+//   if (!res.ok) {
+//     throw new Error((await res.json()).message)
+//   }
+
+//   return await res.json()
+// }
 
 // [DELETE]
 export const deleteCategoriesApi = async (ids: string[]) => {

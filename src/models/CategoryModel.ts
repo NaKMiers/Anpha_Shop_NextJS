@@ -18,6 +18,14 @@ const CategorySchema = new Schema(
       default: 0,
       min: 0,
     },
+    color: {
+      type: String,
+      default: '#000',
+    },
+    logo: {
+      type: String,
+      default: '/category-icon.jpg',
+    },
   },
   { timestamps: true }
 )
@@ -25,7 +33,7 @@ const CategorySchema = new Schema(
 // pre-save hook to generate slug from title
 CategorySchema.pre('save', function (next) {
   if (this.isModified('title')) {
-    this.slug = generateSlug(this.title, this._id.toString())
+    this.slug = generateSlug(this.title)
   }
   next()
 })
@@ -38,6 +46,8 @@ export interface ICategory {
   title: string
   slug: string
   productQuantity: number
+  color: string
+  logo: string
   createdAt: string
   updatedAt: string
 }

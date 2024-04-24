@@ -29,7 +29,7 @@ const TagSchema = new Schema(
 // pre-save hook to generate slug from title
 TagSchema.pre('save', function (next) {
   if (this.isModified('title')) {
-    this.slug = generateSlug(this.title, this._id.toString())
+    this.slug = generateSlug(this.title)
   }
   next()
 })

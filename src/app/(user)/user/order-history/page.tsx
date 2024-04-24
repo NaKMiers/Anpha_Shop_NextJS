@@ -2,7 +2,7 @@
 
 import { FullyOrder } from '@/app/api/user/order-history/route'
 import Input from '@/components/Input'
-import OrderItem from '@/components/OrderItem'
+import OrderItem from '@/components/item/OrderItem'
 import Pagination from '@/components/Pagination'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'

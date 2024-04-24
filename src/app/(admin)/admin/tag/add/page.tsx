@@ -10,7 +10,7 @@ import { useCallback, useEffect } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaPlay } from 'react-icons/fa'
-import { RiCharacterRecognitionLine } from 'react-icons/ri'
+import { MdTitle } from 'react-icons/md'
 
 function AddTagPage() {
   // store
@@ -81,7 +81,7 @@ function AddTagPage() {
           errors={errors}
           required
           type='text'
-          icon={RiCharacterRecognitionLine}
+          icon={MdTitle}
           className='mb-5'
           onFocus={() => clearErrors('title')}
         />

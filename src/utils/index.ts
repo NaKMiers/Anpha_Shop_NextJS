@@ -5,7 +5,7 @@ import slugify from 'slugify'
 import unidecode from 'unidecode'
 
 // generate slug
-export const generateSlug = (value: string, id?: string): string => {
+export const generateSlug = (value: string): string => {
   const baseSlug: string = slugify(unidecode(value.trim()), {
     lower: true,
     remove: /[*+~.()'"!:@,]/g,
