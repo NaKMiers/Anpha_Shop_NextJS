@@ -60,7 +60,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
         tags,
         category,
         images: newImages,
-        slug: generateSlug(title as string, id),
+        slug: generateSlug(title as string),
       },
     })
 
