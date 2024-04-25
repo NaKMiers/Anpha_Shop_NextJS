@@ -143,11 +143,14 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               {curUser?.role !== 'user' && (
                 <li className='group' onClick={() => setOpen(false)}>
                   <Link
-                    href='/admin'
+                    href={
+                      ['admin', 'editor'].includes(curUser?.role) ? '/admin/order' : '/admin/summary/all'
+                    }
                     className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
                     <FaUserSecret size={18} className='wiggle w-[22px]' />
                     <span className='font-body tracking-wide text-[15px] text-primary'>
-                      {curUser?.role.charAt(0).toUpperCase() + curUser?.role.slice(1)}
+                      {/* {curUser?.role.charAt(0).toUpperCase() + curUser?.role.slice(1)} */}
+                      {['admin', 'editor'].includes(curUser?.role) ? 'Orders' : 'Collaborator'}
                     </span>
                   </Link>
                 </li>
