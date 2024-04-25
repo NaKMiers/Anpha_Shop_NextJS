@@ -32,6 +32,16 @@ export async function GET(req: NextRequest) {
     // build filter
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
+        if (key === 'limit') {
+          if (params[key][0] === 'no-limit') {
+            itemPerPage = Number.MAX_SAFE_INTEGER
+            skip = 0
+          } else {
+            itemPerPage = +params[key][0]
+          }
+          continue
+        }
+
         // Special Cases ---------------------
         if (key === 'page') {
           const page = +params[key][0]

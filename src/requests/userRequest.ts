@@ -26,6 +26,19 @@ export const getRoleUsersApi = async () => {
   return await res.json()
 }
 
+// [GET]
+export const getRankUsersApi = async () => {
+  // no-store to bypass cache
+  const res = await fetch('/api/admin/user/rank-user', { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [PUT]
 export const updateProfileApi = async (data: any) => {
   const res = await fetch('/api/user/update-profile', {

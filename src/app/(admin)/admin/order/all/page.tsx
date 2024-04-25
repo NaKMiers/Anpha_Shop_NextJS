@@ -297,7 +297,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             disabled={false}
             register={register}
             errors={errors}
-            type='date'
+            type='datetime-local'
             icon={FaCalendar}
             className='w-full'
             onFocus={() => clearErrors('from')}
@@ -309,7 +309,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             disabled={false}
             register={register}
             errors={errors}
-            type='date'
+            type='datetime-local'
             icon={FaCalendar}
             className='w-full'
             onFocus={() => clearErrors('to')}

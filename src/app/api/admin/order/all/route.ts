@@ -26,10 +26,22 @@ export async function GET(req: NextRequest) {
     const filter: { [key: string]: any } = {}
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
+    console.log('Params: ', params)
+
     // build filter
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         // Special Cases ---------------------
+        if (key === 'limit') {
+          if (params[key][0] === 'no-limit') {
+            itemPerPage = Number.MAX_SAFE_INTEGER
+            skip = 0
+          } else {
+            itemPerPage = +params[key][0]
+          }
+          continue
+        }
+
         if (key === 'page') {
           const page = +params[key][0]
           skip = (page - 1) * itemPerPage
@@ -88,6 +100,9 @@ export async function GET(req: NextRequest) {
         filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
     }
+
+    console.log('Filter: ', filter)
+    console.log('Sort: ', sort)
 
     // get amount of account
     const amount = await OrderModel.countDocuments(filter)

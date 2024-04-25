@@ -16,9 +16,9 @@ export const getAllCagetoriesApi = async (query: string = '') => {
 }
 
 // [GET]
-export const getForceAllCagetoriesApi = async () => {
+export const getForceAllCagetoriesApi = async (option: RequestInit = { cache: 'no-store' }) => {
   // no cache
-  const res = await fetch('/api/admin/category/force-all', { cache: 'no-store' })
+  const res = await fetch('/api/admin/category/force-all', option)
 
   // check status
   if (!res.ok) {

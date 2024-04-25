@@ -1,4 +1,6 @@
+import { ICategory } from '@/models/CategoryModel'
 import moment from 'moment'
+import { applyFlashSalePrice } from './number'
 
 // MARK: Revenue
 // Hàm tính toán doanh thu dựa trên các điều kiện
@@ -64,7 +66,6 @@ const calculateNewOrders = (orders: any[], startDate: Date | string, endDate: Da
 export const newOrderStatCalc = (orders: any[]) => {
   // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
-  console.log('currentDate: ', currentDate)
 
   // Tính toán ngày, tháng, năm trước
   const lastDay = moment(currentDate).subtract(1, 'days')
@@ -125,18 +126,22 @@ export const newOrderStatCalc = (orders: any[]) => {
 
 // MARK: New User
 // Tính số lượng người dùng mới dựa trên các điều kiện thời gian
-const calculateNewUsers = (users: any[], startDate: Date | string, endDate: Date | string) => {
-  const filteredUsers = users.filter(user =>
-    moment(user.createdAt).isBetween(startDate, endDate, undefined, '[]')
-  )
-
-  return filteredUsers.length
+const calculateNewUsers = (orders: any[], startDate: Date | string, endDate: Date | string) => {
+  let newUserEmails: string[] = []
+  orders.forEach(order => {
+    if (moment(order.createdAt).isBetween(startDate, endDate, undefined, '[]')) {
+      const email = order.email
+      if (!newUserEmails.includes(email)) {
+        newUserEmails.push(email)
+      }
+    }
+  })
+  return newUserEmails.length
 }
 
 export const newUserStatCalc = (users: any[]) => {
   // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
-  console.log('currentDate: ', currentDate)
 
   // Tính toán ngày, tháng, năm trước
   const lastDay = moment(currentDate).subtract(1, 'days')
@@ -154,15 +159,11 @@ export const newUserStatCalc = (users: any[]) => {
     lastDay.startOf('day').toDate(),
     lastDay.endOf('day').toDate()
   )
-  console.log('Month User')
   const newUsersThisMonth = calculateNewUsers(
     users,
     currentDate.startOf('month').toDate(),
     currentDate.endOf('month').toDate()
   )
-  console.log(currentDate)
-  console.log(currentDate.startOf('month').toDate())
-  console.log(currentDate.endOf('month').toDate())
   const newUsersLastMonth = calculateNewUsers(
     users,
     lastMonth.startOf('month').toDate(),
@@ -216,7 +217,6 @@ const calculateNewAccountsSold = (orders: any[], startDate: Date | string, endDa
 export const newAccountSoldStatCalc = (orders: any[]) => {
   // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
-  console.log('currentDate: ', currentDate)
 
   // Tính toán ngày, tháng, năm trước
   const lastDay = moment(currentDate).subtract(1, 'days')
@@ -295,7 +295,6 @@ const calculateUsedVouchers = (orders: any[], startDate: Date | string, endDate:
 export const newUsedVoucherStatCalc = (orders: any[]) => {
   // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
-  console.log('currentDate: ', currentDate)
 
   // Tính toán ngày, tháng, năm trước
   const lastDay = moment(currentDate).subtract(1, 'days')
@@ -353,4 +352,122 @@ export const newUsedVoucherStatCalc = (orders: any[]) => {
   }
 
   return newUsedVoucherStat
+}
+
+// MARK: Revenue By Account Rank
+export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
+  const accs: any = []
+
+  console.log('orders---------: ', orders)
+  console.log('categories---------: ', categories)
+
+  orders.forEach(order => {
+    const items: any[] = order.items
+    const discount = order.discount || 0
+    const quantity = items.reduce((qty, item) => qty + item.quantity, 0)
+
+    items.forEach(item => {
+      const { product } = item
+      const { flashsale } = product
+
+      let price = product.price
+      if (flashsale) {
+        switch (flashsale.type) {
+          case 'fixed-reduce': {
+            price = price + +flashsale.value >= 0 ? price + +flashsale.value : 0
+            break
+          }
+          case 'fixed': {
+            price = +flashsale.value
+            break
+          }
+          case 'percentage': {
+            price = price + Math.floor((price * parseFloat(flashsale.value)) / 100)
+            break
+          }
+        }
+      }
+
+      price = price - discount / quantity
+      const accounts: any[] = item.accounts
+      accounts.forEach(account => {
+        let category = null
+        if (typeof product.category === 'string') {
+          category = categories.find(c => c._id === product.category)
+        } else {
+          category = categories.find(c => c._id === product.category._id)
+        }
+
+        accs.push({
+          ...account,
+          price,
+          category,
+        })
+      })
+    })
+  })
+
+  console.log('accs: ', accs)
+
+  const categoryAccountsMap: { [key: string]: any[] } = {}
+  accs.forEach((acc: any) => {
+    const slug: string = acc.category.slug
+
+    if (!categoryAccountsMap[slug]) {
+      categoryAccountsMap[slug] = [acc]
+    } else {
+      categoryAccountsMap[slug].push(acc)
+    }
+  })
+
+  console.log('categoryAccountsMap: ', categoryAccountsMap)
+
+  const groupAccountsByEmail = (categoryAccountsMap: { [key: string]: any[] }) => {
+    const groupedAccountsByEmail: { [key: string]: { [key: string]: any[] } } = {}
+
+    for (const category in categoryAccountsMap) {
+      if (categoryAccountsMap.hasOwnProperty(category)) {
+        const accounts = categoryAccountsMap[category]
+
+        const groupedByEmail: { [key: string]: any[] } = {}
+
+        accounts.forEach(account => {
+          const emailMatch = account.info.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)
+
+          if (emailMatch) {
+            const email = emailMatch[0]
+
+            if (!groupedByEmail[email]) {
+              groupedByEmail[email] = [account]
+            }
+
+            groupedByEmail[email].push(account)
+          }
+        })
+
+        groupedAccountsByEmail[category] = groupedByEmail
+      }
+    }
+
+    return groupedAccountsByEmail
+  }
+
+  // Sử dụng hàm để nhóm các accounts lại dựa trên email
+  const groupedAccountsByEmail = groupAccountsByEmail(categoryAccountsMap)
+  console.log('groupedAccountsByEmail: ', groupedAccountsByEmail)
+
+  const accounts = Object.entries(groupedAccountsByEmail).map(([slug, accountByEmailGroups]) => {
+    return Object.entries(accountByEmailGroups).map(([email, accounts]) => {
+      const totalRevenue = accounts.reduce((total, account) => total + account.price, 0)
+      return {
+        email,
+        category: accounts[0].category,
+        revenue: totalRevenue.toFixed(2),
+      }
+    })
+  })
+
+  console.log('accounts-flated: ', accounts.flat())
+
+  return accounts.flat()
 }

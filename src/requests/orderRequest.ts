@@ -3,9 +3,12 @@ import { FullyCartItem } from '@/app/api/cart/route'
 // Order -------------------------------------
 
 // [GET]
-export const getAllOrdersApi = async (query: string = '') => {
+export const getAllOrdersApi = async (
+  query: string = '',
+  option: RequestInit = { cache: 'no-store' }
+) => {
   // no-store to bypass cache
-  const res = await fetch(`/api/admin/order/all${query}`, { cache: 'no-store' })
+  const res = await fetch(`/api/admin/order/all${query}`, option)
 
   // check status
   if (!res.ok) {

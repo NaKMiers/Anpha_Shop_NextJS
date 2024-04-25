@@ -1,9 +1,12 @@
 // Product -------------------------------------
 
 // [GET]
-export const getAllProductsApi = async (query: string = '') => {
+export const getAllProductsApi = async (
+  query: string = '',
+  option: RequestInit = { cache: 'no-store' }
+) => {
   // no-store to avoid cache
-  const res = await fetch(`/api/admin/product/all${query}`, { cache: 'no-store' })
+  const res = await fetch(`/api/admin/product/all${query}`, option)
 
   // check status
   if (!res.ok) {
