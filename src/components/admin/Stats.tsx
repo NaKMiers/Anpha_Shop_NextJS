@@ -68,7 +68,7 @@ function Stats({ by, className = '' }: statsProps) {
   return (
     <div className={`${className}`}>
       {/* Revenue Stat */}
-      <div className='p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>Revenue</span>
           {loading ? (
@@ -92,7 +92,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* New Order Stat */}
-      <div className='p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>New Order</span>
           {loading ? (
@@ -116,7 +116,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* Sale Account Stat */}
-      <div className='p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>Sale Accounts</span>
           {loading ? (
@@ -140,7 +140,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* New User Stat */}
-      <div className='p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>New User</span>
           {loading ? (
@@ -162,7 +162,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* Used Voucher Stat */}
-      <div className='p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>New Used Voucher</span>
           {loading ? (

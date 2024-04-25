@@ -92,21 +92,22 @@ function AdminPage() {
         {/* Chart & Rank */}
         <div className='col-span-12 grid grid-cols-12 gap-21'>
           {/* BarChart */}
-          <div className='col-span-7'>
+          <div className='col-span-12 lg:col-span-7'>
             <div className='flex gap-2 px-2'>
-              {['revenue', 'new-orders', 'sale-accounts', 'new-users', 'used-vouchers'].map(
-                (label, index) => (
-                  <span
-                    className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
-                      selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
-                    }`}
-                    onClick={() => setSelectedChart(label as never)}
-                    title={label}
-                    key={index}>
-                    {label}
-                  </span>
-                )
-              )}
+              {[
+                'revenue',
+                // , 'new-orders', 'sale-accounts', 'new-users', 'used-vouchers'
+              ].map((label, index) => (
+                <span
+                  className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
+                    selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
+                  }`}
+                  onClick={() => setSelectedChart(label as never)}
+                  title={label}
+                  key={index}>
+                  {label}
+                </span>
+              ))}
 
               {by !== 'year' && (
                 <div className='flex flex-1 justify-end'>
@@ -131,7 +132,7 @@ function AdminPage() {
           </div>
 
           {/* Rank */}
-          <div className='col-span-5'>
+          <div className='col-span-12 lg:col-span-5'>
             <div className='flex gap-2 px-2'>
               {['Recently Sales', 'Account Rank', 'User Spending Rank', 'Category Rank', 'Tag Rank'].map(
                 (label, index) => (
