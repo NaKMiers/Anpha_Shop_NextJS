@@ -36,7 +36,7 @@ function Stats({ by, className = '' }: statsProps) {
         let from: string = ''
         const currentTime = moment()
         if (by === 'day') {
-          from = currentTime.subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss')
+          from = currentTime.subtract(1, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
         } else if (by === 'month') {
           from = currentTime.subtract(1, 'month').startOf('month').format('YYYY-MM-DD HH:mm:ss')
         } else if (by === 'year') {
