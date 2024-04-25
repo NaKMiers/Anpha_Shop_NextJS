@@ -2,7 +2,7 @@ import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { ICategory } from '@/models/CategoryModel'
 import { getAllProductsApi } from '@/requests'
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCircleNotch } from 'react-icons/fa'
 

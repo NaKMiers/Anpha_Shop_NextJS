@@ -16,8 +16,8 @@ function AdminPage() {
   // states
   const [by, setBy] = useState<'day' | 'month' | 'year'>('day')
   const [selectedChart, setSelectedChart] = useState<
-    'revenue' | 'new-orders' | 'sale-accounts' | 'new-users' | 'used-vouchers'
-  >('revenue')
+    'Revenue' | 'New Orders' | 'Sale Accounts' | 'new Users' | 'Used Vouchers'
+  >('Revenue')
   const [tab, setTab] = useState<number>(1)
   const [chartChunk, setChartChunk] = useState<number>(0)
 
@@ -95,8 +95,8 @@ function AdminPage() {
           <div className='col-span-12 lg:col-span-7'>
             <div className='flex gap-2 px-2'>
               {[
-                'revenue',
-                // , 'new-orders', 'sale-accounts', 'new-users', 'used-vouchers'
+                'Revenue',
+                // , 'New Orders', 'Sale Accounts', 'New Users', 'Used Vouchers'
               ].map((label, index) => (
                 <span
                   className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${

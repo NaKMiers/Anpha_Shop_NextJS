@@ -2,7 +2,6 @@ import { ICategory } from '@/models/CategoryModel'
 import moment from 'moment'
 
 // MARK: Revenue
-// Hàm tính toán doanh thu dựa trên các điều kiện
 const calculateRevenue = (orders: any[], date: Date | string, interval: string) => {
   const startOfInterval = moment(date).startOf(interval as moment.unitOfTime.StartOf)
   const endOfInterval = moment(date).endOf(interval as moment.unitOfTime.StartOf)
@@ -18,12 +17,12 @@ const calculateRevenue = (orders: any[], date: Date | string, interval: string) 
 export const revenueStatCalc = (orders: any) => {
   const currentDate = moment()
 
-  // Tính toán ngày, tháng, năm trước
+  // prev day, month, year
   const lastDay = moment(currentDate).subtract(1, 'days')
   const lastMonth = moment(currentDate).subtract(1, 'months')
   const lastYear = moment(currentDate).subtract(1, 'years')
 
-  // Lọc ra các đơn hàng theo các điều kiện khác nhau và tính tổng giá trị của trường total
+  // revenues
   const revenueToday = calculateRevenue(orders, currentDate.toDate(), 'day')
   const revenueYesterday = calculateRevenue(orders, lastDay.toDate(), 'day')
   const revenueThisMonth = calculateRevenue(orders, currentDate.toDate(), 'month')
@@ -31,6 +30,7 @@ export const revenueStatCalc = (orders: any) => {
   const revenueThisYear = calculateRevenue(orders, currentDate.toDate(), 'year')
   const revenueLastYear = calculateRevenue(orders, lastYear.toDate(), 'year')
 
+  // build revenue stat
   const revenueStat = {
     day: [
       revenueToday,
@@ -53,7 +53,6 @@ export const revenueStatCalc = (orders: any) => {
 }
 
 // MARK: New Order
-// Tính số lượng đơn hàng mới dựa trên các điều kiện thời gian
 const calculateNewOrders = (orders: any[], startDate: Date | string, endDate: Date | string) => {
   const filteredOrders = orders.filter(order =>
     moment(order.createdAt).isBetween(startDate, endDate, undefined, '[]')
@@ -63,15 +62,14 @@ const calculateNewOrders = (orders: any[], startDate: Date | string, endDate: Da
 }
 
 export const newOrderStatCalc = (orders: any[]) => {
-  // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
 
-  // Tính toán ngày, tháng, năm trước
+  // prev day, month, year
   const lastDay = moment(currentDate).subtract(1, 'days')
   const lastMonth = moment(currentDate).subtract(1, 'months')
   const lastYear = moment(currentDate).subtract(1, 'years')
 
-  // Tính số lượng đơn hàng mới cho các khoảng thời gian
+  // new orders
   const newOrdersToday = calculateNewOrders(
     orders,
     currentDate.startOf('day').toDate(),
@@ -102,6 +100,8 @@ export const newOrderStatCalc = (orders: any[]) => {
     lastYear.startOf('year').toDate(),
     lastYear.endOf('year').toDate()
   )
+
+  // build new order stat
   const newOrderStat = {
     day: [
       newOrdersToday,
@@ -124,7 +124,6 @@ export const newOrderStatCalc = (orders: any[]) => {
 }
 
 // MARK: New User
-// Tính số lượng người dùng mới dựa trên các điều kiện thời gian
 const calculateNewUsers = (orders: any[], startDate: Date | string, endDate: Date | string) => {
   let newUserEmails: string[] = []
   orders.forEach(order => {
@@ -139,15 +138,14 @@ const calculateNewUsers = (orders: any[], startDate: Date | string, endDate: Dat
 }
 
 export const newUserStatCalc = (users: any[]) => {
-  // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
 
-  // Tính toán ngày, tháng, năm trước
+  // prev day, month, year
   const lastDay = moment(currentDate).subtract(1, 'days')
   const lastMonth = moment(currentDate).subtract(1, 'months')
   const lastYear = moment(currentDate).subtract(1, 'years')
 
-  // Tính số lượng người dùng mới cho các khoảng thời gian
+  // new users
   const newUsersToday = calculateNewUsers(
     users,
     currentDate.startOf('day').toDate(),
@@ -178,6 +176,8 @@ export const newUserStatCalc = (users: any[]) => {
     lastYear.startOf('year').toDate(),
     lastYear.endOf('year').toDate()
   )
+
+  // build new user stat
   const newUserStat = {
     day: [
       newUsersToday,
@@ -200,7 +200,6 @@ export const newUserStatCalc = (users: any[]) => {
 }
 
 // MARK: New Account Sold
-// Tính số lượng tài khoản mới đã bán dựa trên các điều kiện thời gian
 const calculateNewAccountsSold = (orders: any[], startDate: Date | string, endDate: Date | string) => {
   let newAccounts = 0
   orders.forEach(order => {
@@ -214,15 +213,14 @@ const calculateNewAccountsSold = (orders: any[], startDate: Date | string, endDa
 }
 
 export const newAccountSoldStatCalc = (orders: any[]) => {
-  // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
 
-  // Tính toán ngày, tháng, năm trước
+  // prev day, month, year
   const lastDay = moment(currentDate).subtract(1, 'days')
   const lastMonth = moment(currentDate).subtract(1, 'months')
   const lastYear = moment(currentDate).subtract(1, 'years')
 
-  // Tính số lượng tài khoản mới đã bán cho các khoảng thời gian
+  // new accounts sold
   const newAccountsSoldToday = calculateNewAccountsSold(
     orders,
     currentDate.startOf('day').toDate(),
@@ -254,6 +252,7 @@ export const newAccountSoldStatCalc = (orders: any[]) => {
     lastYear.endOf('year').toDate()
   )
 
+  // build new account sold stat
   const newAccountSoldStat = {
     day: [
       newAccountsSoldToday,
@@ -278,7 +277,6 @@ export const newAccountSoldStatCalc = (orders: any[]) => {
 }
 
 // MARK: Used Voucher
-// Tính số lượng voucher được sử dụng dựa trên các điều kiện thời gian
 const calculateUsedVouchers = (orders: any[], startDate: Date | string, endDate: Date | string) => {
   let usedVouchers = 0
   orders.forEach(order => {
@@ -292,15 +290,14 @@ const calculateUsedVouchers = (orders: any[], startDate: Date | string, endDate:
 }
 
 export const newUsedVoucherStatCalc = (orders: any[]) => {
-  // Lấy ngày, tháng, năm hiện tại
   const currentDate = moment()
 
-  // Tính toán ngày, tháng, năm trước
+  // prev day, month, year
   const lastDay = moment(currentDate).subtract(1, 'days')
   const lastMonth = moment(currentDate).subtract(1, 'months')
   const lastYear = moment(currentDate).subtract(1, 'years')
 
-  // Tính số lượng voucher được sử dụng cho các khoảng thời gian
+  // used vouchers
   const usedVouchersToday = calculateUsedVouchers(
     orders,
     currentDate.startOf('day').toDate(),
@@ -332,6 +329,7 @@ export const newUsedVoucherStatCalc = (orders: any[]) => {
     lastYear.endOf('year').toDate()
   )
 
+  // build used voucher stat
   const newUsedVoucherStat = {
     day: [
       usedVouchersToday,
@@ -357,9 +355,7 @@ export const newUsedVoucherStatCalc = (orders: any[]) => {
 export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
   const accs: any = []
 
-  console.log('orders---------: ', orders)
-  console.log('categories---------: ', categories)
-
+  // export accounts from orders
   orders.forEach(order => {
     const items: any[] = order.items
     const discount = order.discount || 0

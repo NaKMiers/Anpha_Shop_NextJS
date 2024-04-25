@@ -149,18 +149,3 @@ export const deletedOrdersApi = async (ids: string[]) => {
 
   return await res.json()
 }
-
-// [POST]
-export const caclIncomeApi = async (time: Date, timeType: string) => {
-  const res = await fetch('/api/admin/order/calc-income', {
-    method: 'POST',
-    body: JSON.stringify({ time, timeType }),
-  })
-
-  // check status
-  if (!res.ok) {
-    throw new Error((await res.json()).message)
-  }
-
-  return await res.json()
-}

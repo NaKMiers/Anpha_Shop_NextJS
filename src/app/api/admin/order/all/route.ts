@@ -80,16 +80,24 @@ export async function GET(req: NextRequest) {
 
           if (dates[0] && dates[1]) {
             filter.createdAt = {
-              $gte: new Date(dates[0]),
-              $lt: new Date(dates[1]),
+              $gte: new Date(dates[0]).toLocaleString('en-US', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+              }),
+              $lt: new Date(dates[1]).toLocaleString('en-US', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+              }),
             }
           } else if (dates[0]) {
             filter.createdAt = {
-              $gte: new Date(dates[0]),
+              $gte: new Date(dates[0]).toLocaleString('en-US', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+              }),
             }
           } else if (dates[1]) {
             filter.createdAt = {
-              $lt: new Date(dates[1]),
+              $lt: new Date(dates[1]).toLocaleString('en-US', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+              }),
             }
           }
 

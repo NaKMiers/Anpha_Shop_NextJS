@@ -10,7 +10,7 @@ import OrderItem from '@/components/admin/OrderItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IOrder } from '@/models/OrderModel'
-import { caclIncomeApi, cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
+import { cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
@@ -155,18 +155,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
     } finally {
       setLoadingOrders([])
       setSelectedOrders([])
-    }
-  }, [])
-
-  // calculate income
-  const handleCalcIncome = useCallback(async (timeType: 'day' | 'month' | 'year') => {
-    try {
-      const { income } = await caclIncomeApi(new Date(), timeType)
-
-      toast.success(`Income: ${formatPrice(income)}`)
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
     }
   }, [])
 
@@ -468,34 +456,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           )}
         </div>
       </AdminMeta>
-
-      {/* MARK: Income */}
-      <div className='mt-9 flex flex-wrap items-center justify-center gap-4 text-white'>
-        <div className='flex items-center gap-2'>
-          <span className='font-semibold'>From: </span>
-          <input
-            type='date'
-            className='bg-white rounded-lg px-3 h-[40px] text-dark outline-none font-semibold cursor-pointer'
-            value={new Date().toISOString().split('T')[0]}
-            onChange={() => {}}
-          />
-        </div>
-        <button
-          className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'
-          onClick={() => handleCalcIncome('day')}>
-          Day Income
-        </button>
-        <button
-          className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'
-          onClick={() => handleCalcIncome('month')}>
-          Month Income
-        </button>
-        <button
-          className='rounded-lg font-semibold px-3 py-2 bg-secondary hover:bg-primary hover:text-dark common-transition'
-          onClick={() => handleCalcIncome('year')}>
-          Year Income
-        </button>
-      </div>
 
       {/* Confirm Dialog */}
       <ConfirmDialog

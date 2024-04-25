@@ -1,6 +1,4 @@
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import Divider from '@/components/Divider'
-import { ICategory } from '@/models/CategoryModel'
 import { getAllOrdersApi, getForceAllCagetoriesApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { rankAccountRevenue } from '@/utils/stat'

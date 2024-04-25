@@ -54,43 +54,39 @@ function Chart({ by, chunk, className = '' }: ChartProps) {
 
         let chartData: any[] = []
 
-        console.log('by: ', by)
-
         if (by === 'day') {
-          // Lấy danh sách các ngày từ ngày đầu tiên của tháng hiện tại đến ngày hiện tại
+          // [1,2,3, ..., daysInMonth]
           const days = Array.from({ length: currentTime.daysInMonth() }, (_, i) => i + 1)
 
-          // Khởi tạo mảng dữ liệu cho biểu đồ
+          // build data chart
           chartData = days.map((day: number) => {
-            // Tìm các đơn hàng trong ngày hiện tại
+            // all orders in day
             const ordersInDay = orders.filter((order: any) => {
               const orderDay = moment(order.createdAt).format('D')
               return orderDay === day.toString()
             })
 
-            // Tính tổng doanh thu của các đơn hàng trong ngày
+            // total revenue in day
             const totalRevenue = ordersInDay.reduce((acc: number, order: any) => {
               return acc + order.total
             }, 0)
 
-            // Trả về đối tượng dữ liệu cho ngày hiện tại
+            // current day revenue
             return {
               name: day.toString(),
               revenue: totalRevenue,
             }
           })
         } else if (by === 'month') {
-          // Lấy danh sách các tháng từ tháng đầu tiên của năm hiện tại đến tháng hiện tại
+          // [1, 2, 3, ..., 12]
           const months = Array.from({ length: currentTime.month() + 1 }, (_, i) => {
             const month = i + 1
             return month
           })
 
-          console.log('months: ', months)
-
-          // Khởi tạo mảng dữ liệu cho biểu đồ
+          // build data chart
           chartData = Array.from({ length: 12 }).map((_, index) => {
-            // Tìm các đơn hàng trong tháng hiện tại
+            // all orders in month
             const ordersInMonth =
               index <= currentTime.month()
                 ? orders.filter((order: any) => {
@@ -100,37 +96,35 @@ function Chart({ by, chunk, className = '' }: ChartProps) {
                   })
                 : []
 
-            // Tính tổng doanh thu của các đơn hàng trong tháng
+            // total revenue in month
             const totalRevenue = ordersInMonth.reduce((acc: number, order: any) => {
               return acc + order.total
             }, 0)
 
-            // Trả về đối tượng dữ liệu cho tháng hiện tại
+            // current month revenue
             return {
               name: moment(index + 1, 'M').format('MMM'),
               revenue: totalRevenue,
             }
           })
         } else if (by === 'year') {
-          // Lấy danh sách các năm từ 5 năm trước đến năm hiện tại
-          console.log('currentTime.year(): ', currentTime.year())
-
+          // [currentYear - 5, currentYear]
           const years = Array.from({ length: 5 }, (_, i) => currentTime.year() - i).reverse()
 
-          // Khởi tạo mảng dữ liệu cho biểu đồ
+          // build data chart
           chartData = years.map((year: number) => {
-            // Tìm các đơn hàng trong năm hiện tại
+            // all orders in year
             const ordersInYear = orders.filter((order: any) => {
               const orderYear = moment(order.createdAt).format('YYYY')
               return orderYear === year.toString()
             })
 
-            // Tính tổng doanh thu của các đơn hàng trong năm
+            // total revenue in year
             const totalRevenue = ordersInYear.reduce((acc: number, order: any) => {
               return acc + order.total
             }, 0)
 
-            // Trả về đối tượng dữ liệu cho năm hiện tại
+            // current year revenue
             return {
               name: year.toString(),
               revenue: totalRevenue,

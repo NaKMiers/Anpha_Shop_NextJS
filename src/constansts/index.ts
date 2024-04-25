@@ -1,10 +1,20 @@
 import { FaTicketAlt } from 'react-icons/fa'
 import { FaBoltLightning, FaCubes, FaGift, FaListCheck, FaTags, FaUser } from 'react-icons/fa6'
-import { MdCategory } from 'react-icons/md'
+import { MdCategory, MdSpaceDashboard } from 'react-icons/md'
 import { RiBillFill } from 'react-icons/ri'
 
 // MARK: Admin Links
 export const adminLinks = [
+  {
+    title: 'Dashboard',
+    Icon: MdSpaceDashboard,
+    links: [
+      {
+        title: 'Dashboard',
+        href: '/admin',
+      },
+    ],
+  },
   {
     title: 'Order',
     Icon: RiBillFill,
