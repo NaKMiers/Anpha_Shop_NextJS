@@ -63,12 +63,12 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
         <div className='flex gap-3 mb-4' key={account._id}>
           <Link
             href={`/${account.type.slug}`}
-            className='flex max-w-[100px] items-start w-full no-scrollbar'>
+            className='flex-shrink-0 flex max-w-[80px] items-start w-full no-scrollbar'>
             <Image
               className='aspect-video rounded-lg shadow-lg'
               src={account.type?.images[0] || '/images/not-found.jpg'}
-              height={150}
-              width={150}
+              height={80}
+              width={80}
               alt='thumbnail'
             />
           </Link>

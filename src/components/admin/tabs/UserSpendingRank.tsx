@@ -52,7 +52,7 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
     <div className={`${className}`}>
       {showUsers.map((user, index) => (
         <div className='flex gap-3 mb-4' key={index}>
-          <Link href='/' className='relative aspect-square text-white'>
+          <Link href='/' className='flex-shrink-0 relative aspect-square text-white'>
             <Image
               className='rounded-lg'
               src={user.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
@@ -70,7 +70,7 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
           <div className='font-body tracking-wider'>
             <p className='font-semibold'>
               {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username}{' '}
-              <span className='text-sm text-slate-400'>({user.email})</span>
+              <span className='text-sm text-slate-400 '>({user.email})</span>
             </p>
             <p className='text-yellow-500'>{formatPrice(user.spent)}</p>
           </div>

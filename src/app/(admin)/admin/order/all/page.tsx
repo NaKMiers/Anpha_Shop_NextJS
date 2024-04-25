@@ -30,8 +30,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const [amount, setAmount] = useState<number>(0)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
 
-  console.log('orders', orders)
-
   // loading and confirming
   const [loadingOrders, setLoadingOrders] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
@@ -92,8 +90,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         setValue('voucherApplied', searchParams?.voucherApplied || getValues('voucherApplied'))
         setValue('status', searchParams?.status || getValues('status'))
         setValue('paymentMethod', searchParams?.paymentMethod || getValues('paymentMethod'))
-        setValue('from', searchParams?.from || getValues('from'))
-        setValue('to', searchParams?.to || getValues('to'))
 
         // set min - max - total
         setMinTotal(chops.minTotal)

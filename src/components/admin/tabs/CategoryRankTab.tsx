@@ -54,18 +54,17 @@ function CategoryRankTab({ className = '' }: CategoryRankTabProps) {
       {!loading ? (
         categories.map((category, index) => (
           <div
-            className={`flex items-center justify-between gap-3 px-3 py-1 mb-4 rounded-xl shadow-md`}
+            className={`flex items-center justify-between gap-2 px-3 py-1 mb-4 rounded-xl shadow-md overflow-x-auto no-scrollbar`}
             style={{
               width: `calc(100% - ${index * 6 < 40 ? index * 6 : 40}%)`,
               background: category.color,
             }}
             key={category._id}>
-            <div className='flex items-center gap-2'>
-              <div className='p-[2px] bg-white rounded-md'>
-                {' '}
+            <div className='flex-shrink-0 flex items-center gap-2'>
+              <div className='flex-shrink-0 p-[2px] bg-white rounded-md'>
                 <Image src={category.logo} width={20} height={20} alt='logo' />
               </div>
-              <span className='font-body tracking-wider text-white bg-dark-100 px-2 rounded-full'>
+              <span className='font-body text-sm font-semibold tracking-wider text-white bg-dark-100 px-2 rounded-full'>
                 {category.title}
               </span>
             </div>
