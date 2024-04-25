@@ -5,6 +5,7 @@ import { IVoucher } from '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+import momentTZ from 'moment-timezone'
 
 // Models: Order, Voucher
 import '@/models/OrderModel'
@@ -88,16 +89,16 @@ export async function GET(req: NextRequest) {
 
           if (dates[0] && dates[1]) {
             filter.createdAt = {
-              $gte: new Date(dates[0]),
-              $lt: new Date(dates[1]),
+              $gte: momentTZ.tz(dates[0], 'Asia/Ho_Chi_Minh').toDate(),
+              $lt: momentTZ.tz(dates[1], 'Asia/Ho_Chi_Minh').toDate(),
             }
           } else if (dates[0]) {
             filter.createdAt = {
-              $gte: new Date(dates[0]),
+              $gte: momentTZ.tz(dates[0], 'Asia/Ho_Chi_Minh').toDate(),
             }
           } else if (dates[1]) {
             filter.createdAt = {
-              $lt: new Date(dates[1]),
+              $lt: momentTZ.tz(dates[1], 'Asia/Ho_Chi_Minh').toDate(),
             }
           }
 

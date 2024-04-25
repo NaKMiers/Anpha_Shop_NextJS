@@ -16,7 +16,7 @@ function AdminPage() {
   // states
   const [by, setBy] = useState<'day' | 'month' | 'year'>('day')
   const [selectedChart, setSelectedChart] = useState<
-    'Revenue' | 'New Orders' | 'Sale Accounts' | 'new Users' | 'Used Vouchers'
+    'Revenue' | 'New Orders' | 'Sale Accounts' | 'New Users' | 'Used Vouchers'
   >('Revenue')
   const [tab, setTab] = useState<number>(1)
   const [chartChunk, setChartChunk] = useState<number>(0)
@@ -39,7 +39,7 @@ function AdminPage() {
     if (by === 'day' && chartChunk < curMonth) {
       setChartChunk(chartChunk + 1)
     } else if (by === 'month') {
-      setChartChunk(chartChunk + 5)
+      setChartChunk(chartChunk + 1)
     }
   }
 
@@ -94,20 +94,19 @@ function AdminPage() {
           {/* BarChart */}
           <div className='col-span-12 lg:col-span-7'>
             <div className='flex gap-2 px-2'>
-              {[
-                'Revenue',
-                // , 'New Orders', 'Sale Accounts', 'New Users', 'Used Vouchers'
-              ].map((label, index) => (
-                <span
-                  className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
-                    selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
-                  }`}
-                  onClick={() => setSelectedChart(label as never)}
-                  title={label}
-                  key={index}>
-                  {label}
-                </span>
-              ))}
+              {['Revenue', , 'New Orders', 'Sale Accounts', 'New Users', 'Used Vouchers'].map(
+                (label, index) => (
+                  <span
+                    className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
+                      selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
+                    }`}
+                    onClick={() => setSelectedChart(label as never)}
+                    title={label}
+                    key={index}>
+                    {label}
+                  </span>
+                )
+              )}
 
               {by !== 'year' && (
                 <div className='flex flex-1 justify-end'>
@@ -127,7 +126,7 @@ function AdminPage() {
               )}
             </div>
             <div className='border p-21 rounded-lg shadow-lg'>
-              <Chart by={by} chunk={chartChunk} />
+              <Chart chart={selectedChart} by={by} chunk={chartChunk} />
             </div>
           </div>
 

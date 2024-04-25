@@ -11,6 +11,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCircleNotch, FaDollarSign } from 'react-icons/fa'
+import { MdNumbers } from 'react-icons/md'
 
 interface statsProps {
   by: 'day' | 'month' | 'year'
@@ -98,7 +99,7 @@ function Stats({ by, className = '' }: statsProps) {
           {loading ? (
             <FaCircleNotch size={18} className='animate-spin text-slate-400' />
           ) : (
-            <FaDollarSign size={20} />
+            <MdNumbers size={20} />
           )}
         </div>
 
@@ -122,7 +123,7 @@ function Stats({ by, className = '' }: statsProps) {
           {loading ? (
             <FaCircleNotch size={18} className='animate-spin text-slate-400' />
           ) : (
-            <FaDollarSign size={20} />
+            <MdNumbers size={20} />
           )}
         </div>
 
@@ -146,7 +147,7 @@ function Stats({ by, className = '' }: statsProps) {
           {loading ? (
             <FaCircleNotch size={18} className='animate-spin text-slate-400' />
           ) : (
-            <FaDollarSign size={20} />
+            <MdNumbers size={20} />
           )}
         </div>
 
@@ -168,7 +169,7 @@ function Stats({ by, className = '' }: statsProps) {
           {loading ? (
             <FaCircleNotch size={18} className='animate-spin text-slate-400' />
           ) : (
-            <FaDollarSign size={20} />
+            <MdNumbers size={20} />
           )}
         </div>
 

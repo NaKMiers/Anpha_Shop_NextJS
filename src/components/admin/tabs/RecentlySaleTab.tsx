@@ -2,6 +2,7 @@
 
 import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
 import { getAllAccountsApi } from '@/requests'
+import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -59,25 +60,43 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
 
   return (
     <div className={`${className}`}>
-      {accounts.map(account => (
-        <div className='flex gap-3 mb-4' key={account._id}>
-          <Link
-            href={`/${account.type.slug}`}
-            className='flex-shrink-0 flex max-w-[80px] items-start w-full no-scrollbar'>
-            <Image
-              className='aspect-video rounded-lg shadow-lg'
-              src={account.type?.images[0] || '/images/not-found.jpg'}
-              height={80}
-              width={80}
-              alt='thumbnail'
-            />
-          </Link>
-          <div className='font-body tracking-wider'>
-            <p className='font-semibold text-ellipsis line-clamp-1'>{account.type.title}</p>
-            <p className='text-ellipsis line-clamp-1'>{account.usingUser}</p>
+      {accounts.map(account => {
+        const minutesAgo = moment().diff(moment(account.begin), 'minutes')
+
+        let color
+        if (minutesAgo <= 30) {
+          color = 'green-500' // Màu xanh lá
+        } else if (minutesAgo <= 60) {
+          color = 'sky-500' // Màu xanh dương
+        } else if (minutesAgo <= 120) {
+          color = 'yellow-400' // Màu vàng
+        } else {
+          color = 'default' // Màu mặc định nếu hơn 30 phút
+        }
+
+        return (
+          <div className='flex gap-3 mb-4' key={account._id}>
+            <Link
+              href={`/${account.type.slug}`}
+              className='flex-shrink-0 flex max-w-[80px] items-start w-full no-scrollbar'>
+              <Image
+                className='aspect-video rounded-lg shadow-lg'
+                src={account.type?.images[0] || '/images/not-found.jpg'}
+                height={80}
+                width={80}
+                alt='thumbnail'
+              />
+            </Link>
+            <div className='font-body tracking-wider'>
+              <p className='font-semibold text-ellipsis line-clamp-1'>{account.type.title}</p>
+              <p className='text-ellipsis line-clamp-1 text-sm'>{account.usingUser}</p>
+              <p className={`text-ellipsis line-clamp-1 text-sm text-${color}`}>
+                {moment(account.begin).format('DD/MM/YYYY HH:mm:ss')}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
 
       {/* Load More */}
       <div className='flex items-center justify-center'>
