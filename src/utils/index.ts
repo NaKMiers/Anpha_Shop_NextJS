@@ -55,3 +55,8 @@ export const shuffleArray = (array: any[]): any[] => {
 
 // create a unique random image name
 export const randomFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
+
+// uppercase first letter
+export const uppercaseFirstLetter = (value: string): string => {
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}

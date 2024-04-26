@@ -52,8 +52,6 @@ function Stats({ by, className = '' }: statsProps) {
         setNewAccountSoldStat(newAccountSoldStatCalc(orders))
         setNewUserStat(newUserStatCalc(orders))
         setNewUsedVoucherStat(newUsedVoucherStatCalc(orders))
-
-        console.log('orders', orders)
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -86,9 +84,11 @@ function Stats({ by, className = '' }: statsProps) {
         </p>
         <p
           className='text-slate-500 text-sm'
-          title={`${revenueStat?.[by][2] > 0 ? '+' : ''}${revenueStat?.[by][2]}% from last month`}>
+          title={`${revenueStat?.[by][2] > 0 ? '+' : ''}${revenueStat?.[by][2]}% from ${
+            by === 'day' ? 'yesterday' : `last ${by}`
+          }`}>
           {revenueStat?.[by][2] > 0 ? '+' : ''}
-          {revenueStat?.[by][2] || 0}% from last month
+          {revenueStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
 
@@ -108,11 +108,11 @@ function Stats({ by, className = '' }: statsProps) {
         </p>
         <p
           className='text-slate-500 text-sm'
-          title={`${newOrderStat?.[by][2] > 0 ? '+' : ''}${
-            newOrderStat?.[by][2] || 0
-          }% from last month`}>
+          title={`${newOrderStat?.[by][2] > 0 ? '+' : ''}${newOrderStat?.[by][2] || 0}% from ${
+            by === 'day' ? 'yesterday' : `last ${by}`
+          }`}>
           {newOrderStat?.[by][2] > 0 ? '+' : ''}
-          {newOrderStat?.[by][2] || 0}% from last month
+          {newOrderStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
 
@@ -134,9 +134,9 @@ function Stats({ by, className = '' }: statsProps) {
           className='text-slate-500 text-sm'
           title={`${newAccountSoldStat?.[by][2] > 0 ? '+' : ''}${
             newAccountSoldStat?.[by][2] || 0
-          }% from last month`}>
+          }% from ${by === 'day' ? 'yesterday' : `last ${by}`}`}>
           {newAccountSoldStat?.[by][2] > 0 ? '+' : ''}
-          {newAccountSoldStat?.[by][2] || 0}% from last month
+          {newAccountSoldStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
 
@@ -156,9 +156,11 @@ function Stats({ by, className = '' }: statsProps) {
         </p>
         <p
           className='text-slate-500 text-sm'
-          title={`${newUserStat?.[by][2] > 0 ? '+' : ''}${newUserStat?.[by][2] || 0}% from last month`}>
+          title={`${newUserStat?.[by][2] > 0 ? '+' : ''}${newUserStat?.[by][2] || 0}% from ${
+            by === 'day' ? 'yesterday' : `last ${by}`
+          }`}>
           {newUserStat?.[by][2] > 0 ? '+' : ''}
-          {newUserStat?.[by][2] || 0}% from last month
+          {newUserStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
 
@@ -180,9 +182,9 @@ function Stats({ by, className = '' }: statsProps) {
           className='text-slate-500 text-sm'
           title={`${newUsedVoucherStat?.[by][2] > 0 ? '+' : ''}${
             newUsedVoucherStat?.[by][2] || 0
-          }% from last month`}>
+          }% from ${by === 'day' ? 'yesterday' : `last ${by}`}`}>
           {newUsedVoucherStat?.[by][2] > 0 ? '+' : ''}
-          {newUsedVoucherStat?.[by][2] || 0}% from last month
+          {newUsedVoucherStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
     </div>

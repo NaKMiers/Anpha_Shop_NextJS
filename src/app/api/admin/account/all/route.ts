@@ -3,6 +3,7 @@ import AccountModel from '@/models/AccountModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
+import momentTZ from 'moment-timezone'
 
 // Models: Account, Product, Category
 import '@/models/AccountModel'
@@ -84,9 +85,16 @@ export async function GET(req: NextRequest) {
           // expire = false: > now or not exist
 
           if (params[key][0] === 'true') {
-            filter[key] = { $lt: new Date(), $exists: true, $ne: null }
+            filter[key] = {
+              $lt: momentTZ.tz(new Date(), 'Asia/Ho_Chi_Minh').toDate(),
+              $exists: true,
+              $ne: null,
+            }
           } else {
-            filter.$or = [{ [key]: { $gt: new Date() } }, { [key]: { $exists: false } }]
+            filter.$or = [
+              { [key]: { $gt: momentTZ.tz(new Date(), 'Asia/Ho_Chi_Minh').toDate() } },
+              { [key]: { $exists: false } },
+            ]
           }
           continue
         }

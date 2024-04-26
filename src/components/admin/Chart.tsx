@@ -22,8 +22,6 @@ function Chart({ by, chart, chunk, className = '' }: ChartProps) {
   const [data, setData] = useState<any>([])
   const [currentTime, setCurrentTime] = useState<moment.Moment>(moment())
 
-  console.log('orders', orders)
-
   // get current time
   useEffect(() => {
     const currentTime = moment().subtract(
@@ -32,8 +30,6 @@ function Chart({ by, chart, chunk, className = '' }: ChartProps) {
     )
     setCurrentTime(currentTime)
   }, [by, chunk])
-
-  console.log('currentTime', currentTime.format('YYYY-MM-DD HH:mm:ss'))
 
   // get orders
   useEffect(() => {
@@ -194,7 +190,9 @@ function Chart({ by, chart, chunk, className = '' }: ChartProps) {
           <YAxis
             dataKey={'value'}
             tickFormatter={value =>
-              `${(value / 1000).toLocaleString('en-US', { maximumFractionDigits: 0 })}k`
+              chart === 'Revenue'
+                ? `${(value / 1000).toLocaleString('en-US', { maximumFractionDigits: 0 })}k`
+                : value
             }
             tickLine={false}
             axisLine={false}
@@ -211,7 +209,7 @@ function Chart({ by, chart, chunk, className = '' }: ChartProps) {
             }}
             animationEasing='ease-in-out'
             animationDuration={200}
-            labelFormatter={(value: string) => (by === 'day' ? `Month ${value}` : value)}
+            labelFormatter={(value: string) => `${by.charAt(0).toUpperCase() + by.slice(1)} ${value}`}
             formatter={value => {
               if (chart === 'Revenue') {
                 const formattedValue = formatPrice(+value)

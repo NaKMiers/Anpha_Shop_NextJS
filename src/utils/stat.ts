@@ -35,17 +35,17 @@ export const revenueStatCalc = (orders: any) => {
     day: [
       revenueToday,
       revenueYesterday,
-      (((revenueToday - revenueYesterday) / revenueYesterday) * 100).toFixed(2),
+      (((revenueToday - revenueYesterday) / revenueYesterday) * 100 || 0).toFixed(2),
     ],
     month: [
       revenueThisMonth,
       revenueLastMonth,
-      (((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100).toFixed(2),
+      (((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100 || 0).toFixed(2),
     ],
     year: [
       revenueThisYear,
       revenueLastYear,
-      (((revenueThisYear - revenueLastYear) / revenueLastYear) * 100).toFixed(2),
+      (((revenueThisYear - revenueLastYear) / revenueLastYear) * 100 || 0).toFixed(2),
     ],
   }
 
@@ -106,17 +106,17 @@ export const newOrderStatCalc = (orders: any[]) => {
     day: [
       newOrdersToday,
       newOrdersYesterday,
-      (((newOrdersToday - newOrdersYesterday) / newOrdersYesterday) * 100).toFixed(2),
+      (((newOrdersToday - newOrdersYesterday) / newOrdersYesterday) * 100 || 0).toFixed(2),
     ],
     month: [
       newOrdersThisMonth,
       newOrdersLastMonth,
-      (((newOrdersThisMonth - newOrdersLastMonth) / newOrdersLastMonth) * 100).toFixed(2),
+      (((newOrdersThisMonth - newOrdersLastMonth) / newOrdersLastMonth) * 100 || 0).toFixed(2),
     ],
     year: [
       newOrdersThisYear,
       newOrdersLastYear,
-      (((newOrdersThisYear - newOrdersLastYear) / newOrdersLastYear) * 100).toFixed(2),
+      (((newOrdersThisYear - newOrdersLastYear) / newOrdersLastYear) * 100 || 0).toFixed(2),
     ],
   }
 
@@ -182,17 +182,17 @@ export const newUserStatCalc = (users: any[]) => {
     day: [
       newUsersToday,
       newUsersYesterday,
-      (((newUsersToday - newUsersYesterday) / newUsersYesterday) * 100).toFixed(2),
+      (((newUsersToday - newUsersYesterday) / newUsersYesterday) * 100 || 0).toFixed(2),
     ],
     month: [
       newUsersThisMonth,
       newUsersLastMonth,
-      (((newUsersThisMonth - newUsersLastMonth) / newUsersLastMonth) * 100).toFixed(2),
+      (((newUsersThisMonth - newUsersLastMonth) / newUsersLastMonth) * 100 || 0).toFixed(2),
     ],
     year: [
       newUsersThisYear,
       newUsersLastYear,
-      (((newUsersThisYear - newUsersLastYear) / newUsersLastYear) * 100).toFixed(2),
+      (((newUsersThisYear - newUsersLastYear) / newUsersLastYear) * 100 || 0).toFixed(2),
     ],
   }
 
@@ -257,19 +257,23 @@ export const newAccountSoldStatCalc = (orders: any[]) => {
     day: [
       newAccountsSoldToday,
       newAccountsSoldYesterday,
-      (((newAccountsSoldToday - newAccountsSoldYesterday) / newAccountsSoldYesterday) * 100).toFixed(2),
+      (
+        ((newAccountsSoldToday - newAccountsSoldYesterday) / newAccountsSoldYesterday) * 100 || 0
+      ).toFixed(2),
     ],
     month: [
       newAccountsSoldThisMonth,
       newAccountsSoldLastMonth,
-      (((newAccountsSoldThisMonth - newAccountsSoldLastMonth) / newAccountsSoldLastMonth) * 100).toFixed(
-        2
-      ),
+      (
+        ((newAccountsSoldThisMonth - newAccountsSoldLastMonth) / newAccountsSoldLastMonth) * 100 || 0
+      ).toFixed(2),
     ],
     year: [
       newAccountsSoldThisYear,
       newAccountsSoldLastYear,
-      (((newAccountsSoldThisYear - newAccountsSoldLastYear) / newAccountsSoldLastYear) * 100).toFixed(2),
+      (
+        ((newAccountsSoldThisYear - newAccountsSoldLastYear) / newAccountsSoldLastYear) * 100 || 0
+      ).toFixed(2),
     ],
   }
 
@@ -334,17 +338,17 @@ export const newUsedVoucherStatCalc = (orders: any[]) => {
     day: [
       usedVouchersToday,
       usedVouchersYesterday,
-      (((usedVouchersToday - usedVouchersYesterday) / usedVouchersYesterday) * 100).toFixed(2),
+      (((usedVouchersToday - usedVouchersYesterday) / usedVouchersYesterday) * 100 || 0).toFixed(2),
     ],
     month: [
       usedVouchersThisMonth,
       usedVouchersLastMonth,
-      (((usedVouchersThisMonth - usedVouchersLastMonth) / usedVouchersLastMonth) * 100).toFixed(2),
+      (((usedVouchersThisMonth - usedVouchersLastMonth) / usedVouchersLastMonth) * 100 || 0).toFixed(2),
     ],
     year: [
       usedVouchersThisYear,
       usedVouchersLastYear,
-      (((usedVouchersThisYear - usedVouchersLastYear) / usedVouchersLastYear) * 100).toFixed(2),
+      (((usedVouchersThisYear - usedVouchersLastYear) / usedVouchersLastYear) * 100 || 0).toFixed(2),
     ],
   }
 
@@ -426,7 +430,7 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
 
         const groupedByEmail: { [key: string]: any[] } = {}
 
-        accounts.forEach(account => {
+        accounts.forEach((account, index) => {
           const emailMatch = account.info.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)
 
           if (emailMatch) {
@@ -434,9 +438,9 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
 
             if (!groupedByEmail[email]) {
               groupedByEmail[email] = [account]
+            } else {
+              groupedByEmail[email].push(account)
             }
-
-            groupedByEmail[email].push(account)
           }
         })
 
@@ -451,18 +455,20 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
   const groupedAccountsByEmail = groupAccountsByEmail(categoryAccountsMap)
   console.log('groupedAccountsByEmail: ', groupedAccountsByEmail)
 
-  const accounts = Object.entries(groupedAccountsByEmail).map(([slug, accountByEmailGroups]) => {
-    return Object.entries(accountByEmailGroups).map(([email, accounts]) => {
-      const totalRevenue = accounts.reduce((total, account) => total + account.price, 0)
-      return {
-        email,
-        category: accounts[0].category,
-        revenue: totalRevenue.toFixed(2),
-      }
-    })
+  const accounts = Object.entries(groupedAccountsByEmail).map(([_, accountByEmailGroups]) => {
+    return Object.entries(accountByEmailGroups)
+      .map(([email, accounts]) => {
+        const totalRevenue = accounts.reduce((total, account) => total + account.price, 0)
+        return {
+          email,
+          category: accounts[0].category,
+          revenue: totalRevenue.toFixed(2),
+        }
+      })
+      .sort((a, b) => b.revenue - a.revenue)
   })
 
-  console.log('accounts-flated: ', accounts.flat())
+  console.log('accounts-unflated: ', accounts)
 
   return accounts.flat()
 }
