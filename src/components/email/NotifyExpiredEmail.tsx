@@ -45,7 +45,7 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
             <Row className='p-4'>
               <Column className='font'>
                 <h1 className='text-2xl font-bold text-center'>
-                  Tài khoản của sẽ hết hạn sau{' '}
+                  Tài khoản của bạn sẽ hết hạn sau{' '}
                   <span className='text-rose-500'>{data.remainingTime}</span> nữa 🥲{' '}
                 </h1>
 
