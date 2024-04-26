@@ -112,7 +112,7 @@ export async function GET(req: NextRequest) {
           remainingTime,
         }
 
-        await notifyExpiredAccount(account.usingUser, data)
+        // await notifyExpiredAccount(account.usingUser, data)
       })
     )
 
