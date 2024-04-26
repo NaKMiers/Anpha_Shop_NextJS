@@ -95,7 +95,7 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
 
             <div className='text-center p-3 mb-10'>
               <a
-                href={`/${data.type.slug}`}
+                  href={`https://anpha.shop/${data.type.slug}`}
                 className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
                 Gia hạn ngay
               </a>
