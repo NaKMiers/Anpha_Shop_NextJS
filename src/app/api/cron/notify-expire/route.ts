@@ -19,9 +19,7 @@ export async function GET(req: NextRequest) {
     // connect to database
     await connectDatabase()
 
-    // rules:
-    // 2. notify when remaning time is <= 1d (1 day, 1 week, ... accounts)
-    // 3. notify when remaning time is <= 2h (1 day, 1 week, 1 month, ... accounts)
+    // rules: notify when remaning time is <= 2h (1 day, 1 week, 1 month, ... accounts)
 
     // steps:
     // 1. get all accounts by userUsing: yes, begin: < now, expire: > now
@@ -50,6 +48,7 @@ export async function GET(req: NextRequest) {
       active: true,
       begin: { $lt: now },
       expire: { $gt: now },
+      $or: [{ notifiedExpire: { $exists: false } }, { notifiedExpire: false }],
     })
       .populate({
         path: 'type',
@@ -69,10 +68,10 @@ export async function GET(req: NextRequest) {
         return true
       }
 
-      // remaning time < 1d
-      if (diff <= 24 * 2400 && duration > 24 * 3600) {
-        return true
-      }
+      // // remaning time < 1d
+      // if (diff <= 24 * 2400 && duration > 24 * 3600) {
+      //   return true
+      // }
 
       return false
     })
@@ -104,7 +103,7 @@ export async function GET(req: NextRequest) {
         if (duration.asSeconds() < 3600) {
           remainingTime = toVNTime(`${duration.minutes()} minutes`)
         } else {
-          remainingTime = toVNTime(`${duration.hours()} hours ${duration.minutes()} minutes`)
+          remainingTime = toVNTime(`${duration.hours()} hours`)
         }
 
         const data = {
@@ -112,8 +111,17 @@ export async function GET(req: NextRequest) {
           remainingTime,
         }
 
-        // await notifyExpiredAccount(account.usingUser, data)
+        console.log('data', data)
+
+        // update notifiedExpire
+        await notifyExpiredAccount(account.usingUser, data)
       })
+    )
+
+    // update notifiedExpire
+    await AccountModel.updateMany(
+      { _id: { $in: accounts.map((account: any) => account._id) } },
+      { $set: { notifiedExpire: true } }
     )
 
     return NextResponse.json({ accounts, message: 'Check Expired' }, { status: 200 })

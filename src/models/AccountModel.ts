@@ -30,6 +30,10 @@ const AccountSchema = new Schema(
       type: Date,
       required: true,
     },
+    notifiedExpire: {
+      type: Boolean,
+      default: false,
+    },
     times: {
       type: {
         days: {
@@ -82,6 +86,7 @@ export interface IAccount {
     minutes: number
     seconds: number
   }
+  notifiedExpire: boolean
   createdAt: string
   updatedAt: string
 }

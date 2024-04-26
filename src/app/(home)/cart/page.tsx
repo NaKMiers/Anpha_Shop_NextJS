@@ -4,6 +4,7 @@ import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Input from '@/components/Input'
+import { commonEmailMistakes } from '@/constansts/mistakes'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
   addCartItem,
@@ -205,6 +206,19 @@ function CartPage() {
     if (!curUser && !getValues('email')) {
       setError('email', { message: 'Email không được để trống' })
       isValid = false
+    } else {
+      const email = getValues('email')
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
+
+      if (!emailRegex.test(email)) {
+        setError('email', { message: 'Email không hợp lệ' })
+        isValid = false
+      } else {
+        if (commonEmailMistakes.some(mistake => email.toLowerCase().includes(mistake))) {
+          setError('email', { message: 'Email không hợp lệ' })
+          isValid = false
+        }
+      }
     }
 
     return isValid
@@ -250,7 +264,6 @@ function CartPage() {
         localStorage.setItem('checkout', JSON.stringify(checkout))
 
         // remove cart items if is LOCAL cart
-        console.log('21030182093120912092901980120982908902190t893075690759834767437687346790')
         console.log('localCartItems', localCartItems)
         const asd = localCartItems.filter(
           (item: FullyCartItem) => !selectedItems.map(i => i._id).includes(item._id)

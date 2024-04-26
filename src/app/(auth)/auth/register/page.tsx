@@ -1,6 +1,7 @@
 'use client'
 
 import Input from '@/components/Input'
+import { commonEmailMistakes } from '@/constansts/mistakes'
 import { registerApi } from '@/requests'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
@@ -38,11 +39,11 @@ function ResgiterPage() {
     data => {
       let isValid = true
 
-      // username must be at least 6 characters
-      if (data.username.length < 6) {
+      // username must be at least 5 characters
+      if (data.username.length < 5) {
         setError('username', {
           type: 'manual',
-          message: 'Username phải có ít nhất 6 ký tự',
+          message: 'Username phải có ít nhất 5 ký tự',
         })
         isValid = false
       }
@@ -54,6 +55,19 @@ function ResgiterPage() {
           message: 'Email không hợp lệ',
         })
         isValid = false
+      } else {
+        const { email } = data
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
+
+        if (!emailRegex.test(email)) {
+          setError('email', { message: 'Email không hợp lệ' })
+          isValid = false
+        } else {
+          if (commonEmailMistakes.some(mistake => email.toLowerCase().includes(mistake))) {
+            setError('email', { message: 'Email không hợp lệ' })
+            isValid = false
+          }
+        }
       }
 
       // password must be at least 6 characters and contain at least 1 lowercase, 1 uppercase, 1 number
