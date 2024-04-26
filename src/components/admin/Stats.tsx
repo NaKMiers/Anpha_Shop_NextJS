@@ -25,7 +25,7 @@ function Stats({ by, className = '' }: statsProps) {
   const [revenueStat, setRevenueStat] = useState<any>(null)
   const [newOrderStat, setNewOrderStat] = useState<any>(null)
   const [newAccountSoldStat, setNewAccountSoldStat] = useState<any>(null)
-  const [newUserStat, setNewUserStat] = useState<any>(null)
+  // const [newUserStat, setNewUserStat] = useState<any>(null)
   const [newUsedVoucherStat, setNewUsedVoucherStat] = useState<any>(null)
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function Stats({ by, className = '' }: statsProps) {
         setRevenueStat(revenueStatCalc(orders))
         setNewOrderStat(newOrderStatCalc(orders))
         setNewAccountSoldStat(newAccountSoldStatCalc(orders))
-        setNewUserStat(newUserStatCalc(orders))
+        // setNewUserStat(newUserStatCalc(orders))
         setNewUsedVoucherStat(newUsedVoucherStatCalc(orders))
       } catch (err: any) {
         console.log(err)
@@ -67,7 +67,7 @@ function Stats({ by, className = '' }: statsProps) {
   return (
     <div className={`${className}`}>
       {/* Revenue Stat */}
-      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>Revenue</span>
           {loading ? (
@@ -93,7 +93,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* New Order Stat */}
-      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>New Order</span>
           {loading ? (
@@ -117,7 +117,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* Sale Account Stat */}
-      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>Sale Accounts</span>
           {loading ? (
@@ -141,7 +141,7 @@ function Stats({ by, className = '' }: statsProps) {
       </div>
 
       {/* New User Stat */}
-      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
+      {/* <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>New User</span>
           {loading ? (
@@ -162,10 +162,10 @@ function Stats({ by, className = '' }: statsProps) {
           {newUserStat?.[by][2] > 0 ? '+' : ''}
           {newUserStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
-      </div>
+      </div> */}
 
       {/* Used Voucher Stat */}
-      <div className='col-span-5 lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
+      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
         <div className='flex justify-between items-center mb-3'>
           <span className='font-body tracking-wider text-lg'>New Used Voucher</span>
           {loading ? (

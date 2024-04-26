@@ -26,7 +26,7 @@ function AdminPage() {
     () => [
       <RecentlySaleTab className='h-[500px] overflow-y-scroll ' key={1} />,
       <AccountRankTab className='h-[500px] overflow-y-scroll' key={2} />,
-      <UserSpendingRankTab className='h-[500px] overflow-y-scroll' key={5} />,
+      <UserSpendingRankTab className='h-[500px]' key={5} />,
       <CategoryRankTab className='h-[500px] overflow-y-scroll' key={3} />,
       <TagRankTab className='h-[500px] overflow-y-scroll' key={4} />,
     ],
@@ -87,26 +87,24 @@ function AdminPage() {
 
       <div className='grid grid-cols-12 gap-x-21 gap-y-16'>
         {/* Stats */}
-        <Stats by={by} className='col-span-12 grid grid-cols-5 gap-x-21 gap-y-21/2' />
+        <Stats by={by} className='col-span-12 grid grid-cols-4 gap-x-21 gap-y-21/2' />
 
         {/* Chart & Rank */}
         <div className='col-span-12 grid grid-cols-12 gap-21'>
           {/* BarChart */}
           <div className='col-span-12 lg:col-span-7'>
             <div className='flex gap-2 px-2'>
-              {['Revenue', , 'New Orders', 'Sale Accounts', 'New Users', 'Used Vouchers'].map(
-                (label, index) => (
-                  <span
-                    className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
-                      selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
-                    }`}
-                    onClick={() => setSelectedChart(label as never)}
-                    title={label}
-                    key={index}>
-                    {label}
-                  </span>
-                )
-              )}
+              {['Revenue', , 'New Orders', 'Sale Accounts', 'Used Vouchers'].map((label, index) => (
+                <span
+                  className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
+                    selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
+                  }`}
+                  onClick={() => setSelectedChart(label as never)}
+                  title={label}
+                  key={index}>
+                  {label}
+                </span>
+              ))}
 
               {by !== 'year' && (
                 <div className='flex flex-1 justify-end'>
