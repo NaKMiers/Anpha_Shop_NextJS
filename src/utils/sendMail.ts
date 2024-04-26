@@ -76,10 +76,7 @@ export async function notifyDeliveryOrder(email: string, orderData: any) {
   console.log('- Notify Delivery Order -')
 
   try {
-    console.log('orderData:', orderData)
-
     const html = render(OrderEmail({ order: orderData }))
-    console.log('html:', html)
     await sendMail(email, 'Bạn có đơn hàng từ Anpha Shop', html)
   } catch (err: any) {
     console.log(err)
@@ -91,8 +88,6 @@ export async function notifyAccountUpdated(email: string, data: any) {
   console.log('- Notify Account Updated -')
 
   try {
-    console.log('Data:', data)
-
     // render template with new data
     const html = render(UpdateInfoEmail({ data }))
     await sendMail(email, 'Cập nhật thông tin tài khoản', html)
@@ -134,7 +129,7 @@ export async function notifyExpiredAccount(email: string, data: any) {
   try {
     // render template with new data
     const html = render(NotifyExpiredEmail({ data }))
-    await sendMail(email, 'Tài khoản sắp hết hạn', html)
+    await sendMail(email, `Tài khoản hết hạn sau ${data.remainingTime} nữa 😱`, html)
   } catch (err: any) {
     console.log(err)
   }

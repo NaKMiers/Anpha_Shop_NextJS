@@ -32,9 +32,7 @@ export const expiredData = {
   expire: '2024-07-29T07:10:14.000Z',
   usingUser: 'oehaao@mailto.plus',
 
-  title: 'AK2',
   remainingTime: '2 giờ',
-  reBuyLink: 'http://localhost:3000/ak2',
 }
 
 export const order = {

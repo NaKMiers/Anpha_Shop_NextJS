@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/cron",
-      "schedule": "*/30 * * * *"
+      "path": "/api/cron/notify-expire?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJlcm52aGZlOXQ5Mzg0N3Q5MjczNG52OTIzN3Q5dm5qaGZrZCIsImlhdCI6MTcxNDEyOTA0MH0.29-_qlUqC1k93_sZK3Vi2TM6E3OVa7OHgUH4xMmeF48",
+      "schedule": "*/30 8-23 * * *"
     }
   ]
 }

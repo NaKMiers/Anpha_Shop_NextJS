@@ -1,7 +1,7 @@
 'use client'
 
 import LoadingButton from '@/components/LoadingButton'
-import { commentData, expiredData, order, summary, updateInfoData } from '@/constansts/emailDataSamples'
+import { order, summary, updateInfoData } from '@/constansts/emailDataSamples'
 import { useCallback, useState } from 'react'
 
 const types = [
@@ -44,7 +44,7 @@ function EmailPage() {
     setLoading(true)
 
     try {
-      const res = await fetch(`/api/cron?type=${type}`)
+      const res = await fetch(`/api/admin/test/email?type=${type}`)
       const data = await res.json()
 
       console.log('data: ', data.mailRes)

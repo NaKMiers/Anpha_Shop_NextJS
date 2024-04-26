@@ -44,8 +44,10 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
 
             <Row className='p-4'>
               <Column className='font'>
-                <h1 className='text-2xl font-bold text-center'>Hi👋 </h1>
-                <h2 className='text-xl font-semibold text-center'>Tài khoản của bạn sắp hết hạn 🥲</h2>
+                <h1 className='text-2xl font-bold text-center'>
+                  Tài khoản của sẽ hết hạn sau{' '}
+                  <span className='text-rose-500'>{data.remainingTime}</span> nữa 🥲{' '}
+                </h1>
 
                 <div className='text-sm mt-8'>
                   <p>
@@ -93,7 +95,7 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
 
             <div className='text-center p-3 mb-10'>
               <a
-                href={data.reBuyLink}
+                href={`/${data.type.slug}`}
                 className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
                 Gia hạn ngay
               </a>

@@ -8,11 +8,8 @@ import SummaryEmail from '@/components/email/SummaryEmail'
 import UpdateInfoEmail from '@/components/email/UpdateInfoEmail'
 import VerifyEmailEmail from '@/components/email/VerifyEmailEmail'
 import VerifyPhoneEmail from '@/components/email/VerifyPhoneEmail'
-import React from 'react'
 
 function EmailTemplatePage({ params: { type } }: { params: { type: string } }) {
-  console.log('type', type)
-
   const renderComponent = () => {
     switch (type) {
       case 'order':
