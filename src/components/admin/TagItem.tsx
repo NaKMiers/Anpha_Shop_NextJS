@@ -98,9 +98,7 @@ function TagItem({
               title={data.isFeatured ? 'Mark Featured' : 'Mark Unfeatured'}>
               <FaCheck
                 size={18}
-                className={`group-hover:scale-125 common-transition ${
-                  data.isFeatured ? 'text-green-500' : 'text-slate-300'
-                }`}
+                className={`wiggle ${data.isFeatured ? 'text-green-500' : 'text-slate-300'}`}
               />
             </button>
           )}
@@ -119,7 +117,7 @@ function TagItem({
                 )
               }}
               title='Edit'>
-              <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+              <MdEdit size={18} className='wiggle' />
             </button>
           )}
 
@@ -136,7 +134,7 @@ function TagItem({
               {loadingTags.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
-                <FaSave size={18} className='group-hover:scale-125 common-transition text-green-500' />
+                <FaSave size={18} className='wiggle text-green-500' />
               )}
             </button>
           )}
@@ -153,7 +151,7 @@ function TagItem({
                 setEditingValues(prev => prev.filter(cate => cate._id !== data._id))
               }}
               title='Cancel'>
-              <MdCancel size={20} className='group-hover:scale-125 common-transition text-slate-300' />
+              <MdCancel size={20} className='wiggle text-slate-300' />
             </button>
           )}
 
@@ -170,7 +168,7 @@ function TagItem({
               {loadingTags.includes(data._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+                <FaTrash size={18} className='wiggle' />
               )}
             </button>
           )}

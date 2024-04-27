@@ -141,9 +141,7 @@ function VoucherItem({
             title={data.active ? 'Deactivate' : 'Activate'}>
             <FaCheck
               size={18}
-              className={`group-hover:scale-125 common-transition ${
-                data.active ? 'text-green-500' : 'text-slate-300'
-              }`}
+              className={`wiggle ${data.active ? 'text-green-500' : 'text-slate-300'}`}
             />
           </button>
 
@@ -153,7 +151,7 @@ function VoucherItem({
             className='block group'
             onClick={e => e.stopPropagation()}
             title='Edit'>
-            <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+            <MdEdit size={18} className='wiggle' />
           </Link>
 
           {/* Delete Button */}
@@ -168,7 +166,7 @@ function VoucherItem({
             {loadingVouchers.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (
-              <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+              <FaTrash size={18} className='wiggle' />
             )}
           </button>
         </div>

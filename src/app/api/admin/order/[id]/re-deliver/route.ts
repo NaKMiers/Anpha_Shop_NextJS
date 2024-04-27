@@ -16,6 +16,9 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     // connect to database
     await connectDatabase()
 
+    // get message
+    const { message } = await req.json()
+
     // get order to re-deliver
     let order: IOrder | null = await OrderModel.findById(id).lean()
 
@@ -51,6 +54,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
       ...order,
       accounts: accountDataList,
       discount: voucherDescription,
+      message,
     }
 
     // EMAIL

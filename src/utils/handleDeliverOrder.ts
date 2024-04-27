@@ -21,7 +21,7 @@ interface AccountListItem {
   accounts: any[]
 }
 
-export default async function handleDeliverOrder(id: string) {
+export default async function handleDeliverOrder(id: string, message: string = '') {
   // get order from database to deliver
   const order: FullyOrder | null = await OrderModel.findById(id)
     .populate({
@@ -217,6 +217,7 @@ export default async function handleDeliverOrder(id: string) {
     ...order,
     accounts: accountDataList,
     discount: order.discount || 0,
+    message,
   }
 
   // EMAIL

@@ -302,10 +302,7 @@ function ProductItem({
               }}
               disabled={syncingProducts.includes(data._id) || loadingProducts.includes(data._id)}
               title='Remove Flash Sale'>
-              <PiLightningSlashFill
-                size={18}
-                className='group-hover:scale-125 text-yellow-400 common-transition'
-              />
+              <PiLightningSlashFill size={18} className='wiggle text-yellow-400' />
             </button>
           )}
 

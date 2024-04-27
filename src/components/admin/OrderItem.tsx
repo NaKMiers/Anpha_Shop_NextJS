@@ -10,7 +10,10 @@ import { FaCheckSquare, FaEye, FaHistory, FaRegTrashAlt } from 'react-icons/fa'
 import { GrDeliver } from 'react-icons/gr'
 import { ImCancelCircle } from 'react-icons/im'
 import { RiDonutChartFill } from 'react-icons/ri'
+import { SiGooglemessages } from 'react-icons/si'
 import ConfirmDialog from '../ConfirmDialog'
+import Input from '../Input'
+import { FieldValues, useForm } from 'react-hook-form'
 
 interface OrderItemProps {
   data: FullyOrder
@@ -43,6 +46,20 @@ function OrderItem({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [confirmType, setConfirmType] = useState<'deliver' | 're-deliver' | 'delete'>('delete')
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
+  const [isOpenMessageModal, setIsOpenMessageModal] = useState<boolean>(false)
+
+  // form
+  const {
+    register,
+    formState: { errors },
+    clearErrors,
+    getValues,
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      message: '',
+    },
+  })
 
   // handle deliver order
   const handleDeliverOrder = useCallback(async () => {
@@ -51,13 +68,16 @@ function OrderItem({
 
     try {
       // send request to deliver order
-      const { message } = await deliverOrderApi(data._id)
+      const { message } = await deliverOrderApi(data._id, getValues('message'))
 
       // update order status
       setOrders(prev => prev.map(o => (o._id === data._id ? { ...o, status: 'done' } : o)))
 
       // show success message
       toast.success(message)
+
+      // clear message
+      reset()
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
@@ -65,7 +85,7 @@ function OrderItem({
       // stop loading
       setIsLoading(false)
     }
-  }, [data._id, setOrders])
+  }, [data._id, setOrders, getValues, reset])
 
   // handle re-deliver order
   const handleReDeliverOrder = useCallback(async () => {
@@ -74,10 +94,13 @@ function OrderItem({
 
     try {
       // send request to re-deliver order
-      const { message } = await reDeliverOrder(data._id)
+      const { message } = await reDeliverOrder(data._id, getValues('message'))
 
       // show success message
       toast.success(message)
+
+      // clear message
+      reset()
     } catch (err: any) {
       console.log(err)
       toast.error(err.message)
@@ -85,7 +108,7 @@ function OrderItem({
       // stop loading
       setIsLoading(false)
     }
-  }, [data._id])
+  }, [data._id, getValues, reset])
 
   return (
     <>
@@ -212,7 +235,7 @@ function OrderItem({
             className='block group'
             onClick={e => e.stopPropagation()}
             title='Detail'>
-            <FaEye size={18} className='text-primary group-hover:scale-125 common-transition' />
+            <FaEye size={18} className='text-primary wiggle' />
           </Link>
 
           {/* Deliver Button */}
@@ -229,10 +252,7 @@ function OrderItem({
               {isLoading ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
-                <GrDeliver
-                  size={18}
-                  className='text-yellow-400 group-hover:scale-125 common-transition'
-                />
+                <GrDeliver size={18} className='text-yellow-400 wiggle' />
               )}
             </button>
           )}
@@ -251,10 +271,22 @@ function OrderItem({
               {isLoading ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
-                <FaHistory size={18} className='text-blue-500 group-hover:scale-125 common-transition' />
+                <FaHistory size={18} className='text-blue-500 wiggle' />
               )}
             </button>
           )}
+
+          {/* Add Messsage To Deliver Button */}
+          <button
+            className='block group'
+            disabled={loadingOrders.includes(data._id) || isLoading}
+            onClick={e => {
+              e.stopPropagation()
+              setIsOpenMessageModal(true)
+            }}
+            title='Re-Deliver'>
+            <SiGooglemessages size={19} className='text-teal-500 wiggle' />
+          </button>
 
           {/* Cancel Button */}
           {data.status === 'pending' && (
@@ -266,10 +298,7 @@ function OrderItem({
                 handleCancelOrders([data._id])
               }}
               title='Cancel'>
-              <ImCancelCircle
-                size={18}
-                className='text-slate-300 group-hover:scale-125 common-transition'
-              />
+              <ImCancelCircle size={18} className='text-slate-300 wiggle' />
             </button>
           )}
 
@@ -286,13 +315,32 @@ function OrderItem({
             {loadingOrders.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (
-              <FaRegTrashAlt
-                size={18}
-                className='group-hover:scale-125 common-transition text-rose-500'
-              />
+              <FaRegTrashAlt size={18} className='wiggle text-rose-500' />
             )}
           </button>
         </div>
+
+        {isOpenMessageModal && (
+          <div
+            className='absolute z-20 p-21 top-0 left-0 w-full h-full flex items-center justify-center gap-2 rounded-md bg-teal-400 bg-opacity-80'
+            onClick={e => {
+              e.stopPropagation()
+              setIsOpenMessageModal(false)
+            }}>
+            <Input
+              id='message'
+              label='Message'
+              register={register}
+              errors={errors}
+              required
+              type='text'
+              icon={SiGooglemessages}
+              className='w-full shadow-lg'
+              onClick={e => e.stopPropagation()}
+              onFocus={() => clearErrors('message')}
+            />
+          </div>
+        )}
       </div>
 
       {/* Confirm Dialog */}

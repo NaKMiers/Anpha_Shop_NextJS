@@ -2,9 +2,9 @@ import { IUser } from '@/models/UserModel'
 import { demoteCollaboratorApi, rechargeUserApi, setCollaboratorApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatDate, formatTime } from '@/utils/time'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaPlus, FaPlusCircle, FaTrash } from 'react-icons/fa'
@@ -400,7 +400,7 @@ function UserItem({
               ) : (
                 <GrUpgrade
                   size={18}
-                  className={`group-hover:scale-125 common-transition ${
+                  className={`wiggle ${
                     userData.role === 'collaborator' ? 'rotate-180 text-red-500' : ''
                   }`}
                 />
@@ -416,7 +416,7 @@ function UserItem({
               }}
               disabled={loadingUsers.includes(userData._id) || isDemoting}
               title='Recharge'>
-              <FaPlusCircle size={18} className='group-hover:scale-125 common-transition' />
+              <FaPlusCircle size={18} className='wiggle' />
             </button>
 
             {/* Delete Button */}
@@ -431,7 +431,7 @@ function UserItem({
               {loadingUsers.includes(userData._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
-                <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+                <FaTrash size={18} className='wiggle' />
               )}
             </button>
           </div>

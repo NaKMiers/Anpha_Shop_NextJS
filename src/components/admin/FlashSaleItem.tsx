@@ -109,7 +109,7 @@ function FlashSaleItem({
             className='block group'
             onClick={e => e.stopPropagation()}
             title='Edit'>
-            <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+            <MdEdit size={18} className='wiggle' />
           </Link>
 
           {/* Delete Button */}
@@ -124,7 +124,7 @@ function FlashSaleItem({
             {loadingFlashSales.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (
-              <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+              <FaTrash size={18} className='wiggle' />
             )}
           </button>
         </div>

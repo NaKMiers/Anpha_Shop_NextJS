@@ -256,6 +256,8 @@ export const order = {
       ],
     },
   ],
+  message:
+    'Hello Guy 😊 Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, est asperiores. Repellat repudiandae maxime exercitationem sed autem perspiciatis consequuntur ex!',
   createdAt: '2024-04-20T07:09:45.271Z',
   updatedAt: '2024-04-21T08:44:34.909Z',
   __v: 0,

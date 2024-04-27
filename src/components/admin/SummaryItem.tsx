@@ -99,7 +99,7 @@ function SummaryItem({
           {loadingSummaries.includes(data._id) ? (
             <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
           ) : (
-            <IoIosSend size={18} className='group-hover:scale-125 common-transition' />
+            <IoIosSend size={18} className='wiggle' />
           )}
         </button>
       </div>

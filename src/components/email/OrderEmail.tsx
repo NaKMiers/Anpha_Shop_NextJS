@@ -79,6 +79,20 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                   </p>
                 </div>
 
+                {/* Message From Admin */}
+                {order.message && typeof order.message === 'string' && order.message.trim() && (
+                  <div
+                    className='px-21 py-21/2 rounded-lg'
+                    style={{
+                      border: '1px solid rgb(0, 0, 0, 0.1)',
+                    }}>
+                    <p className='font-semibold underline tracking-wider text-sm text-slate-400 text-center m-0 mb-3'>
+                      Lời nhắn từ quản trị viên
+                    </p>
+                    <p className='text-sm m-0'>{order.message}</p>
+                  </div>
+                )}
+
                 {/* Product */}
                 <p className='text-center mt-8'>
                   <b className='text-[24px]'>Sản phẩm</b>

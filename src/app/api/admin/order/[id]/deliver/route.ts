@@ -12,8 +12,11 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
     // connect to database
     await connectDatabase()
 
+    // get message
+    const { message } = await req.json()
+
     // handle deliver order
-    const response: any = await handleDeliverOrder(id)
+    const response: any = await handleDeliverOrder(id, message)
 
     if (response.isError) {
       return NextResponse.json({ message: response.message }, { status: 500 })

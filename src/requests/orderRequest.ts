@@ -93,9 +93,10 @@ export const createOrderApi = async (
 }
 
 // [PATCH]
-export const deliverOrderApi = async (orderId: string) => {
+export const deliverOrderApi = async (orderId: string, message: string = '') => {
   const res = await fetch(`/api/admin/order/${orderId}/deliver`, {
     method: 'PATCH',
+    body: JSON.stringify({ message }),
   })
 
   // check status
@@ -107,9 +108,10 @@ export const deliverOrderApi = async (orderId: string) => {
 }
 
 // [PATCH]
-export const reDeliverOrder = async (orderId: string) => {
+export const reDeliverOrder = async (orderId: string, message: string = '') => {
   const res = await fetch(`/api/admin/order/${orderId}/re-deliver`, {
     method: 'PATCH',
+    body: JSON.stringify({ message }),
   })
 
   // check status
