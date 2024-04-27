@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       value,
       timesLeft,
       owner: owner || null,
-      active: active === 'on',
+      active,
     })
 
     // save new voucher to database

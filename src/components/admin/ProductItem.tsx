@@ -4,24 +4,27 @@ import { updateProductPropertyApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useCallback, useState } from 'react'
+import React, { use, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaEye, FaEyeSlash, FaTrash } from 'react-icons/fa'
-import { FaBoltLightning } from 'react-icons/fa6'
+import { FaEye, FaEyeSlash, FaSyncAlt, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
+import { PiLightningFill, PiLightningSlashFill } from 'react-icons/pi'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
-import { PiLightningFill, PiLightningSlashFill } from 'react-icons/pi'
 
 interface ProductItemProps {
   data: ProductWithTagsAndCategory
   loadingProducts: string[]
+  syncingProducts: string[]
   className?: string
 
+  // selected
   selectedProducts: string[]
   setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>
 
+  // functions
   handleActivateProducts: (ids: string[], active: boolean) => void
+  handleSyncProducts: (ids: string[]) => void
   hanldeRemoveApplyingFlashsales: (ids: string[]) => void
   handleDeleteProducts: (ids: string[]) => void
 }
@@ -29,12 +32,14 @@ interface ProductItemProps {
 function ProductItem({
   data,
   loadingProducts,
+  syncingProducts,
   className = '',
   // selected
   selectedProducts,
   setSelectedProducts,
   // functions
   handleActivateProducts,
+  handleSyncProducts,
   hanldeRemoveApplyingFlashsales,
   handleDeleteProducts,
 }: ProductItemProps) {
@@ -80,6 +85,11 @@ function ProductItem({
 
     [data, fieldValue]
   )
+
+  // set field value when data change
+  useEffect(() => {
+    setFieldValue({ stock: data.stock, sold: data.sold })
+  }, [data])
 
   return (
     <>
@@ -255,12 +265,30 @@ function ProductItem({
                 handleActivateProducts([data._id], true)
               }
             }}
+            disabled={syncingProducts.includes(data._id) || loadingProducts.includes(data._id)}
             title={data.active ? 'Deactivate' : 'Activate'}>
             {data.active ? (
-              <FaEye size={18} className='group-hover:scale-125 common-transition text-green-500' />
+              <FaEye size={18} className='wiggle text-green-500' />
             ) : (
-              <FaEyeSlash size={18} className='group-hover:scale-125 common-transition text-slate-300' />
+              <FaEyeSlash size={18} className='wiggle text-slate-300' />
             )}
+          </button>
+
+          {/* Sync Product Stock Button */}
+          <button
+            className='block group'
+            onClick={e => {
+              e.stopPropagation()
+              handleSyncProducts([data._id])
+            }}
+            disabled={syncingProducts.includes(data._id) || loadingProducts.includes(data._id)}
+            title='Sync'>
+            <FaSyncAlt
+              size={16}
+              className={`wiggle ${
+                syncingProducts.includes(data._id) ? 'animate-spin text-slate-300' : ''
+              }`}
+            />
           </button>
 
           {/* Remove Flashsale Button */}
@@ -272,6 +300,7 @@ function ProductItem({
                 setIsOpenConfirmModal(true)
                 setConfirmType('Remove Flash Sale')
               }}
+              disabled={syncingProducts.includes(data._id) || loadingProducts.includes(data._id)}
               title='Remove Flash Sale'>
               <PiLightningSlashFill
                 size={18}
@@ -286,7 +315,7 @@ function ProductItem({
             className='block group'
             onClick={e => e.stopPropagation()}
             title='Edit'>
-            <MdEdit size={18} className='group-hover:scale-125 common-transition' />
+            <MdEdit size={18} className='wiggle' />
           </Link>
 
           {/* Delete Button */}
@@ -296,12 +325,12 @@ function ProductItem({
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
-            disabled={loadingProducts.includes(data._id)}
+            disabled={loadingProducts.includes(data._id) || syncingProducts.includes(data._id)}
             title='Delete'>
             {loadingProducts.includes(data._id) ? (
               <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
             ) : (
-              <FaTrash size={18} className='group-hover:scale-125 common-transition' />
+              <FaTrash size={18} className='wiggle' />
             )}
           </button>
         </div>

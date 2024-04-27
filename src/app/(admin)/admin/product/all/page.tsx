@@ -16,6 +16,7 @@ import {
   deleteProductsApi,
   getAllProductsApi,
   removeApplyingFlashSalesApi,
+  syncProductsApi,
 } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
@@ -44,6 +45,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
 
   // loading and confirming
   const [loadingProducts, setLoadingProducts] = useState<string[]>([])
+  const [syncingProducts, setSyncingProducts] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // values
@@ -160,6 +162,44 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       toast.error(err.message)
     }
   }, [])
+
+  // sync products stock
+  const handleSyncProducts = useCallback(async (ids: string[]) => {
+    try {
+      // start syncing products
+      setSyncingProducts(ids)
+
+      // senred request to server
+      const { syncedProducts, message } = await syncProductsApi(ids)
+
+      console.log('syncedProducts', syncedProducts)
+
+      // update products from state
+      setProducts(prev =>
+        prev.map(product =>
+          syncedProducts.map((prod: ProductWithTagsAndCategory) => prod._id).includes(product._id)
+            ? {
+                ...product,
+                stock: syncedProducts.find(
+                  (prod: ProductWithTagsAndCategory) => prod._id === product._id
+                )?.stock,
+              }
+            : product
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop syncing products
+      setSyncingProducts([])
+    }
+  }, [])
+
+  console.log(products)
 
   // remove applying flashsales
   const hanldeRemoveApplyingFlashsales = useCallback(async (ids: string[]) => {
@@ -543,6 +583,14 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             {selectedProducts.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
+          {!!selectedProducts.length && (
+            <button
+              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-light common-transition'
+              onClick={() => handleSyncProducts(selectedProducts)}>
+              Sync
+            </button>
+          )}
+
           {/* Activate Many Button */}
           {/* Only show activate button if at least 1 product is selected and at least 1 selected product is deactive */}
           {!!selectedProducts.length &&
@@ -610,11 +658,13 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           <ProductItem
             data={product}
             loadingProducts={loadingProducts}
+            syncingProducts={syncingProducts}
             // selected
             selectedProducts={selectedProducts}
             setSelectedProducts={setSelectedProducts}
             // functions
             handleActivateProducts={handleActivateProducts}
+            handleSyncProducts={handleSyncProducts}
             hanldeRemoveApplyingFlashsales={hanldeRemoveApplyingFlashsales}
             handleDeleteProducts={handleDeleteProducts}
             key={product._id}

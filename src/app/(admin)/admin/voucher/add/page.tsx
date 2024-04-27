@@ -78,15 +78,15 @@ function AddVoucherPage() {
           message: 'Code must be at least 5 characters',
         })
         isValid = false
-      }
-
-      // code < 10
-      if (data.code.length > 10) {
-        setError('code', {
-          type: 'manual',
-          message: 'Code must be at most 10 characters',
-        })
-        isValid = false
+      } else {
+        // code < 10
+        if (data.code.length > 10) {
+          setError('code', {
+            type: 'manual',
+            message: 'Code must be at most 10 characters',
+          })
+          isValid = false
+        }
       }
 
       // begin < expire when expire is not empty
@@ -135,9 +135,17 @@ function AddVoucherPage() {
       }
 
       // if type if percentage, value must have % at the end
-      if (data.type === 'percentage' && !data.value.endsWith('%')) {
-        setError('value', { type: 'manual', message: 'Value must have %' })
-        isValid = false
+      if (data.type === 'percentage') {
+        if (!data.value.endsWith('%')) {
+          setError('value', { type: 'manual', message: 'Value must have %' })
+          isValid = false
+        }
+      } else {
+        // if type is fixed, value must be number
+        if (isNaN(+data.value)) {
+          setError('value', { type: 'manual', message: 'Value must be a number' })
+          isValid = false
+        }
       }
 
       return isValid
@@ -149,6 +157,8 @@ function AddVoucherPage() {
   // handle send request to server to add voucher
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
+      console.log('data', data)
+
       // validate form
       if (!handleValidate(data)) return
 

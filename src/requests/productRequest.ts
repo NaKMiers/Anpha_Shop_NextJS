@@ -115,6 +115,21 @@ export const updateProductPropertyApi = async (id: string, field: string, value:
   return await res.json()
 }
 
+// [PATCH]
+export const syncProductsApi = async (ids: string[], all: boolean = false) => {
+  const res = await fetch(`/api/admin/product/sync`, {
+    method: 'PATCH',
+    body: JSON.stringify({ all, ids }),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [PUT]
 export const updateProductApi = async (id: string, data: FormData) => {
   const res = await fetch(`/api/admin/product/${id}/edit`, {
