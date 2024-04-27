@@ -15,8 +15,9 @@ import { IAccount } from '@/models/AccountModel'
 import { getAccountApi, getForceAllProductsApi, updateAccountApi } from '@/requests'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { MdCategory } from 'react-icons/md'
+import { MdCategory, MdMessage } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../../product/all/page'
+import { AiFillMessage } from 'react-icons/ai'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -55,6 +56,7 @@ function AddAccountPage() {
       active: true,
       notify: true,
       usingUser: '',
+      message: '',
     },
   })
 
@@ -279,6 +281,22 @@ function AddAccountPage() {
           className='mb-5'
           onFocus={() => clearErrors('info')}
         />
+
+        {/* Message */}
+        {account?.usingUser && (
+          <Input
+            id='message'
+            label='Message'
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            type='textarea'
+            rows={4}
+            icon={AiFillMessage}
+            className='mb-5'
+            onFocus={() => clearErrors('info')}
+          />
+        )}
 
         {/* Renew */}
         <Input

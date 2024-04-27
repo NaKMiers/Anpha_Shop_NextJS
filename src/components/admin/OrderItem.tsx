@@ -5,15 +5,15 @@ import { formatTime, isToday } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
+import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaCheckSquare, FaEye, FaHistory, FaRegTrashAlt } from 'react-icons/fa'
+import { FaCheckSquare, FaEye, FaHistory, FaRegTrashAlt, FaSearch } from 'react-icons/fa'
 import { GrDeliver } from 'react-icons/gr'
 import { ImCancelCircle } from 'react-icons/im'
 import { RiDonutChartFill } from 'react-icons/ri'
 import { SiGooglemessages } from 'react-icons/si'
 import ConfirmDialog from '../ConfirmDialog'
 import Input from '../Input'
-import { FieldValues, useForm } from 'react-hook-form'
 
 interface OrderItemProps {
   data: FullyOrder
@@ -26,6 +26,8 @@ interface OrderItemProps {
 
   handleCancelOrders: (ids: string[]) => void
   handleDeleteOrders: (ids: string[]) => void
+  setValue: (name: string, value: any) => void
+  handleFilter: () => void
 }
 
 function OrderItem({
@@ -41,6 +43,8 @@ function OrderItem({
   // functions
   handleCancelOrders,
   handleDeleteOrders,
+  setValue,
+  handleFilter,
 }: OrderItemProps) {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -60,6 +64,12 @@ function OrderItem({
       message: '',
     },
   })
+
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Đã sao chép: ' + text)
+  }, [])
 
   // handle deliver order
   const handleDeliverOrder = useCallback(async () => {
@@ -186,7 +196,22 @@ function OrderItem({
 
           {/* Email */}
           <p className='block underline text-ellipsis line-clamp-1' title={'Email: ' + data.email}>
-            {data.email}
+            <span
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(data.email)
+              }}>
+              {data.email}
+            </span>
+            <span
+              className='inline-block ml-2 text-secondary group'
+              onClick={e => {
+                e.stopPropagation()
+                setValue('search', data.email)
+                handleFilter()
+              }}>
+              <FaSearch size={14} className='wiggle' />
+            </span>
           </p>
 
           {/* Total */}

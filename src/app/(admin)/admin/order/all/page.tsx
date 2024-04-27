@@ -480,6 +480,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             setSelectedOrders={setSelectedOrders}
             handleCancelOrders={handleCancelOrders}
             handleDeleteOrders={handleDeleteOrders}
+            setValue={setValue}
+            handleFilter={handleSubmit(handleFilter)}
             key={order._id}
           />
         ))}

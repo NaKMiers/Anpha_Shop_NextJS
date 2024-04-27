@@ -313,6 +313,8 @@ export const updateInfoData = {
   email: 'oehaao@mailto.plus',
   total: 131000,
   discount: 0,
+  message:
+    'Hello Guy 😊 Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, est asperiores. Repellat repudiandae maxime exercitationem sed autem perspiciatis consequuntur ex!',
   items: [
     {
       _id: '66236a2c0305407424d7119e',

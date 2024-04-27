@@ -79,6 +79,20 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   </p>
                 </div>
 
+                {/* Message From Admin */}
+                {data.message && typeof data.message === 'string' && data.message.trim() && (
+                  <div
+                    className='px-21 py-21/2 rounded-lg'
+                    style={{
+                      border: '1px solid rgb(0, 0, 0, 0.1)',
+                    }}>
+                    <p className='font-semibold underline tracking-wider text-sm text-slate-400 text-center m-0 mb-3'>
+                      Lời nhắn từ quản trị viên
+                    </p>
+                    <p className='text-sm m-0'>{data.message}</p>
+                  </div>
+                )}
+
                 {/* Product */}
                 <p className='text-center mt-8'>
                   <b className='text-xl'>
