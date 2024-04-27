@@ -53,7 +53,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     },
     offers: {
       '@type': 'Offer',
-      price: 'product.price',
+      price: product?.price,
       priceCurrency: 'VND',
       availability: product?.stock ? 'InStock' : 'OutOfStock',
       priceValidUntil: null,
