@@ -418,7 +418,7 @@ function CartItem({
                 inputMode='numeric'
                 pattern='[0-9]*'
                 value={quantity}
-                disabled={isLoading}
+                disabled={isLoading || cartItem.product.stock <= 0}
                 onWheel={e => e.currentTarget.blur()}
                 onChange={e => updateQuantity('input', +e.target.value)}
               />
