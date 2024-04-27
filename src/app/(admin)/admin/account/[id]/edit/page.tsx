@@ -18,6 +18,7 @@ import toast from 'react-hot-toast'
 import { MdCategory, MdMessage } from 'react-icons/md'
 import { ProductWithTagsAndCategory } from '../../../product/all/page'
 import { AiFillMessage } from 'react-icons/ai'
+import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -215,6 +216,52 @@ function AddAccountPage() {
                 onFocus={() => clearErrors('usingUser')}
                 className='w-full max-w-[350px]'
               />
+            )}
+          </div>
+        )}
+        {/* Expire */}
+        {account?.usingUser && (
+          <div
+            className='inline-block text-sm rounded-lg px-3 py-2 bg-white mb-4'
+            title='Expire (d/m/y)'>
+            <span className='font-semibold'>Expire: </span>
+            {account.expire ? (
+              <>
+                <span
+                  className={`${
+                    new Date() > new Date(account.expire || '') ? 'text-red-500 font-semibold' : ''
+                  }`}>
+                  {account.expire ? formatTime(account.expire) : '-'}
+                </span>{' '}
+                {account?.begin &&
+                  account?.expire &&
+                  usingPercentage(account.begin, account.expire) < 100 && (
+                    <span
+                      className={`font-semibold text-xs ${getColorClass(account.begin, account.expire)}`}
+                      title={`${
+                        usingPercentage(account.begin, account.expire) >= 93
+                          ? '>= 93'
+                          : usingPercentage(account.begin, account.expire) >= 80
+                          ? '>= 80'
+                          : ''
+                      }`}>
+                      (<span>{usingPercentage(account.begin, account.expire) + '%'}</span>
+                      {' - '}
+                      <span>
+                        {account.expire && getTimeRemaining(account.expire)
+                          ? `${getTimeRemaining(account.expire)}`
+                          : 'Expired'}
+                      </span>
+                      )
+                    </span>
+                  )}{' '}
+              </>
+            ) : (
+              <span className='text-slate-500'>
+                +{account.times.days ? account.times.days + 'd' : ''}
+                {account.times.hours ? ':' + account.times.hours + 'h' : ''}
+                {account.times.minutes ? ':' + account.times.minutes + 'm' : ''}
+              </span>
             )}
           </div>
         )}
