@@ -15,8 +15,6 @@ import '@/models/OrderModel'
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Account -')
 
-  console.log('id: ', id)
-
   try {
     // connect to database
     await connectDatabase()
@@ -123,7 +121,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
                 info,
                 renew,
                 times,
-                active: active === 'on',
+                active,
               },
             },
           },
