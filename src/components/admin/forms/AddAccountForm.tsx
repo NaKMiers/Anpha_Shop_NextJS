@@ -121,10 +121,10 @@ function AddAccountForm({
     // Hàm tạo kết quả từ thông tin trích xuất
     const generateResults = (data: any) => {
       return data.slots.map((slot: any) => {
-        return `✅Email: ${data.email}
-✅Password: ${data.password}
-✅Slot: ${slot.slot}
-✅Pin: ${slot.pin}
+        return `✅ Email: ${data.email}
+✅ Password: ${data.password}
+✅ Slot: ${slot.slot}
+✅ Pin: ${slot.pin}
 
 ${data.additionalInfo}`
       })
