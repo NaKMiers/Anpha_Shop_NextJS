@@ -20,7 +20,6 @@ interface AddAccountFormProps {
   handleDuplicateForm: (form: any) => void
   handleRemoveForm: (id: number) => void
   defaultValues: any
-  index: number
   className?: string
 }
 
@@ -31,7 +30,6 @@ function AddAccountForm({
   handleDuplicateForm,
   handleRemoveForm,
   defaultValues,
-  index,
   className = '',
 }: AddAccountFormProps) {
   // states
@@ -340,13 +338,11 @@ ${data.additionalInfo}`
           Clear
         </button>
 
-        {index === 0 && (
-          <button
-            className='px-4 py-2 text-yellow-400 border border-yellow-400 hover:bg-yellow-400 hover:text-white rounded-lg font-semibold common-transition'
-            onClick={handleGenerate}>
-            Generate
-          </button>
-        )}
+        <button
+          className='px-4 py-2 text-yellow-400 border border-yellow-400 hover:bg-yellow-400 hover:text-white rounded-lg font-semibold common-transition'
+          onClick={handleGenerate}>
+          Generate
+        </button>
 
         {forms.length > 1 && (
           <button

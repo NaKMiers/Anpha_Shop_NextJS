@@ -136,7 +136,7 @@ function AddAccountPage() {
       <Divider size={5} />
 
       <div className={`grid grid-cols-1 ${forms.length > 1 ? 'md:grid-cols-2' : ''} gap-x-21 gap-y-10`}>
-        {forms.map((form, index) => (
+        {forms.map(form => (
           <AddAccountForm
             groupTypes={groupTypes}
             forms={forms}
@@ -144,7 +144,6 @@ function AddAccountPage() {
             handleDuplicateForm={handleDuplicateForm}
             handleRemoveForm={handleRemoveForm}
             defaultValues={defaultValues}
-            index={index}
             key={form.id}
           />
         ))}
