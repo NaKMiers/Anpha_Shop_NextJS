@@ -74,7 +74,7 @@ function AddAccountPage() {
       ...prev,
       {
         ...form,
-        id: new Date().getTime(),
+        id: new Date().getTime() + Math.random(),
       },
     ])
   }, [])
@@ -109,6 +109,8 @@ function AddAccountPage() {
     getAllTypes()
   }, [])
 
+  console.log('forms', forms)
+
   return (
     <div className='max-w-1200 mx-auto'>
       {/* MARK: Admin Header */}
@@ -125,7 +127,7 @@ function AddAccountPage() {
         {forms.length > 1 && (
           <button
             className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-slate-300 text-slate-300 hover:bg-slate-300 hover:text-dark common-transition'
-            onClick={() => setForms([defaultValues])}>
+            onClick={() => setForms(prev => [prev[0]])}>
             Remove All
           </button>
         )}
@@ -134,7 +136,7 @@ function AddAccountPage() {
       <Divider size={5} />
 
       <div className={`grid grid-cols-1 ${forms.length > 1 ? 'md:grid-cols-2' : ''} gap-x-21 gap-y-10`}>
-        {forms.map(form => (
+        {forms.map((form, index) => (
           <AddAccountForm
             groupTypes={groupTypes}
             forms={forms}
@@ -142,6 +144,7 @@ function AddAccountPage() {
             handleDuplicateForm={handleDuplicateForm}
             handleRemoveForm={handleRemoveForm}
             defaultValues={defaultValues}
+            index={index}
             key={form.id}
           />
         ))}

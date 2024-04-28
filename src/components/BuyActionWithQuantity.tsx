@@ -9,10 +9,12 @@ import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import mongoose from 'mongoose'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaCartPlus, FaMinus, FaPlus } from 'react-icons/fa'
+import { FaCartPlus, FaEdit, FaMinus, FaPlus, FaRedditAlien } from 'react-icons/fa'
+import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 
 interface BuyActionWithQuantityProps {
@@ -272,6 +274,13 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
             <FaCartPlus size={22} className='text-white wiggle' />
           )}
         </button>
+        {['admin', 'editor'].includes(curUser?.role) && (
+          <Link
+            href={`/admin/product/all?_id=${product?._id}`}
+            className='flex items-center justify-center h-[38px] border border-yellow-400 rounded-md px-3 group hover:bg-primary-600 common-transition'>
+            <MdEdit size={22} className='wiggle text-yellow-400' />
+          </Link>
+        )}
       </div>
     </>
   )

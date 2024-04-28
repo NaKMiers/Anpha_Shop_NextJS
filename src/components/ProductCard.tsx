@@ -17,6 +17,7 @@ import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
+import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import Price from './Price'
 
@@ -284,6 +285,13 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
             <FaCartPlus size={18} className='text-white wiggle' />
           )}
         </button>
+        {['admin', 'editor'].includes(curUser?.role) && (
+          <Link
+            href={`/admin/product/all?_id=${product?._id}`}
+            className='flex items-center justify-center h-[34px] border border-yellow-400 rounded-md px-3 group hover:bg-primary-600 common-transition'>
+            <MdEdit size={18} className='wiggle text-yellow-400' />
+          </Link>
+        )}
       </div>
     </div>
   )

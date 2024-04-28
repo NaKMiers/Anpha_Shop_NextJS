@@ -2,7 +2,6 @@
 
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
-import { useAppDispatch } from '@/libs/hooks'
 import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { FaCheck, FaInfo } from 'react-icons/fa'
@@ -21,6 +20,7 @@ interface AddAccountFormProps {
   handleDuplicateForm: (form: any) => void
   handleRemoveForm: (id: number) => void
   defaultValues: any
+  index: number
   className?: string
 }
 
@@ -31,11 +31,9 @@ function AddAccountForm({
   handleDuplicateForm,
   handleRemoveForm,
   defaultValues,
+  index,
   className = '',
 }: AddAccountFormProps) {
-  // hooks
-  const dispatch = useAppDispatch()
-
   // states
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -86,6 +84,72 @@ function AddAccountForm({
     [setError]
   )
 
+  const handleGenerate = useCallback(() => {
+    // Hàm trích xuất thông tin từ chuỗi
+    const extractInformation = (inputString: string) => {
+      let infoPart = inputString
+      let additionalInfoPart = ''
+
+      // Kiểm tra nếu có dấu '==='
+      const splitIndex = inputString.indexOf('===')
+      if (splitIndex !== -1) {
+        infoPart = inputString.slice(0, splitIndex)
+        additionalInfoPart = inputString.slice(splitIndex + 3).trim()
+      }
+
+      const regexEmail = /(\S+@\S+\.\S+)/
+      const regexPassword = /(?:🔐 pass:|password:|pass:|pw:|🔐)\s*(\S+)/i
+      const regexSlots = /\((\d+)\)\s*(.+?)\s*-\s*(\d+)/g
+
+      const emailMatch = infoPart.match(regexEmail)
+      const passwordMatch = infoPart.match(regexPassword)
+      const slotsMatches = Array.from(infoPart.matchAll(regexSlots))
+
+      const email = emailMatch ? emailMatch[1] : ''
+      const password = passwordMatch ? passwordMatch[1] : ''
+      const slots = slotsMatches.map(match => ({
+        slot: match[2],
+        pin: match[3],
+      }))
+
+      // Trích xuất các phần thông tin bổ sung
+      const additionalInfo = additionalInfoPart.trim()
+
+      return { email, password, slots, additionalInfo }
+    }
+
+    // Hàm tạo kết quả từ thông tin trích xuất
+    const generateResults = (data: any) => {
+      return data.slots.map((slot: any) => {
+        return `✅Email: ${data.email}
+✅Password: ${data.password}
+✅Slot: ${slot.slot}
+✅Pin: ${slot.pin}
+
+${data.additionalInfo}`
+      })
+    }
+
+    // Trích xuất thông tin từ chuỗi
+    const extractedInfo = extractInformation(getValues('info'))
+
+    // Tạo các kết quả từ thông tin trích xuất
+    const results = generateResults(extractedInfo)
+
+    // remove current form
+    if (!!results.length) {
+      handleRemoveForm(form.id)
+    }
+
+    // handleRemoveForm(form.id)
+    results.forEach((result: string[]) =>
+      handleDuplicateForm({
+        ...getValues(),
+        info: result,
+      })
+    )
+  }, [getValues, handleDuplicateForm, handleRemoveForm, form.id])
+
   // MARK: Submit
   // send request to server to add account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
@@ -108,6 +172,7 @@ function AddAccountForm({
       setLoading(false)
     }
   }
+  console.log('form', form._id)
 
   return (
     <div className={`${className}`}>
@@ -274,6 +339,14 @@ function AddAccountForm({
           onClick={() => reset({ ...defaultValues, id: new Date().getTime() })}>
           Clear
         </button>
+
+        {index === 0 && (
+          <button
+            className='px-4 py-2 text-yellow-400 border border-yellow-400 hover:bg-yellow-400 hover:text-white rounded-lg font-semibold common-transition'
+            onClick={handleGenerate}>
+            Generate
+          </button>
+        )}
 
         {forms.length > 1 && (
           <button

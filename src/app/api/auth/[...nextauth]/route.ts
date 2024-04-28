@@ -12,7 +12,7 @@ import TwitterProvider from 'next-auth/providers/twitter'
 // Models: User
 import '@/models/UserModel'
 
-const handler = NextAuth({
+export const authOptions: any = {
   secret: process.env.NEXTAUTH_SECRET!,
   jwt: {
     secret: process.env.NEXTAUTH_SECRET!,
@@ -90,7 +90,7 @@ const handler = NextAuth({
     // ...add providers here
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, trigger, session }: { token: any; user: any; trigger: any; session: any }) {
       console.log('- JWT -')
       // console.log('jwt-xxxx', token)
       // console.log('jwt-trigger', trigger)
@@ -118,7 +118,7 @@ const handler = NextAuth({
       return token
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       console.log('- Session -')
       // console.log('session-xxxx', session)
       // console.log('session-token', token)
@@ -186,6 +186,8 @@ const handler = NextAuth({
       }
     },
   },
-})
+}
+
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
