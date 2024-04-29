@@ -9,7 +9,6 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
-import LoadingHeading from '@/components/loading/LoadingHeading'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
@@ -49,8 +48,8 @@ async function HomePage() {
     '@context': 'http://schema.org',
     '@type': 'WebSite',
     name: 'Anpha Shop',
-    logo: `${process.env.APP_URL}/logo.jpg`,
-    url: `${process.env.APP_URL}`,
+    logo: `${process.env.NEXT_PUBLIC_APP_URL}/logo.jpg`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL}`,
     inLanguage: 'vi',
     description:
       'Anpha Shop - Shop tài khoản uy tín, chất lượng hàng đầu tại Việt Nam. Đặc biệt, Account tại Anpha Shop hiện là đang là gói account có giá cạnh nhất hàng đầu - chỉ là 9.000VND/tháng',

@@ -1,5 +1,5 @@
 import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
-import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
+import { formatTime, getColorClass, getTimeRemaining, isToday, usingPercentage } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
@@ -98,7 +98,12 @@ function AccountItem({
           {/* Begin */}
           <p className='text-sm' title='Begin (d/m/y)'>
             <span className='font-semibold'>Begin: </span>
-            <span>{data.begin ? formatTime(data.begin) : '-'}</span>
+            <span
+              className={
+                data.begin && isToday(new Date(data.begin)) ? 'font-semibold text-slate-600' : ''
+              }>
+              {data.begin ? formatTime(data.begin) : '-'}
+            </span>
           </p>
 
           {/* Expire */}
