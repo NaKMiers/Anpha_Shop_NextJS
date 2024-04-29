@@ -157,8 +157,6 @@ function AddVoucherPage() {
   // handle send request to server to add voucher
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      console.log('data', data)
-
       // validate form
       if (!handleValidate(data)) return
 

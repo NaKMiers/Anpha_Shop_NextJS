@@ -31,8 +31,6 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
   const [cmts, setCmts] = useState<FullyComment[]>(comments || [])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  console.log(cmts)
-
   // forms
   const {
     register,
@@ -54,8 +52,6 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
       // check if comment is valid
       if (productId) {
         setIsLoading(true)
-
-        console.log(data)
 
         try {
           // send request to add comment

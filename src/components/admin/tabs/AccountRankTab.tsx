@@ -35,7 +35,6 @@ function AccountRankTab({ className = '' }: AccountRankTabProps) {
 
         const query = `?limit=no-limit&status=done&sort=createdAt|-1&from-to=${from}|`
         const { orders } = await getAllOrdersApi(query)
-        console.log('orders: ', orders)
 
         const { categories } = await getForceAllCagetoriesApi()
         const accounts = rankAccountRevenue(orders, categories)

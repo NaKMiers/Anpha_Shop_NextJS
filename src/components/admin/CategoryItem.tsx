@@ -30,8 +30,6 @@ function CategoryItem({
   // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
-  console.log('data', data)
-
   return (
     <>
       <div

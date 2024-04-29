@@ -65,7 +65,6 @@ export async function GET() {
     // create category list with corresponding products
     const productsByCategoryGroups = categories
       .map(category => {
-        console.log('category: ', category.title)
         const productsByCtg = products
           .filter(product => product.category._id.toString() === category._id.toString())
           .sort((a, b) => b.sold - a.sold)
@@ -81,8 +80,6 @@ export async function GET() {
           b.products.reduce((total, product) => total + product.sold, 0) -
           a.products.reduce((total, product) => total + product.sold, 0)
       )
-
-    console.log('productsByCategoryGroups: ', productsByCategoryGroups)
 
     // shuffle products to get random
     const shuffledProducts = shuffleArray([...products.filter(product => product.stock > 0)])

@@ -48,8 +48,6 @@ export async function GET(req: NextRequest) {
       orArray.push({ stock: num })
     }
 
-    console.log('onArray', orArray)
-
     // custom search
     if (
       ['sold out', 'soldout', 'out of stock', 'outofstock', 'hết hàng'].includes(search.toLowerCase())

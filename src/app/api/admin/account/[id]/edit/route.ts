@@ -49,8 +49,6 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
         'items.accounts._id': new mongoose.Types.ObjectId(id),
       }).lean()
 
-      console.log('order', order)
-
       // check if order exists
       if (order) {
         // get related account from order

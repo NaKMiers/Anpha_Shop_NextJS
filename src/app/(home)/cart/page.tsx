@@ -264,7 +264,6 @@ function CartPage() {
         localStorage.setItem('checkout', JSON.stringify(checkout))
 
         // remove cart items if is LOCAL cart
-        console.log('localCartItems', localCartItems)
         const asd = localCartItems.filter(
           (item: FullyCartItem) => !selectedItems.map(i => i._id).includes(item._id)
         )

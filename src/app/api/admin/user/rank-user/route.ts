@@ -60,8 +60,6 @@ export async function GET(req: NextRequest) {
       })
     )
 
-    console.log('spentUser', spentUser)
-
     return NextResponse.json({ spentUser }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })

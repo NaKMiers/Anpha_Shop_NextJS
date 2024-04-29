@@ -57,7 +57,6 @@ export const getBestSellerProductsApi = async () => {
 
 // [GET]
 export const searchProductsApi = async (search: string) => {
-  console.log(`/api/product/search?search=${search}`)
   // no-cache
   const res = await fetch(`/api/product/search?search=${search}`, { cache: 'no-store' })
 

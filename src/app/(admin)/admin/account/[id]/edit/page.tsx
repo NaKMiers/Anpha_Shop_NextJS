@@ -158,7 +158,6 @@ function AddAccountPage() {
   // MARK: Submit
   // send request to server to edit account
   const onSubmit: SubmitHandler<FieldValues> = async data => {
-    console.log('data', data)
     if (!handleValidate(data)) return
 
     // start loading

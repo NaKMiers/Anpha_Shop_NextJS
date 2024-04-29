@@ -17,10 +17,7 @@ export async function PATCH(req: NextRequest) {
     await connectDatabase()
 
     // get products to sync
-    const asd = await req.json()
-    const { all, ids } = asd
-
-    console.log('asd', asd)
+    const { all, ids } = await req.json()
 
     // if all is true, sync all products
     let products: IProduct[] = []

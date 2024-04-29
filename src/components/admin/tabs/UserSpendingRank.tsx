@@ -35,7 +35,6 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
 
       try {
         const { spentUser } = await getRankUsersApi()
-        console.log('spentUser', spentUser)
 
         setUsers(spentUser)
         setShowUsers(spentUser.slice(0, 20))

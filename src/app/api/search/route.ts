@@ -95,8 +95,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('Filter', filter)
-
     // find products by category base on search params
     let products: FullyProduct[] = await ProductModel.find(filter)
       .populate('flashsale')

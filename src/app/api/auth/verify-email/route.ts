@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
 
     // get email to send verification email
     const { email } = await req.json()
-    console.log('Email: ', email)
 
     // get email and token from query
     const searchParams = req.nextUrl.searchParams
@@ -59,7 +58,6 @@ export async function POST(req: NextRequest) {
 
     // token is exist => verify email
     const decode = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
-    console.log('decode:', decode)
 
     // check edcode is exist
     if (!decode) {

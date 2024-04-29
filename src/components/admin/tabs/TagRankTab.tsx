@@ -22,8 +22,6 @@ function TagRankTab({ className = '' }: TagRankTabProps) {
         const query = '?limit=no-limit&sort=createdAt|-1'
         const { products } = await getAllProductsApi(query)
 
-        console.log('products', products)
-
         // Tag Sold Rank
         const tagSoldMap: { [key: string]: ITag & { sold: number } } = {}
         products.forEach((product: any) => {

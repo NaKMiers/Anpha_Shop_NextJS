@@ -164,8 +164,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       // send request to search products
       const { products } = await searchProductsApi(searchValue)
 
-      console.log('products', products)
-
       // set search results
       setSearchResults(products)
     } catch (err: any) {
@@ -188,8 +186,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       setSearchResults(null)
     }
   }, [searchValue, handleSearch])
-
-  console.log('searchResults', searchResults)
 
   return (
     <header

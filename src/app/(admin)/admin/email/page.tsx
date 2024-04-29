@@ -46,8 +46,6 @@ function EmailPage() {
     try {
       const res = await fetch(`/api/admin/test/email?type=${type}`)
       const data = await res.json()
-
-      console.log('data: ', data.mailRes)
     } catch (error) {
       console.error(error)
     } finally {

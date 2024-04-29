@@ -406,8 +406,6 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
     })
   })
 
-  console.log('accs: ', accs)
-
   const categoryAccountsMap: { [key: string]: any[] } = {}
   accs.forEach((acc: any) => {
     const slug: string = acc.category.slug
@@ -418,8 +416,6 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
       categoryAccountsMap[slug].push(acc)
     }
   })
-
-  console.log('categoryAccountsMap: ', categoryAccountsMap)
 
   const groupAccountsByEmail = (categoryAccountsMap: { [key: string]: any[] }) => {
     const groupedAccountsByEmail: { [key: string]: { [key: string]: any[] } } = {}
@@ -453,7 +449,6 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
 
   // Sử dụng hàm để nhóm các accounts lại dựa trên email
   const groupedAccountsByEmail = groupAccountsByEmail(categoryAccountsMap)
-  console.log('groupedAccountsByEmail: ', groupedAccountsByEmail)
 
   const accounts = Object.entries(groupedAccountsByEmail).map(([_, accountByEmailGroups]) => {
     return Object.entries(accountByEmailGroups)
@@ -467,8 +462,6 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
       })
       .sort((a, b) => b.revenue - a.revenue)
   })
-
-  console.log('accounts-unflated: ', accounts)
 
   return accounts.flat()
 }

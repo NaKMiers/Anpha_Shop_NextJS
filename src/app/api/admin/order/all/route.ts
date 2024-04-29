@@ -102,9 +102,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('Filter: ', filter)
-    console.log('Sort: ', sort)
-
     // get amount of account
     const amount = await OrderModel.countDocuments(filter)
 

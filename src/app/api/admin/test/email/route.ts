@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
   const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
   const type = params.type[0]
 
-  console.log('type:', type)
   const email = 'diwas118151@gmail.com'
 
   switch (type) {

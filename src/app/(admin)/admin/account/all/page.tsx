@@ -179,8 +179,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   // handle opimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
-      console.log('data', data)
-
       // reset page
       if (searchParams?.page) {
         delete searchParams.page

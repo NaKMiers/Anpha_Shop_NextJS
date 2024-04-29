@@ -97,8 +97,6 @@ function EditCategoryPage() {
   // edit category
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
-      console.log('category:', category)
-      console.log('file:', file)
       if (!category?.logo && !file) {
         return toast.error('Please select a logo')
       }

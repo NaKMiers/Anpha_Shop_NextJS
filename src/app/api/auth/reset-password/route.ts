@@ -29,12 +29,8 @@ export async function PATCH(req: NextRequest) {
 
     // check if email and token are exist
     if (token) {
-      console.log('token:', token)
-      console.log('newPassword:', newPassword)
-
       // Verify the token
       const decode = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
-      console.log('decode:', decode)
 
       // check edcode is exist
       if (!decode) {

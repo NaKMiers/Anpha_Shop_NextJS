@@ -50,8 +50,6 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
       if (comment._id && curUser?._id) {
         setIsLoading(true)
 
-        console.log(data)
-
         try {
           // send request to add comment
           const { newComment, parentComment } = await replyCommentApi(comment._id, data.comment)

@@ -172,8 +172,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // senred request to server
       const { syncedProducts, message } = await syncProductsApi(ids)
 
-      console.log('syncedProducts', syncedProducts)
-
       // update products from state
       setProducts(prev =>
         prev.map(product =>
@@ -198,8 +196,6 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       setSyncingProducts([])
     }
   }, [])
-
-  console.log(products)
 
   // remove applying flashsales
   const hanldeRemoveApplyingFlashsales = useCallback(async (ids: string[]) => {

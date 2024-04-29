@@ -163,7 +163,7 @@ function UserPage() {
 
       toast.success(message)
     } catch (err: any) {
-      console.log('err', err)
+      console.log(err)
       toast.error(err.message)
       setCountDownEmail(0)
     }
@@ -179,7 +179,7 @@ function UserPage() {
 
       toast.success(message)
     } catch (err: any) {
-      console.log('err', err)
+      console.log(err)
       toast.error(err.message)
       setCountDownPhone(0)
     }

@@ -109,8 +109,6 @@ function AddAccountPage() {
     getAllTypes()
   }, [])
 
-  console.log('forms', forms)
-
   return (
     <div className='max-w-1200 mx-auto'>
       {/* MARK: Admin Header */}

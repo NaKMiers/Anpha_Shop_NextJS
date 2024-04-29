@@ -170,7 +170,6 @@ ${data.additionalInfo}`
       setLoading(false)
     }
   }
-  console.log('form', form._id)
 
   return (
     <div className={`${className}`}>
