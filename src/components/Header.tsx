@@ -21,10 +21,9 @@ import Menu from './Menu'
 
 interface HeaderProps {
   isStatic?: boolean
-  hideSearch?: boolean
 }
 
-function Header({ isStatic, hideSearch }: HeaderProps) {
+function Header({ isStatic }: HeaderProps) {
   // hooks
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
@@ -45,6 +44,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
   const [searchResults, setSearchResults] = useState<any[] | null>(null)
   const searchTimeout = useRef<any>(null)
+  const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
 
   // MARK: Side Effects
   // update user session
@@ -130,22 +130,24 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   // show and hide header on scroll
   useEffect(() => {
     const handleScroll = () => {
-      let scrollTop = window.scrollY
+      if (enableHideHeader) {
+        let scrollTop = window.scrollY
 
-      // scroll down
-      if (scrollTop >= 21) {
-        // scroll top
-        if (scrollTop > lastScrollTop.current) {
-          setIsShow(true)
+        // scroll down
+        if (scrollTop >= 21) {
+          // scroll top
+          if (scrollTop > lastScrollTop.current) {
+            setIsShow(true)
+          } else {
+            setIsShow(false)
+            setIsOpenMenu(false)
+          }
+
+          lastScrollTop.current = scrollTop
         } else {
           setIsShow(false)
           setIsOpenMenu(false)
         }
-
-        lastScrollTop.current = scrollTop
-      } else {
-        setIsShow(false)
-        setIsOpenMenu(false)
       }
     }
 
@@ -184,6 +186,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       }, 500)
     } else {
       setSearchResults(null)
+      setEnableHideHeader(true)
     }
   }, [searchValue, handleSearch])
 
@@ -230,98 +233,97 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         </div>
 
         {/* Search */}
-        {!hideSearch && (
-          <div
-            className={`${openSearch ? 'max-w-full' : 'max-w-0 p-0'} ${
-              !searchResults ? 'overflow-hidden' : ''
-            } lg:max-w-[500px] relative mr-2.5 w-full h-[40px] flex items-center justify-center text-dark duration-300 transition-all`}>
-            <input
-              type='text'
-              placeholder='Tìm kiếm...'
-              className='w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-l-lg bg-white'
-              value={searchValue}
-              onChange={e => setSearchValue(e.target.value)}
-            />
-            <Link
-              href={`/search?search=${searchValue}`}
-              onClick={e => !searchValue && e.preventDefault()}
-              className={`group h-full w-[40px] flex justify-center items-center rounded-r-lg bg-white ${
-                searchLoading ? 'pointer-events-none' : ''
-              }`}>
-              {searchLoading ? (
-                <RiDonutChartFill size={20} className='animate-spin text-slate-300' />
-              ) : (
-                <FaSearch size={16} className='wiggle' />
-              )}
-            </Link>
+        <div
+          className={`${openSearch ? 'max-w-full' : 'max-w-0 p-0'} ${
+            !searchResults ? 'overflow-hidden' : ''
+          } lg:max-w-[500px] relative mr-2.5 w-full h-[40px] flex items-center justify-center text-dark duration-300 transition-all`}>
+          <input
+            type='text'
+            placeholder='Tìm kiếm...'
+            className='appearance-none w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-l-lg bg-white'
+            value={searchValue}
+            onChange={e => setSearchValue(e.target.value)}
+            onFocus={() => setEnableHideHeader(false)}
+            onBlur={() => setEnableHideHeader(true)}
+          />
+          <Link
+            href={`/search?search=${searchValue}`}
+            onClick={e => !searchValue && e.preventDefault()}
+            className={`group h-full w-[40px] flex justify-center items-center rounded-r-lg bg-white ${
+              searchLoading ? 'pointer-events-none' : ''
+            }`}>
+            {searchLoading ? (
+              <RiDonutChartFill size={20} className='animate-spin text-slate-300' />
+            ) : (
+              <FaSearch size={16} className='wiggle' />
+            )}
+          </Link>
 
-            <ul
-              className={`${
-                searchResults ? 'max-h-[500px] p-2' : 'max-h-0 p-0'
-              } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}>
-              {searchResults?.length ? (
-                searchResults.map(product => (
-                  <Link
-                    href={`/${product.slug}`}
-                    key={product._id}
-                    className='flex gap-4 py-2 items-start rounded-lg p-2 hover:bg-sky-200 common-transition'>
-                    <div className='relative aspect-video flex-shrink-0'>
-                      {product.stock <= 0 && (
-                        <div className='absolute top-0 left-0 right-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
-                          <Image
-                            className='animate-wiggle -mt-1'
-                            src='/images/sold-out.jpg'
-                            width={28}
-                            height={28}
-                            alt='sold-out'
-                          />
-                        </div>
-                      )}
-                      <Image
-                        className='rounded-md'
-                        src={product.images[0]}
-                        width={70}
-                        height={70}
-                        alt='product'
-                      />
-
-                      {product.flashsale && (
-                        <PiLightningFill
-                          className='absolute -top-1.5 left-1 text-yellow-400 animate-bounce'
-                          size={16}
+          <ul
+            className={`${
+              searchResults ? 'max-h-[500px] p-2' : 'max-h-0 p-0'
+            } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}>
+            {searchResults?.length ? (
+              searchResults.map(product => (
+                <Link
+                  href={`/${product.slug}`}
+                  key={product._id}
+                  className='flex gap-4 py-2 items-start rounded-lg p-2 hover:bg-sky-200 common-transition'>
+                  <div className='relative aspect-video flex-shrink-0'>
+                    {product.stock <= 0 && (
+                      <div className='absolute top-0 left-0 right-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+                        <Image
+                          className='animate-wiggle -mt-1'
+                          src='/images/sold-out.jpg'
+                          width={28}
+                          height={28}
+                          alt='sold-out'
                         />
-                      )}
-                    </div>
+                      </div>
+                    )}
+                    <Image
+                      className='rounded-md'
+                      src={product.images[0]}
+                      width={70}
+                      height={70}
+                      alt='product'
+                    />
 
-                    <p className='w-full text-ellipsis line-clamp-2 text-dark font-body text-sm tracking-wide leading-5 -mt-0.5'>
-                      {product.title}
-                    </p>
-                  </Link>
-                ))
-              ) : (
-                <p className='text-sm text-center'>0 kết quả tìm thấy</p>
-              )}
-            </ul>
-          </div>
-        )}
+                    {product.flashsale && (
+                      <PiLightningFill
+                        className='absolute -top-1.5 left-1 text-yellow-400 animate-bounce'
+                        size={16}
+                      />
+                    )}
+                  </div>
+
+                  <p className='w-full text-ellipsis line-clamp-2 text-dark font-body text-sm tracking-wide leading-5 -mt-0.5'>
+                    {product.title}
+                  </p>
+                </Link>
+              ))
+            ) : (
+              <p className='text-sm text-center'>0 kết quả tìm thấy</p>
+            )}
+          </ul>
+        </div>
 
         {/* MARK: Nav */}
         <div className='flex-shrink-0 hidden md:flex items-center gap-4'>
-          {!hideSearch && (
-            <button
-              className='flex lg:hidden group h-full justify-center items-center'
-              onClick={() => {
-                setOpenSearch(prev => !prev)
-                setSearchResults(null)
-                setSearchValue('')
-              }}>
-              {openSearch ? (
-                <IoClose size={30} className='wiggle -mr-1.5' />
-              ) : (
-                <FaSearch size={20} className='wiggle' />
-              )}
-            </button>
-          )}
+          <button
+            className='flex lg:hidden group h-full justify-center items-center'
+            onClick={() => {
+              setOpenSearch(prev => !prev)
+              setSearchResults(null)
+              setSearchValue('')
+              setEnableHideHeader(true)
+            }}>
+            {openSearch ? (
+              <IoClose size={30} className='wiggle -mr-1.5' />
+            ) : (
+              <FaSearch size={20} className='wiggle' />
+            )}
+          </button>
 
           <Link href='/cart' prefetch={false} className='relative wiggle'>
             <FaCartShopping size={24} />
@@ -361,21 +363,20 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
 
         {/* Menu Button */}
         <div className='md:hidden flex items-center'>
-          {!hideSearch && (
-            <button
-              className='flex lg:hidden group h-full w-[40px] justify-center items-center'
-              onClick={() => {
-                setOpenSearch(prev => !prev)
-                setSearchResults(null)
-                setSearchValue('')
-              }}>
-              {openSearch ? (
-                <IoClose size={30} className='wiggle' />
-              ) : (
-                <FaSearch size={20} className='wiggle' />
-              )}
-            </button>
-          )}
+          <button
+            className='hidden sm:flex lg:hidden group h-full w-[40px] justify-center items-center'
+            onClick={() => {
+              setOpenSearch(prev => !prev)
+              setSearchResults(null)
+              setSearchValue('')
+              setEnableHideHeader(true)
+            }}>
+            {openSearch ? (
+              <IoClose size={30} className='wiggle' />
+            ) : (
+              <FaSearch size={20} className='wiggle' />
+            )}
+          </button>
 
           <button
             className='flex justify-center items-center w-[40px] h-[40px]'
