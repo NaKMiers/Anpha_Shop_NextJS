@@ -39,7 +39,6 @@ export async function GET(req: NextRequest) {
         if (key === 'search') {
           const searchFields = [
             'title',
-            'description',
             'slug',
             'tags.title',
             'tags.slug',

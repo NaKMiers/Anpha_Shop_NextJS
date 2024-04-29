@@ -24,15 +24,7 @@ export async function GET(req: NextRequest) {
     let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
     // build filter
-    const searchFields = [
-      'title',
-      'description',
-      'slug',
-      'tags.title',
-      'tags.slug',
-      'category.title',
-      'category.slug',
-    ]
+    const searchFields = ['title', 'slug', 'tags.title', 'tags.slug', 'category.title', 'category.slug']
 
     // create $or array for text fields
     const orArray: any[] = searchFields.map(field => ({
