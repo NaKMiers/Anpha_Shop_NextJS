@@ -21,9 +21,10 @@ import Menu from './Menu'
 
 interface HeaderProps {
   isStatic?: boolean
+  hideSearch?: boolean
 }
 
-function Header({ isStatic }: HeaderProps) {
+function Header({ isStatic, hideSearch }: HeaderProps) {
   // hooks
   const dispatch = useAppDispatch()
   const cartItems = useAppSelector(state => state.cart.items)
@@ -45,6 +46,7 @@ function Header({ isStatic }: HeaderProps) {
   const [searchResults, setSearchResults] = useState<any[] | null>(null)
   const searchTimeout = useRef<any>(null)
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
+  const [openResults, setOpenResults] = useState<boolean>(false)
 
   // MARK: Side Effects
   // update user session
@@ -240,11 +242,17 @@ function Header({ isStatic }: HeaderProps) {
           <input
             type='text'
             placeholder='Tìm kiếm...'
-            className='appearance-none w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-l-lg bg-white'
+            className='appearance-none w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-0 rounded-l-lg bg-white'
             value={searchValue}
             onChange={e => setSearchValue(e.target.value)}
-            onFocus={() => setEnableHideHeader(false)}
-            onBlur={() => setEnableHideHeader(true)}
+            onFocus={() => {
+              setEnableHideHeader(false)
+              setOpenResults(true)
+            }}
+            onBlur={() => {
+              setEnableHideHeader(true)
+              setOpenResults(false)
+            }}
           />
           <Link
             href={`/search?search=${searchValue}`}
@@ -261,7 +269,7 @@ function Header({ isStatic }: HeaderProps) {
 
           <ul
             className={`${
-              searchResults ? 'max-h-[500px] p-2' : 'max-h-0 p-0'
+              searchResults && openResults ? 'max-h-[500px] p-2' : 'max-h-0 p-0'
             } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}>
             {searchResults?.length ? (
               searchResults.map(product => (
@@ -364,7 +372,9 @@ function Header({ isStatic }: HeaderProps) {
         {/* Menu Button */}
         <div className='md:hidden flex items-center'>
           <button
-            className='hidden sm:flex lg:hidden group h-full w-[40px] justify-center items-center'
+            className={`${
+              hideSearch ? 'hidden' : ''
+            } sm:flex lg:hidden group h-full w-[40px] justify-center items-center`}
             onClick={() => {
               setOpenSearch(prev => !prev)
               setSearchResults(null)
