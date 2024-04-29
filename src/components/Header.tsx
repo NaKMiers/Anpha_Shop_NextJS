@@ -262,7 +262,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
               {searchResults?.length ? (
                 searchResults.map(product => (
                   <Link
-                    href='/'
+                    href={`/${product.slug}`}
                     key={product._id}
                     className='flex gap-4 py-2 items-start rounded-lg p-2 hover:bg-sky-200 common-transition'>
                     <div className='relative aspect-video flex-shrink-0'>
