@@ -236,8 +236,8 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         {/* Search */}
         {!hideSearch && (
           <div
-            className={`${
-              openSearch ? 'max-w-full' : 'max-w-0 p-0 overflow-hidden'
+            className={`${openSearch ? 'max-w-full' : 'max-w-0 p-0'} ${
+              !searchResults ? 'overflow-hidden' : ''
             } lg:max-w-[500px] relative mr-2.5 w-full h-[40px] flex items-center justify-center text-dark duration-300 transition-all`}>
             <input
               type='text'
