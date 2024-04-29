@@ -66,7 +66,7 @@ function EmailPage() {
             <h1 className='mb-2 font-semibold text-center text-dark'>{type.type}</h1>
 
             <LoadingButton
-              className='w-20 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+              className='w-20 px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
               onClick={() => handleSentMail(type.type)}
               text='Send'
               isLoading={loading}

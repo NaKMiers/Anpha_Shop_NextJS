@@ -295,7 +295,7 @@ function EditFlashSalePage() {
         </div>
 
         {/* MARK: Ready to apply products */}
-        <p className='text-light font-semibold text-xl mb-1'>Select Products</p>
+        <p className='text-white font-semibold text-xl mb-1'>Select Products</p>
         <div className='max-h-[300px] overflow-y-auto flex flex-wrap rounded-lg bg-white p-3 gap-2 mb-5'>
           {products.map(product => (
             <div
@@ -329,7 +329,7 @@ function EditFlashSalePage() {
 
         {/* MARK: Save Button */}
         <LoadingButton
-          className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+          className='px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
           text='Save'
           isLoading={isLoading}

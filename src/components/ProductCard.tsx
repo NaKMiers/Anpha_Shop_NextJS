@@ -233,7 +233,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
       {/* Badge */}
       {product.oldPrice && product.stock > 0 && (
-        <div className='absolute z-10 -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-light font-semibold font-body text-center text-[13px] leading-4'>
+        <div className='absolute z-10 -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-white font-semibold font-body text-center text-[13px] leading-4'>
           Giảm {countPercent(applyFlashSalePrice(product.flashsale, product.price), product.oldPrice)}
         </div>
       )}

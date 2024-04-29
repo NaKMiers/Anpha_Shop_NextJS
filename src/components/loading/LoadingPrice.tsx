@@ -15,7 +15,7 @@ function LoadingPrice({ big, className = '' }: LoadingPriceProps) {
         <div
           className={`loading ${
             big ? 'w-12 h-7' : 'w-10 h-6'
-          } rounded-md px-1 py-[2px] text-light font-sans`}
+          } rounded-md px-1 py-[2px] text-white font-sans`}
         />
       </div>
     </div>

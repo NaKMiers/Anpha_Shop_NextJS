@@ -34,7 +34,7 @@ function Footer() {
 
   return (
     <div className='mb-10 mt-36 px-21'>
-      <div className='max-w-1200 mx-auto bg-dark-100 text-light shadow-medium rounded-medium'>
+      <div className='max-w-1200 mx-auto bg-dark-100 text-white shadow-medium rounded-medium'>
         <div className='p-21'>
           {/* MARK: Top */}
           <div className='flex flex-col px-4 -mx-4 sm:flex-row items-center justify-between gap-3 group'>
@@ -56,23 +56,36 @@ function Footer() {
 
             {/* Social Contacts */}
             <div className='flex gap-5 sm:gap-3'>
-              <a href='https://zalo.me/0899320427' target='_blank' rel='noreferrer' className='wiggle-1'>
+              <Link
+                href='https://zalo.me/0899320427'
+                target='_blank'
+                rel='noreferrer'
+                className='wiggle-1'>
                 <Image src='/images/zalo.jpg' width={30} height={30} alt='zalo' />
-              </a>
-              <a
+              </Link>
+              <Link
                 href='https://www.messenger.com/t/170660996137305'
                 target='_blank'
                 rel='noreferrer'
                 className='wiggle-1'>
                 <Image src='/images/messenger.jpg' width={30} height={30} alt='messenger' />
-              </a>
-              <a
+              </Link>
+              <Link
                 href={`mailto:${process.env.NEXT_PUBLIC_MAIL}`}
                 target='_blank'
                 rel='noreferrer'
                 className='wiggle-1'>
                 <Image src='/images/gmail.jpg' width={30} height={30} alt='gmail' />
-              </a>
+              </Link>
+              <Link href='https://anhkhoa.info' target='_blank' rel='noreferrer' className='wiggle-1'>
+                <Image
+                  className='rounded-full'
+                  src='/images/anhkhoa.jpg'
+                  width={30}
+                  height={30}
+                  alt='gmail'
+                />
+              </Link>
             </div>
           </div>
 
@@ -181,9 +194,11 @@ function Footer() {
             <p className='text-[14px] transition-all duration-300 hover:tracking-wide'>
               © <span className='text-primary font-semibold'>Anpha.shop</span>. All rights reserved
             </p>
-            <p className='text-[14px] transition-all duration-300 hover:tracking-wide'>
+            <Link
+              href='https://anhkhoa.info'
+              className='text-[14px] transition-all duration-300 hover:tracking-wide'>
               <span className='text-primary font-semibold'>Developed by</span> Nguyen Anh Khoa
-            </p>
+            </Link>
           </div>
         </div>
       </div>

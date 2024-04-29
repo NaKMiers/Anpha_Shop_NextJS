@@ -401,7 +401,7 @@ function EditVoucherPage() {
 
         {/* MARK: Save Button */}
         <LoadingButton
-          className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+          className='mt-4 px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
           text='Save'
           isLoading={isLoading}

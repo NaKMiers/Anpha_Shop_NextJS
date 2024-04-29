@@ -127,13 +127,13 @@ function LoginPage() {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isLoading}
-            className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-light hover:bg-primary hover:text-dark common-transition font-semibold ${
+            className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-white hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading ? 'bg-slate-200 pointer-events-none' : ''
             }`}>
             {isLoading ? (
               <FaCircleNotch
                 size={18}
-                className='text-light group-hover:text-dark common-transition animate-spin'
+                className='text-white group-hover:text-dark common-transition animate-spin'
               />
             ) : (
               'Đăng nhập'

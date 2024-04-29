@@ -5,10 +5,11 @@ import LoadingInput from './LoadingInput'
 
 interface LoadingMetaProps {
   items?: boolean
+  hideSearch?: boolean
   className?: string
 }
 
-function LoadingMeta({ items, className = '' }: LoadingMetaProps) {
+function LoadingMeta({ items, hideSearch, className = '' }: LoadingMetaProps) {
   return (
     <div
       className={`bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 ${className}`}>
@@ -18,10 +19,11 @@ function LoadingMeta({ items, className = '' }: LoadingMetaProps) {
       {/* MARK: Filter */}
       <div className='grid grid-cols-12 gap-21'>
         {/* Search */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <LoadingInput className='md:max-w-[450px]' type='text' icon={FaSearch} />
-        </div>
-
+        {!hideSearch && (
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <LoadingInput className='md:max-w-[450px]' type='text' icon={FaSearch} />
+          </div>
+        )}
         {/* Price */}
         <div className='flex flex-col col-span-12 md:col-span-4'>
           <div className='flex gap-2'>

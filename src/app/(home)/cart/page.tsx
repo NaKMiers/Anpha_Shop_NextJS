@@ -494,7 +494,7 @@ function CartPage() {
               className='w-full'
             />
             <button
-              className={`rounded-lg border py-2 px-2 text-[14px] text-nowrap h-[46px] flex-shrink-0 hover:bg-primary common-transition hover:text-light ${
+              className={`rounded-lg border py-2 px-2 text-[14px] text-nowrap h-[46px] flex-shrink-0 hover:bg-primary common-transition hover:text-white ${
                 isLoading
                   ? 'border-slate-200 bg-slate-200 pointer-events-none'
                   : 'border-primary text-primary '
@@ -551,7 +551,7 @@ function CartPage() {
               ) : (
                 <Image className='wiggle-0' src='/images/logo.jpg' height={32} width={32} alt='logo' />
               )}
-              <span className='font-semibold ml-1 group-hover:text-light'>
+              <span className='font-semibold ml-1 group-hover:text-white'>
                 Mua bằng số dư {curUser?._id ? `(${formatPrice(curUser.balance || 0)})` : ''}
               </span>
             </button>
@@ -569,7 +569,7 @@ function CartPage() {
                 width={32}
                 alt='logo'
               />
-              <span className='font-semibold group-hover:text-light'>Mua nhanh với Momo</span>
+              <span className='font-semibold group-hover:text-white'>Mua nhanh với Momo</span>
             </button>
 
             <button
@@ -585,7 +585,7 @@ function CartPage() {
                 width={32}
                 alt='logo'
               />
-              <span className='font-semibold group-hover:text-light'>Mua ngay với Banking</span>
+              <span className='font-semibold group-hover:text-white'>Mua ngay với Banking</span>
             </button>
           </div>
         </div>

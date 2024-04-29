@@ -20,7 +20,7 @@ function Header({ isStatic, className }: HeaderProps) {
     <header
       className={`${
         isStatic ? 'static' : 'fixed z-50 left-0 top-0'
-      } bg-dark-100 w-full text-light shadow-medium-light transition-all duration-300 top-0 ${className}`}>
+      } bg-dark-100 w-full text-white shadow-medium-light transition-all duration-300 top-0 ${className}`}>
       {/* Main Header */}
       <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* MARK: Brand */}

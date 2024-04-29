@@ -45,24 +45,10 @@ export async function GET(req: NextRequest) {
           continue
         }
 
-        if (key === 'ctg') {
-          filter.slug = { $in: params[key] }
-          continue
-        }
-
-        if (['price', 'stock'].includes(key)) {
-          filter[key] = { $lte: +params[key][0] }
-          continue
-        }
-
         // Normal Cases ---------------------
         filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
     }
-
-    // get slug to filter categories
-    const { slug } = filter
-    delete filter.slug
 
     // get all products from database
     const products = await ProductModel.find(filter)
@@ -74,21 +60,8 @@ export async function GET(req: NextRequest) {
     // get amount of account
     const amount = await ProductModel.countDocuments(filter)
 
-    // get min - max values
-    const chops = await ProductModel.aggregate([
-      {
-        $group: {
-          _id: null,
-          minPrice: { $min: '$price' },
-          maxPrice: { $max: '$price' },
-          minStock: { $min: '$stock' },
-          maxStock: { $max: '$stock' },
-        },
-      },
-    ])
-
     // return flashsale products
-    return NextResponse.json({ products, amount, chops: chops[0] }, { status: 200 })
+    return NextResponse.json({ products, amount }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

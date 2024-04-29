@@ -149,7 +149,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className='flex lg:hidden justify-center flex-wrap mt-10 gap-x-21 gap-y-21/2 font-body tracking-wide'>
           <Link
             href={`/user/order/${checkout?.code}`}
-            className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
+            className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-primary hover:bg-secondary hover:text-white common-transition'
             onClick={e => {
               if (!curUser?._id) {
                 e.preventDefault()
@@ -164,7 +164,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </Link>
           <a
             href={`/cart`}
-            className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-slate-300 hover:bg-secondary hover:text-light common-transition'
+            className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-slate-300 hover:bg-secondary hover:text-white common-transition'
             title='Quay lại giỏ hàng'
             onClick={() => localStorage.removeItem('checkout')}>
             <IoMdArrowRoundBack size={18} className='wiggle mb-[-2px] flex-shrink-0' />
@@ -212,7 +212,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           <div className='hidden sm:flex justify-center flex-wrap mt-6 gap-x-21 gap-y-21/2 font-body tracking-wide'>
             <Link
               href={`/user/order/${checkout?.code}`}
-              className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-primary hover:bg-secondary hover:text-light common-transition'
+              className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-primary hover:bg-secondary hover:text-white common-transition'
               onClick={e => {
                 if (!curUser?._id) {
                   e.preventDefault()
@@ -227,7 +227,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             </Link>
             <a
               href={`/cart`}
-              className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-slate-300 hover:bg-secondary hover:text-light common-transition'
+              className='flex items-center justify-center gap-2 group rounded-lg px-21 py-3 bg-slate-300 hover:bg-secondary hover:text-white common-transition'
               title='Quay lại giỏ hàng'
               onClick={() => localStorage.removeItem('checkout')}>
               <IoMdArrowRoundBack size={18} className='wiggle mb-[-2px] flex-shrink-0' />

@@ -1,14 +1,12 @@
 import { FullyProduct } from '@/app/api/product/[slug]/route'
-import Meta from '@/components/Meta'
 import ProductCard from '@/components/ProductCard'
 import { getBestSellerPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
+import Heading from '@/components/Heading'
 
 async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // Data
   let products: FullyProduct[] = []
-  let amount: number = 0
-  let chops: { [key: string]: number } | null = null
   let query = ''
 
   // MARK: Get Data
@@ -21,8 +19,6 @@ async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]
 
     // destructure
     products = data.products
-    amount = data.amount
-    chops = data.chops
   } catch (err: any) {
     console.log(err)
   }
@@ -53,15 +49,18 @@ async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]
   }
 
   return (
-    <div className='pt-16'>
+    <div className='pt-8'>
       {/* MARK: Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* MARK: Meta */}
-      <Meta title={`Danh Sách Bán Chạy`} searchParams={searchParams} type='ctg' chops={chops} />
+      {/* Heading */}
+      <h2
+        className={`max-w-1200 mx-auto md:text-nowrap my-11 w-full text-white font-sans text-4xl tracking-wide font-light text-center sm:text-nowrap`}>
+        Danh Sách Bán Chạy
+      </h2>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4 mt-8'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4 mt-12'>
         {products.map(product => (
           <ProductCard product={product} key={product._id} />
         ))}

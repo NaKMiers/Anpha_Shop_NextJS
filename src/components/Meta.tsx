@@ -14,13 +14,26 @@ import Input from './Input'
 interface MetaProps {
   title?: string
   searchParams: { [key: string]: string[] | string } | undefined
-  type: 'tag' | 'ctg' | 'flash-sale'
+  type: 'tag' | 'ctg' | 'flash-sale' | 'best-seller' | 'search'
   items?: ITag[] | ICategory[]
-  chops: { [key: string]: number } | null
+  chops?: { [key: string]: number } | null
+  hideSearch?: boolean
+  hidePrice?: boolean
+  hideStock?: boolean
   className?: string
 }
 
-function Meta({ title, type, searchParams, items = [], chops, className = '' }: MetaProps) {
+function Meta({
+  title,
+  type,
+  searchParams,
+  items = [],
+  chops,
+  hidePrice,
+  hideStock,
+  hideSearch,
+  className = '',
+}: MetaProps) {
   // hooks
   const pathname = usePathname()
   const router = useRouter()
@@ -164,57 +177,63 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
       {/* MARK: Filter */}
       <div className='grid grid-cols-12 gap-21'>
         {/* Search */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <Input
-            id='search'
-            className='md:max-w-[450px]'
-            label='Search'
-            disabled={false}
-            register={register}
-            errors={errors}
-            type='text'
-            icon={FaSearch}
-            onFocus={() => clearErrors('search')}
-          />
-        </div>
+        {!hideSearch && (
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <Input
+              id='search'
+              className='md:max-w-[450px]'
+              label='Search'
+              disabled={false}
+              register={register}
+              errors={errors}
+              type='text'
+              icon={FaSearch}
+              onFocus={() => clearErrors('search')}
+            />
+          </div>
+        )}
 
         {/* Price */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='price'>
-            <span className='font-bold'>Giá: </span>
-            <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
-          </label>
-          <input
-            id='price'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
-            disabled={false}
-            type='range'
-            min={minPrice}
-            max={maxPrice}
-            value={price}
-            onChange={e => setPrice(+e.target.value)}
-          />
-        </div>
+        {!hidePrice && (
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <label htmlFor='price'>
+              <span className='font-bold'>Giá: </span>
+              <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
+            </label>
+            <input
+              id='price'
+              className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
+              type='range'
+              min={minPrice}
+              max={maxPrice}
+              value={price}
+              onChange={e => setPrice(+e.target.value)}
+            />
+          </div>
+        )}
 
         {/* Stock */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='stock'>
-            <span className='font-bold'>Còn lại: </span>
-            <span>{stock}</span> - <span>{maxStock}</span>
-          </label>
-          <input
-            id='stock'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
-            disabled={false}
-            type='range'
-            min={minStock}
-            max={maxStock}
-            value={stock}
-            onChange={e => setStock(+e.target.value)}
-          />
-        </div>
+        {!hideStock && (
+          <div className='flex flex-col col-span-12 md:col-span-4'>
+            <label htmlFor='stock'>
+              <span className='font-bold'>Còn lại: </span>
+              <span>{stock}</span> - <span>{maxStock}</span>
+            </label>
+            <input
+              id='stock'
+              className='input-range h-2 bg-slate-200 rounded-lg my-2'
+              placeholder=' '
+              disabled={false}
+              type='range'
+              min={minStock}
+              max={maxStock}
+              value={stock}
+              onChange={e => setStock(+e.target.value)}
+            />
+          </div>
+        )}
 
         {/* MARK: Item Selection */}
         {!!items.length && (
@@ -231,7 +250,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
                   items.length === selectedFilterItems.length ? [] : items.map(tag => tag.slug)
                 )
               }>
-              All
+              Tất cả
             </div>
             {items.map(item => (
               <div
@@ -294,7 +313,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
             title='Alt + Enter'
             onClick={handleSubmit(handleFilter)}>
-            Filter
+            Lọc
             <FaFilter size={14} className='ml-1 wiggle' />
           </button>
 
@@ -303,7 +322,7 @@ function Meta({ title, type, searchParams, items = [], chops, className = '' }: 
             className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
             title='Alt + R'
             onClick={handleResetFilter}>
-            Reset
+            Đặt lại
             <BiReset size={22} className='ml-1 wiggle' />
           </button>
         </div>

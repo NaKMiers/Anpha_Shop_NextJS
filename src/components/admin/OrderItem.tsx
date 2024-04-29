@@ -154,7 +154,7 @@ function OrderItem({
                   width={120}
                   alt='thumbnail'
                 />
-                <span className='py-[2px] px-[3px] rounded-full absolute top-1 right-1 bg-secondary shadow-md text-[8px] font-semibold text-light border-2 border-white'>
+                <span className='py-[2px] px-[3px] rounded-full absolute top-1 right-1 bg-secondary shadow-md text-[8px] font-semibold text-white border-2 border-white'>
                   x{item.quantity}
                 </span>
               </Link>

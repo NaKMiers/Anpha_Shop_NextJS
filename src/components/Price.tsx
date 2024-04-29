@@ -162,7 +162,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
           <div
             className={`bg-yellow-400 ${
               big ? 'text-[16px]' : 'text-[13px]'
-            } font-semibold rounded-md px-1 py-[2px] text-light font-sans`}>
+            } font-semibold rounded-md px-1 py-[2px] text-white font-sans`}>
             -{countPercent(newPrice, oldPrice)}
           </div>
         )}

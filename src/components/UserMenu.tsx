@@ -32,9 +32,9 @@ function UserMenu() {
       {data.map(({ title, href, subHref, Icon }) => (
         <li key={href}>
           <Link
-            className={`group flex items-center gap-2 group hover:bg-secondary hover:text-light hover:rounded-lg common-transition px-4 py-4 ${
+            className={`group flex items-center gap-2 group hover:bg-secondary hover:text-white hover:rounded-lg common-transition px-4 py-4 ${
               pathname === href || (subHref && pathname.startsWith(subHref))
-                ? 'bg-primary rounded-lg text-light'
+                ? 'bg-primary rounded-lg text-white'
                 : ''
             }`}
             href={href}>

@@ -54,7 +54,7 @@ function AdminMenu() {
       <div
         className={`fixed top-[20%] z-${
           open ? 30 : 20
-        } right-0 p-4 bg-dark-100 text-light rounded-tl-medium rounded-bl-medium shadow-primary shadow-md max-w-[300px] w-full common-transition ${
+        } right-0 p-4 bg-dark-100 text-white rounded-tl-medium rounded-bl-medium shadow-primary shadow-md max-w-[300px] w-full common-transition ${
           open ? 'translate-x-0 opacity-1' : 'translate-x-full opacity-10'
         }`}>
         <Link href='/user' className='group flex items-center gap-2 mb-3 cursor-pointer'>

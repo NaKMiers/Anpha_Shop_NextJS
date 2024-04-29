@@ -1,22 +1,17 @@
 import { connectDatabase } from '@/config/database'
-import CategoryModel, { ICategory } from '@/models/CategoryModel'
-import '@/models/FlashsaleModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
 import { FullyProduct } from '../product/[slug]/route'
 
-// Models: Product, Flash Sale, Category
-import '@/models/CategoryModel'
+// Models: Product, Tag, Category, FlashSale
 import '@/models/FlashsaleModel'
 import '@/models/ProductModel'
 
-export const dynamic = 'force-dynamic'
-
-// [GET]: /category?ctg=slug1&ctg?=slug2...
+// [GET]: /search?search=...
 export async function GET(req: NextRequest) {
-  console.log('- Get Products By Categories -')
+  console.log('- Search -')
 
   try {
     // connect to database
@@ -42,11 +37,40 @@ export async function GET(req: NextRequest) {
         }
 
         if (key === 'search') {
-          const searchFields = ['title', 'description', 'slug']
+          const searchFields = [
+            'title',
+            'description',
+            'slug',
+            'tags.title',
+            'tags.slug',
+            'category.title',
+            'category.slug',
+          ]
 
-          filter.$or = searchFields.map(field => ({
+          // create $or array for text fields
+          const orArray: any[] = searchFields.map(field => ({
             [field]: { $regex: params[key][0], $options: 'i' },
           }))
+
+          // Try to convert search query to number for price and oldPrice fields
+          const num = Number(params[key][0])
+          if (!isNaN(num)) {
+            orArray.push({ price: num })
+            orArray.push({ oldPrice: num })
+            orArray.push({ sold: num })
+            orArray.push({ stock: num })
+          }
+
+          filter.$or = orArray
+
+          // custom search
+          if (
+            ['sold out', 'soldout', 'out of stock', 'outofstock', 'hết hàng'].includes(
+              params[key][0].toLowerCase()
+            )
+          ) {
+            filter.stock = { $lte: 0 }
+          }
           continue
         }
 
@@ -54,11 +78,6 @@ export async function GET(req: NextRequest) {
           sort = {
             [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
           }
-          continue
-        }
-
-        if (key === 'ctg') {
-          filter.slug = { $in: params[key] }
           continue
         }
 
@@ -76,29 +95,19 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // get slug to filter categories
-    const { slug } = filter
-    delete filter.slug
+    console.log('Filter', filter)
 
     // find products by category base on search params
-    const categories = await CategoryModel.find(slug ? { slug } : {})
-      .select('_id title')
+    let products: FullyProduct[] = await ProductModel.find(filter)
+      .populate('flashsale')
+      .sort(sort)
+      .skip(skip)
+      .limit(itemPerPage)
       .lean()
-    const categoryIds = categories.map(category => category._id)
 
-    let products: FullyProduct[] = []
     let amount: number = 0
 
     if (params.price) {
-      // find products by category ids
-      products = await ProductModel.find({
-        category: { $in: categoryIds },
-        ...filter,
-      })
-        .populate('category flashsale')
-        .sort(sort)
-        .lean()
-
       products = products
         .map(product => {
           if (!product.flashsale) return product
@@ -111,23 +120,8 @@ export async function GET(req: NextRequest) {
 
       amount = products.length
     } else {
-      // find products by category ids
-      products = await ProductModel.find({
-        category: { $in: categoryIds },
-        ...filter,
-      })
-        .populate('flashsale')
-        .sort(sort)
-        .skip(skip)
-        .limit(itemPerPage)
-        .lean()
-
-      // get amount of account
-      amount = await ProductModel.countDocuments({ category: { $in: categoryIds }, ...filter })
+      amount = await ProductModel.countDocuments(filter)
     }
-
-    // get all categories without filter
-    const allCategories: ICategory[] = await CategoryModel.find().select('title slug').lean()
 
     // get min - max values
     const chops = await ProductModel.aggregate([
@@ -143,11 +137,8 @@ export async function GET(req: NextRequest) {
     ])
 
     // return response
-    return NextResponse.json(
-      { products, categories: allCategories, amount, chops: chops[0] },
-      { status: 200 }
-    )
+    return NextResponse.json({ products, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
-    return NextResponse.json({ message: err.nessage }, { status: 500 })
+    return NextResponse.json({ message: err.message }, { status: 500 })
   }
 }

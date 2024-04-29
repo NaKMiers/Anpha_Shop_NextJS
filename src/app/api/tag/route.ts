@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
     } else {
       // find products by tag ids
       products = await ProductModel.find({ tags: { $in: tagIds }, ...filter })
-        .populate('tags flashsale')
+        .populate('flashsale')
         .sort(sort)
         .skip(skip)
         .limit(itemPerPage)

@@ -320,7 +320,7 @@ function AddProductPage() {
 
         {/* Tags */}
         <div className='mb-5'>
-          <p className='text-light font-semibold text-xl mb-1'>Select Tags</p>
+          <p className='text-white font-semibold text-xl mb-1'>Select Tags</p>
 
           <div className='p-2 rounded-lg flex flex-wrap items-center bg-white gap-2'>
             {tags.map(tag => (
@@ -350,7 +350,7 @@ function AddProductPage() {
 
         {/* Categories */}
         <div className='mb-5'>
-          <p className='text-light font-semibold text-xl mb-1'>Select Categories</p>
+          <p className='text-white font-semibold text-xl mb-1'>Select Categories</p>
 
           <div className='p-2 rounded-lg flex flex-wrap items-center bg-white gap-2'>
             {categories.map(category => (
@@ -411,7 +411,7 @@ function AddProductPage() {
                 <button
                   onClick={() => setOriginalImages(prev => prev.filter(i => i !== url))}
                   className='absolute top-2 bg-slate-300 p-2 right-2 group hover:bg-dark-100 rounded-lg'>
-                  <FaX size={16} className='text-dark group-hover:text-light common-transition' />
+                  <FaX size={16} className='text-dark group-hover:text-white common-transition' />
                 </button>
               </div>
             ))}
@@ -422,7 +422,7 @@ function AddProductPage() {
                 <button
                   onClick={() => handleRemoveImage(url)}
                   className='absolute top-2 bg-slate-300 p-2 right-2 group hover:bg-dark-100 rounded-lg'>
-                  <FaX size={16} className='text-dark group-hover:text-light common-transition' />
+                  <FaX size={16} className='text-dark group-hover:text-white common-transition' />
                 </button>
               </div>
             ))}
@@ -431,7 +431,7 @@ function AddProductPage() {
 
         {/* MARK: Save Button */}
         <LoadingButton
-          className='px-4 py-2 bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+          className='px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
           onClick={handleSubmit(onSubmit)}
           text='Save'
           isLoading={isLoading}

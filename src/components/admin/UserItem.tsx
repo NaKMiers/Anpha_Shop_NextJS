@@ -312,7 +312,7 @@ function UserItem({
               onFocus={() => clearErrors('recharge')}
             />
             <LoadingButton
-              className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+              className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
               text='Add'
               onClick={e => {
                 e.stopPropagation()
@@ -369,7 +369,7 @@ function UserItem({
                 onFocus={() => clearErrors('value-' + data._id)}
               />
               <LoadingButton
-                className='px-4 h-[46px] flex items-center justify-center shadow-lg bg-secondary hover:bg-primary text-light rounded-lg font-semibold common-transition'
+                className='px-4 h-[46px] flex items-center justify-center shadow-lg bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
                 text='Set'
                 onClick={e => {
                   e.stopPropagation()

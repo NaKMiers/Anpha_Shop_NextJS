@@ -574,7 +574,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         <div className='flex flex-wrap justify-end items-center col-span-12 gap-2'>
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
             onClick={() =>
               setSelectedProducts(
                 selectedProducts.length > 0 ? [] : products.map(product => product._id)
@@ -585,7 +585,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {!!selectedProducts.length && (
             <button
-              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-light common-transition'
+              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
               onClick={() => handleSyncProducts(selectedProducts)}>
               Sync
             </button>
@@ -596,7 +596,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {!!selectedProducts.length &&
             selectedProducts.some(id => !products.find(product => product._id === id)?.active) && (
               <button
-                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-white common-transition'
                 onClick={() => handleActivateProducts(selectedProducts, true)}>
                 Activate
               </button>
@@ -607,7 +607,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {!!selectedProducts.length &&
             selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
                 onClick={() => handleActivateProducts(selectedProducts, false)}>
                 Deactivate
               </button>
@@ -617,7 +617,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {!!selectedProducts.length &&
             selectedProducts.some(id => products.find(product => product._id === id)?.flashsale) && (
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
                 onClick={() => {
                   hanldeRemoveApplyingFlashsales(selectedProducts)
                 }}>
@@ -628,7 +628,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedProducts.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
               onClick={() => setIsOpenConfirmModal(true)}>
               Delete
             </button>

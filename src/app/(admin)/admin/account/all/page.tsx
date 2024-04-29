@@ -483,7 +483,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-light common-transition'
+            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
             title='Alt + A'
             onClick={() =>
               setSelectedAccounts(
@@ -496,7 +496,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Activate Many Button */}
           {selectedAccounts.some(id => !accounts.find(account => account._id === id)?.active) && (
             <button
-              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-light common-transition'
+              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-white common-transition'
               onClick={() => handleActivateAccounts(selectedAccounts, true)}>
               Activate
             </button>
@@ -505,7 +505,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Deactivate Many Button */}
           {selectedAccounts.some(id => accounts.find(account => account._id === id)?.active) && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
               onClick={() => handleActivateAccounts(selectedAccounts, false)}>
               Deactivate
             </button>
@@ -514,7 +514,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedAccounts.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-light common-transition'
+              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
               title='Alt + Delete'
               onClick={() => setIsOpenConfirmModal(true)}>
               Delete

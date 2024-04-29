@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server'
 
 // Models: Product, Category
 import '@/models/ProductModel'
-import '@/models/CategoryModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,11 +17,7 @@ export async function GET() {
     await connectDatabase()
 
     // get 10 best seller products by sold field
-    const products = await ProductModel.find({ active: true })
-      .populate('category')
-      .sort({ sold: -1 })
-      .limit(10)
-      .lean()
+    const products = await ProductModel.find({ active: true }).sort({ sold: -1 }).limit(10).lean()
 
     // return products
     return NextResponse.json({ products }, { status: 200 })
