@@ -203,15 +203,23 @@ function OrderItem({
               }}>
               {data.email}
             </span>
-            <span
-              className='inline-block ml-2 text-secondary group'
-              onClick={e => {
-                e.stopPropagation()
-                setValue('search', data.email)
-                handleFilter()
-              }}>
-              <FaSearch size={14} className='wiggle' />
-            </span>
+            <div className='inline-flex items-center gap-1.5 border border-secondary rounded-md px-1.5 py-1 ml-1'>
+              <span
+                className='text-secondary group'
+                onClick={e => {
+                  e.stopPropagation()
+                  setValue('search', data.email)
+                  handleFilter()
+                }}>
+                <FaSearch size={14} className='wiggle' />
+              </span>
+              <Link
+                href={`/admin/account/all?search=${data.email}`}
+                className='text-yellow-400 group'
+                onClick={e => e.stopPropagation()}>
+                <FaEye size={15} className='wiggle' />
+              </Link>
+            </div>
           </p>
 
           {/* Total */}

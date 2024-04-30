@@ -88,8 +88,12 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
               />
             </Link>
             <div className='font-body tracking-wider'>
-              <p className='font-semibold text-ellipsis line-clamp-1'>{account.type.title}</p>
-              <p className='text-ellipsis line-clamp-1 text-sm'>{account.usingUser}</p>
+              <p className='font-semibold text-ellipsis line-clamp-1 -mt-1.5'>{account.type.title}</p>
+              <Link
+                href={`/admin/account/all?search=${account.usingUser}`}
+                className='text-ellipsis line-clamp-1 text-sm'>
+                {account.usingUser}
+              </Link>
               <p className={`text-ellipsis line-clamp-1 text-sm text-${color}`}>
                 {moment(account.begin).format('DD/MM/YYYY HH:mm:ss')}
               </p>
