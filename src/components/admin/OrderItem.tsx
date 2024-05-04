@@ -148,7 +148,7 @@ function OrderItem({
                 onClick={e => e.stopPropagation()}
                 key={item._id}>
                 <Image
-                  className='aspect-video'
+                  className='aspect-video h-auto w-auto'
                   src={item.product.images[0] || '/images/not-found.jpg'}
                   height={120}
                   width={120}
@@ -195,15 +195,16 @@ function OrderItem({
           </div>
 
           {/* Email */}
-          <p className='block underline text-ellipsis line-clamp-1' title={'Email: ' + data.email}>
+          <div className='block underline text-ellipsis line-clamp-1' title={'Email: ' + data.email}>
             <span
+              className='mr-1'
               onClick={e => {
                 e.stopPropagation()
                 handleCopy(data.email)
               }}>
               {data.email}
             </span>
-            <div className='inline-flex items-center gap-1.5 border border-secondary rounded-md px-1.5 py-1 ml-1'>
+            <div className='inline-flex items-center gap-1.5 border border-secondary rounded-md px-1.5 py-1'>
               <span
                 className='text-secondary group'
                 onClick={e => {
@@ -220,7 +221,7 @@ function OrderItem({
                 <FaEye size={15} className='wiggle' />
               </Link>
             </div>
-          </p>
+          </div>
 
           {/* Total */}
           <p
