@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Divider from '@/components/Divider'
@@ -9,6 +9,7 @@ import AddAccountForm from '@/components/admin/forms/AddAccountForm'
 import { getForceAllProductsApi } from '@/requests'
 import toast from 'react-hot-toast'
 import { ProductWithTagsAndCategory } from '../../product/all/page'
+import LoadingButton from '@/components/LoadingButton'
 
 export type GroupTypes = {
   [key: string]: ProductWithTagsAndCategory[]
@@ -32,6 +33,10 @@ function AddAccountPage() {
     []
   )
   const [forms, setForms] = useState<any[]>([defaultValues])
+  const [adding, setAdding] = useState<string>('')
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const [isLoopRunning, setIsLoopRunning] = useState<boolean>(false)
+  const timeout = useRef<any>(null)
 
   // MARK: Get Data
   // get all types (products)
@@ -83,6 +88,36 @@ function AddAccountPage() {
     setForms(prev => prev.filter(form => form.id !== id))
   }, [])
 
+  useEffect(() => {
+    const startLoop = () => {
+      setAdding(forms[currentIndex].id)
+
+      if (currentIndex >= forms.length - 1) {
+        setCurrentIndex(0)
+        setIsLoopRunning(false)
+        return
+      }
+
+      // Move to the next item in the array after 1 second
+      timeout.current = setTimeout(() => {
+        setCurrentIndex(prevIndex => prevIndex + 1)
+      }, 1000)
+    }
+
+    if (isLoopRunning) {
+      startLoop()
+    } else {
+      clearTimeout(timeout.current) // Clear timeout when loop is stopped
+      setAdding('')
+    }
+
+    return () => clearTimeout(timeout.current) // Cleanup function to clear timeout when component unmounts
+  }, [isLoopRunning, forms.length, currentIndex, forms, setAdding, setCurrentIndex])
+
+  const handleStartLoop = () => {
+    setIsLoopRunning(true)
+  }
+
   // MARK: Get Data
   // get all types (products)
   useEffect(() => {
@@ -117,6 +152,12 @@ function AddAccountPage() {
       <Divider size={2} />
 
       <div className='flex justify-center items-center gap-2'>
+        <LoadingButton
+          className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-secondary bg-secondary text-white hover:bg-primary hover:border-primary common-transition'
+          onClick={handleStartLoop}
+          text='Add All'
+          isLoading={isLoopRunning}
+        />
         <button
           className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-white common-transition'
           onClick={handleAddForm}>
@@ -139,6 +180,7 @@ function AddAccountPage() {
             groupTypes={groupTypes}
             forms={forms}
             form={form}
+            adding={adding}
             handleDuplicateForm={handleDuplicateForm}
             handleRemoveForm={handleRemoveForm}
             defaultValues={defaultValues}

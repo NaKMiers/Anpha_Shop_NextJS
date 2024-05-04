@@ -2,7 +2,7 @@
 
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { FaCheck, FaInfo } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa6'
@@ -17,6 +17,7 @@ interface AddAccountFormProps {
   groupTypes: GroupTypes
   form: any
   forms: any[]
+  adding: string
   handleDuplicateForm: (form: any) => void
   handleRemoveForm: (id: number) => void
   defaultValues: any
@@ -27,6 +28,7 @@ function AddAccountForm({
   groupTypes,
   form,
   forms,
+  adding,
   handleDuplicateForm,
   handleRemoveForm,
   defaultValues,
@@ -83,12 +85,10 @@ function AddAccountForm({
   )
 
   const handleGenerate = useCallback(() => {
-    // Hàm trích xuất thông tin từ chuỗi
     const extractInformation = (inputString: string) => {
       let infoPart = inputString
       let additionalInfoPart = ''
 
-      // Kiểm tra nếu có dấu '==='
       const splitIndex = inputString.indexOf('===')
       if (splitIndex !== -1) {
         infoPart = inputString.slice(0, splitIndex)
@@ -110,13 +110,11 @@ function AddAccountForm({
         pin: match[3],
       }))
 
-      // Trích xuất các phần thông tin bổ sung
       const additionalInfo = additionalInfoPart.trim()
 
       return { email, password, slots, additionalInfo }
     }
 
-    // Hàm tạo kết quả từ thông tin trích xuất
     const generateResults = (data: any) => {
       return data.slots.map((slot: any) => {
         return `✅ Email: ${data.email}
@@ -128,10 +126,7 @@ ${data.additionalInfo}`
       })
     }
 
-    // Trích xuất thông tin từ chuỗi
     const extractedInfo = extractInformation(getValues('info'))
-
-    // Tạo các kết quả từ thông tin trích xuất
     const results = generateResults(extractedInfo)
 
     // remove current form
@@ -150,26 +145,35 @@ ${data.additionalInfo}`
 
   // MARK: Submit
   // send request to server to add account
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
-    if (!handleValidate(data)) return
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      if (!handleValidate(data)) return
 
-    // start loading
-    setLoading(true)
+      // start loading
+      setLoading(true)
 
-    try {
-      // add new account here
-      const { message } = await addAccountApi(data)
+      try {
+        // add new account here
+        const { message } = await addAccountApi(data)
 
-      // show success message
-      toast.success(message)
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      // stop loading
-      setLoading(false)
+        // show success message
+        toast.success(message)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop loading
+        setLoading(false)
+      }
+    },
+    [handleValidate]
+  )
+
+  useEffect(() => {
+    if (adding === getValues('id')) {
+      handleSubmit(onSubmit)()
     }
-  }
+  }, [adding, getValues, onSubmit, handleSubmit])
 
   return (
     <div className={`${className}`}>
