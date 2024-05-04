@@ -81,6 +81,40 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     url: `${process.env.NEXT_PUBLIC_APP_URL}/${product?.slug}`,
   }
 
+  const handleLines = (text: string) => {
+    // Split the product description into separate lines
+    const lines = text.split('\n').map(line => line.trim())
+
+    // Render each line as a paragraph or list item
+    const renderedLines = lines.map((line, index) => {
+      const key = `line-${index}`
+
+      if (line.startsWith('-')) {
+        // If the line starts with "-", render it as a list item
+        return (
+          <p className='list-none pl-2' key={key}>
+            - {line.substr(1).trim()}
+          </p>
+        )
+      } else {
+        const parts = line.split(':')
+        if (parts.length === 2) {
+          // If the line contains a ":" split it and render the parts with appropriate styling
+          return (
+            <p key={key}>
+              <span className='font-semibold'>{parts[0]}:</span> {parts[1]}
+            </p>
+          )
+        } else {
+          // If the line does not contain a ":" and doesn't start with "-", render it as a plain paragraph
+          return <p key={key}>{line}</p>
+        }
+      }
+    })
+
+    return <div>{renderedLines}</div>
+  }
+
   return (
     <div className='pt-9'>
       {/* MARL: Add JSON-LD */}
@@ -380,23 +414,9 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
             <h3 className='text-[28px] text-dark'>Mô tả sản phẩm</h3>
-            <p>
-              <span>Tên gói: </span>
-              <span className='font-semibold'>
-                Netflix Premium (Gói Share 1 Tháng) - Chia Sẻ Niềm Vui Xem Phim Siêu Nét
-              </span>
-            </p>
-            <p>
-              <span>Hạn sử dụng: </span>
-              <span className='font-semibold'>30 ngày kể từ khi được cấp tài khoản.</span>
-            </p>
-            <ul>
-              <li>- Mỗi profile trong tài khoản sẽ được chia ra có từ 1 - 3 người dùng.</li>
-              <li>
-                - Không giới hạn số lượng thiết bị đăng nhập, tuy nhiên không được xem trên nhiều thiết
-                bị cùng lúc.
-              </li>
-            </ul>
+
+            {handleLines(product?.description || '')}
+
             <p>
               <span>Lưu ý: </span>
               <span className='font-semibold'>
