@@ -46,7 +46,7 @@ function RechargePage() {
               <p>
                 - Bấm vào link sau:{' '}
                 <a className='text-[#a1396c]' href={admin.momo.link}>
-                  {admin.momo.link}
+                  Link thanh toán bằng Momo
                 </a>
               </p>
               <p>(hoặc)</p>
@@ -78,13 +78,25 @@ function RechargePage() {
             </a>
           </p>
 
-          <Image
-            className='mx-auto mt-6 rounded-lg shadow-medium duration-300 transition hover:-translate-y-2'
-            src={admin.momo.image}
-            height={700}
-            width={350}
-            alt='momo-qr'
-          />
+          <div className='flex justify-center mt-6'>
+            <div className='relative rounded-lg shadow-medium duration-300 transition hover:-translate-y-2 overflow-hidden'>
+              <Image src={admin.momo.image} height={700} width={350} alt='momo-qr' />
+              <Image
+                className='absolute top-[56%] left-1/2 -translate-x-1/2 -translate-y-[50%] w-[58%]'
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=2|99|${admin.momo.account}|||0|0|0|${content}|transfer_p2p`}
+                height={700}
+                width={350}
+                alt='momo-qr'
+              />
+              <Image
+                className='bg-[#333] absolute top-[56%] left-1/2 -translate-x-1/2 -translate-y-[50%] rounded-md p-1 w-[12%]'
+                src='/images/logo.jpg'
+                height={42}
+                width={42}
+                alt='momo-qr'
+              />
+            </div>
+          </div>
 
           <p className='mt-8 mb-2'>
             *Nếu không quét được thì bạn có thể nhập thông tin chuyển khoản tại đây:
@@ -165,7 +177,7 @@ function RechargePage() {
 
           <div className='flex justify-center mt-6'>
             <div className='relative rounded-lg shadow-medium duration-300 transition hover:-translate-y-2 overflow-hidden'>
-              <Image className='' src={admin.banking.image} height={700} width={350} alt='banking-qr' />
+              <Image src={admin.banking.image} height={700} width={350} alt='banking-qr' />
               <Image
                 className='absolute top-[41%] left-1/2 -translate-x-1/2 -translate-y-[50%] w-[47%]'
                 src={`https://img.vietqr.io/image/970436-1040587211-eeua38J.jpg?addInfo=${encodeURI(

@@ -22,6 +22,11 @@ const nextConfig = {
         hostname: 'img.vietqr.io',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.qrserver.com',
+        pathname: '**',
+      },
     ],
   },
 }

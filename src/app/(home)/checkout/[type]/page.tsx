@@ -70,9 +70,16 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           * Hãy chuyển vào tài khoản bên dưới với nội dung sau:{' '}
         </p>
 
-        {type === 'momo' && (
+        {type === 'momo' ? (
           <a href='https://me.momo.vn/anphashop'>
-            Ấn vào link sau để chuyển nhanh: <span className='text-[#a1396c]'>{admin.momo.link}</span>
+            Ấn vào link sau để chuyển nhanh:{' '}
+            <span className='text-[#a1396c] underline'>Link thanh toán bằng Momo</span>
+          </a>
+        ) : (
+          <a
+            href={`https://dl.vietqr.io/pay?app=vcb&ba=1040587211@vcb&am=${checkout?.total}&tn=${checkout?.code}`}>
+            Ấn vào link sau để chuyển nhanh:{' '}
+            <span className='text-[#62b866] underline'>Link thanh toán bằng Vietcombank</span>
           </a>
         )}
 
@@ -137,13 +144,42 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           sau khi đã thanh toán.
         </p>
 
-        <Image
-          className='mx-auto mt-6 rounded-lg shadow-medium duration-300 transition hover:-translate-y-2'
-          src={type === 'momo' ? admin.momo.image : admin.banking.image}
-          height={700}
-          width={350}
-          alt={type === 'momo' ? 'momo-qr' : 'banking-qr'}
-        />
+        <div className='flex justify-center mt-6'>
+          <div className='relative rounded-lg shadow-medium duration-300 transition hover:-translate-y-2 overflow-hidden'>
+            {type === 'momo' ? (
+              <>
+                <Image src={admin.momo.image} height={700} width={350} alt='momo-qr' />
+                <Image
+                  className='absolute top-[56%] left-1/2 -translate-x-1/2 -translate-y-[50%] w-[58%]'
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=2|99|${admin.momo.account}|||0|0|${checkout?.total}|${checkout?.code}|transfer_p2p`}
+                  height={700}
+                  width={350}
+                  alt='momo-qr'
+                />
+                <Image
+                  className='bg-[#333] absolute top-[56%] left-1/2 -translate-x-1/2 -translate-y-[50%] rounded-md p-1 w-[12%]'
+                  src='/images/logo.jpg'
+                  height={42}
+                  width={42}
+                  alt='momo-qr'
+                />
+              </>
+            ) : (
+              <>
+                <Image src={admin.banking.image} height={700} width={350} alt='banking-qr' />
+                <Image
+                  className='absolute top-[41%] left-1/2 -translate-x-1/2 -translate-y-[50%] w-[47%]'
+                  src={`https://img.vietqr.io/image/970436-1040587211-eeua38J.jpg?amount=${
+                    checkout?.total
+                  }&addInfo=${encodeURI(checkout?.code)}&accountName=${admin.banking.receiver}`}
+                  height={700}
+                  width={350}
+                  alt='banking-qr'
+                />
+              </>
+            )}
+          </div>
+        </div>
 
         {/* MARK: Action Buttons */}
         <div className='flex lg:hidden justify-center flex-wrap mt-10 gap-x-21 gap-y-21/2 font-body tracking-wide'>
