@@ -22,6 +22,8 @@ function RechargePage() {
     toast.success('Đã sao chép: ' + text)
   }, [])
 
+  const content = 'NAP ' + curUser?.email.split('@')[0]
+
   return (
     <div className='bg-white rounded-medium shadow-medium mt-20 p-21'>
       <h1 className='text-center font-semibold text-4xl mb-2'>Nạp tiền vào tài khoản</h1>
@@ -53,10 +55,8 @@ function RechargePage() {
             <li>Nhập số tiền bạn muốn nạp</li>
             <li>
               Nhập nội dung chuyển tiền:{' '}
-              <span
-                className='text-orange-600 cursor-pointer'
-                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
-                NAP {curUser?.email}
+              <span className='text-orange-600 cursor-pointer' onClick={() => handleCopy(content)}>
+                {content}
               </span>
             </li>
             <li>
@@ -101,10 +101,8 @@ function RechargePage() {
             </p>
             <p>
               Nội dung chuyển khoản:{' '}
-              <span
-                className='text-orange-600 cursor-pointer'
-                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
-                NAP {curUser?.email}
+              <span className='text-orange-600 cursor-pointer' onClick={() => handleCopy(content)}>
+                {content}
               </span>
             </p>
           </div>
@@ -125,16 +123,26 @@ function RechargePage() {
           <h2 className='text-2xl text-[#399162] text-center mb-3'>Chuyển khoản ngân hàng</h2>
 
           <ul className='list-decimal font-semibold pl-6 mb-5'>
-            <li>Vào ứng dụng momo của bạn trên điện thoại</li>
+            <li>Vào ứng dụng ngân hàng của bạn trên điện thoại</li>
             <li>Chọn chức năng quét mã QR</li>
-            <li>Quét mã QR bên dưới</li>
+            <li>
+              <br />
+              <p>
+                - Bấm vào link sau:{' '}
+                <a
+                  className='text-[#399162]'
+                  href={`https://dl.vietqr.io/pay?app=vcb&ba=1040587211@vcb&tn=${content}`}>
+                  Link thanh toán bằng Vietcombank
+                </a>
+              </p>
+              <p>(hoặc)</p>
+              <p>- Quét mã QR bên dưới</p>
+            </li>
             <li>Nhập số tiền bạn muốn nạp</li>
             <li>
               Nhập nội dung chuyển tiền:{' '}
-              <span
-                className='text-orange-600 cursor-pointer'
-                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
-                NAP {curUser?.email}
+              <span className='text-orange-600 cursor-pointer' onClick={() => handleCopy(content)}>
+                {content}
               </span>
             </li>
             <li>
@@ -155,13 +163,20 @@ function RechargePage() {
             </a>
           </p>
 
-          <Image
-            className='mx-auto mt-6 rounded-lg shadow-medium duration-300 transition hover:-translate-y-2'
-            src={admin.banking.image}
-            height={700}
-            width={350}
-            alt='momo-qr'
-          />
+          <div className='flex justify-center mt-6'>
+            <div className='relative rounded-lg shadow-medium duration-300 transition hover:-translate-y-2 overflow-hidden'>
+              <Image className='' src={admin.banking.image} height={700} width={350} alt='banking-qr' />
+              <Image
+                className='absolute top-[41%] left-1/2 -translate-x-1/2 -translate-y-[50%] w-[47%]'
+                src={`https://img.vietqr.io/image/970436-1040587211-eeua38J.jpg?addInfo=${encodeURI(
+                  content
+                )}&accountName=${admin.banking.receiver}`}
+                height={700}
+                width={350}
+                alt='banking-qr'
+              />
+            </div>
+          </div>
 
           <p className='mt-8 mb-2'>
             *Nếu không quét được thì bạn có thể nhập thông tin chuyển khoản tại đây:
@@ -186,10 +201,8 @@ function RechargePage() {
             </p>
             <p>
               Nội dung chuyển khoản:{' '}
-              <span
-                className='text-orange-600 cursor-pointer'
-                onClick={() => handleCopy(`NAP ${curUser?.email}`)}>
-                NAP {curUser?.email}
+              <span className='text-orange-600 cursor-pointer' onClick={() => handleCopy(content)}>
+                {content}
               </span>
             </p>
           </div>

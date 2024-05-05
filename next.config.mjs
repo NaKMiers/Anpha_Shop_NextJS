@@ -17,6 +17,11 @@ const nextConfig = {
         hostname: 'avatars.githubusercontent.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.vietqr.io',
+        pathname: '**',
+      },
     ],
   },
 }
