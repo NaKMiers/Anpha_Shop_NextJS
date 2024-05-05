@@ -45,8 +45,8 @@ function RechargePage() {
               <br />
               <p>
                 - Bấm vào link sau:{' '}
-                <a className='text-[#a1396c]' href={admin.momo.link}>
-                  Link thanh toán bằng Momo
+                <a className='text-[#a1396c] underline' href={admin.momo.link}>
+                  Link nạp bằng Momo
                 </a>
               </p>
               <p>(hoặc)</p>
@@ -142,9 +142,9 @@ function RechargePage() {
               <p>
                 - Bấm vào link sau:{' '}
                 <a
-                  className='text-[#399162]'
+                  className='text-[#399162] underline'
                   href={`https://dl.vietqr.io/pay?app=vcb&ba=1040587211@vcb&tn=${content}`}>
-                  Link thanh toán bằng Vietcombank
+                  Link nạp bằng Vietcombank
                 </a>
               </p>
               <p>(hoặc)</p>
