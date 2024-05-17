@@ -236,11 +236,11 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
               )}
             </button>
             {['admin', 'editor'].includes(curUser?.role) && (
-              <Link
-                href={`/admin/product/all?_id=${product?._id}`}
+              <div
+                onClick={() => router.push(`/admin/product/all?_id=${product?._id}`)}
                 className='flex items-center justify-center h-[26px] border border-yellow-400 rounded-md px-1 group hover:bg-primary-600 common-transition'>
                 <MdEdit size={18} className='wiggle text-yellow-400' />
-              </Link>
+              </div>
             )}
           </div>
         </div>

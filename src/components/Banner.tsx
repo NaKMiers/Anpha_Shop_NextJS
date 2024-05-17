@@ -84,68 +84,47 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               mobile={width < 576 && width > 0}
               thumbs={
                 width < 576 && width > 0
-                  ? [
-                      '/images/netflix-banner-mobile.jpg',
-                      '/images/grammarly-banner-mobile.jpg',
-                      '/images/capcut-banner-mobile.jpg',
-                    ]
-                  : [
-                      '/images/netflix-banner.jpg',
-                      '/images/grammarly-banner.jpg',
-                      '/images/capcut-banner.jpg',
-                    ]
+                  ? ['/images/netflix-random-banner-mobile.jpg', '/images/grammarly-banner-mobile.jpg']
+                  : ['/images/netflix-random-banner.jpg', '/images/grammarly-banner.jpg']
               }>
-              <Image
-                className='hover:scale-105 transition-all duration-700'
-                src={
-                  width < 576 && width > 0
-                    ? '/images/netflix-banner-mobile.jpg'
-                    : '/images/netflix-banner.jpg'
-                }
-                alt='netflix'
-                width={1200}
-                height={768}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-              <Image
-                className='hover:scale-105 transition-all duration-700'
-                src={
-                  width < 576 && width > 0
-                    ? '/images/grammarly-banner-mobile.jpg'
-                    : '/images/grammarly-banner.jpg'
-                }
-                alt='netflix'
-                width={1200}
-                height={768}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-              <Image
-                className='hover:scale-105 transition-all duration-700'
-                src={
-                  width < 576 && width > 0
-                    ? '/images/capcut-banner-mobile.jpg'
-                    : '/images/capcut-banner.jpg'
-                }
-                alt='netflix'
-                width={1200}
-                height={768}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
+              <Link href='/random-netflix-van-may-se-thay-ban-tra-tien'>
+                <Image
+                  className='hover:scale-105 transition-all duration-700'
+                  src={
+                    width < 576 && width > 0
+                      ? '/images/netflix-random-banner-mobile.jpg'
+                      : '/images/netflix-random-banner.jpg'
+                  }
+                  alt='netflix'
+                  width={1200}
+                  height={768}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </Link>
+              <Link href='/grammarly-premium-1-thang-danh-bai-loi-ngu-phap-voi-uu-dai-dac-biet'>
+                <Image
+                  className='hover:scale-105 transition-all duration-700'
+                  src={
+                    width < 576 && width > 0
+                      ? '/images/grammarly-banner-mobile.jpg'
+                      : '/images/grammarly-banner.jpg'
+                  }
+                  alt='netflix'
+                  width={1200}
+                  height={768}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </Link>
             </Slider>
 
             {/* Category */}

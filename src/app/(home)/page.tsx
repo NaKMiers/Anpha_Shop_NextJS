@@ -9,6 +9,7 @@ import { ITag } from '@/models/TagModel'
 import { getHomeApi } from '@/requests'
 import { Metadata } from 'next'
 import { FullyProduct } from '../api/product/[slug]/route'
+import RandomBox from '@/components/RandomBox'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop',
@@ -67,11 +68,10 @@ async function HomePage() {
       {/* MARK: Banner */}
       <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
 
-      <Divider size={28} />
+      {/* <Divider size={28} /> */}
 
-      {/* MARK: About */}
-      <Heading title='Về Anpha Shop' />
-      <About />
+      {/* MARK: Random */}
+      {/* <RandomBox /> */}
 
       <Divider size={28} />
 
@@ -98,6 +98,12 @@ async function HomePage() {
           />
         ))}
       </section>
+
+      <Divider size={28} />
+
+      {/* MARK: About */}
+      <Heading title='Về Anpha Shop' />
+      <About />
 
       <Divider size={28} />
 
