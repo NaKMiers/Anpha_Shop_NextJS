@@ -99,6 +99,21 @@ export const activateProductsApi = async (ids: string[], value: boolean) => {
 }
 
 // [PATCH]
+export const bootProductsApi = async (ids: string[], value: boolean) => {
+  const res = await fetch('/api/admin/product/boot', {
+    method: 'PATCH',
+    body: JSON.stringify({ ids, value }),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [PATCH]
 export const removeApplyingFlashSalesApi = async (ids: string[]) => {
   const res = await fetch('/api/admin/product/remove-flash-sales', {
     method: 'PATCH',

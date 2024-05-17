@@ -71,6 +71,10 @@ const ProductSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    booted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -104,6 +108,7 @@ export interface IProduct {
   stock: number
   slug: string
   active: boolean
+  booted: boolean
   createdAt: string
   updatedAt: string
 }

@@ -13,6 +13,7 @@ import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import {
   activateProductsApi,
+  bootProductsApi,
   deleteProductsApi,
   getAllProductsApi,
   removeApplyingFlashSalesApi,
@@ -151,6 +152,29 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         prev.map(product =>
           updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
             ? { ...product, active: value }
+            : product
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      console.log(err)
+      toast.error(err.message)
+    }
+  }, [])
+
+  // boot product
+  const handleBootProducts = useCallback(async (ids: string[], value: boolean) => {
+    try {
+      // senred request to server
+      const { updatedProducts, message } = await bootProductsApi(ids, value)
+
+      // update products from state
+      setProducts(prev =>
+        prev.map(product =>
+          updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
+            ? { ...product, booted: value }
             : product
         )
       )
@@ -579,11 +603,30 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             {selectedProducts.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
+          {/* Sync Many Button */}
           {!!selectedProducts.length && (
             <button
               className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
               onClick={() => handleSyncProducts(selectedProducts)}>
               Sync
+            </button>
+          )}
+
+          {/* Boot Many Button */}
+          {!!selectedProducts.length && (
+            <button
+              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
+              onClick={() => handleBootProducts(selectedProducts, true)}>
+              Boot
+            </button>
+          )}
+
+          {/* Deboot Many Button */}
+          {!!selectedProducts.length && (
+            <button
+              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
+              onClick={() => handleBootProducts(selectedProducts, false)}>
+              Deboot
             </button>
           )}
 
@@ -660,6 +703,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             setSelectedProducts={setSelectedProducts}
             // functions
             handleActivateProducts={handleActivateProducts}
+            handleBootProducts={handleBootProducts}
             handleSyncProducts={handleSyncProducts}
             hanldeRemoveApplyingFlashsales={hanldeRemoveApplyingFlashsales}
             handleDeleteProducts={handleDeleteProducts}

@@ -67,7 +67,16 @@ export async function GET() {
       .map(category => {
         const productsByCtg = products
           .filter(product => product.category._id.toString() === category._id.toString())
-          .sort((a, b) => b.sold - a.sold)
+          .sort((a, b) => {
+            if (a.booted && !b.booted) {
+              return -1
+            }
+            if (!a.booted && b.booted) {
+              return 1
+            }
+
+            return b.sold - a.sold
+          })
 
         return {
           category,

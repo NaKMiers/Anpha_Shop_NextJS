@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { use, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaEye, FaEyeSlash, FaSyncAlt, FaTrash } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaRocket, FaSyncAlt, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { PiLightningFill, PiLightningSlashFill } from 'react-icons/pi'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -24,6 +24,7 @@ interface ProductItemProps {
 
   // functions
   handleActivateProducts: (ids: string[], active: boolean) => void
+  handleBootProducts: (ids: string[], value: boolean) => void
   handleSyncProducts: (ids: string[]) => void
   hanldeRemoveApplyingFlashsales: (ids: string[]) => void
   handleDeleteProducts: (ids: string[]) => void
@@ -39,6 +40,7 @@ function ProductItem({
   setSelectedProducts,
   // functions
   handleActivateProducts,
+  handleBootProducts,
   handleSyncProducts,
   hanldeRemoveApplyingFlashsales,
   handleDeleteProducts,
@@ -272,6 +274,19 @@ function ProductItem({
             ) : (
               <FaEyeSlash size={18} className='wiggle text-slate-300' />
             )}
+          </button>
+
+          {/* Boot Button */}
+          <button
+            className='block group'
+            onClick={e => {
+              e.stopPropagation()
+              // is being booted
+              handleBootProducts([data._id], !data.booted)
+            }}
+            disabled={syncingProducts.includes(data._id) || loadingProducts.includes(data._id)}
+            title={data.active ? 'Deactivate' : 'Activate'}>
+            <FaRocket size={18} className={`wiggle ${data.booted ? 'text-green-500' : ''}`} />
           </button>
 
           {/* Sync Product Stock Button */}
