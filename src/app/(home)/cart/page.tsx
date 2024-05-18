@@ -214,7 +214,7 @@ function CartPage() {
         setError('email', { message: 'Email không hợp lệ' })
         isValid = false
       } else {
-        if (commonEmailMistakes.some(mistake => email.toLowerCase().includes(mistake))) {
+        if (commonEmailMistakes.some(mistake => email.toLowerCase().endsWith(mistake))) {
           setError('email', { message: 'Email không hợp lệ' })
           isValid = false
         }
