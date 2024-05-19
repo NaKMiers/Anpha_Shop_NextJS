@@ -10,7 +10,7 @@ function About() {
           <div className='w-full md:w-2/3 rounded-lg overflow-hidden aspect-video'>
             <Image
               className='w-full h-full object-cover'
-              src='/images/netflix-banner.jpg'
+              src='/banners/watching-netflix.jpg'
               width={1200}
               height={1200}
               alt='banner'
@@ -32,7 +32,7 @@ function About() {
           <div className='w-full md:w-2/3 rounded-lg overflow-hidden aspect-video'>
             <Image
               className='w-full h-full object-cover'
-              src='/images/spotify-banner.jpg'
+              src='/banners/spotify-banner.jpg'
               width={1920}
               height={1080}
               alt='banner'
@@ -54,7 +54,7 @@ function About() {
           <div className='w-full md:w-2/3 rounded-lg overflow-hidden aspect-video'>
             <Image
               className='w-full h-full object-cover'
-              src='/images/youtube-banner.jpg'
+              src='/banners/youtube-banner.jpg'
               width={1920}
               height={1080}
               alt='banner'

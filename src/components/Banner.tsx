@@ -84,16 +84,26 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               mobile={width < 576 && width > 0}
               thumbs={
                 width < 576 && width > 0
-                  ? ['/images/netflix-random-banner-mobile.jpg', '/images/grammarly-banner-mobile.jpg']
-                  : ['/images/netflix-random-banner.jpg', '/images/grammarly-banner.jpg']
+                  ? [
+                      '/banners/netflix-random-mobile.jpg',
+                      '/banners/grammarly-mobile.jpg',
+                      '/banners/canva-mobile.jpg',
+                      '/banners/spotify-mobile.jpg',
+                    ]
+                  : [
+                      '/banners/netflix-random.jpg',
+                      '/banners/grammarly.jpg',
+                      '/banners/canva.jpg',
+                      '/banners/spotify.jpg',
+                    ]
               }>
               <Link href='/random-netflix-van-may-se-thay-ban-tra-tien'>
                 <Image
                   className='hover:scale-105 transition-all duration-700'
                   src={
                     width < 576 && width > 0
-                      ? '/images/netflix-random-banner-mobile.jpg'
-                      : '/images/netflix-random-banner.jpg'
+                      ? '/banners/netflix-random-mobile.jpg'
+                      : '/banners/netflix-random.jpg'
                   }
                   alt='netflix'
                   width={1200}
@@ -110,11 +120,39 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 <Image
                   className='hover:scale-105 transition-all duration-700'
                   src={
-                    width < 576 && width > 0
-                      ? '/images/grammarly-banner-mobile.jpg'
-                      : '/images/grammarly-banner.jpg'
+                    width < 576 && width > 0 ? '/banners/grammarly-mobile.jpg' : '/banners/grammarly.jpg'
                   }
-                  alt='netflix'
+                  alt='grammarly'
+                  width={1200}
+                  height={768}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </Link>
+              <Link href='/category?ctg=canva'>
+                <Image
+                  className='hover:scale-105 transition-all duration-700'
+                  src={width < 576 && width > 0 ? '/banners/canva-mobile.jpg' : '/banners/canva.jpg'}
+                  alt='canva'
+                  width={1200}
+                  height={768}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </Link>
+              <Link href='/category?ctg=spotify'>
+                <Image
+                  className='hover:scale-105 transition-all duration-700'
+                  src={width < 576 && width > 0 ? '/banners/spotify-mobile.jpg' : '/banners/spotify.jpg'}
+                  alt='spotify'
                   width={1200}
                   height={768}
                   style={{

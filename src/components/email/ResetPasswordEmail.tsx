@@ -97,11 +97,7 @@ function ResetPasswordEmail({
 
           {/* Footer */}
           <div className='flex justify-center pt-[45px]'>
-            <Img
-              className='max-w-full'
-              width={620}
-              src={`${'https://anpha.shop'}/images/footer-banner.jpg`}
-            />
+            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
           </div>
 
           <p className='text-center text-xs text-slate-600'>

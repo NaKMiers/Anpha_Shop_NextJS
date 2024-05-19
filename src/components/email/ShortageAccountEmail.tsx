@@ -42,7 +42,7 @@ export function ShortageAccountEmail({
               border: '2px solid #f44336',
             }}>
             <div>
-              <Img src='https://anpha.shop/images/brand-banner.jpg' className='w-full object-cover' />
+              <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
 
             <Row className='py-4 px-8'>
@@ -68,11 +68,7 @@ export function ShortageAccountEmail({
           </Section>
 
           <div className='flex justify-center pt-[45px]'>
-            <Img
-              className='max-w-full'
-              width={620}
-              src={`${'https://anpha.shop'}/images/footer-banner.jpg`}
-            />
+            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
           </div>
 
           <p className='text-center text-xs text-slate-600'>

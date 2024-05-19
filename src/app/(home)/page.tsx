@@ -68,11 +68,6 @@ async function HomePage() {
       {/* MARK: Banner */}
       <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
 
-      {/* <Divider size={28} /> */}
-
-      {/* MARK: Random */}
-      {/* <RandomBox /> */}
-
       <Divider size={28} />
 
       {/* MARK: Top #10 */}

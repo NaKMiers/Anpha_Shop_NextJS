@@ -20,13 +20,6 @@ async function LoadingHomePage() {
 
       <Divider size={28} />
 
-      {/* MARK: About */}
-      <LoadingHeading size={300} />
-      {/* <About /> */}
-      <LoadingAbout />
-
-      <Divider size={28} />
-
       {/* MARK: Top #10 */}
       <LoadingHeading size={175} />
       <section className='max-w-1200 mx-auto px-4'>
@@ -42,6 +35,12 @@ async function LoadingHomePage() {
           <LoadingGroupProducts className={index !== 6 - 1 ? 'mb-20' : ''} key={index} />
         ))}
       </section>
+
+      <Divider size={28} />
+
+      {/* MARK: About */}
+      <LoadingHeading size={300} />
+      <LoadingAbout />
 
       <Divider size={28} />
 

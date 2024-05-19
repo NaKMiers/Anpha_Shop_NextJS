@@ -40,7 +40,7 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
               border: '1px solid rgb(0, 0, 0, 0.1)',
             }}>
             <div>
-              <Img src='https://anpha.shop/images/brand-banner.jpg' className='w-full object-cover' />
+              <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
 
             <Row className='p-4'>
@@ -133,11 +133,7 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
           </Section>
 
           <div className='flex justify-center pt-[45px]'>
-            <Img
-              className='max-w-full'
-              width={620}
-              src={`${'https://anpha.shop'}/images/footer-banner.jpg`}
-            />
+            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
           </div>
 
           <p className='text-center text-xs text-slate-600'>

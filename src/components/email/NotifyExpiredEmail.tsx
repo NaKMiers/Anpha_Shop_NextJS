@@ -39,7 +39,7 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
               border: '1px solid rgb(0, 0, 0, 0.1)',
             }}>
             <div>
-              <Img src='https://anpha.shop/images/brand-banner.jpg' className='w-full object-cover' />
+              <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
 
             <Row className='p-4'>
@@ -95,7 +95,7 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
 
             <div className='text-center p-3 mb-10'>
               <a
-                  href={`https://anpha.shop/${data.type.slug}`}
+                href={`https://anpha.shop/${data.type.slug}`}
                 className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
                 Gia hạn ngay
               </a>
@@ -103,11 +103,7 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
           </Section>
 
           <div className='flex justify-center pt-[45px]'>
-            <Img
-              className='max-w-full'
-              width={620}
-              src={`${'https://anpha.shop'}/images/footer-banner.jpg`}
-            />
+            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
           </div>
 
           <p className='text-center text-xs text-slate-600'>
