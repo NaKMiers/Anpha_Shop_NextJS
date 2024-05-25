@@ -2,24 +2,47 @@
 
 import { FullyOrder } from '@/app/api/user/order-history/route'
 import CartItem from '@/components/CartItem'
+import Input from '@/components/Input'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
-import { IOrder } from '@/models/OrderModel'
-import { getOrderApi } from '@/requests'
+import { editOrderApi, getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
+import { useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaCopy } from 'react-icons/fa'
+import { FaCopy, FaSave } from 'react-icons/fa'
 import { IoIosHelpCircle } from 'react-icons/io'
+import { MdCancel, MdDateRange, MdEdit } from 'react-icons/md'
+import { RiDonutChartFill } from 'react-icons/ri'
 
 function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // hooks
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   // states
   const [order, setOrder] = useState<FullyOrder | null>(null)
+  const [editMode, setEditMode] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+
+  // form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      createdAt: '',
+      email: '',
+      total: 0,
+    },
+  })
 
   // MARK: Get Data
   // get order
@@ -33,6 +56,13 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
         // set order to state
         setOrder(order)
+
+        // set form values
+        reset({
+          createdAt: new Date(order.createdAt).toISOString().slice(0, 16),
+          email: order.email,
+          total: order.total,
+        })
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
@@ -45,7 +75,37 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
     if (code) {
       getOrder()
     }
-  }, [code, dispatch])
+  }, [dispatch, reset, code])
+
+  // MARK: Save Order Submition
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async data => {
+      if (order) {
+        setIsSaving(true)
+
+        try {
+          console.log('data: ', data)
+          const { updatedOrder, message } = await editOrderApi(order?._id, data)
+
+          // updated order staet
+          setOrder(updatedOrder)
+
+          // show success
+          toast.success(message)
+
+          // turn off edit mode
+          setEditMode(false)
+        } catch (err: any) {
+          toast.error(err.message)
+          console.log(err)
+        } finally {
+          // reset loading state
+          setIsSaving(false)
+        }
+      }
+    },
+    [order]
+  )
 
   // handle copy
   const handleCopy = useCallback((text: string) => {
@@ -55,27 +115,110 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
   return (
     <div className='bg-white py-21 px-4 rounded-medium shadow-medium-light'>
-      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
-        Order Detail: <span className='text-secondary font-sans'>{order?.code}</span>
+      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5 flex items-center justify-between'>
+        <p>
+          Order Detail: <span className='text-secondary font-sans'>{order?.code}</span>
+        </p>
+        <div className='flex items-center justify-center gap-2'>
+          {editMode ? (
+            <>
+              <button
+                className='flex items-center justify-center h-9 rounded-md px-2 border-2 border-slate-400 text-slate-400 hover:bg-slate-400 hover:text-white common-transition'
+                onClick={() => setEditMode(false)}>
+                <MdCancel size={20} />
+              </button>
+              <button
+                className={`flex items-center justify-center h-9 rounded-md px-2 border-2 hover:bg-rose-500 hover:text-white common-transition ${
+                  isSaving
+                    ? 'pointer-events-none border-slate-400 text-slate-400'
+                    : 'border-rose-500 text-rose-500'
+                }`}
+                onClick={handleSubmit(onSubmit)}>
+                {isSaving ? (
+                  <RiDonutChartFill size={20} className='animate-spin' />
+                ) : (
+                  <FaSave size={20} />
+                )}
+              </button>
+            </>
+          ) : (
+            <button
+              className='flex items-center justify-center h-9 rounded-md px-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+              onClick={() => setEditMode(true)}>
+              <MdEdit size={20} />
+            </button>
+          )}
+        </div>
       </h1>
 
       {/* MARK: Info */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-5'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-5 items-start'>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Date: </span>
-          {order && <span className=''>{formatTime(order.createdAt)}</span>}
+          {!editMode ? (
+            <>
+              <span className='font-semibold'>Date: </span>
+              {order && <span className=''>{formatTime(order.createdAt)}</span>}
+            </>
+          ) : (
+            <Input
+              id='createdAt'
+              label='Date'
+              disabled={isSaving}
+              register={register}
+              errors={errors}
+              required
+              type='datetime-local'
+              icon={MdDateRange}
+              className='my-1'
+              onFocus={() => clearErrors('createdAt')}
+            />
+          )}
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           <span className='font-semibold'>Status: </span>
           <span className='font-semibold text-green-500'>{order?.status}</span>
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Email: </span>
-          <span className='text-sky-500'>{order?.email}</span>
+          {!editMode ? (
+            <>
+              <span className='font-semibold'>Email: </span>
+              <span className='text-sky-500'>{order?.email}</span>
+            </>
+          ) : (
+            <Input
+              id='email'
+              label='Email'
+              disabled={isSaving}
+              register={register}
+              errors={errors}
+              required
+              type='email'
+              icon={MdDateRange}
+              className='my-1'
+              onFocus={() => clearErrors('email')}
+            />
+          )}
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Total: </span>
-          <span className='text-secondary font-semibold'>{formatPrice(order?.total)}</span>
+          {!editMode ? (
+            <>
+              <span className='font-semibold'>Total: </span>
+              <span className='text-secondary font-semibold'>{formatPrice(order?.total)}</span>
+            </>
+          ) : (
+            <Input
+              id='total'
+              label='Total'
+              disabled={isSaving}
+              register={register}
+              errors={errors}
+              required
+              type='total'
+              icon={MdDateRange}
+              className='my-1'
+              onFocus={() => clearErrors('total')}
+            />
+          )}
         </div>
         {order?.voucherApplied && (
           <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>

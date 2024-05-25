@@ -392,7 +392,9 @@ function CartItem({
         {/* MARK: Quantity */}
         {!localCartItem && (
           <div className='flex items-center justify-between'>
-            <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
+            <div
+              className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}
+              onClick={e => e.stopPropagation()}>
               <button
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
                   quantity <= 1 || isLoading

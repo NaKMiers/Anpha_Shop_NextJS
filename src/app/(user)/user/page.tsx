@@ -126,33 +126,6 @@ function UserPage() {
   }
 
   // MARK: Handlers
-  // handle add files when user select files
-  const handleAddFile = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files) {
-        const file = e.target.files[0]
-
-        // validate file type and size
-        if (!file.type.startsWith('image/')) {
-          return toast.error('Please select an image file')
-        }
-        if (file.size > 3 * 1024 * 1024) {
-          return toast.error('Please select an image file less than 3MB')
-        }
-
-        setFile(file)
-        if (imageUrl) {
-          URL.revokeObjectURL(imageUrl)
-        }
-        setImageUrl(URL.createObjectURL(file))
-
-        e.target.value = ''
-        e.target.files = null
-      }
-    },
-    [imageUrl]
-  )
-
   // send verify email
   const handleVerifyEmail = useCallback(async () => {
     // start count down
@@ -206,6 +179,33 @@ function UserPage() {
       return () => clearTimeout(timer)
     }
   }, [countDownPhone])
+
+  // handle add files when user select files
+  const handleAddFile = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const file = e.target.files[0]
+
+        // validate file type and size
+        if (!file.type.startsWith('image/')) {
+          return toast.error('Please select an image file')
+        }
+        if (file.size > 3 * 1024 * 1024) {
+          return toast.error('Please select an image file less than 3MB')
+        }
+
+        setFile(file)
+        if (imageUrl) {
+          URL.revokeObjectURL(imageUrl)
+        }
+        setImageUrl(URL.createObjectURL(file))
+
+        e.target.value = ''
+        e.target.files = null
+      }
+    },
+    [imageUrl]
+  )
 
   // update avatar
   const handleSaveAvatar = useCallback(async () => {
