@@ -1,16 +1,16 @@
 'use client'
 
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { ICategory } from '@/models/CategoryModel'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import ProductCard from './ProductCard'
+import { IProduct } from '@/models/ProductModel'
 
 interface GroupProductsProps {
   category?: ICategory
-  products: FullyProduct[]
+  products: IProduct[]
   hideTop?: boolean
   className?: string
   bestSeller?: boolean

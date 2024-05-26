@@ -1,25 +1,25 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
+import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import mongoose from 'mongoose'
-import { getSession, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 
 interface CarouselProductProps {
-  product: FullyProduct
+  product: IProduct
   className?: string
 }
 
@@ -111,7 +111,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
     // calculate user cart length
     // const cartLength = localCart.reduce((total, cartItem) => total + cartItem.quantity, 0) + 1
 
-    dispatch(addLocalCartItem(newCartItem as FullyCartItem))
+    dispatch(addLocalCartItem(newCartItem as ICartItem))
 
     // success toast
     toast.success(`Đã thêm gói "${product.title}" vào giỏ hàng`)
@@ -210,7 +210,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
             {product.title}
           </h5>
           <p className='uppercase text-xs font-semibold text-slate-200 leading-3'>
-            - {product.category.title} -
+            - {(product.category as ICategory).title} -
           </p>
           <p className='font-bold text-white text-xs'>
             Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>

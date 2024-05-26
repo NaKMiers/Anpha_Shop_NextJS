@@ -1,9 +1,9 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { useEffect, useRef, useState } from 'react'
 import CarouselProduct from './item/CarouselItem'
+import { IProduct } from '@/models/ProductModel'
 
 interface CarouselProps {
-  products: FullyProduct[]
+  products: IProduct[]
   className?: string
 }
 

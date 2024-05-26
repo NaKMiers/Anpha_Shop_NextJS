@@ -1,9 +1,9 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
+import { ICartItem } from '@/models/CartItemModel'
+import { IProduct } from '@/models/ProductModel'
 import { getCartApi, searchProductsApi, updateProductsInLocalCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
@@ -74,13 +74,13 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       try {
         // send product ids to get corresponding cart items
         const { products } = await updateProductsInLocalCartApi(
-          localCartItems.map(item => item.product._id)
+          localCartItems.map(item => (item.product as IProduct)._id)
         )
 
         const updatedLocalCartItems = localCartItems
           .map(cartItem => {
             const product = products.find(
-              (product: FullyProduct) => product._id === cartItem.product._id
+              (product: IProduct) => product._id === (cartItem.product as IProduct)._id
             )
 
             // make sure quantity is not greater than stock
@@ -95,7 +95,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                 }
               : null
           })
-          .filter(cartItem => cartItem) as FullyCartItem[]
+          .filter(cartItem => cartItem) as ICartItem[]
 
         dispatch(setLocalCartItems(updatedLocalCartItems))
         setIsLocalCartUpdated(true)

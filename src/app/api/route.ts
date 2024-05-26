@@ -1,10 +1,9 @@
 import { connectDatabase } from '@/config/database'
 import { ICategory } from '@/models/CategoryModel'
-import ProductModel from '@/models/ProductModel'
+import ProductModel, { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { shuffleArray } from '@/utils'
 import { NextResponse } from 'next/server'
-import { FullyProduct } from './product/[slug]/route'
 
 // Models: Product, Tag, Category, Flashsale
 import '@/models/CategoryModel'
@@ -23,7 +22,7 @@ export async function GET() {
     await connectDatabase()
 
     // get all products to show in home page
-    const products: FullyProduct[] = await ProductModel.find({ active: true })
+    const products: IProduct[] = await ProductModel.find({ active: true })
       .populate('tags')
       .populate('category')
       .populate('flashsale')
@@ -32,9 +31,11 @@ export async function GET() {
     // get all categories from products to make sure that no category with empty products
     let categories: ICategory[] = Array.from(
       new Set(
-        products.reduce((categories: ICategory[], product: FullyProduct) => {
-          if (product.category && product.category._id) {
-            categories.push(product.category)
+        products.reduce((categories: ICategory[], product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+
+          if (category && category._id) {
+            categories.push(category)
           }
           return categories
         }, [])
@@ -53,9 +54,10 @@ export async function GET() {
     // get all tags from products to make sure that no tag with empty products
     const tags: ITag[] = Array.from(
       new Set(
-        products.reduce((tags: ITag[], product: FullyProduct) => {
-          if (product.tags && product.tags.length > 0) {
-            tags.push(...product.tags)
+        products.reduce((tags: ITag[], product: IProduct) => {
+          const tgs: ITag[] = product.tags as ITag[]
+          if (tgs && tgs.length > 0) {
+            tags.push(...tgs)
           }
           return tags
         }, [])
@@ -66,7 +68,7 @@ export async function GET() {
     const productsByCategoryGroups = categories
       .map(category => {
         const productsByCtg = products
-          .filter(product => product.category._id.toString() === category._id.toString())
+          .filter(product => (product.category as ICategory)._id.toString() === category._id.toString())
           .sort((a, b) => {
             if (a.booted && !b.booted) {
               return -1

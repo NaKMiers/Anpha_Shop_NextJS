@@ -1,6 +1,5 @@
 'use client'
 
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import Image from 'next/image'
@@ -13,11 +12,12 @@ import BannerMenu from './BannerMenu'
 import Carousel from './Carousel'
 import Header from './Header'
 import Slider from './Slider'
+import { IProduct } from '@/models/ProductModel'
 
 interface BannerProps {
   categories: ICategory[]
   tags: ITag[]
-  carouselProducts: FullyProduct[]
+  carouselProducts: IProduct[]
 }
 
 function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerProps) {
