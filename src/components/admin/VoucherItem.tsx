@@ -1,4 +1,5 @@
-import { VoucherWithOwner } from '@/app/(admin)/admin/voucher/all/page'
+import { IUser } from '@/models/UserModel'
+import { IVoucher } from '@/models/VoucherModel'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
 import Link from 'next/link'
@@ -9,7 +10,7 @@ import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
 
 interface VoucherItemProps {
-  data: VoucherWithOwner
+  data: IVoucher
   loadingVouchers: string[]
   className?: string
 
@@ -107,7 +108,7 @@ function VoucherItem({
           {/* Owner */}
           <p className='text-sm' title='owner'>
             <span className='font-semibold'>Owner: </span>
-            <span>{data.owner?.firstname + ' ' + data.owner?.lastname}</span>
+            <span>{(data.owner as IUser)?.firstname + ' ' + (data.owner as IUser)?.lastname}</span>
           </p>
 
           {/* Used Users */}
