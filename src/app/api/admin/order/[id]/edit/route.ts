@@ -15,20 +15,21 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     await connectDatabase()
 
     // get data to edit order
-    const { createdAt, email, total } = await req.json()
-
-    console.log('createdAt: ', createdAt)
-    console.log('email: ', email)
-    console.log('total: ', total)
+    const { createdAt, email, total, items } = await req.json()
 
     // update order
-    const updatedOrder = await OrderModel.findByIdAndUpdate(id, {
-      $set: {
-        createdAt,
-        email,
-        total,
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          createdAt,
+          email,
+          total,
+          items,
+        },
       },
-    })
+      { new: true }
+    )
 
     // check if order exists or not
     if (!updatedOrder) {

@@ -9,11 +9,11 @@ import { IAccount } from '@/models/AccountModel'
 import { editOrderApi, getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
-import { useRouter } from 'next/navigation'
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { set } from 'mongoose'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaCopy, FaSave } from 'react-icons/fa'
+import { FaCopy, FaMinus, FaPlus, FaSave, FaTrash } from 'react-icons/fa'
 import { IoIosHelpCircle } from 'react-icons/io'
 import { MdCancel, MdDateRange, MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -21,12 +21,16 @@ import { RiDonutChartFill } from 'react-icons/ri'
 function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // hooks
   const dispatch = useAppDispatch()
-  const router = useRouter()
 
   // states
   const [order, setOrder] = useState<FullyOrder | null>(null)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
+
+  const totalQuantity: number = useMemo(
+    () => order?.items.reduce((total, item) => total + item.quantity, 0),
+    [order]
+  )
 
   // form
   const {
@@ -85,7 +89,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
         try {
           console.log('data: ', data)
-          const { updatedOrder, message } = await editOrderApi(order?._id, data)
+          const { updatedOrder, message } = await editOrderApi(order?._id, { ...order, ...data })
 
           // updated order staet
           setOrder(updatedOrder)
@@ -107,6 +111,31 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
     [order]
   )
 
+  // handle change item quantity
+  const handleChangeItemQuantity = useCallback((item: any, value: 1 | -1) => {
+    setOrder(
+      (prev: any) =>
+        ({
+          ...prev,
+          items: prev.items.map((i: any) =>
+            i._id === item._id ? { ...i, quantity: i.quantity + value <= 1 ? 1 : i.quantity + value } : i
+          ),
+        } as FullyOrder)
+    )
+  }, [])
+
+  // handle remove item
+  const handleRemoveItem = useCallback((removeItem: any) => {
+    console.log('Remove Item', removeItem)
+    setOrder(
+      (prev: any) =>
+        ({
+          ...prev,
+          items: prev.items.filter((item: any) => item._id !== removeItem._id),
+        } as FullyOrder)
+    )
+  }, [])
+
   // handle copy
   const handleCopy = useCallback((text: string) => {
     navigator.clipboard.writeText(text)
@@ -123,12 +152,12 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           {editMode ? (
             <>
               <button
-                className='flex items-center justify-center h-9 rounded-md px-2 border-2 border-slate-400 text-slate-400 hover:bg-slate-400 hover:text-white common-transition'
+                className='group flex items-center justify-center h-9 rounded-md px-2 border-2 border-slate-400 text-slate-400 hover:bg-slate-400 hover:text-white common-transition'
                 onClick={() => setEditMode(false)}>
-                <MdCancel size={20} />
+                <MdCancel size={20} className='wiggle' />
               </button>
               <button
-                className={`flex items-center justify-center h-9 rounded-md px-2 border-2 hover:bg-rose-500 hover:text-white common-transition ${
+                className={`group flex items-center justify-center h-9 rounded-md px-2 border-2 hover:bg-rose-500 hover:text-white common-transition ${
                   isSaving
                     ? 'pointer-events-none border-slate-400 text-slate-400'
                     : 'border-rose-500 text-rose-500'
@@ -137,15 +166,15 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                 {isSaving ? (
                   <RiDonutChartFill size={20} className='animate-spin' />
                 ) : (
-                  <FaSave size={20} />
+                  <FaSave size={20} className='wiggle' />
                 )}
               </button>
             </>
           ) : (
             <button
-              className='flex items-center justify-center h-9 rounded-md px-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+              className='group flex items-center justify-center h-9 rounded-md px-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
               onClick={() => setEditMode(true)}>
-              <MdEdit size={20} />
+              <MdEdit size={20} className='wiggle' />
             </button>
           )}
         </div>
@@ -238,7 +267,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
       {/* Product */}
       <h3 className='text-2xl font-semibold mb-4 mt-6'>
-        Product{(order?.items.length || 0) > 1 ? 's' : ''}
+        Product{totalQuantity > 1 ? 's' : ''} ({totalQuantity})
       </h3>
 
       {/* MARK: Items */}
@@ -246,9 +275,34 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         <div className='pl-21/2 relative mb-5' key={item.product._id}>
           <div className='absolute top-1/2 -translate-y-1/2 left-0 h-[88%] w-px bg-slate-200' />
 
-          <div className='rounded-medium border border-slate-300 shadow-lg p-21/2'>
+          <div className='relative rounded-medium border border-slate-300 shadow-lg p-21/2'>
             <CartItem cartItem={item} isCheckout localCartItem isOrderDetailProduct />
 
+            {/* Adjustments */}
+            {editMode && (
+              <div className='flex gap-2 absolute top-2 right-2'>
+                {/* Decrease */}
+                <button
+                  className='group rounded-md h-6 flex items-center justify-center px-1 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+                  onClick={() => handleChangeItemQuantity(item, -1)}>
+                  <FaMinus size={12} className='wiggle' />
+                </button>
+
+                {/* Increase */}
+                <button
+                  className='group rounded-md h-6 flex items-center justify-center px-1 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+                  onClick={() => handleChangeItemQuantity(item, 1)}>
+                  <FaPlus size={12} className='wiggle' />
+                </button>
+
+                {/* Remove Button */}
+                <button
+                  className='group rounded-md h-6 flex items-center justify-center px-1 border-2 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white common-transition'
+                  onClick={() => handleRemoveItem(item)}>
+                  <FaTrash size={12} className='wiggle' />
+                </button>
+              </div>
+            )}
             {order.status === 'done' ? (
               item.accounts.map((account: IAccount) => (
                 <Fragment key={account._id}>
