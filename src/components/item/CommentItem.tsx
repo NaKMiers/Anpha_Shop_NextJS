@@ -1,3 +1,4 @@
+import { IComment } from '@/models/CommentModel'
 import { hideCommentApi, likeCommentApi, replyCommentApi } from '@/requests/commentRequest'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -6,12 +7,11 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash, FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
 import { format } from 'timeago.js'
-import { FullyComment } from '../Comment'
 import LoadingButton from '../LoadingButton'
 
 interface CommentItemProps {
-  comment: FullyComment
-  setCmts: React.Dispatch<React.SetStateAction<FullyComment[]>>
+  comment: IComment
+  setCmts: React.Dispatch<React.SetStateAction<IComment[]>>
   className?: string
 }
 
@@ -94,12 +94,10 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
 
           setCmts(prev =>
             prev.map(c =>
-              c.replied.map((reply: FullyComment) => reply._id).includes(cmt._id)
+              c.replied.map((reply: any) => reply._id).includes(cmt._id)
                 ? {
                     ...c,
-                    replied: c.replied.map((reply: FullyComment) =>
-                      reply._id === cmt._id ? cmt : reply
-                    ),
+                    replied: c.replied.map((reply: any) => (reply._id === cmt._id ? cmt : reply)),
                   }
                 : c
             )
@@ -129,10 +127,10 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
 
           setCmts(prev =>
             prev.map(c => {
-              return c.replied.map((reply: FullyComment) => reply._id).includes(cmt._id)
+              return (c.replied as IComment[]).map(reply => reply._id).includes(cmt._id)
                 ? {
                     ...c,
-                    replied: c.replied.map((reply: FullyComment) =>
+                    replied: (c.replied as IComment[]).map(reply =>
                       reply._id === cmt._id ? cmt : reply
                     ),
                   }
@@ -255,7 +253,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
 
           {/* MARK: Replied Comments */}
           <div className='relative flex flex-col gap-3 mt-1'>
-            {comment.replied.map((comment: FullyComment) => (
+            {(comment.replied as IComment[]).map(comment => (
               <CommentItem setCmts={setCmts} comment={comment} key={comment._id} />
             ))}
           </div>

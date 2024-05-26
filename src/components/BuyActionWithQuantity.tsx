@@ -1,6 +1,5 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
@@ -107,7 +106,7 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
     }
 
     // add new cart item to local cart
-    dispatch(addLocalCartItem(newCartItem as FullyCartItem))
+    dispatch(addLocalCartItem(newCartItem as ICartItem))
 
     // success toast
     toast.success(`Đã thêm gói "${product?.title}" vào giỏ hàng`)

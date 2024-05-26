@@ -5,9 +5,9 @@ import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Voucher, User
-import '@/models/VoucherModel'
 import '@/models/UserModel'
-import { FullyVoucher } from '@/app/api/user/order-history/route'
+import '@/models/VoucherModel'
+import { IUser } from '@/models/UserModel'
 
 // [POST]: /voucher/:code/apply
 export async function POST(req: NextRequest, { params: { code } }: { params: { code: string } }) {
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
     const { email, total } = await req.json()
 
     // get voucher from database to apply
-    const voucher: FullyVoucher | null = await VoucherModel.findOne({ code }).populate('owner').lean()
+    const voucher: IVoucher | null = await VoucherModel.findOne({ code }).populate('owner').lean()
 
     // if voucher does not exist
     if (!voucher || !voucher.active) {
@@ -33,7 +33,8 @@ export async function POST(req: NextRequest, { params: { code } }: { params: { c
     }
 
     // prevent user use their own voucher
-    if (voucher.owner.email === email || voucher.owner.email === userEmail) {
+    const owner: IUser = voucher.owner as IUser
+    if (owner.email === email || owner.email === userEmail) {
       return NextResponse.json(
         { message: 'Bạn không thể sử dụng voucher của chính mình' },
         { status: 401 }

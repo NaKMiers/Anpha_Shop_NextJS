@@ -1,4 +1,3 @@
-import { FullyCartItem } from '@/app/api/cart/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
   addCartItem,
@@ -8,6 +7,7 @@ import {
   updateCartItemQuantity,
   updateLocalCartItemQuantity,
 } from '@/libs/reducers/cartReducer'
+import { ICartItem } from '@/models/CartItemModel'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
@@ -20,9 +20,12 @@ import { RiDonutChartFill } from 'react-icons/ri'
 import { TbPackages } from 'react-icons/tb'
 import ConfirmDialog from './ConfirmDialog'
 import Price from './Price'
+import { CartItemToAdd } from '@/app/api/cart/add/route'
+import { IProduct } from '@/models/ProductModel'
+import { IFlashsale } from '@/models/FlashsaleModel'
 
 interface CartItemProps {
-  cartItem: FullyCartItem
+  cartItem: ICartItem
   localCartItem?: boolean
   className?: string
   isCheckout?: boolean
@@ -89,7 +92,7 @@ function CartItem({
       // send request to add product to cart
       const { cartItems, message, errors } = await addToCartApi([
         { productId: cartItem.productId, quantity: cartItem.quantity },
-      ])
+      ] as CartItemToAdd[])
 
       // show toast success
       if (message) {
@@ -165,7 +168,7 @@ function CartItem({
         }
         // increase
         else if (value === 1) {
-          if (quantity >= cartItem.product.stock) return
+          if (quantity >= (cartItem.product as IProduct).stock) return
           if (curUser) {
             dispatch(
               updateCartItemQuantity({
@@ -218,13 +221,21 @@ function CartItem({
                 }, 0)
               }
             }
-            if (value > cartItem.product.stock) {
+            if (value > (cartItem.product as IProduct).stock) {
               if (curUser) {
-                dispatch(updateCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock }))
-                updateQuantityGlobal(cartItem.product.stock)
+                dispatch(
+                  updateCartItemQuantity({
+                    id: cartItem._id,
+                    quantity: (cartItem.product as IProduct).stock,
+                  })
+                )
+                updateQuantityGlobal((cartItem.product as IProduct).stock)
               } else {
                 dispatch(
-                  updateLocalCartItemQuantity({ id: cartItem._id, quantity: cartItem.product.stock })
+                  updateLocalCartItemQuantity({
+                    id: cartItem._id,
+                    quantity: (cartItem.product as IProduct).stock,
+                  })
                 )
               }
             } else {
@@ -238,7 +249,7 @@ function CartItem({
         }, 1010)
       }
     },
-    [cartItem._id, cartItem.product.stock, curUser, dispatch, quantity, updateQuantityGlobal]
+    [updateQuantityGlobal, dispatch, cartItem._id, cartItem.product, curUser, quantity]
   )
 
   return (
@@ -259,9 +270,9 @@ function CartItem({
       }>
       {/* MARK: Thumbnails */}
       <div className='relative'>
-        {cartItem.product.stock <= 0 && (
+        {(cartItem.product as IProduct).stock <= 0 && (
           <Link
-            href={`/${cartItem.product.slug}`}
+            href={`/${(cartItem.product as IProduct).slug}`}
             prefetch={false}
             className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
             <Image
@@ -275,18 +286,18 @@ function CartItem({
         )}
 
         <Link
-          href={`/${cartItem.product.slug}`}
+          href={`/${(cartItem.product as IProduct).slug}`}
           prefetch={false}
           className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
           onClick={e => e.stopPropagation()}>
           <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
-            {cartItem.product.images.map(src => (
+            {(cartItem.product as IProduct).images.map(src => (
               <Image
                 className='flex-shrink w-full snap-start'
                 src={src}
                 width={150}
                 height={150}
-                alt={`/${cartItem.product.slug}`}
+                alt={`/${(cartItem.product as IProduct).slug}`}
                 key={src}
               />
             ))}
@@ -336,7 +347,9 @@ function CartItem({
       {/* MARK: Body */}
       <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
-        <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`}>{cartItem.product.title}</h2>
+        <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`}>
+          {(cartItem.product as IProduct).title}
+        </h2>
 
         {/* Info */}
         {isOrderDetailProduct && (
@@ -353,7 +366,7 @@ function CartItem({
               <FaHashtag className='text-darker' size={16} />
               <span className='text-darker font-bold text-nowrap'>Giá:</span>
               <span className='text-green-500'>
-                {formatPrice(cartItem.product.price * cartItem.quantity)}
+                {formatPrice((cartItem.product as IProduct).price * cartItem.quantity)}
               </span>
             </div>
           </div>
@@ -375,16 +388,16 @@ function CartItem({
           <>
             {/* Price & Stock */}
             <Price
-              price={cartItem.product.price}
-              oldPrice={cartItem.product.oldPrice}
-              stock={cartItem.product.stock}
-              flashSale={cartItem.product.flashsale}
+              price={(cartItem.product as IProduct).price}
+              oldPrice={(cartItem.product as IProduct).oldPrice}
+              stock={(cartItem.product as IProduct).stock}
+              flashSale={(cartItem.product as IProduct).flashsale as IFlashsale}
               big
             />
             <div className='flex items-center gap-1 mt-2 text-[16px]'>
               <TbPackages className='text-darker' size={22} />
               <span className='text-darker font-bold text-nowrap font-body tracking-wide'>Còn lại:</span>
-              <span className='text-green-500'>{cartItem.product.stock}</span>
+              <span className='text-green-500'>{(cartItem.product as IProduct).stock}</span>
             </div>
           </>
         )}
@@ -420,18 +433,18 @@ function CartItem({
                 inputMode='numeric'
                 pattern='[0-9]*'
                 value={quantity}
-                disabled={isLoading || cartItem.product.stock <= 0}
+                disabled={isLoading || (cartItem.product as IProduct).stock <= 0}
                 onWheel={e => e.currentTarget.blur()}
                 onChange={e => updateQuantity('input', +e.target.value)}
               />
 
               <button
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
-                  quantity >= cartItem.product?.stock! || isLoading
+                  quantity >= (cartItem.product as IProduct)?.stock! || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
                     : ' border-secondary bg-white'
                 }`}
-                disabled={quantity >= cartItem.product?.stock! || isLoading}
+                disabled={quantity >= (cartItem.product as IProduct)?.stock! || isLoading}
                 onClick={() => updateQuantity('button', 1)}>
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
