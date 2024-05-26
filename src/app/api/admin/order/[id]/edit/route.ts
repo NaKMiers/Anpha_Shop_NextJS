@@ -15,7 +15,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     await connectDatabase()
 
     // get data to edit order
-    const { createdAt, email, total, items } = await req.json()
+    const { createdAt, email, status, total, items } = await req.json()
 
     // update order
     const updatedOrder = await OrderModel.findByIdAndUpdate(
@@ -24,6 +24,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
         $set: {
           createdAt,
           email,
+          status,
           total,
           items,
         },

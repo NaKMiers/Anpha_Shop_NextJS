@@ -16,7 +16,7 @@ import toast from 'react-hot-toast'
 import { FaCopy, FaMinus, FaPlus, FaSave, FaTrash } from 'react-icons/fa'
 import { IoIosHelpCircle } from 'react-icons/io'
 import { MdCancel, MdDateRange, MdEdit } from 'react-icons/md'
-import { RiDonutChartFill } from 'react-icons/ri'
+import { RiCheckboxMultipleBlankLine, RiDonutChartFill } from 'react-icons/ri'
 
 function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // hooks
@@ -44,6 +44,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
     defaultValues: {
       createdAt: '',
       email: '',
+      status: '',
       total: 0,
     },
   })
@@ -65,6 +66,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         reset({
           createdAt: new Date(order.createdAt).toISOString().slice(0, 16),
           email: order.email,
+          status: order.status,
           total: order.total,
         })
       } catch (err: any) {
@@ -204,8 +206,46 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           )}
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Status: </span>
-          <span className='font-semibold text-green-500'>{order?.status}</span>
+          {!editMode ? (
+            <>
+              <span className='font-semibold'>Status: </span>
+              <span
+                className={`font-semibold ${
+                  order?.status === 'pending'
+                    ? 'text-yellow-400'
+                    : order?.status === 'done'
+                    ? 'text-green-500'
+                    : 'text-slate-400'
+                }`}>
+                {order?.status}
+              </span>
+            </>
+          ) : (
+            <Input
+              id='status'
+              label='Status'
+              disabled={isSaving}
+              register={register}
+              errors={errors}
+              icon={RiCheckboxMultipleBlankLine}
+              type='select'
+              onFocus={() => clearErrors('status')}
+              options={[
+                {
+                  value: 'pending',
+                  label: 'Pending',
+                },
+                {
+                  value: 'done',
+                  label: 'Done',
+                },
+                {
+                  value: 'cancel',
+                  label: 'Cancel',
+                },
+              ]}
+            />
+          )}
         </div>
         <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
           {!editMode ? (
