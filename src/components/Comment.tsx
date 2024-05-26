@@ -1,23 +1,17 @@
 'use client'
 
 import { IComment } from '@/models/CommentModel'
-import { IUser } from '@/models/UserModel'
 import { addCommentApi } from '@/requests/commentRequest'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import CommentItem from './item/CommentItem'
 import LoadingButton from './LoadingButton'
-
-export type FullyComment = IComment & {
-  user: IUser
-  replied: FullyComment[]
-}
+import CommentItem from './item/CommentItem'
 
 interface CommentProps {
-  comments: FullyComment[]
+  comments: IComment[]
   productId: string | undefined
   className?: string
 }
@@ -28,7 +22,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
   const curUser: any = session?.user
 
   // states
-  const [cmts, setCmts] = useState<FullyComment[]>(comments || [])
+  const [cmts, setCmts] = useState<IComment[]>(comments || [])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // forms

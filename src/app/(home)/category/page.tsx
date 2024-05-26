@@ -1,15 +1,15 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
 import Pagination from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
 import { getCategoriesPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 
 async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // Data
   let categories: ICategory[] = []
-  let products: FullyProduct[] = []
+  let products: IProduct[] = []
   let amount: number = 0
   let chops: { [key: string]: number } | null = null
   let query = ''

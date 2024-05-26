@@ -1,6 +1,5 @@
-import { FullyComment } from '@/components/Comment'
 import { connectDatabase } from '@/config/database'
-import CommentModel from '@/models/CommentModel'
+import CommentModel, { IComment } from '@/models/CommentModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -66,7 +65,7 @@ export async function PATCH(req: NextRequest, { params: { id } }: { params: { id
       return NextResponse.json({ message: 'Bình luận không tồn tại' }, { status: 404 })
     }
 
-    const comment: FullyComment = {
+    const comment: IComment = {
       ...updatedComment,
       userId: updatedComment.userId._id,
       user: updatedComment.userId,

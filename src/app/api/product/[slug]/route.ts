@@ -1,9 +1,6 @@
 import { connectDatabase } from '@/config/database'
-import { ICategory } from '@/models/CategoryModel'
 import CommentModel from '@/models/CommentModel'
-import { IFlashsale } from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import { ITag } from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Product, Tag, Category, Flashsale, Comment, User,
@@ -16,13 +13,6 @@ import '@/models/UserModel'
 
 export const dynamic = 'force-dynamic'
 
-// products with category and tags and flashsale
-export type FullyProduct = IProduct & {
-  category: ICategory
-  tags: ITag[]
-  flashsale: IFlashsale
-}
-
 // [GET]: /product/:slug
 export async function GET(req: NextRequest, { params: { slug } }: { params: { slug: string } }) {
   console.log('- Get Product Page -')
@@ -32,7 +22,7 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     await connectDatabase()
 
     // get product from database
-    const product: FullyProduct | null = await ProductModel.findOne({
+    const product: IProduct | null = await ProductModel.findOne({
       slug: encodeURIComponent(slug),
       active: true,
     })

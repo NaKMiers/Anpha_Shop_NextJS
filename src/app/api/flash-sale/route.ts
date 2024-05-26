@@ -1,14 +1,14 @@
 import { connectDatabase } from '@/config/database'
 import '@/models/FlashsaleModel'
-import ProductModel from '@/models/ProductModel'
+import ProductModel, { IProduct } from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyProduct } from '../product/[slug]/route'
 
 // Models: Product, Flash Sale
 import '@/models/FlashsaleModel'
 import '@/models/ProductModel'
+import { IFlashsale } from '@/models/FlashsaleModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    let products: FullyProduct[] = []
+    let products: IProduct[] = []
     let amount: number = 0
     if (params.price) {
       // get all products from database
@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
 
       products = products
         .map(product => {
-          const appliedPrice = applyFlashSalePrice(product.flashsale, product.price)
+          const appliedPrice = applyFlashSalePrice(product.flashsale as IFlashsale, product.price)
           return { ...product, price: appliedPrice }
         })
         .filter(product => product.price <= +params.price[0])

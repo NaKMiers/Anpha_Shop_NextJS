@@ -1,9 +1,9 @@
 import { connectDatabase } from '@/config/database'
-import ProductModel from '@/models/ProductModel'
+import ProductModel, { IProduct } from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyProduct } from '../product/[slug]/route'
+import { IFlashsale } from '@/models/FlashsaleModel'
 
 // Models: Product, Tag, Category, FlashSale
 import '@/models/FlashsaleModel'
@@ -95,7 +95,7 @@ export async function GET(req: NextRequest) {
     }
 
     // find products by category base on search params
-    let products: FullyProduct[] = await ProductModel.find(filter)
+    let products: IProduct[] = await ProductModel.find(filter)
       .populate('flashsale')
       .sort(sort)
       .skip(skip)
@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
         .map(product => {
           if (!product.flashsale) return product
 
-          const appliedPrice = applyFlashSalePrice(product.flashsale, product.price)
+          const appliedPrice = applyFlashSalePrice(product.flashsale as IFlashsale, product.price)
           return { ...product, price: appliedPrice }
         })
         .filter(product => product.price <= +params.price[0])

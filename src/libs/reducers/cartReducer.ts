@@ -1,31 +1,31 @@
-import { FullyCartItem } from '@/app/api/cart/route'
+import { ICartItem } from '@/models/CartItemModel'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a function to access localStorage safely
-const getLocalCartItems = (): FullyCartItem[] => {
+const getLocalCartItems = (): ICartItem[] => {
   return typeof window !== 'undefined'
-    ? (JSON.parse(localStorage.getItem('localCart') ?? '[]') as FullyCartItem[])
+    ? (JSON.parse(localStorage.getItem('localCart') ?? '[]') as ICartItem[])
     : []
 }
 
 export const cart = createSlice({
   name: 'cart',
   initialState: {
-    items: [] as FullyCartItem[],
+    items: [] as ICartItem[],
     localItems: getLocalCartItems(),
-    selectedItems: [] as FullyCartItem[],
+    selectedItems: [] as ICartItem[],
   },
   reducers: {
     // MARK: GLOCAL CART
-    setCartItems: (state, action: PayloadAction<FullyCartItem[]>) => {
+    setCartItems: (state, action: PayloadAction<ICartItem[]>) => {
       return {
         ...state,
         items: action.payload,
       }
     },
-    addCartItem: (state, action: PayloadAction<FullyCartItem[]>) => {
+    addCartItem: (state, action: PayloadAction<ICartItem[]>) => {
       // Initialize an array to store updated items
-      let updatedItems: FullyCartItem[] = [...state.items]
+      let updatedItems: ICartItem[] = [...state.items]
 
       // Loop through each item in the payload
       action.payload.forEach(item => {
@@ -63,7 +63,7 @@ export const cart = createSlice({
     },
 
     // MARK: LOCAL CART
-    setLocalCartItems: (state, action: PayloadAction<FullyCartItem[]>) => {
+    setLocalCartItems: (state, action: PayloadAction<ICartItem[]>) => {
       // set localStorage
       localStorage.setItem('localCart', JSON.stringify(action.payload))
 
@@ -72,7 +72,7 @@ export const cart = createSlice({
         localItems: action.payload,
       }
     },
-    addLocalCartItem: (state, action: PayloadAction<FullyCartItem>) => {
+    addLocalCartItem: (state, action: PayloadAction<ICartItem>) => {
       // if cart item has already existed in cart -> increase quantity
       const existedCartItem = state.localItems.find(item => item._id === action.payload._id)
       if (existedCartItem) {
@@ -135,7 +135,7 @@ export const cart = createSlice({
     },
 
     // MARK: Checkout
-    setSelectedItems: (state, action: PayloadAction<FullyCartItem[]>) => {
+    setSelectedItems: (state, action: PayloadAction<ICartItem[]>) => {
       return {
         ...state,
         selectedItems: action.payload,

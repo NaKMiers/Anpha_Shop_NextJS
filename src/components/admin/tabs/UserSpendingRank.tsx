@@ -1,4 +1,3 @@
-import Divider from '@/components/Divider'
 import { getRankUsersApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import Image from 'next/image'

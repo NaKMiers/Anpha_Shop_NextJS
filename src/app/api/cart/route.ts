@@ -4,17 +4,12 @@ import '@/models/FlashsaleModel'
 import '@/models/ProductModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyProduct } from '../product/[slug]/route'
 
 // Models: CartItem, Product
 import '@/models/CartItemModel'
 import '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'
-
-export type FullyCartItem = ICartItem & {
-  product: FullyProduct
-}
 
 // [GET]: /cart
 export async function GET(req: NextRequest) {
@@ -59,7 +54,7 @@ export async function GET(req: NextRequest) {
             }
           : null
       )
-      .filter(cartItem => cartItem) as FullyCartItem[]
+      .filter(cartItem => cartItem) as ICartItem[]
 
     // return user's cart
     return NextResponse.json({ cart }, { status: 200 })

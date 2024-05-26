@@ -1,6 +1,5 @@
-import { FlashSaleWithProducts } from '@/app/(admin)/admin/flash-sale/all/page'
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashsaleModel'
+import FlashsaleModel, { IFlashsale } from '@/models/FlashsaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -19,7 +18,7 @@ export async function GET(req: NextRequest, { params: { id } }: { params: { id: 
     await connectDatabase()
 
     // get flash sale from database
-    const flashSale: FlashSaleWithProducts | null = await FlashsaleModel.findById(id).lean()
+    const flashSale: IFlashsale | null = await FlashsaleModel.findById(id).lean()
 
     if (!flashSale) {
       return NextResponse.json({ message: 'Flash sale not found' }, { status: 404 })

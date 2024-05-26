@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
+import { IVoucher } from './VoucherModel'
+import { ICartItem } from './CartItemModel'
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema(
@@ -162,4 +164,9 @@ export interface IUser {
   verifiedPhone: boolean
   createdAt: string
   updatedAt: string
+
+  // subs
+  vouchers?: IVoucher[]
+  cart?: ICartItem[]
+  cartLength?: number
 }

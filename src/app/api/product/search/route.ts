@@ -1,7 +1,6 @@
 import { connectDatabase } from '@/config/database'
-import ProductModel from '@/models/ProductModel'
+import ProductModel, { IProduct } from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyProduct } from '../[slug]/route'
 
 // Models: Product
 import '@/models/ProductModel'
@@ -50,7 +49,7 @@ export async function GET(req: NextRequest) {
     filter.$or = orArray
 
     // find products by category base on search params
-    let products: FullyProduct[] = await ProductModel.find(filter).sort(sort).lean()
+    let products: IProduct[] = await ProductModel.find(filter).sort(sort).lean()
 
     // return response
     return NextResponse.json({ products }, { status: 200 })

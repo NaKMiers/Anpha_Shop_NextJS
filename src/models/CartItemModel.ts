@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { IProduct } from './ProductModel'
+import { IUser } from './UserModel'
 const Schema = mongoose.Schema
 
 const CartItemSchema = new Schema(
@@ -29,9 +31,12 @@ export default CartItemModel
 
 export interface ICartItem {
   _id: string
-  userId: string
-  productId: string
+  userId: string | IUser
+  productId: string | IProduct
   quantity: number
   createdAt: string
   updatedAt: string
+
+  // subs
+  product?: IProduct
 }

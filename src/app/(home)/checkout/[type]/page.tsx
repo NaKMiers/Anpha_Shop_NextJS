@@ -1,11 +1,11 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import { admins } from '@/constansts'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { ICartItem } from '@/models/CartItemModel'
 import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -216,7 +216,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <Divider size={5} />
 
         <div>
-          {checkout?.items.map((cartItem: FullyCartItem, index: number) => (
+          {checkout?.items.map((cartItem: ICartItem, index: number) => (
             <CartItem
               cartItem={cartItem}
               className={index != 0 ? 'mt-4' : ''}

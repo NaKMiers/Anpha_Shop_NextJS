@@ -17,10 +17,8 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaSearch, FaSort } from 'react-icons/fa'
-import { ProductWithTagsAndCategory } from '../../product/all/page'
 import { GroupTypes } from '../add/page'
-
-export type AccountWithProduct = IAccount & { type: ProductWithTagsAndCategory }
+import { ICategory } from '@/models/CategoryModel'
 
 function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: string[] | string } }) {
   // store
@@ -29,7 +27,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   const router = useRouter()
 
   // states
-  const [accounts, setAccounts] = useState<AccountWithProduct[]>([])
+  const [accounts, setAccounts] = useState<IAccount[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
   const [types, setTypes] = useState<IProduct[]>([])
@@ -83,11 +81,12 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
-        types.forEach((product: ProductWithTagsAndCategory) => {
-          if (!groupTypes[product.category.title]) {
-            groupTypes[product.category.title] = []
+        types.forEach((product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+          if (!groupTypes[category.title]) {
+            groupTypes[category.title] = []
           }
-          groupTypes[product.category.title].push(product)
+          groupTypes[category.title].push(product)
         })
 
         // update accounts from state
@@ -129,7 +128,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       // update accounts from state
       setAccounts(prev =>
         prev.map(account =>
-          updatedAccounts.map((account: AccountWithProduct) => account._id).includes(account._id)
+          updatedAccounts.map((account: IAccount) => account._id).includes(account._id)
             ? { ...account, active: value }
             : account
         )
@@ -155,8 +154,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         // remove deleted tags from state
         setAccounts(prev =>
           prev.filter(
-            account =>
-              !deletedAccounts.map((account: AccountWithProduct) => account._id).includes(account._id)
+            account => !deletedAccounts.map((account: IAccount) => account._id).includes(account._id)
           )
         )
 

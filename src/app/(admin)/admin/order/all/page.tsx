@@ -1,6 +1,5 @@
 'use client'
 
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
@@ -26,7 +25,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const router = useRouter()
 
   // states
-  const [orders, setOrders] = useState<FullyOrder[]>([])
+  const [orders, setOrders] = useState<IOrder[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
 

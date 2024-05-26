@@ -1,9 +1,8 @@
-import { FullyOrder } from '@/app/api/user/order-history/route'
-import AccountModel, { IAccount } from '@/models/AccountModel'
-import OrderModel from '@/models/OrderModel'
+import AccountModel from '@/models/AccountModel'
+import OrderModel, { IOrder } from '@/models/OrderModel'
 import ProductModel from '@/models/ProductModel'
-import UserModel from '@/models/UserModel'
-import VoucherModel from '@/models/VoucherModel'
+import UserModel, { IUser } from '@/models/UserModel'
+import VoucherModel, { IVoucher } from '@/models/VoucherModel'
 import { notifyDeliveryOrder, notifyShortageAccount } from '@/utils/sendMail'
 import { calcExpireTime } from '@/utils/time'
 import { NextResponse } from 'next/server'
@@ -23,7 +22,7 @@ interface AccountListItem {
 
 export default async function handleDeliverOrder(id: string, message: string = '') {
   // get order from database to deliver
-  const order: FullyOrder | null = await OrderModel.findById(id)
+  const order: IOrder | null = await OrderModel.findById(id)
     .populate({
       path: 'voucherApplied',
       select: 'code',
@@ -156,10 +155,10 @@ export default async function handleDeliverOrder(id: string, message: string = '
 
   // VOUCHER
   // get voucher form database
-  const voucher = order.voucherApplied
+  const voucher: IVoucher = order.voucherApplied as IVoucher
 
   if (voucher) {
-    const commission: any = voucher.owner.commission
+    const commission: any = (voucher.owner as IUser).commission
     let extraAccumulated = 0
 
     switch (commission.type) {

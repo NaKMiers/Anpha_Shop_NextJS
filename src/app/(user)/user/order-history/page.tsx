@@ -1,11 +1,11 @@
 'use client'
 
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import Input from '@/components/Input'
 import OrderItem from '@/components/item/OrderItem'
 import Pagination from '@/components/Pagination'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { IOrder } from '@/models/OrderModel'
 import { getOrderHistoryApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
@@ -24,7 +24,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   const router = useRouter()
 
   // states
-  const [orders, setOrders] = useState<FullyOrder[]>([])
+  const [orders, setOrders] = useState<IOrder[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false)
 

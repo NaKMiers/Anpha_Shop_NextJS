@@ -1,12 +1,15 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import BuyActionWithQuantity from '@/components/BuyActionWithQuantity'
 import ChooseMe from '@/components/ChooseMe'
-import Comment, { FullyComment } from '@/components/Comment'
+import Comment from '@/components/Comment'
 import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
 import Slider from '@/components/Slider'
+import { ICategory } from '@/models/CategoryModel'
+import { IComment } from '@/models/CommentModel'
+import { IFlashsale } from '@/models/FlashsaleModel'
+import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { getProductPageApi } from '@/requests'
 import { Metadata } from 'next'
@@ -25,9 +28,9 @@ export const metadata: Metadata = {
 
 async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
   // Data
-  let product: FullyProduct | null = null
-  let relatedProducts: FullyProduct[] = []
-  let comments: FullyComment[] = []
+  let product: IProduct | null = null
+  let relatedProducts: IProduct[] = []
+  let comments: IComment[] = []
 
   // MARK: Get Data
   try {
@@ -49,7 +52,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     description: product?.description,
     brand: {
       '@type': 'Brand',
-      name: product?.category.title,
+      name: (product?.category as ICategory).title,
     },
     offers: {
       '@type': 'Offer',
@@ -168,7 +171,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             price={product?.price || 0}
             oldPrice={product?.oldPrice}
             stock={product?.stock || 0}
-            flashSale={product?.flashsale}
+            flashSale={product?.flashsale as IFlashsale}
             big
           />
 
@@ -178,10 +181,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <MdCategory className='w-7 text-darker' size={26} />
               <span className='text-darker font-bold text-nowrap'>Thể loại:</span>
               <Link
-                href={`/category?ctg=${product?.category.slug}`}
+                href={`/category?ctg=${(product?.category as ICategory).slug}`}
                 prefetch={false}
                 className='text-orange-500 hover:underline'>
-                {product?.category.title}
+                {(product?.category as ICategory).title}
               </Link>
             </div>
 
@@ -189,12 +192,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             <div className='flex items-center gap-1 flex-wrap'>
               <FaTags className='w-7 text-darker' size={20} />
               <span className='text-darker font-bold text-nowrap'>Tags:</span>
-              {product?.tags.map((tag: ITag, index) => (
-                <Link
-                  href={`/tags?ctg=${tag.slug}`}
-                  prefetch={false}
-                  className='text-dark'
-                  key={tag.slug}>
+              {(product?.tags as ITag[]).map((tag: ITag, index) => (
+                <Link href={`/tags?ctg=${tag.slug}`} prefetch={false} className='text-dark' key={index}>
                   {tag.title + (index !== product!.tags.length - 1 ? ', ' : '')}
                 </Link>
               ))}
@@ -229,7 +228,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         {/* MARK: Introduction */}
         <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>
         <div className='flex flex-wrap w-full -mx-21/2'>
-          {product?.category.slug === 'netflix' && (
+          {(product?.category as ICategory).slug === 'netflix' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}
@@ -254,7 +253,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {product?.category.slug === 'capcut' && (
+          {(product?.category as ICategory).slug === 'capcut' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}
@@ -279,7 +278,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {product?.category.slug === 'chatgpt' && (
+          {(product?.category as ICategory).slug === 'chatgpt' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}
@@ -307,7 +306,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {product?.category.slug === 'youtube' && (
+          {(product?.category as ICategory).slug === 'youtube' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}
@@ -332,7 +331,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {product?.category.slug === 'spotify' && (
+          {(product?.category as ICategory).slug === 'spotify' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}
@@ -356,7 +355,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {product?.category.slug === 'grammarly' && (
+          {(product?.category as ICategory).slug === 'grammarly' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}
@@ -384,7 +383,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {product?.category.slug === 'canva' && (
+          {(product?.category as ICategory).slug === 'canva' && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
                 Chào mừng bạn đến với{' '}

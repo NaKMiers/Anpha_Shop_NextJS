@@ -18,8 +18,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCalendar, FaSearch, FaSort } from 'react-icons/fa'
 
-export type VoucherWithOwner = IVoucher & { owner: { firstname: string; lastname: string } }
-
 function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
   const dispatch = useAppDispatch()
@@ -27,7 +25,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
   const router = useRouter()
 
   // states
-  const [vouchers, setVouchers] = useState<VoucherWithOwner[]>([])
+  const [vouchers, setVouchers] = useState<IVoucher[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedVouchers, setSelectedVouchers] = useState<string[]>([])
 
@@ -128,7 +126,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       // update vouchers from state
       setVouchers(prev =>
         prev.map(voucher =>
-          updatedVouchers.map((voucher: VoucherWithOwner) => voucher._id).includes(voucher._id)
+          updatedVouchers.map((voucher: IVoucher) => voucher._id).includes(voucher._id)
             ? { ...voucher, active: value }
             : voucher
         )

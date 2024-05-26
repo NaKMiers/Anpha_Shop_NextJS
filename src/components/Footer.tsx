@@ -1,5 +1,7 @@
 'use client'
-import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page'
+
+import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
 import { getBestSellerProductsApi } from '@/requests'
 import AspectRatio from '@mui/joy/AspectRatio'
 import Card from '@mui/joy/Card'
@@ -14,7 +16,7 @@ import { PiSignOutBold } from 'react-icons/pi'
 
 function Footer() {
   // states
-  const [bestSellerProducts, setBestSellerProducts] = useState<ProductWithTagsAndCategory[]>([])
+  const [bestSellerProducts, setBestSellerProducts] = useState<IProduct[]>([])
 
   // get best seller products
   useEffect(() => {
@@ -116,7 +118,7 @@ function Footer() {
                         {product.title}
                       </p>
                       <span className='text-gray-500 font-body text-xs font-semibold'>
-                        {product.category.title}
+                        {(product.category as ICategory).title}
                       </span>
                     </CardContent>
                   </Card>

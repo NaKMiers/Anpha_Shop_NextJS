@@ -1,12 +1,12 @@
 'use client'
 
-import { UserWithVouchers } from '@/app/api/admin/summary/all/route'
 import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
 import AdminMeta from '@/components/admin/AdminMeta'
 import SummaryItem from '@/components/admin/SummaryItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import { IUser } from '@/models/UserModel'
 import { getAllCollaboratorsApi, sendSummaryApi } from '@/requests/summaryRequest'
 import { handleQuery } from '@/utils/handleQuery'
 import { useCallback, useEffect, useState } from 'react'
@@ -17,7 +17,7 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
   const dispatch = useAppDispatch()
 
   // states
-  const [summaries, setSummaries] = useState<UserWithVouchers[]>([])
+  const [summaries, setSummaries] = useState<IUser[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedSummaries, setSelectedSummaries] = useState<string[]>([])
 

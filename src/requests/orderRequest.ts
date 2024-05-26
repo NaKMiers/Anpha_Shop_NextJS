@@ -1,6 +1,6 @@
-import { FullyCartItem } from '@/app/api/cart/route'
-
 // Order -------------------------------------
+
+import { ICartItem } from '@/models/CartItemModel'
 
 // [GET]
 export const getAllOrdersApi = async (
@@ -68,7 +68,7 @@ export const createOrderApi = async (
   total: number,
   voucherApplied: string | undefined,
   discount: number | undefined,
-  items: FullyCartItem[],
+  items: ICartItem[],
   paymentMethod: string
 ) => {
   const res = await fetch('/api/order/create', {

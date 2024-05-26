@@ -4,15 +4,11 @@ import ProductModel, { IProduct } from '@/models/ProductModel'
 import { IUser } from '@/models/UserModel'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyCartItem } from '../route'
 
 // Models: CartItem, Product, Flash Sale
 import '@/models/CartItemModel'
 import '@/models/FlashsaleModel'
 import '@/models/ProductModel'
-
-export type UserWithCart = IUser & { cart: ICartItem[]; cartLength: number }
-export type CartItemWithProduct = ICartItem & { product: IProduct }
 
 export type CartItemToAdd = {
   productId: string
@@ -91,7 +87,7 @@ export async function POST(req: NextRequest) {
           ...existingCartItem,
           quantity: newQuantity,
           product: foundProduct,
-        } as FullyCartItem
+        } as ICartItem
       } else {
         // not enough product to add
         if (foundProduct.stock < quantity) {

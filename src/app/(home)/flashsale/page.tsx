@@ -1,15 +1,13 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Meta from '@/components/Meta'
 import Pagination from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
-import { ICategory } from '@/models/CategoryModel'
-import { ITag } from '@/models/TagModel'
-import { getFlashSalePageApi, getTagsPageApi } from '@/requests'
+import { IProduct } from '@/models/ProductModel'
+import { getFlashSalePageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 
 async function TagPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // Data
-  let products: FullyProduct[] = []
+  let products: IProduct[] = []
   let amount: number = 0
   let chops: { [key: string]: number } | null = null
   let query = ''

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { IProduct } from './ProductModel'
 const Schema = mongoose.Schema
 
 const AccountSchema = new Schema(
@@ -73,7 +74,7 @@ export default AccountModel
 
 export interface IAccount {
   _id: string
-  type: string
+  type: string | IProduct
   info: string
   usingUser?: string
   active: boolean

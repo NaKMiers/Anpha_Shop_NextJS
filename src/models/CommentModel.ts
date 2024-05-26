@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { IProduct } from './ProductModel'
+import { IUser } from './UserModel'
 const Schema = mongoose.Schema
 
 const CommentSchema = new Schema(
@@ -41,12 +43,15 @@ export default CommentModel
 
 export interface IComment {
   _id: string
-  userId: string
-  productId: string
+  userId: string | IUser
+  productId: string | IProduct
   content: string
-  replied: string[]
-  likes: string[]
+  replied: string[] | IComment[]
+  likes: string[] | IUser[]
   hide: boolean
   createdAt: string
   updatedAt: string
+
+  // subs
+  user?: IUser
 }

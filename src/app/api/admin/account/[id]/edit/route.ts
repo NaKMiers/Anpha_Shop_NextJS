@@ -1,13 +1,12 @@
 import { connectDatabase } from '@/config/database'
 import AccountModel, { IAccount } from '@/models/AccountModel'
-import OrderModel from '@/models/OrderModel'
+import OrderModel, { IOrder } from '@/models/OrderModel'
 import { notifyAccountUpdated } from '@/utils/sendMail'
 import { getTimes } from '@/utils/time'
 import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Account, Order
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import '@/models/AccountModel'
 import '@/models/OrderModel'
 
@@ -41,7 +40,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
 
     const isChangedUsingUser = updatedAccount?.usingUser !== usingUser
 
-    let order: FullyOrder | null = null
+    let order: IOrder | null = null
 
     if (isChangedUsingUser) {
       // get order from database to update account

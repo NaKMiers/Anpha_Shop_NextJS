@@ -1,5 +1,5 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
 import { getAllProductsApi } from '@/requests'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -26,8 +26,9 @@ function CategoryRankTab({ className = '' }: CategoryRankTabProps) {
 
         // Category Sold Rank
         const categorySoldMap: { [key: string]: ICategory & { sold: number } } = {}
-        products.forEach((product: FullyProduct) => {
-          const { category, sold }: { category: ICategory; sold: number } = product
+        products.forEach((product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+          const sold = product.sold
           if (!categorySoldMap[category.slug]) {
             categorySoldMap[category.slug] = { ...category, sold: 0 }
           }

@@ -1,7 +1,7 @@
 import { connectDatabase } from '@/config/database'
 import CategoryModel from '@/models/CategoryModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
-import TagModel from '@/models/TagModel'
+import TagModel, { ITag } from '@/models/TagModel'
 import { generateSlug } from '@/utils'
 import { deleteFile, uploadFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
@@ -65,11 +65,11 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     })
 
     // get tags that need to be increased and decreased
-    const oldTags = product.tags
-    const newTags = tags
+    const oldTags: ITag[] = product.tags as ITag[]
+    const newTags: ITag[] = tags as ITag[]
 
-    const tagsToIncrease = newTags.filter((tag: string) => !oldTags.includes(tag))
-    const tagsToDecrease = oldTags.filter((tag: string) => !newTags.includes(tag))
+    const tagsToIncrease = newTags.filter(tag => !oldTags.includes(tag))
+    const tagsToDecrease = oldTags.filter(tag => !newTags.includes(tag))
 
     // get category that need to be increased and decreased
     const oldCategory = product.category

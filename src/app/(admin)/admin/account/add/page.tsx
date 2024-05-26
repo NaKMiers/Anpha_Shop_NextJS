@@ -2,17 +2,17 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Divider from '@/components/Divider'
 import AdminHeader from '@/components/admin/AdminHeader'
 import AddAccountForm from '@/components/admin/forms/AddAccountForm'
 import { getForceAllProductsApi } from '@/requests'
 import toast from 'react-hot-toast'
-import { ProductWithTagsAndCategory } from '../../product/all/page'
 import LoadingButton from '@/components/LoadingButton'
+import { IProduct } from '@/models/ProductModel'
+import { ICategory } from '@/models/CategoryModel'
 
 export type GroupTypes = {
-  [key: string]: ProductWithTagsAndCategory[]
+  [key: string]: IProduct[]
 }
 
 function AddAccountPage() {
@@ -48,11 +48,12 @@ function AddAccountPage() {
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
-        products.forEach((product: FullyProduct) => {
-          if (!groupTypes[product.category.title]) {
-            groupTypes[product.category.title] = []
+        products.forEach((product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+          if (!groupTypes[category.title]) {
+            groupTypes[category.title] = []
           }
-          groupTypes[product.category.title].push(product)
+          groupTypes[category.title].push(product)
         })
 
         setGroupTypes(groupTypes)
@@ -128,11 +129,12 @@ function AddAccountPage() {
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
-        products.forEach((product: FullyProduct) => {
-          if (!groupTypes[product.category.title]) {
-            groupTypes[product.category.title] = []
+        products.forEach((product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+          if (!groupTypes[category.title]) {
+            groupTypes[category.title] = []
           }
-          groupTypes[product.category.title].push(product)
+          groupTypes[category.title].push(product)
         })
 
         setGroupTypes(groupTypes)

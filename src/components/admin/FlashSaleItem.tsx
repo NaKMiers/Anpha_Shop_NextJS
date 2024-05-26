@@ -1,4 +1,3 @@
-import { FlashSaleWithProducts } from '@/app/(admin)/admin/flash-sale/all/page'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
 import Image from 'next/image'
@@ -8,9 +7,11 @@ import { FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import { IFlashsale } from '@/models/FlashsaleModel'
+import { IProduct } from '@/models/ProductModel'
 
 interface FlashSaleItemProps {
-  data: FlashSaleWithProducts
+  data: IFlashsale
   loadingFlashSales: string[]
   className?: string
 
@@ -83,7 +84,7 @@ function FlashSaleItem({
 
         {/* Applying Products */}
         <div className='flex flex-wrap rounded-lg gap-2 max-h-[300px] overflow-y-auto mb-3'>
-          {data.products.map(product => (
+          {(data.products as IProduct[]).map(product => (
             <div
               className='border border-slate-300 bg-white rounded-lg flex items-start p-2 gap-2'
               key={product._id}>

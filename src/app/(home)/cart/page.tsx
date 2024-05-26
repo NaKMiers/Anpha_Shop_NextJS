@@ -1,6 +1,6 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
+import { CartItemToAdd } from '@/app/api/cart/add/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Input from '@/components/Input'
@@ -13,6 +13,8 @@ import {
   setSelectedItems,
 } from '@/libs/reducers/cartReducer'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
+import { ICartItem } from '@/models/CartItemModel'
+import { IProduct } from '@/models/ProductModel'
 import { IVoucher } from '@/models/VoucherModel'
 import { addToCartApi, applyVoucherApi, createOrderApi } from '@/requests'
 import { applyFlashSalePrice, calcPercentage, formatPrice } from '@/utils/number'
@@ -47,8 +49,8 @@ function CartPage() {
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
   const [cartLength, setCartlength] = useState<number>(0)
-  const [items, setItems] = useState<FullyCartItem[]>([])
-  const [localItems, setLocalItems] = useState<FullyCartItem[]>([])
+  const [items, setItems] = useState<ICartItem[]>([])
+  const [localItems, setLocalItems] = useState<ICartItem[]>([])
 
   // loading and showing
   const [isShowVoucher, setIsShowVoucher] = useState<boolean>(false)
@@ -117,7 +119,9 @@ function CartPage() {
 
   // auto select cart item
   useEffect(() => {
-    const selectedItems = items.filter(item => queryParams.getAll('product').includes(item.product.slug))
+    const selectedItems = items.filter(item =>
+      queryParams.getAll('product').includes((item.product as IProduct).slug)
+    )
 
     dispatch(setSelectedItems(selectedItems))
   }, [queryParams, items, dispatch])
@@ -164,10 +168,13 @@ function CartPage() {
     try {
       // send request to add product to cart
       const { cartItems, message, errors } = await addToCartApi(
-        localItems.map(item => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        }))
+        localItems.map(
+          item =>
+            ({
+              productId: item.productId,
+              quantity: item.quantity,
+            } as CartItemToAdd)
+        )
       )
 
       // show toast success
@@ -236,7 +243,7 @@ function CartPage() {
 
       try {
         // handle confirm payment
-        const items = (selectedItems as any).map((cartItem: FullyCartItem) => ({
+        const items = (selectedItems as any).map((cartItem: ICartItem) => ({
           _id: cartItem._id,
           product: cartItem.product,
           quantity: cartItem.quantity,
@@ -265,7 +272,7 @@ function CartPage() {
 
         // remove cart items if is LOCAL cart
         const asd = localCartItems.filter(
-          (item: FullyCartItem) => !selectedItems.map(i => i._id).includes(item._id)
+          (item: ICartItem) => !selectedItems.map(i => i._id).includes(item._id)
         )
 
         if (!curUser?._id) {
@@ -309,11 +316,11 @@ function CartPage() {
     try {
       // const { orderCode } = await generateOrderCodeApi() // cache: no-store
 
-      const items = selectedItems.map((cartItem: FullyCartItem) => ({
+      const items = selectedItems.map((cartItem: ICartItem) => ({
         _id: cartItem._id,
         product: cartItem.product,
         quantity: cartItem.quantity,
-      })) as FullyCartItem[]
+      })) as ICartItem[]
 
       // send request to server to create order
       const { removedCartItems, message } = await createOrderApi(

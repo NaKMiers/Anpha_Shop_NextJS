@@ -1,4 +1,5 @@
-import { UserWithVouchers } from '@/app/api/admin/summary/all/route'
+import { IUser } from '@/models/UserModel'
+import { IVoucher } from '@/models/VoucherModel'
 import { formatPrice } from '@/utils/number'
 import { formatDate } from '@/utils/time'
 import React from 'react'
@@ -6,7 +7,7 @@ import { IoIosSend } from 'react-icons/io'
 import { RiDonutChartFill } from 'react-icons/ri'
 
 interface SummaryItemProps {
-  data: UserWithVouchers
+  data: IUser
   loadingSummaries: string[]
   className?: string
 
@@ -64,12 +65,14 @@ function SummaryItem({
         <p className='font-semibold text-sm'>
           Temporary Income:{' '}
           <span className='text-sky-500'>
-            {formatPrice(data.vouchers.reduce((total, voucher) => total + voucher.accumulated, 0))}
+            {formatPrice(
+              (data.vouchers as IVoucher[]).reduce((total, voucher) => total + voucher.accumulated, 0)
+            )}
           </span>
         </p>
         <p className='font-semibold text-sm'>
           Vouchers:{' '}
-          {data.vouchers.map((voucher, index) => (
+          {(data.vouchers as IVoucher[]).map((voucher, index) => (
             <span
               className='text-slate-500'
               title={`${voucher.type} | ${
@@ -79,7 +82,7 @@ function SummaryItem({
               } | ${formatPrice(voucher.minTotal)} | ${formatPrice(voucher.maxReduce)}`}
               key={voucher.code}>
               {voucher.code}
-              {index === data.vouchers.length - 1 ? '' : ', '}
+              {index === (data.vouchers as IVoucher[]).length - 1 ? '' : ', '}
             </span>
           ))}
         </p>

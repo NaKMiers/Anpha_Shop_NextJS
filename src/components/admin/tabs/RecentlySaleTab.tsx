@@ -1,6 +1,7 @@
 'use client'
 
-import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
+import { IAccount } from '@/models/AccountModel'
+import { IProduct } from '@/models/ProductModel'
 import { getAllAccountsApi } from '@/requests'
 import moment from 'moment'
 import Image from 'next/image'
@@ -15,7 +16,7 @@ interface RecentlySaleTab {
 
 function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
   // states
-  const [accounts, setAccounts] = useState<AccountWithProduct[]>([])
+  const [accounts, setAccounts] = useState<IAccount[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
 
@@ -77,18 +78,20 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
         return (
           <div className='flex gap-3 mb-4' key={account._id}>
             <Link
-              href={`/${account.type.slug}`}
+              href={`/${(account.type as IProduct).slug}`}
               className='flex-shrink-0 flex max-w-[80px] items-start w-full no-scrollbar'>
               <Image
                 className='aspect-video rounded-lg shadow-lg'
-                src={account.type?.images[0] || '/images/not-found.jpg'}
+                src={(account.type as IProduct)?.images[0] || '/images/not-found.jpg'}
                 height={80}
                 width={80}
                 alt='thumbnail'
               />
             </Link>
             <div className='font-body tracking-wider'>
-              <p className='font-semibold text-ellipsis line-clamp-1 -mt-1.5'>{account.type.title}</p>
+              <p className='font-semibold text-ellipsis line-clamp-1 -mt-1.5'>
+                {(account.type as IProduct).title}
+              </p>
               <Link
                 href={`/admin/account/all?search=${account.usingUser}`}
                 className='text-ellipsis line-clamp-1 text-sm'>

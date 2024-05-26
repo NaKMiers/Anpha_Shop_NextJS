@@ -8,8 +8,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import '@/models/UserModel'
 import '@/models/VoucherModel'
 
-export type UserWithVouchers = IUser & { vouchers: IVoucher[] }
-
 // [GET]: /admin/summary/all
 export async function GET(req: NextRequest) {
   console.log('- Get All Collaborators -')
@@ -56,10 +54,10 @@ export async function GET(req: NextRequest) {
     const collaborators = await UserModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
     // get vouchers associated with each collaborator
-    const collaboratorsWithVouchers: UserWithVouchers[] = await Promise.all(
+    const collaboratorsWithVouchers: IUser[] = await Promise.all(
       collaborators.map(async collaborator => {
         const vouchers: IVoucher[] = await VoucherModel.find({ owner: collaborator._id }).lean()
-        return { ...collaborator, vouchers } as UserWithVouchers
+        return { ...collaborator, vouchers } as IUser
       })
     )
 

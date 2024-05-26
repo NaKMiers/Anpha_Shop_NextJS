@@ -1,6 +1,4 @@
 import { connectDatabase } from '@/config/database'
-import { ICategory } from '@/models/CategoryModel'
-import { ITag } from '@/models/TagModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: User, Account, Voucher, Category, Tag, Order, Product
@@ -8,11 +6,9 @@ import '@/models/AccountModel'
 import '@/models/CategoryModel'
 import '@/models/OrderModel'
 import '@/models/ProductModel'
-import ProductModel from '@/models/ProductModel'
 import '@/models/TagModel'
 import '@/models/UserModel'
 import '@/models/VoucherModel'
-import { FullyProduct } from '../product/[slug]/route'
 
 export const dynamic = 'force-dynamic'
 

@@ -18,8 +18,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCalendar, FaSort } from 'react-icons/fa'
 
-export type FlashSaleWithProducts = IFlashsale & { products: IProduct[] }
-
 function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // store
   const dispatch = useAppDispatch()
@@ -27,7 +25,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
   const router = useRouter()
 
   // states
-  const [flashSales, setFlashSales] = useState<FlashSaleWithProducts[]>([])
+  const [flashSales, setFlashSales] = useState<IFlashsale[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedFlashSales, setSelectedFlashSales] = useState<string[]>([])
 
@@ -104,7 +102,10 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         const productIds = flashSales
           .filter(flashSale => ids.includes(flashSale._id))
           .reduce(
-            (acc, flashSale) => [...acc, ...flashSale.products.map(product => product._id)],
+            (acc, flashSale) => [
+              ...acc,
+              ...(flashSale.products as IProduct[]).map(product => product._id),
+            ],
             [] as string[]
           )
 

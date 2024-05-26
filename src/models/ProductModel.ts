@@ -1,5 +1,8 @@
 import { generateSlug } from '@/utils'
 import mongoose from 'mongoose'
+import { IFlashsale } from './FlashsaleModel'
+import { ITag } from './TagModel'
+import { ICategory } from './CategoryModel'
 const Schema = mongoose.Schema
 
 const ProductSchema = new Schema(
@@ -100,9 +103,9 @@ export interface IProduct {
   oldPrice?: number
   price: number
   description: string
-  flashsale?: string
-  tags: string[]
-  category: string
+  flashsale?: string | IFlashsale
+  tags: string[] | ITag[]
+  category: string | ICategory
   images: string[]
   sold: number
   stock: number

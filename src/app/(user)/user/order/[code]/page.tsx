@@ -1,11 +1,12 @@
 'use client'
 
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
+import { IOrder } from '@/models/OrderModel'
+import { IVoucher } from '@/models/VoucherModel'
 import { getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
@@ -18,7 +19,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   const dispatch = useAppDispatch()
 
   // states
-  const [order, setOrder] = useState<FullyOrder | null>(null)
+  const [order, setOrder] = useState<IOrder | null>(null)
 
   // MARK: Get Data
   // get order
@@ -88,8 +89,10 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
         {order?.voucherApplied && (
           <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
             <span className='font-semibold'>Voucher: </span>
-            <span className='text-slate-400 font-semibold' title={order?.voucherApplied.desc}>
-              {order?.voucherApplied.code}
+            <span
+              className='text-slate-400 font-semibold'
+              title={(order?.voucherApplied as IVoucher).desc}>
+              {(order?.voucherApplied as IVoucher).code}
             </span>
           </div>
         )}

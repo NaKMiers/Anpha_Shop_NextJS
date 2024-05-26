@@ -1,26 +1,27 @@
-import { ProductWithTagsAndCategory } from '@/app/(admin)/admin/product/all/page'
 import { ITag } from '@/models/TagModel'
 import { updateProductPropertyApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { use, useCallback, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, use, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash, FaRocket, FaSyncAlt, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { PiLightningFill, PiLightningSlashFill } from 'react-icons/pi'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import { IProduct } from '@/models/ProductModel'
+import { ICategory } from '@/models/CategoryModel'
 
 interface ProductItemProps {
-  data: ProductWithTagsAndCategory
+  data: IProduct
   loadingProducts: string[]
   syncingProducts: string[]
   className?: string
 
   // selected
   selectedProducts: string[]
-  setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>
+  setSelectedProducts: Dispatch<SetStateAction<string[]>>
 
   // functions
   handleActivateProducts: (ids: string[], active: boolean) => void
@@ -155,9 +156,11 @@ function ProductItem({
             title={data.title}>
             <span
               className={`shadow-md text-xs ${
-                data.category.title ? 'bg-yellow-300 text-dark' : 'bg-slate-200 text-slate-400'
+                (data.category as ICategory).title
+                  ? 'bg-yellow-300 text-dark'
+                  : 'bg-slate-200 text-slate-400'
               } px-2 py-px select-none rounded-md font-body mr-2`}>
-              {data.category.title || 'empty'}
+              {(data.category as ICategory).title || 'empty'}
             </span>
             {data.title}
           </p>
@@ -243,7 +246,7 @@ function ProductItem({
           {/* MARK: Tags */}
           <p className='text-slate-500'>
             <span className='text-dark font-semibold'>Tags: </span>
-            {data.tags.map((tag: ITag, index) => (
+            {(data.tags as ITag[]).map((tag: ITag, index) => (
               <span key={tag.slug} className='text-slate-400'>
                 {tag.title}
                 {index < data.tags.length - 1 ? ', ' : ''}

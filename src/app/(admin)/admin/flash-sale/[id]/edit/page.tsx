@@ -1,11 +1,11 @@
 'use client'
 
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
+import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { getFlashSaleApi, getForceAllProductsApi, updateFlashSaleApi } from '@/requests'
 import Image from 'next/image'
@@ -86,15 +86,17 @@ function EditFlashSalePage() {
         const { products } = await getForceAllProductsApi()
 
         // categorize products
-        const categorizedProductsObj = products.reduce((acc: any, product: FullyProduct) => {
-          if (!acc[product.category.title]) {
-            acc[product.category.title] = []
+        const categorizedProductsObj = products.reduce((acc: any, product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+
+          if (!acc[category.title]) {
+            acc[category.title] = []
           }
-          acc[product.category.title].push(product)
+          acc[category.title].push(product)
           return acc
         }, {})
 
-        const categorizedProducts = Object.values(categorizedProductsObj).flat() as FullyProduct[]
+        const categorizedProducts = Object.values(categorizedProductsObj).flat() as IProduct[]
 
         // set products to state
         setProducts(categorizedProducts)

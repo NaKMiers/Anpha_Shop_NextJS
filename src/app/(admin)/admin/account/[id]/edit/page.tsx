@@ -12,16 +12,17 @@ import { ImClock } from 'react-icons/im'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
+import { IProduct } from '@/models/ProductModel'
 import { getAccountApi, getForceAllProductsApi, updateAccountApi } from '@/requests'
+import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { MdCategory, MdMessage } from 'react-icons/md'
-import { ProductWithTagsAndCategory } from '../../../product/all/page'
 import { AiFillMessage } from 'react-icons/ai'
-import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
+import { MdCategory } from 'react-icons/md'
+import { ICategory } from '@/models/CategoryModel'
 
 export type GroupTypes = {
-  [key: string]: ProductWithTagsAndCategory[]
+  [key: string]: IProduct[]
 }
 
 function AddAccountPage() {
@@ -105,11 +106,12 @@ function AddAccountPage() {
 
         // group product be category.title
         const groupTypes: GroupTypes = {}
-        products.forEach((product: ProductWithTagsAndCategory) => {
-          if (!groupTypes[product.category.title]) {
-            groupTypes[product.category.title] = []
+        products.forEach((product: IProduct) => {
+          const category: ICategory = product.category as ICategory
+          if (!groupTypes[category.title]) {
+            groupTypes[category.title] = []
           }
-          groupTypes[product.category.title].push(product)
+          groupTypes[category.title].push(product)
         })
 
         setGroupTypes(groupTypes)

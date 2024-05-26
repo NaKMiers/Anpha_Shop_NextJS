@@ -1,5 +1,5 @@
 import { connectDatabase } from '@/config/database'
-import CartItemModel from '@/models/CartItemModel'
+import CartItemModel, { ICartItem } from '@/models/CartItemModel'
 import OrderModel from '@/models/OrderModel'
 import UserModel, { IUser } from '@/models/UserModel'
 import { generateOrderCode } from '@/utils'
@@ -7,7 +7,6 @@ import handleDeliverOrder from '@/utils/handleDeliverOrder'
 import { notifyNewOrderToAdmin } from '@/utils/sendMail'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { FullyCartItem } from '../../cart/route'
 
 // Models: User, CartItem, Order
 import '@/models/CartItemModel'
@@ -69,7 +68,7 @@ export async function POST(req: NextRequest) {
     let removedCartItems = []
     if (userId) {
       // delete cart items from database
-      removedCartItems = items.map((item: FullyCartItem) => item._id)
+      removedCartItems = items.map((item: ICartItem) => item._id)
       await CartItemModel.deleteMany({
         _id: { $in: removedCartItems },
       })

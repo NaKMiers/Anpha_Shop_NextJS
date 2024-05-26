@@ -1,11 +1,11 @@
 'use client'
 
-import { FullyCartItem } from '@/app/api/cart/route'
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
+import { IFlashsale } from '@/models/FlashsaleModel'
+import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import { applyFlashSalePrice, countPercent } from '@/utils/number'
 import mongoose from 'mongoose'
@@ -22,7 +22,7 @@ import { RiDonutChartFill } from 'react-icons/ri'
 import Price from './Price'
 
 interface ProductCardProps {
-  product: FullyProduct
+  product: IProduct
   className?: string
 }
 
@@ -116,7 +116,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
     }
 
     // add new cart item to local cart
-    dispatch(addLocalCartItem(newCartItem as FullyCartItem))
+    dispatch(addLocalCartItem(newCartItem as ICartItem))
 
     // success toast
     toast.success(`Đã thêm gói "${product.title}" vào giỏ hàng`)
@@ -234,7 +234,11 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       {/* Badge */}
       {product.oldPrice && product.stock > 0 && (
         <div className='absolute z-10 -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-white font-semibold font-body text-center text-[13px] leading-4'>
-          Giảm {countPercent(applyFlashSalePrice(product.flashsale, product.price), product.oldPrice)}
+          Giảm{' '}
+          {countPercent(
+            applyFlashSalePrice(product.flashsale as IFlashsale, product.price),
+            product.oldPrice
+          )}
         </div>
       )}
 
@@ -251,7 +255,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       <Price
         price={product.price}
         oldPrice={product.oldPrice}
-        flashSale={product.flashsale}
+        flashSale={product.flashsale as IFlashsale}
         stock={product.stock}
         className='mb-2'
       />

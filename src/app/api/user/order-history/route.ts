@@ -1,25 +1,15 @@
 import { connectDatabase } from '@/config/database'
 import OrderModel, { IOrder } from '@/models/OrderModel'
-import { IUser } from '@/models/UserModel'
-import { IVoucher } from '@/models/VoucherModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
+import momentTZ from 'moment-timezone'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import momentTZ from 'moment-timezone'
 
 // Models: Order, Voucher
 import '@/models/OrderModel'
 import '@/models/VoucherModel'
 
 export const dynamic = 'force-dynamic'
-
-export type FullyVoucher = IVoucher & {
-  owner: IUser
-}
-
-export type FullyOrder = IOrder & {
-  voucherApplied: FullyVoucher | null
-}
 
 // [GET]: /admin/order/all
 export async function GET(req: NextRequest) {
@@ -117,7 +107,7 @@ export async function GET(req: NextRequest) {
     })
 
     // get all order from database
-    const orders: FullyOrder[] = await OrderModel.find({
+    const orders: IOrder[] = await OrderModel.find({
       userId,
       ...filter,
     })

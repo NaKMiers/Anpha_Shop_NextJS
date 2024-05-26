@@ -1,4 +1,3 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import OrderModel from '@/models/OrderModel'
 import crypto from 'crypto'
 import slugify from 'slugify'

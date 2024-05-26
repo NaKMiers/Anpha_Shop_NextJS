@@ -1,4 +1,3 @@
-import { AccountWithProduct } from '@/app/(admin)/admin/account/all/page'
 import { formatTime, getColorClass, getTimeRemaining, isToday, usingPercentage } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,9 +7,12 @@ import { FaCheck, FaCopy, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import { IAccount } from '@/models/AccountModel'
+import { IProduct } from '@/models/ProductModel'
+import { ICategory } from '@/models/CategoryModel'
 
 interface AccountItemProps {
-  data: AccountWithProduct
+  data: IAccount
   loadingAccounts: string[]
   className?: string
 
@@ -55,14 +57,14 @@ function AccountItem({
         <div className='w-[calc(100%_-_42px)]'>
           {/* MARK: Thumbnails */}
           <Link
-            href={`/${data.type?.slug || ''}`}
+            href={`/${(data.type as IProduct)?.slug || ''}`}
             prefetch={false}
             onClick={e => e.stopPropagation()}
             className='mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
             <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
               <Image
                 className='aspect-video flex-shrink-0 snap-start object-cover w-full h-full'
-                src={data.type?.images[0] || '/images/not-found.jpg'}
+                src={(data.type as IProduct)?.images[0] || '/images/not-found.jpg'}
                 height={200}
                 width={200}
                 alt='thumbnail'
@@ -85,14 +87,16 @@ function AccountItem({
           {/* Type */}
           <p
             className='inline-flex mb-2 flex-wrap gap-2 items-center font-semibold text-[18px] mr-2 leading-5 font-body tracking-wide'
-            title={data.type?.title}>
+            title={(data.type as IProduct)?.title}>
             <span
               className={`shadow-md text-xs ${
-                data.type?.category.title ? 'bg-yellow-300 text-dark' : 'bg-slate-200 text-slate-400'
+                ((data.type as IProduct)?.category as ICategory).title
+                  ? 'bg-yellow-300 text-dark'
+                  : 'bg-slate-200 text-slate-400'
               } px-2 py-px select-none rounded-md font-body`}>
-              {data.type?.category.title || 'empty'}
+              {((data.type as IProduct)?.category as ICategory).title || 'empty'}
             </span>
-            {data.type?.title}
+            {(data.type as IProduct)?.title}
           </p>
 
           {/* Begin */}

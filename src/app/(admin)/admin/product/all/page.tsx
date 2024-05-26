@@ -27,8 +27,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaSort } from 'react-icons/fa'
 
-export type ProductWithTagsAndCategory = IProduct & { tags: ITag[]; category: ICategory }
-
 function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: string[] | string } }) {
   // store
   const dispatch = useAppDispatch()
@@ -36,7 +34,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
   const router = useRouter()
 
   // states
-  const [products, setProducts] = useState<ProductWithTagsAndCategory[]>([])
+  const [products, setProducts] = useState<IProduct[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [tgs, setTgs] = useState<ITag[]>([])
@@ -150,7 +148,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // update products from state
       setProducts(prev =>
         prev.map(product =>
-          updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
+          updatedProducts.map((product: IProduct) => product._id).includes(product._id)
             ? { ...product, active: value }
             : product
         )
@@ -173,7 +171,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // update products from state
       setProducts(prev =>
         prev.map(product =>
-          updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
+          updatedProducts.map((product: IProduct) => product._id).includes(product._id)
             ? { ...product, booted: value }
             : product
         )
@@ -199,12 +197,10 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // update products from state
       setProducts(prev =>
         prev.map(product =>
-          syncedProducts.map((prod: ProductWithTagsAndCategory) => prod._id).includes(product._id)
+          syncedProducts.map((prod: IProduct) => prod._id).includes(product._id)
             ? {
                 ...product,
-                stock: syncedProducts.find(
-                  (prod: ProductWithTagsAndCategory) => prod._id === product._id
-                )?.stock,
+                stock: syncedProducts.find((prod: IProduct) => prod._id === product._id)?.stock,
               }
             : product
         )
@@ -230,7 +226,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // update products from state
       setProducts(prev =>
         prev.map(product =>
-          updatedProducts.map((product: ProductWithTagsAndCategory) => product._id).includes(product._id)
+          updatedProducts.map((product: IProduct) => product._id).includes(product._id)
             ? { ...product, flashsale: undefined }
             : product
         )
@@ -255,10 +251,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // remove deleted products from state
       setProducts(prev =>
         prev.filter(
-          product =>
-            !deletedProducts
-              .map((product: ProductWithTagsAndCategory) => product._id)
-              .includes(product._id)
+          product => !deletedProducts.map((product: IProduct) => product._id).includes(product._id)
         )
       )
 

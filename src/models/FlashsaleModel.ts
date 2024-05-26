@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { IProduct } from './ProductModel'
 const Schema = mongoose.Schema
 
 const FlashsaleSchema = new Schema(
@@ -58,4 +59,7 @@ export interface IFlashsale {
   productQuantity: number
   createdAt: string
   updatedAt: string
+
+  // subs
+  products?: IProduct[]
 }

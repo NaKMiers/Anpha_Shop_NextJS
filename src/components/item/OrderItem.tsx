@@ -1,6 +1,7 @@
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import { useAppDispatch } from '@/libs/hooks'
 import { addCartItem } from '@/libs/reducers/cartReducer'
+import { IOrder } from '@/models/OrderModel'
+import { IVoucher } from '@/models/VoucherModel'
 import { addToCartApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
@@ -12,7 +13,7 @@ import CartItem from '../CartItem'
 import LoadingButton from '../LoadingButton'
 
 interface OrderItemProps {
-  order: FullyOrder
+  order: IOrder
   className?: string
 }
 
@@ -114,8 +115,10 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
         <div className='flex flex-wrap items-center justify-between gap-x-3'>
           <div>
             <span className='font-semibold'>Voucher: </span>
-            <span title={order.voucherApplied.desc} className='font-semibold text-slate-400'>
-              {order.voucherApplied.code}
+            <span
+              title={(order.voucherApplied as IVoucher).desc}
+              className='font-semibold text-slate-400'>
+              {(order.voucherApplied as IVoucher).code}
             </span>
           </div>
           <div>

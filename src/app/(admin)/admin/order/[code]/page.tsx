@@ -1,15 +1,15 @@
 'use client'
 
-import { FullyOrder } from '@/app/api/user/order-history/route'
 import CartItem from '@/components/CartItem'
 import Input from '@/components/Input'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
+import { IOrder } from '@/models/OrderModel'
+import { IVoucher } from '@/models/VoucherModel'
 import { editOrderApi, getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
-import { set } from 'mongoose'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -23,7 +23,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
   const dispatch = useAppDispatch()
 
   // states
-  const [order, setOrder] = useState<FullyOrder | null>(null)
+  const [order, setOrder] = useState<IOrder | null>(null)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
 
@@ -120,7 +120,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           items: prev.items.map((i: any) =>
             i._id === item._id ? { ...i, quantity: i.quantity + value <= 1 ? 1 : i.quantity + value } : i
           ),
-        } as FullyOrder)
+        } as IOrder)
     )
   }, [])
 
@@ -132,7 +132,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         ({
           ...prev,
           items: prev.items.filter((item: any) => item._id !== removeItem._id),
-        } as FullyOrder)
+        } as IOrder)
     )
   }, [])
 
@@ -252,8 +252,10 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         {order?.voucherApplied && (
           <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
             <span className='font-semibold'>Voucher: </span>
-            <span className='text-slate-400 font-semibold' title={order?.voucherApplied.desc}>
-              {order?.voucherApplied.code}
+            <span
+              className='text-slate-400 font-semibold'
+              title={(order?.voucherApplied as IVoucher).desc}>
+              {(order?.voucherApplied as IVoucher).code}
             </span>
           </div>
         )}

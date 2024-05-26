@@ -1,12 +1,11 @@
-import { FullyProduct } from '@/app/api/product/[slug]/route'
 import ProductCard from '@/components/ProductCard'
+import { IProduct } from '@/models/ProductModel'
 import { getBestSellerPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
-import Heading from '@/components/Heading'
 
 async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // Data
-  let products: FullyProduct[] = []
+  let products: IProduct[] = []
   let query = ''
 
   // MARK: Get Data
