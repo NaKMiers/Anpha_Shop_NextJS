@@ -19,7 +19,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     await connectDatabase()
 
     // get data to edit account
-    const { usingUser, type, info, renew, active, days, hours, minutes, seconds, notify, message } =
+    const { usingUser, type, info, renew, expire, active, days, hours, minutes, seconds, notify, message } =
       await req.json()
     const times = getTimes(+days, +hours, +minutes, +seconds)
 
@@ -31,6 +31,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           type,
           info,
           renew,
+          expire,
           times,
           active,
         },
