@@ -2,24 +2,24 @@
 
 import Input from '@/components/Input'
 import LoadingButton from '@/components/LoadingButton'
-import { useAppDispatch, useAppSelector } from '@/libs/hooks'
-import { useCallback, useEffect, useState } from 'react'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { FaCheck, FaInfo, FaUser } from 'react-icons/fa'
-import { FaPlay } from 'react-icons/fa6'
-import { ImClock } from 'react-icons/im'
-
 import AdminHeader from '@/components/admin/AdminHeader'
+import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
+import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { getAccountApi, getForceAllProductsApi, updateAccountApi } from '@/requests'
 import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
+import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AiFillMessage } from 'react-icons/ai'
+import { FaCheck, FaInfo, FaUser } from 'react-icons/fa'
+import { FaPlay } from 'react-icons/fa6'
+import { ImClock } from 'react-icons/im'
 import { MdCategory } from 'react-icons/md'
-import { ICategory } from '@/models/CategoryModel'
 
 export type GroupTypes = {
    [key: string]: IProduct[]
@@ -80,8 +80,8 @@ function AddAccountPage() {
             // set value to form
             setValue('type', account.type)
             setValue('info', account.info)
-            setValue('renew', new Date(account.renew).toISOString().split('T')[0])
-            setValue('expire', new Date(account.expire).toISOString().slice(0, 16))
+            setValue('renew', moment(account.expire).local().format('YYYY-MM-DD'))
+            setValue('expire', moment(account.expire).local().format('YYYY-MM-DDTHH:mm'))
             setValue('days', account.times.days)
             setValue('hours', account.times.hours)
             setValue('minutes', account.times.minutes)

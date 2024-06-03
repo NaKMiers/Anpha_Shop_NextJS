@@ -12,186 +12,190 @@ import { IProduct } from '@/models/ProductModel'
 import { ICategory } from '@/models/CategoryModel'
 
 export type GroupTypes = {
-  [key: string]: IProduct[]
+   [key: string]: IProduct[]
 }
 
 function AddAccountPage() {
-  // states
-  const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
-  const defaultValues = useMemo(
-    () => ({
-      id: new Date().getTime(),
-      type: '',
-      info: '',
-      renew: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
-      days: 1,
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-      active: true,
-    }),
-    []
-  )
-  const [forms, setForms] = useState<any[]>([defaultValues])
-  const [adding, setAdding] = useState<string>('')
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
-  const [isLoopRunning, setIsLoopRunning] = useState<boolean>(false)
-  const timeout = useRef<any>(null)
+   // states
+   const [groupTypes, setGroupTypes] = useState<GroupTypes>({})
+   const defaultValues = useMemo(
+      () => ({
+         id: new Date().getTime(),
+         type: '',
+         info: '',
+         renew: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+         days: 1,
+         hours: 0,
+         minutes: 0,
+         seconds: 0,
+         active: true,
+      }),
+      []
+   )
+   const [forms, setForms] = useState<any[]>([defaultValues])
+   const [adding, setAdding] = useState<string>('')
+   const [currentIndex, setCurrentIndex] = useState<number>(0)
+   const [isLoopRunning, setIsLoopRunning] = useState<boolean>(false)
+   const timeout = useRef<any>(null)
 
-  // MARK: Get Data
-  // get all types (products)
-  useEffect(() => {
-    const getAllTypes = async () => {
-      try {
-        // send request to server to get all products
-        const { products } = await getForceAllProductsApi()
+   // MARK: Get Data
+   // get all types (products)
+   useEffect(() => {
+      const getAllTypes = async () => {
+         try {
+            // send request to server to get all products
+            const { products } = await getForceAllProductsApi()
 
-        // group product be category.title
-        const groupTypes: GroupTypes = {}
-        products.forEach((product: IProduct) => {
-          const category: ICategory = product.category as ICategory
-          if (!groupTypes[category.title]) {
-            groupTypes[category.title] = []
-          }
-          groupTypes[category.title].push(product)
-        })
+            // group product be category.title
+            const groupTypes: GroupTypes = {}
+            products.forEach((product: IProduct) => {
+               const category: ICategory = product.category as ICategory
+               if (!groupTypes[category.title]) {
+                  groupTypes[category.title] = []
+               }
+               groupTypes[category.title].push(product)
+            })
 
-        setGroupTypes(groupTypes)
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
+            setGroupTypes(groupTypes)
+         } catch (err: any) {
+            console.log(err)
+            toast.error(err.message)
+         }
       }
-    }
-    getAllTypes()
-  }, [])
+      getAllTypes()
+   }, [])
 
-  const handleAddForm = useCallback(() => {
-    setForms(prev => [
-      ...prev,
-      {
-        ...defaultValues,
-        id: new Date().getTime(),
-      },
-    ])
-  }, [setForms, defaultValues])
+   const handleAddForm = useCallback(() => {
+      setForms(prev => [
+         ...prev,
+         {
+            ...defaultValues,
+            id: new Date().getTime(),
+         },
+      ])
+   }, [setForms, defaultValues])
 
-  const handleDuplicateForm = useCallback((form: any) => {
-    setForms(prev => [
-      ...prev,
-      {
-        ...form,
-        id: new Date().getTime() + Math.random(),
-      },
-    ])
-  }, [])
+   const handleDuplicateForm = useCallback((form: any) => {
+      setForms(prev => [
+         ...prev,
+         {
+            ...form,
+            id: new Date().getTime() + Math.random(),
+         },
+      ])
+   }, [])
 
-  const handleRemoveForm = useCallback((id: number) => {
-    setForms(prev => prev.filter(form => form.id !== id))
-  }, [])
+   const handleRemoveForm = useCallback((id: number) => {
+      setForms(prev => prev.filter(form => form.id !== id))
+   }, [])
 
-  useEffect(() => {
-    const startLoop = () => {
-      setAdding(forms[currentIndex].id)
+   useEffect(() => {
+      const startLoop = () => {
+         setAdding(forms[currentIndex].id)
 
-      if (currentIndex >= forms.length - 1) {
-        setCurrentIndex(0)
-        setIsLoopRunning(false)
-        return
+         if (currentIndex >= forms.length - 1) {
+            setCurrentIndex(0)
+            setIsLoopRunning(false)
+            return
+         }
+
+         // Move to the next item in the array after 1 second
+         timeout.current = setTimeout(() => {
+            setCurrentIndex(prevIndex => prevIndex + 1)
+         }, 1000)
       }
 
-      // Move to the next item in the array after 1 second
-      timeout.current = setTimeout(() => {
-        setCurrentIndex(prevIndex => prevIndex + 1)
-      }, 1000)
-    }
-
-    if (isLoopRunning) {
-      startLoop()
-    } else {
-      clearTimeout(timeout.current) // Clear timeout when loop is stopped
-      setAdding('')
-    }
-
-    return () => clearTimeout(timeout.current) // Cleanup function to clear timeout when component unmounts
-  }, [isLoopRunning, forms.length, currentIndex, forms, setAdding, setCurrentIndex])
-
-  const handleStartLoop = () => {
-    setIsLoopRunning(true)
-  }
-
-  // MARK: Get Data
-  // get all types (products)
-  useEffect(() => {
-    const getAllTypes = async () => {
-      try {
-        // send request to server to get all products
-        const { products } = await getForceAllProductsApi()
-
-        // group product be category.title
-        const groupTypes: GroupTypes = {}
-        products.forEach((product: IProduct) => {
-          const category: ICategory = product.category as ICategory
-          if (!groupTypes[category.title]) {
-            groupTypes[category.title] = []
-          }
-          groupTypes[category.title].push(product)
-        })
-
-        setGroupTypes(groupTypes)
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
+      if (isLoopRunning) {
+         startLoop()
+      } else {
+         clearTimeout(timeout.current) // Clear timeout when loop is stopped
+         setAdding('')
       }
-    }
-    getAllTypes()
-  }, [])
 
-  return (
-    <div className='max-w-1200 mx-auto'>
-      {/* MARK: Admin Header */}
-      <AdminHeader title='Add Account' backLink='/admin/account/all' />
+      return () => clearTimeout(timeout.current) // Cleanup function to clear timeout when component unmounts
+   }, [isLoopRunning, forms.length, currentIndex, forms, setAdding, setCurrentIndex])
 
-      <Divider size={2} />
+   const handleStartLoop = () => {
+      setIsLoopRunning(true)
+   }
 
-      <div className='flex justify-center items-center gap-2'>
-        <LoadingButton
-          className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-secondary bg-secondary text-white hover:bg-primary hover:border-primary common-transition'
-          onClick={handleStartLoop}
-          text='Add All'
-          isLoading={isLoopRunning}
-        />
-        <button
-          className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-white common-transition'
-          onClick={handleAddForm}>
-          New Form
-        </button>
-        {forms.length > 1 && (
-          <button
-            className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-slate-300 text-slate-300 hover:bg-slate-300 hover:text-dark common-transition'
-            onClick={() => setForms(prev => [prev[0]])}>
-            Remove All
-          </button>
-        )}
+   // MARK: Get Data
+   // get all types (products)
+   useEffect(() => {
+      const getAllTypes = async () => {
+         try {
+            // send request to server to get all products
+            const { products } = await getForceAllProductsApi()
+
+            // group product be category.title
+            const groupTypes: GroupTypes = {}
+            products.forEach((product: IProduct) => {
+               const category: ICategory = product.category as ICategory
+               if (!groupTypes[category.title]) {
+                  groupTypes[category.title] = []
+               }
+               groupTypes[category.title].push(product)
+            })
+
+            setGroupTypes(groupTypes)
+         } catch (err: any) {
+            console.log(err)
+            toast.error(err.message)
+         }
+      }
+      getAllTypes()
+   }, [])
+
+   return (
+      <div className='max-w-1200 mx-auto'>
+         {/* MARK: Admin Header */}
+         <AdminHeader title='Add Account' backLink='/admin/account/all' />
+
+         <Divider size={2} />
+
+         <div className='flex justify-center items-center gap-2'>
+            <LoadingButton
+               className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-secondary bg-secondary text-white hover:bg-primary hover:border-primary common-transition'
+               onClick={handleStartLoop}
+               text='Add All'
+               isLoading={isLoopRunning}
+            />
+            <button
+               className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-white common-transition'
+               onClick={handleAddForm}
+            >
+               New Form
+            </button>
+            {forms.length > 1 && (
+               <button
+                  className='rounded-lg shadow-lg px-3 py-2 font-semibold text-sm border border-slate-300 text-slate-300 hover:bg-slate-300 hover:text-dark common-transition'
+                  onClick={() => setForms(prev => [prev[0]])}
+               >
+                  Remove All
+               </button>
+            )}
+         </div>
+
+         <Divider size={5} />
+
+         <div
+            className={`grid grid-cols-1 ${forms.length > 1 ? 'md:grid-cols-2' : ''} gap-x-21 gap-y-10`}
+         >
+            {forms.map(form => (
+               <AddAccountForm
+                  groupTypes={groupTypes}
+                  forms={forms}
+                  form={form}
+                  adding={adding}
+                  handleDuplicateForm={handleDuplicateForm}
+                  handleRemoveForm={handleRemoveForm}
+                  defaultValues={defaultValues}
+                  key={form.id}
+               />
+            ))}
+         </div>
       </div>
-
-      <Divider size={5} />
-
-      <div className={`grid grid-cols-1 ${forms.length > 1 ? 'md:grid-cols-2' : ''} gap-x-21 gap-y-10`}>
-        {forms.map(form => (
-          <AddAccountForm
-            groupTypes={groupTypes}
-            forms={forms}
-            form={form}
-            adding={adding}
-            handleDuplicateForm={handleDuplicateForm}
-            handleRemoveForm={handleRemoveForm}
-            defaultValues={defaultValues}
-            key={form.id}
-          />
-        ))}
-      </div>
-    </div>
-  )
+   )
 }
 
 export default AddAccountPage
