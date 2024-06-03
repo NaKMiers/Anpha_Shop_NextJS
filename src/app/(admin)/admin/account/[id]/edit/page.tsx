@@ -25,7 +25,7 @@ export type GroupTypes = {
    [key: string]: IProduct[]
 }
 
-function AddAccountPage() {
+function EditAccountPage() {
    // hooks
    const dispatch = useAppDispatch()
    const isLoading = useAppSelector(state => state.modal.isLoading)
@@ -163,6 +163,7 @@ function AddAccountPage() {
    // MARK: Submit
    // send request to server to edit account
    const onSubmit: SubmitHandler<FieldValues> = async data => {
+      console.log('data: ', data)
       if (!handleValidate(data)) return
 
       // start loading
@@ -501,4 +502,4 @@ function AddAccountPage() {
    )
 }
 
-export default AddAccountPage
+export default EditAccountPage

@@ -5,6 +5,7 @@ import { notifyAccountUpdated } from '@/utils/sendMail'
 import { getTimes } from '@/utils/time'
 import mongoose from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
+import momentTZ from 'moment-timezone'
 
 // Models: Account, Order
 import '@/models/AccountModel'
@@ -31,7 +32,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           type,
           info,
           renew,
-          expire,
+          expire: momentTZ.tz(expire, 'Asia/Ho_Chi_Minh').toDate(),
           times,
           active,
         },
