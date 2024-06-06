@@ -8,7 +8,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
@@ -27,7 +28,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -38,7 +40,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
             className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}>
+            }}
+          >
             <div>
               <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
@@ -85,7 +88,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                     className='px-21 py-21/2 rounded-lg'
                     style={{
                       border: '1px solid rgb(0, 0, 0, 0.1)',
-                    }}>
+                    }}
+                  >
                     <p className='font-semibold underline tracking-wider text-sm text-slate-400 text-center m-0 mb-3'>
                       Lời nhắn từ quản trị viên
                     </p>
@@ -104,7 +108,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   style={{
                     border: '1px solid rgb(0, 0, 0, 0.1)',
                   }}
-                  className='border rounded-lg p-21/2 mb-4 bg-sky-50'>
+                  className='border rounded-lg p-21/2 mb-4 bg-sky-50'
+                >
                   {/* New Info */}
                   <p className='font-semibold text-secondary m-0 mb-4 underline text-sm'>
                     Thông tin mới:
@@ -119,7 +124,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   style={{
                     border: '1px solid rgb(0, 0, 0, 0.1)',
                   }}
-                  className='border rounded-lg p-21/2 mb-4 bg-slate-100 text-slate-500'>
+                  className='border rounded-lg p-21/2 mb-4 bg-slate-100 text-slate-500'
+                >
                   {/* Old Info */}
                   <p className='font-semibold m-0 mb-4 underline text-sm'>Thông tin cũ:</p>
 
@@ -146,17 +152,11 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
 
           <div className='text-center'>
             <a
-              href='https://zalo.me/0899320427'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block'>
-              <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
-            </a>
-            <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}

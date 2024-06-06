@@ -59,13 +59,6 @@ function Footer() {
             {/* Social Contacts */}
             <div className='flex gap-5 sm:gap-3'>
               <Link
-                href='https://zalo.me/0899320427'
-                target='_blank'
-                rel='noreferrer'
-                className='wiggle-1'>
-                <Image src='/images/zalo.jpg' width={30} height={30} alt='zalo' />
-              </Link>
-              <Link
                 href='https://www.messenger.com/t/170660996137305'
                 target='_blank'
                 rel='noreferrer'

@@ -12,7 +12,8 @@ function ResetPasswordEmail({
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4 pb-6'>
           <Section className='inline-block mx-auto'>
@@ -31,7 +32,8 @@ function ResetPasswordEmail({
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -73,7 +75,8 @@ function ResetPasswordEmail({
             <div className='text-center p-3'>
               <a
                 href={link}
-                className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'
+              >
                 Khôi phục mật khẩu
               </a>
             </div>
@@ -106,17 +109,11 @@ function ResetPasswordEmail({
 
           <div className='text-center'>
             <a
-              href='https://zalo.me/0899320427'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block'>
-              <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
-            </a>
-            <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}

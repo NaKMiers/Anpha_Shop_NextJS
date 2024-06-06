@@ -4,6 +4,7 @@ import Divider from '@/components/Divider'
 import { admins } from '@/constansts'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { IoIosHelpCircle } from 'react-icons/io'
@@ -63,7 +64,8 @@ function RechargePage() {
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
               <span
                 className='text-green-500 cursor-pointer'
-                onClick={() => handleCopy(admin.momo.receiver)}>
+                onClick={() => handleCopy(admin.momo.receiver)}
+              >
                 {admin.momo.receiver}
               </span>
               )
@@ -72,10 +74,11 @@ function RechargePage() {
 
           <p>Sau từ 1 - 5 phút tài khoản của bạn sẽ được cộng tiền.</p>
           <p>
-            *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}
-            <a className='text-sky-500' href={admin.zalo}>
-              {admin.zalo}
-            </a>
+            *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá: *Nếu không thấy
+            được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}
+            <Link className='text-pink-700' href={admin.messenger} target='_blank'>
+              {admin.messenger}
+            </Link>
           </p>
 
           <div className='flex justify-center mt-6'>
@@ -107,7 +110,8 @@ function RechargePage() {
               Số tài khoản Momo:{' '}
               <span
                 className='text-[#a1396c] font-semibold cursor-pointer'
-                onClick={() => handleCopy(admin.momo.account)}>
+                onClick={() => handleCopy(admin.momo.account)}
+              >
                 {admin.momo.account}
               </span>
             </p>
@@ -124,9 +128,9 @@ function RechargePage() {
 
           <p>
             *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}
-            <a className='text-sky-500' href={admin.zalo}>
-              {admin.zalo}
-            </a>
+            <Link className='text-pink-700' href={admin.messenger} target='_blank'>
+              {admin.messenger}
+            </Link>
           </p>
         </div>
 
@@ -143,7 +147,8 @@ function RechargePage() {
                 - Bấm vào link sau:{' '}
                 <a
                   className='text-[#399162] underline'
-                  href={`https://dl.vietqr.io/pay?app=vcb&ba=1040587211@vcb&tn=${content}`}>
+                  href={`https://dl.vietqr.io/pay?app=vcb&ba=1040587211@vcb&tn=${content}`}
+                >
                   Link nạp bằng Vietcombank
                 </a>
               </p>
@@ -161,7 +166,8 @@ function RechargePage() {
               Hoàn tất quá trình nạp tiền (tên người nhận:{' '}
               <span
                 className='text-green-500 cursor-pointer'
-                onClick={() => handleCopy(admin.banking.receiver)}>
+                onClick={() => handleCopy(admin.banking.receiver)}
+              >
                 {admin.banking.receiver}
               </span>
             </li>
@@ -170,9 +176,9 @@ function RechargePage() {
           <p>Sau từ 1 - 5 phút tài khoản của bạn sẽ được cộng tiền.</p>
           <p>
             *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}
-            <a className='text-sky-500' href={admin.zalo}>
-              {admin.zalo}
-            </a>
+            <Link className='text-pink-700' href={admin.messenger} target='_blank'>
+              {admin.messenger}
+            </Link>
           </p>
 
           <div className='flex justify-center mt-6'>
@@ -199,7 +205,8 @@ function RechargePage() {
               Ngân hàng:{' '}
               <span
                 className='text-[#399162] font-semibold cursor-pointer'
-                onClick={() => handleCopy(admin.banking.name)}>
+                onClick={() => handleCopy(admin.banking.name)}
+              >
                 {admin.banking.name}
               </span>
             </p>
@@ -207,7 +214,8 @@ function RechargePage() {
               Số tài khoản:{' '}
               <span
                 className='text-secondary font-semibold cursor-pointer'
-                onClick={() => handleCopy(admin.banking.account)}>
+                onClick={() => handleCopy(admin.banking.account)}
+              >
                 {admin.banking.account}
               </span>
             </p>
@@ -224,9 +232,9 @@ function RechargePage() {
 
           <p>
             *Nếu không thấy được cộng tiền thì liên hệ đến admin để được giải quyết nhá:{' '}
-            <a className='text-sky-500' href={admin.zalo}>
-              {admin.zalo}
-            </a>
+            <Link className='text-pink-700' href={admin.messenger} target='_blank'>
+              {admin.messenger}
+            </Link>
           </p>
         </div>
       </div>

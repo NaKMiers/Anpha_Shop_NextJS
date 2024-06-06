@@ -11,7 +11,8 @@ export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
@@ -30,7 +31,8 @@ export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -41,7 +43,8 @@ export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
             className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}>
+            }}
+          >
             <div>
               <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
@@ -91,7 +94,8 @@ export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
                 <div className='rounded-lg' style={{ border, boxSizing: 'border-box' }}>
                   <div
                     className='w-full text-center p-3'
-                    style={{ borderBottom: border, boxSizing: 'border-box' }}>
+                    style={{ borderBottom: border, boxSizing: 'border-box' }}
+                  >
                     <div className='inline-block w-1/2 font-semibold'>Voucher</div>
                     <div className='inline-block w-1/2 font-semibold'>
                       <span>Tích lũy</span>
@@ -104,7 +108,8 @@ export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
                         borderBottom: index != vouchers.length - 1 ? border : 0,
                         boxSizing: 'border-box',
                       }}
-                      key={voucher._id}>
+                      key={voucher._id}
+                    >
                       <div className='inline-block w-1/2'>
                         <span className='text-secondary'>{voucher.code}</span>
                       </div>
@@ -133,17 +138,11 @@ export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
 
           <div className='text-center'>
             <a
-              href='https://zalo.me/0899320427'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block'>
-              <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
-            </a>
-            <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}

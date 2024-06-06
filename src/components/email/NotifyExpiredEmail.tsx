@@ -112,13 +112,6 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
 
           <div className='text-center'>
             <a
-              href='https://zalo.me/0899320427'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block'>
-              <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
-            </a>
-            <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'

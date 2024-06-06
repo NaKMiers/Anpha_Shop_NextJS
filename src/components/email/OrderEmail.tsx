@@ -8,7 +8,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
@@ -27,7 +28,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -38,7 +40,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
             className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}>
+            }}
+          >
             <div>
               <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
@@ -85,7 +88,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                     className='px-21 py-21/2 rounded-lg'
                     style={{
                       border: '1px solid rgb(0, 0, 0, 0.1)',
-                    }}>
+                    }}
+                  >
                     <p className='font-semibold underline tracking-wider text-sm text-slate-400 text-center m-0 mb-3'>
                       Lời nhắn từ quản trị viên
                     </p>
@@ -104,7 +108,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                       border: '1px solid rgb(0, 0, 0, 0.1)',
                     }}
                     className='border rounded-lg p-21/2 mb-4'
-                    key={item._id}>
+                    key={item._id}
+                  >
                     <Text className='font-semibold m-0 text-slate-500'>{item.product.title}</Text>
 
                     {order.accounts
@@ -112,7 +117,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                       .accounts.map((account: any) => (
                         <Text
                           key={account._id}
-                          className='whitespace-pre m-0 py-4 max-w-[600px] overflow-x-auto border-b '>
+                          className='whitespace-pre m-0 py-4 max-w-[600px] overflow-x-auto border-b '
+                        >
                           {account.info}
                         </Text>
                       ))}
@@ -125,7 +131,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
               <div className='text-center p-3 mb-8'>
                 <a
                   href={`https://anpha.shop/user/order/${order.code}`}
-                  className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                  className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'
+                >
                   Xem chi tiết
                 </a>
               </div>
@@ -142,17 +149,11 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
 
           <div className='text-center'>
             <a
-              href='https://zalo.me/0899320427'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block'>
-              <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
-            </a>
-            <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}

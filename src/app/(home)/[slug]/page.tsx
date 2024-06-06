@@ -183,7 +183,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <Link
                 href={`/category?ctg=${(product?.category as ICategory).slug}`}
                 prefetch={false}
-                className='text-orange-500 hover:underline'>
+                className='text-orange-500 hover:underline'
+              >
                 {(product?.category as ICategory).title}
               </Link>
             </div>
@@ -500,17 +501,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 href='https://m.me/anphashopacc'
                 className='text-sky-5000 underline text-pink-500'
                 target='_blank'
-                rel='noreferrer'>
+                rel='noreferrer'
+              >
                 Messenger
               </a>{' '}
-              hoặc{' '}
-              <a
-                href='https://zalo.me/0899320427'
-                className='text-sky-500 underline'
-                target='_blank'
-                rel='noreferrer'>
-                Zalo
-              </a>
             </p>
           </div>
 
@@ -533,16 +527,9 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                     href='https://m.me/anphashopacc'
                     className='text-sky-5000 underline text-pink-500'
                     target='_blank'
-                    rel='noreferrer'>
+                    rel='noreferrer'
+                  >
                     Messenger
-                  </a>{' '}
-                  hoặc{' '}
-                  <a
-                    href='https://zalo.me/0899320427'
-                    className='text-sky-500 underline'
-                    target='_blank'
-                    rel='noreferrer'>
-                    Zalo
                   </a>{' '}
                   để được xử lí trong thời gian sớm nhất
                 </p>

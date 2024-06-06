@@ -7,7 +7,8 @@ export function NotifyCommentEmail({ data = commentData }: { data?: any }) {
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
@@ -26,7 +27,8 @@ export function NotifyCommentEmail({ data = commentData }: { data?: any }) {
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -37,7 +39,8 @@ export function NotifyCommentEmail({ data = commentData }: { data?: any }) {
             className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}>
+            }}
+          >
             <div>
               <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
@@ -88,7 +91,8 @@ export function NotifyCommentEmail({ data = commentData }: { data?: any }) {
                 className='inline no-underline rounded-lg font-semibold cursor-pointer py-3 px-7 text-slate-500'
                 style={{
                   border: '1px solid rgba(0, 0, 0, 0.1)',
-                }}>
+                }}
+              >
                 Phản hồi ngay
               </a>
             </div>
@@ -104,17 +108,11 @@ export function NotifyCommentEmail({ data = commentData }: { data?: any }) {
 
           <div className='text-center'>
             <a
-              href='https://zalo.me/0899320427'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block'>
-              <Img src={`${'https://anpha.shop'}/images/zalo.jpg`} width={35} height={35} alt='zalo' />
-            </a>
-            <a
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}
