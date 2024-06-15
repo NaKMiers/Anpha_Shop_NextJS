@@ -52,7 +52,7 @@ export default async function RootLayout({
 
           {/* Utils */}
           <PageLoading />
-          <ContactFloating />
+          {/* <ContactFloating /> */}
 
           {/* Main */}
           <main className='px-21'>

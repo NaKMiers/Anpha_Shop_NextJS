@@ -6,18 +6,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 
-interface SidebarProps {
+interface UtilBarProps {
   categories: ICategory[]
   className?: string
 }
 
-function Sidebar({ categories, className = '' }: SidebarProps) {
+function UtilBar({ categories, className = '' }: UtilBarProps) {
   // hooks
   const { data: session } = useSession()
   const curUser: any = session?.user
 
   // states
-  const [show, setShow] = useState<boolean>(true)
+  const [show, setShow] = useState<boolean>(false)
 
   // refs
   const timeOutRef = useRef<any>(null)
@@ -31,8 +31,14 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
       }
 
       timeOutRef.current = setTimeout(() => {
+        // scroll to end of page then not show
+        if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
+          setShow(false)
+          return
+        }
+
         setShow(true)
-      }, 500)
+      }, 350)
     }
 
     window.addEventListener('scroll', handleScroll)
@@ -43,12 +49,15 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
 
   return (
     <div
-      className={`flex flex-col items-center py-3 gap-3 fixed z-40 top-1/2 -translate-y-1/2 bg-dark-100 rounded-lg shadow-medium-light transition-all duration-300 ${
-        show ? 'right-3 opacity-1' : 'right-0 translate-x-full opacity-0'
-      }  ${className}`}>
+      className={`flex md:flex-col justify-center items-center gap-5 pl-3 w-[calc(100%-21px)] md:w-auto md:px-0 md:py-3 fixed z-40 left-1/2 md:left-auto -translate-x-1/2 md:translate-x-0 md:top-1/2 md:-translate-y-1/2 bg-dark-100 rounded-lg shadow-medium-light transition-all duration-300 ${
+        show
+          ? 'bottom-21/2 md:bottom-auto md:right-3 opacity-1'
+          : 'bottom-0 md:bottom-auto translate-y-full md:translate-y-auto md:right-0 md:translate-x-full opacity-0'
+      }  ${className}`}
+    >
       {/* MARK: Avatar */}
       {curUser?._id && (
-        <Link href='/user' className='border-b pb-3'>
+        <Link href='/user' className='md:border-b md:pb-3 py-3 md:py-0 flex-shrink-0'>
           <Image
             className='aspect-square rounded-full wiggle-0'
             src={curUser.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
@@ -60,23 +69,24 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
       )}
 
       {/* MARK: Best Seller */}
-      <Link href='/#best-seller' className='rounded-full group'>
+      <Link href='/#best-seller' className='rounded-full group py-3 md:py-0'>
         <span className='text-[24px] font-semibold text-orange-500 italic wiggle block leading-5'>
           1st
         </span>
       </Link>
 
       {/* MARK: Categories */}
-      <div className='flex flex-col -mt-3 pt-3 px-3 gap-3 max-h-[230px] overflow-y-scroll no-scrollbar'>
+      <div className='flex md:flex-col px-3 py-3 -ml-3 md:m-0 md:-mt-3 md:max-h-[282px] items-center gap-5 overflow-auto no-scrollbar'>
         {categories.map(category => (
           <Link
             href={`/#${category.slug}`}
-            className='rounded-full group'
+            className='flex-shrink-0 group'
             title={category.title}
-            key={category.slug}>
+            key={category.slug}
+          >
             <Image
-              className='aspect-square wiggle'
-              src={`/images/${category?.slug}-icon.jpg`}
+              className='aspect-square wiggle rounded-md'
+              src={`${category.logo}`}
               width={28}
               height={28}
               alt='logo'
@@ -88,4 +98,4 @@ function Sidebar({ categories, className = '' }: SidebarProps) {
   )
 }
 
-export default Sidebar
+export default UtilBar

@@ -4,6 +4,7 @@ import ChooseMe from '@/components/ChooseMe'
 import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import Heading from '@/components/Heading'
+import UtilBar from '@/components/UtilBar'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
@@ -63,6 +64,9 @@ async function HomePage() {
     <div className='min-h-screen'>
       {/* MARK: Add JSON-LD */}
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* UtilBar */}
+      <UtilBar categories={categories} />
 
       {/* MARK: Banner */}
       <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
