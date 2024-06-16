@@ -18,7 +18,7 @@ function UtilBar({ categories, className = '' }: UtilBarProps) {
   const curUser: any = session?.user
 
   // states
-  const [show, setShow] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(true)
   const [width, setWidth] = useState<number>(0)
 
   // refs
