@@ -104,13 +104,17 @@ function CartPage() {
     if (voucher) {
       if (voucher.type === 'fixed-reduce') {
         discount = +voucher.value
-        finalTotal = subTotal + discount
+        finalTotal = subTotal + discount < 0 ? 0 : subTotal + discount
       } else if (voucher.type === 'fixed') {
         discount = +voucher.value
         finalTotal = discount
       } else if (voucher.type === 'percentage') {
         discount = +calcPercentage(voucher.value, subTotal)
-        finalTotal = subTotal + discount
+        console.log('discount', discount, 'voucher.maxReduce', voucher.maxReduce)
+        if (Math.abs(discount) > voucher.maxReduce) {
+          discount = -voucher.maxReduce
+        }
+        finalTotal = subTotal + discount < 0 ? 0 : subTotal + discount
       }
     }
     setDiscount(discount)
@@ -382,7 +386,8 @@ function CartPage() {
 
             <div
               className='flex justify-center items-center gap-2 group cursor-pointer bg-dark-200 mb-4 text-white rounded-lg p-1 hover:bg-primary common-transition'
-              onClick={handleMoveAllLocalToGlobalCartItem}>
+              onClick={handleMoveAllLocalToGlobalCartItem}
+            >
               <span>Thêm tất cả</span>
               <FaArrowCircleDown size={18} className='inline-block wiggle-0' />
             </div>
@@ -477,7 +482,8 @@ function CartPage() {
               (
               <button
                 className='text-sky-600 hover:underline z-10'
-                onClick={() => setIsShowVoucher(prev => !prev)}>
+                onClick={() => setIsShowVoucher(prev => !prev)}
+              >
                 ấn vào đây
               </button>
               )
@@ -486,7 +492,8 @@ function CartPage() {
           <div
             className={`flex items-center gap-1 mb-2 overflow-hidden common-transition ${
               isShowVoucher ? 'max-h-[200px]' : 'max-h-0'
-            }`}>
+            }`}
+          >
             <Input
               id='code'
               label='Voucher'
@@ -506,7 +513,8 @@ function CartPage() {
                   : 'border-primary text-primary '
               }`}
               onClick={handleSubmit(handleApplyVoucher)}
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <RiDonutChartFill size={26} className='animate-spin text-slate-300' />
               ) : (
@@ -530,6 +538,7 @@ function CartPage() {
                 {voucher?.type === 'percentage'
                   ? `${voucher.value} (${formatPrice(calcPercentage(voucher.value, subTotal))})`
                   : formatPrice(+voucher?.value!)}
+                {voucher?.type === 'percentage' && ` (tối đa ${formatPrice(voucher.maxReduce)})`}
               </span>
             </div>
           )}
@@ -551,7 +560,8 @@ function CartPage() {
                 isBuying ? 'pointer-events-none' : ''
               }`}
               disabled={isBuying || isLoading}
-              onClick={handleBuyWithBalance}>
+              onClick={handleBuyWithBalance}
+            >
               {isBuying ? (
                 <RiDonutChartFill size={32} className='animate-spin text-slate-200' />
               ) : (
@@ -567,7 +577,8 @@ function CartPage() {
                 isBuying || isLoading ? 'pointer-events-none' : ''
               }`}
               onClick={() => handleCheckout('momo')}
-              disabled={isBuying || isLoading}>
+              disabled={isBuying || isLoading}
+            >
               <Image
                 className='group-hover:border-white rounded-md border-2 wiggle-0'
                 src='/images/momo-icon.jpg'
@@ -583,7 +594,8 @@ function CartPage() {
                 isBuying || isLoading ? 'pointer-events-none' : ''
               }`}
               onClick={() => handleCheckout('banking')}
-              disabled={isBuying || isLoading}>
+              disabled={isBuying || isLoading}
+            >
               <Image
                 className='wiggle-0'
                 src='/images/banking-icon.jpg'
