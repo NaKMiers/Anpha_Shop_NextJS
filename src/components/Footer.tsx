@@ -62,17 +62,19 @@ function Footer() {
                 href='https://www.messenger.com/t/170660996137305'
                 target='_blank'
                 rel='noreferrer'
-                className='wiggle-1'>
+                className='wiggle-1'
+              >
                 <Image src='/images/messenger.jpg' width={30} height={30} alt='messenger' />
               </Link>
               <Link
                 href={`mailto:${process.env.NEXT_PUBLIC_MAIL}`}
                 target='_blank'
                 rel='noreferrer'
-                className='wiggle-1'>
+                className='wiggle-1'
+              >
                 <Image src='/images/gmail.jpg' width={30} height={30} alt='gmail' />
               </Link>
-              <Link href='https://anhkhoa.info' target='_blank' rel='noreferrer' className='wiggle-1'>
+              {/* <Link href='https://anhkhoa.info' target='_blank' rel='noreferrer' className='wiggle-1'>
                 <Image
                   className='rounded-full'
                   src='/images/anhkhoa.jpg'
@@ -80,7 +82,7 @@ function Footer() {
                   height={30}
                   alt='gmail'
                 />
-              </Link>
+              </Link> */}
             </div>
           </div>
 
@@ -95,7 +97,8 @@ function Footer() {
                   href={`/${product.slug}`}
                   prefetch={false}
                   className='block w-[230px] shrink-0 px-2 group snap-start group'
-                  key={index}>
+                  key={index}
+                >
                   <Card className='text-dark' variant='soft'>
                     <AspectRatio ratio='16/9'>
                       <Image
@@ -126,32 +129,37 @@ function Footer() {
                 <ul className='tracking-wide text-sm'>
                   <Link
                     href='/user'
-                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'
+                  >
                     <FaChevronRight size={14} className='text-primary' />
                     <p className=''>Thông tin tài khoản</p>
                   </Link>
                   <Link
                     href='/recharge'
-                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'
+                  >
                     <FaChevronRight size={14} className='text-primary' />
                     <p className=''>Nạp tiền</p>
                   </Link>
                   <Link
                     href='/cart'
                     prefetch={false}
-                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'
+                  >
                     <FaChevronRight size={14} className='text-primary' />
                     <p className=''>Giỏ hàng</p>
                   </Link>
                   <Link
                     href='/user/order-history'
-                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'>
+                    className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'
+                  >
                     <FaChevronRight size={14} className='text-primary' />
                     <p className=''>Lịch sử mua hàng</p>
                   </Link>
                   <button
                     className='flex items-center gap-1 text-nowrap transition-all duration-300 hover:tracking-wider'
-                    onClick={() => signOut()}>
+                    onClick={() => signOut()}
+                  >
                     <PiSignOutBold size={15} className='ml-1 text-yellow-400' />
                     <p className=''>Đăng xuất</p>
                   </button>
@@ -191,7 +199,8 @@ function Footer() {
             </p>
             <Link
               href='https://anhkhoa.info'
-              className='text-[14px] transition-all duration-300 hover:tracking-wide'>
+              className='text-[14px] transition-all duration-300 hover:tracking-wide'
+            >
               <span className='text-primary font-semibold'>Developed by</span> Nguyen Anh Khoa
             </Link>
           </div>
