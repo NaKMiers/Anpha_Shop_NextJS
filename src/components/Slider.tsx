@@ -134,12 +134,14 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       className={`relative w-full h-full overflow-hidden rounded-lg group ${className}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}>
+      onTouchEnd={handleTouchEnd}
+    >
       {/* MARK: Slide Track */}
       <div
         className={`flex w-full h-full cursor-pointer no-scrollbar transition-all ease-linear duration-300`}
         style={{ marginLeft: '-100%' }}
-        ref={slideTrackRef}>
+        ref={slideTrackRef}
+      >
         {[
           Children.toArray(children)[childrenAmount - 1],
           ...Children.toArray(children),
@@ -156,12 +158,14 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         <>
           <button
             className='group md:-translate-x-full group-hover:translate-x-0 absolute flex items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 common-transition h-full w-12 left-0 top-0'
-            onClick={prevSlide}>
+            onClick={prevSlide}
+          >
             <FaChevronLeft size={16} className='wiggle text-white' />
           </button>
           <button
             className='group md:translate-x-full group-hover:translate-x-0 absolute flex items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 common-transition h-full w-12 right-0 top-0'
-            onClick={nextSlide}>
+            onClick={nextSlide}
+          >
             <FaChevronRight size={16} className='wiggle text-white' />
           </button>
         </>
@@ -172,7 +176,8 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         <div
           className={`absolute z-10 w-full px-21 ${
             mobile ? 'gap-6' : 'gap-5'
-          } flex justify-center items-center left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition`}>
+          } flex justify-center items-center left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition`}
+        >
           {thumbs.map((src, index) => {
             return (
               <button
@@ -182,7 +187,8 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
                   slide === index + 1 ? 'opacity-100' : 'opacity-60'
                 }`}
                 onClick={() => setSlide(index + 1)}
-                key={src}>
+                key={src}
+              >
                 <Image
                   className='w-full h-full object-cover'
                   src={src}

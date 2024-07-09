@@ -1,5 +1,4 @@
 import Background from '@/components/Background'
-import ContactFloating from '@/components/ContactFloating'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import PageLoading from '@/components/PageLoading'

@@ -1,5 +1,4 @@
 import AdminMenu from '@/components/admin/AdminMenu'
-import Header from '@/components/Header'
 import PageLoading from '@/components/PageLoading'
 import StoreProvider from '@/libs/StoreProvider'
 import type { Metadata } from 'next'
@@ -7,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { Toaster } from 'react-hot-toast'
 import '../globals.scss'
 import Background from '@/components/Background'
+import Header from '@/components/Header'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
