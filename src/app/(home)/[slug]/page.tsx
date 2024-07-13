@@ -146,8 +146,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 <Image
                   className='w-full h-full object-cover'
                   src={src}
-                  width={1200}
-                  height={768}
+                  width={1800}
+                  height={1000}
                   alt='product'
                   key={src}
                 />
