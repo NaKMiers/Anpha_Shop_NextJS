@@ -89,7 +89,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               thumbs={
                 width < 576 && width > 0
                   ? [
-                      "/banners/office-365.jpg",
+                      "/banners/office-365-mobile.jpg",
                       "/banners/netflix-random-mobile.jpg",
                       "/banners/grammarly-mobile.jpg",
                       "/banners/canva-mobile.jpg",
@@ -107,7 +107,11 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               <Link href='/category?ctg=microsoft-office'>
                 <Image
                   className='hover:scale-105 transition-all duration-700'
-                  src={width < 576 && width > 0 ? "/banners/office-365.jpg" : "/banners/office-365.jpg"}
+                  src={
+                    width < 576 && width > 0
+                      ? "/banners/office-365-mobile.jpg"
+                      : "/banners/office-365.jpg"
+                  }
                   alt='netflix'
                   width={1200}
                   height={768}
