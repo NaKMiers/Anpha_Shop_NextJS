@@ -55,7 +55,7 @@ export default async function UserLayout({
           <PageLoading />
           <ContactFloating />
 
-          {/* Madin */}
+          {/* Main */}
           <main className='px-21'>
             <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
               {/* Sidebar */}

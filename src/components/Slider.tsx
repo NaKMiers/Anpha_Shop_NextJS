@@ -1,133 +1,133 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import React, { Children, useCallback, useEffect, useRef, useState } from 'react'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import Image from "next/image";
+import React, { Children, useCallback, useEffect, useRef, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface SliderProps {
-  time?: number
-  children: React.ReactNode
-  className?: string
-  hideControls?: boolean
-  thumbs?: string[]
-  mobile?: boolean
+  time?: number;
+  children: React.ReactNode;
+  className?: string;
+  hideControls?: boolean;
+  thumbs?: string[];
+  mobile?: boolean;
 }
 
-function Slider({ time, hideControls, children, thumbs = [], mobile, className = '' }: SliderProps) {
+function Slider({ time, hideControls, children, thumbs = [], mobile, className = "" }: SliderProps) {
   // states
-  const [slide, setSlide] = useState<number>(1)
-  const [isSliding, setIsSliding] = useState<boolean>(false)
-  const [touchStartX, setTouchStartX] = useState<number>(0)
-  const [touchEndX, setTouchEndX] = useState<number>(0)
+  const [slide, setSlide] = useState<number>(1);
+  const [isSliding, setIsSliding] = useState<boolean>(false);
+  const [touchStartX, setTouchStartX] = useState<number>(0);
+  const [touchEndX, setTouchEndX] = useState<number>(0);
 
   // refs
-  const slideTrackRef = useRef<HTMLDivElement>(null)
+  const slideTrackRef = useRef<HTMLDivElement>(null);
 
   // values
-  const childrenAmount = Children.count(children)
+  const childrenAmount = Children.count(children);
 
   // MARK: Slide Functions
   // change slide main function
   useEffect(() => {
     if (slideTrackRef.current) {
-      slideTrackRef.current.style.marginLeft = `calc(-100% * ${slide})`
+      slideTrackRef.current.style.marginLeft = `calc(-100% * ${slide})`;
     }
-  }, [slide])
+  }, [slide]);
 
   // to next slide
   const nextSlide = useCallback(() => {
     // not sliding
     if (!isSliding) {
       // start sliding
-      setIsSliding(true)
+      setIsSliding(true);
 
       if (slide === childrenAmount) {
-        setSlide(childrenAmount + 1)
+        setSlide(childrenAmount + 1);
 
         setTimeout(() => {
           if (slideTrackRef.current) {
-            slideTrackRef.current.style.transition = 'none'
-            setSlide(1)
+            slideTrackRef.current.style.transition = "none";
+            setSlide(1);
           }
-        }, 310)
+        }, 310);
 
         setTimeout(() => {
           if (slideTrackRef.current) {
-            slideTrackRef.current.style.transition = 'all 0.3s linear'
+            slideTrackRef.current.style.transition = "all 0.3s linear";
           }
-        }, 350)
+        }, 350);
       } else {
-        setSlide(prev => prev + 1)
+        setSlide((prev) => prev + 1);
       }
 
       // stop sliding after slided
       setTimeout(() => {
-        setIsSliding(false)
-      }, 350)
+        setIsSliding(false);
+      }, 350);
     }
-  }, [childrenAmount, isSliding, slide])
+  }, [childrenAmount, isSliding, slide]);
 
   // to previous slide
   const prevSlide = useCallback(() => {
     // if not sliding
     if (!isSliding) {
       // start sliding
-      setIsSliding(true)
+      setIsSliding(true);
 
       if (slide === 1) {
-        setSlide(0)
+        setSlide(0);
 
         setTimeout(() => {
           if (slideTrackRef.current) {
-            slideTrackRef.current.style.transition = 'none'
-            setSlide(childrenAmount)
+            slideTrackRef.current.style.transition = "none";
+            setSlide(childrenAmount);
           }
-        }, 310)
+        }, 310);
 
         setTimeout(() => {
           if (slideTrackRef.current) {
-            slideTrackRef.current.style.transition = 'all 0.3s linear'
+            slideTrackRef.current.style.transition = "all 0.3s linear";
           }
-        }, 350)
+        }, 350);
       } else {
-        setSlide(prev => prev - 1)
+        setSlide((prev) => prev - 1);
       }
 
       // stop sliding after slided
       setTimeout(() => {
-        setIsSliding(false)
-      }, 350)
+        setIsSliding(false);
+      }, 350);
     }
-  }, [childrenAmount, isSliding, slide])
+  }, [childrenAmount, isSliding, slide]);
 
   // next slide by time
   useEffect(() => {
     if (time) {
       const interval = setInterval(() => {
-        nextSlide()
-      }, time)
+        nextSlide();
+      }, time);
 
-      return () => clearInterval(interval)
+      return () => clearInterval(interval);
     }
-  }, [time, nextSlide])
+  }, [time, nextSlide]);
 
   // MARK: Touch Events
   const handleTouchStart = (event: React.TouchEvent) => {
-    setTouchStartX(event.touches[0].clientX)
-  }
+    setTouchStartX(event.touches[0].clientX);
+  };
 
   const handleTouchMove = (event: React.TouchEvent) => {
-    setTouchEndX(event.touches[0].clientX)
-  }
+    setTouchEndX(event.touches[0].clientX);
+  };
 
   const handleTouchEnd = () => {
-    const touchDiff = touchStartX - touchEndX
+    const touchDiff = touchStartX - touchEndX;
     if (touchDiff > 0 && touchDiff > 50) {
-      nextSlide() // Swiped left
+      nextSlide(); // Swiped left
     } else if (touchDiff < 0 && touchDiff < -50) {
-      prevSlide() // Swiped right
+      prevSlide(); // Swiped right
     }
-  }
+  };
 
   return (
     <div
@@ -139,7 +139,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       {/* MARK: Slide Track */}
       <div
         className={`flex w-full h-full cursor-pointer no-scrollbar transition-all ease-linear duration-300`}
-        style={{ marginLeft: '-100%' }}
+        style={{ marginLeft: "-100%" }}
         ref={slideTrackRef}
       >
         {[
@@ -175,16 +175,16 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       {thumbs.length >= 2 && (
         <div
           className={`absolute z-10 w-full px-21 ${
-            mobile ? 'gap-6' : 'gap-5'
+            mobile ? "gap-4" : "gap-5"
           } flex justify-center items-center left-1/2 -translate-x-1/2 bottom-[6%] md:translate-y-full md:bottom-0 group-hover:translate-y-0 group-hover:bottom-[6%] common-transition`}
         >
           {thumbs.map((src, index) => {
             return (
               <button
                 className={`${
-                  mobile ? 'aspect-[9/16]' : 'aspect-video'
+                  mobile ? "aspect-[9/16]" : "aspect-video"
                 } rounded-lg shadow-md border-2 border-white common-transition hover:opacity-100 hover:scale-105 hover:-translate-y-1 overflow-hidden ${
-                  slide === index + 1 ? 'opacity-100' : 'opacity-60'
+                  slide === index + 1 ? "opacity-100" : "opacity-60"
                 }`}
                 onClick={() => setSlide(index + 1)}
                 key={src}
@@ -197,7 +197,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
                   alt='slide-thumb'
                 />
               </button>
-            )
+            );
           })}
         </div>
       )}
@@ -208,16 +208,16 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
               <button
                 key={index}
                 className={`w-[14px] h-[14px] rounded-full bg-white hover:bg-opacity-100 common-transition shadow-md ${
-                  slide === index + 1 ? 'bg-opacity-100' : 'bg-opacity-50'
+                  slide === index + 1 ? "bg-opacity-100" : "bg-opacity-50"
                 }`}
                 onClick={() => setSlide(index + 1)}
               />
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default Slider
+export default Slider;

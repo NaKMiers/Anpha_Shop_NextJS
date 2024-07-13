@@ -1,122 +1,122 @@
-import BuyActionWithQuantity from '@/components/BuyActionWithQuantity'
-import ChooseMe from '@/components/ChooseMe'
-import Comment from '@/components/Comment'
-import Divider from '@/components/Divider'
-import GroupProducts from '@/components/GroupProducts'
-import LinkBar from '@/components/LinkBar'
-import Price from '@/components/Price'
-import Slider from '@/components/Slider'
-import { ICategory } from '@/models/CategoryModel'
-import { IComment } from '@/models/CommentModel'
-import { IFlashsale } from '@/models/FlashsaleModel'
-import { IProduct } from '@/models/ProductModel'
-import { ITag } from '@/models/TagModel'
-import { getProductPageApi } from '@/requests'
-import { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { FaCircleCheck, FaTags } from 'react-icons/fa6'
-import { MdCategory } from 'react-icons/md'
-import { TbPackages } from 'react-icons/tb'
+import BuyActionWithQuantity from "@/components/BuyActionWithQuantity";
+import ChooseMe from "@/components/ChooseMe";
+import Comment from "@/components/Comment";
+import Divider from "@/components/Divider";
+import GroupProducts from "@/components/GroupProducts";
+import LinkBar from "@/components/LinkBar";
+import Price from "@/components/Price";
+import Slider from "@/components/Slider";
+import { ICategory } from "@/models/CategoryModel";
+import { IComment } from "@/models/CommentModel";
+import { IFlashsale } from "@/models/FlashsaleModel";
+import { IProduct } from "@/models/ProductModel";
+import { ITag } from "@/models/TagModel";
+import { getProductPageApi } from "@/requests";
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { FaCircleCheck, FaTags } from "react-icons/fa6";
+import { MdCategory } from "react-icons/md";
+import { TbPackages } from "react-icons/tb";
 
 export const metadata: Metadata = {
-  title: 'Product',
+  title: "Product",
   description:
-    'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
-}
+    "Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!",
+};
 
 async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
   // Data
-  let product: IProduct | null = null
-  let relatedProducts: IProduct[] = []
-  let comments: IComment[] = []
+  let product: IProduct | null = null;
+  let relatedProducts: IProduct[] = [];
+  let comments: IComment[] = [];
 
   // MARK: Get Data
   try {
     // revalidate every 1 minute
-    const data = await getProductPageApi(slug)
+    const data = await getProductPageApi(slug);
 
-    product = data.product
-    relatedProducts = data.relatedProducts
-    comments = data.comments
+    product = data.product;
+    relatedProducts = data.relatedProducts;
+    comments = data.comments;
   } catch (err: any) {
-    return notFound()
+    return notFound();
   }
 
   // jsonLD
   const jsonLd = {
-    '@context': 'http://schema.org',
-    '@type': 'Product',
+    "@context": "http://schema.org",
+    "@type": "Product",
     name: product?.title,
     description: product?.description,
     brand: {
-      '@type': 'Brand',
+      "@type": "Brand",
       name: (product?.category as ICategory).title,
     },
     offers: {
-      '@type': 'Offer',
+      "@type": "Offer",
       price: product?.price,
-      priceCurrency: 'VND',
-      availability: product?.stock ? 'InStock' : 'OutOfStock',
+      priceCurrency: "VND",
+      availability: product?.stock ? "InStock" : "OutOfStock",
       priceValidUntil: null,
     },
     aggregateRating: {
-      '@type': 'AggregateRating',
+      "@type": "AggregateRating",
       ratingValue: 5.0,
       reviewCount: 7,
     },
     review: [
       {
-        '@type': 'Review',
+        "@type": "Review",
         author: {
-          '@type': 'Person',
-          name: 'hothingoctram03',
+          "@type": "Person",
+          name: "hothingoctram03",
         },
         reviewRating: {
-          '@type': 'Rating',
-          ratingValue: '5.0',
+          "@type": "Rating",
+          ratingValue: "5.0",
         },
-        description: 'Sản phẩm tốt, ưu tín, chủ shop dễ thương còn được tặng voucher nữa',
+        description: "Sản phẩm tốt, ưu tín, chủ shop dễ thương còn được tặng voucher nữa",
       },
     ],
     image: product?.images[0],
     url: `${process.env.NEXT_PUBLIC_APP_URL}/${product?.slug}`,
-  }
+  };
 
   const handleLines = (text: string) => {
     // Split the product description into separate lines
-    const lines = text.split('\n').map(line => line.trim())
+    const lines = text.split("\n").map((line) => line.trim());
 
     // Render each line as a paragraph or list item
     const renderedLines = lines.map((line, index) => {
-      const key = `line-${index}`
+      const key = `line-${index}`;
 
-      if (line.startsWith('-')) {
+      if (line.startsWith("-")) {
         // If the line starts with "-", render it as a list item
         return (
           <p className='list-none pl-2' key={key}>
             - {line.substr(1).trim()}
           </p>
-        )
+        );
       } else {
-        const parts = line.split(':')
+        const parts = line.split(":");
         if (parts.length === 2) {
           // If the line contains a ":" split it and render the parts with appropriate styling
           return (
             <p key={key}>
               <span className='font-semibold'>{parts[0]}:</span> {parts[1]}
             </p>
-          )
+          );
         } else {
           // If the line does not contain a ":" and doesn't start with "-", render it as a plain paragraph
-          return <p key={key}>{line}</p>
+          return <p key={key}>{line}</p>;
         }
       }
-    })
+    });
 
-    return <div>{renderedLines}</div>
-  }
+    return <div>{renderedLines}</div>;
+  };
 
   return (
     <div className='pt-9'>
@@ -142,7 +142,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
             {/* Thumbnails */}
             <Slider>
-              {product?.images.map(src => (
+              {product?.images.map((src) => (
                 <Image
                   className='w-full h-full object-cover'
                   src={src}
@@ -195,7 +195,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <span className='text-darker font-bold text-nowrap'>Tags:</span>
               {(product?.tags as ITag[]).map((tag: ITag, index) => (
                 <Link href={`/tags?ctg=${tag.slug}`} prefetch={false} className='text-dark' key={index}>
-                  {tag.title + (index !== product!.tags.length - 1 ? ', ' : '')}
+                  {tag.title + (index !== product!.tags.length - 1 ? ", " : "")}
                 </Link>
               ))}
             </div>
@@ -229,23 +229,23 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         {/* MARK: Introduction */}
         <h3 className='text-[28px] text-dark'>Giới thiệu sản phẩm</h3>
         <div className='flex flex-wrap w-full -mx-21/2'>
-          {(product?.category as ICategory).slug === 'netflix' && (
+          {(product?.category as ICategory).slug === "netflix" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='/https://www.netflix.com' className='text-[#e50914]'>
                   Netflix
-                </a>{' '}
+                </a>{" "}
                 - Ứng dụng giải trí số 1 thế giới!
               </p>
               <p className='font-semibold text-lg font-body'>
-                Khám phá thế giới phim và series truyền hình độc đáo, đỉnh cao với{' '}
+                Khám phá thế giới phim và series truyền hình độc đáo, đỉnh cao với{" "}
                 <a href='/https://www.netflix.com' className='text-[#e50914]'>
                   Netflix
                 </a>
                 . Đặc biệt, bạn sẽ được tận hưởng trải nghiệm xem phim linh hoạt trên mọi thiết bị. Hãy
                 bắt đầu hành trình giải trí của bạn ngay hôm nay và không bỏ lỡ những thước phim độc
-                quyền chỉ có tại{' '}
+                quyền chỉ có tại{" "}
                 <a href='/https://www.netflix.com' className='text-[#e50914]'>
                   Netflix
                 </a>
@@ -254,23 +254,23 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {(product?.category as ICategory).slug === 'capcut' && (
+          {(product?.category as ICategory).slug === "capcut" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='https://www.capcut.com' className='text-[#596ef4]'>
                   CapCut
-                </a>{' '}
+                </a>{" "}
                 - Ứng dụng chỉnh sửa video hàng đầu!
               </p>
               <p className='font-semibold text-lg font-body'>
-                Khám phá thế giới của sáng tạo video với{' '}
+                Khám phá thế giới của sáng tạo video với{" "}
                 <a href='https://www.capcut.com' className='text-[#596ef4]'>
                   CapCut
                 </a>
                 . Tận hưởng công cụ chỉnh sửa linh hoạt trên mọi thiết bị của bạn và biến những ý tưởng
                 thành hiện thực một cách dễ dàng. Bắt đầu hành trình sáng tạo của bạn ngay hôm nay và
-                khám phá các tính năng độc đáo chỉ có trong{' '}
+                khám phá các tính năng độc đáo chỉ có trong{" "}
                 <a href='https://www.capcut.com' className='text-[#596ef4]'>
                   CapCut
                 </a>
@@ -279,13 +279,13 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {(product?.category as ICategory).slug === 'chatgpt' && (
+          {(product?.category as ICategory).slug === "chatgpt" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='https://chat.openai.com' className='text-[#1da484]'>
                   ChatGPT
-                </a>{' '}
+                </a>{" "}
                 - Trợ lý thông minh của bạn! 🌟💬
               </p>
               <p className='font-semibold text-lg font-body'>
@@ -293,10 +293,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 <a href='https://chat.openai.com' className='text-[#1da484]'>
                   ChatGPT
                 </a>
-                . Hãy đặt câu hỏi, tìm kiếm thông tin, hoặc đơn giản là trò chuyện để giải trí -{' '}
+                . Hãy đặt câu hỏi, tìm kiếm thông tin, hoặc đơn giản là trò chuyện để giải trí -{" "}
                 <a href='https://chat.openai.com' className='text-[#1da484]'>
                   ChatGPT
-                </a>{' '}
+                </a>{" "}
                 sẽ là đối tác tin cậy của bạn. 🤖🗨️
               </p>
               <p className='font-semibold text-lg font-body'>
@@ -307,13 +307,13 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             </div>
           )}
 
-          {(product?.category as ICategory).slug === 'youtube' && (
+          {(product?.category as ICategory).slug === "youtube" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='https://www.youtube.com' className='text-[#ff0000]'>
                   Youtube
-                </a>{' '}
+                </a>{" "}
                 - Nền tảng giải trí vượt trội, nơi bạn sẽ khám phá thế giới qua những video độc đáo và
                 thú vị hơn mọi khi!
               </p>
@@ -322,23 +322,23 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 mẻ. 🎥✨
               </p>
               <p className='font-semibold text-lg font-body'>
-                Hãy tham gia{' '}
+                Hãy tham gia{" "}
                 <a href='https://www.youtube.com' className='text-[#ff0000]'>
                   Youtube
-                </a>{' '}
+                </a>{" "}
                 ngay hôm nay để trải nghiệm sự khác biệt và sự đa dạng trong thế giới giải trí trực
                 tuyến! 🌟🚀
               </p>
             </div>
           )}
 
-          {(product?.category as ICategory).slug === 'spotify' && (
+          {(product?.category as ICategory).slug === "spotify" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='https://open.spotify.com' className='text-[#1ed760]'>
                   Spotify🎵🌐
-                </a>{' '}
+                </a>{" "}
                 - Nền tảng âm nhạc tuyệt vời, nơi bạn sẽ khám phá âm nhạc với trải nghiệm nghe nhạc độc
                 đáo và thú vị hơn mọi khi!
               </p>
@@ -347,27 +347,27 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 podcast. 🎶✨
               </p>
               <p className='font-semibold text-lg font-body'>
-                Hãy tham gia{' '}
+                Hãy tham gia{" "}
                 <a href='https://open.spotify.com' className='text-[#1ed760]'>
                   Spotify🎵🌐
-                </a>{' '}
+                </a>{" "}
                 ngay hôm nay để trải nghiệm sự đa dạng và sự hòa mình vào thế giới âm nhạc mới mẻ! 🌟🎧🚀
               </p>
             </div>
           )}
 
-          {(product?.category as ICategory).slug === 'grammarly' && (
+          {(product?.category as ICategory).slug === "grammarly" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='https://www.grammarly.com' className='text-[#15c39a]'>
                   Grammarly📝✨
-                </a>{' '}
+                </a>{" "}
                 - Trợ lý văn bản thông minh, nơi bạn sẽ trải nghiệm công nghệ kiểm tra và cải thiện ngôn
                 ngữ một cách nhanh chóng và hiệu quả!
               </p>
               <p className='font-semibold text-lg font-body'>
-                Với{' '}
+                Với{" "}
                 <a href='https://www.grammarly.com' className='text-[#15c39a]'>
                   Grammarly
                 </a>
@@ -375,39 +375,62 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 hoàn hảo và chuyên nghiệp. 🚀📚
               </p>
               <p className='font-semibold text-lg font-body'>
-                Hãy tham gia{' '}
+                Hãy tham gia{" "}
                 <a href='https://www.grammarly.com' className='text-[#15c39a]'>
                   Grammarly
-                </a>{' '}
+                </a>{" "}
                 ngay hôm nay để trải nghiệm sự thuận tiện và nâng cao kỹ năng viết của bạn! 🌟💻🔍
               </p>
             </div>
           )}
 
-          {(product?.category as ICategory).slug === 'canva' && (
+          {(product?.category as ICategory).slug === "canva" && (
             <div className='w-full px-21/2 mb-12'>
               <p className='font-semibold text-lg font-body'>
-                Chào mừng bạn đến với{' '}
+                Chào mừng bạn đến với{" "}
                 <a href='https://www.canva.com' className='text-[#04bdcc]'>
                   Canva🎨✨
-                </a>{' '}
+                </a>{" "}
                 - Nền tảng thiết kế sáng tạo, nơi bạn có thể biến ý tưởng thành hình ảnh và thiết kế độc
                 đáo một cách dễ dàng!
               </p>
               <p className='font-semibold text-lg font-body'>
-                Sử dụng{' '}
+                Sử dụng{" "}
                 <a href='https://www.canva.com' className='text-[#04bdcc]'>
                   Canva
-                </a>{' '}
+                </a>{" "}
                 để tạo hình ảnh, thiệp mời, poster, và nhiều nội dung sáng tạo khác mà không cần kỹ năng
                 thiết kế chuyên sâu. 🌈💻
               </p>
               <p className='font-semibold text-lg font-body'>
-                Hãy tham gia{' '}
+                Hãy tham gia{" "}
                 <a href='https://www.canva.com' className='text-[#04bdcc]'>
                   Canva
-                </a>{' '}
+                </a>{" "}
                 ngay hôm nay để khám phá không gian sáng tạo và biến ý tưởng của bạn thành hiện thực!
+              </p>
+            </div>
+          )}
+
+          {(product?.category as ICategory).slug === "microsoft-office" && (
+            <div className='w-full px-21/2 mb-12'>
+              <p className='font-semibold text-lg font-body'>
+                Chào mừng bạn đến với <span className='text-[#04bdcc]'>Microsoft Office 365 ✨🚀</span> -
+                Nền tảng sáng tạo và năng suất hàng đầu thế giới!
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Khám phá một thế giới làm việc hoàn toàn mới với{" "}
+                <span className='text-[#04bdcc]'>Office 365</span>, nơi mọi công việc trở nên dễ dàng và
+                hiệu quả hơn bao giờ hết
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Với <span className='text-[#04bdcc]'>Office 365</span> 🎉📈, bạn không chỉ đơn thuần là
+                làm việc mà còn sáng tạo theo cách của riêng bạn. Trải nghiệm các công cụ văn phòng đỉnh
+                cao 🛠️, linh hoạt trên mọi thiết bị 📱💻, giúp bạn làm việc mọi lúc, mọi nơi ⏰🌍
+              </p>
+              <p className='font-semibold text-lg font-body'>
+                Hãy bắt đầu hành trình để nâng tầm năng suất và sáng tạo ngay hôm nay, và khám phá những
+                tính năng độc đáo chỉ có tại <span className='text-[#04bdcc]'>Office 365</span>. 🌟💡🖋️
               </p>
             </div>
           )}
@@ -415,7 +438,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
             <h3 className='text-[28px] text-dark'>Mô tả sản phẩm</h3>
 
-            {handleLines(product?.description || '')}
+            {handleLines(product?.description || "")}
 
             <p>
               <span>Lưu ý: </span>
@@ -439,10 +462,10 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <li className='mb-4'>
                 <span className='font-semibold'>Cách 3: </span>
                 <div>
-                  -{' '}
+                  -{" "}
                   <Link href='/recharge' className='text-secondary underline'>
                     Nạp tiền vào tài khoản
-                  </Link>{' '}
+                  </Link>{" "}
                   sau đó mua hàng.
                 </div>
               </li>
@@ -496,7 +519,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               </li>
             </ul>
             <p>
-              - Liên hệ người bán tại{' '}
+              - Liên hệ người bán tại{" "}
               <a
                 href='https://m.me/anphashopacc'
                 className='text-sky-5000 underline text-pink-500'
@@ -504,7 +527,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 rel='noreferrer'
               >
                 Messenger
-              </a>{' '}
+              </a>{" "}
             </p>
           </div>
 
@@ -522,7 +545,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
               <li>
                 <p className='font-semibold'>Bị quá tải thiết bị trong quá trình sử dụng thì làm sao?</p>
                 <p>
-                  Hãy chờ trong khoảng 1 - 2 tiếng sau đó quay lại hoặc liên hệ người bán thông qua{' '}
+                  Hãy chờ trong khoảng 1 - 2 tiếng sau đó quay lại hoặc liên hệ người bán thông qua{" "}
                   <a
                     href='https://m.me/anphashopacc'
                     className='text-sky-5000 underline text-pink-500'
@@ -530,7 +553,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                     rel='noreferrer'
                   >
                     Messenger
-                  </a>{' '}
+                  </a>{" "}
                   để được xử lí trong thời gian sớm nhất
                 </p>
               </li>
@@ -554,7 +577,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         <Comment comments={comments} productId={product?._id} className='mt-4' />
       </section>
     </div>
-  )
+  );
 }
 
-export default ProductPage
+export default ProductPage;
