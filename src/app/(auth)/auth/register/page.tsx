@@ -36,7 +36,7 @@ function ResgiterPage() {
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(
-    data => {
+    (data) => {
       let isValid = true
 
       // username must be at least 5 characters
@@ -56,17 +56,9 @@ function ResgiterPage() {
         })
         isValid = false
       } else {
-        const { email } = data
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
-
-        if (!emailRegex.test(email)) {
+        if (commonEmailMistakes.some((mistake) => data.email.toLowerCase().includes(mistake))) {
           setError('email', { message: 'Email không hợp lệ' })
           isValid = false
-        } else {
-          if (commonEmailMistakes.some(mistake => email.toLowerCase().includes(mistake))) {
-            setError('email', { message: 'Email không hợp lệ' })
-            isValid = false
-          }
         }
       }
 
@@ -96,7 +88,7 @@ function ResgiterPage() {
 
   // MARK: Register Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
-    async data => {
+    async (data) => {
       // validate form
       if (!handleValidate(data)) return
 
@@ -225,7 +217,8 @@ function ResgiterPage() {
             disabled={isLoading}
             className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-white hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading ? 'bg-slate-200 pointer-events-none' : ''
-            }`}>
+            }`}
+          >
             {isLoading ? (
               <FaCircleNotch
                 size={18}
@@ -251,13 +244,15 @@ function ResgiterPage() {
 
           <button
             className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
-            onClick={() => signIn('google', { callbackUrl: '/' })}>
+            onClick={() => signIn('google', { callbackUrl: '/' })}
+          >
             <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
           </button>
 
           <button
             className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
-            onClick={() => signIn('github', { callbackUrl: '/' })}>
+            onClick={() => signIn('github', { callbackUrl: '/' })}
+          >
             <Image className='wiggle' src='/images/github.jpg' height={25} width={25} alt='github' />
           </button>
         </div>
