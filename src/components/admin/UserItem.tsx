@@ -72,7 +72,7 @@ function UserItem({
 
   // MARK: Handlers
   // submit recharge form
-  const onRechargeSubmit: SubmitHandler<FieldValues> = async formData => {
+  const onRechargeSubmit: SubmitHandler<FieldValues> = async (formData) => {
     setIsLoadingRecharge(true)
 
     try {
@@ -98,7 +98,7 @@ function UserItem({
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(
-    formData => {
+    (formData) => {
       let isValid = true
 
       // if type if percentage, value must have '%' at the end
@@ -125,7 +125,7 @@ function UserItem({
   )
 
   // submit collaborator form
-  const onSetCollaboratorSubmit: SubmitHandler<FieldValues> = async formData => {
+  const onSetCollaboratorSubmit: SubmitHandler<FieldValues> = async (formData) => {
     // validate form
     if (!handleValidate(formData)) return
 
@@ -188,12 +188,13 @@ function UserItem({
         } ${!isCurUser ? 'cursor-pointer' : ''} ${className}`}
         onClick={() =>
           !isCurUser &&
-          setSelectedUsers(prev =>
+          setSelectedUsers((prev) =>
             prev.includes(userData._id)
-              ? prev.filter(id => id !== userData._id)
+              ? prev.filter((id) => id !== userData._id)
               : [...prev, userData._id]
           )
-        }>
+        }
+      >
         {/* MARK: Body */}
         <div>
           {/* Avatar */}
@@ -212,7 +213,8 @@ function UserItem({
           </div>
           <p
             className='block font-semibold text-[18px] font-body tracking-wide text-secondary text-ellipsis line-clamp-1'
-            title={userData.email}>
+            title={userData.email}
+          >
             {userData.email}
           </p>
           <div className='flex items-center gap-2 text-sm'>
@@ -222,7 +224,8 @@ function UserItem({
             </p>
             <button
               className='group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 common-transition hover:border-primary'
-              onClick={e => e.stopPropagation()}>
+              onClick={(e) => e.stopPropagation()}
+            >
               <FaPlus
                 size={10}
                 className='group-hover:text-primary common-transition'
@@ -275,7 +278,8 @@ function UserItem({
             <span
               className={`${
                 +new Date() - +new Date(data.createdAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
-              }`}>
+              }`}
+            >
               {formatTime(userData.createdAt)}
             </span>
           </p>
@@ -284,7 +288,8 @@ function UserItem({
             <span
               className={`${
                 +new Date() - +new Date(data.updatedAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
-              }`}>
+              }`}
+            >
               {formatTime(userData.updatedAt)}
             </span>
           </p>
@@ -294,10 +299,11 @@ function UserItem({
         {isOpenRecharge && (
           <div
             className='absolute z-20 p-21 top-0 left-0 w-full h-full flex items-center justify-center gap-2 rounded-md bg-secondary bg-opacity-80'
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation()
               setIsOpenRecharge(false)
-            }}>
+            }}
+          >
             <Input
               id='recharge'
               label='Recharge'
@@ -308,13 +314,13 @@ function UserItem({
               type='number'
               icon={HiLightningBolt}
               className='w-full shadow-lg'
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               onFocus={() => clearErrors('recharge')}
             />
             <LoadingButton
               className='px-4 h-[46px] shadow-lg flex items-center justify-center bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
               text='Add'
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation()
                 handleSubmit(onRechargeSubmit)(e)
               }}
@@ -327,10 +333,11 @@ function UserItem({
         {isOpenSetCollaborator && (
           <div
             className='absolute z-20 p-21 top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-2 rounded-md bg-yellow-400 bg-opacity-80'
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation()
               setIsOpenSetCollaborator(false)
-            }}>
+            }}
+          >
             {/* Type */}
             <Input
               id='type'
@@ -341,7 +348,7 @@ function UserItem({
               icon={RiCheckboxMultipleBlankLine}
               type='select'
               className='w-full'
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               onFocus={() => clearErrors('type')}
               options={[
                 {
@@ -365,13 +372,13 @@ function UserItem({
                 type='text'
                 icon={HiLightningBolt}
                 className='w-full shadow-lg'
-                onClick={e => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
                 onFocus={() => clearErrors('value-' + data._id)}
               />
               <LoadingButton
                 className='px-4 h-[46px] flex items-center justify-center shadow-lg bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
                 text='Set'
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation()
                   handleSubmit(onSetCollaboratorSubmit)(e)
                 }}
@@ -387,14 +394,15 @@ function UserItem({
             {/* Promote User Button */}
             <button
               className='block group'
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation()
                 userData.role === 'collaborator'
                   ? setIsOpenDemoteCollboratorConfirmationDialog(true)
                   : setIsOpenSetCollaborator(true)
               }}
               disabled={loadingUsers.includes(userData._id) || isDemoting}
-              title={userData.role === 'collaborator' ? 'Demote' : 'Promote'}>
+              title={userData.role === 'collaborator' ? 'Demote' : 'Promote'}
+            >
               {isDemoting ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (
@@ -410,24 +418,26 @@ function UserItem({
             {/* Add Balance Button */}
             <button
               className='block group'
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation()
                 setIsOpenRecharge(true)
               }}
               disabled={loadingUsers.includes(userData._id) || isDemoting}
-              title='Recharge'>
+              title='Recharge'
+            >
               <FaPlusCircle size={18} className='wiggle' />
             </button>
 
             {/* Delete Button */}
             <button
               className='block group'
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
               disabled={loadingUsers.includes(userData._id) || isDemoting}
-              title='Delete'>
+              title='Delete'
+            >
               {loadingUsers.includes(userData._id) ? (
                 <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
               ) : (

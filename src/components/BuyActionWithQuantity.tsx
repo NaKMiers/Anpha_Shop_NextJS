@@ -24,8 +24,8 @@ interface BuyActionWithQuantityProps {
 function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantityProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.modal.isLoading)
-  const localCart = useAppSelector(state => state.cart.localItems)
+  const isLoading = useAppSelector((state) => state.modal.isLoading)
+  const localCart = useAppSelector((state) => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -217,7 +217,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
               : 'border border-secondary'
           }`}
           disabled={quantity <= 1 || isLoading || (product?.stock || 0) <= 0}
-          onClick={() => handleQuantity(-1)}>
+          onClick={() => handleQuantity(-1)}
+        >
           <FaMinus
             size={16}
             className={`group-hover:text-white wiggle ${
@@ -231,8 +232,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           inputMode='numeric'
           value={quantity}
           disabled={isLoading || (product?.stock || 0) <= 0}
-          onChange={e => setQuantity(+e.target.value || 0)}
-          onBlur={e => handleQuantity(+e.target.value, true)}
+          onChange={(e) => setQuantity(+e.target.value || 0)}
+          onBlur={(e) => handleQuantity(+e.target.value, true)}
         />
         <button
           className={`group flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
@@ -241,7 +242,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
               : ' border-secondary'
           }`}
           disabled={quantity === product?.stock || isLoading || (product?.stock || 0) <= 0}
-          onClick={() => handleQuantity(1)}>
+          onClick={() => handleQuantity(1)}
+        >
           <FaPlus
             size={16}
             className={`group-hover:text-white wiggle ${
@@ -258,7 +260,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
             isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleBuyNow}
-          disabled={isLoading || (product?.stock || 0) <= 0}>
+          disabled={isLoading || (product?.stock || 0) <= 0}
+        >
           MUA NGAY
         </button>
         <button
@@ -266,7 +269,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
             isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}
-          disabled={isLoading || (product?.stock || 0) <= 0}>
+          disabled={isLoading || (product?.stock || 0) <= 0}
+        >
           {isLoading ? (
             <RiDonutChartFill size={22} className='animate-spin text-white' />
           ) : (
@@ -276,7 +280,8 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
         {['admin', 'editor'].includes(curUser?.role) && (
           <Link
             href={`/admin/product/all?_id=${product?._id}`}
-            className='flex items-center justify-center h-[38px] border border-yellow-400 rounded-md px-3 group hover:bg-primary-600 common-transition'>
+            className='flex items-center justify-center h-[38px] border border-yellow-400 rounded-md px-3 group hover:bg-primary-600 common-transition'
+          >
             <MdEdit size={22} className='wiggle text-yellow-400' />
           </Link>
         )}

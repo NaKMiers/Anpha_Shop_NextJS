@@ -39,7 +39,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
 
   // handle send comment
   const sendComment: SubmitHandler<FieldValues> = useCallback(
-    async data => {
+    async (data) => {
       // check login
       if (!curUser) return toast.error('Bạn cần đăng nhập để thực hiện chức năng này')
 
@@ -53,7 +53,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
           newComment.user = curUser
 
           // add new comment to list
-          setCmts(prev => [newComment, ...prev])
+          setCmts((prev) => [newComment, ...prev])
 
           // reset form
           reset()
@@ -83,7 +83,8 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
         <div
           className={`relative w-full rounded-lg border-[2px] bg-white ${
             errors.comment ? 'border-rose-400' : 'border-slate-200'
-          }`}>
+          }`}
+        >
           <input
             id='comment'
             className='h-[40px] block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer number-input'
@@ -91,7 +92,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
             disabled={isLoading}
             type='text'
             {...register('comment', { required: true })}
-            onWheel={e => e.currentTarget.blur()}
+            onWheel={(e) => e.currentTarget.blur()}
           />
 
           {/* label */}
@@ -99,7 +100,8 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
             htmlFor='comment'
             className={`absolute text-nowrap rounded-md text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer ${
               errors.comment ? 'text-rose-400' : 'text-dark'
-            }`}>
+            }`}
+          >
             Comment
           </label>
         </div>
@@ -117,8 +119,8 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
       {/* MARK: Comment List */}
       <div className='flex flex-col mt-5 gap-3 max-h-[500px] overflow-y-scroll'>
         {cmts
-          .filter(comment => !comment.hide || comment.userId === curUser?._id)
-          .map(comment => (
+          .filter((comment) => !comment.hide || comment.userId === curUser?._id)
+          .map((comment) => (
             <CommentItem comment={comment} setCmts={setCmts} key={comment._id} />
           ))}
       </div>

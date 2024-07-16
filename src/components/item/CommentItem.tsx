@@ -42,7 +42,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
   // MARK: Handlers
   // reply comment
   const replyComment: SubmitHandler<FieldValues> = useCallback(
-    async data => {
+    async (data) => {
       // check login
       if (!curUser) return toast.error('Bạn cần đăng nhập để thực hiện chức năng này')
 
@@ -56,8 +56,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           newComment.user = curUser
 
           // add new comment to list
-          setCmts(prev =>
-            prev.map(comment =>
+          setCmts((prev) =>
+            prev.map((comment) =>
               comment._id === parentComment._id
                 ? {
                     ...comment,
@@ -92,8 +92,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         if (!cmt.productId) {
           // replied comment
 
-          setCmts(prev =>
-            prev.map(c =>
+          setCmts((prev) =>
+            prev.map((c) =>
               c.replied.map((reply: any) => reply._id).includes(cmt._id)
                 ? {
                     ...c,
@@ -104,7 +104,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )
         } else {
           // normal comment
-          setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
+          setCmts((prev) => prev.map((comment) => (comment._id === cmt._id ? cmt : comment)))
         }
       } catch (err: any) {
         toast.error(err.message)
@@ -125,12 +125,12 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         if (!cmt.productId) {
           // replied comment
 
-          setCmts(prev =>
-            prev.map(c => {
-              return (c.replied as IComment[]).map(reply => reply._id).includes(cmt._id)
+          setCmts((prev) =>
+            prev.map((c) => {
+              return (c.replied as IComment[]).map((reply) => reply._id).includes(cmt._id)
                 ? {
                     ...c,
-                    replied: (c.replied as IComment[]).map(reply =>
+                    replied: (c.replied as IComment[]).map((reply) =>
                       reply._id === cmt._id ? cmt : reply
                     ),
                   }
@@ -139,7 +139,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )
         } else {
           // normal comment
-          setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
+          setCmts((prev) => prev.map((comment) => (comment._id === cmt._id ? cmt : comment)))
         }
       } catch (err: any) {
         console.log(err)
@@ -174,7 +174,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
                   ? 'border-rose-500 hover:bg-rose-500 text-rose-500'
                   : 'border-green-500 hover:bg-green-500 text-green-500'
               } hover:text-white common-transition`}
-              onClick={() => hideComment(comment._id, comment.hide ? 'n' : 'y')}>
+              onClick={() => hideComment(comment._id, comment.hide ? 'n' : 'y')}
+            >
               {comment.hide ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
             </button>
           )}
@@ -205,7 +206,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           {comment.productId && (
             <div
               className='flex font-semibold text-primary gap-1 cursor-pointer select-none'
-              onClick={() => setIsOpenReply(prev => !prev)}>
+              onClick={() => setIsOpenReply((prev) => !prev)}
+            >
               <span>{comment.replied.length}</span>
               <span className=''>Phản hồi</span>
               <FaSortDown />
@@ -217,7 +219,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         <div
           className={`${
             isOpenReply ? 'max-h-[350px]' : 'max-h-0'
-          } relative h-full overflow-y-scroll common-transition mt-1 `}>
+          } relative h-full overflow-y-scroll common-transition mt-1 `}
+        >
           {/* MARK: Input */}
           <div className='sticky z-10 top-0 flex items-start gap-2 bg-white'>
             <Image
@@ -235,7 +238,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
                 disabled={isLoading}
                 type='text'
                 {...register('comment', { required: true })}
-                onWheel={e => e.currentTarget.blur()}
+                onWheel={(e) => e.currentTarget.blur()}
               />
               <div className='flex gap-2 mt-2 justify-end'>
                 <button className='h-[30px] text-sm px-3 rounded-lg hover:bg-slate-200 common-transition'>
@@ -253,7 +256,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
 
           {/* MARK: Replied Comments */}
           <div className='relative flex flex-col gap-3 mt-1'>
-            {(comment.replied as IComment[]).map(comment => (
+            {(comment.replied as IComment[]).map((comment) => (
               <CommentItem setCmts={setCmts} comment={comment} key={comment._id} />
             ))}
           </div>

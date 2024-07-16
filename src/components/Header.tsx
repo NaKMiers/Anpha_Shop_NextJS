@@ -27,8 +27,8 @@ interface HeaderProps {
 function Header({ isStatic, hideSearch }: HeaderProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const cartItems = useAppSelector(state => state.cart.items)
-  const localCartItems = useAppSelector(state => state.cart.localItems)
+  const cartItems = useAppSelector((state) => state.cart.items)
+  const localCartItems = useAppSelector((state) => state.cart.localItems)
   const { data: session, update } = useSession()
   const curUser: any = session?.user
 
@@ -36,7 +36,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const [isShow, setIsShow] = useState<boolean>(false)
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false)
   const lastScrollTop = useRef<number>(0)
-  const [cartLength, setCartlength] = useState<number>(0)
+  const [cartLength, setCartLength] = useState<number>(0)
   const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
 
   // search
@@ -48,20 +48,23 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
 
+  const [updated, setUpdated] = useState<boolean>(false)
+
   // MARK: Side Effects
   // update user session
   useEffect(() => {
     const updateUser = async () => {
+      setUpdated(true)
       await update()
     }
-    if (!curUser?._id) {
+    if (!updated) {
       updateUser()
     }
-  }, [update, curUser?._id])
+  }, [update, updated])
 
   // get cart length
   useEffect(() => {
-    setCartlength(
+    setCartLength(
       curUser?._id
         ? cartItems.reduce((total, item) => total + item.quantity, 0)
         : localCartItems.reduce((total, item) => total + item.quantity, 0)
@@ -74,11 +77,11 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       try {
         // send product ids to get corresponding cart items
         const { products } = await updateProductsInLocalCartApi(
-          localCartItems.map(item => (item.product as IProduct)._id)
+          localCartItems.map((item) => (item.product as IProduct)._id)
         )
 
         const updatedLocalCartItems = localCartItems
-          .map(cartItem => {
+          .map((cartItem) => {
             const product = products.find(
               (product: IProduct) => product._id === (cartItem.product as IProduct)._id
             )
@@ -95,7 +98,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                 }
               : null
           })
-          .filter(cartItem => cartItem) as ICartItem[]
+          .filter((cartItem) => cartItem) as ICartItem[]
 
         dispatch(setLocalCartItems(updatedLocalCartItems))
         setIsLocalCartUpdated(true)
@@ -198,18 +201,21 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         isStatic ? 'static' : 'fixed z-50 left-0 top-0'
       } bg-dark-100 w-full text-white shadow-medium-light transition-all duration-300 ${
         isShow ? 'top-0' : 'top-[-100%]'
-      }`}>
+      }`}
+    >
       {/* Main Header */}
       <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
         {/* MARK: Brand */}
         <div
           className={`${
             openSearch ? 'max-w-0 overflow-hidden' : 'max-w-[300px] w-[90%]'
-          } sm:flex-shrink-0 pl-4 -ml-4 flex items-center h-full overflow-x-scroll no-scrollbar duration-300 transition-all`}>
+          } sm:flex-shrink-0 pl-4 -ml-4 flex items-center h-full overflow-x-scroll no-scrollbar duration-300 transition-all`}
+        >
           <Link
             href='/'
             prefetch={false}
-            className='hidden sm:block shrink-0 rounded-full common-transition spin'>
+            className='hidden sm:block shrink-0 rounded-full common-transition spin'
+          >
             <Image
               className='aspect-square rounded-full'
               src='/images/logo.jpg'
@@ -223,7 +229,8 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           </Link>
           <Link
             href='/recharge'
-            className='flex ml-3 bg-primary px-[10px] py-[6px] rounded-lg items-center gap-1 group hover:bg-secondary common-transition'>
+            className='flex ml-3 bg-primary px-[10px] py-[6px] rounded-lg items-center gap-1 group hover:bg-secondary common-transition'
+          >
             <span className='font-bold font-body text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
               Nạp
             </span>
@@ -238,13 +245,14 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         <div
           className={`${openSearch ? 'max-w-full' : 'max-w-0 p-0'} ${
             !searchResults ? 'overflow-hidden' : ''
-          } lg:max-w-[500px] relative mr-2.5 w-full h-[40px] flex items-center justify-center text-dark duration-300 transition-all`}>
+          } lg:max-w-[500px] relative mr-2.5 w-full h-[40px] flex items-center justify-center text-dark duration-300 transition-all`}
+        >
           <input
             type='text'
             placeholder='Tìm kiếm...'
             className='appearance-none w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-0 rounded-l-lg bg-white'
             value={searchValue}
-            onChange={e => setSearchValue(e.target.value)}
+            onChange={(e) => setSearchValue(e.target.value)}
             onFocus={() => {
               setEnableHideHeader(false)
               setOpenResults(true)
@@ -256,10 +264,11 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           />
           <Link
             href={`/search?search=${searchValue}`}
-            onClick={e => !searchValue && e.preventDefault()}
+            onClick={(e) => !searchValue && e.preventDefault()}
             className={`group h-full w-[40px] flex justify-center items-center rounded-r-lg bg-white ${
               searchLoading ? 'pointer-events-none' : ''
-            }`}>
+            }`}
+          >
             {searchLoading ? (
               <RiDonutChartFill size={20} className='animate-spin text-slate-300' />
             ) : (
@@ -270,13 +279,15 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           <ul
             className={`${
               searchResults && openResults ? 'max-h-[500px] p-2' : 'max-h-0 p-0'
-            } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}>
+            } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}
+          >
             {searchResults?.length ? (
-              searchResults.map(product => (
+              searchResults.map((product) => (
                 <Link
                   href={`/${product.slug}`}
                   key={product._id}
-                  className='flex gap-4 py-2 items-start rounded-lg p-2 hover:bg-sky-200 common-transition'>
+                  className='flex gap-4 py-2 items-start rounded-lg p-2 hover:bg-sky-200 common-transition'
+                >
                   <div className='relative aspect-video flex-shrink-0'>
                     {product.stock <= 0 && (
                       <div className='absolute top-0 left-0 right-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
@@ -321,11 +332,12 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           <button
             className='flex lg:hidden group h-full justify-center items-center'
             onClick={() => {
-              setOpenSearch(prev => !prev)
+              setOpenSearch((prev) => !prev)
               setSearchResults(null)
               setSearchValue('')
               setEnableHideHeader(true)
-            }}>
+            }}
+          >
             {openSearch ? (
               <IoClose size={30} className='wiggle -mr-1.5' />
             ) : (
@@ -346,7 +358,8 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
             !!curUser._id && (
               <div
                 className='flex items-center gap-2 cursor-pointer'
-                onClick={() => setIsOpenMenu(prev => !prev)}>
+                onClick={() => setIsOpenMenu((prev) => !prev)}
+              >
                 <Image
                   className='aspect-square rounded-full wiggle-0'
                   src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
@@ -363,7 +376,8 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           ) : (
             <Link
               href='/auth/login'
-              className='bg-secondary hover:bg-primary text-nowrap common-transition px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider cursor-pointer'>
+              className='bg-secondary hover:bg-primary text-nowrap common-transition px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider cursor-pointer'
+            >
               Đăng nhập
             </Link>
           )}
@@ -376,11 +390,12 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
               hideSearch ? 'hidden' : ''
             } sm:flex lg:hidden group h-full w-[40px] justify-center items-center`}
             onClick={() => {
-              setOpenSearch(prev => !prev)
+              setOpenSearch((prev) => !prev)
               setSearchResults(null)
               setSearchValue('')
               setEnableHideHeader(true)
-            }}>
+            }}
+          >
             {openSearch ? (
               <IoClose size={30} className='wiggle' />
             ) : (
@@ -390,7 +405,8 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
 
           <button
             className='flex justify-center items-center w-[40px] h-[40px]'
-            onClick={() => setIsOpenMenu(prev => !prev)}>
+            onClick={() => setIsOpenMenu((prev) => !prev)}
+          >
             <FaBars size={22} className='common-transition wiggle' />
           </button>
         </div>

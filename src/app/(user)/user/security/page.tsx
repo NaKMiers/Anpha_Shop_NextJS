@@ -14,7 +14,7 @@ import { FaCheck, FaEyeSlash } from 'react-icons/fa'
 function SecurityPage() {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.modal.isLoading)
+  const isLoading = useAppSelector((state) => state.modal.isLoading)
   const { data: session } = useSession()
   const curUser: any = session?.user
 
@@ -39,7 +39,7 @@ function SecurityPage() {
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(
-    data => {
+    (data) => {
       let isValid = true
 
       // newPassword must be at least 5 characters and contain at least 1 lowercase, 1 uppercase, 1 number, and must not be the same as oldPassword
@@ -69,7 +69,7 @@ function SecurityPage() {
   )
 
   // MARK: Submit
-  const onSubmit: SubmitHandler<FieldValues> = async data => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     // validate form
     if (!handleValidate(data)) return
 

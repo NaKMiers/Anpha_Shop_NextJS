@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import '../globals.scss'
 import Background from '@/components/Background'
 import Header from '@/components/Header'
+import authOptions from '../api/auth/[...nextauth]/authOptions'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -27,7 +28,7 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
   return (
     <html lang='vi'>

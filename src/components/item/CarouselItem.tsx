@@ -26,7 +26,7 @@ interface CarouselProductProps {
 function CarouselProduct({ product, className = '' }: CarouselProductProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const localCart = useAppSelector(state => state.cart.localItems)
+  const localCart = useAppSelector((state) => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -191,7 +191,8 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
     <Link
       href={`/${product.slug}`}
       prefetch={false}
-      className={`aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2 ${className}`}>
+      className={`aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2 ${className}`}
+    >
       <div className='relative rounded-small overflow-hidden group'>
         {/* MARK: Thumbnail */}
         <Image
@@ -206,7 +207,8 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
         <div className='flex flex-col sm:gap-1 justify-center absolute translate-y-full opacity-0 w-full h-full top-0 left-0 bg-sky-500 bg-opacity-65 p-3 text-center transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
           <h5
             className='text-white text-sm font-body leading-4 text-ellipsis flex-shrink-0 line-clamp-2'
-            title={product.title}>
+            title={product.title}
+          >
             {product.title}
           </h5>
           <p className='uppercase text-xs font-semibold text-slate-200 leading-3'>
@@ -216,11 +218,12 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
             Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>
           </p>
           {/* Action Buttons */}
-          <div className='flex items-center gap-2 justify-center' onClick={e => e.preventDefault()}>
+          <div className='flex items-center gap-2 justify-center' onClick={(e) => e.preventDefault()}>
             <button
               className='h-[26px] md:h-[30px] px-2 bg-secondary rounded-[4px] text-[12px] text-white font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
               onClick={handleBuyNow}
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               MUA NGAY
             </button>
             <button
@@ -228,7 +231,8 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
                 isLoading ? 'pointer-events-none bg-slate-200' : ''
               }`}
               onClick={handleAddToCart}
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <RiDonutChartFill size={13} className='animate-spin text-white' />
               ) : (
@@ -238,7 +242,8 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
             {['admin', 'editor'].includes(curUser?.role) && (
               <div
                 onClick={() => router.push(`/admin/product/all?_id=${product?._id}`)}
-                className='flex items-center justify-center h-[26px] border border-yellow-400 rounded-md px-1 group hover:bg-primary-600 common-transition'>
+                className='flex items-center justify-center h-[26px] border border-yellow-400 rounded-md px-1 group hover:bg-primary-600 common-transition'
+              >
                 <MdEdit size={18} className='wiggle text-yellow-400' />
               </div>
             )}

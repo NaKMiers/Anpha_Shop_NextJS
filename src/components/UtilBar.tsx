@@ -74,7 +74,7 @@ function UtilBar({ categories, className = '' }: UtilBarProps) {
     >
       <button
         className='group hidden md:flex items-center justify-center absolute top-1/2 -translate-y-1/2 left-0 -translate-x-full py-3 bg-white rounded-l-md shadow-md'
-        onClick={() => setShow(prev => !prev)}
+        onClick={() => setShow((prev) => !prev)}
       >
         <FaGripVertical size={20} className={`wiggle`} />
       </button>
@@ -101,7 +101,7 @@ function UtilBar({ categories, className = '' }: UtilBarProps) {
 
       {/* MARK: Categories */}
       <div className='flex md:flex-col px-3 py-3 -ml-3 md:m-0 md:-mt-3 md:max-h-[282px] items-center gap-5 overflow-auto no-scrollbar'>
-        {categories.map(category => (
+        {categories.map((category) => (
           <Link
             href={`/#${category.slug}`}
             className='flex-shrink-0 group'

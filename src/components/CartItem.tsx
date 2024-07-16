@@ -42,7 +42,7 @@ function CartItem({
   // hooks
   const dispatch = useAppDispatch()
   const { data: session } = useSession()
-  const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
+  const selectedCartItems = useAppSelector((state) => state.cart.selectedItems)
   const curUser: any = session?.user
 
   // states
@@ -257,24 +257,26 @@ function CartItem({
       className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 cursor-pointer common-transition ${className} ${
         localCartItem ? '' : 'rounded-medium border p-21'
       } ${
-        !!selectedCartItems.find(cI => cI._id === cartItem._id) ? 'border-primary' : 'border-slate-400'
+        !!selectedCartItems.find((cI) => cI._id === cartItem._id) ? 'border-primary' : 'border-slate-400'
       }`}
       onClick={() =>
         dispatch(
           setSelectedItems(
-            selectedCartItems.find(cI => cI._id === cartItem._id)
-              ? selectedCartItems.filter(cI => cI._id !== cartItem._id)
+            selectedCartItems.find((cI) => cI._id === cartItem._id)
+              ? selectedCartItems.filter((cI) => cI._id !== cartItem._id)
               : [...selectedCartItems, cartItem]
           )
         )
-      }>
+      }
+    >
       {/* MARK: Thumbnails */}
       <div className='relative'>
         {(cartItem.product as IProduct).stock <= 0 && (
           <Link
             href={`/${(cartItem.product as IProduct).slug}`}
             prefetch={false}
-            className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+            className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'
+          >
             <Image
               className='animate-wiggle -mt-1'
               src='/images/sold-out.jpg'
@@ -289,9 +291,10 @@ function CartItem({
           href={`/${(cartItem.product as IProduct).slug}`}
           prefetch={false}
           className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
-          onClick={e => e.stopPropagation()}>
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
-            {(cartItem.product as IProduct).images.map(src => (
+            {(cartItem.product as IProduct).images.map((src) => (
               <Image
                 className='flex-shrink w-full snap-start'
                 src={src}
@@ -331,12 +334,12 @@ function CartItem({
         <input
           type='checkbox'
           className='size-5 z-10 cursor-pointer absolute top-21 right-21 accent-primary'
-          checked={!!selectedCartItems.find(cI => cI._id === cartItem._id)}
+          checked={!!selectedCartItems.find((cI) => cI._id === cartItem._id)}
           onChange={() =>
             dispatch(
               setSelectedItems(
-                selectedCartItems.find(cI => cI._id === cartItem._id)
-                  ? selectedCartItems.filter(cI => cI._id !== cartItem._id)
+                selectedCartItems.find((cI) => cI._id === cartItem._id)
+                  ? selectedCartItems.filter((cI) => cI._id !== cartItem._id)
                   : [...selectedCartItems, cartItem]
               )
             )
@@ -407,7 +410,8 @@ function CartItem({
           <div className='flex items-center justify-between'>
             <div
               className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}
-              onClick={e => e.stopPropagation()}>
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 className={`flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
                   quantity <= 1 || isLoading
@@ -415,7 +419,8 @@ function CartItem({
                     : 'border border-secondary bg-white'
                 }`}
                 disabled={quantity <= 1 || isLoading}
-                onClick={() => updateQuantity('button', -1)}>
+                onClick={() => updateQuantity('button', -1)}
+              >
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
                 ) : (
@@ -434,8 +439,8 @@ function CartItem({
                 pattern='[0-9]*'
                 value={quantity}
                 disabled={isLoading || (cartItem.product as IProduct).stock <= 0}
-                onWheel={e => e.currentTarget.blur()}
-                onChange={e => updateQuantity('input', +e.target.value)}
+                onWheel={(e) => e.currentTarget.blur()}
+                onChange={(e) => updateQuantity('input', +e.target.value)}
               />
 
               <button
@@ -445,7 +450,8 @@ function CartItem({
                     : ' border-secondary bg-white'
                 }`}
                 disabled={quantity >= (cartItem.product as IProduct)?.stock! || isLoading}
-                onClick={() => updateQuantity('button', 1)}>
+                onClick={() => updateQuantity('button', 1)}
+              >
                 {isLoading ? (
                   <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
                 ) : (
@@ -464,7 +470,7 @@ function CartItem({
             <FaTrashAlt
               size={21}
               className='text-secondary cursor-pointer hover:scale-110 common-transition wiggle'
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
