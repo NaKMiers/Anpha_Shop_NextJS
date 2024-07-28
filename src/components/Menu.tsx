@@ -69,14 +69,16 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             : 'max-h-0 sm:max-h-0 p-0 sm:max-w-0 sm:w-0 opacity-0x'
         } ${
           curUser && !curUser?._id ? 'hidden' : ''
-        } w-full h-[calc(100vh_-_72px)] sm:h-auto overflow-hidden transition-all duration-300 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}>
+        } w-full h-[calc(100vh_-_72px)] sm:h-auto overflow-hidden transition-all duration-300 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}
+      >
         {curUser ? (
           // MARK: User Logged In
           curUser?._id && (
             <>
               <Link
                 href='/user'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'>
+                className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'
+              >
                 <Image
                   className='aspect-square rounded-full wiggle-0'
                   src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
@@ -97,7 +99,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 <Link
                   className='group flex-shrink-0 rounded-full ml-1 border-2 border-primary p-[2px] hover:scale-110 common-transition'
                   href='/recharge'
-                  onClick={() => setOpen(false)}>
+                  onClick={() => setOpen(false)}
+                >
                   <FaPlus size={11} className='text-primary common-transition' />
                 </Link>
               </li>
@@ -105,7 +108,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <li className='group' onClick={() => setOpen(false)}>
                 <Link
                   href='/user'
-                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                >
                   <FaUser size={18} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
                 </Link>
@@ -114,7 +118,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 <Link
                   href='/cart'
                   prefetch={false}
-                  className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                  className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                >
                   <FaCartShopping size={18} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                   {!!cartLength && (
@@ -127,7 +132,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <li className='group' onClick={() => setOpen(false)}>
                 <Link
                   href='/user/order-history'
-                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                >
                   <FaHistory size={18} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
                 </Link>
@@ -135,7 +141,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <li className='group' onClick={() => setOpen(false)}>
                 <a
                   href='https://www.messenger.com/t/170660996137305'
-                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                >
                   <FaPhone size={18} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
                 </a>
@@ -148,7 +155,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                         ? '/admin/order/all'
                         : '/admin/summary/all'
                     }
-                    className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                    className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                  >
                     <FaUserSecret size={18} className='wiggle w-[22px]' />
                     <span className='font-body tracking-wide text-[15px] text-primary'>
                       {/* {curUser?.role.charAt(0).toUpperCase() + curUser?.role.slice(1)} */}
@@ -160,7 +168,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               <li className='group' onClick={() => setOpen(false)}>
                 <button
                   className='flex items-center w-full gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
-                  onClick={() => signOut()}>
+                  onClick={() => signOut()}
+                >
                   <TbLogout size={20} className='wiggle w-[22px]' />
                   <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
                 </button>
@@ -173,7 +182,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/cart'
-                className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+              >
                 <FaCartShopping size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
                 {!!cartLength && (
@@ -184,9 +194,19 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               </Link>
             </li>
             <li className='group' onClick={() => setOpen(false)}>
+              <a
+                href='https://www.messenger.com/t/170660996137305'
+                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+              >
+                <FaPhone size={18} className='wiggle w-[22px]' />
+                <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
+              </a>
+            </li>
+            <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/auth/login'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+              >
                 <FiLogIn size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng nhập</span>
               </Link>
@@ -194,7 +214,8 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             <li className='group' onClick={() => setOpen(false)}>
               <Link
                 href='/auth/register'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
+                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+              >
                 <FaUserPlus size={18} className='wiggle w-[22px]' />
                 <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng ký</span>
               </Link>
