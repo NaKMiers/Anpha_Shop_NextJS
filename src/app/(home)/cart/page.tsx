@@ -33,10 +33,10 @@ import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
 function CartPage() {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector((state) => state.modal.isLoading)
-  let localCartItems = useAppSelector((state) => state.cart.localItems)
-  let cartItems = useAppSelector((state) => state.cart.items)
-  const selectedItems = useAppSelector((state) => state.cart.selectedItems)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
+  let localCartItems = useAppSelector(state => state.cart.localItems)
+  let cartItems = useAppSelector(state => state.cart.items)
+  const selectedItems = useAppSelector(state => state.cart.selectedItems)
   const queryParams = useSearchParams()
   const router = useRouter()
   const { data: session } = useSession()
@@ -90,7 +90,7 @@ function CartPage() {
   // auto calc total, discount, subTotal
   useEffect(() => {
     const subTotal = selectedItems.reduce((total, cartItem) => {
-      const item: any = items.find((cI) => cI._id === cartItem._id)
+      const item: any = items.find(cI => cI._id === cartItem._id)
 
       return (
         total +
@@ -110,7 +110,6 @@ function CartPage() {
         finalTotal = discount
       } else if (voucher.type === 'percentage') {
         discount = +calcPercentage(voucher.value, subTotal)
-        console.log('discount', discount, 'voucher.maxReduce', voucher.maxReduce)
         if (Math.abs(discount) > voucher.maxReduce) {
           discount = -voucher.maxReduce
         }
@@ -123,7 +122,7 @@ function CartPage() {
 
   // auto select cart item
   useEffect(() => {
-    const selectedItems = items.filter((item) =>
+    const selectedItems = items.filter(item =>
       queryParams.getAll('product').includes((item.product as IProduct).slug)
     )
 
@@ -133,7 +132,7 @@ function CartPage() {
   // MARK: Api functions
   // send request to server to check voucher
   const handleApplyVoucher: SubmitHandler<FieldValues> = useCallback(
-    async (data) => {
+    async data => {
       if (selectedItems.length) {
         // start loading
         dispatch(setLoading(true))
@@ -173,7 +172,7 @@ function CartPage() {
       // send request to add product to cart
       const { cartItems, message, errors } = await addToCartApi(
         localItems.map(
-          (item) =>
+          item =>
             ({
               productId: item.productId,
               quantity: item.quantity,
@@ -225,7 +224,7 @@ function CartPage() {
         setError('email', { message: 'Email không hợp lệ' })
         isValid = false
       } else {
-        if (commonEmailMistakes.some((mistake) => email.toLowerCase().endsWith(mistake))) {
+        if (commonEmailMistakes.some(mistake => email.toLowerCase().endsWith(mistake))) {
           setError('email', { message: 'Email không hợp lệ' })
           isValid = false
         }
@@ -276,7 +275,7 @@ function CartPage() {
 
         // remove cart items if is LOCAL cart
         const asd = localCartItems.filter(
-          (item: ICartItem) => !selectedItems.map((i) => i._id).includes(item._id)
+          (item: ICartItem) => !selectedItems.map(i => i._id).includes(item._id)
         )
 
         if (!curUser?._id) {
@@ -338,7 +337,7 @@ function CartPage() {
       )
 
       // remove cart items in store
-      dispatch(setCartItems(items.filter((item) => !removedCartItems.includes(item._id))))
+      dispatch(setCartItems(items.filter(item => !removedCartItems.includes(item._id))))
 
       // show success message
       toast.success(message)
@@ -482,7 +481,7 @@ function CartPage() {
               (
               <button
                 className='text-sky-600 hover:underline z-10'
-                onClick={() => setIsShowVoucher((prev) => !prev)}
+                onClick={() => setIsShowVoucher(prev => !prev)}
               >
                 ấn vào đây
               </button>

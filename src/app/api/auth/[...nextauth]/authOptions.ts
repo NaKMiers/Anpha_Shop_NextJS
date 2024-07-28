@@ -43,7 +43,7 @@ const authOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: any) {
-        console.log('- Cedentials -', credentials)
+        console.log('- Credentials -', credentials)
 
         // check if credentials is empty
         if (!credentials?.usernameOrEmail || !credentials?.password) {
@@ -113,9 +113,6 @@ const authOptions = {
 
     async session({ session, token }: any) {
       console.log('- Session -')
-      // console.log('session-xxxx', session)
-      // console.log('session-token', token)
-
       session.user = token
 
       return session
