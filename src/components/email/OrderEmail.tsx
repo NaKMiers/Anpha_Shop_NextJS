@@ -21,7 +21,6 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                     src={`${'https://anpha.shop'}/images/logo.jpg`}
                     width={35}
                     height={35}
-                    alt='logo'
                   />
                 </a>
               </Column>
@@ -71,6 +70,12 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                   <p>
                     <b>Trạng thái: </b>
                     <span className='text-[#50C878]'>Đã giao</span>
+                  </p>
+                  <p>
+                    <b>Phương thức thanh toán: </b>
+                    <span className='text-purple-600'>
+                      {order.paymentMethod.charAt(0).toUpperCase() + order.paymentMethod.slice(1)}
+                    </span>
                   </p>
                   <p>
                     <b>Tổng tiền: </b>

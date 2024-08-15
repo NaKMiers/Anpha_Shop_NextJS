@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import '../globals.scss'
 import Background from '@/components/Background'
 import authOptions from '../api/auth/[...nextauth]/authOptions'
+import PageLoading from '@/components/PageLoading'
 
 export const metadata: Metadata = {
   title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
@@ -33,6 +34,9 @@ export default async function RootLayout({
         <StoreProvider session={session}>
           {/* Background */}
           <Background noBeta />
+
+          {/* Utils */}
+          <PageLoading />
 
           {/* Toast */}
           <Toaster

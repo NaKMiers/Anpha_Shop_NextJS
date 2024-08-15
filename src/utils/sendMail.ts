@@ -12,6 +12,7 @@ import nodeMailer from 'nodemailer'
 
 // Models: User
 import '@/models/UserModel'
+import { formatPrice } from './number'
 
 // SEND MAIL CORE
 const transporter = nodeMailer.createTransport({
@@ -46,7 +47,11 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
     let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
 
     const html = render(NotifyOrderEmail({ order: newOrder }))
-    await sendMail(emails, 'New Order', html)
+    await sendMail(
+      emails,
+      `New - ${newOrder.code} - ${formatPrice(newOrder.total)} - ${newOrder.paymentMethod}`,
+      html
+    )
   } catch (err: any) {
     console.log(err)
   }

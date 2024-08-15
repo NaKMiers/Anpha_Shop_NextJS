@@ -8,7 +8,8 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
@@ -20,14 +21,14 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
                     src={`${'https://anpha.shop'}/images/logo.jpg`}
                     width={35}
                     height={35}
-                    alt='logo'
                   />
                 </a>
               </Column>
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -38,7 +39,8 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
             className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}>
+            }}
+          >
             <div>
               <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
@@ -90,7 +92,8 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
                       <li className='mb-2' key={item._id}>
                         <a
                           href={`https://anpha.shop/${item.product.slug}`}
-                          className='block h-full text-dark tracking-wider no-underline'>
+                          className='block h-full text-dark tracking-wider no-underline'
+                        >
                           <Section>
                             <Row>
                               <Column className='w-[130px]'>
@@ -122,7 +125,8 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
               <div className='text-center p-3 mb-8'>
                 <a
                   href={`https://anpha.shop/admin/order/all`}
-                  className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                  className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'
+                >
                   Giao hàng ngay
                 </a>
               </div>
@@ -142,7 +146,8 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}

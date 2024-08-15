@@ -2,6 +2,8 @@
 
 import Input from '@/components/Input'
 import { commonEmailMistakes } from '@/constansts/mistakes'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { registerApi } from '@/requests'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
@@ -15,6 +17,7 @@ import { MdEmail } from 'react-icons/md'
 
 function ResgiterPage() {
   // hooks
+  const dispatch = useAppDispatch()
   const router = useRouter()
 
   // states
@@ -36,7 +39,7 @@ function ResgiterPage() {
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(
-    (data) => {
+    data => {
       let isValid = true
 
       // username must be at least 5 characters
@@ -56,7 +59,7 @@ function ResgiterPage() {
         })
         isValid = false
       } else {
-        if (commonEmailMistakes.some((mistake) => data.email.toLowerCase().includes(mistake))) {
+        if (commonEmailMistakes.some(mistake => data.email.toLowerCase().includes(mistake))) {
           setError('email', { message: 'Email không hợp lệ' })
           isValid = false
         }
@@ -88,7 +91,7 @@ function ResgiterPage() {
 
   // MARK: Register Submition
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
-    async (data) => {
+    async data => {
       // validate form
       if (!handleValidate(data)) return
 
@@ -129,6 +132,8 @@ function ResgiterPage() {
 
   // keyboard event
   useEffect(() => {
+    dispatch(setPageLoading(false))
+
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         handleSubmit(onSubmit)()
@@ -140,7 +145,7 @@ function ResgiterPage() {
     return () => {
       window.removeEventListener('keydown', handleKeydown)
     }
-  }, [handleSubmit, onSubmit])
+  }, [dispatch, handleSubmit, onSubmit])
 
   return (
     <div className='relative w-full min-h-screen'>
@@ -244,14 +249,20 @@ function ResgiterPage() {
 
           <button
             className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
-            onClick={() => signIn('google', { callbackUrl: '/' })}
+            onClick={() => {
+              dispatch(setPageLoading(true))
+              signIn('google', { callbackUrl: '/' })
+            }}
           >
             <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
           </button>
 
           <button
             className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
-            onClick={() => signIn('github', { callbackUrl: '/' })}
+            onClick={() => {
+              dispatch(setPageLoading(true))
+              signIn('github', { callbackUrl: '/' })
+            }}
           >
             <Image className='wiggle' src='/images/github.jpg' height={25} width={25} alt='github' />
           </button>

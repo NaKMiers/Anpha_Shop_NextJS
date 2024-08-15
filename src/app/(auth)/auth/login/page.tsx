@@ -1,6 +1,8 @@
 'use client'
 
 import Input from '@/components/Input'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -12,6 +14,7 @@ import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 
 function LoginPage() {
   // hooks
+  const dispatch = useAppDispatch()
   const router = useRouter()
 
   // states
@@ -31,7 +34,7 @@ function LoginPage() {
     },
   })
 
-  // MARK: Login Submition
+  // MARK: Login Submission
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       setIsLoading(true)
@@ -67,6 +70,8 @@ function LoginPage() {
 
   // keyboard event
   useEffect(() => {
+    dispatch(setPageLoading(false))
+
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         handleSubmit(onSubmit)()
@@ -78,7 +83,7 @@ function LoginPage() {
     return () => {
       window.removeEventListener('keydown', handleKeydown)
     }
-  }, [handleSubmit, onSubmit])
+  }, [handleSubmit, onSubmit, dispatch])
 
   return (
     <div className='relative w-full min-h-screen'>
@@ -129,7 +134,8 @@ function LoginPage() {
             disabled={isLoading}
             className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-white hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading ? 'bg-slate-200 pointer-events-none' : ''
-            }`}>
+            }`}
+          >
             {isLoading ? (
               <FaCircleNotch
                 size={18}
@@ -155,13 +161,21 @@ function LoginPage() {
 
           <button
             className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
-            onClick={() => signIn('google', { callbackUrl: '/' })}>
+            onClick={() => {
+              dispatch(setPageLoading(true))
+              signIn('google', { callbackUrl: '/' })
+            }}
+          >
             <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
           </button>
 
           <button
             className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
-            onClick={() => signIn('github', { callbackUrl: '/' })}>
+            onClick={() => {
+              dispatch(setPageLoading(true))
+              signIn('github', { callbackUrl: '/' })
+            }}
+          >
             <Image className='wiggle' src='/images/github.jpg' height={25} width={25} alt='github' />
           </button>
         </div>

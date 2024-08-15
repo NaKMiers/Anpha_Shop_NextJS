@@ -1,6 +1,8 @@
 'use client'
 
 import Input from '@/components/Input'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { resetPassword } from '@/requests'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -11,6 +13,7 @@ import { FaCircleNotch } from 'react-icons/fa6'
 
 function ResetPasswordPage() {
   // hooks
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const queryParams = useSearchParams()
 
@@ -76,6 +79,8 @@ function ResetPasswordPage() {
 
   // keyboard event
   useEffect(() => {
+    dispatch(setPageLoading(false))
+
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         handleSubmit(onSubmit)()
@@ -87,7 +92,7 @@ function ResetPasswordPage() {
     return () => {
       window.removeEventListener('keydown', handleKeydown)
     }
-  }, [handleSubmit, onSubmit])
+  }, [dispatch, handleSubmit, onSubmit])
 
   return (
     <div className='relative w-full min-h-screen'>
@@ -134,7 +139,8 @@ function ResetPasswordPage() {
             disabled={isLoading}
             className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-white hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading ? 'bg-slate-200 pointer-events-none' : ''
-            }`}>
+            }`}
+          >
             {isLoading ? (
               <FaCircleNotch
                 size={18}

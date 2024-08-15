@@ -21,7 +21,6 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                     src={`${'https://anpha.shop'}/images/logo.jpg`}
                     width={35}
                     height={35}
-                    alt='logo'
                   />
                 </a>
               </Column>

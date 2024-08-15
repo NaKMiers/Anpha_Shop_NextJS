@@ -1,6 +1,8 @@
 'use client'
 
 import Input from '@/components/Input'
+import { useAppDispatch } from '@/libs/hooks'
+import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { forgotPasswordApi } from '@/requests'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -11,6 +13,9 @@ import { MdEmail } from 'react-icons/md'
 const time = 60
 
 function ForgotPasswordPage() {
+  // hooks
+  const dispatch = useAppDispatch()
+
   // states
   const [isSent, setIsSent] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -78,6 +83,8 @@ function ForgotPasswordPage() {
 
   // keyboard event
   useEffect(() => {
+    dispatch(setPageLoading(false))
+
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         handleSubmit(onSubmit)()
@@ -89,7 +96,7 @@ function ForgotPasswordPage() {
     return () => {
       window.removeEventListener('keydown', handleKeydown)
     }
-  }, [handleSubmit, onSubmit])
+  }, [dispatch, handleSubmit, onSubmit])
 
   return (
     <div className='relative w-full min-h-screen'>
@@ -141,7 +148,8 @@ function ForgotPasswordPage() {
             disabled={isSent && isCounting}
             className={`h-[40px] min-w-[48px] items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-white flex gap-2 hover:bg-primary hover:text-dark common-transition font-semibold ${
               isLoading || isCounting ? 'bg-slate-200 pointer-events-none' : ''
-            }`}>
+            }`}
+          >
             {isLoading || isCounting ? (
               <FaCircleNotch
                 size={18}
