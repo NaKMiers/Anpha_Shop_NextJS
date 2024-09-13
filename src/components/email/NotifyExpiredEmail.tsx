@@ -7,7 +7,8 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
     <Tailwind
       config={{
         theme,
-      }}>
+      }}
+    >
       <Body className='text-dark font-sans'>
         <Container className='bg-white p-4'>
           <Section className='inline-block mx-auto'>
@@ -26,7 +27,8 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
               <Column>
                 <a
                   href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'>
+                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                >
                   .AnphaShop
                 </a>
               </Column>
@@ -37,7 +39,8 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
             className='rounded-lg overflow-hidden'
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}>
+            }}
+          >
             <div>
               <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
             </div>
@@ -79,7 +82,8 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
                   style={{
                     border: '1px solid rgb(0, 0, 0, 0.1)',
                   }}
-                  className='border rounded-lg p-21/2 mb-4'>
+                  className='border rounded-lg p-21/2 mb-4'
+                >
                   <Text className='font-semibold m-0 text-slate-500'>{data.type.title}</Text>
 
                   <p className='whitespace-pre m-0 py-4 max-w-[600px] overflow-x-auto border-b '>
@@ -96,7 +100,8 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
             <div className='text-center p-3 mb-10'>
               <a
                 href={`https://anpha.shop/${data.type.slug}`}
-                className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'>
+                className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'
+              >
                 Gia hạn ngay
               </a>
             </div>
@@ -115,7 +120,8 @@ export function NotifyExpiredEmail({ data = expiredData }: { data?: any }) {
               href='https://www.messenger.com/t/170660996137305'
               target='_blank'
               rel='noreferrer'
-              className='inline-block ml-2'>
+              className='inline-block ml-2'
+            >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}

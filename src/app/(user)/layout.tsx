@@ -1,76 +1,34 @@
-import Background from '@/components/Background'
 import ContactFloating from '@/components/ContactFloating'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import PageLoading from '@/components/PageLoading'
 import UserMenu from '@/components/UserMenu'
-import StoreProvider from '@/libs/StoreProvider'
-import type { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { Toaster } from 'react-hot-toast'
-import '../globals.scss'
-import authOptions from '../api/auth/[...nextauth]/authOptions'
-
-export const metadata: Metadata = {
-  title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
-  description:
-    'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
-  keywords:
-    'shop, tài khoản, account, cao cấp, uy tín, chất lượng, đẳng cấp, anpha shop, account, mua acc, account gia re, shop account, shop acc gia re',
-  icons: {
-    icon: ['/favicon.ico?v=4'],
-    apple: ['/apple-touch-icon.png?v=4'],
-    shortcut: ['/apple-touch-icon.png'],
-  },
-  manifest: '/site.webmanifest',
-}
 
 export default async function UserLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
-
   return (
-    <html lang='vi'>
-      <body className='text-dark' suppressHydrationWarning={true}>
-        <StoreProvider session={session}>
-          {/* Background */}
-          <Background />
+    <>
+      {/* Header */}
+      <Header isStatic />
 
-          {/* Toast */}
-          <Toaster
-            toastOptions={{
-              style: {
-                background: '#333',
-                color: '#fff',
-              },
-            }}
-          />
+      {/* Contact Floating */}
+      <ContactFloating />
 
-          {/* Header */}
-          <Header isStatic />
+      {/* Main */}
+      <main className='px-21'>
+        <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
+          {/* Sidebar */}
+          <UserMenu />
 
-          {/* Utils */}
-          <PageLoading />
-          <ContactFloating />
+          {/* Content */}
+          <div className='w-full bg-white rounded-medium shadow-medium p-8'>{children}</div>
+        </div>
+      </main>
 
-          {/* Main */}
-          <main className='px-21'>
-            <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
-              {/* Sidebar */}
-              <UserMenu />
-
-              {/* Content */}
-              <div className='w-full bg-white rounded-medium shadow-medium p-8'>{children}</div>
-            </div>
-          </main>
-
-          {/* Footer */}
-          <Footer />
-        </StoreProvider>
-      </body>
-    </html>
+      {/* Footer */}
+      <Footer />
+    </>
   )
 }

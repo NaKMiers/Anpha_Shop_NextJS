@@ -63,12 +63,12 @@ export async function GET(req: NextRequest) {
       const { days, hours, minutes, seconds } = account.times
       const duration = momentTZ.duration({ days, hours, minutes, seconds }).asSeconds()
 
-      // remaning time < 2h
+      // remaining time < 2h
       if (diff <= 2 * 3600) {
         return true
       }
 
-      // // remaning time < 1d
+      // // remaining time < 1d
       // if (diff <= 24 * 2400 && duration > 24 * 3600) {
       //   return true
       // }

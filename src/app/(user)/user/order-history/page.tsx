@@ -169,7 +169,8 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
       <div className='flex justify-end'>
         <button
           onClick={() => setIsShowFilter(!isShowFilter)}
-          className='px-3 py-[2px] bg-dark-100 text-white rounded-md shadow-lg ml-auto group hover:bg-primary common-transition mb-3'>
+          className='px-3 py-[2px] bg-dark-100 text-white rounded-md shadow-lg ml-auto group hover:bg-primary common-transition mb-3'
+        >
           <BsThreeDots size={28} className='wiggle' />
         </button>
       </div>
@@ -180,7 +181,8 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
           isShowFilter
             ? 'p-21 max-w-full max-h-[500px] md:max-h-[300px] opacity-1'
             : 'max-w-0 max-h-0 p-0 opacity-0'
-        }`}>
+        }`}
+      >
         <div className='grid grid-cols-12 gap-21'>
           {/* Search */}
           <div className='flex flex-col col-span-12 md:col-span-6'>
@@ -282,7 +284,8 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
             <button
               className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
               title='Alt + Enter'
-              onClick={handleSubmit(handleFilter)}>
+              onClick={handleSubmit(handleFilter)}
+            >
               Lọc
               <FaFilter size={14} className='ml-[6px] wiggle' />
             </button>
@@ -291,7 +294,8 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
             <button
               className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
               title='Alt + R'
-              onClick={handleResetFilter}>
+              onClick={handleResetFilter}
+            >
               Đặt lại
               <BiReset size={22} className='ml-1 wiggle' />
             </button>

@@ -1,65 +1,21 @@
 import AdminMenu from '@/components/admin/AdminMenu'
-import Background from '@/components/Background'
 import Header from '@/components/Header'
-import PageLoading from '@/components/PageLoading'
-import StoreProvider from '@/libs/StoreProvider'
-import type { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { Toaster } from 'react-hot-toast'
-import authOptions from '../api/auth/[...nextauth]/authOptions'
-import '../globals.scss'
-
-export const metadata: Metadata = {
-  title: 'Anpha Shop | Shop Tài Khoản Cao Cấp và Tiện Lợi',
-  description:
-    'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
-  keywords:
-    'shop, tài khoản, account, cao cấp, uy tín, chất lượng, đẳng cấp, anpha shop, account, mua acc, account gia re, shop account, shop acc gia re',
-  icons: {
-    icon: ['/favicon.ico?v=4'],
-    apple: ['/apple-touch-icon.png?v=4'],
-    shortcut: ['/apple-touch-icon.png'],
-  },
-  manifest: '/site.webmanifest',
-}
 
 export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
-
   return (
-    <html lang='vi'>
-      <body className='text-dark' suppressHydrationWarning={true}>
-        <StoreProvider session={session}>
-          {/* Background */}
-          <Background />
+    <>
+      {/* Header */}
+      <Header isStatic />
 
-          {/* Toast */}
-          <Toaster
-            toastOptions={{
-              style: {
-                background: '#333',
-                color: '#fff',
-              },
-            }}
-          />
+      {/* Menu */}
+      <AdminMenu />
 
-          {/* Header */}
-          <Header isStatic />
-
-          {/* Menu */}
-          <AdminMenu />
-
-          {/* Loading */}
-          <PageLoading />
-
-          {/* Main */}
-          <main className='px-21 py-20'>{children}</main>
-        </StoreProvider>
-      </body>
-    </html>
+      {/* Main */}
+      <main className='px-21 py-20'>{children}</main>
+    </>
   )
 }
