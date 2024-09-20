@@ -1,10 +1,10 @@
 import Background from '@/components/Background'
-import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import PageLoading from '@/components/PageLoading'
 import StoreProvider from '@/libs/StoreProvider'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
+import Script from 'next/script'
 import { Toaster } from 'react-hot-toast'
 import authOptions from './api/auth/[...nextauth]/authOptions'
 import './globals.scss'
@@ -33,6 +33,21 @@ export default async function RootLayout({
   return (
     <html lang='vi'>
       <body className='text-dark' suppressHydrationWarning={true}>
+        {/* Google Analytics Script */}
+        <Script
+          strategy='afterInteractive'
+          src={`https://www.googletagmanager.com/gtag/js?id=G-XHR0P5M0ZT`}
+        />
+        <Script id='google-analytics' strategy='afterInteractive'>
+          {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-XHR0P5M0ZT');
+            `}
+        </Script>
+
         <StoreProvider session={session}>
           {/* Background */}
           <Background />
@@ -52,7 +67,6 @@ export default async function RootLayout({
 
           {/* Utils */}
           <PageLoading />
-          {/* <ContactFloating /> */}
 
           {/* Main */}
           {children}

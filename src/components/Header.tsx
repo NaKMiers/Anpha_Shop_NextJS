@@ -27,8 +27,8 @@ interface HeaderProps {
 function Header({ isStatic, hideSearch }: HeaderProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const cartItems = useAppSelector((state) => state.cart.items)
-  const localCartItems = useAppSelector((state) => state.cart.localItems)
+  const cartItems = useAppSelector(state => state.cart.items)
+  const localCartItems = useAppSelector(state => state.cart.localItems)
   const { data: session, update } = useSession()
   const curUser: any = session?.user
 
@@ -47,7 +47,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const searchTimeout = useRef<any>(null)
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
-
   const [updated, setUpdated] = useState<boolean>(false)
 
   // MARK: Side Effects
@@ -77,11 +76,11 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       try {
         // send product ids to get corresponding cart items
         const { products } = await updateProductsInLocalCartApi(
-          localCartItems.map((item) => (item.product as IProduct)._id)
+          localCartItems.map(item => (item.product as IProduct)._id)
         )
 
         const updatedLocalCartItems = localCartItems
-          .map((cartItem) => {
+          .map(cartItem => {
             const product = products.find(
               (product: IProduct) => product._id === (cartItem.product as IProduct)._id
             )
@@ -98,7 +97,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                 }
               : null
           })
-          .filter((cartItem) => cartItem) as ICartItem[]
+          .filter(cartItem => cartItem) as ICartItem[]
 
         dispatch(setLocalCartItems(updatedLocalCartItems))
         setIsLocalCartUpdated(true)
@@ -252,7 +251,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
             placeholder='Tìm kiếm...'
             className='appearance-none w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-0 rounded-l-lg bg-white'
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={e => setSearchValue(e.target.value)}
             onFocus={() => {
               setEnableHideHeader(false)
               setOpenResults(true)
@@ -264,7 +263,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           />
           <Link
             href={`/search?search=${searchValue}`}
-            onClick={(e) => !searchValue && e.preventDefault()}
+            onClick={e => !searchValue && e.preventDefault()}
             className={`group h-full w-[40px] flex justify-center items-center rounded-r-lg bg-white ${
               searchLoading ? 'pointer-events-none' : ''
             }`}
@@ -282,7 +281,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
             } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}
           >
             {searchResults?.length ? (
-              searchResults.map((product) => (
+              searchResults.map(product => (
                 <Link
                   href={`/${product.slug}`}
                   key={product._id}
@@ -332,7 +331,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           <button
             className='flex lg:hidden group h-full justify-center items-center'
             onClick={() => {
-              setOpenSearch((prev) => !prev)
+              setOpenSearch(prev => !prev)
               setSearchResults(null)
               setSearchValue('')
               setEnableHideHeader(true)
@@ -358,7 +357,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
             !!curUser._id && (
               <div
                 className='flex items-center gap-2 cursor-pointer'
-                onClick={() => setIsOpenMenu((prev) => !prev)}
+                onClick={() => setIsOpenMenu(prev => !prev)}
               >
                 <Image
                   className='aspect-square rounded-full wiggle-0'
@@ -390,7 +389,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
               hideSearch ? 'hidden' : ''
             } sm:flex lg:hidden group h-full w-[40px] justify-center items-center`}
             onClick={() => {
-              setOpenSearch((prev) => !prev)
+              setOpenSearch(prev => !prev)
               setSearchResults(null)
               setSearchValue('')
               setEnableHideHeader(true)
@@ -405,7 +404,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
 
           <button
             className='flex justify-center items-center w-[40px] h-[40px]'
-            onClick={() => setIsOpenMenu((prev) => !prev)}
+            onClick={() => setIsOpenMenu(prev => !prev)}
           >
             <FaBars size={22} className='common-transition wiggle' />
           </button>
