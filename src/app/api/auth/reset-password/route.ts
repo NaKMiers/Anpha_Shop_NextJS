@@ -30,7 +30,7 @@ export async function PATCH(req: NextRequest) {
     // check if email and token are exist
     if (token) {
       // Verify the token
-      const decode = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
+      const decode = jwt.verify(token, process.env.NEXTAUTH_SECRET!) as JwtPayload
 
       // check edcode is exist
       if (!decode) {

@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron/notify-expire?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJlcm52aGZlOXQ5Mzg0N3Q5MjczNG52OTIzN3Q5dm5qaGZrZCIsImlhdCI6MTcxNDEyOTA0MH0.29-_qlUqC1k93_sZK3Vi2TM6E3OVa7OHgUH4xMmeF48",
+      "path": "/api/cron/notify-expire?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrYWpmbHZhOTgyM3I5OGhoMDEwaGYzamtqYWtqZmphd2tqc25ka2ZqbjIzMTAyMTkyIiwiaWF0IjoxNzI3MzM3MTQwfQ.Z1hs10EibDvF85l8kOyn4I39Q9ZOZo7YJSBwjO3A9Wk",
       "schedule": "*/30 8-23 * * *"
     }
   ]

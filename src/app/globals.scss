@@ -76,7 +76,7 @@
 }
 
 .background-app {
-  background: linear-gradient(45deg, #333 80%, #01dbe5 20%);
+  background: linear-gradient(-45deg, #01dbe5 15%, #333 0%, #333 85%, #01dbe5 15%);
 }
 
 @mixin underline--after($background-color, $repeat: false) {

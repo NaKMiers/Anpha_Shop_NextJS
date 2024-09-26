@@ -21,6 +21,30 @@ export const metadata: Metadata = {
     shortcut: ['/apple-touch-icon.png'],
   },
   manifest: '/site.webmanifest',
+  openGraph: {
+    title: 'Anpha Shop',
+    description:
+      'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
+    url: process.env.NEXT_PUBLIC_APP_URL,
+    siteName: 'Anpha Shop',
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/images/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Anpha Shop Logo',
+      },
+    ],
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Anpha Shop',
+    description:
+      'Chào mừng bạn đến với Anpha Shop, địa chỉ tin cậy cho những người đang tìm kiếm Account Cao Cấp. Tại Anpha Shop, chúng tôi tự hào mang đến cho bạn những tài khoản chất lượng và đẳng cấp, đáp ứng mọi nhu cầu của bạn. Khám phá bộ sưu tập Account Cao Cấp tại cửa hàng của chúng tôi ngay hôm nay và trải nghiệm sự khác biệt với Anpha Shop - Nơi đáng tin cậy cho sự đẳng cấp!',
+    images: [`${process.env.NEXT_PUBLIC_APP_URL}/images/logo.png`],
+  },
 }
 
 export default async function RootLayout({

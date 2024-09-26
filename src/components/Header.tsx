@@ -47,19 +47,21 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const searchTimeout = useRef<any>(null)
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
-  const [updated, setUpdated] = useState<boolean>(false)
+
+  // refs
+  const isUpdated = useRef<boolean>(false)
 
   // MARK: Side Effects
-  // update user session
+  // update user session after load page
   useEffect(() => {
     const updateUser = async () => {
-      setUpdated(true)
+      isUpdated.current = true
       await update()
     }
-    if (!updated) {
+    if (!isUpdated.current) {
       updateUser()
     }
-  }, [update, updated])
+  }, [update])
 
   // get cart length
   useEffect(() => {

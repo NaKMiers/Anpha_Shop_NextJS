@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/database'
 import UserModel, { IUser } from '@/models/UserModel'
 import bcrypt from 'bcrypt'
+import { SessionStrategy } from 'next-auth'
 
 // Providers
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -10,12 +11,11 @@ import TwitterProvider from 'next-auth/providers/twitter'
 
 const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET!,
-  },
   session: {
+    strategy: 'jwt' as SessionStrategy,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  // debug: process.env.NODE_ENV === 'development',
   providers: [
     // GOOGLE
     GoogleProvider({
