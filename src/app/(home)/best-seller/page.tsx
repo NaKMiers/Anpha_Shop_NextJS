@@ -48,20 +48,27 @@ async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]
   }
 
   return (
-    <div className='pt-8'>
+    <div className="pt-8">
       {/* MARK: Add JSON-LD */}
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Heading */}
       <h2
-        className={`max-w-1200 mx-auto md:text-nowrap my-11 w-full text-white font-sans text-4xl tracking-wide font-light text-center sm:text-nowrap`}>
+        className={`mx-auto my-11 w-full max-w-1200 text-center font-sans text-4xl font-light tracking-wide text-white sm:text-nowrap md:text-nowrap`}
+      >
         Danh Sách Bán Chạy
       </h2>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4 mt-12'>
+      <div className="mt-12 grid grid-cols-1 gap-21 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map(product => (
-          <ProductCard product={product} key={product._id} />
+          <ProductCard
+            product={product}
+            key={product._id}
+          />
         ))}
       </div>
     </div>

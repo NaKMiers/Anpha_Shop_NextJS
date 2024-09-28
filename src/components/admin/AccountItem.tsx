@@ -1,15 +1,15 @@
+import { IAccount } from '@/models/AccountModel'
+import { ICategory } from '@/models/CategoryModel'
+import { IProduct } from '@/models/ProductModel'
 import { formatTime, getColorClass, getTimeRemaining, isToday, usingPercentage } from '@/utils/time'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useCallback, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCheck, FaCopy, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
-import { IAccount } from '@/models/AccountModel'
-import { IProduct } from '@/models/ProductModel'
-import { ICategory } from '@/models/CategoryModel'
 
 interface AccountItemProps {
   data: IAccount
@@ -46,91 +46,105 @@ function AccountItem({
   return (
     <>
       <div
-        className={`relative w-full flex items-start gap-2 p-4 rounded-lg shadow-lg cursor-pointer common-transition ${
-          selectedAccounts.includes(data._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
-        }  ${className}`}
+        className={`common-transition relative flex w-full cursor-pointer items-start gap-2 rounded-lg p-4 shadow-lg ${
+          selectedAccounts.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
+        } ${className}`}
         onClick={() =>
           setSelectedAccounts(prev =>
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
-        }>
-        <div className='w-[calc(100%_-_42px)]'>
+        }
+      >
+        <div className="w-[calc(100%_-_42px)]">
           {/* MARK: Thumbnails */}
           <Link
             href={`/${(data.type as IProduct)?.slug || ''}`}
             prefetch={false}
             onClick={e => e.stopPropagation()}
-            className='mr-4 flex items-center max-w-[160px] rounded-lg shadow-md overflow-hidden mb-2'>
-            <div className='flex items-center w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
+            className="mb-2 mr-4 flex max-w-[160px] items-center overflow-hidden rounded-lg shadow-md"
+          >
+            <div className="no-scrollbar flex w-full snap-x snap-mandatory items-center overflow-x-scroll">
               <Image
-                className='aspect-video flex-shrink-0 snap-start object-cover w-full h-full'
+                className="aspect-video h-full w-full flex-shrink-0 snap-start object-cover"
                 src={(data.type as IProduct)?.images[0] || '/images/not-found.jpg'}
                 height={200}
                 width={200}
-                alt='thumbnail'
+                alt="thumbnail"
               />
             </div>
           </Link>
 
           {/* Using User */}
           <div
-            className={`absolute z-10 -top-3 left-1/2 -translate-x-1/2 shadow-md text-sm text-dark  px-2 py-[2px] select-none rounded-lg font-body ${
+            className={`absolute -top-3 left-1/2 z-10 -translate-x-1/2 select-none rounded-lg px-2 py-[2px] font-body text-sm text-dark shadow-md ${
               data.usingUser ? 'bg-secondary text-white' : 'bg-slate-300 text-slate-400'
             }`}
             onClick={e => {
               e.stopPropagation()
               data.usingUser && handleCopy(data.usingUser)
-            }}>
+            }}
+          >
             {data.usingUser ? data.usingUser : '___'}
           </div>
 
           {/* Type */}
           <p
-            className='inline-flex mb-2 flex-wrap gap-2 items-center font-semibold text-[18px] mr-2 leading-5 font-body tracking-wide'
-            title={(data.type as IProduct)?.title}>
+            className="mb-2 mr-2 inline-flex flex-wrap items-center gap-2 font-body text-[18px] font-semibold leading-5 tracking-wide"
+            title={(data.type as IProduct)?.title}
+          >
             <span
-              className={`shadow-md text-xs ${
+              className={`text-xs shadow-md ${
                 ((data.type as IProduct)?.category as ICategory).title
                   ? 'bg-yellow-300 text-dark'
                   : 'bg-slate-200 text-slate-400'
-              } px-2 py-px select-none rounded-md font-body`}>
+              } select-none rounded-md px-2 py-px font-body`}
+            >
               {((data.type as IProduct)?.category as ICategory).title || 'empty'}
             </span>
             {(data.type as IProduct)?.title}
           </p>
 
           {/* Begin */}
-          <p className='text-sm' title='Begin (d/m/y)'>
-            <span className='font-semibold'>Begin: </span>
+          <p
+            className="text-sm"
+            title="Begin (d/m/y)"
+          >
+            <span className="font-semibold">Begin: </span>
             <span
               className={
                 data.begin && isToday(new Date(data.begin)) ? 'font-semibold text-slate-600' : ''
-              }>
+              }
+            >
               {data.begin ? formatTime(data.begin) : '-'}
             </span>
           </p>
 
           {/* Expire */}
-          <p className='text-sm' title='Expire (d/m/y)'>
-            <span className='font-semibold'>Expire: </span>
+          <p
+            className="text-sm"
+            title="Expire (d/m/y)"
+          >
+            <span className="font-semibold">Expire: </span>
             {data.expire ? (
               <>
                 <span
                   className={`${
-                    new Date() > new Date(data.expire || '') ? 'text-red-500 font-semibold' : ''
-                  }`}>
+                    new Date() > new Date(data.expire || '') ? 'font-semibold text-red-500' : ''
+                  }`}
+                >
                   {data.expire ? formatTime(data.expire) : '-'}
                 </span>{' '}
                 {data?.begin && data?.expire && usingPercentage(data.begin, data.expire) < 100 && (
                   <span
-                    className={`font-semibold text-xs ${getColorClass(data.begin, data.expire)}`}
+                    className={`text-xs font-semibold ${getColorClass(data.begin, data.expire)}`}
                     title={`${
                       usingPercentage(data.begin, data.expire) >= 93
                         ? '>= 93'
                         : usingPercentage(data.begin, data.expire) >= 80
-                        ? '>= 80'
-                        : ''
-                    }`}>
+                          ? '>= 80'
+                          : ''
+                    }`}
+                  >
                     (<span>{usingPercentage(data.begin, data.expire) + '%'}</span>
                     {' - '}
                     <span>
@@ -143,7 +157,7 @@ function AccountItem({
                 )}{' '}
               </>
             ) : (
-              <span className='text-slate-500'>
+              <span className="text-slate-500">
                 +{data.times.days ? data.times.days + 'd' : ''}
                 {data.times.hours ? ':' + data.times.hours + 'h' : ''}
                 {data.times.minutes ? ':' + data.times.minutes + 'm' : ''}
@@ -152,45 +166,60 @@ function AccountItem({
           </p>
 
           {/* Renew */}
-          <p className='text-sm' title='Expire (d/m/y)'>
-            <span className='font-semibold'>Renew: </span>
-            <span className={`${new Date() > new Date(data.renew) ? 'text-red-500 font-semibold' : ''}`}>
+          <p
+            className="text-sm"
+            title="Expire (d/m/y)"
+          >
+            <span className="font-semibold">Renew: </span>
+            <span className={`${new Date() > new Date(data.renew) ? 'font-semibold text-red-500' : ''}`}>
               {formatTime(data.renew)}
             </span>
           </p>
 
           {/* Updated  */}
-          <p className='text-sm' title='Expire (d/m/y)'>
-            <span className='font-semibold'>Updated: </span>
+          <p
+            className="text-sm"
+            title="Expire (d/m/y)"
+          >
+            <span className="font-semibold">Updated: </span>
             <span
               className={`${
                 +new Date() - +new Date(data.updatedAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
-              }`}>
+              }`}
+            >
               {formatTime(data.updatedAt)}
             </span>
           </p>
 
           {/* Info */}
-          <div className='relative'>
+          <div className="relative">
             <button
-              className='group absolute top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500 bg-white'
+              className="group absolute right-1.5 top-1.5 rounded-md border bg-white p-1.5 text-slate-500"
               onClick={e => {
                 e.stopPropagation()
                 handleCopy(data.info)
-              }}>
-              <FaCopy size={16} className='wiggle' />
+              }}
+            >
+              <FaCopy
+                size={16}
+                className="wiggle"
+              />
             </button>
-            <div className='w-full mt-2 max-h-[200px] border rounded-lg p-2 text-sm font-body tracking-wide overflow-scroll whitespace-pre break-all'>
+            <div className="mt-2 max-h-[200px] w-full overflow-scroll whitespace-pre break-all rounded-lg border p-2 font-body text-sm tracking-wide">
               {data.info.split('\n').map((line, index) => (
-                <span key={index} className='block'>
+                <span
+                  key={index}
+                  className="block"
+                >
                   {line.split(' ').map((word, index) => (
                     <span
                       key={index}
-                      className='inline-block cursor-pointer'
+                      className="inline-block cursor-pointer"
                       onClick={e => {
                         e.stopPropagation()
                         handleCopy(word)
-                      }}>
+                      }}
+                    >
                       {word}{' '}
                     </span>
                   ))}
@@ -201,15 +230,16 @@ function AccountItem({
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className='flex flex-col flex-shrink-0 border border-dark text-dark rounded-lg px-2 py-3 gap-4'>
+        <div className="flex flex-shrink-0 flex-col gap-4 rounded-lg border border-dark px-2 py-3 text-dark">
           {/* Active Button */}
           <button
-            className='block group'
+            className="group block"
             onClick={e => {
               e.stopPropagation()
               handleActivateAccounts([data._id], !data.active)
             }}
-            title={data.active ? 'Deactivate' : 'Activate'}>
+            title={data.active ? 'Deactivate' : 'Activate'}
+          >
             <FaCheck
               size={18}
               className={`wiggle ${data.active ? 'text-green-500' : 'text-slate-300'}`}
@@ -219,25 +249,36 @@ function AccountItem({
           {/* Edit Button Link */}
           <Link
             href={`/admin/account/${data._id}/edit`}
-            className='block group'
-            title='Edit'
-            onClick={e => e.stopPropagation()}>
-            <MdEdit size={18} className='wiggle' />
+            className="group block"
+            title="Edit"
+            onClick={e => e.stopPropagation()}
+          >
+            <MdEdit
+              size={18}
+              className="wiggle"
+            />
           </Link>
 
           {/* Delete Button */}
           <button
-            className='block group'
+            className="group block"
             onClick={e => {
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
             disabled={loadingAccounts.includes(data._id)}
-            title='Delete'>
+            title="Delete"
+          >
             {loadingAccounts.includes(data._id) ? (
-              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+              <RiDonutChartFill
+                size={18}
+                className="animate-spin text-slate-300"
+              />
             ) : (
-              <FaTrash size={18} className='wiggle' />
+              <FaTrash
+                size={18}
+                className="wiggle"
+              />
             )}
           </button>
         </div>
@@ -247,8 +288,8 @@ function AccountItem({
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Account'
-        content='Are you sure that you want to delete this account?'
+        title="Delete Account"
+        content="Are you sure that you want to delete this account?"
         onAccept={() => handleDeleteAccounts([data._id])}
         isLoading={loadingAccounts.includes(data._id)}
       />
@@ -256,4 +297,4 @@ function AccountItem({
   )
 }
 
-export default AccountItem
+export default memo(AccountItem)

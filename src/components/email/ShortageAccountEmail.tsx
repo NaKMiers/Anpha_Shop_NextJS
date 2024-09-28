@@ -12,14 +12,14 @@ export function ShortageAccountEmail({
         theme,
       }}
     >
-      <Body className='text-dark font-sans'>
-        <Container className='bg-white p-4'>
-          <Section className='inline-block mx-auto'>
-            <Row className='mb-3 w-full'>
+      <Body className="font-sans text-dark">
+        <Container className="bg-white p-4">
+          <Section className="mx-auto inline-block">
+            <Row className="mb-3 w-full">
               <Column>
-                <a href='https://anpha.shop'>
+                <a href="https://anpha.shop">
                   <Img
-                    className='aspect-square rounded-full'
+                    className="aspect-square rounded-full"
                     src={`${'https://anpha.shop'}/images/logo.jpg`}
                     width={35}
                     height={35}
@@ -28,8 +28,8 @@ export function ShortageAccountEmail({
               </Column>
               <Column>
                 <a
-                  href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                  href="https://anpha.shop"
+                  className="text-2xl font-bold tracking-[0.3px] text-dark no-underline"
                 >
                   .AnphaShop
                 </a>
@@ -38,20 +38,23 @@ export function ShortageAccountEmail({
           </Section>
 
           <Section
-            className='rounded-lg overflow-hidden'
+            className="overflow-hidden rounded-lg"
             style={{
               border: '2px solid #f44336',
             }}
           >
             <div>
-              <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
+              <Img
+                src="https://anpha.shop/banners/brand.jpg"
+                className="w-full object-cover"
+              />
             </div>
 
-            <Row className='py-4 px-8'>
-              <Column className='font'>
-                <h1 className='text-2xl font-bold text-center'>Oh Nooooo....😱 </h1>
+            <Row className="px-8 py-4">
+              <Column className="font">
+                <h1 className="text-center text-2xl font-bold">Oh Nooooo....😱 </h1>
                 <h2
-                  className='text-xl font-semibold text-center text-rose-500 rounded-lg py-21/2 px-21 bg-yellow-100'
+                  className="rounded-lg bg-yellow-100 px-21 py-21/2 text-center text-xl font-semibold text-rose-500"
                   style={{
                     border: '2px solid #f44336',
                   }}
@@ -61,36 +64,40 @@ export function ShortageAccountEmail({
               </Column>
             </Row>
 
-            <div className='text-center p-3 mb-10'>
+            <div className="mb-10 p-3 text-center">
               <a
                 href={`https://anpha.shop/admin/product/add`}
-                className='inline bg-secondary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'
+                className="inline cursor-pointer rounded-lg border-0 bg-secondary px-7 py-3 font-semibold text-white no-underline"
               >
                 Thêm sản phẩm ngay
               </a>
             </div>
           </Section>
 
-          <div className='flex justify-center pt-[45px]'>
-            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
+          <div className="flex justify-center pt-[45px]">
+            <Img
+              className="max-w-full"
+              width={620}
+              src={`${'https://anpha.shop'}/banners/footer.jpg`}
+            />
           </div>
 
-          <p className='text-center text-xs text-slate-600'>
+          <p className="text-center text-xs text-slate-600">
             © 2023 | Anpha Shop - Developed by Nguyen Anh Khoa, All rights reserved.
           </p>
 
-          <div className='text-center'>
+          <div className="text-center">
             <a
-              href='https://www.messenger.com/t/170660996137305'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block ml-2'
+              href="https://www.messenger.com/t/170660996137305"
+              target="_blank"
+              rel="noreferrer"
+              className="ml-2 inline-block"
             >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}
                 height={35}
-                alt='messenger'
+                alt="messenger"
               />
             </a>
           </div>

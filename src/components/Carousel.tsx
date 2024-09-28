@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import CarouselProduct from './item/CarouselItem'
 import { IProduct } from '@/models/ProductModel'
+import { memo, useEffect, useRef, useState } from 'react'
+import CarouselProduct from './item/CarouselItem'
 
 interface CarouselProps {
   products: IProduct[]
@@ -78,15 +78,19 @@ function Carousel({ products, className = '' }: CarouselProps) {
 
   return (
     <div
-      className={`flex items-center h-full overflow-x-scroll ${className}`}
+      className={`flex h-full items-center overflow-x-scroll ${className}`}
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}>
+      onMouseLeave={handleMouseLeave}
+    >
       {[...products, ...products].map((product, index) => (
-        <CarouselProduct product={product} key={index} />
+        <CarouselProduct
+          product={product}
+          key={index}
+        />
       ))}
     </div>
   )
 }
 
-export default Carousel
+export default memo(Carousel)

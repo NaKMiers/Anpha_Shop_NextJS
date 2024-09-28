@@ -122,7 +122,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           items: prev.items.map((i: any) =>
             i._id === item._id ? { ...i, quantity: i.quantity + value <= 1 ? 1 : i.quantity + value } : i
           ),
-        } as IOrder)
+        }) as IOrder
     )
   }, [])
 
@@ -133,7 +133,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         ({
           ...prev,
           items: prev.items.filter((item: any) => item._id !== removeItem._id),
-        } as IOrder)
+        }) as IOrder
     )
   }, [])
 
@@ -144,22 +144,25 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
   }, [])
 
   return (
-    <div className='bg-white py-21 px-4 rounded-medium shadow-medium-light'>
-      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5 flex items-center justify-between'>
+    <div className="rounded-medium bg-white px-4 py-21 shadow-medium-light">
+      <h1 className="mb-5 flex items-center justify-between font-body text-3xl font-semibold tracking-wide">
         <p>
-          Order Detail: <span className='text-secondary font-sans'>{order?.code}</span>
+          Order Detail: <span className="font-sans text-secondary">{order?.code}</span>
         </p>
-        <div className='flex items-center justify-center gap-2'>
+        <div className="flex items-center justify-center gap-2">
           {editMode ? (
             <>
               <button
-                className='group flex items-center justify-center h-9 rounded-md px-2 border-2 border-slate-400 text-slate-400 hover:bg-slate-400 hover:text-white common-transition'
+                className="common-transition group flex h-9 items-center justify-center rounded-md border-2 border-slate-400 px-2 text-slate-400 hover:bg-slate-400 hover:text-white"
                 onClick={() => setEditMode(false)}
               >
-                <MdCancel size={20} className='wiggle' />
+                <MdCancel
+                  size={20}
+                  className="wiggle"
+                />
               </button>
               <button
-                className={`group flex items-center justify-center h-9 rounded-md px-2 border-2 hover:bg-rose-500 hover:text-white common-transition ${
+                className={`common-transition group flex h-9 items-center justify-center rounded-md border-2 px-2 hover:bg-rose-500 hover:text-white ${
                   isSaving
                     ? 'pointer-events-none border-slate-400 text-slate-400'
                     : 'border-rose-500 text-rose-500'
@@ -167,57 +170,66 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                 onClick={handleSubmit(onSubmit)}
               >
                 {isSaving ? (
-                  <RiDonutChartFill size={20} className='animate-spin' />
+                  <RiDonutChartFill
+                    size={20}
+                    className="animate-spin"
+                  />
                 ) : (
-                  <FaSave size={20} className='wiggle' />
+                  <FaSave
+                    size={20}
+                    className="wiggle"
+                  />
                 )}
               </button>
             </>
           ) : (
             <button
-              className='group flex items-center justify-center h-9 rounded-md px-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+              className="common-transition group flex h-9 items-center justify-center rounded-md border-2 border-secondary px-2 text-secondary hover:bg-secondary hover:text-white"
               onClick={() => setEditMode(true)}
             >
-              <MdEdit size={20} className='wiggle' />
+              <MdEdit
+                size={20}
+                className="wiggle"
+              />
             </button>
           )}
         </div>
       </h1>
 
       {/* MARK: Info */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-5 items-start'>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+      <div className="mt-5 grid grid-cols-1 items-start gap-2 md:grid-cols-2">
+        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
-              <span className='font-semibold'>Date: </span>
-              {order && <span className=''>{formatTime(order.createdAt)}</span>}
+              <span className="font-semibold">Date: </span>
+              {order && <span className="">{formatTime(order.createdAt)}</span>}
             </>
           ) : (
             <Input
-              id='createdAt'
-              label='Date'
+              id="createdAt"
+              label="Date"
               disabled={isSaving}
               register={register}
               errors={errors}
               required
-              type='datetime-local'
+              type="datetime-local"
               icon={MdDateRange}
-              className='my-1'
+              className="my-1"
               onFocus={() => clearErrors('createdAt')}
             />
           )}
         </div>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
-              <span className='font-semibold'>Status: </span>
+              <span className="font-semibold">Status: </span>
               <span
                 className={`font-semibold ${
                   order?.status === 'pending'
                     ? 'text-yellow-400'
                     : order?.status === 'done'
-                    ? 'text-green-500'
-                    : 'text-slate-400'
+                      ? 'text-green-500'
+                      : 'text-slate-400'
                 }`}
               >
                 {order?.status}
@@ -225,13 +237,13 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             </>
           ) : (
             <Input
-              id='status'
-              label='Status'
+              id="status"
+              label="Status"
               disabled={isSaving}
               register={register}
               errors={errors}
               icon={RiCheckboxMultipleBlankLine}
-              type='select'
+              type="select"
               onFocus={() => clearErrors('status')}
               options={[
                 {
@@ -250,53 +262,53 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             />
           )}
         </div>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
-              <span className='font-semibold'>Email: </span>
-              <span className='text-sky-500'>{order?.email}</span>
+              <span className="font-semibold">Email: </span>
+              <span className="text-sky-500">{order?.email}</span>
             </>
           ) : (
             <Input
-              id='email'
-              label='Email'
+              id="email"
+              label="Email"
               disabled={isSaving}
               register={register}
               errors={errors}
               required
-              type='email'
+              type="email"
               icon={MdDateRange}
-              className='my-1'
+              className="my-1"
               onFocus={() => clearErrors('email')}
             />
           )}
         </div>
-        <div className='col-span-1 rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
+        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
-              <span className='font-semibold'>Total: </span>
-              <span className='text-secondary font-semibold'>{formatPrice(order?.total)}</span>
+              <span className="font-semibold">Total: </span>
+              <span className="font-semibold text-secondary">{formatPrice(order?.total)}</span>
             </>
           ) : (
             <Input
-              id='total'
-              label='Total'
+              id="total"
+              label="Total"
               disabled={isSaving}
               register={register}
               errors={errors}
               required
-              type='total'
+              type="total"
               icon={MdDateRange}
-              className='my-1'
+              className="my-1"
               onFocus={() => clearErrors('total')}
             />
           )}
         </div>
         {order?.voucherApplied && (
-          <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-            <span className='font-semibold'>Voucher: </span>
+          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+            <span className="font-semibold">Voucher: </span>
             <span
-              className='text-slate-400 font-semibold'
+              className="font-semibold text-slate-400"
               title={(order?.voucherApplied as IVoucher).desc}
             >
               {(order?.voucherApplied as IVoucher).code}
@@ -304,77 +316,100 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           </div>
         )}
         {!!order?.discount && (
-          <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-            <span className='font-semibold'>Giảm giá: </span>
-            <span className='text-secondary font-semibold'>{formatPrice(order?.discount)}</span>
+          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+            <span className="font-semibold">Giảm giá: </span>
+            <span className="font-semibold text-secondary">{formatPrice(order?.discount)}</span>
           </div>
         )}
       </div>
 
       {/* Product */}
-      <h3 className='text-2xl font-semibold mb-4 mt-6'>
+      <h3 className="mb-4 mt-6 text-2xl font-semibold">
         Product{totalQuantity > 1 ? 's' : ''} ({totalQuantity})
       </h3>
 
       {/* MARK: Items */}
       {order?.items.map(item => (
-        <div className='pl-21/2 relative mb-5' key={item.product._id}>
-          <div className='absolute top-1/2 -translate-y-1/2 left-0 h-[88%] w-px bg-slate-200' />
+        <div
+          className="relative mb-5 pl-21/2"
+          key={item.product._id}
+        >
+          <div className="absolute left-0 top-1/2 h-[88%] w-px -translate-y-1/2 bg-slate-200" />
 
-          <div className='relative rounded-medium border border-slate-300 shadow-lg p-21/2'>
-            <CartItem cartItem={item} isCheckout localCartItem isOrderDetailProduct />
+          <div className="relative rounded-medium border border-slate-300 p-21/2 shadow-lg">
+            <CartItem
+              cartItem={item}
+              isCheckout
+              localCartItem
+              isOrderDetailProduct
+            />
 
             {/* Adjustments */}
             {editMode && (
-              <div className='flex gap-2 absolute top-2 right-2'>
+              <div className="absolute right-2 top-2 flex gap-2">
                 {/* Decrease */}
                 <button
-                  className='group rounded-md h-6 flex items-center justify-center px-1 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+                  className="common-transition group flex h-6 items-center justify-center rounded-md border-2 border-secondary px-1 text-secondary hover:bg-secondary hover:text-white"
                   onClick={() => handleChangeItemQuantity(item, -1)}
                 >
-                  <FaMinus size={12} className='wiggle' />
+                  <FaMinus
+                    size={12}
+                    className="wiggle"
+                  />
                 </button>
 
                 {/* Increase */}
                 <button
-                  className='group rounded-md h-6 flex items-center justify-center px-1 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white common-transition'
+                  className="common-transition group flex h-6 items-center justify-center rounded-md border-2 border-secondary px-1 text-secondary hover:bg-secondary hover:text-white"
                   onClick={() => handleChangeItemQuantity(item, 1)}
                 >
-                  <FaPlus size={12} className='wiggle' />
+                  <FaPlus
+                    size={12}
+                    className="wiggle"
+                  />
                 </button>
 
                 {/* Remove Button */}
                 <button
-                  className='group rounded-md h-6 flex items-center justify-center px-1 border-2 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white common-transition'
+                  className="common-transition group flex h-6 items-center justify-center rounded-md border-2 border-rose-500 px-1 text-rose-500 hover:bg-rose-500 hover:text-white"
                   onClick={() => handleRemoveItem(item)}
                 >
-                  <FaTrash size={12} className='wiggle' />
+                  <FaTrash
+                    size={12}
+                    className="wiggle"
+                  />
                 </button>
               </div>
             )}
             {order.status === 'done' ? (
               item.accounts.map((account: IAccount) => (
                 <Fragment key={account._id}>
-                  <hr className='mt-5 mb-3' />
+                  <hr className="mb-3 mt-5" />
 
-                  <div className='relative'>
+                  <div className="relative">
                     <button
-                      className='group absolute z-10 top-1.5 right-1.5 rounded-md border p-1.5 text-slate-500 bg-white'
+                      className="group absolute right-1.5 top-1.5 z-10 rounded-md border bg-white p-1.5 text-slate-500"
                       onClick={e => {
                         e.stopPropagation()
                         handleCopy(account.info)
                       }}
                     >
-                      <FaCopy size={16} className='wiggle' />
+                      <FaCopy
+                        size={16}
+                        className="wiggle"
+                      />
                     </button>
 
-                    <div className='relative border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                    <div className="relative mt-2 max-h-[200px] w-full overflow-auto whitespace-pre break-all rounded-xl border border-slate-300 p-4 font-body text-sm tracking-wide">
                       {account.info.split('\n').map((line, index) => (
-                        <span key={index} className='block'>
+                        <span
+                          key={index}
+                          className="block"
+                        >
                           {line.split(' ').map((word, index) => (
                             <span
                               key={index}
-                              className='inline-block cursor-pointer'
+                              className="inline-block cursor-pointer"
                               onClick={e => {
                                 e.stopPropagation()
                                 navigator.clipboard.writeText(word)
@@ -401,7 +436,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             )}
 
             {order.status === 'done' && (
-              <p className='flex items-center gap-1 text-slate-500 mt-2'>
+              <p className="mt-2 flex items-center gap-1 text-slate-500">
                 <IoIosHelpCircle size={20} /> Ấn để sao chép từng phần
               </p>
             )}

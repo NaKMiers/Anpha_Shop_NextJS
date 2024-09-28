@@ -176,7 +176,7 @@ function CartPage() {
             ({
               productId: item.productId,
               quantity: item.quantity,
-            } as CartItemToAdd)
+            }) as CartItemToAdd
         )
       )
 
@@ -363,13 +363,16 @@ function CartPage() {
   ])
 
   return (
-    <div className='mt-20 grid grid-cols-3 gap-21 bg-white rounded-medium shadow-medium p-8 pb-16 text-dark'>
-      <div className='col-span-3 lg:col-span-2'>
-        <h1 className='flex items-center gap-2 font-semibold font-body text-3xl'>
-          <FaCartShopping size={30} className='text-dark wiggle' />
+    <div className="mt-20 grid grid-cols-3 gap-21 rounded-medium bg-white p-8 pb-16 text-dark shadow-medium">
+      <div className="col-span-3 lg:col-span-2">
+        <h1 className="flex items-center gap-2 font-body text-3xl font-semibold">
+          <FaCartShopping
+            size={30}
+            className="wiggle text-dark"
+          />
           <span>Giỏ hàng</span>
           <span>
-            (<span className='text-primary font-normal'>{cartLength}</span>)
+            (<span className="font-normal text-primary">{cartLength}</span>)
           </span>
         </h1>
 
@@ -377,21 +380,28 @@ function CartPage() {
 
         {/* MARK: Local Cart */}
         {!!localItems.length && curUser && (
-          <div className='border border-slate-400 rounded-medium p-3'>
-            <p className='text-primary italic mb-3'>
+          <div className="rounded-medium border border-slate-400 p-3">
+            <p className="mb-3 italic text-primary">
               Có một số sản phẩm hiện đang tồn tại trên máy của bạn, bấm vào nút{' '}
-              <FaPlusSquare size={19} className='inline-block wiggle' /> bên dưới để thêm vào giỏ hàng.
+              <FaPlusSquare
+                size={19}
+                className="wiggle inline-block"
+              />{' '}
+              bên dưới để thêm vào giỏ hàng.
             </p>
 
             <div
-              className='flex justify-center items-center gap-2 group cursor-pointer bg-dark-200 mb-4 text-white rounded-lg p-1 hover:bg-primary common-transition'
+              className="common-transition group mb-4 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-dark-200 p-1 text-white hover:bg-primary"
               onClick={handleMoveAllLocalToGlobalCartItem}
             >
               <span>Thêm tất cả</span>
-              <FaArrowCircleDown size={18} className='inline-block wiggle-0' />
+              <FaArrowCircleDown
+                size={18}
+                className="wiggle-0 inline-block"
+              />
             </div>
 
-            <div className='max-h-[386px] overflow-y-auto '>
+            <div className="max-h-[386px] overflow-y-auto">
               {localItems.map((cartItem, index) => (
                 <CartItem
                   cartItem={cartItem}
@@ -409,38 +419,53 @@ function CartPage() {
         {/* MARK: Cart */}
         {items.length ? (
           <div>
-            <div className='flex items-center justify-end gap-2 pr-21 select-none'>
-              <label htmlFor='selectAll' className='font-semibold cursor-pointer '>
+            <div className="flex select-none items-center justify-end gap-2 pr-21">
+              <label
+                htmlFor="selectAll"
+                className="cursor-pointer font-semibold"
+              >
                 {items.length === selectedItems.length ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
               </label>
               <input
-                name='selectAll'
-                id='selectAll'
-                type='checkbox'
+                name="selectAll"
+                id="selectAll"
+                type="checkbox"
                 checked={items.length === selectedItems.length}
                 onChange={() =>
                   items.length === selectedItems.length
                     ? dispatch(setSelectedItems([]))
                     : dispatch(setSelectedItems(items))
                 }
-                className='size-5 accent-primary   cursor-pointer'
+                className="size-5 cursor-pointer accent-primary"
               />
             </div>
 
-            <div className='pt-4' />
+            <div className="pt-4" />
 
             {items.map((cartItem, index) => (
-              <CartItem cartItem={cartItem} className={index != 0 ? 'mt-5' : ''} key={index} />
+              <CartItem
+                cartItem={cartItem}
+                className={index != 0 ? 'mt-5' : ''}
+                key={index}
+              />
             ))}
           </div>
         ) : (
-          <p className='text-center'>
+          <p className="text-center">
             Chưa có sản phẩm nào trong giỏ hàng của hàng. Hãy ấn vào{' '}
-            <Link href='/' prefetch={false} className='text-sky-500 underline'>
+            <Link
+              href="/"
+              prefetch={false}
+              className="text-sky-500 underline"
+            >
               đây
             </Link>{' '}
             để bắt đầu mua hàng.{' '}
-            <Link href='/' prefetch={false} className='text-sky-500 underline italic'>
+            <Link
+              href="/"
+              prefetch={false}
+              className="italic text-sky-500 underline"
+            >
               Quay lại
             </Link>
           </p>
@@ -448,39 +473,39 @@ function CartPage() {
       </div>
 
       {/* MARK: Summary */}
-      <div className='col-span-3 lg:col-span-1'>
-        <div className='border-2 border-primary rounded-medium shadow-lg p-4 sticky  lg:mt-[60px] top-[88px] bg-sky-50 overflow-auto'>
+      <div className="col-span-3 lg:col-span-1">
+        <div className="sticky top-[88px] overflow-auto rounded-medium border-2 border-primary bg-sky-50 p-4 shadow-lg lg:mt-[60px]">
           {/* Email */}
           {!curUser && (
             <>
-              <p className='mb-2'>
+              <p className="mb-2">
                 Nhập email của bạn{' '}
-                <span className='text-primary'>
+                <span className="text-primary">
                   (Email này sẽ được dùng để gửi đơn hàng sau khi mua)
                 </span>
               </p>
               <Input
-                id='email'
-                label='Email'
+                id="email"
+                label="Email"
                 disabled={isLoading}
                 register={register}
                 errors={errors}
                 required
-                type='email'
+                type="email"
                 icon={MdEmail}
-                className='mb-2'
+                className="mb-2"
                 onFocus={() => clearErrors('email')}
               />
             </>
           )}
 
           {/* Voucher */}
-          <div className='mb-2'>
+          <div className="mb-2">
             Bạn có voucher?{' '}
-            <p className='text-nowrap inline'>
+            <p className="inline text-nowrap">
               (
               <button
-                className='text-sky-600 hover:underline z-10'
+                className="z-10 text-sky-600 hover:underline"
                 onClick={() => setIsShowVoucher(prev => !prev)}
               >
                 ấn vào đây
@@ -489,33 +514,36 @@ function CartPage() {
             </p>
           </div>
           <div
-            className={`flex items-center gap-1 mb-2 overflow-hidden common-transition ${
+            className={`common-transition mb-2 flex items-center gap-1 overflow-hidden ${
               isShowVoucher ? 'max-h-[200px]' : 'max-h-0'
             }`}
           >
             <Input
-              id='code'
-              label='Voucher'
+              id="code"
+              label="Voucher"
               disabled={isLoading}
               register={register}
               errors={errors}
               required
-              type='text'
+              type="text"
               icon={RiCoupon2Fill}
               onFocus={() => clearErrors('code')}
-              className='w-full'
+              className="w-full"
             />
             <button
-              className={`rounded-lg border py-2 px-2 text-[14px] text-nowrap h-[46px] flex-shrink-0 hover:bg-primary common-transition hover:text-white ${
+              className={`common-transition h-[46px] flex-shrink-0 text-nowrap rounded-lg border px-2 py-2 text-[14px] hover:bg-primary hover:text-white ${
                 isLoading
-                  ? 'border-slate-200 bg-slate-200 pointer-events-none'
-                  : 'border-primary text-primary '
+                  ? 'pointer-events-none border-slate-200 bg-slate-200'
+                  : 'border-primary text-primary'
               }`}
               onClick={handleSubmit(handleApplyVoucher)}
               disabled={isLoading}
             >
               {isLoading ? (
-                <RiDonutChartFill size={26} className='animate-spin text-slate-300' />
+                <RiDonutChartFill
+                  size={26}
+                  className="animate-spin text-slate-300"
+                />
               ) : (
                 'Áp dụng'
               )}
@@ -526,14 +554,14 @@ function CartPage() {
           )}
 
           {/* Total */}
-          <div className='flex items-center justify-between mb-2 gap-3'>
+          <div className="mb-2 flex items-center justify-between gap-3">
             <span>Tổng tiền:</span>
-            <span className='font-semibold'>{formatPrice(subTotal)}</span>
+            <span className="font-semibold">{formatPrice(subTotal)}</span>
           </div>
           {voucher && (
-            <div className='flex items-center justify-between'>
+            <div className="flex items-center justify-between">
               <span>Voucher:</span>
-              <span className='font-semibold text-yellow-400'>
+              <span className="font-semibold text-yellow-400">
                 {voucher?.type === 'percentage'
                   ? `${voucher.value} (${formatPrice(calcPercentage(voucher.value, subTotal))})`
                   : formatPrice(+voucher?.value!)}
@@ -547,62 +575,71 @@ function CartPage() {
           <Divider size={2} />
 
           {/* Final Total */}
-          <div className='flex items-end justify-between mb-4 gap-x-3'>
-            <span className='font-semibold text-xl'>Thành tiền:</span>
-            <span className='font-semibold text-3xl text-green-500'>{formatPrice(total)}</span>
+          <div className="mb-4 flex items-end justify-between gap-x-3">
+            <span className="text-xl font-semibold">Thành tiền:</span>
+            <span className="text-3xl font-semibold text-green-500">{formatPrice(total)}</span>
           </div>
 
           {/* MARK: Payment Methods */}
-          <div className='flex flex-col gap-3 select-none'>
+          <div className="flex select-none flex-col gap-3">
             <button
-              className={`flex items-center justify-center rounded-xl gap-1 border py-2 px-3 group border-primary hover:bg-primary common-transition ${
+              className={`common-transition group flex items-center justify-center gap-1 rounded-xl border border-primary px-3 py-2 hover:bg-primary ${
                 isBuying ? 'pointer-events-none' : ''
               }`}
               disabled={isBuying || isLoading}
               onClick={handleBuyWithBalance}
             >
               {isBuying ? (
-                <RiDonutChartFill size={32} className='animate-spin text-slate-200' />
+                <RiDonutChartFill
+                  size={32}
+                  className="animate-spin text-slate-200"
+                />
               ) : (
-                <Image className='wiggle-0' src='/images/logo.jpg' height={32} width={32} alt='logo' />
+                <Image
+                  className="wiggle-0"
+                  src="/images/logo.jpg"
+                  height={32}
+                  width={32}
+                  alt="logo"
+                />
               )}
-              <span className='font-semibold ml-1 group-hover:text-white'>
+              <span className="ml-1 font-semibold group-hover:text-white">
                 Mua bằng số dư {curUser?._id ? `(${formatPrice(curUser.balance || 0)})` : ''}
               </span>
             </button>
 
             <button
-              className={`flex items-center justify-center rounded-xl gap-2 border border-[#a1396c] py-2 px-3 group hover:bg-[#a1396c] common-transition ${
+              className={`common-transition group flex items-center justify-center gap-2 rounded-xl border border-[#a1396c] px-3 py-2 hover:bg-[#a1396c] ${
                 isBuying || isLoading ? 'pointer-events-none' : ''
               }`}
               onClick={() => handleCheckout('momo')}
               disabled={isBuying || isLoading}
             >
               <Image
-                className='group-hover:border-white rounded-md border-2 wiggle-0'
-                src='/images/momo-icon.jpg'
+                className="wiggle-0 rounded-md border-2 group-hover:border-white"
+                src="/images/momo-icon.jpg"
                 height={32}
                 width={32}
-                alt='logo'
+                alt="logo"
               />
-              <span className='font-semibold group-hover:text-white'>Mua nhanh với Momo</span>
+              <span className="font-semibold group-hover:text-white">Mua nhanh với Momo</span>
             </button>
 
             <button
-              className={`flex items-center justify-center rounded-xl gap-2 border border-[#62b866] py-2 px-3 group hover:bg-[#62b866] common-transition ${
+              className={`common-transition group flex items-center justify-center gap-2 rounded-xl border border-[#62b866] px-3 py-2 hover:bg-[#62b866] ${
                 isBuying || isLoading ? 'pointer-events-none' : ''
               }`}
               onClick={() => handleCheckout('banking')}
               disabled={isBuying || isLoading}
             >
               <Image
-                className='wiggle-0'
-                src='/images/banking-icon.jpg'
+                className="wiggle-0"
+                src="/images/banking-icon.jpg"
                 height={32}
                 width={32}
-                alt='logo'
+                alt="logo"
               />
-              <span className='font-semibold group-hover:text-white'>Mua ngay với Banking</span>
+              <span className="font-semibold group-hover:text-white">Mua ngay với Banking</span>
             </button>
           </div>
         </div>

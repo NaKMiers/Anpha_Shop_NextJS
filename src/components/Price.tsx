@@ -2,7 +2,7 @@
 
 import { IFlashsale } from '@/models/FlashsaleModel'
 import { countPercent, formatPrice } from '@/utils/number'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import CounterItem from './item/CounterItem'
 
 interface PriceProps {
@@ -108,32 +108,50 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
   }, [flashSale, price, stock])
 
   return (
-    <div className={`rounded-md overflow-hidden ${className}`}>
+    <div className={`overflow-hidden rounded-md ${className}`}>
       {/* MARK: Flash Sale */}
       {isValidFS && (
-        <div className='flex items-center justify-between flex-wrap px-3 py-2 bg-secondary text-white font-body text-[18px] font-bold tracking-wider'>
+        <div className="flex flex-wrap items-center justify-between bg-secondary px-3 py-2 font-body text-[18px] font-bold tracking-wider text-white">
           <span className={`${big ? 'sm:text-[22px]' : ''} text-[18px]`}>Flash sale</span>
 
           {/* Counter */}
-          <div className='flex shrink-0 gap-1'>
+          <div className="flex shrink-0 gap-1">
             {/* Hours */}
-            <div className='flex items-center bg-dark-100 rounded-sm pl-[2px] pr-[1px]'>
-              <CounterItem value={Math.floor(timeLeft[0] / 10)} max={9} />
-              <CounterItem value={timeLeft[0] % 10} max={9} />
+            <div className="flex items-center rounded-sm bg-dark-100 pl-[2px] pr-[1px]">
+              <CounterItem
+                value={Math.floor(timeLeft[0] / 10)}
+                max={9}
+              />
+              <CounterItem
+                value={timeLeft[0] % 10}
+                max={9}
+              />
             </div>
             <span>:</span>
 
             {/* Minutes */}
-            <div className='flex items-center bg-dark-100 rounded-sm pl-[2px] pr-[1px]'>
-              <CounterItem value={Math.floor(timeLeft[1] / 10)} max={5} />
-              <CounterItem value={timeLeft[1] % 10} max={9} />
+            <div className="flex items-center rounded-sm bg-dark-100 pl-[2px] pr-[1px]">
+              <CounterItem
+                value={Math.floor(timeLeft[1] / 10)}
+                max={5}
+              />
+              <CounterItem
+                value={timeLeft[1] % 10}
+                max={9}
+              />
             </div>
             <span>:</span>
 
             {/* Seconds */}
-            <div className='flex items-center bg-dark-100 rounded-sm pl-[2px] pr-[1px]'>
-              <CounterItem value={Math.floor(timeLeft[2] / 10)} max={5} />
-              <CounterItem value={timeLeft[2] % 10} max={9} />
+            <div className="flex items-center rounded-sm bg-dark-100 pl-[2px] pr-[1px]">
+              <CounterItem
+                value={Math.floor(timeLeft[2] / 10)}
+                max={5}
+              />
+              <CounterItem
+                value={timeLeft[2] % 10}
+                max={9}
+              />
             </div>
           </div>
         </div>
@@ -142,19 +160,22 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
       {/* MARK: Price */}
       <div
         className={`flex items-center justify-evenly gap-2 px-1.5 py-2 ${
-          big ? 'sm:justify-start sm:gap-4 sm:py-4 sm:px-21' : ''
-        } flex-wrap bg-slate-100 font-body`}>
+          big ? 'sm:justify-start sm:gap-4 sm:px-21 sm:py-4' : ''
+        } flex-wrap bg-slate-100 font-body`}
+      >
         <div
           className={`text-secondary ${
             big ? 'text-[30px] tracking-wide' : 'text-[22px] tracking-wider'
-          }  leading-7`}>
+          } leading-7`}
+        >
           {formatPrice(newPrice)}
         </div>
         {oldPrice && (
           <div
             className={`text-gray-400 ${
               big ? 'text-[16px] tracking-wider' : 'text-[14px]'
-            } line-through`}>
+            } line-through`}
+          >
             {formatPrice(oldPrice)}
           </div>
         )}
@@ -162,7 +183,8 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
           <div
             className={`bg-yellow-400 ${
               big ? 'text-[16px]' : 'text-[13px]'
-            } font-semibold rounded-md px-1 py-[2px] text-white font-sans`}>
+            } rounded-md px-1 py-[2px] font-sans font-semibold text-white`}
+          >
             -{countPercent(newPrice, oldPrice)}
           </div>
         )}
@@ -171,4 +193,4 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
   )
 }
 
-export default Price
+export default memo(Price)

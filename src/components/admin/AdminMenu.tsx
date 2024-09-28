@@ -4,7 +4,7 @@ import { adminLinks } from '@/constansts'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { FaBarsStaggered } from 'react-icons/fa6'
 
@@ -37,13 +37,13 @@ function AdminMenu() {
       <div
         className={`${
           open ? 'block' : 'hidden'
-        } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30`}
+        } fixed bottom-0 left-0 right-0 top-0 z-30 h-screen w-screen`}
         onClick={() => setOpen(false)}
       />
 
       {/* MARK: Open Button */}
       <button
-        className={`fixed top-[20%] z-20 right-0 p-[5px] pl-2 bg-dark-100 text-white rounded-tl-md rounded-bl-md shadow-md common-transition hover:bg-primary ${
+        className={`common-transition fixed right-0 top-[20%] z-20 rounded-bl-md rounded-tl-md bg-dark-100 p-[5px] pl-2 text-white shadow-md hover:bg-primary ${
           !open ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={() => setOpen(!open)}
@@ -55,19 +55,22 @@ function AdminMenu() {
       <div
         className={`fixed top-[20%] z-${
           open ? 30 : 20
-        } right-0 p-4 bg-dark-100 text-white rounded-tl-medium rounded-bl-medium shadow-primary shadow-md max-w-[300px] w-full common-transition ${
-          open ? 'translate-x-0 opacity-1' : 'translate-x-full opacity-10'
+        } common-transition right-0 w-full max-w-[300px] rounded-bl-medium rounded-tl-medium bg-dark-100 p-4 text-white shadow-md shadow-primary ${
+          open ? 'opacity-1 translate-x-0' : 'translate-x-full opacity-10'
         }`}
       >
-        <Link href='/user' className='group flex items-center gap-2 mb-3 cursor-pointer'>
+        <Link
+          href="/user"
+          className="group mb-3 flex cursor-pointer items-center gap-2"
+        >
           <Image
-            className='rounded-full shadow-md wiggle-0'
+            className="wiggle-0 rounded-full shadow-md"
             src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
             height={40}
             width={40}
-            alt='avatar'
+            alt="avatar"
           />
-          <span className='font-semibold font-body tracking-wide text-xl'>
+          <span className="font-body text-xl font-semibold tracking-wide">
             {curUser?.firstname && curUser?.lastname
               ? `${curUser.firstname} ${curUser.lastname}`
               : curUser?.username}
@@ -77,14 +80,20 @@ function AdminMenu() {
         {/* Links */}
         <ul>
           {adminLinks.map(({ title, Icon, links }) => (
-            <li className='flex items-center gap-2' key={title}>
+            <li
+              className="flex items-center gap-2"
+              key={title}
+            >
               {/* "All" Link */}
               <Link
                 href={links[0].href}
-                className='group flex flex-grow items-center gap-2 group rounded-lg p-2 common-transition hover:bg-secondary font-body tracking-wide'
+                className="common-transition group flex flex-grow items-center gap-2 rounded-lg p-2 font-body tracking-wide hover:bg-secondary"
                 onClick={() => setOpen(false)}
               >
-                <Icon size={18} className='wiggle' />
+                <Icon
+                  size={18}
+                  className="wiggle"
+                />
                 {links[0].title}
               </Link>
 
@@ -92,10 +101,13 @@ function AdminMenu() {
               {links[1] && (
                 <Link
                   href={links[1].href}
-                  className='group flex justify-center items-center flex-shrink-0 rounded-full border-2 border-white p-[3px] hover:scale-110 common-transition hover:border-primary'
+                  className="common-transition group flex flex-shrink-0 items-center justify-center rounded-full border-2 border-white p-[3px] hover:scale-110 hover:border-primary"
                   onClick={() => setOpen(false)}
                 >
-                  <FaPlus size={10} className='group-hover:text-primary wiggle' />
+                  <FaPlus
+                    size={10}
+                    className="wiggle group-hover:text-primary"
+                  />
                 </Link>
               )}
             </li>
@@ -106,4 +118,4 @@ function AdminMenu() {
   )
 }
 
-export default AdminMenu
+export default memo(AdminMenu)

@@ -151,62 +151,71 @@ function EditCategoryPage() {
   }, [handleSubmit, onSubmit])
 
   return (
-    <div className='max-w-1200 mx-auto'>
+    <div className="mx-auto max-w-1200">
       {/* MARK: Admin Header */}
-      <AdminHeader title='Add Category' backLink='/admin/category/all' />
+      <AdminHeader
+        title="Add Category"
+        backLink="/admin/category/all"
+      />
 
       {/* MARK: Body */}
-      <div className='mt-5'>
-        <div className='mb-5 flex-wrap flex gap-5'>
+      <div className="mt-5">
+        <div className="mb-5 flex flex-wrap gap-5">
           <div
-            className='w-[50px] h-[50px] flex items-center justify-center bg-white rounded-lg p-1.5 cursor-pointer group'
-            onClick={() => logoInputRef.current?.click()}>
+            className="group flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-lg bg-white p-1.5"
+            onClick={() => logoInputRef.current?.click()}
+          >
             {imageUrl || category?.logo ? (
               <Image
                 src={imageUrl || category?.logo || ''}
                 width={34}
                 height={34}
-                alt='logo'
-                className='w-full h-full rounded-md object-cover group-hover:opacity-50 common-transition'
+                alt="logo"
+                className="common-transition h-full w-full rounded-md object-cover group-hover:opacity-50"
               />
             ) : (
               <GrRadialSelected
                 size={24}
-                className='text-secondary group-hover:opacity-50 common-transition'
+                className="common-transition text-secondary group-hover:opacity-50"
               />
             )}
-            <input hidden type='file' onChange={handleAddFile} ref={logoInputRef} />
+            <input
+              hidden
+              type="file"
+              onChange={handleAddFile}
+              ref={logoInputRef}
+            />
           </div>
 
           <Input
-            id='title'
-            label='Title'
+            id="title"
+            label="Title"
             disabled={isLoading}
             register={register}
             errors={errors}
             required
-            type='text'
+            type="text"
             icon={MdTitle}
-            className='flex-1'
+            className="flex-1"
             onFocus={() => clearErrors('title')}
           />
           <Input
-            id='color'
-            label='Color'
+            id="color"
+            label="Color"
             disabled={isLoading}
             register={register}
             errors={errors}
             required
-            type='color'
+            type="color"
             icon={IoIosColorPalette}
-            className='w-full md:w-32'
+            className="w-full md:w-32"
             onFocus={() => clearErrors('title')}
           />
         </div>
         <LoadingButton
-          className='px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
+          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
-          text='Save'
+          text="Save"
           isLoading={isLoading}
         />
       </div>

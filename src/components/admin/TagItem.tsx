@@ -1,5 +1,5 @@
 import { ITag } from '@/models/TagModel'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { FaCheck, FaSave, FaTrash } from 'react-icons/fa'
 import { MdCancel, MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -48,21 +48,22 @@ function TagItem({
   return (
     <>
       <div
-        className={`flex flex-col p-4 rounded-lg shadow-lg text-dark cursor-pointer common-transition ${
-          selectedTags.includes(data._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
+        className={`common-transition flex cursor-pointer flex-col rounded-lg p-4 text-dark shadow-lg ${
+          selectedTags.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         key={data._id}
         onClick={() =>
           setSelectedTags(prev =>
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
-        }>
+        }
+      >
         {/* MARK: Body */}
         {editingTags.includes(data._id) ? (
           // Tag Title Input
           <input
-            className='w-full mb-2 rounded-lg py-2 px-4 text-dark outline-none border border-slate-300'
-            type='text'
+            className="mb-2 w-full rounded-lg border border-slate-300 px-4 py-2 text-dark outline-none"
+            type="text"
             value={editingValues.find(t => t._id === data._id)?.title}
             onClick={e => e.stopPropagation()}
             disabled={loadingTags.includes(data._id)}
@@ -74,28 +75,35 @@ function TagItem({
           />
         ) : (
           // Tag Title
-          <p className='font-semibold' title={data.slug}>
+          <p
+            className="font-semibold"
+            title={data.slug}
+          >
             {data.title}
           </p>
         )}
 
         {/* Product Quantity */}
-        <p className='font-semibold mb-2' title={`Product Quantity: ${data.productQuantity}`}>
-          <span>Pr.Q:</span> <span className='text-primary'>{data.productQuantity}</span>
+        <p
+          className="mb-2 font-semibold"
+          title={`Product Quantity: ${data.productQuantity}`}
+        >
+          <span>Pr.Q:</span> <span className="text-primary">{data.productQuantity}</span>
         </p>
 
         {/* MARK: Action Buttons */}
-        <div className='flex self-end border border-dark rounded-lg px-3 py-2 gap-4'>
+        <div className="flex gap-4 self-end rounded-lg border border-dark px-3 py-2">
           {/* Feature Button */}
           {!editingTags.includes(data._id) && (
             <button
-              className='block group'
+              className="group block"
               onClick={e => {
                 e.stopPropagation()
                 handleFeatureTags([data._id], !data.isFeatured)
               }}
               disabled={loadingTags.includes(data._id)}
-              title={data.isFeatured ? 'Mark Featured' : 'Mark Unfeatured'}>
+              title={data.isFeatured ? 'Mark Featured' : 'Mark Unfeatured'}
+            >
               <FaCheck
                 size={18}
                 className={`wiggle ${data.isFeatured ? 'text-green-500' : 'text-slate-300'}`}
@@ -106,7 +114,7 @@ function TagItem({
           {/* Edit Button */}
           {!editingTags.includes(data._id) && (
             <button
-              className='block group'
+              className="group block"
               onClick={e => {
                 e.stopPropagation()
                 setEditingTags(prev => (!prev.includes(data._id) ? [...prev, data._id] : prev))
@@ -116,25 +124,36 @@ function TagItem({
                     : prev
                 )
               }}
-              title='Edit'>
-              <MdEdit size={18} className='wiggle' />
+              title="Edit"
+            >
+              <MdEdit
+                size={18}
+                className="wiggle"
+              />
             </button>
           )}
 
           {/* Save Button */}
           {editingTags.includes(data._id) && (
             <button
-              className='block group'
+              className="group block"
               onClick={e => {
                 e.stopPropagation()
                 handleSaveEditingTags([editingValues.find(cate => cate._id === data._id)] as any[])
               }}
               disabled={loadingTags.includes(data._id)}
-              title='Save'>
+              title="Save"
+            >
               {loadingTags.includes(data._id) ? (
-                <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+                <RiDonutChartFill
+                  size={18}
+                  className="animate-spin text-slate-300"
+                />
               ) : (
-                <FaSave size={18} className='wiggle text-green-500' />
+                <FaSave
+                  size={18}
+                  className="wiggle text-green-500"
+                />
               )}
             </button>
           )}
@@ -142,7 +161,7 @@ function TagItem({
           {/* Cancel Button */}
           {editingTags.includes(data._id) && !loadingTags.includes(data._id) && (
             <button
-              className='block group'
+              className="group block"
               onClick={e => {
                 e.stopPropagation()
                 setEditingTags(prev =>
@@ -150,25 +169,36 @@ function TagItem({
                 )
                 setEditingValues(prev => prev.filter(cate => cate._id !== data._id))
               }}
-              title='Cancel'>
-              <MdCancel size={20} className='wiggle text-slate-300' />
+              title="Cancel"
+            >
+              <MdCancel
+                size={20}
+                className="wiggle text-slate-300"
+              />
             </button>
           )}
 
           {/* Delete Button */}
           {!editingTags.includes(data._id) && (
             <button
-              className='block group'
+              className="group block"
               onClick={e => {
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
               disabled={loadingTags.includes(data._id)}
-              title='Delete'>
+              title="Delete"
+            >
               {loadingTags.includes(data._id) ? (
-                <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+                <RiDonutChartFill
+                  size={18}
+                  className="animate-spin text-slate-300"
+                />
               ) : (
-                <FaTrash size={18} className='wiggle' />
+                <FaTrash
+                  size={18}
+                  className="wiggle"
+                />
               )}
             </button>
           )}
@@ -179,8 +209,8 @@ function TagItem({
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Tag'
-        content='Are you sure that you want to delete this tag?'
+        title="Delete Tag"
+        content="Are you sure that you want to delete this tag?"
         onAccept={() => handleDeleteTags([data._id])}
         isLoading={loadingTags.includes(data._id)}
       />
@@ -188,4 +218,4 @@ function TagItem({
   )
 }
 
-export default TagItem
+export default memo(TagItem)

@@ -203,48 +203,51 @@ function AddVoucherPage() {
   }
 
   return (
-    <div className='max-w-1200 mx-auto'>
-      <AdminHeader title='Add Product' backLink='/admin/product/all' />
+    <div className="mx-auto max-w-1200">
+      <AdminHeader
+        title="Add Product"
+        backLink="/admin/product/all"
+      />
 
-      <div className='pt-5' />
+      <div className="pt-5" />
 
       <div>
         {/* Title */}
         <Input
-          id='title'
-          label='Title'
+          id="title"
+          label="Title"
           disabled={isLoading}
           register={register}
           errors={errors}
           required
-          type='text'
+          type="text"
           icon={RiCharacterRecognitionLine}
-          className='mb-5'
+          className="mb-5"
           onFocus={() => clearErrors('title')}
         />
 
-        <div className='mb-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
+        <div className="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
           {/* Price */}
           <Input
-            id='price'
-            label='Price'
+            id="price"
+            label="Price"
             disabled={isLoading}
             register={register}
             errors={errors}
             required
-            type='number'
+            type="number"
             icon={FaMoneyBillAlt}
             onFocus={() => clearErrors('price')}
           />
 
           {/* Old Price */}
           <Input
-            id='oldPrice'
-            label='Old Price'
+            id="oldPrice"
+            label="Old Price"
             disabled={isLoading}
             register={register}
             errors={errors}
-            type='number'
+            type="number"
             icon={FaMoneyBillAlt}
             onFocus={() => clearErrors('oldPrice')}
           />
@@ -252,38 +255,47 @@ function AddVoucherPage() {
 
         {/* Description */}
         <Input
-          id='description'
-          label='Description'
+          id="description"
+          label="Description"
           disabled={isLoading}
           register={register}
           errors={errors}
-          type='textarea'
+          type="textarea"
           rows={10}
           icon={MdNumbers}
-          className='mb-5'
+          className="mb-5"
           onFocus={() => clearErrors('description')}
         />
 
-        <div className='flex mb-4'>
-          <div className='bg-white rounded-lg px-3 flex items-center'>
-            <FaPlay size={16} className='text-secondary' />
+        <div className="mb-4 flex">
+          <div className="flex items-center rounded-lg bg-white px-3">
+            <FaPlay
+              size={16}
+              className="text-secondary"
+            />
           </div>
           <label
-            className={`select-none cursor-pointer border border-green-500 px-4 py-2 rounded-lg common-transition  ${
+            className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 px-4 py-2 ${
               isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
             }`}
-            htmlFor='isActive'
-            onClick={() => setIsChecked(!isChecked)}>
+            htmlFor="isActive"
+            onClick={() => setIsChecked(!isChecked)}
+          >
             Active
           </label>
-          <input type='checkbox' id='isActive' hidden {...register('isActive', { required: false })} />
+          <input
+            type="checkbox"
+            id="isActive"
+            hidden
+            {...register('isActive', { required: false })}
+          />
         </div>
 
         {/* Tags */}
-        <div className='mb-5'>
-          <p className='text-white font-semibold text-xl mb-1'>Select Tags</p>
+        <div className="mb-5">
+          <p className="mb-1 text-xl font-semibold text-white">Select Tags</p>
 
-          <div className='p-2 rounded-lg flex flex-wrap items-center bg-white gap-2'>
+          <div className="flex flex-wrap items-center gap-2 rounded-lg bg-white p-2">
             {tags.map(tag => (
               <Fragment key={tag._id}>
                 <input
@@ -293,14 +305,15 @@ function AddVoucherPage() {
                     )
                   }
                   hidden
-                  type='checkbox'
+                  type="checkbox"
                   id={tag._id}
                 />
                 <label
-                  className={`cursor-pointer select-none rounded-lg border border-green-500 text-green-500 py-[6px] px-3 common-transition ${
+                  className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 px-3 py-[6px] text-green-500 ${
                     selectedTags.some(t => t === tag._id) ? 'bg-green-500 text-white' : ''
                   }`}
-                  htmlFor={tag._id}>
+                  htmlFor={tag._id}
+                >
                   {tag.title}
                 </label>
               </Fragment>
@@ -309,23 +322,24 @@ function AddVoucherPage() {
         </div>
 
         {/* Categories */}
-        <div className='mb-5'>
-          <p className='text-white font-semibold text-xl mb-1'>Select Categories</p>
+        <div className="mb-5">
+          <p className="mb-1 text-xl font-semibold text-white">Select Categories</p>
 
-          <div className='p-2 rounded-lg flex flex-wrap items-center bg-white gap-2'>
+          <div className="flex flex-wrap items-center gap-2 rounded-lg bg-white p-2">
             {categories.map(category => (
               <Fragment key={category._id}>
                 <input
                   onChange={() => setSelectedCategory(category._id)}
                   hidden
-                  type='checkbox'
+                  type="checkbox"
                   id={category._id}
                 />
                 <label
-                  className={`cursor-pointer select-none rounded-lg border border-sky-500 text-sky-500 py-[6px] px-3 common-transition ${
+                  className={`common-transition cursor-pointer select-none rounded-lg border border-sky-500 px-3 py-[6px] text-sky-500 ${
                     selectedCategory === category._id ? 'bg-sky-500 text-white' : ''
                   }`}
-                  htmlFor={category._id}>
+                  htmlFor={category._id}
+                >
                   {category.title}
                 </label>
               </Fragment>
@@ -334,18 +348,21 @@ function AddVoucherPage() {
         </div>
 
         {/* Images */}
-        <div className='mb-5'>
-          <div className='flex'>
-            <span className='inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 border-slate-200 bg-slate-100'>
-              <FaFile size={19} className='text-secondary' />
+        <div className="mb-5">
+          <div className="flex">
+            <span className="inline-flex items-center rounded-bl-lg rounded-tl-lg border-[2px] border-slate-200 bg-slate-100 px-3 text-sm text-gray-900">
+              <FaFile
+                size={19}
+                className="text-secondary"
+              />
             </span>
-            <div className='relative w-full border-[2px] border-l-0 bg-white border-slate-200'>
+            <div className="relative w-full border-[2px] border-l-0 border-slate-200 bg-white">
               <input
-                id='images'
-                className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
-                placeholder=' '
+                id="images"
+                className="peer block w-full bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-dark focus:outline-none focus:ring-0"
+                placeholder=" "
                 disabled={isLoading}
-                type='file'
+                type="file"
                 multiple
                 onChange={handleAddFiles}
               />
@@ -353,7 +370,8 @@ function AddVoucherPage() {
               {/* label */}
               <label
                 htmlFor={'images'}
-                className='absolute rounded-md text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer text-dark'>
+                className="absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-pointer rounded-md bg-white px-2 text-sm text-dark duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+              >
                 Images
               </label>
             </div>
@@ -361,15 +379,28 @@ function AddVoucherPage() {
         </div>
 
         {!!imageUrls.length && (
-          <div className='flex flex-wrap gap-3 rounded-lg bg-white p-3 mb-5'>
+          <div className="mb-5 flex flex-wrap gap-3 rounded-lg bg-white p-3">
             {imageUrls.map(url => (
-              <div className='relative' key={url}>
-                <Image className='rounded-lg' src={url} height={250} width={250} alt='thumbnail' />
+              <div
+                className="relative"
+                key={url}
+              >
+                <Image
+                  className="rounded-lg"
+                  src={url}
+                  height={250}
+                  width={250}
+                  alt="thumbnail"
+                />
 
                 <button
                   onClick={() => handleRemoveImage(url)}
-                  className='absolute top-2 bg-slate-300 p-2 right-2 group hover:bg-dark-100 rounded-lg'>
-                  <FaX size={16} className='text-dark group-hover:text-white common-transition' />
+                  className="group absolute right-2 top-2 rounded-lg bg-slate-300 p-2 hover:bg-dark-100"
+                >
+                  <FaX
+                    size={16}
+                    className="common-transition text-dark group-hover:text-white"
+                  />
                 </button>
               </div>
             ))}
@@ -377,9 +408,9 @@ function AddVoucherPage() {
         )}
 
         <LoadingButton
-          className='px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
+          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
-          text='Add'
+          text="Add"
           isLoading={isLoading}
         />
       </div>

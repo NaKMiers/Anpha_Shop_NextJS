@@ -1,3 +1,4 @@
+import { CartItemToAdd } from '@/app/api/cart/add/route'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
   addCartItem,
@@ -8,21 +9,20 @@ import {
   updateLocalCartItemQuantity,
 } from '@/libs/reducers/cartReducer'
 import { ICartItem } from '@/models/CartItemModel'
+import { IFlashsale } from '@/models/FlashsaleModel'
+import { IProduct } from '@/models/ProductModel'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useRef, useState } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaHashtag, FaMinus, FaPlus, FaPlusSquare, FaTrashAlt } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
 import { TbPackages } from 'react-icons/tb'
 import ConfirmDialog from './ConfirmDialog'
 import Price from './Price'
-import { CartItemToAdd } from '@/app/api/cart/add/route'
-import { IProduct } from '@/models/ProductModel'
-import { IFlashsale } from '@/models/FlashsaleModel'
 
 interface CartItemProps {
   cartItem: ICartItem
@@ -42,7 +42,7 @@ function CartItem({
   // hooks
   const dispatch = useAppDispatch()
   const { data: session } = useSession()
-  const selectedCartItems = useAppSelector((state) => state.cart.selectedItems)
+  const selectedCartItems = useAppSelector(state => state.cart.selectedItems)
   const curUser: any = session?.user
 
   // states
@@ -254,35 +254,35 @@ function CartItem({
 
   return (
     <div
-      className={`relative flex flex-wrap md:flex-nowrap items-start gap-3 cursor-pointer common-transition ${className} ${
+      className={`common-transition relative flex cursor-pointer flex-wrap items-start gap-3 md:flex-nowrap ${className} ${
         localCartItem ? '' : 'rounded-medium border p-21'
       } ${
-        !!selectedCartItems.find((cI) => cI._id === cartItem._id) ? 'border-primary' : 'border-slate-400'
+        !!selectedCartItems.find(cI => cI._id === cartItem._id) ? 'border-primary' : 'border-slate-400'
       }`}
       onClick={() =>
         dispatch(
           setSelectedItems(
-            selectedCartItems.find((cI) => cI._id === cartItem._id)
-              ? selectedCartItems.filter((cI) => cI._id !== cartItem._id)
+            selectedCartItems.find(cI => cI._id === cartItem._id)
+              ? selectedCartItems.filter(cI => cI._id !== cartItem._id)
               : [...selectedCartItems, cartItem]
           )
         )
       }
     >
       {/* MARK: Thumbnails */}
-      <div className='relative'>
+      <div className="relative">
         {(cartItem.product as IProduct).stock <= 0 && (
           <Link
             href={`/${(cartItem.product as IProduct).slug}`}
             prefetch={false}
-            className='absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'
+            className="absolute bottom-0 left-0 right-0 top-0 z-10 flex aspect-video items-start justify-center rounded-lg bg-white bg-opacity-50"
           >
             <Image
-              className='animate-wiggle -mt-1'
-              src='/images/sold-out.jpg'
+              className="-mt-1 animate-wiggle"
+              src="/images/sold-out.jpg"
               width={34}
               height={34}
-              alt='sold-out'
+              alt="sold-out"
             />
           </Link>
         )}
@@ -290,13 +290,13 @@ function CartItem({
         <Link
           href={`/${(cartItem.product as IProduct).slug}`}
           prefetch={false}
-          className='aspect-video rounded-lg overflow-hidden shadow-lg block max-w-[150px]'
-          onClick={(e) => e.stopPropagation()}
+          className="block aspect-video max-w-[150px] overflow-hidden rounded-lg shadow-lg"
+          onClick={e => e.stopPropagation()}
         >
-          <div className='flex w-full overflow-x-scroll snap-x snap-mandatory no-scrollbar'>
-            {(cartItem.product as IProduct).images.map((src) => (
+          <div className="no-scrollbar flex w-full snap-x snap-mandatory overflow-x-scroll">
+            {(cartItem.product as IProduct).images.map(src => (
               <Image
-                className='flex-shrink w-full snap-start'
+                className="w-full flex-shrink snap-start"
                 src={src}
                 width={150}
                 height={150}
@@ -310,20 +310,23 @@ function CartItem({
 
       {/* Local action buttons */}
       {localCartItem && !isCheckout && (
-        <div className='absolute z-10 top-1 right-4 group flex flex-col gap-2'>
+        <div className="group absolute right-4 top-1 z-10 flex flex-col gap-2">
           {isLoading ? (
-            <RiDonutChartFill size={24} className='animate-spin text-slate-300' />
+            <RiDonutChartFill
+              size={24}
+              className="animate-spin text-slate-300"
+            />
           ) : (
             <FaPlusSquare // add to database cart
               size={21}
-              className='text-primary cursor-pointer wiggle-1'
+              className="wiggle-1 cursor-pointer text-primary"
               onClick={handleMoveLocalToGlobalCartItem}
             />
           )}
 
           <FaTrashAlt // delete
             size={21}
-            className='text-secondary cursor-pointer wiggle-1'
+            className="wiggle-1 cursor-pointer text-secondary"
             onClick={handleDeleteLocalCartItem}
           />
         </div>
@@ -332,14 +335,14 @@ function CartItem({
       {/* MARK: Checkbox */}
       {!localCartItem && (
         <input
-          type='checkbox'
-          className='size-5 z-10 cursor-pointer absolute top-21 right-21 accent-primary'
-          checked={!!selectedCartItems.find((cI) => cI._id === cartItem._id)}
+          type="checkbox"
+          className="absolute right-21 top-21 z-10 size-5 cursor-pointer accent-primary"
+          checked={!!selectedCartItems.find(cI => cI._id === cartItem._id)}
           onChange={() =>
             dispatch(
               setSelectedItems(
-                selectedCartItems.find((cI) => cI._id === cartItem._id)
-                  ? selectedCartItems.filter((cI) => cI._id !== cartItem._id)
+                selectedCartItems.find(cI => cI._id === cartItem._id)
+                  ? selectedCartItems.filter(cI => cI._id !== cartItem._id)
                   : [...selectedCartItems, cartItem]
               )
             )
@@ -348,27 +351,33 @@ function CartItem({
       )}
 
       {/* MARK: Body */}
-      <div className={`relative w-full h-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
+      <div className={`relative h-full w-full ${localCartItem && !isCheckout ? 'pr-10' : ''}`}>
         {/* Title */}
-        <h2 className={`text-[20px] tracking-wide mb-2 leading-6 pr-8`}>
+        <h2 className={`mb-2 pr-8 text-[20px] leading-6 tracking-wide`}>
           {(cartItem.product as IProduct).title}
         </h2>
 
         {/* Info */}
         {isOrderDetailProduct && (
-          <div className='flex justify-between'>
+          <div className="flex justify-between">
             {/* (Order Detail) Quantity */}
-            <div className='flex items-center gap-1 text-[16px]'>
-              <FaHashtag className='text-darker' size={16} />
-              <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
-              <span className='text-green-500'>{cartItem.quantity}</span>
+            <div className="flex items-center gap-1 text-[16px]">
+              <FaHashtag
+                className="text-darker"
+                size={16}
+              />
+              <span className="text-nowrap font-bold text-darker">Số lượng:</span>
+              <span className="text-green-500">{cartItem.quantity}</span>
             </div>
 
             {/* (Order Detail) Price */}
-            <div className='flex items-center gap-1 text-[16px]'>
-              <FaHashtag className='text-darker' size={16} />
-              <span className='text-darker font-bold text-nowrap'>Giá:</span>
-              <span className='text-green-500'>
+            <div className="flex items-center gap-1 text-[16px]">
+              <FaHashtag
+                className="text-darker"
+                size={16}
+              />
+              <span className="text-nowrap font-bold text-darker">Giá:</span>
+              <span className="text-green-500">
                 {formatPrice((cartItem.product as IProduct).price * cartItem.quantity)}
               </span>
             </div>
@@ -378,12 +387,15 @@ function CartItem({
         {/* Quantity - Price - Stock*/}
         {localCartItem ? (
           !isOrderDetailProduct && (
-            <div className='flex flex-col gap-3 text-xl font-body tracking-wide'>
+            <div className="flex flex-col gap-3 font-body text-xl tracking-wide">
               {/* Quantity */}
-              <div className='flex items-center gap-1 text-[16px]'>
-                <FaHashtag className='text-darker' size={16} />
-                <span className='text-darker font-bold text-nowrap'>Số lượng:</span>
-                <span className='text-green-500'>{cartItem.quantity}</span>
+              <div className="flex items-center gap-1 text-[16px]">
+                <FaHashtag
+                  className="text-darker"
+                  size={16}
+                />
+                <span className="text-nowrap font-bold text-darker">Số lượng:</span>
+                <span className="text-green-500">{cartItem.quantity}</span>
               </div>
             </div>
           )
@@ -397,23 +409,26 @@ function CartItem({
               flashSale={(cartItem.product as IProduct).flashsale as IFlashsale}
               big
             />
-            <div className='flex items-center gap-1 mt-2 text-[16px]'>
-              <TbPackages className='text-darker' size={22} />
-              <span className='text-darker font-bold text-nowrap font-body tracking-wide'>Còn lại:</span>
-              <span className='text-green-500'>{(cartItem.product as IProduct).stock}</span>
+            <div className="mt-2 flex items-center gap-1 text-[16px]">
+              <TbPackages
+                className="text-darker"
+                size={22}
+              />
+              <span className="text-nowrap font-body font-bold tracking-wide text-darker">Còn lại:</span>
+              <span className="text-green-500">{(cartItem.product as IProduct).stock}</span>
             </div>
           </>
         )}
 
         {/* MARK: Quantity */}
         {!localCartItem && (
-          <div className='flex items-center justify-between'>
+          <div className="flex items-center justify-between">
             <div
-              className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}
-              onClick={(e) => e.stopPropagation()}
+              className={`my-3 inline-flex select-none overflow-hidden rounded-md ${className}`}
+              onClick={e => e.stopPropagation()}
             >
               <button
-                className={`flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
+                className={`common-transition group flex items-center justify-center rounded-bl-md rounded-tl-md border px-3 py-[10px] hover:bg-secondary ${
                   quantity <= 1 || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
                     : 'border border-secondary bg-white'
@@ -422,42 +437,48 @@ function CartItem({
                 onClick={() => updateQuantity('button', -1)}
               >
                 {isLoading ? (
-                  <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
+                  <RiDonutChartFill
+                    size={16}
+                    className="animate-spin text-slate-300"
+                  />
                 ) : (
                   <FaMinus
                     size={16}
-                    className={`group-hover:text-white wiggle ${
+                    className={`wiggle group-hover:text-white ${
                       quantity <= 1 || isLoading ? 'text-slate-300' : 'text-secondary'
                     }`}
                   />
                 )}
               </button>
               <input
-                className='max-w-14 px-2 border-y border-slate-100 outline-none text-center text-lg text-dark font-semibold font-body number-input'
-                type='number'
-                inputMode='numeric'
-                pattern='[0-9]*'
+                className="number-input max-w-14 border-y border-slate-100 px-2 text-center font-body text-lg font-semibold text-dark outline-none"
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={quantity}
                 disabled={isLoading || (cartItem.product as IProduct).stock <= 0}
-                onWheel={(e) => e.currentTarget.blur()}
-                onChange={(e) => updateQuantity('input', +e.target.value)}
+                onWheel={e => e.currentTarget.blur()}
+                onChange={e => updateQuantity('input', +e.target.value)}
               />
 
               <button
-                className={`flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
+                className={`common-transition group flex items-center justify-center rounded-br-md rounded-tr-md border px-3 py-[10px] hover:bg-secondary ${
                   quantity >= (cartItem.product as IProduct)?.stock! || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
-                    : ' border-secondary bg-white'
+                    : 'border-secondary bg-white'
                 }`}
                 disabled={quantity >= (cartItem.product as IProduct)?.stock! || isLoading}
                 onClick={() => updateQuantity('button', 1)}
               >
                 {isLoading ? (
-                  <RiDonutChartFill size={16} className='animate-spin text-slate-300' />
+                  <RiDonutChartFill
+                    size={16}
+                    className="animate-spin text-slate-300"
+                  />
                 ) : (
                   <FaPlus
                     size={16}
-                    className={`group-hover:text-white wiggle ${
+                    className={`wiggle group-hover:text-white ${
                       quantity >= cartItem.product?.stock! || isLoading
                         ? 'text-slate-300'
                         : 'text-secondary'
@@ -469,8 +490,8 @@ function CartItem({
 
             <FaTrashAlt
               size={21}
-              className='text-secondary cursor-pointer hover:scale-110 common-transition wiggle'
-              onClick={(e) => {
+              className="common-transition wiggle cursor-pointer text-secondary hover:scale-110"
+              onClick={e => {
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)
               }}
@@ -480,8 +501,8 @@ function CartItem({
             <ConfirmDialog
               open={isOpenConfirmModal}
               setOpen={setIsOpenConfirmModal}
-              title='Xóa sản phẩm khỏi giỏ hàng'
-              content='Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?'
+              title="Xóa sản phẩm khỏi giỏ hàng"
+              content="Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?"
               onAccept={() => (curUser ? handleDeleteCartItem() : handleDeleteLocalCartItem())}
               isLoading={isDeleting}
             />
@@ -492,4 +513,4 @@ function CartItem({
   )
 }
 
-export default CartItem
+export default memo(CartItem)

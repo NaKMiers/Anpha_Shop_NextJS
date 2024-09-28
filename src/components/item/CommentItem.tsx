@@ -2,7 +2,7 @@ import { IComment } from '@/models/CommentModel'
 import { hideCommentApi, likeCommentApi, replyCommentApi } from '@/requests/commentRequest'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import React, { useCallback, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash, FaHeart, FaRegHeart, FaSortDown } from 'react-icons/fa'
@@ -42,7 +42,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
   // MARK: Handlers
   // reply comment
   const replyComment: SubmitHandler<FieldValues> = useCallback(
-    async (data) => {
+    async data => {
       // check login
       if (!curUser) return toast.error('Bạn cần đăng nhập để thực hiện chức năng này')
 
@@ -56,8 +56,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           newComment.user = curUser
 
           // add new comment to list
-          setCmts((prev) =>
-            prev.map((comment) =>
+          setCmts(prev =>
+            prev.map(comment =>
               comment._id === parentComment._id
                 ? {
                     ...comment,
@@ -92,8 +92,8 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         if (!cmt.productId) {
           // replied comment
 
-          setCmts((prev) =>
-            prev.map((c) =>
+          setCmts(prev =>
+            prev.map(c =>
               c.replied.map((reply: any) => reply._id).includes(cmt._id)
                 ? {
                     ...c,
@@ -104,7 +104,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )
         } else {
           // normal comment
-          setCmts((prev) => prev.map((comment) => (comment._id === cmt._id ? cmt : comment)))
+          setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
         }
       } catch (err: any) {
         toast.error(err.message)
@@ -125,12 +125,12 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         if (!cmt.productId) {
           // replied comment
 
-          setCmts((prev) =>
-            prev.map((c) => {
-              return (c.replied as IComment[]).map((reply) => reply._id).includes(cmt._id)
+          setCmts(prev =>
+            prev.map(c => {
+              return (c.replied as IComment[]).map(reply => reply._id).includes(cmt._id)
                 ? {
                     ...c,
-                    replied: (c.replied as IComment[]).map((reply) =>
+                    replied: (c.replied as IComment[]).map(reply =>
                       reply._id === cmt._id ? cmt : reply
                     ),
                   }
@@ -139,7 +139,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           )
         } else {
           // normal comment
-          setCmts((prev) => prev.map((comment) => (comment._id === cmt._id ? cmt : comment)))
+          setCmts(prev => prev.map(comment => (comment._id === cmt._id ? cmt : comment)))
         }
       } catch (err: any) {
         console.log(err)
@@ -150,30 +150,30 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
   )
 
   return (
-    <div className={`w-full flex items-start gap-3 ${className}`}>
+    <div className={`flex w-full items-start gap-3 ${className}`}>
       {/* Avatar */}
       <Image
-        className='rounded-full shadow-lg'
+        className="rounded-full shadow-lg"
         src={user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
         width={40}
         height={40}
-        alt='avatar'
+        alt="avatar"
       />
 
-      <div className='w-full'>
+      <div className="w-full">
         {/* MARK: Headline */}
-        <div className=''>
-          <span className='font-semibold'>
+        <div className="">
+          <span className="font-semibold">
             {user?.firstname && user?.lastname ? `${user?.firstname} ${user?.lastname}` : user?.username}
           </span>{' '}
-          - <span className='text-slate-500 text-sm'>{format(comment.createdAt)}</span>{' '}
+          - <span className="text-sm text-slate-500">{format(comment.createdAt)}</span>{' '}
           {curUser?.role !== 'user' && (
             <button
-              className={`ml-2 px-[6px] py-[1px] rounded-[4px] text-sm border ${
+              className={`ml-2 rounded-[4px] border px-[6px] py-[1px] text-sm ${
                 comment.hide
-                  ? 'border-rose-500 hover:bg-rose-500 text-rose-500'
-                  : 'border-green-500 hover:bg-green-500 text-green-500'
-              } hover:text-white common-transition`}
+                  ? 'border-rose-500 text-rose-500 hover:bg-rose-500'
+                  : 'border-green-500 text-green-500 hover:bg-green-500'
+              } common-transition hover:text-white`}
               onClick={() => hideComment(comment._id, comment.hide ? 'n' : 'y')}
             >
               {comment.hide ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
@@ -182,21 +182,21 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         </div>
 
         {/* MARK: Content */}
-        <p className='font-body tracking-tide'>{comment.content}</p>
+        <p className="tracking-tide font-body">{comment.content}</p>
 
         {/* MARK: Actions */}
-        <div className='flex items-center gap-3 text-sm'>
-          <div className='group flex items-center font-semibold gap-1'>
+        <div className="flex items-center gap-3 text-sm">
+          <div className="group flex items-center gap-1 font-semibold">
             {comment.likes.includes(curUser?._id) ? (
               <FaHeart
                 size={14}
-                className='h-[14px] text-secondary cursor-pointer wiggle'
+                className="wiggle h-[14px] cursor-pointer text-secondary"
                 onClick={() => likeComment('n')}
               />
             ) : (
               <FaRegHeart
                 size={14}
-                className='w-4 h-[14px] text-secondary cursor-pointer wiggle'
+                className="wiggle h-[14px] w-4 cursor-pointer text-secondary"
                 onClick={() => likeComment('y')}
               />
             )}{' '}
@@ -205,11 +205,11 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
 
           {comment.productId && (
             <div
-              className='flex font-semibold text-primary gap-1 cursor-pointer select-none'
-              onClick={() => setIsOpenReply((prev) => !prev)}
+              className="flex cursor-pointer select-none gap-1 font-semibold text-primary"
+              onClick={() => setIsOpenReply(prev => !prev)}
             >
               <span>{comment.replied.length}</span>
-              <span className=''>Phản hồi</span>
+              <span className="">Phản hồi</span>
               <FaSortDown />
             </div>
           )}
@@ -219,35 +219,35 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         <div
           className={`${
             isOpenReply ? 'max-h-[350px]' : 'max-h-0'
-          } relative h-full overflow-y-scroll common-transition mt-1 `}
+          } common-transition relative mt-1 h-full overflow-y-scroll`}
         >
           {/* MARK: Input */}
-          <div className='sticky z-10 top-0 flex items-start gap-2 bg-white'>
+          <div className="sticky top-0 z-10 flex items-start gap-2 bg-white">
             <Image
               className={`rounded-full shadow-lg ${className}`}
               src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
               width={24}
               height={24}
-              alt='avatar'
+              alt="avatar"
             />
-            <div className='w-full flex flex-col items-end sm:flex-row sm:items-center'>
+            <div className="flex w-full flex-col items-end sm:flex-row sm:items-center">
               <input
-                id='comment'
-                className='px-2 py-1 border-b w-full text-sm text-dark focus:outline-none focus:ring-0 peer'
-                placeholder=' '
+                id="comment"
+                className="peer w-full border-b px-2 py-1 text-sm text-dark focus:outline-none focus:ring-0"
+                placeholder=" "
                 disabled={isLoading}
-                type='text'
+                type="text"
                 {...register('comment', { required: true })}
-                onWheel={(e) => e.currentTarget.blur()}
+                onWheel={e => e.currentTarget.blur()}
               />
-              <div className='flex gap-2 mt-2 justify-end'>
-                <button className='h-[30px] text-sm px-3 rounded-lg hover:bg-slate-200 common-transition'>
+              <div className="mt-2 flex justify-end gap-2">
+                <button className="common-transition h-[30px] rounded-lg px-3 text-sm hover:bg-slate-200">
                   Hủy
                 </button>
                 <LoadingButton
-                  className='h-[30px] flex items-center text-sm px-3 border border-primary hover:bg-primary text-primary hover:text-white rounded-lg common-transition'
+                  className="common-transition flex h-[30px] items-center rounded-lg border border-primary px-3 text-sm text-primary hover:bg-primary hover:text-white"
                   onClick={handleSubmit(replyComment)}
-                  text='Gửi'
+                  text="Gửi"
                   isLoading={isLoading}
                 />
               </div>
@@ -255,9 +255,13 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
           </div>
 
           {/* MARK: Replied Comments */}
-          <div className='relative flex flex-col gap-3 mt-1'>
-            {(comment.replied as IComment[]).map((comment) => (
-              <CommentItem setCmts={setCmts} comment={comment} key={comment._id} />
+          <div className="relative mt-1 flex flex-col gap-3">
+            {(comment.replied as IComment[]).map(comment => (
+              <CommentItem
+                setCmts={setCmts}
+                comment={comment}
+                key={comment._id}
+              />
             ))}
           </div>
         </div>
@@ -266,4 +270,4 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
   )
 }
 
-export default CommentItem
+export default memo(CommentItem)

@@ -4,7 +4,7 @@ import ProductCard from '@/components/ProductCard'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
-import { getSearchPageApi, getTagsPageApi } from '@/requests'
+import { getSearchPageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 
 async function SearchPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
@@ -63,22 +63,34 @@ async function SearchPage({ searchParams }: { searchParams?: { [key: string]: st
   }
 
   return (
-    <div className='pt-16'>
+    <div className="pt-16">
       {/* MARK: Add JSON-LD */}
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* MARK: Meta */}
-      <Meta title={`Kết quả tìm kiếm`} searchParams={searchParams} type='tag' chops={chops} hideSearch />
+      <Meta
+        title={`Kết quả tìm kiếm`}
+        searchParams={searchParams}
+        type="tag"
+        chops={chops}
+        hideSearch
+      />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} sản phẩm
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4'>
+      <div className="grid grid-cols-1 gap-21 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map(product => (
-          <ProductCard product={product} key={product._id} />
+          <ProductCard
+            product={product}
+            key={product._id}
+          />
         ))}
       </div>
 
@@ -87,7 +99,7 @@ async function SearchPage({ searchParams }: { searchParams?: { [key: string]: st
         searchParams={searchParams}
         amount={amount}
         itemsPerPage={itemPerPage}
-        className='mt-11'
+        className="mt-11"
       />
     </div>
   )

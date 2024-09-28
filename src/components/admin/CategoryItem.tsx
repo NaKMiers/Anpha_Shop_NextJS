@@ -1,11 +1,11 @@
 import { ICategory } from '@/models/CategoryModel'
+import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
-import Image from 'next/image'
 
 interface CategoryItemProps {
   data: ICategory
@@ -33,65 +33,83 @@ function CategoryItem({
   return (
     <>
       <div
-        className={`flex flex-col p-4 rounded-lg shadow-lg text-dark cursor-pointer common-transition ${
-          selectedCategories.includes(data._id) ? 'bg-violet-50 -translate-y-1' : 'bg-white'
+        className={`common-transition flex cursor-pointer flex-col rounded-lg p-4 text-dark shadow-lg ${
+          selectedCategories.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         onClick={() =>
           setSelectedCategories(prev =>
             prev.includes(data._id) ? prev.filter(id => id !== data._id) : [...prev, data._id]
           )
         }
-        key={data._id}>
+        key={data._id}
+      >
         {/* MARK: Body */}
-        <div className='flex gap-3'>
+        <div className="flex gap-3">
           {data.logo && (
-            <div className='flex-shrink-0'>
+            <div className="flex-shrink-0">
               <Image
-                className='rounded-lg aspect-square '
+                className="aspect-square rounded-lg"
                 src={data.logo}
                 width={40}
                 height={40}
-                alt='category-logo'
+                alt="category-logo"
               />
             </div>
           )}
 
-          <div className=''>
-            <p className='font-semibold' title={data.slug}>
+          <div className="">
+            <p
+              className="font-semibold"
+              title={data.slug}
+            >
               {data.title}
             </p>
 
             {/* Product Quantity */}
-            <p className='font-semibold mb-2' title={`Product Quantity: ${data.productQuantity}`}>
-              <span>Pr.Q:</span> <span className='text-primary'>{data.productQuantity}</span>
+            <p
+              className="mb-2 font-semibold"
+              title={`Product Quantity: ${data.productQuantity}`}
+            >
+              <span>Pr.Q:</span> <span className="text-primary">{data.productQuantity}</span>
             </p>
           </div>
         </div>
 
         {/* MARK: Action Buttson */}
-        <div className='flex self-end border overflow-x-auto max-w-full border-dark rounded-lg px-3 py-2 gap-4'>
+        <div className="flex max-w-full gap-4 self-end overflow-x-auto rounded-lg border border-dark px-3 py-2">
           {/* Edit Button Link */}
           <Link
             href={`/admin/category/${data.slug}/edit`}
-            className='block group'
+            className="group block"
             onClick={e => e.stopPropagation()}
-            title='Edit'>
-            <MdEdit size={18} className='wiggle' />
+            title="Edit"
+          >
+            <MdEdit
+              size={18}
+              className="wiggle"
+            />
           </Link>
 
           {/* Delete Button */}
           <button
-            className='block group'
+            className="group block"
             onClick={e => {
               e.stopPropagation()
               setIsOpenConfirmModal(true)
             }}
             disabled={loadingCategories.includes(data._id)}
-            title='Delete'>
+            title="Delete"
+          >
             {loadingCategories.includes(data._id) ? (
-              <RiDonutChartFill size={18} className='animate-spin text-slate-300' />
+              <RiDonutChartFill
+                size={18}
+                className="animate-spin text-slate-300"
+              />
             ) : (
-              <FaTrash size={18} className='wiggle' />
+              <FaTrash
+                size={18}
+                className="wiggle"
+              />
             )}
           </button>
         </div>
@@ -101,8 +119,8 @@ function CategoryItem({
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Category'
-        content='Are you sure that you want to delete this category?'
+        title="Delete Category"
+        content="Are you sure that you want to delete this category?"
         onAccept={() => handleDeleteCategories([data._id])}
         isLoading={loadingCategories.includes(data._id)}
       />
@@ -110,4 +128,4 @@ function CategoryItem({
   )
 }
 
-export default CategoryItem
+export default memo(CategoryItem)

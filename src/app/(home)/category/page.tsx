@@ -60,28 +60,34 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
   }
 
   return (
-    <div className='pt-16'>
+    <div className="pt-16">
       {/* MARK: Add JSON-LD */}
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* MARK: Meta */}
       <Meta
         title={`Danh Mục Sản Phẩm`}
         searchParams={searchParams}
-        type='ctg'
+        type="ctg"
         items={categories}
         chops={chops}
       />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} sản phẩm
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-21 md:grid-cols-3 lg:grid-cols-4'>
+      <div className="grid grid-cols-1 gap-21 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map(product => (
-          <ProductCard product={product} key={product._id} />
+          <ProductCard
+            product={product}
+            key={product._id}
+          />
         ))}
       </div>
 
@@ -90,7 +96,7 @@ async function CategoryPage({ searchParams }: { searchParams?: { [key: string]: 
         searchParams={searchParams}
         amount={amount}
         itemsPerPage={itemPerPage}
-        className='mt-11'
+        className="mt-11"
       />
     </div>
   )

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import LoadingProductCard from './LoadingProductCard'
 
@@ -14,27 +15,33 @@ function LoadingGroupProducts({ hideTop, bestSeller, className = '' }: GroupProd
       {!hideTop && (
         <div className={`flex ${!bestSeller ? 'justify-between' : 'justify-end'} px-6`}>
           {!bestSeller && (
-            <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90 group'>
-              <div className='aspect-square items-center w-6 h-6 loading rounded-full' />
-              <span className='w-16 h-2 rounded loading' />
+            <div className="group flex items-center gap-2 rounded-t-xl border-b-2 bg-white px-3 py-2 opacity-90">
+              <div className="loading aspect-square h-6 w-6 items-center rounded-full" />
+              <span className="loading h-2 w-16 rounded" />
             </div>
           )}
-          <div className='flex gap-2 py-2 px-3 items-center bg-white rounded-t-xl border-b-2 opacity-90'>
-            <span className='w-16 h-2 rounded loading' />
+          <div className="flex items-center gap-2 rounded-t-xl border-b-2 bg-white px-3 py-2 opacity-90">
+            <span className="loading h-2 w-16 rounded" />
           </div>
         </div>
       )}
 
-      <div className='group flex items-center justify-center absolute -left-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-l-small shadow-md'>
-        <FaChevronLeft size={18} className='text-dark' />
+      <div className="group absolute -left-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-l-small bg-white bg-opacity-80 shadow-md">
+        <FaChevronLeft
+          size={18}
+          className="text-dark"
+        />
       </div>
-      <div className='group flex items-center justify-center absolute -right-21 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 w-10 h-11 z-10 rounded-r-small shadow-md'>
-        <FaChevronRight size={18} className='text-dark' />
+      <div className="group absolute -right-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-r-small bg-white bg-opacity-80 shadow-md">
+        <FaChevronRight
+          size={18}
+          className="text-dark"
+        />
       </div>
 
       {/* MARK: Slider */}
-      <div className='flex flex-wrap min-h-[490px] px-21/2 bg-white bg-opacity-90 rounded-medium shadow-medium'>
-        <div className='flex w-full py-21 overflow-hidden'>
+      <div className="flex min-h-[490px] flex-wrap rounded-medium bg-white bg-opacity-90 px-21/2 shadow-medium">
+        <div className="flex w-full overflow-hidden py-21">
           {Array.from({ length: 10 }).map((_, index) => {
             const color =
               index <= 2 ? (index <= 1 ? (index <= 0 ? '#f44336' : 'orange') : 'lightgreen') : '#0dcaf0'
@@ -42,17 +49,19 @@ function LoadingGroupProducts({ hideTop, bestSeller, className = '' }: GroupProd
             return (
               <div
                 key={index}
-                className='relative flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-21/2 snap-start'>
+                className="relative w-full flex-shrink-0 snap-start px-21/2 sm:w-1/2 md:w-1/3 lg:w-1/4"
+              >
                 {bestSeller && (
                   <div
-                    className='absolute z-20 right-1 font-[700] rotate-[10deg]'
+                    className="absolute right-1 z-20 rotate-[10deg] font-[700]"
                     style={{
                       color,
                       fontSize:
                         index <= 2 ? (index <= 1 ? (index <= 0 ? '56px' : '48px') : '40px') : '32px',
                       top:
                         index <= 2 ? (index <= 1 ? (index <= 0 ? '-30px' : '-26px') : '-22px') : '-13px',
-                    }}>
+                    }}
+                  >
                     #{index + 1}
                   </div>
                 )}
@@ -66,4 +75,4 @@ function LoadingGroupProducts({ hideTop, bestSeller, className = '' }: GroupProd
   )
 }
 
-export default LoadingGroupProducts
+export default memo(LoadingGroupProducts)

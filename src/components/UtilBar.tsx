@@ -4,7 +4,7 @@ import { ICategory } from '@/models/CategoryModel'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { FaGripVertical } from 'react-icons/fa'
 
 interface UtilBarProps {
@@ -66,54 +66,63 @@ function UtilBar({ categories, className = '' }: UtilBarProps) {
 
   return (
     <div
-      className={`flex md:flex-col justify-center items-center gap-5 pl-3 w-[calc(100%-21px)] md:w-auto md:px-0 md:py-3 fixed z-40 left-1/2 md:left-auto -translate-x-1/2 md:translate-x-0 md:top-1/2 md:-translate-y-1/2 bg-dark-100 rounded-lg shadow-medium-light transition-all duration-300 ${
+      className={`fixed left-1/2 z-40 flex w-[calc(100%-21px)] -translate-x-1/2 items-center justify-center gap-5 rounded-lg bg-dark-100 pl-3 shadow-medium-light transition-all duration-300 md:left-auto md:top-1/2 md:w-auto md:-translate-y-1/2 md:translate-x-0 md:flex-col md:px-0 md:py-3 ${
         show
-          ? 'bottom-21/2 md:bottom-auto md:right-3 opacity-1'
-          : 'bottom-0 md:bottom-auto translate-y-full md:translate-y-auto md:right-0 md:translate-x-[100%] opacity-0 md:opacity-100'
-      }  ${className}`}
+          ? 'opacity-1 bottom-21/2 md:bottom-auto md:right-3'
+          : 'md:translate-y-auto bottom-0 translate-y-full opacity-0 md:bottom-auto md:right-0 md:translate-x-[100%] md:opacity-100'
+      } ${className}`}
     >
       <button
-        className='group hidden md:flex items-center justify-center absolute top-1/2 -translate-y-1/2 left-0 -translate-x-full py-3 bg-white rounded-l-md shadow-md'
-        onClick={() => setShow((prev) => !prev)}
+        className="group absolute left-0 top-1/2 hidden -translate-x-full -translate-y-1/2 items-center justify-center rounded-l-md bg-white py-3 shadow-md md:flex"
+        onClick={() => setShow(prev => !prev)}
       >
-        <FaGripVertical size={20} className={`wiggle`} />
+        <FaGripVertical
+          size={20}
+          className={`wiggle`}
+        />
       </button>
 
       {/* MARK: Avatar */}
       {curUser?._id && (
-        <Link href='/user' className='md:border-b md:pb-3 py-3 md:py-0 flex-shrink-0'>
+        <Link
+          href="/user"
+          className="flex-shrink-0 py-3 md:border-b md:py-0 md:pb-3"
+        >
           <Image
-            className='aspect-square rounded-full wiggle-0'
+            className="wiggle-0 aspect-square rounded-full"
             src={curUser.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
             width={36}
             height={36}
-            alt='logo'
+            alt="logo"
           />
         </Link>
       )}
 
       {/* MARK: Best Seller */}
-      <Link href='/#best-seller' className='rounded-full group py-3 md:py-0'>
-        <span className='text-[24px] font-semibold text-orange-500 italic wiggle block leading-5'>
+      <Link
+        href="/#best-seller"
+        className="group rounded-full py-3 md:py-0"
+      >
+        <span className="wiggle block text-[24px] font-semibold italic leading-5 text-orange-500">
           1st
         </span>
       </Link>
 
       {/* MARK: Categories */}
-      <div className='flex md:flex-col px-3 py-3 -ml-3 md:m-0 md:-mt-3 md:max-h-[282px] items-center gap-5 overflow-auto no-scrollbar'>
-        {categories.map((category) => (
+      <div className="no-scrollbar -ml-3 flex items-center gap-5 overflow-auto px-3 py-3 md:m-0 md:-mt-3 md:max-h-[282px] md:flex-col">
+        {categories.map(category => (
           <Link
             href={`/#${category.slug}`}
-            className='flex-shrink-0 group'
+            className="group flex-shrink-0"
             title={category.title}
             key={category.slug}
           >
             <Image
-              className='aspect-square wiggle rounded-md'
+              className="wiggle aspect-square rounded-md"
               src={`${category.logo}`}
               width={28}
               height={28}
-              alt='logo'
+              alt="logo"
             />
           </Link>
         ))}
@@ -122,4 +131,4 @@ function UtilBar({ categories, className = '' }: UtilBarProps) {
   )
 }
 
-export default UtilBar
+export default memo(UtilBar)

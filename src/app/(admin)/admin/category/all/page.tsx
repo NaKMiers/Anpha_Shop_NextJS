@@ -204,25 +204,35 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
   }, [categories, selectedCategories, handleDeleteCategories, handleSubmit])
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* MARK: Top & Pagination */}
-      <AdminHeader title='All Categories' addLink='/admin/category/add' />
-      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
+      <AdminHeader
+        title="All Categories"
+        addLink="/admin/category/add"
+      />
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+      />
 
       {/* MARK: Filter */}
-      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+      <AdminMeta
+        handleFilter={handleSubmit(handleFilter)}
+        handleResetFilter={handleResetFilter}
+      >
         {/* Product Quantity */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='productQuantity'>
-            <span className='font-bold'>Product Quantity: </span>
+        <div className="col-span-12 flex flex-col md:col-span-4">
+          <label htmlFor="productQuantity">
+            <span className="font-bold">Product Quantity: </span>
             <span>{productQuantity}</span> - <span>{maxPQ}</span>
           </label>
           <input
-            id='productQuantity'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="productQuantity"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minPQ || 0}
             max={maxPQ || 0}
             value={productQuantity}
@@ -231,16 +241,16 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         </div>
 
         {/* MARK: Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-4">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sort'
+            id="sort"
+            label="Sort"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('sort')}
             options={[
               {
@@ -265,21 +275,23 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
+            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedCategories(selectedCategories.length > 0 ? [] : categories.map(tag => tag._id))
-            }>
+            }
+          >
             {selectedCategories.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
           {/* Delete Many Button */}
           {!!selectedCategories.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => setIsOpenConfirmModal(true)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => setIsOpenConfirmModal(true)}
+            >
               Delete
             </button>
           )}
@@ -290,20 +302,20 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Categories'
-        content='Are you sure that you want to delete these categories?'
+        title="Delete Categories"
+        content="Are you sure that you want to delete these categories?"
         onAccept={() => handleDeleteCategories(selectedCategories)}
         isLoading={loadingCategories.length > 0}
       />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount}{' '}
         {amount > 1 ? 'categories' : 'category'}
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-21'>
+      <div className="grid grid-cols-1 gap-21 md:grid-cols-3 lg:grid-cols-5">
         {categories.map(category => (
           <CategoryItem
             data={category}

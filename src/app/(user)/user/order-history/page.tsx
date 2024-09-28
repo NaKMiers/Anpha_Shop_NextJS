@@ -161,56 +161,59 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   }, [handleFilter, handleResetFilter, handleSubmit, reset])
 
   return (
-    <div className='flex flex-col'>
-      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>LỊCH SỬ MUA HÀNG CỦA TÔI</h1>
+    <div className="flex flex-col">
+      <h1 className="mb-5 font-body text-3xl font-semibold tracking-wide">LỊCH SỬ MUA HÀNG CỦA TÔI</h1>
 
       {/* MARK: Filter */}
       {/* Open Filter */}
-      <div className='flex justify-end'>
+      <div className="flex justify-end">
         <button
           onClick={() => setIsShowFilter(!isShowFilter)}
-          className='px-3 py-[2px] bg-dark-100 text-white rounded-md shadow-lg ml-auto group hover:bg-primary common-transition mb-3'
+          className="common-transition group mb-3 ml-auto rounded-md bg-dark-100 px-3 py-[2px] text-white shadow-lg hover:bg-primary"
         >
-          <BsThreeDots size={28} className='wiggle' />
+          <BsThreeDots
+            size={28}
+            className="wiggle"
+          />
         </button>
       </div>
 
       {/* Filter */}
       <div
-        className={`bg-dark-100 self-end w-full rounded-medium shadow-md text-white overflow-auto transition-all duration-300 no-scrollbar ${
+        className={`no-scrollbar w-full self-end overflow-auto rounded-medium bg-dark-100 text-white shadow-md transition-all duration-300 ${
           isShowFilter
-            ? 'p-21 max-w-full max-h-[500px] md:max-h-[300px] opacity-1'
-            : 'max-w-0 max-h-0 p-0 opacity-0'
+            ? 'opacity-1 max-h-[500px] max-w-full p-21 md:max-h-[300px]'
+            : 'max-h-0 max-w-0 p-0 opacity-0'
         }`}
       >
-        <div className='grid grid-cols-12 gap-21'>
+        <div className="grid grid-cols-12 gap-21">
           {/* Search */}
-          <div className='flex flex-col col-span-12 md:col-span-6'>
+          <div className="col-span-12 flex flex-col md:col-span-6">
             <Input
-              className='md:max-w-[450px]'
-              id='search'
-              label='Tìm kiếm'
+              className="md:max-w-[450px]"
+              id="search"
+              label="Tìm kiếm"
               disabled={false}
               register={register}
               errors={errors}
-              type='text'
+              type="text"
               icon={FaSearch}
               onFocus={() => clearErrors('search')}
             />
           </div>
 
           {/* Price */}
-          <div className='flex flex-col col-span-12 md:col-span-6'>
-            <label htmlFor='total'>
-              <span className='font-bold'>Tổng tiền: </span>
+          <div className="col-span-12 flex flex-col md:col-span-6">
+            <label htmlFor="total">
+              <span className="font-bold">Tổng tiền: </span>
               <span>{formatPrice(total)}</span> - <span>{formatPrice(maxTotal)}</span>
             </label>
             <input
-              id='total'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
+              id="total"
+              className="input-range my-2 h-2 rounded-lg bg-slate-200"
+              placeholder=" "
               disabled={false}
-              type='range'
+              type="range"
               min={minTotal || 0}
               max={maxTotal || 0}
               value={total}
@@ -219,43 +222,43 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
           </div>
 
           {/* From To */}
-          <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
+          <div className="col-span-12 flex flex-wrap gap-2 sm:flex-nowrap lg:col-span-6">
             <Input
-              id='from'
-              label='Từ ngày'
+              id="from"
+              label="Từ ngày"
               disabled={false}
               register={register}
               errors={errors}
-              type='date'
+              type="date"
               icon={FaCalendar}
-              className='w-full'
+              className="w-full"
               onFocus={() => clearErrors('from')}
             />
 
             <Input
-              id='to'
-              label='Đến ngày'
+              id="to"
+              label="Đến ngày"
               disabled={false}
               register={register}
               errors={errors}
-              type='date'
+              type="date"
               icon={FaCalendar}
-              className='w-full'
+              className="w-full"
               onFocus={() => clearErrors('to')}
             />
           </div>
 
           {/* Select Filter */}
-          <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-6'>
+          <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-6">
             {/* Sort */}
             <Input
-              id='sort'
-              label='Sắp xếp'
+              id="sort"
+              label="Sắp xếp"
               disabled={false}
               register={register}
               errors={errors}
               icon={FaSort}
-              type='select'
+              type="select"
               onFocus={() => clearErrors('sort')}
               options={[
                 {
@@ -279,38 +282,48 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
             />
           </div>
 
-          <div className='flex justify-end gap-2 items-center col-span-12'>
+          <div className="col-span-12 flex items-center justify-end gap-2">
             {/* Filter Button */}
             <button
-              className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-              title='Alt + Enter'
+              className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
+              title="Alt + Enter"
               onClick={handleSubmit(handleFilter)}
             >
               Lọc
-              <FaFilter size={14} className='ml-[6px] wiggle' />
+              <FaFilter
+                size={14}
+                className="wiggle ml-[6px]"
+              />
             </button>
 
             {/* Reset Button */}
             <button
-              className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-              title='Alt + R'
+              className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
+              title="Alt + R"
               onClick={handleResetFilter}
             >
               Đặt lại
-              <BiReset size={22} className='ml-1 wiggle' />
+              <BiReset
+                size={22}
+                className="wiggle ml-1"
+              />
             </button>
           </div>
         </div>
       </div>
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-dark font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-dark">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} đơn hàng
       </div>
 
       {/* MARK: Items */}
       {orders.map((order, index) => (
-        <OrderItem order={order} className={index !== 0 ? 'mt-4' : ''} key={order._id} />
+        <OrderItem
+          order={order}
+          className={index !== 0 ? 'mt-4' : ''}
+          key={order._id}
+        />
       ))}
 
       {/* MARK: Pagination */}
@@ -318,7 +331,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
         searchParams={searchParams}
         amount={amount}
         itemsPerPage={itemPerPage}
-        className='mt-11 bg-dark-100 p-[6px] rounded-lg'
+        className="mt-11 rounded-lg bg-dark-100 p-[6px]"
       />
     </div>
   )

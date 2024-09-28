@@ -3,7 +3,7 @@ import { getAllOrdersApi, getForceAllCagetoriesApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { rankAccountRevenue } from '@/utils/stat'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCircleNotch } from 'react-icons/fa'
 
@@ -56,22 +56,26 @@ function AccountRankTab({ className = '' }: AccountRankTabProps) {
       {!loading ? (
         <>
           <select
-            className='appearance-none p-2.5 font-semibold text-xs bg-dark-100 text-white focus:outline-none focus:ring-0 peer rounded-lg cursor-pointer'
+            className="peer cursor-pointer appearance-none rounded-lg bg-dark-100 p-2.5 text-xs font-semibold text-white focus:outline-none focus:ring-0"
             value={by}
-            onChange={e => setBy(e.target.value as never)}>
+            onChange={e => setBy(e.target.value as never)}
+          >
             <option
-              className='bg-dark-100 text-white font-body font-semibold tracking-wider p-5'
-              value='day'>
+              className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
+              value="day"
+            >
               By Day
             </option>
             <option
-              className='bg-dark-100 text-white font-body font-semibold tracking-wider p-5'
-              value='month'>
+              className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
+              value="month"
+            >
               By Month
             </option>
             <option
-              className='bg-dark-100 text-white font-body font-semibold tracking-wider p-5'
-              value='year'>
+              className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
+              value="year"
+            >
               By Year
             </option>
           </select>
@@ -79,18 +83,22 @@ function AccountRankTab({ className = '' }: AccountRankTabProps) {
           <Divider size={4} />
 
           {accounts.map((account, index) => (
-            <div className='flex flex-col items-start gap-1 mb-3' key={index}>
-              <p className='text-white text-sm bg-slate-700 px-2 py-[2px] rounded-lg'>{account.email}</p>
-              <div className='flex gap-2'>
-                <span className='text-green-500 text-sm font-semibold'>
+            <div
+              className="mb-3 flex flex-col items-start gap-1"
+              key={index}
+            >
+              <p className="rounded-lg bg-slate-700 px-2 py-[2px] text-sm text-white">{account.email}</p>
+              <div className="flex gap-2">
+                <span className="text-sm font-semibold text-green-500">
                   {formatPrice(account.revenue)}
                 </span>
                 <span
-                  className={`shadow-md text-xs px-1 py-[3px] select-none rounded-md font-body`}
+                  className={`select-none rounded-md px-1 py-[3px] font-body text-xs shadow-md`}
                   style={{
                     background: account.category.color,
-                  }}>
-                  <span className='bg-white tex-dark rounded-md px-1 text-[11px]'>
+                  }}
+                >
+                  <span className="tex-dark rounded-md bg-white px-1 text-[11px]">
                     {account.category.title}
                   </span>
                 </span>
@@ -99,12 +107,15 @@ function AccountRankTab({ className = '' }: AccountRankTabProps) {
           ))}
         </>
       ) : (
-        <div className='flex items-center justify-center'>
-          <FaCircleNotch size={18} className='animate-spin text-slate-400' />
+        <div className="flex items-center justify-center">
+          <FaCircleNotch
+            size={18}
+            className="animate-spin text-slate-400"
+          />
         </div>
       )}
     </div>
   )
 }
 
-export default AccountRankTab
+export default memo(AccountRankTab)

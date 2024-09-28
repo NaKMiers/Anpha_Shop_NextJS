@@ -14,14 +14,14 @@ function ResetPasswordEmail({
         theme,
       }}
     >
-      <Body className='text-dark font-sans'>
-        <Container className='bg-white p-4 pb-6'>
-          <Section className='inline-block mx-auto'>
-            <Row className='mb-3 w-full'>
+      <Body className="font-sans text-dark">
+        <Container className="bg-white p-4 pb-6">
+          <Section className="mx-auto inline-block">
+            <Row className="mb-3 w-full">
               <Column>
-                <a href='https://anpha.shop'>
+                <a href="https://anpha.shop">
                   <Img
-                    className='aspect-square rounded-full'
+                    className="aspect-square rounded-full"
                     src={`${'https://anpha.shop'}/images/logo.jpg`}
                     width={35}
                     height={35}
@@ -30,8 +30,8 @@ function ResetPasswordEmail({
               </Column>
               <Column>
                 <a
-                  href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                  href="https://anpha.shop"
+                  className="text-2xl font-bold tracking-[0.3px] text-dark no-underline"
                 >
                   .AnphaShop
                 </a>
@@ -40,17 +40,17 @@ function ResetPasswordEmail({
           </Section>
 
           <div
-            className='border-t'
+            className="border-t"
             style={{
               borderTop: '1px solid rgb(0, 0, 0, 0.1)',
             }}
           />
 
-          <Section className='px-5'>
+          <Section className="px-5">
             <p>Hi {name},</p>
             <p>
               Bạn đã gửi yêu cầu khôi phục mật khẩu tại{' '}
-              <span className='font-semibold'>&quot;Anpha Shop&quot;</span> lúc{' '}
+              <span className="font-semibold">&quot;Anpha Shop&quot;</span> lúc{' '}
               {new Intl.DateTimeFormat('vi', {
                 dateStyle: 'full',
                 timeStyle: 'medium',
@@ -65,16 +65,19 @@ function ResetPasswordEmail({
 
             <p>
               Ngược lại, nếu đây là bạn, hãy ấn nút bên dưới để{' '}
-              <a href={link} className='text-blue-500'>
+              <a
+                href={link}
+                className="text-blue-500"
+              >
                 khôi phục mật khẩu của bạn
               </a>{' '}
               ngay.
             </p>
 
-            <div className='text-center p-3'>
+            <div className="p-3 text-center">
               <a
                 href={link}
-                className='inline bg-primary no-underline rounded-lg text-white font-semibold cursor-pointer py-3 px-7 border-0'
+                className="inline cursor-pointer rounded-lg border-0 bg-primary px-7 py-3 font-semibold text-white no-underline"
               >
                 Khôi phục mật khẩu
               </a>
@@ -86,7 +89,10 @@ function ResetPasswordEmail({
             <p>
               Nếu có bất kỳ thắc mắc nào? Vui lòng liên hệ Anpha Shop để được hỗ trợ một cách nhiệt tình
               và nhanh chống:{' '}
-              <a href='https://www.messenger.com/t/170660996137305' className='text-blue-500'>
+              <a
+                href="https://www.messenger.com/t/170660996137305"
+                className="text-blue-500"
+              >
                 Liên hệ
               </a>
             </p>
@@ -98,26 +104,30 @@ function ResetPasswordEmail({
           </Section>
 
           {/* Footer */}
-          <div className='flex justify-center pt-[45px]'>
-            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
+          <div className="flex justify-center pt-[45px]">
+            <Img
+              className="max-w-full"
+              width={620}
+              src={`${'https://anpha.shop'}/banners/footer.jpg`}
+            />
           </div>
 
-          <p className='text-center text-xs text-slate-600'>
+          <p className="text-center text-xs text-slate-600">
             © 2023 | Anpha Shop - Developed by Nguyen Anh Khoa, All rights reserved.
           </p>
 
-          <div className='text-center'>
+          <div className="text-center">
             <a
-              href='https://www.messenger.com/t/170660996137305'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block ml-2'
+              href="https://www.messenger.com/t/170660996137305"
+              target="_blank"
+              rel="noreferrer"
+              className="ml-2 inline-block"
             >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}
                 height={35}
-                alt='messenger'
+                alt="messenger"
               />
             </a>
           </div>

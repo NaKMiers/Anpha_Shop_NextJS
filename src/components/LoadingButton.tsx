@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { RiDonutChartFill } from 'react-icons/ri'
 
 interface LoadingButtonProps {
@@ -11,13 +12,21 @@ function LoadingButton({ text, isLoading, onClick, className = '' }: LoadingButt
   return (
     <button
       className={`${
-        isLoading ? 'bg-slate-200 pointer-events-none flex justify-center' : ''
+        isLoading ? 'pointer-events-none flex justify-center bg-slate-200' : ''
       } ${className}`}
       disabled={isLoading}
-      onClick={onClick}>
-      {isLoading ? <RiDonutChartFill size={24} className='animate-spin' /> : text}
+      onClick={onClick}
+    >
+      {isLoading ? (
+        <RiDonutChartFill
+          size={24}
+          className="animate-spin"
+        />
+      ) : (
+        text
+      )}
     </button>
   )
 }
 
-export default LoadingButton
+export default memo(LoadingButton)

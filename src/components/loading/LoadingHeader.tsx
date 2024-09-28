@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { memo } from 'react'
 import { FaBars, FaCartShopping } from 'react-icons/fa6'
 import { HiLightningBolt } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
@@ -19,61 +20,68 @@ function Header({ isStatic, className }: HeaderProps) {
   return (
     <header
       className={`${
-        isStatic ? 'static' : 'fixed z-50 left-0 top-0'
-      } bg-dark-100 w-full text-white shadow-medium-light transition-all duration-300 top-0 ${className}`}
+        isStatic ? 'static' : 'fixed left-0 top-0 z-50'
+      } top-0 w-full bg-dark-100 text-white shadow-medium-light transition-all duration-300 ${className}`}
     >
       {/* Main Header */}
-      <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
+      <div className="relative m-auto flex h-[72px] w-full max-w-1200 items-center justify-between px-21">
         {/* MARK: Brand */}
-        <div className='pl-4 -ml-4 flex items-center max-w-[300px] w-[90%] h-full overflow-x-scroll no-scrollbar'>
+        <div className="no-scrollbar -ml-4 flex h-full w-[90%] max-w-[300px] items-center overflow-x-scroll pl-4">
           <Link
-            href='/'
+            href="/"
             prefetch={false}
-            className='hidden sm:block shrink-0 rounded-full common-transition spin'
+            className="common-transition spin hidden shrink-0 rounded-full sm:block"
           >
             <Image
-              className='aspect-square rounded-full'
-              src='/images/logo.jpg'
+              className="aspect-square rounded-full"
+              src="/images/logo.jpg"
               width={40}
               height={40}
-              alt='logo'
+              alt="logo"
             />
           </Link>
-          <Link href='/' prefetch={false} className='text-2xl font-bold'>
+          <Link
+            href="/"
+            prefetch={false}
+            className="text-2xl font-bold"
+          >
             .AnphaShop
           </Link>
           <Link
-            href='/recharge'
-            className='flex ml-3 bg-primary px-[10px] py-[6px] rounded-lg items-center gap-1 group hover:bg-secondary common-transition'
+            href="/recharge"
+            className="common-transition group ml-3 flex items-center gap-1 rounded-lg bg-primary px-[10px] py-[6px] hover:bg-secondary"
           >
-            <span className='font-bold font-body text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
+            <span className="common-transition font-body text-[18px] font-bold tracking-[0.02em] group-hover:text-white">
               Nạp
             </span>
             <HiLightningBolt
               size={20}
-              className='animate-bounce group-hover:text-white common-transition'
+              className="common-transition animate-bounce group-hover:text-white"
             />
           </Link>
         </div>
 
         {/* MARK: Nav */}
-        <div className='hidden md:flex items-center gap-4'>
-          <Link href='/cart' prefetch={false}>
+        <div className="hidden items-center gap-4 md:flex">
+          <Link
+            href="/cart"
+            prefetch={false}
+          >
             <FaCartShopping size={24} />
           </Link>
 
           {curUser ? (
             !!curUser._id && (
-              <div className='flex items-center gap-2 cursor-pointer'>
-                <div className='w-10 h-10 rounded-full loading' />
-                <div className='loading w-20 h-7 rounded-lg' />
+              <div className="flex cursor-pointer items-center gap-2">
+                <div className="loading h-10 w-10 rounded-full" />
+                <div className="loading h-7 w-20 rounded-lg" />
                 <IoChevronDown size={22} />
               </div>
             )
           ) : (
             <Link
-              href='/auth/login'
-              className='bg-secondary hover:bg-primary text-nowrap common-transition px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider cursor-pointer'
+              href="/auth/login"
+              className="common-transition cursor-pointer text-nowrap rounded-extra-small bg-secondary px-[10px] py-[6px] font-body font-semibold tracking-wider hover:bg-primary"
             >
               Đăng nhập
             </Link>
@@ -81,8 +89,8 @@ function Header({ isStatic, className }: HeaderProps) {
         </div>
 
         {/* Menu Button */}
-        <div className='md:hidden flex items-center'>
-          <button className='flex justify-center items-center w-[40px] h-[40px]'>
+        <div className="flex items-center md:hidden">
+          <button className="flex h-[40px] w-[40px] items-center justify-center">
             <FaBars size={22} />
           </button>
         </div>
@@ -91,4 +99,4 @@ function Header({ isStatic, className }: HeaderProps) {
   )
 }
 
-export default Header
+export default memo(Header)

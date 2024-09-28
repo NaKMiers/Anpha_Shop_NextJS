@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 async function LoadingHomePage() {
   return (
-    <div className='min-h-screen'>
+    <div className="min-h-screen">
       {/* MARK: Banner */}
       <LoadingBanner />
 
@@ -22,7 +22,7 @@ async function LoadingHomePage() {
 
       {/* MARK: Top #10 */}
       <LoadingHeading size={175} />
-      <section className='max-w-1200 mx-auto px-4'>
+      <section className="mx-auto max-w-1200 px-4">
         <LoadingGroupProducts />
       </section>
 
@@ -30,9 +30,12 @@ async function LoadingHomePage() {
 
       {/* MARK: Products */}
       <LoadingHeading />
-      <section className='max-w-1200 mx-auto px-4'>
+      <section className="mx-auto max-w-1200 px-4">
         {Array.from({ length: 6 }).map((_, index) => (
-          <LoadingGroupProducts className={index !== 6 - 1 ? 'mb-20' : ''} key={index} />
+          <LoadingGroupProducts
+            className={index !== 6 - 1 ? 'mb-20' : ''}
+            key={index}
+          />
         ))}
       </section>
 

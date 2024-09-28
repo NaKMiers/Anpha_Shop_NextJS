@@ -5,7 +5,7 @@ import { ITag } from '@/models/TagModel'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { BiReset } from 'react-icons/bi'
 import { FaFilter, FaSearch, FaSort } from 'react-icons/fa'
@@ -170,23 +170,24 @@ function Meta({
 
   return (
     <div
-      className={`bg-white self-end w-full rounded-medium shadow-md text-dark overflow-auto transition-all duration-300 no-scrollbar p-21 ${className}`}>
+      className={`no-scrollbar w-full self-end overflow-auto rounded-medium bg-white p-21 text-dark shadow-md transition-all duration-300 ${className}`}
+    >
       {/* MARK: Title */}
-      <h2 className='text-2xl font-semibold mb-21'>{title}</h2>
+      <h2 className="mb-21 text-2xl font-semibold">{title}</h2>
 
       {/* MARK: Filter */}
-      <div className='grid grid-cols-12 gap-21'>
+      <div className="grid grid-cols-12 gap-21">
         {/* Search */}
         {!hideSearch && (
-          <div className='flex flex-col col-span-12 md:col-span-4'>
+          <div className="col-span-12 flex flex-col md:col-span-4">
             <Input
-              id='search'
-              className='md:max-w-[450px]'
-              label='Search'
+              id="search"
+              className="md:max-w-[450px]"
+              label="Search"
               disabled={false}
               register={register}
               errors={errors}
-              type='text'
+              type="text"
               icon={FaSearch}
               onFocus={() => clearErrors('search')}
             />
@@ -195,17 +196,17 @@ function Meta({
 
         {/* Price */}
         {!hidePrice && (
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='price'>
-              <span className='font-bold'>Giá: </span>
+          <div className="col-span-12 flex flex-col md:col-span-4">
+            <label htmlFor="price">
+              <span className="font-bold">Giá: </span>
               <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
             </label>
             <input
-              id='price'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
+              id="price"
+              className="input-range my-2 h-2 rounded-lg bg-slate-200"
+              placeholder=" "
               disabled={false}
-              type='range'
+              type="range"
               min={minPrice}
               max={maxPrice}
               value={price}
@@ -216,17 +217,17 @@ function Meta({
 
         {/* Stock */}
         {!hideStock && (
-          <div className='flex flex-col col-span-12 md:col-span-4'>
-            <label htmlFor='stock'>
-              <span className='font-bold'>Còn lại: </span>
+          <div className="col-span-12 flex flex-col md:col-span-4">
+            <label htmlFor="stock">
+              <span className="font-bold">Còn lại: </span>
               <span>{stock}</span> - <span>{maxStock}</span>
             </label>
             <input
-              id='stock'
-              className='input-range h-2 bg-slate-200 rounded-lg my-2'
-              placeholder=' '
+              id="stock"
+              className="input-range my-2 h-2 rounded-lg bg-slate-200"
+              placeholder=" "
               disabled={false}
-              type='range'
+              type="range"
               min={minStock}
               max={maxStock}
               value={stock}
@@ -237,26 +238,27 @@ function Meta({
 
         {/* MARK: Item Selection */}
         {!!items.length && (
-          <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
+          <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:max-h-[152px] lg:max-h-[152px]">
             <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+              className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                 items.length === selectedFilterItems.length
-                  ? 'bg-dark-100 text-white border-dark-100'
+                  ? 'border-dark-100 bg-dark-100 text-white'
                   : 'border-slate-300 bg-slate-200'
               }`}
-              title='All Types'
+              title="All Types"
               onClick={() =>
                 setSelectedFilterItems(
                   items.length === selectedFilterItems.length ? [] : items.map(tag => tag.slug)
                 )
-              }>
+              }
+            >
               Tất cả
             </div>
             {items.map(item => (
               <div
-                className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                   selectedFilterItems.includes(item.slug)
-                    ? 'bg-secondary text-white border-secondary'
+                    ? 'border-secondary bg-secondary text-white'
                     : 'border-slate-300'
                 }`}
                 title={item.title}
@@ -265,7 +267,8 @@ function Meta({
                   selectedFilterItems.includes(item.slug)
                     ? () => setSelectedFilterItems(prev => prev.filter(id => id !== item.slug))
                     : () => setSelectedFilterItems(prev => [...prev, item.slug])
-                }>
+                }
+              >
                 {item.title}
               </div>
             ))}
@@ -273,16 +276,16 @@ function Meta({
         )}
 
         {/* MARK: Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sắp xếp'
+            id="sort"
+            label="Sắp xếp"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('sort')}
             options={[
               {
@@ -307,23 +310,31 @@ function Meta({
         </div>
 
         {/* MARK: Filter Buttons */}
-        <div className='flex justify-end gap-2 items-center col-span-12 md:col-span-4'>
+        <div className="col-span-12 flex items-center justify-end gap-2 md:col-span-4">
           {/* Filter Button */}
           <button
-            className='group flex items-center text-nowrap bg-primary text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-secondary text-white common-transition'
-            title='Alt + Enter'
-            onClick={handleSubmit(handleFilter)}>
+            className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
+            title="Alt + Enter"
+            onClick={handleSubmit(handleFilter)}
+          >
             Lọc
-            <FaFilter size={14} className='ml-1 wiggle' />
+            <FaFilter
+              size={14}
+              className="wiggle ml-1"
+            />
           </button>
 
           {/* Reset Button */}
           <button
-            className='group flex items-center text-nowrap bg-slate-600 text-[16px] font-semibold py-2 px-3 rounded-md cursor-pointer hover:bg-slate-800 text-white common-transition'
-            title='Alt + R'
-            onClick={handleResetFilter}>
+            className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
+            title="Alt + R"
+            onClick={handleResetFilter}
+          >
             Đặt lại
-            <BiReset size={22} className='ml-1 wiggle' />
+            <BiReset
+              size={22}
+              className="wiggle ml-1"
+            />
           </button>
         </div>
       </div>
@@ -331,4 +342,4 @@ function Meta({
   )
 }
 
-export default Meta
+export default memo(Meta)

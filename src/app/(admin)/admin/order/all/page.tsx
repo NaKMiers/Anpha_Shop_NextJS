@@ -231,40 +231,47 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   }, [handleFilter, handleResetFilter, handleSubmit, orders])
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* MARK: Top & Pagination */}
-      <AdminHeader title='All Orders' />
-      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
+      <AdminHeader title="All Orders" />
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+      />
 
       {/* MARK: Filter */}
-      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+      <AdminMeta
+        handleFilter={handleSubmit(handleFilter)}
+        handleResetFilter={handleResetFilter}
+      >
         {/* Search */}
-        <div className='flex flex-col col-span-12 md:col-span-6'>
+        <div className="col-span-12 flex flex-col md:col-span-6">
           <Input
-            id='search'
-            className='md:max-w-[450px]'
-            label='Search'
+            id="search"
+            className="md:max-w-[450px]"
+            label="Search"
             disabled={false}
             register={register}
             errors={errors}
-            type='text'
+            type="text"
             icon={FaSearch}
             onFocus={() => clearErrors('search')}
           />
         </div>
 
         {/* Total */}
-        <div className='flex flex-col col-span-12 md:col-span-6'>
-          <label htmlFor='total'>
-            <span className='font-bold'>Total: </span>
+        <div className="col-span-12 flex flex-col md:col-span-6">
+          <label htmlFor="total">
+            <span className="font-bold">Total: </span>
             <span>{formatPrice(total)}</span> - <span>{formatPrice(maxTotal)}</span>
           </label>
           <input
-            id='total'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="total"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minTotal || 0}
             max={maxTotal || 0}
             value={total}
@@ -273,43 +280,43 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         </div>
 
         {/* From To */}
-        <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
+        <div className="col-span-12 flex flex-wrap gap-2 sm:flex-nowrap lg:col-span-6">
           <Input
-            id='from'
-            label='From'
+            id="from"
+            label="From"
             disabled={false}
             register={register}
             errors={errors}
-            type='datetime-local'
+            type="datetime-local"
             icon={FaCalendar}
-            className='w-full'
+            className="w-full"
             onFocus={() => clearErrors('from')}
           />
 
           <Input
-            id='to'
-            label='To'
+            id="to"
+            label="To"
             disabled={false}
             register={register}
             errors={errors}
-            type='datetime-local'
+            type="datetime-local"
             icon={FaCalendar}
-            className='w-full'
+            className="w-full"
             onFocus={() => clearErrors('to')}
           />
         </div>
 
         {/* MARK: Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sort'
+            id="sort"
+            label="Sort"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('')}
             options={[
               {
@@ -334,13 +341,13 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
 
           {/* User ID */}
           <Input
-            id='userId'
-            label='User ID'
+            id="userId"
+            label="User ID"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('')}
             options={[
               {
@@ -357,18 +364,18 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
                 label: 'No',
               },
             ]}
-            className='min-w-[110px]'
+            className="min-w-[110px]"
           />
 
           {/* Voucher Applied */}
           <Input
-            id='voucherApplied'
-            label='Voucher'
+            id="voucherApplied"
+            label="Voucher"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('')}
             options={[
               {
@@ -385,18 +392,18 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
                 label: 'Off',
               },
             ]}
-            className='min-w-[112px]'
+            className="min-w-[112px]"
           />
 
           {/* Status */}
           <Input
-            id='status'
-            label='Status'
+            id="status"
+            label="Status"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('')}
             options={[
               {
@@ -421,13 +428,14 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
+            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedOrders(selectedOrders.length > 0 ? [] : orders.map(order => order._id))
-            }>
+            }
+          >
             {selectedOrders.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
@@ -435,8 +443,9 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           {!!selectedOrders.length &&
             selectedOrders.every(id => orders.find(order => order._id === id)?.status === 'pending') && (
               <button
-                className='border border-slate-300 rounded-lg px-3 py-2 hover:bg-slate-300 hover:text-white common-transition'
-                onClick={() => handleCancelOrders(selectedOrders)}>
+                className="common-transition rounded-lg border border-slate-300 px-3 py-2 hover:bg-slate-300 hover:text-white"
+                onClick={() => handleCancelOrders(selectedOrders)}
+              >
                 Cancel
               </button>
             )}
@@ -444,8 +453,9 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           {/* Delete Many Button */}
           {!!selectedOrders.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => setIsOpenConfirmModal(true)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => setIsOpenConfirmModal(true)}
+            >
               Delete
             </button>
           )}
@@ -456,20 +466,20 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Orders'
-        content='Are you sure that you want to delete these orders?'
+        title="Delete Orders"
+        content="Are you sure that you want to delete these orders?"
         onAccept={() => handleDeleteOrders(selectedOrders)}
         isLoading={loadingOrders.length > 0}
       />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} order
         {amount > 1 ? 's' : ''}
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>
+      <div className="grid grid-cols-1 gap-21 md:grid-cols-2 lg:grid-cols-3">
         {orders.map(order => (
           <OrderItem
             data={order}

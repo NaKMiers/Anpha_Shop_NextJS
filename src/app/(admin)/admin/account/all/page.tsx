@@ -9,6 +9,7 @@ import AdminMeta from '@/components/admin/AdminMeta'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IAccount } from '@/models/AccountModel'
+import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { activateAccountsApi, deleteAccountsApi, getAllAccountsApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
@@ -18,7 +19,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaSearch, FaSort } from 'react-icons/fa'
 import { GroupTypes } from '../add/page'
-import { ICategory } from '@/models/CategoryModel'
 
 function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: string[] | string } }) {
   // store
@@ -256,48 +256,59 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   )
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* MARK: Top & Pagination */}
-      <AdminHeader title='All Accounts' addLink='/admin/account/add' />
-      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
+      <AdminHeader
+        title="All Accounts"
+        addLink="/admin/account/add"
+      />
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+      />
 
       {/* MARK: Filter */}
-      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+      <AdminMeta
+        handleFilter={handleSubmit(handleFilter)}
+        handleResetFilter={handleResetFilter}
+      >
         {/* Search */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
+        <div className="col-span-12 flex flex-col md:col-span-4">
           <Input
-            className='md:max-w-[450px]'
-            id='search'
-            label='Search'
+            className="md:max-w-[450px]"
+            id="search"
+            label="Search"
             disabled={false}
             register={register}
             errors={errors}
-            type='text'
+            type="text"
             icon={FaSearch}
             onFocus={() => clearErrors('info')}
           />
         </div>
 
         {/* Type Selection */}
-        <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12 md:col-span-8'>
+        <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:col-span-8 md:max-h-[152px] lg:max-h-[152px]">
           <div
-            className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+            className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
               types.length === selectedTypes.length
-                ? 'bg-dark-100 text-white border-dark-100'
+                ? 'border-dark-100 bg-dark-100 text-white'
                 : 'border-slate-300'
             }`}
-            title='All Types'
+            title="All Types"
             onClick={() =>
               setSelectedTypes(types.length === selectedTypes.length ? [] : types.map(type => type._id))
-            }>
+            }
+          >
             All
           </div>
           {Object.keys(groupTypes).map(key => (
             <Fragment key={key}>
               <div
-                className={`ml-2 overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                className={`common-transition ml-2 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                   checkAllTypesOfCategorySelected(groupTypes[key])
-                    ? 'bg-dark-100 text-white border-dark-100'
+                    ? 'border-dark-100 bg-dark-100 text-white'
                     : 'border-slate-300 bg-slate-200'
                 }`}
                 title={key}
@@ -309,14 +320,15 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
                       )
                     : // add all types of category
                       setSelectedTypes(prev => [...prev, ...groupTypes[key].map(type => type._id)])
-                }>
+                }
+              >
                 {key}
               </div>
               {groupTypes[key].map(type => (
                 <div
-                  className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+                  className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                     selectedTypes.includes(type._id)
-                      ? 'bg-secondary text-white border-secondary'
+                      ? 'border-secondary bg-secondary text-white'
                       : 'border-slate-300'
                   }`}
                   title={type.title}
@@ -325,7 +337,8 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
                     selectedTypes.includes(type._id)
                       ? () => setSelectedTypes(prev => prev.filter(id => id !== type._id))
                       : () => setSelectedTypes(prev => [...prev, type._id])
-                  }>
+                  }
+                >
                   {type.title}
                 </div>
               ))}
@@ -334,16 +347,16 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* MARK: Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sort'
+            id="sort"
+            label="Sort"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('info')}
             options={[
               {
@@ -368,13 +381,13 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Active */}
           <Input
-            id='active'
-            label='Active'
+            id="active"
+            label="Active"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('info')}
             options={[
               {
@@ -395,13 +408,13 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Using */}
           <Input
-            id='usingUser'
-            label='Using'
+            id="usingUser"
+            label="Using"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('info')}
             options={[
               {
@@ -422,13 +435,13 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Expire */}
           <Input
-            id='expire'
-            label='Expiry'
+            id="expire"
+            label="Expiry"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('info')}
             options={[
               {
@@ -449,13 +462,13 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Renew */}
           <Input
-            id='renew'
-            label='Renew'
+            id="renew"
+            label="Renew"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('info')}
             options={[
               {
@@ -476,24 +489,26 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
-            title='Alt + A'
+            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            title="Alt + A"
             onClick={() =>
               setSelectedAccounts(
                 selectedAccounts.length > 0 ? [] : accounts.map(account => account._id)
               )
-            }>
+            }
+          >
             {selectedAccounts.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
           {/* Activate Many Button */}
           {selectedAccounts.some(id => !accounts.find(account => account._id === id)?.active) && (
             <button
-              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-white common-transition'
-              onClick={() => handleActivateAccounts(selectedAccounts, true)}>
+              className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+              onClick={() => handleActivateAccounts(selectedAccounts, true)}
+            >
               Activate
             </button>
           )}
@@ -501,8 +516,9 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Deactivate Many Button */}
           {selectedAccounts.some(id => accounts.find(account => account._id === id)?.active) && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => handleActivateAccounts(selectedAccounts, false)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => handleActivateAccounts(selectedAccounts, false)}
+            >
               Deactivate
             </button>
           )}
@@ -510,9 +526,10 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedAccounts.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              title='Alt + Delete'
-              onClick={() => setIsOpenConfirmModal(true)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              title="Alt + Delete"
+              onClick={() => setIsOpenConfirmModal(true)}
+            >
               Delete
             </button>
           )}
@@ -523,19 +540,19 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Accounts'
-        content='Are you sure that you want to delete these accounts?'
+        title="Delete Accounts"
+        content="Are you sure that you want to delete these accounts?"
         onAccept={() => handleDeleteAccounts(selectedAccounts)}
         isLoading={loadingAccounts.length > 0}
       />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} account{amount > 1 && 's'}
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid gap-21 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+      <div className="grid grid-cols-1 gap-21 md:grid-cols-2 lg:grid-cols-3">
         {accounts.map(account => (
           <AccountItem
             data={account}

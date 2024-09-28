@@ -17,13 +17,13 @@ export default async function UserLayout({
       <ContactFloating />
 
       {/* Main */}
-      <main className='px-21'>
-        <div className='max-w-1200 mx-auto flex flex-wrap lg:flex-nowrap mt-12 gap-21'>
+      <main className="px-21">
+        <div className="mx-auto mt-12 flex max-w-1200 flex-wrap gap-21 lg:flex-nowrap">
           {/* Sidebar */}
           <UserMenu />
 
           {/* Content */}
-          <div className='w-full bg-white rounded-medium shadow-medium p-8'>{children}</div>
+          <div className="w-full rounded-medium bg-white p-8 shadow-medium">{children}</div>
         </div>
       </main>
 

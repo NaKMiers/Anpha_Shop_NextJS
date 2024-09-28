@@ -25,7 +25,7 @@ import { MdDateRange, MdWork } from 'react-icons/md'
 function UserPage() {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector((state) => state.modal.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session, update } = useSession()
   const queryParams = useSearchParams()
   const router = useRouter()
@@ -99,7 +99,7 @@ function UserPage() {
 
   // MARK: Submit
   // handle update profile
-  const updateProfile: SubmitHandler<FieldValues> = async (data) => {
+  const updateProfile: SubmitHandler<FieldValues> = async data => {
     // start loading
     dispatch(setLoading(true))
 
@@ -243,36 +243,39 @@ function UserPage() {
 
   return (
     <div>
-      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>TÀI KHOẢN CỦA TÔI</h1>
+      <h1 className="mb-5 font-body text-3xl font-semibold tracking-wide">TÀI KHOẢN CỦA TÔI</h1>
 
-      <div className='grid grid-cols-12 gap-21'>
+      <div className="grid grid-cols-12 gap-21">
         {/* MARK: Avatar */}
-        <div className='flex flex-col items-center col-span-12 sm:col-span-6 lg:col-span-3 sm:border-r border-slate-400 p-2'>
-          <div className='relative flex justify-center items-center aspect-square max-w-[200px] mx-auto rounded-full overflow-hidden p-3 group'>
+        <div className="col-span-12 flex flex-col items-center border-slate-400 p-2 sm:col-span-6 sm:border-r lg:col-span-3">
+          <div className="group relative mx-auto flex aspect-square max-w-[200px] items-center justify-center overflow-hidden rounded-full p-3">
             {(imageUrl || user?.avatar) && (
               <Image
-                className='rounded-full common-transition w-full h-full object-cover'
+                className="common-transition h-full w-full rounded-full object-cover"
                 src={imageUrl || user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
                 width={160}
                 height={160}
-                alt='avatar'
+                alt="avatar"
               />
             )}
             <input
-              id='images'
+              id="images"
               hidden
-              placeholder=' '
+              placeholder=" "
               disabled={isLoading}
-              type='file'
+              type="file"
               onChange={handleAddFile}
               ref={avatarInputRef}
             />
             {user?.authType === 'local' && (
               <div
-                className='absolute top-0 left-0 flex opacity-0 group-hover:opacity-100 items-center justify-center bg-primary w-full h-full bg-opacity-50 common-transition cursor-pointer'
+                className="common-transition absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-primary bg-opacity-50 opacity-0 group-hover:opacity-100"
                 onClick={() => avatarInputRef.current?.click()}
               >
-                <FaCamera size={52} className='text-white wiggle-0' />
+                <FaCamera
+                  size={52}
+                  className="wiggle-0 text-white"
+                />
               </div>
             )}
           </div>
@@ -280,36 +283,40 @@ function UserPage() {
           {/* Save Avatar Button */}
           {user?.authType === 'local' && file && (
             <LoadingButton
-              className='mt-1.5 rounded-lg border border-green-500 text-green-500 text-sm py-[6px] px-3 font-semibold hover:bg-green-500 hover:text-white common-transition'
+              className="common-transition mt-1.5 rounded-lg border border-green-500 px-3 py-[6px] text-sm font-semibold text-green-500 hover:bg-green-500 hover:text-white"
               onClick={handleSaveAvatar}
-              text='Lưu'
+              text="Lưu"
               isLoading={isChangingAvatar}
             />
           )}
 
-          <div className='sm:hidden border-b border-slate-400 max-w-[200px] mx-auto mt-3 -mb-2' />
+          <div className="mx-auto -mb-2 mt-3 max-w-[200px] border-b border-slate-400 sm:hidden" />
         </div>
 
         {/* MARK: Basic Info */}
-        <div className='col-span-12 text-center sm:text-start sm:col-span-6 lg:col-span-9 grid grid-cols-12 gap-x-21'>
+        <div className="col-span-12 grid grid-cols-12 gap-x-21 text-center sm:col-span-6 sm:text-start lg:col-span-9">
           {/* Email */}
-          <div className='col-span-12 md:col-span-6 mb-3'>
-            <p className='font-semibold'>
+          <div className="col-span-12 mb-3 md:col-span-6">
+            <p className="font-semibold">
               Email{' '}
               {countDownEmail === 0 ? (
                 user.verifiedEmail ? (
-                  <span className='text-green-500 text-sm font-normal'>(Đã xác minh)</span>
+                  <span className="text-sm font-normal text-green-500">(Đã xác minh)</span>
                 ) : (
                   <span
-                    className='text-yellow-500 text-sm font-normal cursor-pointer'
+                    className="cursor-pointer text-sm font-normal text-yellow-500"
                     onClick={handleVerifyEmail}
                   >
                     (Xác minh ngay)
                   </span>
                 )
               ) : (
-                <span className='inlineitems-block text-slate-400 font-normal text-sm'>
-                  <FaCircleNotch size={14} className='-mt-1 animate-spin inline' /> {countDownEmail}
+                <span className="inlineitems-block text-sm font-normal text-slate-400">
+                  <FaCircleNotch
+                    size={14}
+                    className="-mt-1 inline animate-spin"
+                  />{' '}
+                  {countDownEmail}
                 </span>
               )}
             </p>
@@ -318,50 +325,50 @@ function UserPage() {
 
           {/* Username */}
           {user?.username ? (
-            <div className='col-span-12 md:col-span-6 mb-3'>
+            <div className="col-span-12 mb-3 md:col-span-6">
               {user?.username && (
                 <>
-                  <p className='font-semibold'>Username</p>
+                  <p className="font-semibold">Username</p>
                   <p>{user?.username}</p>
                 </>
               )}
             </div>
           ) : (
-            <div className='col-span-12 md:col-span-6 mb-3'>
-              <p className='font-semibold mb-1'>Nạp tiền</p>
+            <div className="col-span-12 mb-3 md:col-span-6">
+              <p className="mb-1 font-semibold">Nạp tiền</p>
               <Link
-                href='/recharge'
-                className='bg-primary px-3 py-[6px] rounded-extra-small inline-flex items-center gap-1 group hover:bg-secondary common-transition'
+                href="/recharge"
+                className="common-transition group inline-flex items-center gap-1 rounded-extra-small bg-primary px-3 py-[6px] hover:bg-secondary"
               >
-                <span className='font-bold font-body text-white text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
+                <span className="common-transition font-body text-[18px] font-bold tracking-[0.02em] text-white group-hover:text-white">
                   Nạp
                 </span>
                 <HiLightningBolt
                   size={20}
-                  className='animate-bounce text-white group-hover:text-white common-transition'
+                  className="common-transition animate-bounce text-white group-hover:text-white"
                 />
               </Link>
             </div>
           )}
 
           {/* Accumulated */}
-          <div className='col-span-12 md:col-span-6 mb-3'>
-            <p className='font-semibold'>Tổng tích lũy</p>
+          <div className="col-span-12 mb-3 md:col-span-6">
+            <p className="font-semibold">Tổng tích lũy</p>
             {user?.accumulated >= 0 && formatPrice(user?.accumulated)}
           </div>
 
           {/* Balance */}
-          <div className='col-span-12 md:col-span-6 mb-3'>
-            <p className='font-semibold'>Số dư tài khoản</p>
-            <div className='flex items-center gap-2 justify-center sm:justify-normal'>
-              {user?.balance >= 0 && <p className='text-green-500'>{formatPrice(user?.balance)}</p>}
+          <div className="col-span-12 mb-3 md:col-span-6">
+            <p className="font-semibold">Số dư tài khoản</p>
+            <div className="flex items-center justify-center gap-2 sm:justify-normal">
+              {user?.balance >= 0 && <p className="text-green-500">{formatPrice(user?.balance)}</p>}
               <Link
-                className='group flex-shrink-0 rounded-full border-2 border-primary hover:border-secondary p-[2px] hover:scale-110 common-transition'
-                href='/recharge'
+                className="common-transition group flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110 hover:border-secondary"
+                href="/recharge"
               >
                 <FaPlus
                   size={10}
-                  className='text-primary common-transition wiggle group-hover:text-secondary'
+                  className="common-transition wiggle text-primary group-hover:text-secondary"
                 />
               </Link>
             </div>
@@ -391,155 +398,140 @@ function UserPage() {
 
       {/* MARK: Detail */}
       <div>
-        <h3 className='text-2xl font-semibold mb-5'>
+        <h3 className="mb-5 text-2xl font-semibold">
           Thông tin chi tiết{' '}
           <button
-            className={`text-sky-500 text-base font-normal group ${isEditing ? 'text-slate-600' : ''}`}
+            className={`group text-base font-normal text-sky-500 ${isEditing ? 'text-slate-600' : ''}`}
             onClick={() => setIsEditing(!isEditing)}
           >
-            (<span className='group-hover:underline'>{!isEditing ? 'chỉnh sửa' : 'hủy'}</span>)
+            (<span className="group-hover:underline">{!isEditing ? 'chỉnh sửa' : 'hủy'}</span>)
           </button>
         </h3>
 
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-21'>
-          <div className='col-span-1'>
+        <div className="grid grid-cols-1 gap-21 lg:grid-cols-2">
+          <div className="col-span-1">
             {isEditing ? (
               <Input
-                id='lastname'
-                className='mt-2'
-                label='Họ'
+                id="lastname"
+                className="mt-2"
+                label="Họ"
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={IoText}
-                type='text'
+                type="text"
                 onFocus={() => clearErrors('lastname')}
               />
             ) : (
               <>
-                <span className='font-semibold'>Họ: </span>
+                <span className="font-semibold">Họ: </span>
                 <span className={!user?.lastname ? 'text-slate-400' : ''}>{user?.lastname}</span>
               </>
             )}
           </div>
-          <div className='col-span-1'>
+          <div className="col-span-1">
             {isEditing ? (
               <Input
-                id='firstname'
-                className='mt-2'
-                label='Tên'
+                id="firstname"
+                className="mt-2"
+                label="Tên"
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={IoText}
-                type='text'
+                type="text"
                 onFocus={() => clearErrors('firstname')}
               />
             ) : (
               <>
-                <span className='font-semibold'>Tên: </span>
+                <span className="font-semibold">Tên: </span>
                 <span className={!user?.firstname ? 'text-slate-400' : ''}>{user?.firstname}</span>
               </>
             )}
           </div>
-          <div className='col-span-1'>
+          <div className="col-span-1">
             {isEditing ? (
               <Input
-                id='birthday'
-                className='mt-2'
-                label='Ngày sinh'
+                id="birthday"
+                className="mt-2"
+                label="Ngày sinh"
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={MdDateRange}
-                type='date'
+                type="date"
                 maxDate={moment().local().format('YYYY-MM-DD')}
-                minDate='1900-01-01'
+                minDate="1900-01-01"
                 onFocus={() => clearErrors('birthday')}
               />
             ) : (
               <>
-                <span className='font-semibold'>Ngày sinh: </span>
+                <span className="font-semibold">Ngày sinh: </span>
                 <span className={!user?.birthday ? 'text-slate-400' : ''}>
                   {formatDate(user?.birthday)}
                 </span>
               </>
             )}
           </div>
-          <div className='col-span-1'>
+          <div className="col-span-1">
             {isEditing ? (
               <Input
-                id='job'
-                className='mt-2'
-                label='Nghề nghiệp'
+                id="job"
+                className="mt-2"
+                label="Nghề nghiệp"
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={MdWork}
-                type='text'
+                type="text"
                 onFocus={() => clearErrors('job')}
               />
             ) : (
               <>
-                <span className='font-semibold'>Nghề nghiệp: </span>
+                <span className="font-semibold">Nghề nghiệp: </span>
                 <span className={!user?.job ? 'text-slate-400' : ''}>{user?.job}</span>
               </>
             )}
           </div>
-          <div className='col-span-1'>
+          <div className="col-span-1">
             {isEditing ? (
               <Input
-                className='mt-2'
-                id='address'
-                label='Địa chỉ'
+                className="mt-2"
+                id="address"
+                label="Địa chỉ"
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={FaLocationDot}
-                type='text'
+                type="text"
                 onFocus={() => clearErrors('address')}
               />
             ) : (
               <>
-                <span className='font-semibold'>Địa chỉ: </span>
+                <span className="font-semibold">Địa chỉ: </span>
                 <span className={!user?.address ? 'text-slate-400' : ''}>{user?.address}</span>
               </>
             )}
           </div>
-          <div className='col-span-1'>
+          <div className="col-span-1">
             {isEditing ? (
               <Input
-                className='mt-2'
-                id='phone'
-                label='Số điện thoại'
+                className="mt-2"
+                id="phone"
+                label="Số điện thoại"
                 disabled={false}
                 register={register}
                 errors={errors}
                 icon={FaPhone}
-                type='number'
+                type="number"
                 onFocus={() => clearErrors('phone')}
               />
             ) : (
               <>
-                <span className='font-semibold'>Số điện thoại: </span>
+                <span className="font-semibold">Số điện thoại: </span>
                 <span className={!user?.phone ? 'text-slate-400' : ''}>
                   {user?.phone || 'Chưa có thông tin'}
                 </span>{' '}
-                {/* {countDownPhone === 0 ? (
-                  user.verifiedPhone ? (
-                    <span className='text-green-500 text-sm font-normal'>(Đã xác minh)</span>
-                  ) : (
-                    <span
-                      className='text-yellow-500 text-sm font-normal cursor-pointer'
-                      onClick={handleVerifyPhone}>
-                      (Xác minh ngay)
-                    </span>
-                  )
-                ) : (
-                  <span className='inlineitems-block text-slate-400 font-normal text-sm'>
-                    <FaCircleNotch size={14} className='-mt-1 animate-spin inline' /> {countDownPhone}
-                  </span>
-                )} */}
               </>
             )}
           </div>
@@ -548,9 +540,9 @@ function UserPage() {
         {/* MARK: Save */}
         {isEditing && (
           <LoadingButton
-            className='mt-5 mb-5 px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
+            className="common-transition mb-5 mt-5 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
             onClick={handleSubmit(updateProfile)}
-            text='Lưu'
+            text="Lưu"
             isLoading={isLoading}
           />
         )}

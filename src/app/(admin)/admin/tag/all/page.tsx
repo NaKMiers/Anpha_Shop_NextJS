@@ -251,25 +251,35 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
   }, [tags, selectedTags, handleDeleteTags, handleFilter, handleSubmit, handleResetFilter])
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* MARK: Top & Pagination */}
-      <AdminHeader title='All Tags' addLink='/admin/tag/add' />
-      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
+      <AdminHeader
+        title="All Tags"
+        addLink="/admin/tag/add"
+      />
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+      />
 
       {/* MARK: Filter */}
-      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+      <AdminMeta
+        handleFilter={handleSubmit(handleFilter)}
+        handleResetFilter={handleResetFilter}
+      >
         {/* Product Quantity */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='productQuantity'>
-            <span className='font-bold'>Product Quantity: </span>
+        <div className="col-span-12 flex flex-col md:col-span-4">
+          <label htmlFor="productQuantity">
+            <span className="font-bold">Product Quantity: </span>
             <span>{productQuantity}</span> - <span>{maxPQ}</span>
           </label>
           <input
-            id='productQuantity'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="productQuantity"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minPQ || 0}
             max={maxPQ || 0}
             value={productQuantity}
@@ -278,16 +288,16 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         </div>
 
         {/* MARK: Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-4'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-4">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sort'
+            id="sort"
+            label="Sort"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('sort')}
             options={[
               {
@@ -312,13 +322,13 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
 
           {/* Featured */}
           <Input
-            id='isFeatured'
-            label='Featured'
+            id="isFeatured"
+            label="Featured"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('isFeatured')}
             options={[
               {
@@ -335,16 +345,17 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
                 label: 'Off',
               },
             ]}
-            className='min-w-[120px]'
+            className="min-w-[120px]"
           />
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
-            onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}>
+            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}
+          >
             {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
@@ -352,20 +363,22 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             <>
               {/* Save Many Button */}
               <button
-                className='border border-green-500 text-green-500 rounded-lg px-3 py-2 hover:bg-green-500 hover:text-white common-transition'
+                className="common-transition rounded-lg border border-green-500 px-3 py-2 text-green-500 hover:bg-green-500 hover:text-white"
                 onClick={() =>
                   handleSaveEditingTags(editingValues.filter(value => selectedTags.includes(value._id)))
-                }>
+                }
+              >
                 Save All
               </button>
               {/* Cancel Many Button */}
               <button
-                className='border border-slate-400 text-slate-400 rounded-lg px-3 py-2 hover:bg-slate-400 hover:text-white common-transition'
+                className="common-transition rounded-lg border border-slate-400 px-3 py-2 text-slate-400 hover:bg-slate-400 hover:text-white"
                 onClick={() => {
                   // cancel editing values are selected
                   setEditingTags(editingTags.filter(id => !selectedTags.includes(id)))
                   setEditingValues(editingValues.filter(value => !selectedTags.includes(value._id)))
-                }}>
+                }}
+              >
                 Cancel
               </button>
             </>
@@ -375,8 +388,9 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           {!!selectedTags.length &&
             selectedTags.some(id => !tags.find(tag => tag._id === id)?.isFeatured) && (
               <button
-                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-white common-transition'
-                onClick={() => handleFeatureTags(selectedTags, true)}>
+                className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+                onClick={() => handleFeatureTags(selectedTags, true)}
+              >
                 Mark
               </button>
             )}
@@ -385,8 +399,9 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           {!!selectedTags.length &&
             selectedTags.some(id => tags.find(tag => tag._id === id)?.isFeatured) && (
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-                onClick={() => handleFeatureTags(selectedTags, false)}>
+                className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+                onClick={() => handleFeatureTags(selectedTags, false)}
+              >
                 Unmark
               </button>
             )}
@@ -394,8 +409,9 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           {/* Delete Many Button */}
           {!!selectedTags.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => setIsOpenConfirmModal(true)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => setIsOpenConfirmModal(true)}
+            >
               Delete
             </button>
           )}
@@ -406,19 +422,19 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Tags'
-        content='Are you sure that you want to delete these tags?'
+        title="Delete Tags"
+        content="Are you sure that you want to delete these tags?"
         onAccept={() => handleDeleteTags(selectedTags)}
         isLoading={loadingTags.length > 0}
       />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} tag{amount > 1 ? 's' : ''}
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-21 lg:grid-cols-5'>
+      <div className="grid grid-cols-1 gap-21 md:grid-cols-3 lg:grid-cols-5">
         {tags.map(tag => (
           <TagItem
             data={tag}

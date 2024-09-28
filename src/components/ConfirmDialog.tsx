@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { RiDonutChartFill } from 'react-icons/ri'
 
 interface ConfirmDialogProps {
@@ -84,40 +84,47 @@ function ConfirmDialog({
 
   return (
     <div
-      className='fixed z-40 top-0 left-0 h-screen text-dark w-screen hidden items-center justify-center p-21 bg-black bg-opacity-10 opacity-0 transition-all duration-300'
+      className="fixed left-0 top-0 z-40 hidden h-screen w-screen items-center justify-center bg-black bg-opacity-10 p-21 text-dark opacity-0 transition-all duration-300"
       ref={modalRef}
-      onClick={() => setOpen(false)}>
+      onClick={() => setOpen(false)}
+    >
       <div
-        className={`rounded-medium shadow-medium-light bg-white p-21 max-w-[500px] w-full max-h-[500px] opacity-0 transition-all duration-300 translate-y-8 ${className}`}
+        className={`max-h-[500px] w-full max-w-[500px] translate-y-8 rounded-medium bg-white p-21 opacity-0 shadow-medium-light transition-all duration-300 ${className}`}
         ref={modalBodyRef}
-        onClick={e => e.stopPropagation()}>
-        <h2 className='text-2xl font-semibold tracking-wide'>{title}</h2>
-        <hr className='my-2' />
+        onClick={e => e.stopPropagation()}
+      >
+        <h2 className="text-2xl font-semibold tracking-wide">{title}</h2>
+        <hr className="my-2" />
 
-        <p className='font-body tracking-wide'>{content}</p>
+        <p className="font-body tracking-wide">{content}</p>
 
-        <hr className='my-2' />
+        <hr className="my-2" />
 
-        <div className='flex items-center justify-end gap-3 select-none'>
+        <div className="flex select-none items-center justify-end gap-3">
           <button
-            className={`rounded-lg shadow-lg px-3 py-2 border border-slate-300 hover:bg-slate-300 hover:text-white common-transition ${
+            className={`common-transition rounded-lg border border-slate-300 px-3 py-2 shadow-lg hover:bg-slate-300 hover:text-white ${
               isLoading ? 'pointer-events-none' : ''
             }`}
             onClick={() => setOpen(false)}
-            disabled={isLoading}>
+            disabled={isLoading}
+          >
             {cancelLabel || 'Hủy'}
           </button>
           <button
-            className={`rounded-lg shadow-lg px-3 py-2 border text-${color}-500 hover:bg-secondary hover:border-secondary hover:text-white common-transition ${
+            className={`rounded-lg border px-3 py-2 shadow-lg text-${color}-500 common-transition hover:border-secondary hover:bg-secondary hover:text-white ${
               isLoading ? 'pointer-events-none border-slate-300' : `border-${color}-500`
             }`}
             onClick={() => {
               onAccept()
               setOpen(false)
             }}
-            disabled={isLoading}>
+            disabled={isLoading}
+          >
             {isLoading ? (
-              <RiDonutChartFill size={24} className='animate-spin text-slate-300' />
+              <RiDonutChartFill
+                size={24}
+                className="animate-spin text-slate-300"
+              />
             ) : (
               acceeptLabel || 'Đồng ý'
             )}
@@ -128,4 +135,4 @@ function ConfirmDialog({
   )
 }
 
-export default ConfirmDialog
+export default memo(ConfirmDialog)

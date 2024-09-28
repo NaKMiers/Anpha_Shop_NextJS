@@ -1,7 +1,7 @@
 'use client'
 
 import { carouselProductSamples } from '@/constansts/dataSamples'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import CarouselProduct from './item/CarouselItem'
 
 interface Slide3DProps {
@@ -32,13 +32,19 @@ function Slide3D({ products = carouselProductSamples, className = '' }: Slide3DP
 
   return (
     <div
-      className={`flex items-center h-full py-21 overflow-x-scroll no-scrollbar ${className}`}
-      ref={containerRef}>
+      className={`no-scrollbar flex h-full items-center overflow-x-scroll py-21 ${className}`}
+      ref={containerRef}
+    >
       {[...products, ...products].map((product, index) => {
-        return <CarouselProduct product={product} key={index} />
+        return (
+          <CarouselProduct
+            product={product}
+            key={index}
+          />
+        )
       })}
     </div>
   )
 }
 
-export default Slide3D
+export default memo(Slide3D)

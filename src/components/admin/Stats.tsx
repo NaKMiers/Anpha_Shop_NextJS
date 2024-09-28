@@ -4,11 +4,10 @@ import {
   newAccountSoldStatCalc,
   newOrderStatCalc,
   newUsedVoucherStatCalc,
-  newUserStatCalc,
   revenueStatCalc,
 } from '@/utils/stat'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCircleNotch, FaDollarSign } from 'react-icons/fa'
 import { MdNumbers } from 'react-icons/md'
@@ -67,74 +66,93 @@ function Stats({ by, className = '' }: statsProps) {
   return (
     <div className={`${className}`}>
       {/* Revenue Stat */}
-      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
-        <div className='flex justify-between items-center mb-3'>
-          <span className='font-body tracking-wider text-lg'>Revenue</span>
+      <div className="col-span-full rounded-lg bg-white p-21 shadow-lg lg:col-span-1">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="font-body text-lg tracking-wider">Revenue</span>
           {loading ? (
-            <FaCircleNotch size={18} className='animate-spin text-slate-400' />
+            <FaCircleNotch
+              size={18}
+              className="animate-spin text-slate-400"
+            />
           ) : (
             <FaDollarSign size={20} />
           )}
         </div>
 
         <p
-          className='font-semibold text-3xl mb-3 text-ellipsis line-clamp-1 block'
-          title={formatPrice(revenueStat?.[by][0] || 0)}>
+          className="mb-3 line-clamp-1 block text-ellipsis text-3xl font-semibold"
+          title={formatPrice(revenueStat?.[by][0] || 0)}
+        >
           {formatPrice(revenueStat?.[by][0] || 0)}
         </p>
         <p
-          className='text-slate-500 text-sm'
+          className="text-sm text-slate-500"
           title={`${revenueStat?.[by][2] > 0 ? '+' : ''}${revenueStat?.[by][2]}% from ${
             by === 'day' ? 'yesterday' : `last ${by}`
-          }`}>
+          }`}
+        >
           {revenueStat?.[by][2] > 0 ? '+' : ''}
           {revenueStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
 
       {/* New Order Stat */}
-      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
-        <div className='flex justify-between items-center mb-3'>
-          <span className='font-body tracking-wider text-lg'>New Order</span>
+      <div className="col-span-full rounded-lg bg-white p-21 shadow-lg lg:col-span-1">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="font-body text-lg tracking-wider">New Order</span>
           {loading ? (
-            <FaCircleNotch size={18} className='animate-spin text-slate-400' />
+            <FaCircleNotch
+              size={18}
+              className="animate-spin text-slate-400"
+            />
           ) : (
             <MdNumbers size={20} />
           )}
         </div>
 
-        <p className='font-semibold text-3xl mb-3' title={newOrderStat?.[by][0] || 0}>
+        <p
+          className="mb-3 text-3xl font-semibold"
+          title={newOrderStat?.[by][0] || 0}
+        >
           {newOrderStat?.[by][0]}
         </p>
         <p
-          className='text-slate-500 text-sm'
+          className="text-sm text-slate-500"
           title={`${newOrderStat?.[by][2] > 0 ? '+' : ''}${newOrderStat?.[by][2] || 0}% from ${
             by === 'day' ? 'yesterday' : `last ${by}`
-          }`}>
+          }`}
+        >
           {newOrderStat?.[by][2] > 0 ? '+' : ''}
           {newOrderStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
       </div>
 
       {/* Sale Account Stat */}
-      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
-        <div className='flex justify-between items-center mb-3'>
-          <span className='font-body tracking-wider text-lg'>Sale Accounts</span>
+      <div className="col-span-full rounded-lg bg-white p-21 shadow-lg lg:col-span-1">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="font-body text-lg tracking-wider">Sale Accounts</span>
           {loading ? (
-            <FaCircleNotch size={18} className='animate-spin text-slate-400' />
+            <FaCircleNotch
+              size={18}
+              className="animate-spin text-slate-400"
+            />
           ) : (
             <MdNumbers size={20} />
           )}
         </div>
 
-        <p className='font-semibold text-3xl mb-3' title={newAccountSoldStat?.[by][0] || 0}>
+        <p
+          className="mb-3 text-3xl font-semibold"
+          title={newAccountSoldStat?.[by][0] || 0}
+        >
           {newAccountSoldStat?.[by][0] || 0}
         </p>
         <p
-          className='text-slate-500 text-sm'
+          className="text-sm text-slate-500"
           title={`${newAccountSoldStat?.[by][2] > 0 ? '+' : ''}${
             newAccountSoldStat?.[by][2] || 0
-          }% from ${by === 'day' ? 'yesterday' : `last ${by}`}`}>
+          }% from ${by === 'day' ? 'yesterday' : `last ${by}`}`}
+        >
           {newAccountSoldStat?.[by][2] > 0 ? '+' : ''}
           {newAccountSoldStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
@@ -165,24 +183,31 @@ function Stats({ by, className = '' }: statsProps) {
       </div> */}
 
       {/* Used Voucher Stat */}
-      <div className='col-span-full lg:col-span-1 p-21 rounded-lg shadow-lg bg-white'>
-        <div className='flex justify-between items-center mb-3'>
-          <span className='font-body tracking-wider text-lg'>New Used Voucher</span>
+      <div className="col-span-full rounded-lg bg-white p-21 shadow-lg lg:col-span-1">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="font-body text-lg tracking-wider">New Used Voucher</span>
           {loading ? (
-            <FaCircleNotch size={18} className='animate-spin text-slate-400' />
+            <FaCircleNotch
+              size={18}
+              className="animate-spin text-slate-400"
+            />
           ) : (
             <MdNumbers size={20} />
           )}
         </div>
 
-        <p className='font-semibold text-3xl mb-3' title={newUsedVoucherStat?.[by][0] || 0}>
+        <p
+          className="mb-3 text-3xl font-semibold"
+          title={newUsedVoucherStat?.[by][0] || 0}
+        >
           {newUsedVoucherStat?.[by][0] || 0}
         </p>
         <p
-          className='text-slate-500 text-sm'
+          className="text-sm text-slate-500"
           title={`${newUsedVoucherStat?.[by][2] > 0 ? '+' : ''}${
             newUsedVoucherStat?.[by][2] || 0
-          }% from ${by === 'day' ? 'yesterday' : `last ${by}`}`}>
+          }% from ${by === 'day' ? 'yesterday' : `last ${by}`}`}
+        >
           {newUsedVoucherStat?.[by][2] > 0 ? '+' : ''}
           {newUsedVoucherStat?.[by][2] || 0}% from {by === 'day' ? 'yesterday' : `last ${by}`}
         </p>
@@ -191,4 +216,4 @@ function Stats({ by, className = '' }: statsProps) {
   )
 }
 
-export default Stats
+export default memo(Stats)

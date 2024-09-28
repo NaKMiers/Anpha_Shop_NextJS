@@ -6,7 +6,7 @@ import { getAllAccountsApi } from '@/requests'
 import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCircleNotch } from 'react-icons/fa'
 
@@ -76,28 +76,33 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
         }
 
         return (
-          <div className='flex gap-3 mb-4' key={account._id}>
+          <div
+            className="mb-4 flex gap-3"
+            key={account._id}
+          >
             <Link
               href={`/${(account.type as IProduct).slug}`}
-              className='flex-shrink-0 flex max-w-[80px] items-start w-full no-scrollbar'>
+              className="no-scrollbar flex w-full max-w-[80px] flex-shrink-0 items-start"
+            >
               <Image
-                className='aspect-video rounded-lg shadow-lg'
+                className="aspect-video rounded-lg shadow-lg"
                 src={(account.type as IProduct)?.images[0] || '/images/not-found.jpg'}
                 height={80}
                 width={80}
-                alt='thumbnail'
+                alt="thumbnail"
               />
             </Link>
-            <div className='font-body tracking-wider'>
-              <p className='font-semibold text-ellipsis line-clamp-1 -mt-1.5'>
+            <div className="font-body tracking-wider">
+              <p className="-mt-1.5 line-clamp-1 text-ellipsis font-semibold">
                 {(account.type as IProduct).title}
               </p>
               <Link
                 href={`/admin/account/all?search=${account.usingUser}`}
-                className='text-ellipsis line-clamp-1 text-sm'>
+                className="line-clamp-1 text-ellipsis text-sm"
+              >
                 {account.usingUser}
               </Link>
-              <p className={`text-ellipsis line-clamp-1 text-sm text-${color}`}>
+              <p className={`line-clamp-1 text-ellipsis text-sm text-${color}`}>
                 {moment(account.begin).format('DD/MM/YYYY HH:mm:ss')}
               </p>
             </div>
@@ -106,14 +111,18 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
       })}
 
       {/* Load More */}
-      <div className='flex items-center justify-center'>
+      <div className="flex items-center justify-center">
         <button
-          className={`flex items-center justify-center font-semibold rounded-md px-3 h-8 text-sm text-white border-2 hover:bg-white hover:text-dark common-transition ${
-            loading ? 'pointer-events-none bg-white border-slate-400' : 'bg-dark-100 border-dark'
+          className={`common-transition flex h-8 items-center justify-center rounded-md border-2 px-3 text-sm font-semibold text-white hover:bg-white hover:text-dark ${
+            loading ? 'pointer-events-none border-slate-400 bg-white' : 'border-dark bg-dark-100'
           }`}
-          onClick={handleLoadMore}>
+          onClick={handleLoadMore}
+        >
           {loading ? (
-            <FaCircleNotch size={18} className='animate-spin text-slate-400' />
+            <FaCircleNotch
+              size={18}
+              className="animate-spin text-slate-400"
+            />
           ) : (
             <span>({accounts.length}) Load more...</span>
           )}
@@ -123,4 +132,4 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
   )
 }
 
-export default RecentlySaleTab
+export default memo(RecentlySaleTab)

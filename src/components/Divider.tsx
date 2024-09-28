@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 interface DividerProps {
   size: number
@@ -7,7 +7,10 @@ interface DividerProps {
 
 function Divider({ size, border }: DividerProps) {
   return border ? (
-    <div className='border' style={{ marginTop: size * 4, marginBottom: size * 4 }} />
+    <div
+      className="border"
+      style={{ marginTop: size * 4, marginBottom: size * 4 }}
+    />
   ) : (
     <div
       style={{
@@ -17,4 +20,4 @@ function Divider({ size, border }: DividerProps) {
   )
 }
 
-export default Divider
+export default memo(Divider)

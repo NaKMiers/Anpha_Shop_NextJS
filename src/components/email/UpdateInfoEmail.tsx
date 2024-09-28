@@ -10,14 +10,14 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
         theme,
       }}
     >
-      <Body className='text-dark font-sans'>
-        <Container className='bg-white p-4'>
-          <Section className='inline-block mx-auto'>
-            <Row className='mb-3 w-full'>
+      <Body className="font-sans text-dark">
+        <Container className="bg-white p-4">
+          <Section className="mx-auto inline-block">
+            <Row className="mb-3 w-full">
               <Column>
-                <a href='https://anpha.shop'>
+                <a href="https://anpha.shop">
                   <Img
-                    className='aspect-square rounded-full'
+                    className="aspect-square rounded-full"
                     src={`${'https://anpha.shop'}/images/logo.jpg`}
                     width={35}
                     height={35}
@@ -26,8 +26,8 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
               </Column>
               <Column>
                 <a
-                  href='https://anpha.shop'
-                  className='text-2xl font-bold tracking-[0.3px] no-underline text-dark'
+                  href="https://anpha.shop"
+                  className="text-2xl font-bold tracking-[0.3px] text-dark no-underline"
                 >
                   .AnphaShop
                 </a>
@@ -36,26 +36,29 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
           </Section>
 
           <Section
-            className='rounded-lg overflow-hidden'
+            className="overflow-hidden rounded-lg"
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
             }}
           >
             <div>
-              <Img src='https://anpha.shop/banners/brand.jpg' className='w-full object-cover' />
+              <Img
+                src="https://anpha.shop/banners/brand.jpg"
+                className="w-full object-cover"
+              />
             </div>
 
-            <Row className='p-4'>
-              <Column className='font'>
-                <h1 className='text-2xl font-bold text-center'>Hi👋</h1>
-                <h2 className='text-xl font-semibold text-center'>
+            <Row className="p-4">
+              <Column className="font">
+                <h1 className="text-center text-2xl font-bold">Hi👋</h1>
+                <h2 className="text-center text-xl font-semibold">
                   Cập nhật lại thông tin tài khoản vì lí do bảo mật
                 </h2>
 
-                <div className='text-sm mt-8'>
+                <div className="mt-8 text-sm">
                   <p>
                     <b>Mã đơn hàng: </b>
-                    <span className='text-secondary tracking-wider font-semibold'>{data.code}</span>
+                    <span className="font-semibold tracking-wider text-secondary">{data.code}</span>
                   </p>
                   <p>
                     <b>Ngày đặt hàng: </b>
@@ -69,7 +72,7 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   </p>
                   <p>
                     <b>Trạng thái: </b>
-                    <span className='text-[#50C878]'>Đã giao</span>
+                    <span className="text-[#50C878]">Đã giao</span>
                   </p>
                   <p>
                     <b>Tổng tiền: </b>
@@ -77,29 +80,29 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   </p>
                   <p>
                     <b>Email: </b>
-                    <span className='text-[#0a82ed]'>{data.email}</span>
+                    <span className="text-[#0a82ed]">{data.email}</span>
                   </p>
                 </div>
 
                 {/* Message From Admin */}
                 {data.message && typeof data.message === 'string' && data.message.trim() && (
                   <div
-                    className='px-21 py-21/2 rounded-lg'
+                    className="rounded-lg px-21 py-21/2"
                     style={{
                       border: '1px solid rgb(0, 0, 0, 0.1)',
                     }}
                   >
-                    <p className='font-semibold underline tracking-wider text-sm text-slate-400 text-center m-0 mb-3'>
+                    <p className="m-0 mb-3 text-center text-sm font-semibold tracking-wider text-slate-400 underline">
                       Lời nhắn từ quản trị viên
                     </p>
-                    <p className='text-sm m-0'>{data.message}</p>
+                    <p className="m-0 text-sm">{data.message}</p>
                   </div>
                 )}
 
                 {/* Product */}
-                <p className='text-center mt-8'>
-                  <b className='text-xl'>
-                    Sản phẩm: <span className='italic text-slate-500'>{data.product.title}</span>
+                <p className="mt-8 text-center">
+                  <b className="text-xl">
+                    Sản phẩm: <span className="italic text-slate-500">{data.product.title}</span>
                   </b>
                 </p>
 
@@ -107,14 +110,14 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   style={{
                     border: '1px solid rgb(0, 0, 0, 0.1)',
                   }}
-                  className='border rounded-lg p-21/2 mb-4 bg-sky-50'
+                  className="mb-4 rounded-lg border bg-sky-50 p-21/2"
                 >
                   {/* New Info */}
-                  <p className='font-semibold text-secondary m-0 mb-4 underline text-sm'>
+                  <p className="m-0 mb-4 text-sm font-semibold text-secondary underline">
                     Thông tin mới:
                   </p>
 
-                  <p className='whitespace-pre m-0 max-w-[600px] overflow-x-auto border-b '>
+                  <p className="m-0 max-w-[600px] overflow-x-auto whitespace-pre border-b">
                     {data.newInfo.info}
                   </p>
                 </div>
@@ -123,17 +126,17 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
                   style={{
                     border: '1px solid rgb(0, 0, 0, 0.1)',
                   }}
-                  className='border rounded-lg p-21/2 mb-4 bg-slate-100 text-slate-500'
+                  className="mb-4 rounded-lg border bg-slate-100 p-21/2 text-slate-500"
                 >
                   {/* Old Info */}
-                  <p className='font-semibold m-0 mb-4 underline text-sm'>Thông tin cũ:</p>
+                  <p className="m-0 mb-4 text-sm font-semibold underline">Thông tin cũ:</p>
 
-                  <p className='whitespace-pre m-0 max-w-[600px] overflow-x-auto border-b '>
+                  <p className="m-0 max-w-[600px] overflow-x-auto whitespace-pre border-b">
                     {data.oldInfo.info}
                   </p>
                 </div>
 
-                <p className='text-center text-sm text-slate-600'>
+                <p className="text-center text-sm text-slate-600">
                   Xin lỗi bạn vì sự bất tiện này 😢, xin vui lòng đăng nhập lại và tiếp tục sử dịch vụ.
                   Xin chân thành cảm ơn 😊
                 </p>
@@ -141,26 +144,30 @@ export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
             </Row>
           </Section>
 
-          <div className='flex justify-center pt-[45px]'>
-            <Img className='max-w-full' width={620} src={`${'https://anpha.shop'}/banners/footer.jpg`} />
+          <div className="flex justify-center pt-[45px]">
+            <Img
+              className="max-w-full"
+              width={620}
+              src={`${'https://anpha.shop'}/banners/footer.jpg`}
+            />
           </div>
 
-          <p className='text-center text-xs text-slate-600'>
+          <p className="text-center text-xs text-slate-600">
             © 2023 | Anpha Shop - Developed by Nguyen Anh Khoa, All rights reserved.
           </p>
 
-          <div className='text-center'>
+          <div className="text-center">
             <a
-              href='https://www.messenger.com/t/170660996137305'
-              target='_blank'
-              rel='noreferrer'
-              className='inline-block ml-2'
+              href="https://www.messenger.com/t/170660996137305"
+              target="_blank"
+              rel="noreferrer"
+              className="ml-2 inline-block"
             >
               <Img
                 src={`${'https://anpha.shop'}/images/messenger.jpg`}
                 width={35}
                 height={35}
-                alt='messenger'
+                alt="messenger"
               />
             </a>
           </div>

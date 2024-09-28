@@ -5,7 +5,7 @@ import { formatPrice } from '@/utils/number'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { FaHistory, FaPhone, FaPlus, FaUser, FaUserPlus, FaUserSecret } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 import { FiLogIn } from 'react-icons/fi'
@@ -57,7 +57,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
       <div
         className={`${
           open ? 'block' : 'hidden'
-        } fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-30 ${className}`}
+        } fixed bottom-0 left-0 right-0 top-0 z-30 h-screen w-screen ${className}`}
         onClick={() => setOpen(false)}
       />
 
@@ -65,113 +65,152 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
       <ul
         className={`${
           open
-            ? 'max-h-screen sm:max-w-full sm:w-[300px] sm:max-h-[350px] p-3 opacity-1x'
-            : 'max-h-0 sm:max-h-0 p-0 sm:max-w-0 sm:w-0 opacity-0x'
+            ? 'opacity-1x max-h-screen p-3 sm:max-h-[350px] sm:w-[300px] sm:max-w-full'
+            : 'opacity-0x max-h-0 p-0 sm:max-h-0 sm:w-0 sm:max-w-0'
         } ${
           curUser && !curUser?._id ? 'hidden' : ''
-        } w-full h-[calc(100vh_-_72px)] sm:h-auto overflow-hidden transition-all duration-300 absolute top-[72px] sm:top-[60px] right-0 sm:right-21 z-30 sm:rounded-medium sm:shadow-sky-400 shadow-md bg-dark-100`}
+        } absolute right-0 top-[72px] z-30 h-[calc(100vh_-_72px)] w-full overflow-hidden bg-dark-100 shadow-md transition-all duration-300 sm:right-21 sm:top-[60px] sm:h-auto sm:rounded-medium sm:shadow-sky-400`}
       >
         {curUser ? (
           // MARK: User Logged In
           curUser?._id && (
             <>
               <Link
-                href='/user'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg group hover:bg-secondary common-transition'
+                href="/user"
+                className="common-transition group flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
                 <Image
-                  className='aspect-square rounded-full wiggle-0'
+                  className="wiggle-0 aspect-square rounded-full"
                   src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
                   height={40}
                   width={40}
-                  alt='avatar'
+                  alt="avatar"
                 />
-                <span className='font-semibold text-xl'>
+                <span className="text-xl font-semibold">
                   {curUser?.authType === 'local'
                     ? curUser?.username
                     : curUser?.firstname + ' ' + curUser?.lastname}
                 </span>
               </Link>
 
-              <li className='flex items-center gap-1 py-2 px-3 rounded-lg hover:bg-secondary common-transition'>
-                <span className='font-semibold'>Số dư: </span>
+              <li className="common-transition flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
+                <span className="font-semibold">Số dư: </span>
                 <span>{formatPrice(curUser?.balance)}</span>
                 <Link
-                  className='group flex-shrink-0 rounded-full ml-1 border-2 border-primary p-[2px] hover:scale-110 common-transition'
-                  href='/recharge'
+                  className="common-transition group ml-1 flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110"
+                  href="/recharge"
                   onClick={() => setOpen(false)}
                 >
-                  <FaPlus size={11} className='text-primary common-transition' />
+                  <FaPlus
+                    size={11}
+                    className="common-transition text-primary"
+                  />
                 </Link>
               </li>
 
-              <li className='group' onClick={() => setOpen(false)}>
+              <li
+                className="group"
+                onClick={() => setOpen(false)}
+              >
                 <Link
-                  href='/user'
-                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                  href="/user"
+                  className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
-                  <FaUser size={18} className='wiggle w-[22px]' />
-                  <span className='font-body tracking-wide text-[15px]'>Thông tin tài khoản</span>
+                  <FaUser
+                    size={18}
+                    className="wiggle w-[22px]"
+                  />
+                  <span className="font-body text-[15px] tracking-wide">Thông tin tài khoản</span>
                 </Link>
               </li>
-              <li className='group' onClick={() => setOpen(false)}>
+              <li
+                className="group"
+                onClick={() => setOpen(false)}
+              >
                 <Link
-                  href='/cart'
+                  href="/cart"
                   prefetch={false}
-                  className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                  className="common-transition relative flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
-                  <FaCartShopping size={18} className='wiggle w-[22px]' />
-                  <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
+                  <FaCartShopping
+                    size={18}
+                    className="wiggle w-[22px]"
+                  />
+                  <span className="font-body text-[15px] tracking-wide">Giỏ hàng</span>
                   {!!cartLength && (
-                    <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
+                    <span className="absolute right-2 top-1/2 flex h-5 min-w-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary px-1 text-center text-xs font-semibold">
                       {cartLength}
                     </span>
                   )}
                 </Link>
               </li>
-              <li className='group' onClick={() => setOpen(false)}>
+              <li
+                className="group"
+                onClick={() => setOpen(false)}
+              >
                 <Link
-                  href='/user/order-history'
-                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                  href="/user/order-history"
+                  className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
-                  <FaHistory size={18} className='wiggle w-[22px]' />
-                  <span className='font-body tracking-wide text-[15px]'>Lịch sử mua hàng</span>
+                  <FaHistory
+                    size={18}
+                    className="wiggle w-[22px]"
+                  />
+                  <span className="font-body text-[15px] tracking-wide">Lịch sử mua hàng</span>
                 </Link>
               </li>
-              <li className='group' onClick={() => setOpen(false)}>
+              <li
+                className="group"
+                onClick={() => setOpen(false)}
+              >
                 <a
-                  href='https://www.messenger.com/t/170660996137305'
-                  className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                  href="https://www.messenger.com/t/170660996137305"
+                  className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
-                  <FaPhone size={18} className='wiggle w-[22px]' />
-                  <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
+                  <FaPhone
+                    size={18}
+                    className="wiggle w-[22px]"
+                  />
+                  <span className="font-body text-[15px] tracking-wide">Liên hệ</span>
                 </a>
               </li>
               {curUser?.role !== 'user' && (
-                <li className='group' onClick={() => setOpen(false)}>
+                <li
+                  className="group"
+                  onClick={() => setOpen(false)}
+                >
                   <Link
                     href={
                       ['admin', 'editor'].includes(curUser?.role)
                         ? '/admin/order/all'
                         : '/admin/summary/all'
                     }
-                    className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                    className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                   >
-                    <FaUserSecret size={18} className='wiggle w-[22px]' />
-                    <span className='font-body tracking-wide text-[15px] text-primary'>
+                    <FaUserSecret
+                      size={18}
+                      className="wiggle w-[22px]"
+                    />
+                    <span className="font-body text-[15px] tracking-wide text-primary">
                       {/* {curUser?.role.charAt(0).toUpperCase() + curUser?.role.slice(1)} */}
                       {['admin', 'editor'].includes(curUser?.role) ? 'Orders' : 'Collaborator'}
                     </span>
                   </Link>
                 </li>
               )}
-              <li className='group' onClick={() => setOpen(false)}>
+              <li
+                className="group"
+                onClick={() => setOpen(false)}
+              >
                 <button
-                  className='flex items-center w-full gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                  className="common-transition flex w-full items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                   onClick={() => signOut()}
                 >
-                  <TbLogout size={20} className='wiggle w-[22px]' />
-                  <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng xuất</span>
+                  <TbLogout
+                    size={20}
+                    className="wiggle w-[22px]"
+                  />
+                  <span className="font-body text-[15px] tracking-wide text-yellow-500">Đăng xuất</span>
                 </button>
               </li>
             </>
@@ -179,45 +218,69 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
         ) : (
           // MARK: User Not Logged In
           <>
-            <li className='group' onClick={() => setOpen(false)}>
+            <li
+              className="group"
+              onClick={() => setOpen(false)}
+            >
               <Link
-                href='/cart'
-                className='flex items-center relative gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                href="/cart"
+                className="common-transition relative flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
-                <FaCartShopping size={18} className='wiggle w-[22px]' />
-                <span className='font-body tracking-wide text-[15px]'>Giỏ hàng</span>
+                <FaCartShopping
+                  size={18}
+                  className="wiggle w-[22px]"
+                />
+                <span className="font-body text-[15px] tracking-wide">Giỏ hàng</span>
                 {!!cartLength && (
-                  <span className='absolute top-1/2 right-2 -translate-y-1/2 font-semibold rounded-full bg-primary min-w-5 flex items-center justify-center px-1 h-5 text-center text-xs'>
+                  <span className="absolute right-2 top-1/2 flex h-5 min-w-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary px-1 text-center text-xs font-semibold">
                     {cartLength}
                   </span>
                 )}
               </Link>
             </li>
-            <li className='group' onClick={() => setOpen(false)}>
+            <li
+              className="group"
+              onClick={() => setOpen(false)}
+            >
               <a
-                href='https://www.messenger.com/t/170660996137305'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                href="https://www.messenger.com/t/170660996137305"
+                className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
-                <FaPhone size={18} className='wiggle w-[22px]' />
-                <span className='font-body tracking-wide text-[15px]'>Liên hệ</span>
+                <FaPhone
+                  size={18}
+                  className="wiggle w-[22px]"
+                />
+                <span className="font-body text-[15px] tracking-wide">Liên hệ</span>
               </a>
             </li>
-            <li className='group' onClick={() => setOpen(false)}>
+            <li
+              className="group"
+              onClick={() => setOpen(false)}
+            >
               <Link
-                href='/auth/login'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                href="/auth/login"
+                className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
-                <FiLogIn size={18} className='wiggle w-[22px]' />
-                <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng nhập</span>
+                <FiLogIn
+                  size={18}
+                  className="wiggle w-[22px]"
+                />
+                <span className="font-body text-[15px] tracking-wide text-yellow-500">Đăng nhập</span>
               </Link>
             </li>
-            <li className='group' onClick={() => setOpen(false)}>
+            <li
+              className="group"
+              onClick={() => setOpen(false)}
+            >
               <Link
-                href='/auth/register'
-                className='flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-secondary common-transition'
+                href="/auth/register"
+                className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
-                <FaUserPlus size={18} className='wiggle w-[22px]' />
-                <span className='font-body tracking-wide text-[15px] text-yellow-500'>Đăng ký</span>
+                <FaUserPlus
+                  size={18}
+                  className="wiggle w-[22px]"
+                />
+                <span className="font-body text-[15px] tracking-wide text-yellow-500">Đăng ký</span>
               </Link>
             </li>
           </>
@@ -227,4 +290,4 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
   )
 }
 
-export default Menu
+export default memo(Menu)

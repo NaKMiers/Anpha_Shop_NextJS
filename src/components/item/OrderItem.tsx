@@ -7,7 +7,7 @@ import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import CartItem from '../CartItem'
 import LoadingButton from '../LoadingButton'
@@ -65,93 +65,103 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
   }, [dispatch, order.items, router])
 
   return (
-    <div className={`border rounded-medium px-21 py-4 ${className}`}>
+    <div className={`rounded-medium border px-21 py-4 ${className}`}>
       {/* MARK: Head Info */}
-      <div className='flex flex-wrap items-center justify-between gap-x-3'>
+      <div className="flex flex-wrap items-center justify-between gap-x-3">
         <div>
-          <span className='font-semibold'>Mã hóa đơn: </span>
-          <span className='text-primary font-semibold'>{order.code}</span>
+          <span className="font-semibold">Mã hóa đơn: </span>
+          <span className="font-semibold text-primary">{order.code}</span>
         </div>
         <div>
-          <span className='font-semibold'>Ngày đặt hàng: </span>
+          <span className="font-semibold">Ngày đặt hàng: </span>
           <span>{formatTime(order.createdAt)}</span>
         </div>
       </div>
 
-      <div className='flex flex-wrap items-center justify-between gap-x-3'>
+      <div className="flex flex-wrap items-center justify-between gap-x-3">
         <div>
-          <span className='font-semibold'>Trạng thái: </span>
+          <span className="font-semibold">Trạng thái: </span>
           <span
             className={
               order.status === 'pending'
                 ? 'text-yellow-500'
                 : order.status === 'cancel'
-                ? 'text-slate-400'
-                : order.status === 'done'
-                ? 'text-green-500'
-                : ''
-            }>
+                  ? 'text-slate-400'
+                  : order.status === 'done'
+                    ? 'text-green-500'
+                    : ''
+            }
+          >
             {order.status === 'pending'
               ? 'Đang xử lí'
               : order.status === 'cancel'
-              ? 'Đã hủy'
-              : order.status === 'done'
-              ? 'Hoàn tất'
-              : ''}
+                ? 'Đã hủy'
+                : order.status === 'done'
+                  ? 'Hoàn tất'
+                  : ''}
           </span>
         </div>
         <div>
-          <span className='font-semibold'>Phương thức thanh toán: </span>
+          <span className="font-semibold">Phương thức thanh toán: </span>
           <span
             className={`font-semibold ${
               order.paymentMethod === 'momo' ? 'text-[#a1396c]' : 'text-green-600'
-            }`}>
+            }`}
+          >
             {order.paymentMethod.toUpperCase()}
           </span>
         </div>
       </div>
 
       {order.voucherApplied && (
-        <div className='flex flex-wrap items-center justify-between gap-x-3'>
+        <div className="flex flex-wrap items-center justify-between gap-x-3">
           <div>
-            <span className='font-semibold'>Voucher: </span>
+            <span className="font-semibold">Voucher: </span>
             <span
               title={(order.voucherApplied as IVoucher).desc}
-              className='font-semibold text-slate-400'>
+              className="font-semibold text-slate-400"
+            >
               {(order.voucherApplied as IVoucher).code}
             </span>
           </div>
           <div>
-            <span className='font-semibold'>Giảm giá: </span>
-            <span className='text-secondary'>{formatPrice(order.discount)}</span>
+            <span className="font-semibold">Giảm giá: </span>
+            <span className="text-secondary">{formatPrice(order.discount)}</span>
           </div>
         </div>
       )}
 
       {/* MARK:  Items */}
       {order.items.map(item => (
-        <CartItem cartItem={item} localCartItem isCheckout className='mt-4' key={item.product._id} />
+        <CartItem
+          cartItem={item}
+          localCartItem
+          isCheckout
+          className="mt-4"
+          key={item.product._id}
+        />
       ))}
 
-      <hr className='mt-8 mb-3' />
+      <hr className="mb-3 mt-8" />
 
       {/* Total */}
-      <div className='flex justify-end items-center gap-2 mb-2'>
+      <div className="mb-2 flex items-center justify-end gap-2">
         <span>Tổng: </span>
-        <span className='text-green-500 font-semibold text-2xl'>{formatPrice(order.total)}</span>
+        <span className="text-2xl font-semibold text-green-500">{formatPrice(order.total)}</span>
       </div>
 
       {/* MARK: Action Buttons */}
-      <div className='flex justify-end gap-2'>
+      <div className="flex justify-end gap-2">
         <LoadingButton
-          className='px-[14px] py-[6px] rounded-md font-semibold bg-secondary hover:bg-primary text-white hover:text-dark common-transition'
+          className="common-transition rounded-md bg-secondary px-[14px] py-[6px] font-semibold text-white hover:bg-primary hover:text-dark"
           onClick={handleReBuying}
-          text='Mua lại'
+          text="Mua lại"
           isLoading={isReBuying}
         />
         <Link
           href={`/user/order/${order?.code}`}
-          className='px-[14px] py-[6px] rounded-md font-semibold bg-primary hover:bg-secondary hover:text-white common-transition'>
+          className="common-transition rounded-md bg-primary px-[14px] py-[6px] font-semibold hover:bg-secondary hover:text-white"
+        >
           Chi tiết
         </Link>
       </div>
@@ -159,4 +169,4 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
   )
 }
 
-export default OrderItem
+export default memo(OrderItem)

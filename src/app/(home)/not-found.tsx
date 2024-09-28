@@ -3,26 +3,30 @@ import Link from 'next/link'
 
 function NotFoundPage() {
   return (
-    <div className='pt-20 text-center text-white font-body tracking-wider'>
-      <h1 className='mb-5 text-3xl font-semibold'>Không tìm thấy sản phẩm.</h1>
+    <div className="pt-20 text-center font-body tracking-wider text-white">
+      <h1 className="mb-5 text-3xl font-semibold">Không tìm thấy sản phẩm.</h1>
 
-      <Link href='/' className='flex justify-center'>
+      <Link
+        href="/"
+        className="flex justify-center"
+      >
         <Image
-          className='rounded-medium shadow-medium-light'
-          src='/images/404-page.jpg'
+          className="rounded-medium shadow-medium-light"
+          src="/images/404-page.jpg"
           width={500}
           height={500}
-          alt='page-not-found'
+          alt="page-not-found"
         />
       </Link>
 
-      <div className='mt-21'>
-        <p className='text-xl'>
+      <div className="mt-21">
+        <p className="text-xl">
           Quay lại trang chủ{' '}
           <Link
-            href='/'
+            href="/"
             prefetch={false}
-            className='underline text-sky-400 hover:text-sky-600 common-transition'>
+            className="common-transition text-sky-400 underline hover:text-sky-600"
+          >
             Trang chủ
           </Link>
           .

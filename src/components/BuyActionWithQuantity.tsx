@@ -10,9 +10,9 @@ import mongoose from 'mongoose'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaCartPlus, FaEdit, FaMinus, FaPlus, FaRedditAlien } from 'react-icons/fa'
+import { FaCartPlus, FaMinus, FaPlus } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 
@@ -24,8 +24,8 @@ interface BuyActionWithQuantityProps {
 function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantityProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector((state) => state.modal.isLoading)
-  const localCart = useAppSelector((state) => state.cart.localItems)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
+  const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -209,9 +209,9 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   return (
     <>
       {/* MARK: Main */}
-      <div className={`select-none inline-flex rounded-md overflow-hidden my-3 ${className}`}>
+      <div className={`my-3 inline-flex select-none overflow-hidden rounded-md ${className}`}>
         <button
-          className={`group flex items-center justify-center px-3 py-[10px] group rounded-tl-md rounded-bl-md hover:bg-secondary border common-transition ${
+          className={`common-transition group flex items-center justify-center rounded-bl-md rounded-tl-md border px-3 py-[10px] hover:bg-secondary ${
             quantity <= 1
               ? 'pointer-events-none border-slate-100 bg-slate-100'
               : 'border border-secondary'
@@ -221,32 +221,32 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
         >
           <FaMinus
             size={16}
-            className={`group-hover:text-white wiggle ${
+            className={`wiggle group-hover:text-white ${
               quantity <= 1 ? 'text-slate-300' : 'text-secondary'
             }`}
           />
         </button>
         <input
-          className='max-w-14 px-2 border-y border-slate-100 outline-none text-center text-lg text-dark font-semibold font-body'
-          type='text'
-          inputMode='numeric'
+          className="max-w-14 border-y border-slate-100 px-2 text-center font-body text-lg font-semibold text-dark outline-none"
+          type="text"
+          inputMode="numeric"
           value={quantity}
           disabled={isLoading || (product?.stock || 0) <= 0}
-          onChange={(e) => setQuantity(+e.target.value || 0)}
-          onBlur={(e) => handleQuantity(+e.target.value, true)}
+          onChange={e => setQuantity(+e.target.value || 0)}
+          onBlur={e => handleQuantity(+e.target.value, true)}
         />
         <button
-          className={`group flex items-center justify-center px-3 py-[10px] group rounded-tr-md rounded-br-md hover:bg-secondary border common-transition ${
+          className={`common-transition group flex items-center justify-center rounded-br-md rounded-tr-md border px-3 py-[10px] hover:bg-secondary ${
             quantity >= product?.stock!
               ? 'pointer-events-none border-slate-100 bg-slate-100'
-              : ' border-secondary'
+              : 'border-secondary'
           }`}
           disabled={quantity === product?.stock || isLoading || (product?.stock || 0) <= 0}
           onClick={() => handleQuantity(1)}
         >
           <FaPlus
             size={16}
-            className={`group-hover:text-white wiggle ${
+            className={`wiggle group-hover:text-white ${
               quantity >= product?.stock! ? 'text-slate-300' : 'text-secondary'
             }`}
           />
@@ -254,9 +254,9 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
       </div>
 
       {/* MARK: Action Buttons */}
-      <div className='flex items-center flex-row-reverse md:flex-row justify-start gap-3 mt-2'>
+      <div className="mt-2 flex flex-row-reverse items-center justify-start gap-3 md:flex-row">
         <button
-          className={`bg-secondary rounded-md text-white text-xl px-3 py-[5px] font-semibold font-body hover:bg-primary common-transition  ${
+          className={`common-transition rounded-md bg-secondary px-3 py-[5px] font-body text-xl font-semibold text-white hover:bg-primary ${
             isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleBuyNow}
@@ -265,24 +265,33 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
           MUA NGAY
         </button>
         <button
-          className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 common-transition ${
+          className={`hover:bg-primary-600 common-transition group rounded-md bg-primary px-3 py-2 ${
             isLoading || (product?.stock || 0) <= 0 ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}
           disabled={isLoading || (product?.stock || 0) <= 0}
         >
           {isLoading ? (
-            <RiDonutChartFill size={22} className='animate-spin text-white' />
+            <RiDonutChartFill
+              size={22}
+              className="animate-spin text-white"
+            />
           ) : (
-            <FaCartPlus size={22} className='text-white wiggle' />
+            <FaCartPlus
+              size={22}
+              className="wiggle text-white"
+            />
           )}
         </button>
         {['admin', 'editor'].includes(curUser?.role) && (
           <Link
             href={`/admin/product/all?_id=${product?._id}`}
-            className='flex items-center justify-center h-[38px] border border-yellow-400 rounded-md px-3 group hover:bg-primary-600 common-transition'
+            className="hover:bg-primary-600 common-transition group flex h-[38px] items-center justify-center rounded-md border border-yellow-400 px-3"
           >
-            <MdEdit size={22} className='wiggle text-yellow-400' />
+            <MdEdit
+              size={22}
+              className="wiggle text-yellow-400"
+            />
           </Link>
         )}
       </div>
@@ -290,4 +299,4 @@ function BuyActionWithQuantity({ product, className = '' }: BuyActionWithQuantit
   )
 }
 
-export default BuyActionWithQuantity
+export default memo(BuyActionWithQuantity)

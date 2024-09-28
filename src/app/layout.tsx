@@ -55,14 +55,20 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions)
 
   return (
-    <html lang='vi'>
-      <body className='text-dark' suppressHydrationWarning={true}>
+    <html lang="vi">
+      <body
+        className="text-dark"
+        suppressHydrationWarning={true}
+      >
         {/* Google Analytics Script */}
         <Script
-          strategy='afterInteractive'
+          strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=G-XHR0P5M0ZT`}
         />
-        <Script id='google-analytics' strategy='afterInteractive'>
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+        >
           {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}

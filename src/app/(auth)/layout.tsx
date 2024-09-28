@@ -6,8 +6,8 @@ export default async function RootLayout({
   return (
     <>
       {/* Main */}
-      <main className='px-21'>
-        <div className='max-w-1200 mx-auto'>{children}</div>
+      <main className="px-21">
+        <div className="mx-auto max-w-1200">{children}</div>
       </main>
     </>
   )

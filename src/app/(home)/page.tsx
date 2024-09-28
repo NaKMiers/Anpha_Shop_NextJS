@@ -61,32 +61,42 @@ async function HomePage() {
   }
 
   return (
-    <div className='min-h-screen'>
+    <div className="min-h-screen">
       {/* MARK: Add JSON-LD */}
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* UtilBar */}
       <UtilBar categories={categories} />
 
       {/* MARK: Banner */}
-      <Banner carouselProducts={carouselProducts} tags={tags} categories={categories} />
+      <Banner
+        carouselProducts={carouselProducts}
+        tags={tags}
+        categories={categories}
+      />
 
       <Divider size={28} />
 
       {/* MARK: Top #10 */}
-      <h2 className='max-w-1200 mx-auto text-nowrap flex items-center gap-4 my-11 w-full justify-between text-white font-sans text-4xl tracking-wide font-light before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full text-center after:bg-white sm:text-nowrap'>
-        Top <span className='font-semibold text-5xl italic text-orange-500 box-'>#10</span>
+      <h2 className="mx-auto my-11 flex w-full max-w-1200 items-center justify-between gap-4 text-nowrap text-center font-sans text-4xl font-light tracking-wide text-white before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full after:bg-white sm:text-nowrap">
+        Top <span className="box- text-5xl font-semibold italic text-orange-500">#10</span>
       </h2>
 
-      <section className='max-w-1200 mx-auto px-4'>
-        <GroupProducts products={bestSellerProducts} bestSeller />
+      <section className="mx-auto max-w-1200 px-4">
+        <GroupProducts
+          products={bestSellerProducts}
+          bestSeller
+        />
       </section>
 
       <Divider size={28} />
 
       {/* MARK: Products */}
-      <Heading title='Sản phẩm' />
-      <section className='max-w-1200 mx-auto px-4'>
+      <Heading title="Sản phẩm" />
+      <section className="mx-auto max-w-1200 px-4">
         {productsByCategoryGroups.map((group, index) => (
           <GroupProducts
             category={group.category}
@@ -100,13 +110,13 @@ async function HomePage() {
       <Divider size={28} />
 
       {/* MARK: About */}
-      <Heading title='Về Anpha Shop' />
+      <Heading title="Về Anpha Shop" />
       <About />
 
       <Divider size={28} />
 
       {/* MARK: Choose Me */}
-      <Heading title='Tại sao chọn tôi' />
+      <Heading title="Tại sao chọn tôi" />
       <ChooseMe />
     </div>
   )

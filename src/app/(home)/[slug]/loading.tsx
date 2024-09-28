@@ -12,51 +12,66 @@ import { TbPackages } from 'react-icons/tb'
 
 async function LoadingProductPage() {
   return (
-    <div className='pt-9'>
+    <div className="pt-9">
       {/* MARK: Top */}
-      <section className='bg-white p-8 flex flex-col gap-x-21 gap-y-21/2 md:flex-row rounded-medium shadow-medium'>
-        <div className='w-full md:w-[45%] md:max-w-[500px]'>
-          <div className='relative aspect-video shadow-xl rounded-md'>
+      <section className="flex flex-col gap-x-21 gap-y-21/2 rounded-medium bg-white p-8 shadow-medium md:flex-row">
+        <div className="w-full md:w-[45%] md:max-w-[500px]">
+          <div className="relative aspect-video rounded-md shadow-xl">
             <Slider>
-              <div className='w-full h-full loading rounded-lg' />
+              <div className="loading h-full w-full rounded-lg" />
             </Slider>
           </div>
 
           {/* Link */}
-          <LoadingLinkBar className='mt-21' />
+          <LoadingLinkBar className="mt-21" />
         </div>
 
-        <div className='md:w-[55%]'>
-          <div className='h-2 w-full mt-3 mb-5 rounded loading' />
-          <div className='h-2 w-full mt-3 mb-5 rounded loading' />
+        <div className="md:w-[55%]">
+          <div className="loading mb-5 mt-3 h-2 w-full rounded" />
+          <div className="loading mb-5 mt-3 h-2 w-full rounded" />
 
           <LoadingPrice big />
 
-          <div className='flex flex-col gap-3 text-xl font-body tracking-wide mt-5'>
+          <div className="mt-5 flex flex-col gap-3 font-body text-xl tracking-wide">
             {/* Category */}
-            <div className='flex items-center flex-wrap gap-1'>
-              <MdCategory className='w-7 text-darker' size={26} />
-              <span className='rounded loading h-2 w-[80px] mr-2' />
-              <span className='rounded loading h-2 w-[25px] mr-2' />
+            <div className="flex flex-wrap items-center gap-1">
+              <MdCategory
+                className="w-7 text-darker"
+                size={26}
+              />
+              <span className="loading mr-2 h-2 w-[80px] rounded" />
+              <span className="loading mr-2 h-2 w-[25px] rounded" />
             </div>
 
             {/* Tags */}
-            <div className='flex items-center gap-1 flex-wrap'>
-              <FaTags className='w-7 text-darker' size={20} />
-              <span className='rounded loading h-2 w-[80px] mr-2' />
+            <div className="flex flex-wrap items-center gap-1">
+              <FaTags
+                className="w-7 text-darker"
+                size={20}
+              />
+              <span className="loading mr-2 h-2 w-[80px] rounded" />
               {Array.from({ length: 2 }).map((_, index) => (
-                <span className='rounded loading h-2 w-[54px] mr-2' key={index} />
+                <span
+                  className="loading mr-2 h-2 w-[54px] rounded"
+                  key={index}
+                />
               ))}
             </div>
-            <div className='flex items-center gap-1'>
-              <TbPackages className='w-7 text-darker' size={26} />
-              <span className='rounded loading h-2 w-[80px] mr-2' />
-              <span className='rounded loading h-2 w-[25px] mr-2' />
+            <div className="flex items-center gap-1">
+              <TbPackages
+                className="w-7 text-darker"
+                size={26}
+              />
+              <span className="loading mr-2 h-2 w-[80px] rounded" />
+              <span className="loading mr-2 h-2 w-[25px] rounded" />
             </div>
-            <div className='flex items-center gap-1'>
-              <FaCircleCheck className='w-7 text-darker' size={20} />
-              <span className='rounded loading h-2 w-[80px] mr-2' />
-              <span className='rounded loading h-2 w-[25px] mr-2' />
+            <div className="flex items-center gap-1">
+              <FaCircleCheck
+                className="w-7 text-darker"
+                size={20}
+              />
+              <span className="loading mr-2 h-2 w-[80px] rounded" />
+              <span className="loading mr-2 h-2 w-[25px] rounded" />
             </div>
           </div>
 
@@ -67,74 +82,74 @@ async function LoadingProductPage() {
       <Divider size={9} />
 
       {/* MARK: Related Products */}
-      <section className='max-w-1200 mx-auto bg-dark-100 border-4 border-white p-8 rounded-medium shadow-medium overflow-hidden'>
+      <section className="mx-auto max-w-1200 overflow-hidden rounded-medium border-4 border-white bg-dark-100 p-8 shadow-medium">
         <LoadingGroupProducts hideTop />
       </section>
 
       <Divider size={9} />
 
       {/* MARK: Detail */}
-      <section className='max-w-1200 mx-auto bg-white p-8 rounded-medium shadow-medium'>
+      <section className="mx-auto max-w-1200 rounded-medium bg-white p-8 shadow-medium">
         {/* MARK: Introduction */}
-        <div className='h-2 w-full max-w-[300px] mt-3 mb-5 rounded loading' />
+        <div className="loading mb-5 mt-3 h-2 w-full max-w-[300px] rounded" />
 
-        <div className='flex flex-wrap w-full -mx-21/2'>
-          <div className='w-full px-21/2 mb-12'>
-            <div className='h-2 w-[90%] my-3 mb-2 rounded loading' />
-            <div className='h-2 w-[90%] my-3 mb-2 rounded loading' />
-            <div className='h-2 w-[90%] my-3 mb-2 rounded loading' />
+        <div className="-mx-21/2 flex w-full flex-wrap">
+          <div className="mb-12 w-full px-21/2">
+            <div className="loading my-3 mb-2 h-2 w-[90%] rounded" />
+            <div className="loading my-3 mb-2 h-2 w-[90%] rounded" />
+            <div className="loading my-3 mb-2 h-2 w-[90%] rounded" />
           </div>
 
-          <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
-            <div className='h-2 w-full max-w-[300px] mt-3 mb-5 rounded loading' />
+          <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
+            <div className="loading mb-5 mt-3 h-2 w-full max-w-[300px] rounded" />
 
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
           </div>
 
-          <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
-            <div className='h-2 w-full max-w-[300px] mt-3 mb-5 rounded loading' />
+          <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
+            <div className="loading mb-5 mt-3 h-2 w-full max-w-[300px] rounded" />
 
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
           </div>
 
-          <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
-            <div className='h-2 w-full max-w-[300px] mt-3 mb-5 rounded loading' />
+          <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
+            <div className="loading mb-5 mt-3 h-2 w-full max-w-[300px] rounded" />
 
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
           </div>
 
-          <div className='inline-block w-full md:w-1/2 px-21/2 mb-12'>
-            <div className='h-2 w-full max-w-[300px] mt-3 mb-5 rounded loading' />
+          <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
+            <div className="loading mb-5 mt-3 h-2 w-full max-w-[300px] rounded" />
 
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
-            <div className='h-2 w-[90%] m-3 mb-4 rounded loading' />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
+            <div className="loading m-3 mb-4 h-2 w-[90%] rounded" />
           </div>
         </div>
 
         {/* MARK: Choose Me */}
-        <div className='mb-10'>
-          <div className='h-2 w-full max-w-[300px] mt-3 mb-5 rounded loading' />
-          <LoadingChooseMe className='mx-[-16px]' />
+        <div className="mb-10">
+          <div className="loading mb-5 mt-3 h-2 w-full max-w-[300px] rounded" />
+          <LoadingChooseMe className="mx-[-16px]" />
         </div>
       </section>
 
       <Divider size={9} />
 
       {/* MARK: Comment */}
-      <section className='max-w-1200 mx-auto bg-white p-21 rounded-medium shadow-medium'>
-        <h3 className='text-[24px] font-semibold text-dark'>Bình luận gần đây</h3>
-        <LoadingComment className='mt-4' />
+      <section className="mx-auto max-w-1200 rounded-medium bg-white p-21 shadow-medium">
+        <h3 className="text-[24px] font-semibold text-dark">Bình luận gần đây</h3>
+        <LoadingComment className="mt-4" />
       </section>
     </div>
   )

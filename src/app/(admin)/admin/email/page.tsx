@@ -54,26 +54,27 @@ function EmailPage() {
   }, [])
 
   return (
-    <div className='max-w-1200 mx-auto'>
-      <div className='grid grid-cols-7 gap-21 cursor-pointer'>
+    <div className="mx-auto max-w-1200">
+      <div className="grid cursor-pointer grid-cols-7 gap-21">
         {types.map(type => (
           <div
-            className='p-3 rounded-lg shaodow-lg bg-sky-50 flex flex-col items-center'
+            className="shaodow-lg flex flex-col items-center rounded-lg bg-sky-50 p-3"
             key={type.type}
-            onClick={() => setSelectedSample(type.sample)}>
-            <h1 className='mb-2 font-semibold text-center text-dark'>{type.type}</h1>
+            onClick={() => setSelectedSample(type.sample)}
+          >
+            <h1 className="mb-2 text-center font-semibold text-dark">{type.type}</h1>
 
             <LoadingButton
-              className='w-20 px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
+              className="common-transition w-20 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
               onClick={() => handleSentMail(type.type)}
-              text='Send'
+              text="Send"
               isLoading={loading}
             />
           </div>
         ))}
       </div>
 
-      <div className='whitespace-pre bg-sky-50 min-h-[300px] rounded-lg shadow-lg p-21 mt-21 overflow-scroll'>
+      <div className="mt-21 min-h-[300px] overflow-scroll whitespace-pre rounded-lg bg-sky-50 p-21 shadow-lg">
         <pre>{JSON.stringify(selectedSample, null, 2)}</pre>
       </div>
     </div>

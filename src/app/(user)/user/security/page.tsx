@@ -14,7 +14,7 @@ import { FaCheck, FaEyeSlash } from 'react-icons/fa'
 function SecurityPage() {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector((state) => state.modal.isLoading)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session } = useSession()
   const curUser: any = session?.user
 
@@ -39,7 +39,7 @@ function SecurityPage() {
 
   // validate form
   const handleValidate: SubmitHandler<FieldValues> = useCallback(
-    (data) => {
+    data => {
       let isValid = true
 
       // newPassword must be at least 5 characters and contain at least 1 lowercase, 1 uppercase, 1 number, and must not be the same as oldPassword
@@ -69,7 +69,7 @@ function SecurityPage() {
   )
 
   // MARK: Submit
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async data => {
     // validate form
     if (!handleValidate(data)) return
 
@@ -104,85 +104,100 @@ function SecurityPage() {
 
   return (
     <div>
-      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>MẬT KHẨU VÀ BẢO MẬT</h1>
+      <h1 className="mb-5 font-body text-3xl font-semibold tracking-wide">MẬT KHẨU VÀ BẢO MẬT</h1>
 
       {!isLocalAuth && (
-        <p className='text-red-500 mb-4'>
+        <p className="mb-4 text-red-500">
           Tính năng không khả dụng do tài khoản được xác thực bởi {curUser?.authType}.
         </p>
       )}
 
       {/* MARK: Change Password */}
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-21 pb-5'>
-        <div className='col-span-1 flex flex-col gap-4'>
+      <div className="grid grid-cols-1 gap-21 pb-5 lg:grid-cols-2">
+        <div className="col-span-1 flex flex-col gap-4">
           <Input
-            id='oldPassword'
-            label='Mật khẩu cũ'
+            id="oldPassword"
+            label="Mật khẩu cũ"
             disabled={!isLocalAuth || isLoading}
             register={register}
             errors={errors}
             icon={FaEyeSlash}
             required
-            type='password'
+            type="password"
             onFocus={() => clearErrors('oldPassword')}
           />
 
           <Input
-            id='newPassword'
-            label='Mật khẩu mới'
+            id="newPassword"
+            label="Mật khẩu mới"
             disabled={!isLocalAuth || isLoading}
             register={register}
             errors={errors}
             icon={FaEyeSlash}
             required
-            type='password'
+            type="password"
             onFocus={() => clearErrors('newPassword')}
           />
 
           <Input
-            id='reNewPassword'
-            label='Nhập lại mật khẩu mới'
+            id="reNewPassword"
+            label="Nhập lại mật khẩu mới"
             disabled={!isLocalAuth || isLoading}
             register={register}
             errors={errors}
             icon={FaEyeSlash}
             required
-            type='password'
+            type="password"
             onFocus={() => clearErrors('reNewPassword')}
           />
 
           {isLocalAuth && (
             <LoadingButton
-              className='px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg font-semibold common-transition'
+              className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
               onClick={handleSubmit(onSubmit)}
-              text='Lưu'
+              text="Lưu"
               isLoading={isLoading}
             />
           )}
         </div>
 
         {/* MARK: Check List */}
-        <div className='col-span-1'>
-          <h4 className='text-2xl mb-2'>Mật khẩu</h4>
+        <div className="col-span-1">
+          <h4 className="mb-2 text-2xl">Mật khẩu</h4>
           <ul>
-            <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-500' />
+            <li className="flex items-center gap-2">
+              <FaCheck
+                size={16}
+                className="text-green-500"
+              />
               <p>Mật khẩu mới phải khác mật khẩu cũ</p>
             </li>
-            <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-500' />
+            <li className="flex items-center gap-2">
+              <FaCheck
+                size={16}
+                className="text-green-500"
+              />
               <p>Phải có tối thiếu 6 ký tự</p>
             </li>
-            <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-500' />
+            <li className="flex items-center gap-2">
+              <FaCheck
+                size={16}
+                className="text-green-500"
+              />
               <p>Phải có ít nhất một chữ hoa</p>
             </li>
-            <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-500' />
+            <li className="flex items-center gap-2">
+              <FaCheck
+                size={16}
+                className="text-green-500"
+              />
               <p>Phải có ít nhất một chữ thường</p>
             </li>
-            <li className='flex items-center gap-2'>
-              <FaCheck size={16} className='text-green-500' />
+            <li className="flex items-center gap-2">
+              <FaCheck
+                size={16}
+                className="text-green-500"
+              />
               <p>Phải có ít nhất một chữ số</p>
             </li>
           </ul>

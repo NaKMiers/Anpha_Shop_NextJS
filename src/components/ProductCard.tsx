@@ -13,7 +13,7 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
@@ -29,7 +29,7 @@ interface ProductCardProps {
 function ProductCard({ product, className = '' }: ProductCardProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const localCart = useAppSelector((state) => state.cart.localItems)
+  const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -195,21 +195,21 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
   return (
     <div
-      className={`relative w-full h-full min-h-[430px] p-4 bg-white shadow-lg rounded-xl hover:-translate-y-1 transition duration-500 ${className}`}
+      className={`relative h-full min-h-[430px] w-full rounded-xl bg-white p-4 shadow-lg transition duration-500 hover:-translate-y-1 ${className}`}
     >
       {/* MARK: Sold out */}
       {product.stock <= 0 && (
         <Link
           href={`/${product.slug}`}
           prefetch={false}
-          className='absolute z-10 top-4 left-4 right-4 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'
+          className="absolute left-4 right-4 top-4 z-10 flex aspect-video items-start justify-center rounded-lg bg-white bg-opacity-50"
         >
           <Image
-            className='animate-wiggle -mt-1'
-            src='/images/sold-out.jpg'
+            className="-mt-1 animate-wiggle"
+            src="/images/sold-out.jpg"
             width={60}
             height={60}
-            alt='sold-out'
+            alt="sold-out"
           />
         </Link>
       )}
@@ -218,16 +218,16 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       <Link
         href={`/${product.slug}`}
         prefetch={false}
-        className='relative aspect-video rounded-lg overflow-hidden shadow-lg block'
+        className="relative block aspect-video overflow-hidden rounded-lg shadow-lg"
       >
-        <div className='flex w-full overflow-x-scroll snap-x snap-mandatory'>
-          {product.images.map((src) => (
+        <div className="flex w-full snap-x snap-mandatory overflow-x-scroll">
+          {product.images.map(src => (
             <Image
-              className='flex-shrink-0 snap-start w-full h-full object-cover'
+              className="h-full w-full flex-shrink-0 snap-start object-cover"
               src={src}
               width={400}
               height={400}
-              alt='netflix'
+              alt="netflix"
               key={src}
             />
           ))}
@@ -236,7 +236,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
 
       {/* Badge */}
       {product.oldPrice && product.stock > 0 && (
-        <div className='absolute z-10 -top-2 -left-2 rounded-tl-lg rounded-br-lg bg-yellow-400 p-1 max-w-10 text-white font-semibold font-body text-center text-[13px] leading-4'>
+        <div className="absolute -left-2 -top-2 z-10 max-w-10 rounded-br-lg rounded-tl-lg bg-yellow-400 p-1 text-center font-body text-[13px] font-semibold leading-4 text-white">
           Giảm{' '}
           {countPercent(
             applyFlashSalePrice(product.flashsale as IFlashsale, product.price),
@@ -246,9 +246,12 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       )}
 
       {/* Title */}
-      <Link href={`/${product.slug}`} prefetch={false}>
+      <Link
+        href={`/${product.slug}`}
+        prefetch={false}
+      >
         <h3
-          className='font-body text-[18px] text-dark tracking-wide leading-[22px] my-3'
+          className="my-3 font-body text-[18px] leading-[22px] tracking-wide text-dark"
           title={product.title}
         >
           {product.title}
@@ -261,21 +264,24 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         oldPrice={product.oldPrice}
         flashSale={product.flashsale as IFlashsale}
         stock={product.stock}
-        className='mb-2'
+        className="mb-2"
       />
 
       {/* Basic Information */}
-      <div className='flex items-center font-body tracking-wide'>
-        <FaCircleCheck size={16} className='text-darker' />
-        <span className='font-bold text-darker ml-1'>Đã bán:</span>
-        <span className='text-red-500 ml-1'>{product.sold}</span>
+      <div className="flex items-center font-body tracking-wide">
+        <FaCircleCheck
+          size={16}
+          className="text-darker"
+        />
+        <span className="ml-1 font-bold text-darker">Đã bán:</span>
+        <span className="ml-1 text-red-500">{product.sold}</span>
       </div>
 
       {/* MARK: Action Buttons */}
-      <div className='flex items-center justify-end md:justify-start gap-2 mt-2'>
+      <div className="mt-2 flex items-center justify-end gap-2 md:justify-start">
         <button
-          className={`bg-secondary rounded-md text-white px-2 py-[5px] font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition ${
-            isDisabled ? 'bg-slate-200 pointer-events-none' : ''
+          className={`common-transition text-nowrap rounded-md bg-secondary px-2 py-[5px] font-body font-semibold tracking-wider text-white hover:bg-primary ${
+            isDisabled ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleBuyNow}
           disabled={isDisabled}
@@ -283,24 +289,33 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
           MUA NGAY
         </button>
         <button
-          className={`bg-primary rounded-md py-2 px-3 group hover:bg-primary-600 hover:bg-secondary common-transition ${
+          className={`hover:bg-primary-600 common-transition group rounded-md bg-primary px-3 py-2 hover:bg-secondary ${
             isDisabled ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}
           disabled={isDisabled}
         >
           {isLoading ? (
-            <RiDonutChartFill size={18} className='animate-spin text-white' />
+            <RiDonutChartFill
+              size={18}
+              className="animate-spin text-white"
+            />
           ) : (
-            <FaCartPlus size={18} className='text-white wiggle' />
+            <FaCartPlus
+              size={18}
+              className="wiggle text-white"
+            />
           )}
         </button>
         {['admin', 'editor'].includes(curUser?.role) && (
           <Link
             href={`/admin/product/all?_id=${product?._id}`}
-            className='flex items-center justify-center h-[34px] border border-yellow-400 rounded-md px-3 group hover:bg-primary-600 common-transition'
+            className="hover:bg-primary-600 common-transition group flex h-[34px] items-center justify-center rounded-md border border-yellow-400 px-3"
           >
-            <MdEdit size={18} className='wiggle text-yellow-400' />
+            <MdEdit
+              size={18}
+              className="wiggle text-yellow-400"
+            />
           </Link>
         )}
       </div>
@@ -308,4 +323,4 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
   )
 }
 
-export default ProductCard
+export default memo(ProductCard)

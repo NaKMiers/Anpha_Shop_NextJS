@@ -48,58 +48,63 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
   }, [code, dispatch])
 
   return (
-    <div className='-m-3'>
-      <h1 className='font-semibold text-3xl font-body tracking-wide mb-5'>
-        CHI TIẾT ĐƠN HÀNG: <span className='text-secondary font-sans'>{order?.code}</span>
+    <div className="-m-3">
+      <h1 className="mb-5 font-body text-3xl font-semibold tracking-wide">
+        CHI TIẾT ĐƠN HÀNG: <span className="font-sans text-secondary">{order?.code}</span>
       </h1>
 
-      <Divider size={5} border />
+      <Divider
+        size={5}
+        border
+      />
 
       {/* MARK: Info */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 items-start'>
-        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Ngày mua: </span>
-          {order && <span className=''>{formatTime(order.createdAt)}</span>}
+      <div className="grid grid-cols-1 items-start gap-2 md:grid-cols-2">
+        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <span className="font-semibold">Ngày mua: </span>
+          {order && <span className="">{formatTime(order.createdAt)}</span>}
         </div>
-        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Trạng thái: </span>
+        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <span className="font-semibold">Trạng thái: </span>
           <span
             className={`${
               order?.status === 'pending'
                 ? 'text-yellow-500'
                 : order?.status === 'done'
-                ? 'text-green-500'
-                : 'text-slate-400'
-            }`}>
+                  ? 'text-green-500'
+                  : 'text-slate-400'
+            }`}
+          >
             {order?.status === 'pending'
               ? 'Đang xử lí'
               : order?.status === 'done'
-              ? 'Hoàn tất'
-              : 'Đã hủy'}
+                ? 'Hoàn tất'
+                : 'Đã hủy'}
           </span>
         </div>
-        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Email: </span>
-          <span className='text-sky-500'>{order?.email}</span>
+        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <span className="font-semibold">Email: </span>
+          <span className="text-sky-500">{order?.email}</span>
         </div>
-        <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-          <span className='font-semibold'>Tổng tiền: </span>
-          <span className='text-green-500 font-semibold'>{formatPrice(order?.total)}</span>
+        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <span className="font-semibold">Tổng tiền: </span>
+          <span className="font-semibold text-green-500">{formatPrice(order?.total)}</span>
         </div>
         {order?.voucherApplied && (
-          <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-            <span className='font-semibold'>Voucher: </span>
+          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+            <span className="font-semibold">Voucher: </span>
             <span
-              className='text-slate-400 font-semibold'
-              title={(order?.voucherApplied as IVoucher).desc}>
+              className="font-semibold text-slate-400"
+              title={(order?.voucherApplied as IVoucher).desc}
+            >
               {(order?.voucherApplied as IVoucher).code}
             </span>
           </div>
         )}
         {!!order?.discount && (
-          <div className='rounded-xl shadow-lg py-2 px-4 hover:tracking-wide common-transition'>
-            <span className='font-semibold'>Giảm giá: </span>
-            <span className='text-secondary font-semibold'>{formatPrice(order?.discount)}</span>
+          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+            <span className="font-semibold">Giảm giá: </span>
+            <span className="font-semibold text-secondary">{formatPrice(order?.discount)}</span>
           </div>
         )}
       </div>
@@ -107,32 +112,44 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
       <Divider size={6} />
 
       {/* MARK: Product */}
-      <h3 className='text-2xl font-semibold mb-4'>SẢN PHẨM</h3>
+      <h3 className="mb-4 text-2xl font-semibold">SẢN PHẨM</h3>
 
       {order?.items.map(item => (
-        <div className='pl-21/2 relative mb-5' key={item.product._id}>
-          <div className='absolute top-1/2 -translate-y-1/2 left-0 h-[88%] w-px bg-slate-200' />
+        <div
+          className="relative mb-5 pl-21/2"
+          key={item.product._id}
+        >
+          <div className="absolute left-0 top-1/2 h-[88%] w-px -translate-y-1/2 bg-slate-200" />
 
-          <div className='rounded-medium border border-slate-300 shadow-lg p-21/2'>
-            <CartItem cartItem={item} isCheckout localCartItem isOrderDetailProduct />
+          <div className="rounded-medium border border-slate-300 p-21/2 shadow-lg">
+            <CartItem
+              cartItem={item}
+              isCheckout
+              localCartItem
+              isOrderDetailProduct
+            />
 
             {order.status === 'done' ? (
               item.accounts.map((account: IAccount) => (
                 <Fragment key={account._id}>
-                  <hr className='mt-5 mb-3' />
+                  <hr className="mb-3 mt-5" />
 
-                  <div className='border border-slate-300 rounded-xl p-4 w-full mt-2 max-h-[200px] text-sm font-body tracking-wide overflow-auto whitespace-pre break-all'>
+                  <div className="mt-2 max-h-[200px] w-full overflow-auto whitespace-pre break-all rounded-xl border border-slate-300 p-4 font-body text-sm tracking-wide">
                     {account.info.split('\n').map((line, index) => (
-                      <span key={index} className='block'>
+                      <span
+                        key={index}
+                        className="block"
+                      >
                         {line.split(' ').map((word, index) => (
                           <span
                             key={index}
-                            className='inline-block cursor-pointer'
+                            className="inline-block cursor-pointer"
                             onClick={e => {
                               e.stopPropagation()
                               navigator.clipboard.writeText(word)
                               toast.success('Đã sao chép: ' + word)
-                            }}>
+                            }}
+                          >
                             {word}{' '}
                           </span>
                         ))}
@@ -145,13 +162,14 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
               <p
                 className={`mt-6 text-center italic ${
                   order.status === 'pending' ? 'text-yellow-500' : 'text-slate-400'
-                } border-t border-slate-200 pt-2`}>
+                } border-t border-slate-200 pt-2`}
+              >
                 {order.status === 'pending' ? 'Đang xử lí' : 'Đã hủy'}
               </p>
             )}
 
             {order.status === 'done' && (
-              <p className='flex items-center gap-1 text-slate-500 mt-2'>
+              <p className="mt-2 flex items-center gap-1 text-slate-500">
                 <IoIosHelpCircle size={20} /> Ấn để sao chép từng phần
               </p>
             )}

@@ -15,7 +15,7 @@ export default async function AdminLayout({
       <AdminMenu />
 
       {/* Main */}
-      <main className='px-21 py-20'>{children}</main>
+      <main className="px-21 py-20">{children}</main>
     </>
   )
 }

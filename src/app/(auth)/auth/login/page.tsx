@@ -86,60 +86,66 @@ function LoginPage() {
   }, [handleSubmit, onSubmit, dispatch])
 
   return (
-    <div className='relative w-full min-h-screen'>
-      <div className='bg-white pb-10 max-w-[500px] w-full py-21 px-8 rounded-medium shadow-medium absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-        <h1 className='text-secondary text-[40px] font-semibold tracking-wide font-body mb-4'>
+    <div className="relative min-h-screen w-full">
+      <div className="absolute left-1/2 top-1/2 w-full max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-medium bg-white px-8 py-21 pb-10 shadow-medium">
+        <h1 className="mb-4 font-body text-[40px] font-semibold tracking-wide text-secondary">
           Đăng nhập
         </h1>
 
         <Input
-          id='usernameOrEmail'
-          label='Username / Email'
+          id="usernameOrEmail"
+          label="Username / Email"
           disabled={isLoading}
           register={register}
           errors={errors}
           required
-          type='text'
+          type="text"
           icon={FaCircleUser}
-          className='mb-5'
+          className="mb-5"
           onFocus={() => clearErrors('usernameOrEmail')}
         />
 
         <Input
-          id='password'
-          label='Mật khẩu'
+          id="password"
+          label="Mật khẩu"
           disabled={isLoading}
           register={register}
           errors={errors}
           required
-          type='password'
+          type="password"
           icon={FaEyeSlash}
-          className='mb-5'
+          className="mb-5"
           onFocus={() => clearErrors('password')}
         />
 
-        <div className='flex justify-end mb-3 -mt-3'>
-          <a href='/auth/forgot-password' className='text-dark hover:underline'>
+        <div className="-mt-3 mb-3 flex justify-end">
+          <a
+            href="/auth/forgot-password"
+            className="text-dark hover:underline"
+          >
             Quên mật khẩu?
           </a>
         </div>
 
-        <div className='flex items-center justify-end gap-3 mb-4'>
-          <a href='/auth/register' className='underline text-sky-500'>
+        <div className="mb-4 flex items-center justify-end gap-3">
+          <a
+            href="/auth/register"
+            className="text-sky-500 underline"
+          >
             Đăng ký
           </a>
 
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isLoading}
-            className={`h-[40px] min-w-[48px] flex items-center justify-center group bg-secondary rounded-lg py-2 px-3 text-white hover:bg-primary hover:text-dark common-transition font-semibold ${
-              isLoading ? 'bg-slate-200 pointer-events-none' : ''
+            className={`common-transition group flex h-[40px] min-w-[48px] items-center justify-center rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
+              isLoading ? 'pointer-events-none bg-slate-200' : ''
             }`}
           >
             {isLoading ? (
               <FaCircleNotch
                 size={18}
-                className='text-white group-hover:text-dark common-transition animate-spin'
+                className="common-transition animate-spin text-white group-hover:text-dark"
               />
             ) : (
               'Đăng nhập'
@@ -150,9 +156,9 @@ function LoginPage() {
         <hr />
 
         {/* MARK: Social Login */}
-        <p className='text-center text-slate-500 font-body text-lg py-4'>Hoặc đăng nhập với</p>
+        <p className="py-4 text-center font-body text-lg text-slate-500">Hoặc đăng nhập với</p>
 
-        <div className='flex items-center justify-center gap-4'>
+        <div className="flex items-center justify-center gap-4">
           {/* <button
             className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
             onClick={() => signIn('twitter', { callbackUrl: '/' })}>
@@ -160,23 +166,35 @@ function LoginPage() {
           </button> */}
 
           <button
-            className='p-2 rounded-full border-2 border-yellow-300 group hover:bg-yellow-100 common-transition'
+            className="common-transition group rounded-full border-2 border-yellow-300 p-2 hover:bg-yellow-100"
             onClick={() => {
               dispatch(setPageLoading(true))
               signIn('google', { callbackUrl: '/' })
             }}
           >
-            <Image className='wiggle' src='/images/google.jpg' height={25} width={25} alt='google' />
+            <Image
+              className="wiggle"
+              src="/images/google.jpg"
+              height={25}
+              width={25}
+              alt="google"
+            />
           </button>
 
           <button
-            className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
+            className="common-transition group rounded-full border-2 border-slate-800 p-2 hover:bg-slate-300"
             onClick={() => {
               dispatch(setPageLoading(true))
               signIn('github', { callbackUrl: '/' })
             }}
           >
-            <Image className='wiggle' src='/images/github.jpg' height={25} width={25} alt='github' />
+            <Image
+              className="wiggle"
+              src="/images/github.jpg"
+              height={25}
+              width={25}
+              alt="github"
+            />
           </button>
         </div>
       </div>

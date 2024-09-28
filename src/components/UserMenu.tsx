@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { memo } from 'react'
 import { FaHistory, FaUser, FaUserLock } from 'react-icons/fa'
 
 const data = [
@@ -28,18 +29,22 @@ function UserMenu() {
   const pathname = usePathname()
 
   return (
-    <ul className='h-full flex flex-row flex-shrink-0 gap-2 justify-evenly lg:flex-col w-full lg:w-1/4 md:min-w-[265px] p-21 bg-white rounded-medium shadow-medium'>
+    <ul className="flex h-full w-full flex-shrink-0 flex-row justify-evenly gap-2 rounded-medium bg-white p-21 shadow-medium md:min-w-[265px] lg:w-1/4 lg:flex-col">
       {data.map(({ title, href, subHref, Icon }) => (
         <li key={href}>
           <Link
-            className={`group flex items-center gap-2 group hover:bg-secondary hover:text-white hover:rounded-lg common-transition px-4 py-4 ${
+            className={`common-transition group flex items-center gap-2 px-4 py-4 hover:rounded-lg hover:bg-secondary hover:text-white ${
               pathname === href || (subHref && pathname.startsWith(subHref))
-                ? 'bg-primary rounded-lg text-white'
+                ? 'rounded-lg bg-primary text-white'
                 : ''
             }`}
-            href={href}>
-            <Icon size={21} className='wiggle' />
-            <span className='hidden md:block font-body text-[18px] font-semibold'>{title}</span>
+            href={href}
+          >
+            <Icon
+              size={21}
+              className="wiggle"
+            />
+            <span className="hidden font-body text-[18px] font-semibold md:block">{title}</span>
           </Link>
         </li>
       ))}
@@ -47,4 +52,4 @@ function UserMenu() {
   )
 }
 
-export default UserMenu
+export default memo(UserMenu)

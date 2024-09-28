@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { FaCheck, FaCopy } from 'react-icons/fa6'
 
@@ -26,25 +26,33 @@ function LinkBar({ link, className = '' }: LinkBarProps) {
   return (
     <button
       className={`flex w-full items-center border-[1.5px] ${
-        isCopied ? 'border-slate-400' : 'border-secondary group'
-      } rounded-md pr-2 overflow-hidden ${className || ''}`}
+        isCopied ? 'border-slate-400' : 'group border-secondary'
+      } overflow-hidden rounded-md pr-2 ${className || ''}`}
       onClick={handleCopy}
-      disabled={isCopied}>
+      disabled={isCopied}
+    >
       <div className={`${isCopied ? 'bg-slate-400' : 'bg-secondary'} px-[10px] py-[10px]`}>
         {isCopied ? (
-          <FaCheck size={18} className='text-white wiggle' />
+          <FaCheck
+            size={18}
+            className="wiggle text-white"
+          />
         ) : (
-          <FaCopy size={18} className='text-white wiggle' />
+          <FaCopy
+            size={18}
+            className="wiggle text-white"
+          />
         )}
       </div>
       <p
-        className={`overflow-x-scroll text-nowrap no-scrollbar px-2 text-slate-500 ${
+        className={`no-scrollbar overflow-x-scroll text-nowrap px-2 text-slate-500 ${
           !isCopied ? 'cursor-pointer' : ''
-        }`}>
+        }`}
+      >
         {link}
       </p>
     </button>
   )
 }
 
-export default LinkBar
+export default memo(LinkBar)

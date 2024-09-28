@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 
 interface CounterItem {
   max: number
@@ -40,10 +40,19 @@ function CounterItem({ max, value, size = 25, className }: CounterItem) {
   }, [max, value, size])
 
   return (
-    <div className={`overflow-y-hidden ${className}`} style={{ height: size }}>
-      <div className={`flex flex-col h-full common-transition`} ref={slideTrackRef}>
+    <div
+      className={`overflow-y-hidden ${className}`}
+      style={{ height: size }}
+    >
+      <div
+        className={`common-transition flex h-full flex-col`}
+        ref={slideTrackRef}
+      >
         {[...Array.from({ length: max + 1 }, (_, i) => max - i), max].map((n, i) => (
-          <span className='flex-shrink-0 h-full' key={i}>
+          <span
+            className="h-full flex-shrink-0"
+            key={i}
+          >
             {n}
           </span>
         ))}
@@ -52,4 +61,4 @@ function CounterItem({ max, value, size = 25, className }: CounterItem) {
   )
 }
 
-export default CounterItem
+export default memo(CounterItem)

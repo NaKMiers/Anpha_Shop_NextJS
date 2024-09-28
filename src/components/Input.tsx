@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
 import { FaEye } from 'react-icons/fa'
 
@@ -49,23 +49,37 @@ function Input({
   }, [])
 
   return (
-    <div className={`${className}`} onClick={onClick} onFocus={onFocus}>
+    <div
+      className={`${className}`}
+      onClick={onClick}
+      onFocus={onFocus}
+    >
       <div className={`flex`}>
         {/* MARK: Icon */}
         {Icon && (
           <span
             onClick={type === 'password' ? showPassword : undefined}
-            className={`inline-flex items-center px-3 rounded-tl-lg rounded-bl-lg border-[2px] text-sm text-gray-900 ${
+            className={`inline-flex items-center rounded-bl-lg rounded-tl-lg border-[2px] px-3 text-sm text-gray-900 ${
               errors[id] ? 'border-rose-400 bg-rose-100' : 'border-slate-200 bg-slate-100'
-            } ${type === 'password' ? 'cursor-pointer' : ''}`}>
+            } ${type === 'password' ? 'cursor-pointer' : ''}`}
+          >
             {type === 'password' ? (
               isShowPassword ? (
-                <FaEye size={19} className='text-secondary' />
+                <FaEye
+                  size={19}
+                  className="text-secondary"
+                />
               ) : (
-                <Icon size={19} className='text-secondary' />
+                <Icon
+                  size={19}
+                  className="text-secondary"
+                />
               )
             ) : (
-              <Icon size={19} className='text-secondary' />
+              <Icon
+                size={19}
+                className="text-secondary"
+              />
             )}
           </span>
         )}
@@ -73,13 +87,14 @@ function Input({
         {/* MARK: Text Field */}
         <div
           className={`relative w-full border-[2px] border-l-0 bg-white ${
-            Icon ? 'rounded-tr-lg rounded-br-lg' : 'rounded-lg'
-          } ${errors[id] ? 'border-rose-400' : 'border-slate-200'}`}>
+            Icon ? 'rounded-br-lg rounded-tr-lg' : 'rounded-lg'
+          } ${errors[id] ? 'border-rose-400' : 'border-slate-200'}`}
+        >
           {type === 'textarea' ? (
             <textarea
               id={id}
-              className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer'
-              placeholder=' '
+              className="peer block w-full bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-dark focus:outline-none focus:ring-0"
+              placeholder=" "
               disabled={disabled}
               rows={rows || 4}
               {...register(id, { required })}
@@ -87,17 +102,19 @@ function Input({
           ) : type === 'select' ? (
             <select
               id={id}
-              className=' block min-h-[46px] px-2.5 pb-2.5 pt-4 w-full text-sm text-dark focus:outline-none focus:ring-0 peer rounded-r-lg'
+              className="peer block min-h-[46px] w-full rounded-r-lg px-2.5 pb-2.5 pt-4 text-sm text-dark focus:outline-none focus:ring-0"
               style={{ WebkitAppearance: 'none' }}
               disabled={disabled}
               {...register(id, { required })}
               onChange={onChange}
-              defaultValue={options?.find(option => option.selected)?.value}>
+              defaultValue={options?.find(option => option.selected)?.value}
+            >
               {options?.map((option, index) => (
                 <option
-                  className='bg-dark-100 appearance-none text-white font-body font-semibold tracking-wider p-5'
+                  className="appearance-none bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
                   key={index}
-                  value={option.value}>
+                  value={option.value}
+                >
                   {option.label}
                 </option>
               ))}
@@ -105,7 +122,7 @@ function Input({
           ) : (
             <input
               id={id}
-              className='block h-[46px] px-2.5 pb-2.5 pt-4 w-full text-sm text-dark bg-transparent focus:outline-none focus:ring-0 peer number-input'
+              className="number-input peer block h-[46px] w-full bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-dark focus:outline-none focus:ring-0"
               min={type === 'date' ? minDate : undefined}
               max={type === 'date' ? maxDate : undefined}
               disabled={disabled}
@@ -118,9 +135,10 @@ function Input({
           {/* MARK: Label */}
           <label
             htmlFor={id}
-            className={`absolute text-nowrap rounded-md text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 cursor-pointer ${
+            className={`absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-pointer text-nowrap rounded-md bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 ${
               errors[id] ? 'text-rose-400' : 'text-dark'
-            }`}>
+            }`}
+          >
             {label}
           </label>
         </div>
@@ -128,10 +146,10 @@ function Input({
 
       {/* MARK: Error */}
       {errors[id]?.message && (
-        <span className='text-sm text-rose-400'>{errors[id]?.message?.toString()}</span>
+        <span className="text-sm text-rose-400">{errors[id]?.message?.toString()}</span>
       )}
     </div>
   )
 }
 
-export default Input
+export default memo(Input)

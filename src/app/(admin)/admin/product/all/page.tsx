@@ -359,25 +359,35 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
   }, [handleFilter, handleResetFilter, products, handleSubmit])
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* Top & Pagination */}
-      <AdminHeader title='All Products' addLink='/admin/product/add' />
-      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
+      <AdminHeader
+        title="All Products"
+        addLink="/admin/product/add"
+      />
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+      />
 
       {/* Filter */}
-      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+      <AdminMeta
+        handleFilter={handleSubmit(handleFilter)}
+        handleResetFilter={handleResetFilter}
+      >
         {/* Price */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='price'>
-            <span className='font-bold'>Price: </span>
+        <div className="col-span-12 flex flex-col md:col-span-4">
+          <label htmlFor="price">
+            <span className="font-bold">Price: </span>
             <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
           </label>
           <input
-            id='price'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="price"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minPrice || 0}
             max={maxPrice || 0}
             value={price}
@@ -386,17 +396,17 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Sold */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='sold'>
-            <span className='font-bold'>Sold: </span>
+        <div className="col-span-12 flex flex-col md:col-span-4">
+          <label htmlFor="sold">
+            <span className="font-bold">Sold: </span>
             <span>{sold}</span> - <span>{maxSold}</span>
           </label>
           <input
-            id='sold'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="sold"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minSold || 0}
             max={maxSold || 0}
             value={sold}
@@ -405,17 +415,17 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Stock */}
-        <div className='flex flex-col col-span-12 md:col-span-4'>
-          <label htmlFor='stock'>
-            <span className='font-bold'>Stock: </span>
+        <div className="col-span-12 flex flex-col md:col-span-4">
+          <label htmlFor="stock">
+            <span className="font-bold">Stock: </span>
             <span>{stock}</span> - <span>{maxStock}</span>
           </label>
           <input
-            id='stock'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="stock"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minStock || 0}
             max={maxStock || 0}
             value={stock}
@@ -424,26 +434,27 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Cate Selection */}
-        <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
+        <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:max-h-[152px] lg:max-h-[152px]">
           <div
-            className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+            className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
               cates.length === selectedFilterCates.length
-                ? 'bg-dark-100 text-white border-dark-100'
+                ? 'border-dark-100 bg-dark-100 text-white'
                 : 'border-slate-300'
             }`}
-            title='All Types'
+            title="All Types"
             onClick={() =>
               setSelectedFilterCates(
                 cates.length === selectedFilterCates.length ? [] : cates.map(category => category._id)
               )
-            }>
+            }
+          >
             All
           </div>
           {cates.map(category => (
             <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+              className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                 selectedFilterCates.includes(category._id)
-                  ? 'bg-primary text-white border-primary'
+                  ? 'border-primary bg-primary text-white'
                   : 'border-slate-300'
               }`}
               title={category.title}
@@ -452,33 +463,35 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
                 selectedFilterCates.includes(category._id)
                   ? () => setSelectedFilterCates(prev => prev.filter(id => id !== category._id))
                   : () => setSelectedFilterCates(prev => [...prev, category._id])
-              }>
+              }
+            >
               {category.title}
             </div>
           ))}
         </div>
 
         {/* Tag Selection */}
-        <div className='flex justify-end items-end gap-1 flex-wrap max-h-[228px] md:max-h-[152px] lg:max-h-[152px] overflow-auto col-span-12'>
+        <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:max-h-[152px] lg:max-h-[152px]">
           <div
-            className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+            className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
               tgs.length === selectedFilterTags.length
-                ? 'bg-dark-100 text-white border-dark-100'
+                ? 'border-dark-100 bg-dark-100 text-white'
                 : 'border-slate-300'
             }`}
-            title='All Types'
+            title="All Types"
             onClick={() =>
               setSelectedFilterTags(
                 tgs.length === selectedFilterTags.length ? [] : tgs.map(tag => tag._id)
               )
-            }>
+            }
+          >
             All
           </div>
           {tgs.map(tag => (
             <div
-              className={`overflow-hidden max-w-60 text-ellipsis text-nowrap h-[34px] leading-[34px] px-2 rounded-md border cursor-pointer select-none common-transition ${
+              className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                 selectedFilterTags.includes(tag._id)
-                  ? 'bg-secondary text-white border-secondary'
+                  ? 'border-secondary bg-secondary text-white'
                   : 'border-slate-300'
               }`}
               title={tag.title}
@@ -487,23 +500,24 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
                 selectedFilterTags.includes(tag._id)
                   ? () => setSelectedFilterTags(prev => prev.filter(id => id !== tag._id))
                   : () => setSelectedFilterTags(prev => [...prev, tag._id])
-              }>
+              }
+            >
               {tag.title}
             </div>
           ))}
         </div>
 
         {/* Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sort'
+            id="sort"
+            label="Sort"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('sort')}
             options={[
               {
@@ -528,13 +542,13 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Active */}
           <Input
-            id='active'
-            label='Active'
+            id="active"
+            label="Active"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('active')}
             options={[
               {
@@ -551,18 +565,18 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
                 label: 'Off',
               },
             ]}
-            className='min-w-[104px]'
+            className="min-w-[104px]"
           />
 
           {/* Flash Sale */}
           <Input
-            id='flashsale'
-            label='Flash Sale'
+            id="flashsale"
+            label="Flash Sale"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('flashsale')}
             options={[
               {
@@ -579,28 +593,30 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
                 label: 'Off',
               },
             ]}
-            className='min-w-[124px]'
+            className="min-w-[124px]"
           />
         </div>
 
         {/* Action Buttons */}
-        <div className='flex flex-wrap justify-end items-center col-span-12 gap-2'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
+            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedProducts(
                 selectedProducts.length > 0 ? [] : products.map(product => product._id)
               )
-            }>
+            }
+          >
             {selectedProducts.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
           {/* Sync Many Button */}
           {!!selectedProducts.length && (
             <button
-              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
-              onClick={() => handleSyncProducts(selectedProducts)}>
+              className="common-transition rounded-lg border border-purple-400 px-3 py-2 text-purple-400 hover:bg-purple-400 hover:text-white"
+              onClick={() => handleSyncProducts(selectedProducts)}
+            >
               Sync
             </button>
           )}
@@ -608,8 +624,9 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Boot Many Button */}
           {!!selectedProducts.length && (
             <button
-              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
-              onClick={() => handleBootProducts(selectedProducts, true)}>
+              className="common-transition rounded-lg border border-purple-400 px-3 py-2 text-purple-400 hover:bg-purple-400 hover:text-white"
+              onClick={() => handleBootProducts(selectedProducts, true)}
+            >
               Boot
             </button>
           )}
@@ -617,8 +634,9 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Deboot Many Button */}
           {!!selectedProducts.length && (
             <button
-              className='border border-purple-400 text-purple-400 rounded-lg px-3 py-2 hover:bg-purple-400 hover:text-white common-transition'
-              onClick={() => handleBootProducts(selectedProducts, false)}>
+              className="common-transition rounded-lg border border-purple-400 px-3 py-2 text-purple-400 hover:bg-purple-400 hover:text-white"
+              onClick={() => handleBootProducts(selectedProducts, false)}
+            >
               Deboot
             </button>
           )}
@@ -628,8 +646,9 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {!!selectedProducts.length &&
             selectedProducts.some(id => !products.find(product => product._id === id)?.active) && (
               <button
-                className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-white common-transition'
-                onClick={() => handleActivateProducts(selectedProducts, true)}>
+                className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+                onClick={() => handleActivateProducts(selectedProducts, true)}
+              >
                 Activate
               </button>
             )}
@@ -639,8 +658,9 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {!!selectedProducts.length &&
             selectedProducts.some(id => products.find(product => product._id === id)?.active) && (
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-                onClick={() => handleActivateProducts(selectedProducts, false)}>
+                className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+                onClick={() => handleActivateProducts(selectedProducts, false)}
+              >
                 Deactivate
               </button>
             )}
@@ -649,10 +669,11 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {!!selectedProducts.length &&
             selectedProducts.some(id => products.find(product => product._id === id)?.flashsale) && (
               <button
-                className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
+                className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
                 onClick={() => {
                   hanldeRemoveApplyingFlashsales(selectedProducts)
-                }}>
+                }}
+              >
                 Remove Flash Sale
               </button>
             )}
@@ -660,8 +681,9 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedProducts.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => setIsOpenConfirmModal(true)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => setIsOpenConfirmModal(true)}
+            >
               Delete
             </button>
           )}
@@ -672,20 +694,20 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Products'
-        content='Are you sure that you want to delete these products?'
+        title="Delete Products"
+        content="Are you sure that you want to delete these products?"
         onAccept={() => handleDeleteProducts(selectedProducts)}
         isLoading={loadingProducts.length > 0}
       />
 
       {/* Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} product
         {amount > 1 ? 's' : ''}
       </div>
 
       {/* MAIN LIST */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-21 lg:grid-cols-3'>
+      <div className="grid grid-cols-1 gap-21 md:grid-cols-2 lg:grid-cols-3">
         {products.map(product => (
           <ProductItem
             data={product}

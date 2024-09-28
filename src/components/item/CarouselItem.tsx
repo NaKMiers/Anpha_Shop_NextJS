@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaCartPlus } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
@@ -26,7 +26,7 @@ interface CarouselProductProps {
 function CarouselProduct({ product, className = '' }: CarouselProductProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const localCart = useAppSelector((state) => state.cart.localItems)
+  const localCart = useAppSelector(state => state.cart.localItems)
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -191,60 +191,72 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
     <Link
       href={`/${product.slug}`}
       prefetch={false}
-      className={`aspect-video w-2/3 sm:w-1/3 lg:w-1/5 shrink-0 px-21/2 ${className}`}
+      className={`aspect-video w-2/3 shrink-0 px-21/2 sm:w-1/3 lg:w-1/5 ${className}`}
     >
-      <div className='relative rounded-small overflow-hidden group'>
+      <div className="group relative overflow-hidden rounded-small">
         {/* MARK: Thumbnail */}
         <Image
-          className='flex-shrink-0 snap-start w-full h-full object-cover block'
+          className="block h-full w-full flex-shrink-0 snap-start object-cover"
           src={product.images[0]}
           width={1200}
           height={768}
-          alt='account'
+          alt="account"
         />
 
         {/* MARK: Overlay */}
-        <div className='flex flex-col sm:gap-1 justify-center absolute translate-y-full opacity-0 w-full h-full top-0 left-0 bg-sky-500 bg-opacity-65 p-3 text-center transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
+        <div className="absolute left-0 top-0 flex h-full w-full translate-y-full flex-col justify-center bg-sky-500 bg-opacity-65 p-3 text-center opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:gap-1">
           <h5
-            className='text-white text-sm font-body leading-4 text-ellipsis flex-shrink-0 line-clamp-2'
+            className="line-clamp-2 flex-shrink-0 text-ellipsis font-body text-sm leading-4 text-white"
             title={product.title}
           >
             {product.title}
           </h5>
-          <p className='uppercase text-xs font-semibold text-slate-200 leading-3'>
+          <p className="text-xs font-semibold uppercase leading-3 text-slate-200">
             - {(product.category as ICategory).title} -
           </p>
-          <p className='font-bold text-white text-xs'>
-            Đã bán: <span className='font-semibold text-green-200'>{product.sold}</span>
+          <p className="text-xs font-bold text-white">
+            Đã bán: <span className="font-semibold text-green-200">{product.sold}</span>
           </p>
           {/* Action Buttons */}
-          <div className='flex items-center gap-2 justify-center' onClick={(e) => e.preventDefault()}>
+          <div
+            className="flex items-center justify-center gap-2"
+            onClick={e => e.preventDefault()}
+          >
             <button
-              className='h-[26px] md:h-[30px] px-2 bg-secondary rounded-[4px] text-[12px] text-white font-semibold font-body tracking-wider text-nowrap hover:bg-primary common-transition'
+              className="common-transition h-[26px] text-nowrap rounded-[4px] bg-secondary px-2 font-body text-[12px] font-semibold tracking-wider text-white hover:bg-primary md:h-[30px]"
               onClick={handleBuyNow}
               disabled={isLoading}
             >
               MUA NGAY
             </button>
             <button
-              className={`h-[26px] md:h-[30px] px-2 bg-primary rounded-[4px] hover:bg-primary-600 common-transition hover:bg-secondary ${
+              className={`hover:bg-primary-600 common-transition h-[26px] rounded-[4px] bg-primary px-2 hover:bg-secondary md:h-[30px] ${
                 isLoading ? 'pointer-events-none bg-slate-200' : ''
               }`}
               onClick={handleAddToCart}
               disabled={isLoading}
             >
               {isLoading ? (
-                <RiDonutChartFill size={13} className='animate-spin text-white' />
+                <RiDonutChartFill
+                  size={13}
+                  className="animate-spin text-white"
+                />
               ) : (
-                <FaCartPlus size={16} className='text-white wiggle-1' />
+                <FaCartPlus
+                  size={16}
+                  className="wiggle-1 text-white"
+                />
               )}
             </button>
             {['admin', 'editor'].includes(curUser?.role) && (
               <div
                 onClick={() => router.push(`/admin/product/all?_id=${product?._id}`)}
-                className='flex items-center justify-center h-[26px] border border-yellow-400 rounded-md px-1 group hover:bg-primary-600 common-transition'
+                className="hover:bg-primary-600 common-transition group flex h-[26px] items-center justify-center rounded-md border border-yellow-400 px-1"
               >
-                <MdEdit size={18} className='wiggle text-yellow-400' />
+                <MdEdit
+                  size={18}
+                  className="wiggle text-yellow-400"
+                />
               </div>
             )}
           </div>
@@ -254,4 +266,4 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
   )
 }
 
-export default CarouselProduct
+export default memo(CarouselProduct)

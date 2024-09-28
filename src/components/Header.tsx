@@ -9,7 +9,7 @@ import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaSearch } from 'react-icons/fa'
 import { FaBars, FaCartShopping } from 'react-icons/fa6'
@@ -199,45 +199,49 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   return (
     <header
       className={`${
-        isStatic ? 'static' : 'fixed z-50 left-0 top-0'
-      } bg-dark-100 w-full text-white shadow-medium-light transition-all duration-300 ${
+        isStatic ? 'static' : 'fixed left-0 top-0 z-50'
+      } w-full bg-dark-100 text-white shadow-medium-light transition-all duration-300 ${
         isShow ? 'top-0' : 'top-[-100%]'
       }`}
     >
       {/* Main Header */}
-      <div className='relative flex justify-between items-center max-w-1200 w-full h-[72px] m-auto px-21'>
+      <div className="relative m-auto flex h-[72px] w-full max-w-1200 items-center justify-between px-21">
         {/* MARK: Brand */}
         <div
           className={`${
-            openSearch ? 'max-w-0 overflow-hidden' : 'max-w-[300px] w-[90%]'
-          } sm:flex-shrink-0 pl-4 -ml-4 flex items-center h-full overflow-x-scroll no-scrollbar duration-300 transition-all`}
+            openSearch ? 'max-w-0 overflow-hidden' : 'w-[90%] max-w-[300px]'
+          } no-scrollbar -ml-4 flex h-full items-center overflow-x-scroll pl-4 transition-all duration-300 sm:flex-shrink-0`}
         >
           <Link
-            href='/'
+            href="/"
             prefetch={false}
-            className='hidden sm:block shrink-0 rounded-full common-transition spin'
+            className="common-transition spin hidden shrink-0 rounded-full sm:block"
           >
             <Image
-              className='aspect-square rounded-full'
-              src='/images/logo.jpg'
+              className="aspect-square rounded-full"
+              src="/images/logo.jpg"
               width={40}
               height={40}
-              alt='logo'
+              alt="logo"
             />
           </Link>
-          <Link href='/' prefetch={false} className='text-2xl font-bold'>
+          <Link
+            href="/"
+            prefetch={false}
+            className="text-2xl font-bold"
+          >
             .AnphaShop
           </Link>
           <Link
-            href='/recharge'
-            className='flex ml-3 bg-primary px-[10px] py-[6px] rounded-lg items-center gap-1 group hover:bg-secondary common-transition'
+            href="/recharge"
+            className="common-transition group ml-3 flex items-center gap-1 rounded-lg bg-primary px-[10px] py-[6px] hover:bg-secondary"
           >
-            <span className='font-bold font-body text-[18px] tracking-[0.02em] group-hover:text-white common-transition'>
+            <span className="common-transition font-body text-[18px] font-bold tracking-[0.02em] group-hover:text-white">
               Nạp
             </span>
             <HiLightningBolt
               size={20}
-              className='animate-bounce group-hover:text-white common-transition'
+              className="common-transition animate-bounce group-hover:text-white"
             />
           </Link>
         </div>
@@ -246,12 +250,12 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         <div
           className={`${openSearch ? 'max-w-full' : 'max-w-0 p-0'} ${
             !searchResults ? 'overflow-hidden' : ''
-          } lg:max-w-[500px] relative mr-2.5 w-full h-[40px] flex items-center justify-center text-dark duration-300 transition-all`}
+          } relative mr-2.5 flex h-[40px] w-full items-center justify-center text-dark transition-all duration-300 lg:max-w-[500px]`}
         >
           <input
-            type='text'
-            placeholder='Tìm kiếm...'
-            className='appearance-none w-full h-full font-body tracking-wider px-4 py-2 outline-none rounded-0 rounded-l-lg bg-white'
+            type="text"
+            placeholder="Tìm kiếm..."
+            className="rounded-0 h-full w-full appearance-none rounded-l-lg bg-white px-4 py-2 font-body tracking-wider outline-none"
             value={searchValue}
             onChange={e => setSearchValue(e.target.value)}
             onFocus={() => {
@@ -266,72 +270,78 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           <Link
             href={`/search?search=${searchValue}`}
             onClick={e => !searchValue && e.preventDefault()}
-            className={`group h-full w-[40px] flex justify-center items-center rounded-r-lg bg-white ${
+            className={`group flex h-full w-[40px] items-center justify-center rounded-r-lg bg-white ${
               searchLoading ? 'pointer-events-none' : ''
             }`}
           >
             {searchLoading ? (
-              <RiDonutChartFill size={20} className='animate-spin text-slate-300' />
+              <RiDonutChartFill
+                size={20}
+                className="animate-spin text-slate-300"
+              />
             ) : (
-              <FaSearch size={16} className='wiggle' />
+              <FaSearch
+                size={16}
+                className="wiggle"
+              />
             )}
           </Link>
 
           <ul
             className={`${
               searchResults && openResults ? 'max-h-[500px] p-2' : 'max-h-0 p-0'
-            } absolute z-20 top-12 left-0 w-full rounded-lg shadow-medium bg-white gap-2 overflow-y-auto transition-all duration-300`}
+            } absolute left-0 top-12 z-20 w-full gap-2 overflow-y-auto rounded-lg bg-white shadow-medium transition-all duration-300`}
           >
             {searchResults?.length ? (
               searchResults.map(product => (
                 <Link
                   href={`/${product.slug}`}
                   key={product._id}
-                  className='flex gap-4 py-2 items-start rounded-lg p-2 hover:bg-sky-200 common-transition'
+                  className="common-transition flex items-start gap-4 rounded-lg p-2 py-2 hover:bg-sky-200"
                 >
-                  <div className='relative aspect-video flex-shrink-0'>
+                  <div className="relative aspect-video flex-shrink-0">
                     {product.stock <= 0 && (
-                      <div className='absolute top-0 left-0 right-0 flex justify-center items-start aspect-video bg-white rounded-lg bg-opacity-50'>
+                      <div className="absolute left-0 right-0 top-0 flex aspect-video items-start justify-center rounded-lg bg-white bg-opacity-50">
                         <Image
-                          className='animate-wiggle -mt-1'
-                          src='/images/sold-out.jpg'
+                          className="-mt-1 animate-wiggle"
+                          src="/images/sold-out.jpg"
                           width={28}
                           height={28}
-                          alt='sold-out'
+                          alt="sold-out"
                         />
                       </div>
                     )}
                     <Image
-                      className='rounded-md'
+                      className="rounded-md"
                       src={product.images[0]}
                       width={70}
                       height={70}
-                      alt='product'
+                      alt="product"
                     />
 
                     {product.flashsale && (
                       <PiLightningFill
-                        className='absolute -top-1.5 left-1 text-yellow-400 animate-bounce'
+                        className="absolute -top-1.5 left-1 animate-bounce text-yellow-400"
                         size={16}
                       />
                     )}
                   </div>
 
-                  <p className='w-full text-ellipsis line-clamp-2 text-dark font-body text-sm tracking-wide leading-5 -mt-0.5'>
+                  <p className="-mt-0.5 line-clamp-2 w-full text-ellipsis font-body text-sm leading-5 tracking-wide text-dark">
                     {product.title}
                   </p>
                 </Link>
               ))
             ) : (
-              <p className='text-sm text-center'>0 kết quả tìm thấy</p>
+              <p className="text-center text-sm">0 kết quả tìm thấy</p>
             )}
           </ul>
         </div>
 
         {/* MARK: Nav */}
-        <div className='flex-shrink-0 hidden md:flex items-center gap-4'>
+        <div className="hidden flex-shrink-0 items-center gap-4 md:flex">
           <button
-            className='flex lg:hidden group h-full justify-center items-center'
+            className="group flex h-full items-center justify-center lg:hidden"
             onClick={() => {
               setOpenSearch(prev => !prev)
               setSearchResults(null)
@@ -340,16 +350,26 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
             }}
           >
             {openSearch ? (
-              <IoClose size={30} className='wiggle -mr-1.5' />
+              <IoClose
+                size={30}
+                className="wiggle -mr-1.5"
+              />
             ) : (
-              <FaSearch size={20} className='wiggle' />
+              <FaSearch
+                size={20}
+                className="wiggle"
+              />
             )}
           </button>
 
-          <Link href='/cart' prefetch={false} className='relative wiggle'>
+          <Link
+            href="/cart"
+            prefetch={false}
+            className="wiggle relative"
+          >
             <FaCartShopping size={24} />
             {!!cartLength && (
-              <span className='absolute -top-2 right-[-5px] bg-primary rounded-full text-center px-[6px] py-[2px] text-[10px] font-bold'>
+              <span className="absolute -top-2 right-[-5px] rounded-full bg-primary px-[6px] py-[2px] text-center text-[10px] font-bold">
                 {cartLength}
               </span>
             )}
@@ -358,26 +378,29 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           {curUser ? (
             !!curUser._id && (
               <div
-                className='flex items-center gap-2 cursor-pointer'
+                className="flex cursor-pointer items-center gap-2"
                 onClick={() => setIsOpenMenu(prev => !prev)}
               >
                 <Image
-                  className='aspect-square rounded-full wiggle-0'
+                  className="wiggle-0 aspect-square rounded-full"
                   src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
                   width={40}
                   height={40}
-                  alt='avatar'
+                  alt="avatar"
                 />
-                <div className='text-[18px] font-body hover:underline underline-offset-2'>
+                <div className="font-body text-[18px] underline-offset-2 hover:underline">
                   {formatPrice(curUser?.balance)}
                 </div>
-                <IoChevronDown size={22} className='common-transition wiggle' />
+                <IoChevronDown
+                  size={22}
+                  className="common-transition wiggle"
+                />
               </div>
             )
           ) : (
             <Link
-              href='/auth/login'
-              className='bg-secondary hover:bg-primary text-nowrap common-transition px-[10px] py-[6px] rounded-extra-small font-body font-semibold tracking-wider cursor-pointer'
+              href="/auth/login"
+              className="common-transition cursor-pointer text-nowrap rounded-extra-small bg-secondary px-[10px] py-[6px] font-body font-semibold tracking-wider hover:bg-primary"
             >
               Đăng nhập
             </Link>
@@ -385,11 +408,11 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         </div>
 
         {/* Menu Button */}
-        <div className='md:hidden flex items-center'>
+        <div className="flex items-center md:hidden">
           <button
             className={`${
               hideSearch ? 'hidden' : ''
-            } sm:flex lg:hidden group h-full w-[40px] justify-center items-center`}
+            } group h-full w-[40px] items-center justify-center sm:flex lg:hidden`}
             onClick={() => {
               setOpenSearch(prev => !prev)
               setSearchResults(null)
@@ -398,25 +421,37 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
             }}
           >
             {openSearch ? (
-              <IoClose size={30} className='wiggle' />
+              <IoClose
+                size={30}
+                className="wiggle"
+              />
             ) : (
-              <FaSearch size={20} className='wiggle' />
+              <FaSearch
+                size={20}
+                className="wiggle"
+              />
             )}
           </button>
 
           <button
-            className='flex justify-center items-center w-[40px] h-[40px]'
+            className="flex h-[40px] w-[40px] items-center justify-center"
             onClick={() => setIsOpenMenu(prev => !prev)}
           >
-            <FaBars size={22} className='common-transition wiggle' />
+            <FaBars
+              size={22}
+              className="common-transition wiggle"
+            />
           </button>
         </div>
 
         {/* MARK: Menu */}
-        <Menu open={isOpenMenu} setOpen={setIsOpenMenu} />
+        <Menu
+          open={isOpenMenu}
+          setOpen={setIsOpenMenu}
+        />
       </div>
     </header>
   )
 }
 
-export default Header
+export default memo(Header)

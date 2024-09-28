@@ -252,40 +252,50 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
   }, [handleFilter, handleResetFilter, handleSubmit, vouchers])
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* MARK: Top & Pagination */}
-      <AdminHeader title='All Vouchers' addLink='/admin/voucher/add' />
-      <Pagination searchParams={searchParams} amount={amount} itemsPerPage={itemPerPage} />
+      <AdminHeader
+        title="All Vouchers"
+        addLink="/admin/voucher/add"
+      />
+      <Pagination
+        searchParams={searchParams}
+        amount={amount}
+        itemsPerPage={itemPerPage}
+      />
 
       {/* MARK: Filter */}
-      <AdminMeta handleFilter={handleSubmit(handleFilter)} handleResetFilter={handleResetFilter}>
+      <AdminMeta
+        handleFilter={handleSubmit(handleFilter)}
+        handleResetFilter={handleResetFilter}
+      >
         {/* Search */}
-        <div className='flex flex-col col-span-12'>
+        <div className="col-span-12 flex flex-col">
           <Input
-            className='md:max-w-[450px]'
-            id='search'
-            label='Search'
+            className="md:max-w-[450px]"
+            id="search"
+            label="Search"
             disabled={false}
             register={register}
             errors={errors}
-            type='text'
+            type="text"
             icon={FaSearch}
             onFocus={() => clearErrors('search')}
           />
         </div>
 
         {/* Min Total */}
-        <div className='flex flex-col col-span-12 md:col-span-6'>
-          <label htmlFor='minTotal'>
-            <span className='font-bold'>Min Total: </span>
+        <div className="col-span-12 flex flex-col md:col-span-6">
+          <label htmlFor="minTotal">
+            <span className="font-bold">Min Total: </span>
             <span>{formatPrice(minTotal || maxMinTotal)}</span> - <span>{formatPrice(maxMinTotal)}</span>
           </label>
           <input
-            id='minTotal'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="minTotal"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minMinTotal || 0}
             max={maxMinTotal || 0}
             value={minTotal}
@@ -294,18 +304,18 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Max Reduce */}
-        <div className='flex flex-col col-span-12 md:col-span-6'>
-          <label htmlFor='maxReduce'>
-            <span className='font-bold'>Max Reduce: </span>
+        <div className="col-span-12 flex flex-col md:col-span-6">
+          <label htmlFor="maxReduce">
+            <span className="font-bold">Max Reduce: </span>
             <span>{formatPrice(maxReduce || maxMaxReduce)}</span> -{' '}
             <span>{formatPrice(maxMaxReduce)}</span>
           </label>
           <input
-            id='maxReduce'
-            className='input-range h-2 bg-slate-200 rounded-lg my-2'
-            placeholder=' '
+            id="maxReduce"
+            className="input-range my-2 h-2 rounded-lg bg-slate-200"
+            placeholder=" "
             disabled={false}
-            type='range'
+            type="range"
             min={minMaxReduce || 0}
             max={maxMaxReduce || 0}
             value={maxReduce}
@@ -314,70 +324,70 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Begin */}
-        <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
+        <div className="col-span-12 flex flex-wrap gap-2 sm:flex-nowrap lg:col-span-6">
           <Input
-            id='beginFrom'
-            label='Begin From'
+            id="beginFrom"
+            label="Begin From"
             disabled={false}
             register={register}
             errors={errors}
-            type='date'
+            type="date"
             icon={FaCalendar}
-            className='w-full'
+            className="w-full"
             onFocus={() => clearErrors('beginFrom')}
           />
 
           <Input
-            id='beginTo'
-            label='Begin To'
+            id="beginTo"
+            label="Begin To"
             disabled={false}
             register={register}
             errors={errors}
-            type='date'
+            type="date"
             icon={FaCalendar}
-            className='w-full'
+            className="w-full"
             onFocus={() => clearErrors('beginTo')}
           />
         </div>
 
         {/* Expire */}
-        <div className='flex flex-wrap sm:flex-nowrap gap-2 col-span-12 lg:col-span-6'>
+        <div className="col-span-12 flex flex-wrap gap-2 sm:flex-nowrap lg:col-span-6">
           <Input
-            id='expireFrom'
-            label='Expire From'
+            id="expireFrom"
+            label="Expire From"
             disabled={false}
             register={register}
             errors={errors}
-            type='date'
+            type="date"
             icon={FaCalendar}
-            className='w-full'
+            className="w-full"
             onFocus={() => clearErrors('expireFrom')}
           />
 
           <Input
-            id='expireTo'
-            label='Expire To'
+            id="expireTo"
+            label="Expire To"
             disabled={false}
             register={register}
             errors={errors}
-            type='date'
+            type="date"
             icon={FaCalendar}
-            className='w-full'
+            className="w-full"
             onFocus={() => clearErrors('expireTo')}
           />
         </div>
 
         {/* MARK: Select Filter */}
-        <div className='flex justify-end items-center flex-wrap gap-3 col-span-12 md:col-span-8'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
           {/* Sort */}
           <Input
-            id='sort'
-            label='Sort'
+            id="sort"
+            label="Sort"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('sort')}
             options={[
               {
@@ -402,13 +412,13 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Times Left */}
           <Input
-            id='timesLeft'
-            label='Times Left'
+            id="timesLeft"
+            label="Times Left"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('timesLeft')}
             options={[
               {
@@ -429,13 +439,13 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Type */}
           <Input
-            id='type'
-            label='Type'
+            id="type"
+            label="Type"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('type')}
             options={[
               {
@@ -460,13 +470,13 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Active */}
           <Input
-            id='active'
-            label='Active'
+            id="active"
+            label="Active"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
-            type='select'
+            type="select"
             onFocus={() => clearErrors('active')}
             options={[
               {
@@ -483,28 +493,30 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
                 label: 'Off',
               },
             ]}
-            className='min-w-[108px]'
+            className="min-w-[108px]"
           />
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className='flex flex-wrap justify-end items-center gap-2 col-span-12'>
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className='border border-sky-400 text-sky-400 rounded-lg px-3 py-2 hover:bg-sky-400 hover:text-white common-transition'
+            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedVouchers(
                 selectedVouchers.length > 0 ? [] : vouchers.map(voucher => voucher._id)
               )
-            }>
+            }
+          >
             {selectedVouchers.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
           {/* Activate Many Button */}
           {selectedVouchers.some(id => !vouchers.find(voucher => voucher._id === id)?.active) && (
             <button
-              className='border border-green-400 text-green-400 rounded-lg px-3 py-2 hover:bg-green-400 hover:text-white common-transition'
-              onClick={() => handleActivateVouchers(selectedVouchers, true)}>
+              className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+              onClick={() => handleActivateVouchers(selectedVouchers, true)}
+            >
               Activate
             </button>
           )}
@@ -512,8 +524,9 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Deactivate Many Button */}
           {selectedVouchers.some(id => vouchers.find(voucher => voucher._id === id)?.active) && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => handleActivateVouchers(selectedVouchers, false)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => handleActivateVouchers(selectedVouchers, false)}
+            >
               Deactivate
             </button>
           )}
@@ -521,8 +534,9 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedVouchers.length && (
             <button
-              className='border border-red-500 text-red-500 rounded-lg px-3 py-2 hover:bg-red-500 hover:text-white common-transition'
-              onClick={() => setIsOpenConfirmModal(true)}>
+              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              onClick={() => setIsOpenConfirmModal(true)}
+            >
               Delete
             </button>
           )}
@@ -533,20 +547,20 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
       <ConfirmDialog
         open={isOpenConfirmModal}
         setOpen={setIsOpenConfirmModal}
-        title='Delete Vouchers'
-        content='Are you sure that you want to delete these vouchers?'
+        title="Delete Vouchers"
+        content="Are you sure that you want to delete these vouchers?"
         onAccept={() => handleDeleteVouchers(selectedVouchers)}
         isLoading={loadingVouchers.length > 0}
       />
 
       {/* MARK: Amount */}
-      <div className='p-3 text-sm text-right text-white font-semibold'>
+      <div className="p-3 text-right text-sm font-semibold text-white">
         {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} voucher
         {amount > 1 ? 's' : ''}
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-21'>
+      <div className="grid grid-cols-1 gap-21 md:grid-cols-2 lg:grid-cols-3">
         {vouchers.map(voucher => (
           <VoucherItem
             data={voucher}

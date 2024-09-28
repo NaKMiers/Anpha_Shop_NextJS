@@ -1,7 +1,7 @@
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import Link from 'next/link'
-import React from 'react'
+import React, { memo } from 'react'
 import { BiSolidCategoryAlt } from 'react-icons/bi'
 import { FaTag } from 'react-icons/fa'
 import { FaBoltLightning } from 'react-icons/fa6'
@@ -19,37 +19,50 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
     <>
       {/* MARK: Overlay */}
       <div
-        className={`fixed top-0 left-0 right-0 bottom-0 ${!open ? 'hidden' : ''}`}
+        className={`fixed bottom-0 left-0 right-0 top-0 ${!open ? 'hidden' : ''}`}
         onClick={() => setOpen(false)}
       />
       {/* MARK: Main */}
       <div
-        className={`lg:hidden absolute z-10 top-0 left-0 w-full h-full bg-dark-100 bg-opacity-90 flex flex-col sm:flex-row justify-evenly items-start md:items-start gap-21 transition-all duration-300 rounded-bl-small overflow-hidden ${
+        className={`absolute left-0 top-0 z-10 flex h-full w-full flex-col items-start justify-evenly gap-21 overflow-hidden rounded-bl-small bg-dark-100 bg-opacity-90 transition-all duration-300 sm:flex-row md:items-start lg:hidden ${
           open ? 'max-h-[calc(100vh_-_72px_-_21px*2)] px-21 py-9' : 'max-h-0'
         }`}
-        onClick={() => setOpen(false)}>
-        <button className='absolute top-0 right-0 rounded-lg group p-2' onClick={() => setOpen(false)}>
-          <IoClose size={24} className='text-white wiggle' />
+        onClick={() => setOpen(false)}
+      >
+        <button
+          className="group absolute right-0 top-0 rounded-lg p-2"
+          onClick={() => setOpen(false)}
+        >
+          <IoClose
+            size={24}
+            className="wiggle text-white"
+          />
         </button>
 
         {/* MARK: Tag */}
         <ul
-          className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'
-          onClick={e => e.stopPropagation()}>
-          <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
+          className="relative w-full overflow-y-scroll rounded-lg bg-white p-2 pb-6 pt-0 shadow-small sm:max-w-[300px]"
+          onClick={e => e.stopPropagation()}
+        >
+          <h5 className="sticky top-0 z-10 bg-white pt-2 text-center text-[20px] font-semibold text-dark">
             Tags
           </h5>
 
           {tags?.map(tag => (
             <li
-              className='group rounded-extra-small text-dark hover:bg-primary common-transition'
-              key={tag.title}>
+              className="common-transition group rounded-extra-small text-dark hover:bg-primary"
+              key={tag.title}
+            >
               <Link
                 href={`/tag?tag=${tag.slug}`}
                 prefetch={false}
-                className='flex items-center px-[10px] py-[6px]'>
-                <FaTag size={16} className='wiggle' />
-                <span className='ms-2'>{tag.title}</span>
+                className="flex items-center px-[10px] py-[6px]"
+              >
+                <FaTag
+                  size={16}
+                  className="wiggle"
+                />
+                <span className="ms-2">{tag.title}</span>
               </Link>
             </li>
           ))}
@@ -57,32 +70,42 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
 
         {/* MARK: Category */}
         <ul
-          className='relative sm:max-w-[300px] w-full bg-white p-2 pt-0 pb-6 rounded-lg shadow-small overflow-y-scroll'
-          onClick={e => e.stopPropagation()}>
-          <h5 className='bg-white pt-2 sticky top-0 text-[20px] font-semibold text-center text-dark z-10'>
+          className="relative w-full overflow-y-scroll rounded-lg bg-white p-2 pb-6 pt-0 shadow-small sm:max-w-[300px]"
+          onClick={e => e.stopPropagation()}
+        >
+          <h5 className="sticky top-0 z-10 bg-white pt-2 text-center text-[20px] font-semibold text-dark">
             Thể loại
           </h5>
 
-          <li className='group rounded-extra-small text-dark hover:bg-primary common-transition'>
+          <li className="common-transition group rounded-extra-small text-dark hover:bg-primary">
             <Link
-              href='/flashsale'
+              href="/flashsale"
               prefetch={false}
-              className='flex items-center px-[10px] py-[6px] gap-2'>
-              <FaBoltLightning size={16} className='wiggle text-secondary' />
-              <span className='font-bold text-secondary'>FLASHSALES</span>
+              className="flex items-center gap-2 px-[10px] py-[6px]"
+            >
+              <FaBoltLightning
+                size={16}
+                className="wiggle text-secondary"
+              />
+              <span className="font-bold text-secondary">FLASHSALES</span>
             </Link>
           </li>
 
           {categories?.map(category => (
             <li
-              className='group rounded-extra-small text-dark hover:bg-primary common-transition'
-              key={category.title}>
+              className="common-transition group rounded-extra-small text-dark hover:bg-primary"
+              key={category.title}
+            >
               <Link
                 href={`/category?ctg=${category.slug}`}
                 prefetch={false}
-                className='flex items-center px-[10px] py-[6px]'>
-                <BiSolidCategoryAlt size={17} className='wiggle' />
-                <span className='ms-2'>{category.title}</span>
+                className="flex items-center px-[10px] py-[6px]"
+              >
+                <BiSolidCategoryAlt
+                  size={17}
+                  className="wiggle"
+                />
+                <span className="ms-2">{category.title}</span>
               </Link>
             </li>
           ))}
@@ -92,4 +115,4 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
   )
 }
 
-export default BannerMenu
+export default memo(BannerMenu)

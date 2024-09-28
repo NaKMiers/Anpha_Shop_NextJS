@@ -3,7 +3,7 @@
 import { handleQuery } from '@/utils/handleQuery'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 
 interface PaginationProps {
   searchParams: { [key: string]: string[] | string } | undefined
@@ -67,26 +67,29 @@ function Pagination({
   return (
     pageAmount > 1 && (
       <div
-        className={`flex font-semibold gap-2 justify-center w-full max-w-[491px] mx-auto ${className}`}>
+        className={`mx-auto flex w-full max-w-[491px] justify-center gap-2 font-semibold ${className}`}
+      >
         {/* MARK: Prev */}
         {currentPage != 1 && (
           <Link
             href={getPageLink(currentPage <= 1 ? 1 : currentPage - 1)}
-            className='rounded-lg border-2 py-[6px] px-2 bg-white hover:bg-secondary hover:text-white common-transition border-white'
-            title={`👈 Trang ${currentPage <= 1 ? 1 : currentPage - 1}`}>
+            className="common-transition rounded-lg border-2 border-white bg-white px-2 py-[6px] hover:bg-secondary hover:text-white"
+            title={`👈 Trang ${currentPage <= 1 ? 1 : currentPage - 1}`}
+          >
             Trước
           </Link>
         )}
 
         {/* MARK: 1 ... n */}
-        <div className='flex gap-2 no-scrollbar overflow-x-scroll'>
+        <div className="no-scrollbar flex gap-2 overflow-x-scroll">
           {Array.from({ length: pageAmount }).map((_, index) => (
             <Link
               href={getPageLink(index + 1)}
-              className={`rounded-lg border-2 py-[6px] px-4 hover:bg-secondary hover:text-white common-transition border-white text-dark ${
-                currentPage === index + 1 ? 'bg-primary border-primary' : 'bg-white'
+              className={`common-transition rounded-lg border-2 border-white px-4 py-[6px] text-dark hover:bg-secondary hover:text-white ${
+                currentPage === index + 1 ? 'border-primary bg-primary' : 'bg-white'
               }`}
-              key={index}>
+              key={index}
+            >
               {index + 1}
             </Link>
           ))}
@@ -96,8 +99,9 @@ function Pagination({
         {currentPage != pageAmount && (
           <Link
             href={getPageLink(currentPage >= pageAmount ? pageAmount : currentPage + 1)}
-            className='rounded-lg border-2 py-[6px] px-2 bg-white hover:bg-secondary hover:text-white common-transition border-white'
-            title={`👉 Trang ${currentPage >= pageAmount ? pageAmount : currentPage + 1}`}>
+            className="common-transition rounded-lg border-2 border-white bg-white px-2 py-[6px] hover:bg-secondary hover:text-white"
+            title={`👉 Trang ${currentPage >= pageAmount ? pageAmount : currentPage + 1}`}
+          >
             Sau
           </Link>
         )}
@@ -106,4 +110,4 @@ function Pagination({
   )
 }
 
-export default Pagination
+export default memo(Pagination)
