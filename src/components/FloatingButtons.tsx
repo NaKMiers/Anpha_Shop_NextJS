@@ -16,7 +16,6 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
 
   // states
   const [openAds, setOpenAds] = useState<boolean>(false)
-  const [isAllowCloseAds, setIsAllowCloseAds] = useState<boolean>(false)
 
   // set width
   useEffect(() => {
@@ -40,18 +39,12 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
     if (JSON.parse(localStorage.getItem('openAds') || '{"timeLeft": 4}').timeLeft > 0) {
       setTimeout(() => {
         setOpenAds(true)
-        setTimeout(() => {
-          setIsAllowCloseAds(true)
-        }, 3000)
       }, 10000)
     }
   }, [])
 
   // handle close ads
   const handleCloseAds = useCallback(() => {
-    console.log('isAllowCloseAds', isAllowCloseAds)
-    if (!isAllowCloseAds) return
-
     const string = localStorage.getItem('openAds')
     if (string) {
       const data = JSON.parse(string)
@@ -64,8 +57,7 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
     }
 
     setOpenAds(false)
-    setIsAllowCloseAds(false)
-  }, [isAllowCloseAds])
+  }, [])
 
   return (
     <>
@@ -77,9 +69,6 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
           title="Ads"
           onClick={() => {
             setOpenAds(true)
-            setTimeout(() => {
-              setIsAllowCloseAds(true)
-            }, 3000)
           }}
         >
           <RiAdvertisementFill
