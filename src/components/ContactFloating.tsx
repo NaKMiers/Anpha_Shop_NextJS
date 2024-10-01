@@ -36,7 +36,7 @@ function ContactFloating({ className = '' }: ContactFloatingProps) {
         onClick={() => setOpen(false)}
       />
       <div
-        className={`fixed bottom-9 right-3 z-30 flex select-none items-center overflow-hidden rounded-xl bg-dark-100 shadow-medium-light transition-all duration-300 ${
+        className={`fixed bottom-[88px] right-3 z-30 flex select-none items-center overflow-hidden rounded-xl bg-dark-100 shadow-medium-light transition-all duration-300 md:bottom-9 ${
           !open ? '' : ''
         }`}
       >
