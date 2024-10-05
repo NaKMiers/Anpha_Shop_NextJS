@@ -145,7 +145,7 @@ function ForgotPasswordPage() {
         <div className="-mt-3 mb-3 flex justify-end">
           <a
             href="/auth/login"
-            className="common-transition text-dark underline hover:text-sky-600"
+            className="trans-200 text-dark underline hover:text-sky-600"
           >
             Quay lại đăng nhập
           </a>
@@ -156,14 +156,14 @@ function ForgotPasswordPage() {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isSent && isCounting}
-            className={`common-transition group flex h-[40px] min-w-[48px] items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
+            className={`trans-200 group flex h-[40px] min-w-[48px] items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
               isLoading || isCounting ? 'pointer-events-none bg-slate-200' : ''
             }`}
           >
             {isLoading || isCounting ? (
               <FaCircleNotch
                 size={18}
-                className="common-transition animate-spin text-white group-hover:text-dark"
+                className="trans-200 animate-spin text-white group-hover:text-dark"
               />
             ) : (
               'Gửi mã'

@@ -45,7 +45,7 @@ function AdminMeta({ handleFilter, handleResetFilter, className = '', children }
         <div className="col-span-12 flex items-center justify-end gap-2 md:col-span-4">
           {/* Filter Button */}
           <button
-            className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
+            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
             title="Alt + Enter"
             onClick={handleFilter}
           >
@@ -58,7 +58,7 @@ function AdminMeta({ handleFilter, handleResetFilter, className = '', children }
 
           {/* Reset Button */}
           <button
-            className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
+            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
             title="Alt + R"
             onClick={handleResetFilter}
           >

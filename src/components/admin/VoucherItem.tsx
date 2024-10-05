@@ -38,7 +38,7 @@ function VoucherItem({
   return (
     <>
       <div
-        className={`common-transition relative flex cursor-pointer items-start justify-between gap-2 rounded-lg p-4 text-dark shadow-lg ${
+        className={`trans-200 relative flex cursor-pointer items-start justify-between gap-2 rounded-lg p-4 text-dark shadow-lg ${
           selectedVouchers.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         onClick={() =>

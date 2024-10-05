@@ -251,7 +251,7 @@ function UserPage() {
           <div className="group relative mx-auto flex aspect-square max-w-[200px] items-center justify-center overflow-hidden rounded-full p-3">
             {(imageUrl || user?.avatar) && (
               <Image
-                className="common-transition h-full w-full rounded-full object-cover"
+                className="trans-200 h-full w-full rounded-full object-cover"
                 src={imageUrl || user?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
                 width={160}
                 height={160}
@@ -269,7 +269,7 @@ function UserPage() {
             />
             {user?.authType === 'local' && (
               <div
-                className="common-transition absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-primary bg-opacity-50 opacity-0 group-hover:opacity-100"
+                className="trans-200 absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-primary bg-opacity-50 opacity-0 group-hover:opacity-100"
                 onClick={() => avatarInputRef.current?.click()}
               >
                 <FaCamera
@@ -283,7 +283,7 @@ function UserPage() {
           {/* Save Avatar Button */}
           {user?.authType === 'local' && file && (
             <LoadingButton
-              className="common-transition mt-1.5 rounded-lg border border-green-500 px-3 py-[6px] text-sm font-semibold text-green-500 hover:bg-green-500 hover:text-white"
+              className="trans-200 mt-1.5 rounded-lg border border-green-500 px-3 py-[6px] text-sm font-semibold text-green-500 hover:bg-green-500 hover:text-white"
               onClick={handleSaveAvatar}
               text="Lưu"
               isLoading={isChangingAvatar}
@@ -338,14 +338,14 @@ function UserPage() {
               <p className="mb-1 font-semibold">Nạp tiền</p>
               <Link
                 href="/recharge"
-                className="common-transition group inline-flex items-center gap-1 rounded-extra-small bg-primary px-3 py-[6px] hover:bg-secondary"
+                className="trans-200 group inline-flex items-center gap-1 rounded-extra-small bg-primary px-3 py-[6px] hover:bg-secondary"
               >
-                <span className="common-transition font-body text-[18px] font-bold tracking-[0.02em] text-white group-hover:text-white">
+                <span className="trans-200 font-body text-[18px] font-bold tracking-[0.02em] text-white group-hover:text-white">
                   Nạp
                 </span>
                 <HiLightningBolt
                   size={20}
-                  className="common-transition animate-bounce text-white group-hover:text-white"
+                  className="trans-200 animate-bounce text-white group-hover:text-white"
                 />
               </Link>
             </div>
@@ -363,12 +363,12 @@ function UserPage() {
             <div className="flex items-center justify-center gap-2 sm:justify-normal">
               {user?.balance >= 0 && <p className="text-green-500">{formatPrice(user?.balance)}</p>}
               <Link
-                className="common-transition group flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110 hover:border-secondary"
+                className="trans-200 group flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110 hover:border-secondary"
                 href="/recharge"
               >
                 <FaPlus
                   size={10}
-                  className="common-transition wiggle text-primary group-hover:text-secondary"
+                  className="trans-200 wiggle text-primary group-hover:text-secondary"
                 />
               </Link>
             </div>
@@ -540,7 +540,7 @@ function UserPage() {
         {/* MARK: Save */}
         {isEditing && (
           <LoadingButton
-            className="common-transition mb-5 mt-5 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+            className="trans-200 mb-5 mt-5 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
             onClick={handleSubmit(updateProfile)}
             text="Lưu"
             isLoading={isLoading}

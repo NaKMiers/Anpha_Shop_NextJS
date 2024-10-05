@@ -46,7 +46,7 @@ function AccountItem({
   return (
     <>
       <div
-        className={`common-transition relative flex w-full cursor-pointer items-start gap-2 rounded-lg p-4 shadow-lg ${
+        className={`trans-200 relative flex w-full cursor-pointer items-start gap-2 rounded-lg p-4 shadow-lg ${
           selectedAccounts.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         onClick={() =>

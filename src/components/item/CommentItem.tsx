@@ -173,7 +173,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
                 comment.hide
                   ? 'border-rose-500 text-rose-500 hover:bg-rose-500'
                   : 'border-green-500 text-green-500 hover:bg-green-500'
-              } common-transition hover:text-white`}
+              } trans-200 hover:text-white`}
               onClick={() => hideComment(comment._id, comment.hide ? 'n' : 'y')}
             >
               {comment.hide ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
@@ -219,7 +219,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         <div
           className={`${
             isOpenReply ? 'max-h-[350px]' : 'max-h-0'
-          } common-transition relative mt-1 h-full overflow-y-scroll`}
+          } trans-200 relative mt-1 h-full overflow-y-scroll`}
         >
           {/* MARK: Input */}
           <div className="sticky top-0 z-10 flex items-start gap-2 bg-white">
@@ -241,11 +241,11 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
                 onWheel={e => e.currentTarget.blur()}
               />
               <div className="mt-2 flex justify-end gap-2">
-                <button className="common-transition h-[30px] rounded-lg px-3 text-sm hover:bg-slate-200">
+                <button className="trans-200 h-[30px] rounded-lg px-3 text-sm hover:bg-slate-200">
                   Hủy
                 </button>
                 <LoadingButton
-                  className="common-transition flex h-[30px] items-center rounded-lg border border-primary px-3 text-sm text-primary hover:bg-primary hover:text-white"
+                  className="trans-200 flex h-[30px] items-center rounded-lg border border-primary px-3 text-sm text-primary hover:bg-primary hover:text-white"
                   onClick={handleSubmit(replyComment)}
                   text="Gửi"
                   isLoading={isLoading}

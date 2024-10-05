@@ -43,7 +43,7 @@ function AdminMenu() {
 
       {/* MARK: Open Button */}
       <button
-        className={`common-transition fixed right-0 top-[20%] z-20 rounded-bl-md rounded-tl-md bg-dark-100 p-[5px] pl-2 text-white shadow-md hover:bg-primary ${
+        className={`trans-200 fixed right-0 top-[20%] z-20 rounded-bl-md rounded-tl-md bg-dark-100 p-[5px] pl-2 text-white shadow-md hover:bg-primary ${
           !open ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={() => setOpen(!open)}
@@ -55,7 +55,7 @@ function AdminMenu() {
       <div
         className={`fixed top-[20%] z-${
           open ? 30 : 20
-        } common-transition right-0 w-full max-w-[300px] rounded-bl-medium rounded-tl-medium bg-dark-100 p-4 text-white shadow-md shadow-primary ${
+        } trans-200 right-0 w-full max-w-[300px] rounded-bl-medium rounded-tl-medium bg-dark-100 p-4 text-white shadow-md shadow-primary ${
           open ? 'opacity-1 translate-x-0' : 'translate-x-full opacity-10'
         }`}
       >
@@ -87,7 +87,7 @@ function AdminMenu() {
               {/* "All" Link */}
               <Link
                 href={links[0].href}
-                className="common-transition group flex flex-grow items-center gap-2 rounded-lg p-2 font-body tracking-wide hover:bg-secondary"
+                className="trans-200 group flex flex-grow items-center gap-2 rounded-lg p-2 font-body tracking-wide hover:bg-secondary"
                 onClick={() => setOpen(false)}
               >
                 <Icon
@@ -101,7 +101,7 @@ function AdminMenu() {
               {links[1] && (
                 <Link
                   href={links[1].href}
-                  className="common-transition group flex flex-shrink-0 items-center justify-center rounded-full border-2 border-white p-[3px] hover:scale-110 hover:border-primary"
+                  className="trans-200 group flex flex-shrink-0 items-center justify-center rounded-full border-2 border-white p-[3px] hover:scale-110 hover:border-primary"
                   onClick={() => setOpen(false)}
                 >
                   <FaPlus

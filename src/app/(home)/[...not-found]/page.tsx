@@ -25,7 +25,7 @@ function NotFoundPage() {
           <Link
             href="/"
             prefetch={false}
-            className="common-transition text-sky-400 underline hover:text-sky-600"
+            className="trans-200 text-sky-400 underline hover:text-sky-600"
           >
             Trang chủ
           </Link>

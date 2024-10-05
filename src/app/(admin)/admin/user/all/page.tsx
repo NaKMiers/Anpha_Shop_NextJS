@@ -355,7 +355,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={handleSelectAllUsers}
           >
             {selectedUsers.length > 0 ? 'Unselect All' : 'Select All'}
@@ -364,7 +364,7 @@ function AllUsersPage({ searchParams }: { searchParams?: { [key: string]: string
           {/* Delete Many Button */}
           {!!selectedUsers.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => setIsOpenConfirmModal(true)}
             >
               Delete

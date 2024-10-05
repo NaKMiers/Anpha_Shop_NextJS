@@ -153,7 +153,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           {editMode ? (
             <>
               <button
-                className="common-transition group flex h-9 items-center justify-center rounded-md border-2 border-slate-400 px-2 text-slate-400 hover:bg-slate-400 hover:text-white"
+                className="trans-200 group flex h-9 items-center justify-center rounded-md border-2 border-slate-400 px-2 text-slate-400 hover:bg-slate-400 hover:text-white"
                 onClick={() => setEditMode(false)}
               >
                 <MdCancel
@@ -162,7 +162,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
                 />
               </button>
               <button
-                className={`common-transition group flex h-9 items-center justify-center rounded-md border-2 px-2 hover:bg-rose-500 hover:text-white ${
+                className={`trans-200 group flex h-9 items-center justify-center rounded-md border-2 px-2 hover:bg-rose-500 hover:text-white ${
                   isSaving
                     ? 'pointer-events-none border-slate-400 text-slate-400'
                     : 'border-rose-500 text-rose-500'
@@ -184,7 +184,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             </>
           ) : (
             <button
-              className="common-transition group flex h-9 items-center justify-center rounded-md border-2 border-secondary px-2 text-secondary hover:bg-secondary hover:text-white"
+              className="trans-200 group flex h-9 items-center justify-center rounded-md border-2 border-secondary px-2 text-secondary hover:bg-secondary hover:text-white"
               onClick={() => setEditMode(true)}
             >
               <MdEdit
@@ -198,7 +198,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
       {/* MARK: Info */}
       <div className="mt-5 grid grid-cols-1 items-start gap-2 md:grid-cols-2">
-        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
               <span className="font-semibold">Date: </span>
@@ -219,7 +219,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             />
           )}
         </div>
-        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
               <span className="font-semibold">Status: </span>
@@ -262,7 +262,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             />
           )}
         </div>
-        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
               <span className="font-semibold">Email: </span>
@@ -283,7 +283,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
             />
           )}
         </div>
-        <div className="common-transition col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 col-span-1 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           {!editMode ? (
             <>
               <span className="font-semibold">Total: </span>
@@ -305,7 +305,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           )}
         </div>
         {order?.voucherApplied && (
-          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
             <span className="font-semibold">Voucher: </span>
             <span
               className="font-semibold text-slate-400"
@@ -316,7 +316,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           </div>
         )}
         {!!order?.discount && (
-          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
             <span className="font-semibold">Giảm giá: </span>
             <span className="font-semibold text-secondary">{formatPrice(order?.discount)}</span>
           </div>
@@ -349,7 +349,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
               <div className="absolute right-2 top-2 flex gap-2">
                 {/* Decrease */}
                 <button
-                  className="common-transition group flex h-6 items-center justify-center rounded-md border-2 border-secondary px-1 text-secondary hover:bg-secondary hover:text-white"
+                  className="trans-200 group flex h-6 items-center justify-center rounded-md border-2 border-secondary px-1 text-secondary hover:bg-secondary hover:text-white"
                   onClick={() => handleChangeItemQuantity(item, -1)}
                 >
                   <FaMinus
@@ -360,7 +360,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
                 {/* Increase */}
                 <button
-                  className="common-transition group flex h-6 items-center justify-center rounded-md border-2 border-secondary px-1 text-secondary hover:bg-secondary hover:text-white"
+                  className="trans-200 group flex h-6 items-center justify-center rounded-md border-2 border-secondary px-1 text-secondary hover:bg-secondary hover:text-white"
                   onClick={() => handleChangeItemQuantity(item, 1)}
                 >
                   <FaPlus
@@ -371,7 +371,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
                 {/* Remove Button */}
                 <button
-                  className="common-transition group flex h-6 items-center justify-center rounded-md border-2 border-rose-500 px-1 text-rose-500 hover:bg-rose-500 hover:text-white"
+                  className="trans-200 group flex h-6 items-center justify-center rounded-md border-2 border-rose-500 px-1 text-rose-500 hover:bg-rose-500 hover:text-white"
                   onClick={() => handleRemoveItem(item)}
                 >
                   <FaTrash

@@ -212,7 +212,7 @@ function EditAccountPage() {
             </div>
             {!isEditingUsingUser ? (
               <p
-                className={`common-transition cursor-pointer select-none rounded-lg border border-dark bg-white px-4 py-2 text-dark`}
+                className={`trans-200 cursor-pointer select-none rounded-lg border border-dark bg-white px-4 py-2 text-dark`}
               >
                 {account.usingUser}
               </p>
@@ -470,7 +470,7 @@ function EditAccountPage() {
             {...register('active', { required: false })}
           />
           <label
-            className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
+            className={`trans-200 cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
             htmlFor="active"
           >
             Active
@@ -494,7 +494,7 @@ function EditAccountPage() {
               {...register('notify', { required: false })}
             />
             <label
-              className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
+              className={`trans-200 cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
               htmlFor="notify"
             >
               Notify
@@ -504,7 +504,7 @@ function EditAccountPage() {
 
         {/* Save Button */}
         <LoadingButton
-          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+          className="trans-200 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
           text="Save"
           isLoading={isLoading}

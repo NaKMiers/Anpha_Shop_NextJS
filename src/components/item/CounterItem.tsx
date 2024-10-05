@@ -45,7 +45,7 @@ function CounterItem({ max, value, size = 25, className }: CounterItem) {
       style={{ height: size }}
     >
       <div
-        className={`common-transition flex h-full flex-col`}
+        className={`trans-200 flex h-full flex-col`}
         ref={slideTrackRef}
       >
         {[...Array.from({ length: max + 1 }, (_, i) => max - i), max].map((n, i) => (

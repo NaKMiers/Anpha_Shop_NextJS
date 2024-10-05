@@ -50,8 +50,6 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
       try {
         const { results: movies } = await getMoviesList('popular', { page: 1 })
         setMovies(movies.slice(0, 4))
-
-        console.log('movies', movies)
       } catch (error) {
         console.log(error)
       }
@@ -88,7 +86,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
               {tags?.map(tag => (
                 <li
-                  className="common-transition group rounded-extra-small text-dark hover:bg-primary"
+                  className="trans-200 group rounded-extra-small text-dark hover:bg-primary"
                   key={tag.title}
                 >
                   <Link
@@ -176,7 +174,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             <ul className="hidden min-w-[200px] overflow-y-auto rounded-lg bg-white p-2 lg:block">
               <h5 className="ml-2 text-center text-[20px] font-semibold text-dark">Thể loại</h5>
 
-              <li className="common-transition group rounded-extra-small text-dark hover:bg-primary">
+              <li className="trans-200 group rounded-extra-small text-dark hover:bg-primary">
                 <Link
                   href="/flashsale"
                   prefetch={false}
@@ -192,7 +190,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
               {categories?.map(category => (
                 <li
-                  className="common-transition group rounded-extra-small text-dark hover:bg-primary"
+                  className="trans-200 group rounded-extra-small text-dark hover:bg-primary"
                   key={category.title}
                 >
                   <Link

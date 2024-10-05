@@ -183,7 +183,7 @@ function UserItem({
   return (
     <>
       <div
-        className={`common-transition relative flex select-none items-start justify-between gap-2 rounded-lg p-4 shadow-lg ${
+        className={`trans-200 relative flex select-none items-start justify-between gap-2 rounded-lg p-4 shadow-lg ${
           selectedUsers.includes(userData._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${!isCurUser ? 'cursor-pointer' : ''} ${className}`}
         onClick={() =>
@@ -223,12 +223,12 @@ function UserItem({
               <span className="text-green-500">{formatPrice(userData.balance)}</span>
             </p>
             <button
-              className="common-transition group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 hover:border-primary"
+              className="trans-200 group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 hover:border-primary"
               onClick={e => e.stopPropagation()}
             >
               <FaPlus
                 size={10}
-                className="common-transition group-hover:text-primary"
+                className="trans-200 group-hover:text-primary"
                 onClick={() => setIsOpenRecharge(true)}
               />
             </button>
@@ -318,7 +318,7 @@ function UserItem({
               onFocus={() => clearErrors('recharge')}
             />
             <LoadingButton
-              className="common-transition flex h-[46px] items-center justify-center rounded-lg bg-secondary px-4 font-semibold text-white shadow-lg hover:bg-primary"
+              className="trans-200 flex h-[46px] items-center justify-center rounded-lg bg-secondary px-4 font-semibold text-white shadow-lg hover:bg-primary"
               text="Add"
               onClick={e => {
                 e.stopPropagation()
@@ -376,7 +376,7 @@ function UserItem({
                 onFocus={() => clearErrors('value-' + data._id)}
               />
               <LoadingButton
-                className="common-transition flex h-[46px] items-center justify-center rounded-lg bg-secondary px-4 font-semibold text-white shadow-lg hover:bg-primary"
+                className="trans-200 flex h-[46px] items-center justify-center rounded-lg bg-secondary px-4 font-semibold text-white shadow-lg hover:bg-primary"
                 text="Set"
                 onClick={e => {
                   e.stopPropagation()

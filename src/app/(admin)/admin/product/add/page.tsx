@@ -275,7 +275,7 @@ function AddVoucherPage() {
             />
           </div>
           <label
-            className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 px-4 py-2 ${
+            className={`trans-200 cursor-pointer select-none rounded-lg border border-green-500 px-4 py-2 ${
               isChecked ? 'bg-green-500 text-white' : 'bg-white text-green-500'
             }`}
             htmlFor="isActive"
@@ -309,7 +309,7 @@ function AddVoucherPage() {
                   id={tag._id}
                 />
                 <label
-                  className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 px-3 py-[6px] text-green-500 ${
+                  className={`trans-200 cursor-pointer select-none rounded-lg border border-green-500 px-3 py-[6px] text-green-500 ${
                     selectedTags.some(t => t === tag._id) ? 'bg-green-500 text-white' : ''
                   }`}
                   htmlFor={tag._id}
@@ -335,7 +335,7 @@ function AddVoucherPage() {
                   id={category._id}
                 />
                 <label
-                  className={`common-transition cursor-pointer select-none rounded-lg border border-sky-500 px-3 py-[6px] text-sky-500 ${
+                  className={`trans-200 cursor-pointer select-none rounded-lg border border-sky-500 px-3 py-[6px] text-sky-500 ${
                     selectedCategory === category._id ? 'bg-sky-500 text-white' : ''
                   }`}
                   htmlFor={category._id}
@@ -399,7 +399,7 @@ function AddVoucherPage() {
                 >
                   <FaX
                     size={16}
-                    className="common-transition text-dark group-hover:text-white"
+                    className="trans-200 text-dark group-hover:text-white"
                   />
                 </button>
               </div>
@@ -408,7 +408,7 @@ function AddVoucherPage() {
         )}
 
         <LoadingButton
-          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+          className="trans-200 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
           text="Add"
           isLoading={isLoading}

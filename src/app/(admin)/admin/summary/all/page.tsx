@@ -130,7 +130,7 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             title="Alt + A"
             onClick={() =>
               setSelectedSummaries(
@@ -144,7 +144,7 @@ function AllSummariesPage({ searchParams }: { searchParams?: { [key: string]: st
           {/* Send Summaries Button */}
           {!!selectedSummaries.length && (
             <button
-              className="common-transition rounded-lg border border-green-500 px-3 py-2 text-green-500 hover:bg-green-500 hover:text-white"
+              className="trans-200 rounded-lg border border-green-500 px-3 py-2 text-green-500 hover:bg-green-500 hover:text-white"
               title="Alt + Delete"
               onClick={() => handleSendSummaries(selectedSummaries)}
             >

@@ -169,7 +169,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
       <div className="flex justify-end">
         <button
           onClick={() => setIsShowFilter(!isShowFilter)}
-          className="common-transition group mb-3 ml-auto rounded-md bg-dark-100 px-3 py-[2px] text-white shadow-lg hover:bg-primary"
+          className="trans-200 group mb-3 ml-auto rounded-md bg-dark-100 px-3 py-[2px] text-white shadow-lg hover:bg-primary"
         >
           <BsThreeDots
             size={28}
@@ -285,7 +285,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
           <div className="col-span-12 flex items-center justify-end gap-2">
             {/* Filter Button */}
             <button
-              className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
+              className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
               title="Alt + Enter"
               onClick={handleSubmit(handleFilter)}
             >
@@ -298,7 +298,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
 
             {/* Reset Button */}
             <button
-              className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
+              className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
               title="Alt + R"
               onClick={handleResetFilter}
             >

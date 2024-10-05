@@ -81,7 +81,7 @@ function ContactFloating({ className = '' }: ContactFloatingProps) {
         >
           <FaChevronLeft
             size={20}
-            className={`group-hover:scale-125 ${open ? 'rotate-180' : ''} common-transition text-white`}
+            className={`group-hover:scale-125 ${open ? 'rotate-180' : ''} trans-200 text-white`}
           />
         </button>
       </div>

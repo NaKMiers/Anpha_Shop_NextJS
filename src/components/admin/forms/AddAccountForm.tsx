@@ -331,7 +331,7 @@ ${data.additionalInfo}`
           {...register('active', { required: false })}
         />
         <label
-          className={`common-transition cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
+          className={`trans-200 cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white`}
           htmlFor="active"
         >
           Active
@@ -341,28 +341,28 @@ ${data.additionalInfo}`
       <div className="flex flex-wrap items-center gap-2">
         {/* MARK: Add Button */}
         <LoadingButton
-          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+          className="trans-200 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
           text="Add"
           isLoading={loading}
         />
 
         <button
-          className="common-transition rounded-lg border border-sky-300 px-4 py-2 font-semibold text-sky-300 hover:bg-sky-300 hover:text-white"
+          className="trans-200 rounded-lg border border-sky-300 px-4 py-2 font-semibold text-sky-300 hover:bg-sky-300 hover:text-white"
           onClick={() => handleDuplicateForm(getValues())}
         >
           Duplicate
         </button>
 
         <button
-          className="common-transition rounded-lg border border-rose-400 px-4 py-2 font-semibold text-rose-400 hover:bg-rose-400 hover:text-white"
+          className="trans-200 rounded-lg border border-rose-400 px-4 py-2 font-semibold text-rose-400 hover:bg-rose-400 hover:text-white"
           onClick={() => reset({ ...defaultValues, id: new Date().getTime() })}
         >
           Clear
         </button>
 
         <button
-          className="common-transition rounded-lg border border-yellow-400 px-4 py-2 font-semibold text-yellow-400 hover:bg-yellow-400 hover:text-white"
+          className="trans-200 rounded-lg border border-yellow-400 px-4 py-2 font-semibold text-yellow-400 hover:bg-yellow-400 hover:text-white"
           onClick={handleGenerate}
         >
           Generate
@@ -370,7 +370,7 @@ ${data.additionalInfo}`
 
         {forms.length > 1 && (
           <button
-            className="common-transition rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-300 hover:bg-slate-300 hover:text-dark"
+            className="trans-200 rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-300 hover:bg-slate-300 hover:text-dark"
             onClick={() => handleRemoveForm(form.id)}
           >
             Remove

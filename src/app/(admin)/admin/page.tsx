@@ -24,11 +24,26 @@ function AdminPage() {
   // tabs
   const tabs = useMemo(
     () => [
-      <RecentlySaleTab className='h-[500px] overflow-y-scroll ' key={1} />,
-      <AccountRankTab className='h-[500px] overflow-y-scroll' key={2} />,
-      <UserSpendingRankTab className='h-[500px]' key={5} />,
-      <CategoryRankTab className='h-[500px] overflow-y-scroll' key={3} />,
-      <TagRankTab className='h-[500px] overflow-y-scroll' key={4} />,
+      <RecentlySaleTab
+        className="h-[500px] overflow-y-scroll"
+        key={1}
+      />,
+      <AccountRankTab
+        className="h-[500px] overflow-y-scroll"
+        key={2}
+      />,
+      <UserSpendingRankTab
+        className="h-[500px]"
+        key={5}
+      />,
+      <CategoryRankTab
+        className="h-[500px] overflow-y-scroll"
+        key={3}
+      />,
+      <TagRankTab
+        className="h-[500px] overflow-y-scroll"
+        key={4}
+      />,
     ],
     []
   )
@@ -52,32 +67,36 @@ function AdminPage() {
   }
 
   return (
-    <div className='bg-white text-dark rounded-medium shadow-medium p-21'>
+    <div className="rounded-medium bg-white p-21 text-dark shadow-medium">
       {/* Staticticals */}
-      <h1 className='text-2xl font-semibold'>Dashboard</h1>
+      <h1 className="text-2xl font-semibold">Dashboard</h1>
 
       {/* Filter By Time */}
-      <div className='flex justify-end'>
+      <div className="flex justify-end">
         <select
-          className='appearance-none p-2.5 font-semibold text-sm bg-dark-100 text-white focus:outline-none focus:ring-0 peer rounded-lg cursor-pointer'
+          className="peer cursor-pointer appearance-none rounded-lg bg-dark-100 p-2.5 text-sm font-semibold text-white focus:outline-none focus:ring-0"
           value={by}
           onChange={e => {
             setBy(e.target.value as never)
             setChartChunk(0)
-          }}>
+          }}
+        >
           <option
-            className='bg-dark-100 text-white font-body font-semibold tracking-wider p-5'
-            value='day'>
+            className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
+            value="day"
+          >
             By Day
           </option>
           <option
-            className='bg-dark-100 text-white font-body font-semibold tracking-wider p-5'
-            value='month'>
+            className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
+            value="month"
+          >
             By Month
           </option>
           <option
-            className='bg-dark-100 text-white font-body font-semibold tracking-wider p-5'
-            value='year'>
+            className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
+            value="year"
+          >
             By Year
           </option>
         </select>
@@ -85,67 +104,78 @@ function AdminPage() {
 
       <Divider size={4} />
 
-      <div className='grid grid-cols-12 gap-x-21 gap-y-16'>
+      <div className="grid grid-cols-12 gap-x-21 gap-y-16">
         {/* Stats */}
-        <Stats by={by} className='col-span-12 grid grid-cols-4 gap-x-21 gap-y-21/2' />
+        <Stats
+          by={by}
+          className="col-span-12 grid grid-cols-4 gap-x-21 gap-y-21/2"
+        />
 
         {/* Chart & Rank */}
-        <div className='col-span-12 grid grid-cols-12 gap-21'>
+        <div className="col-span-12 grid grid-cols-12 gap-21">
           {/* BarChart */}
-          <div className='col-span-12 lg:col-span-7'>
-            <div className='flex gap-2 px-2'>
+          <div className="col-span-12 lg:col-span-7">
+            <div className="flex gap-2 px-2">
               {['Revenue', , 'New Orders', 'Sale Accounts', 'Used Vouchers'].map((label, index) => (
                 <span
-                  className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
-                    selectedChart === label ? 'bg-dark-100 text-white border-transparent' : ''
+                  className={`trans-200 line-clamp-1 block max-w-[100px] cursor-pointer text-ellipsis text-nowrap rounded-t-lg border border-b-0 px-2 py-1 ${
+                    selectedChart === label ? 'border-transparent bg-dark-100 text-white' : ''
                   }`}
                   onClick={() => setSelectedChart(label as never)}
                   title={label}
-                  key={index}>
+                  key={index}
+                >
                   {label}
                 </span>
               ))}
 
               {by !== 'year' && (
-                <div className='flex flex-1 justify-end'>
+                <div className="flex flex-1 justify-end">
                   <span
-                    className={`flex items-center rounded-tl-md justify-center px-2 py-1 border border-b-0 cursor-pointer`}
-                    title='Previous'
-                    onClick={prevChunk}>
+                    className={`flex cursor-pointer items-center justify-center rounded-tl-md border border-b-0 px-2 py-1`}
+                    title="Previous"
+                    onClick={prevChunk}
+                  >
                     <FaAngleLeft size={16} />
                   </span>
                   <span
-                    className={`flex items-center rounded-tr-md justify-center px-2 py-1 border border-b-0 cursor-pointer`}
-                    title='Next'
-                    onClick={nextChunk}>
+                    className={`flex cursor-pointer items-center justify-center rounded-tr-md border border-b-0 px-2 py-1`}
+                    title="Next"
+                    onClick={nextChunk}
+                  >
                     <FaAngleRight size={16} />
                   </span>
                 </div>
               )}
             </div>
-            <div className='border p-21 rounded-lg shadow-lg'>
-              <Chart chart={selectedChart} by={by} chunk={chartChunk} />
+            <div className="rounded-lg border p-21 shadow-lg">
+              <Chart
+                chart={selectedChart}
+                by={by}
+                chunk={chartChunk}
+              />
             </div>
           </div>
 
           {/* Rank */}
-          <div className='col-span-12 lg:col-span-5'>
-            <div className='flex gap-2 px-2'>
+          <div className="col-span-12 lg:col-span-5">
+            <div className="flex gap-2 px-2">
               {['Recently Sales', 'Account Rank', 'User Spending Rank', 'Category Rank', 'Tag Rank'].map(
                 (label, index) => (
                   <span
-                    className={`px-2 py-1 text-nowrap rounded-t-lg border border-b-0 cursor-pointer common-transition max-w-[100px] text-ellipsis line-clamp-1 block ${
-                      tab === index + 1 ? 'bg-dark-100 text-white border-transparent' : ''
+                    className={`trans-200 line-clamp-1 block max-w-[100px] cursor-pointer text-ellipsis text-nowrap rounded-t-lg border border-b-0 px-2 py-1 ${
+                      tab === index + 1 ? 'border-transparent bg-dark-100 text-white' : ''
                     }`}
                     onClick={() => setTab(index + 1)}
                     title={label}
-                    key={index}>
+                    key={index}
+                  >
                     {label}
                   </span>
                 )
               )}
             </div>
-            <div className='border p-21 rounded-lg shadow-lg'>{tabs[tab - 1]}</div>
+            <div className="rounded-lg border p-21 shadow-lg">{tabs[tab - 1]}</div>
           </div>
         </div>
       </div>

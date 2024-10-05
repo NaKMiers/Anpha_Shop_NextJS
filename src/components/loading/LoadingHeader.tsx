@@ -30,7 +30,7 @@ function Header({ isStatic, className }: HeaderProps) {
           <Link
             href="/"
             prefetch={false}
-            className="common-transition spin hidden shrink-0 rounded-full sm:block"
+            className="trans-200 spin hidden shrink-0 rounded-full sm:block"
           >
             <Image
               className="aspect-square rounded-full"
@@ -49,14 +49,14 @@ function Header({ isStatic, className }: HeaderProps) {
           </Link>
           <Link
             href="/recharge"
-            className="common-transition group ml-3 flex items-center gap-1 rounded-lg bg-primary px-[10px] py-[6px] hover:bg-secondary"
+            className="trans-200 group ml-3 flex items-center gap-1 rounded-lg bg-primary px-[10px] py-[6px] hover:bg-secondary"
           >
-            <span className="common-transition font-body text-[18px] font-bold tracking-[0.02em] group-hover:text-white">
+            <span className="trans-200 font-body text-[18px] font-bold tracking-[0.02em] group-hover:text-white">
               Nạp
             </span>
             <HiLightningBolt
               size={20}
-              className="common-transition animate-bounce group-hover:text-white"
+              className="trans-200 animate-bounce group-hover:text-white"
             />
           </Link>
         </div>
@@ -81,7 +81,7 @@ function Header({ isStatic, className }: HeaderProps) {
           ) : (
             <Link
               href="/auth/login"
-              className="common-transition cursor-pointer text-nowrap rounded-extra-small bg-secondary px-[10px] py-[6px] font-body font-semibold tracking-wider hover:bg-primary"
+              className="trans-200 cursor-pointer text-nowrap rounded-extra-small bg-secondary px-[10px] py-[6px] font-body font-semibold tracking-wider hover:bg-primary"
             >
               Đăng nhập
             </Link>

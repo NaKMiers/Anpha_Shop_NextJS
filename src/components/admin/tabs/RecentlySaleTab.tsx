@@ -113,7 +113,7 @@ function RecentlySaleTab({ className = '' }: RecentlySaleTab) {
       {/* Load More */}
       <div className="flex items-center justify-center">
         <button
-          className={`common-transition flex h-8 items-center justify-center rounded-md border-2 px-3 text-sm font-semibold text-white hover:bg-white hover:text-dark ${
+          className={`trans-200 flex h-8 items-center justify-center rounded-md border-2 px-3 text-sm font-semibold text-white hover:bg-white hover:text-dark ${
             loading ? 'pointer-events-none border-slate-400 bg-white' : 'border-dark bg-dark-100'
           }`}
           onClick={handleLoadMore}

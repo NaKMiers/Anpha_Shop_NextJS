@@ -240,7 +240,7 @@ function Meta({
         {!!items.length && (
           <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:max-h-[152px] lg:max-h-[152px]">
             <div
-              className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+              className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                 items.length === selectedFilterItems.length
                   ? 'border-dark-100 bg-dark-100 text-white'
                   : 'border-slate-300 bg-slate-200'
@@ -256,7 +256,7 @@ function Meta({
             </div>
             {items.map(item => (
               <div
-                className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+                className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                   selectedFilterItems.includes(item.slug)
                     ? 'border-secondary bg-secondary text-white'
                     : 'border-slate-300'
@@ -313,7 +313,7 @@ function Meta({
         <div className="col-span-12 flex items-center justify-end gap-2 md:col-span-4">
           {/* Filter Button */}
           <button
-            className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
+            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
             title="Alt + Enter"
             onClick={handleSubmit(handleFilter)}
           >
@@ -326,7 +326,7 @@ function Meta({
 
           {/* Reset Button */}
           <button
-            className="common-transition group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
+            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
             title="Alt + R"
             onClick={handleResetFilter}
           >

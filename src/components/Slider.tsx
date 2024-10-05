@@ -160,7 +160,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       {!hideControls && childrenAmount >= 2 && (
         <>
           <button
-            className="common-transition group absolute left-0 top-0 flex h-full w-12 items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 group-hover:translate-x-0 md:-translate-x-full"
+            className="trans-200 group absolute left-0 top-0 flex h-full w-12 items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 group-hover:translate-x-0 md:-translate-x-full"
             onClick={prevSlide}
           >
             <FaChevronLeft
@@ -169,7 +169,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
             />
           </button>
           <button
-            className="common-transition group absolute right-0 top-0 flex h-full w-12 items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 group-hover:translate-x-0 md:translate-x-full"
+            className="trans-200 group absolute right-0 top-0 flex h-full w-12 items-center justify-center hover:bg-slate-100 hover:bg-opacity-10 group-hover:translate-x-0 md:translate-x-full"
             onClick={nextSlide}
           >
             <FaChevronRight
@@ -185,7 +185,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         <div
           className={`absolute z-10 w-full px-21 ${
             mobile ? 'gap-2.5' : 'gap-5'
-          } common-transition bottom-[6%] left-1/2 flex -translate-x-1/2 items-center justify-center group-hover:bottom-[6%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full`}
+          } trans-200 bottom-[6%] left-1/2 flex -translate-x-1/2 items-center justify-center group-hover:bottom-[6%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full`}
         >
           <p className="xs:block absolute -top-10 left-1/2 hidden -translate-x-1/2 rounded-3xl border-2 border-light bg-dark-100 bg-opacity-50 px-3 py-1 text-center text-xs font-semibold text-light drop-shadow-md md:-top-10 md:text-base lg:-top-12 lg:text-lg">
             Phim Hay Netflix
@@ -196,7 +196,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
               <button
                 className={`${
                   mobile ? 'aspect-[9/16]' : 'aspect-video'
-                } common-transition overflow-hidden rounded-lg border-2 border-white shadow-md hover:-translate-y-1 hover:scale-105 hover:opacity-100 ${
+                } trans-200 overflow-hidden rounded-lg border-2 border-white shadow-md hover:-translate-y-1 hover:scale-105 hover:opacity-100 ${
                   slide === index + 1 ? 'opacity-100' : 'opacity-60'
                 }`}
                 onClick={() => setSlide(index + 1)}
@@ -215,12 +215,12 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         </div>
       )}
       {childrenAmount >= 2 && thumbs.length <= 0 && (
-        <div className="common-transition absolute bottom-[10%] left-1/2 z-10 flex -translate-x-1/2 items-center gap-5 group-hover:bottom-[10%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full">
+        <div className="trans-200 absolute bottom-[10%] left-1/2 z-10 flex -translate-x-1/2 items-center gap-5 group-hover:bottom-[10%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full">
           {Array.from({ length: childrenAmount }).map((_, index) => {
             return (
               <button
                 key={index}
-                className={`common-transition h-[14px] w-[14px] rounded-full bg-white shadow-md hover:bg-opacity-100 ${
+                className={`trans-200 h-[14px] w-[14px] rounded-full bg-white shadow-md hover:bg-opacity-100 ${
                   slide === index + 1 ? 'bg-opacity-100' : 'bg-opacity-50'
                 }`}
                 onClick={() => setSlide(index + 1)}

@@ -50,7 +50,7 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
 
           {tags?.map(tag => (
             <li
-              className="common-transition group rounded-extra-small text-dark hover:bg-primary"
+              className="trans-200 group rounded-extra-small text-dark hover:bg-primary"
               key={tag.title}
             >
               <Link
@@ -77,7 +77,7 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
             Thể loại
           </h5>
 
-          <li className="common-transition group rounded-extra-small text-dark hover:bg-primary">
+          <li className="trans-200 group rounded-extra-small text-dark hover:bg-primary">
             <Link
               href="/flashsale"
               prefetch={false}
@@ -93,7 +93,7 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
 
           {categories?.map(category => (
             <li
-              className="common-transition group rounded-extra-small text-dark hover:bg-primary"
+              className="trans-200 group rounded-extra-small text-dark hover:bg-primary"
               key={category.title}
             >
               <Link

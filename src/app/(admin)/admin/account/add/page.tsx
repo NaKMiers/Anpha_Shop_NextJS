@@ -157,20 +157,20 @@ function AddAccountPage() {
 
       <div className="flex items-center justify-center gap-2">
         <LoadingButton
-          className="common-transition rounded-lg border border-secondary bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-lg hover:border-primary hover:bg-primary"
+          className="trans-200 rounded-lg border border-secondary bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-lg hover:border-primary hover:bg-primary"
           onClick={handleStartLoop}
           text="Add All"
           isLoading={isLoopRunning}
         />
         <button
-          className="common-transition rounded-lg border border-yellow-400 px-3 py-2 text-sm font-semibold text-yellow-400 shadow-lg hover:bg-yellow-400 hover:text-white"
+          className="trans-200 rounded-lg border border-yellow-400 px-3 py-2 text-sm font-semibold text-yellow-400 shadow-lg hover:bg-yellow-400 hover:text-white"
           onClick={handleAddForm}
         >
           New Form
         </button>
         {forms.length > 1 && (
           <button
-            className="common-transition rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-300 shadow-lg hover:bg-slate-300 hover:text-dark"
+            className="trans-200 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-300 shadow-lg hover:bg-slate-300 hover:text-dark"
             onClick={() => setForms(prev => [prev[0]])}
           >
             Remove All

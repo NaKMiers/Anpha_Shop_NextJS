@@ -386,7 +386,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedFlashSales(
                 selectedFlashSales.length > 0 ? [] : flashSales.map(flashSale => flashSale._id)
@@ -399,7 +399,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
           {/* Delete Many Button */}
           {!!selectedFlashSales.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => setIsOpenConfirmModal(true)}
             >
               Delete

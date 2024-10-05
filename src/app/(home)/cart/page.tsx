@@ -391,7 +391,7 @@ function CartPage() {
             </p>
 
             <div
-              className="common-transition group mb-4 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-dark-200 p-1 text-white hover:bg-primary"
+              className="trans-200 group mb-4 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-dark-200 p-1 text-white hover:bg-primary"
               onClick={handleMoveAllLocalToGlobalCartItem}
             >
               <span>Thêm tất cả</span>
@@ -514,7 +514,7 @@ function CartPage() {
             </p>
           </div>
           <div
-            className={`common-transition mb-2 flex items-center gap-1 overflow-hidden ${
+            className={`trans-200 mb-2 flex items-center gap-1 overflow-hidden ${
               isShowVoucher ? 'max-h-[200px]' : 'max-h-0'
             }`}
           >
@@ -531,7 +531,7 @@ function CartPage() {
               className="w-full"
             />
             <button
-              className={`common-transition h-[46px] flex-shrink-0 text-nowrap rounded-lg border px-2 py-2 text-[14px] hover:bg-primary hover:text-white ${
+              className={`trans-200 h-[46px] flex-shrink-0 text-nowrap rounded-lg border px-2 py-2 text-[14px] hover:bg-primary hover:text-white ${
                 isLoading
                   ? 'pointer-events-none border-slate-200 bg-slate-200'
                   : 'border-primary text-primary'
@@ -583,7 +583,7 @@ function CartPage() {
           {/* MARK: Payment Methods */}
           <div className="flex select-none flex-col gap-3">
             <button
-              className={`common-transition group flex items-center justify-center gap-1 rounded-xl border border-primary px-3 py-2 hover:bg-primary ${
+              className={`trans-200 group flex items-center justify-center gap-1 rounded-xl border border-primary px-3 py-2 hover:bg-primary ${
                 isBuying ? 'pointer-events-none' : ''
               }`}
               disabled={isBuying || isLoading}
@@ -609,7 +609,7 @@ function CartPage() {
             </button>
 
             <button
-              className={`common-transition group flex items-center justify-center gap-2 rounded-xl border border-[#a1396c] px-3 py-2 hover:bg-[#a1396c] ${
+              className={`trans-200 group flex items-center justify-center gap-2 rounded-xl border border-[#a1396c] px-3 py-2 hover:bg-[#a1396c] ${
                 isBuying || isLoading ? 'pointer-events-none' : ''
               }`}
               onClick={() => handleCheckout('momo')}
@@ -626,7 +626,7 @@ function CartPage() {
             </button>
 
             <button
-              className={`common-transition group flex items-center justify-center gap-2 rounded-xl border border-[#62b866] px-3 py-2 hover:bg-[#62b866] ${
+              className={`trans-200 group flex items-center justify-center gap-2 rounded-xl border border-[#62b866] px-3 py-2 hover:bg-[#62b866] ${
                 isBuying || isLoading ? 'pointer-events-none' : ''
               }`}
               onClick={() => handleCheckout('banking')}

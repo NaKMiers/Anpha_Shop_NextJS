@@ -124,7 +124,7 @@ function OrderItem({
   return (
     <>
       <div
-        className={`justify common-transition relative flex w-full cursor-pointer items-start gap-2 rounded-lg p-4 shadow-lg ${
+        className={`justify trans-200 relative flex w-full cursor-pointer items-start gap-2 rounded-lg p-4 shadow-lg ${
           selectedOrders.includes(data._id)
             ? '-translate-y-1 bg-violet-50'
             : data.status === 'done'

@@ -106,7 +106,7 @@ function Comment({ comments, productId, className = '' }: CommentProps) {
           </label>
         </div>
         <LoadingButton
-          className="common-transition flex h-[40px] items-center rounded-lg border border-primary px-3 text-primary hover:bg-primary hover:text-white sm:px-6"
+          className="trans-200 flex h-[40px] items-center rounded-lg border border-primary px-3 text-primary hover:bg-primary hover:text-white sm:px-6"
           onClick={handleSubmit(sendComment)}
           text="Gửi"
           isLoading={isLoading}

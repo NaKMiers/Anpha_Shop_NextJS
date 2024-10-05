@@ -202,7 +202,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className="mt-10 flex flex-wrap justify-center gap-x-21 gap-y-21/2 font-body tracking-wide lg:hidden">
           <Link
             href={`/user/order/${checkout?.code}`}
-            className="common-transition group flex items-center justify-center gap-2 rounded-lg bg-primary px-21 py-3 hover:bg-secondary hover:text-white"
+            className="trans-200 group flex items-center justify-center gap-2 rounded-lg bg-primary px-21 py-3 hover:bg-secondary hover:text-white"
             onClick={e => {
               if (!curUser?._id) {
                 e.preventDefault()
@@ -221,7 +221,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </Link>
           <a
             href={`/cart`}
-            className="common-transition group flex items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
+            className="trans-200 group flex items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
             title="Quay lại giỏ hàng"
             onClick={() => localStorage.removeItem('checkout')}
           >
@@ -276,7 +276,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           <div className="mt-6 hidden flex-wrap justify-center gap-x-21 gap-y-21/2 font-body tracking-wide sm:flex">
             <Link
               href={`/user/order/${checkout?.code}`}
-              className="common-transition group flex items-center justify-center gap-2 rounded-lg bg-primary px-21 py-3 hover:bg-secondary hover:text-white"
+              className="trans-200 group flex items-center justify-center gap-2 rounded-lg bg-primary px-21 py-3 hover:bg-secondary hover:text-white"
               onClick={e => {
                 if (!curUser?._id) {
                   e.preventDefault()
@@ -295,7 +295,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             </Link>
             <a
               href={`/cart`}
-              className="common-transition group flex items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
+              className="trans-200 group flex items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
               title="Quay lại giỏ hàng"
               onClick={() => localStorage.removeItem('checkout')}
             >

@@ -140,14 +140,14 @@ function ResetPasswordPage() {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isLoading}
-            className={`common-transition group flex h-[40px] min-w-[48px] items-center justify-center rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
+            className={`trans-200 group flex h-[40px] min-w-[48px] items-center justify-center rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
               isLoading ? 'pointer-events-none bg-slate-200' : ''
             }`}
           >
             {isLoading ? (
               <FaCircleNotch
                 size={18}
-                className="common-transition animate-spin text-white group-hover:text-dark"
+                className="trans-200 animate-spin text-white group-hover:text-dark"
               />
             ) : (
               'Đặt lại'

@@ -37,7 +37,7 @@ function FlashSaleItem({
   return (
     <>
       <div
-        className={`common-transition flex cursor-pointer flex-col rounded-lg p-4 shadow-lg ${
+        className={`trans-200 flex cursor-pointer flex-col rounded-lg p-4 shadow-lg ${
           selectedFlashSales.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         onClick={() =>

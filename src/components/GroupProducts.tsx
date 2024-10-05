@@ -103,7 +103,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
               <Link
                 href={bestSeller ? '/best-seller' : `/category/?ctg=${category?.slug}`}
                 prefetch={false}
-                className="common-transition text-sky-600 underline hover:text-green-600"
+                className="trans-200 text-sky-600 underline hover:text-green-600"
               >
                 Tất cả
               </Link>
@@ -116,7 +116,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
       {!isExpaned && (
         <>
           <button
-            className="common-transition group absolute -left-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-l-small bg-white bg-opacity-80 shadow-md hover:bg-opacity-100"
+            className="trans-200 group absolute -left-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-l-small bg-white bg-opacity-80 shadow-md hover:bg-opacity-100"
             onClick={prevSlide}
           >
             <FaChevronLeft
@@ -125,7 +125,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
             />
           </button>
           <button
-            className="common-transition group absolute -right-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-r-small bg-white bg-opacity-80 shadow-md hover:bg-opacity-100"
+            className="trans-200 group absolute -right-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-r-small bg-white bg-opacity-80 shadow-md hover:bg-opacity-100"
             onClick={nextSlide}
           >
             <FaChevronRight

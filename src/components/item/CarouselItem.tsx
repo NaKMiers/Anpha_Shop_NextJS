@@ -223,14 +223,14 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
             onClick={e => e.preventDefault()}
           >
             <button
-              className="common-transition h-[26px] text-nowrap rounded-[4px] bg-secondary px-2 font-body text-[12px] font-semibold tracking-wider text-white hover:bg-primary md:h-[30px]"
+              className="trans-200 h-[26px] text-nowrap rounded-[4px] bg-secondary px-2 font-body text-[12px] font-semibold tracking-wider text-white hover:bg-primary md:h-[30px]"
               onClick={handleBuyNow}
               disabled={isLoading}
             >
               MUA NGAY
             </button>
             <button
-              className={`hover:bg-primary-600 common-transition h-[26px] rounded-[4px] bg-primary px-2 hover:bg-secondary md:h-[30px] ${
+              className={`hover:bg-primary-600 trans-200 h-[26px] rounded-[4px] bg-primary px-2 hover:bg-secondary md:h-[30px] ${
                 isLoading ? 'pointer-events-none bg-slate-200' : ''
               }`}
               onClick={handleAddToCart}
@@ -251,7 +251,7 @@ function CarouselProduct({ product, className = '' }: CarouselProductProps) {
             {['admin', 'editor'].includes(curUser?.role) && (
               <div
                 onClick={() => router.push(`/admin/product/all?_id=${product?._id}`)}
-                className="hover:bg-primary-600 common-transition group flex h-[26px] items-center justify-center rounded-md border border-yellow-400 px-1"
+                className="hover:bg-primary-600 trans-200 group flex h-[26px] items-center justify-center rounded-md border border-yellow-400 px-1"
               >
                 <MdEdit
                   size={18}

@@ -73,7 +73,7 @@ function Pagination({
         {currentPage != 1 && (
           <Link
             href={getPageLink(currentPage <= 1 ? 1 : currentPage - 1)}
-            className="common-transition rounded-lg border-2 border-white bg-white px-2 py-[6px] hover:bg-secondary hover:text-white"
+            className="trans-200 rounded-lg border-2 border-white bg-white px-2 py-[6px] hover:bg-secondary hover:text-white"
             title={`👈 Trang ${currentPage <= 1 ? 1 : currentPage - 1}`}
           >
             Trước
@@ -85,7 +85,7 @@ function Pagination({
           {Array.from({ length: pageAmount }).map((_, index) => (
             <Link
               href={getPageLink(index + 1)}
-              className={`common-transition rounded-lg border-2 border-white px-4 py-[6px] text-dark hover:bg-secondary hover:text-white ${
+              className={`trans-200 rounded-lg border-2 border-white px-4 py-[6px] text-dark hover:bg-secondary hover:text-white ${
                 currentPage === index + 1 ? 'border-primary bg-primary' : 'bg-white'
               }`}
               key={index}
@@ -99,7 +99,7 @@ function Pagination({
         {currentPage != pageAmount && (
           <Link
             href={getPageLink(currentPage >= pageAmount ? pageAmount : currentPage + 1)}
-            className="common-transition rounded-lg border-2 border-white bg-white px-2 py-[6px] hover:bg-secondary hover:text-white"
+            className="trans-200 rounded-lg border-2 border-white bg-white px-2 py-[6px] hover:bg-secondary hover:text-white"
             title={`👉 Trang ${currentPage >= pageAmount ? pageAmount : currentPage + 1}`}
           >
             Sau

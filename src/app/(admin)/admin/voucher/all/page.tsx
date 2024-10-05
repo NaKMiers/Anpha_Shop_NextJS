@@ -501,7 +501,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedVouchers(
                 selectedVouchers.length > 0 ? [] : vouchers.map(voucher => voucher._id)
@@ -514,7 +514,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Activate Many Button */}
           {selectedVouchers.some(id => !vouchers.find(voucher => voucher._id === id)?.active) && (
             <button
-              className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+              className="trans-200 rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
               onClick={() => handleActivateVouchers(selectedVouchers, true)}
             >
               Activate
@@ -524,7 +524,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Deactivate Many Button */}
           {selectedVouchers.some(id => vouchers.find(voucher => voucher._id === id)?.active) && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => handleActivateVouchers(selectedVouchers, false)}
             >
               Deactivate
@@ -534,7 +534,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedVouchers.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => setIsOpenConfirmModal(true)}
             >
               Delete

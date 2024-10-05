@@ -153,14 +153,14 @@ function OrderItem({ order, className = '' }: OrderItemProps) {
       {/* MARK: Action Buttons */}
       <div className="flex justify-end gap-2">
         <LoadingButton
-          className="common-transition rounded-md bg-secondary px-[14px] py-[6px] font-semibold text-white hover:bg-primary hover:text-dark"
+          className="trans-200 rounded-md bg-secondary px-[14px] py-[6px] font-semibold text-white hover:bg-primary hover:text-dark"
           onClick={handleReBuying}
           text="Mua lại"
           isLoading={isReBuying}
         />
         <Link
           href={`/user/order/${order?.code}`}
-          className="common-transition rounded-md bg-primary px-[14px] py-[6px] font-semibold hover:bg-secondary hover:text-white"
+          className="trans-200 rounded-md bg-primary px-[14px] py-[6px] font-semibold hover:bg-secondary hover:text-white"
         >
           Chi tiết
         </Link>

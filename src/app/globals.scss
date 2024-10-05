@@ -30,24 +30,32 @@
   background-color: #a8bbbf;
 }
 
-.common-transition {
+.trans-200 {
   @apply transition-all duration-200 ease-in-out;
 }
 
+.trans-300 {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.trans-500 {
+  @apply transition-all duration-500 ease-in-out;
+}
+
 .wiggle {
-  @apply group-hover:animate-scale-wiggle common-transition group-hover:scale-[1.2];
-  @apply hover:animate-scale-wiggle common-transition hover:scale-[1.2];
+  @apply trans-200 group-hover:scale-[1.2] group-hover:animate-scale-wiggle;
+  @apply trans-200 hover:scale-[1.2] hover:animate-scale-wiggle;
   transform-origin: center;
 }
 
 .wiggle-0 {
-  @apply group-hover:animate-wiggle common-transition;
-  @apply hover:animate-wiggle common-transition;
+  @apply trans-200 group-hover:animate-wiggle;
+  @apply trans-200 hover:animate-wiggle;
   transform-origin: center;
 }
 
 .wiggle-1 {
-  @apply hover:animate-scale-wiggle common-transition hover:scale-[1.2];
+  @apply trans-200 hover:scale-[1.2] hover:animate-scale-wiggle;
   transform-origin: center;
 }
 
@@ -62,7 +70,7 @@
 }
 
 .loading {
-  @apply bg-loading animate-pulse;
+  @apply animate-pulse bg-loading;
 }
 
 .number-input::-webkit-inner-spin-button,
@@ -97,7 +105,7 @@
     width: 0;
     height: 1.5px;
 
-    transition: var(--common-transition);
+    transition: var(--trans-200);
     background: $background-color;
 
     @if $repeat {

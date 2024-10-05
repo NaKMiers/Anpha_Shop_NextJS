@@ -254,7 +254,7 @@ function CartItem({
 
   return (
     <div
-      className={`common-transition relative flex cursor-pointer flex-wrap items-start gap-3 md:flex-nowrap ${className} ${
+      className={`trans-200 relative flex cursor-pointer flex-wrap items-start gap-3 md:flex-nowrap ${className} ${
         localCartItem ? '' : 'rounded-medium border p-21'
       } ${
         !!selectedCartItems.find(cI => cI._id === cartItem._id) ? 'border-primary' : 'border-slate-400'
@@ -428,7 +428,7 @@ function CartItem({
               onClick={e => e.stopPropagation()}
             >
               <button
-                className={`common-transition group flex items-center justify-center rounded-bl-md rounded-tl-md border px-3 py-[10px] hover:bg-secondary ${
+                className={`trans-200 group flex items-center justify-center rounded-bl-md rounded-tl-md border px-3 py-[10px] hover:bg-secondary ${
                   quantity <= 1 || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
                     : 'border border-secondary bg-white'
@@ -462,7 +462,7 @@ function CartItem({
               />
 
               <button
-                className={`common-transition group flex items-center justify-center rounded-br-md rounded-tr-md border px-3 py-[10px] hover:bg-secondary ${
+                className={`trans-200 group flex items-center justify-center rounded-br-md rounded-tr-md border px-3 py-[10px] hover:bg-secondary ${
                   quantity >= (cartItem.product as IProduct)?.stock! || isLoading
                     ? 'pointer-events-none border-slate-100 bg-slate-100'
                     : 'border-secondary bg-white'
@@ -490,7 +490,7 @@ function CartItem({
 
             <FaTrashAlt
               size={21}
-              className="common-transition wiggle cursor-pointer text-secondary hover:scale-110"
+              className="trans-200 wiggle cursor-pointer text-secondary hover:scale-110"
               onClick={e => {
                 e.stopPropagation()
                 setIsOpenConfirmModal(true)

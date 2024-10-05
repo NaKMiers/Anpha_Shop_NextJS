@@ -226,14 +226,14 @@ function ResgiterPage() {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={isLoading}
-            className={`common-transition group flex h-[40px] min-w-[48px] items-center justify-center rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
+            className={`trans-200 group flex h-[40px] min-w-[48px] items-center justify-center rounded-lg bg-secondary px-3 py-2 font-semibold text-white hover:bg-primary hover:text-dark ${
               isLoading ? 'pointer-events-none bg-slate-200' : ''
             }`}
           >
             {isLoading ? (
               <FaCircleNotch
                 size={18}
-                className="common-transition animate-spin text-white group-hover:text-dark"
+                className="trans-200 animate-spin text-white group-hover:text-dark"
               />
             ) : (
               'Đăng ký'
@@ -248,13 +248,13 @@ function ResgiterPage() {
         {/* MARK: Social Login */}
         <div className="flex items-center justify-center gap-4">
           {/* <button
-            className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 common-transition'
+            className='p-2 rounded-full border-2 border-slate-800 group hover:bg-slate-300 trans-200'
             onClick={() => signIn('twitter', { callbackUrl: '/' })}>
             <Image className='wiggle' src='/images/twitter.jpg' height={25} width={25} alt='github' />
           </button> */}
 
           <button
-            className="common-transition group rounded-full border-2 border-yellow-300 p-2 hover:bg-yellow-100"
+            className="trans-200 group rounded-full border-2 border-yellow-300 p-2 hover:bg-yellow-100"
             onClick={() => {
               dispatch(setPageLoading(true))
               signIn('google', { callbackUrl: '/' })
@@ -270,7 +270,7 @@ function ResgiterPage() {
           </button>
 
           <button
-            className="common-transition group rounded-full border-2 border-slate-800 p-2 hover:bg-slate-300"
+            className="trans-200 group rounded-full border-2 border-slate-800 p-2 hover:bg-slate-300"
             onClick={() => {
               dispatch(setPageLoading(true))
               signIn('github', { callbackUrl: '/' })

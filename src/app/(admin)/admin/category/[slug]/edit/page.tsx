@@ -171,12 +171,12 @@ function EditCategoryPage() {
                 width={34}
                 height={34}
                 alt="logo"
-                className="common-transition h-full w-full rounded-md object-cover group-hover:opacity-50"
+                className="trans-200 h-full w-full rounded-md object-cover group-hover:opacity-50"
               />
             ) : (
               <GrRadialSelected
                 size={24}
-                className="common-transition text-secondary group-hover:opacity-50"
+                className="trans-200 text-secondary group-hover:opacity-50"
               />
             )}
             <input
@@ -213,7 +213,7 @@ function EditCategoryPage() {
           />
         </div>
         <LoadingButton
-          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+          className="trans-200 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
           text="Save"
           isLoading={isLoading}

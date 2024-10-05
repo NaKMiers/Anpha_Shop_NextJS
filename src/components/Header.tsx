@@ -38,6 +38,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const lastScrollTop = useRef<number>(0)
   const [cartLength, setCartLength] = useState<number>(0)
   const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
+  const [openAds, setOpenAds] = useState<boolean>(false)
 
   // search
   const [openSearch, setOpenSearch] = useState<boolean>(false)
@@ -50,6 +51,17 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
 
   // refs
   const isUpdated = useRef<boolean>(false)
+
+  // MARK: ADS
+  useEffect(() => {
+    setInterval(() => {
+      setOpenAds(true)
+
+      setTimeout(() => {
+        setOpenAds(false)
+      }, 10000)
+    }, 60000)
+  }, [])
 
   // MARK: Side Effects
   // update user session after load page
@@ -204,6 +216,18 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         isShow ? 'top-0' : 'top-[-100%]'
       }`}
     >
+      {/* Ads */}
+      <Link
+        href="https://monaedu.com"
+        target="_blank"
+        rel="noreferrer"
+        className={`${openAds ? 'max-h-6 py-0.5' : 'max-h-0 py-0'} trans-300 group flex h-6 w-full items-center justify-center overflow-hidden bg-yellow-400 px-21 text-center font-body text-sm tracking-wider text-dark`}
+      >
+        Giảm đến 100.000đ hoặc 50% khi nhập mã{' '}
+        <span className="wiggle-0 inline-block font-semibold">&quot;BIGSALE50&quot;</span> khi mua khóa
+        học tại monaedu.com
+      </Link>
+
       {/* Main Header */}
       <div className="relative m-auto flex h-[72px] w-full max-w-1200 items-center justify-between px-21">
         {/* MARK: Brand */}
@@ -215,7 +239,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           <Link
             href="/"
             prefetch={false}
-            className="common-transition spin hidden shrink-0 rounded-full sm:block"
+            className="trans-200 spin hidden shrink-0 rounded-full sm:block"
           >
             <Image
               className="aspect-square rounded-full"
@@ -234,14 +258,14 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           </Link>
           <Link
             href="/recharge"
-            className="common-transition group ml-3 flex items-center gap-1 rounded-lg bg-primary px-[10px] py-[6px] hover:bg-secondary"
+            className="trans-200 group ml-3 flex items-center gap-1 rounded-lg bg-primary px-[10px] py-[6px] hover:bg-secondary"
           >
-            <span className="common-transition font-body text-[18px] font-bold tracking-[0.02em] group-hover:text-white">
+            <span className="trans-200 font-body text-[18px] font-bold tracking-[0.02em] group-hover:text-white">
               Nạp
             </span>
             <HiLightningBolt
               size={20}
-              className="common-transition animate-bounce group-hover:text-white"
+              className="trans-200 animate-bounce group-hover:text-white"
             />
           </Link>
         </div>
@@ -297,7 +321,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                 <Link
                   href={`/${product.slug}`}
                   key={product._id}
-                  className="common-transition flex items-start gap-4 rounded-lg p-2 py-2 hover:bg-sky-200"
+                  className="trans-200 flex items-start gap-4 rounded-lg p-2 py-2 hover:bg-sky-200"
                 >
                   <div className="relative aspect-video flex-shrink-0">
                     {product.stock <= 0 && (
@@ -393,14 +417,14 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                 </div>
                 <IoChevronDown
                   size={22}
-                  className="common-transition wiggle"
+                  className="trans-200 wiggle"
                 />
               </div>
             )
           ) : (
             <Link
               href="/auth/login"
-              className="common-transition cursor-pointer text-nowrap rounded-extra-small bg-secondary px-[10px] py-[6px] font-body font-semibold tracking-wider hover:bg-primary"
+              className="trans-200 cursor-pointer text-nowrap rounded-extra-small bg-secondary px-[10px] py-[6px] font-body font-semibold tracking-wider hover:bg-primary"
             >
               Đăng nhập
             </Link>
@@ -439,7 +463,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
           >
             <FaBars
               size={22}
-              className="common-transition wiggle"
+              className="trans-200 wiggle"
             />
           </button>
         </div>

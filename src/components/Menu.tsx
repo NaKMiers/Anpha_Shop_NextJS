@@ -77,7 +77,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             <>
               <Link
                 href="/user"
-                className="common-transition group flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                className="trans-200 group flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
                 <Image
                   className="wiggle-0 aspect-square rounded-full"
@@ -93,17 +93,17 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 </span>
               </Link>
 
-              <li className="common-transition flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
+              <li className="trans-200 flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
                 <span className="font-semibold">Số dư: </span>
                 <span>{formatPrice(curUser?.balance)}</span>
                 <Link
-                  className="common-transition group ml-1 flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110"
+                  className="trans-200 group ml-1 flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110"
                   href="/recharge"
                   onClick={() => setOpen(false)}
                 >
                   <FaPlus
                     size={11}
-                    className="common-transition text-primary"
+                    className="trans-200 text-primary"
                   />
                 </Link>
               </li>
@@ -114,7 +114,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               >
                 <Link
                   href="/user"
-                  className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                  className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
                   <FaUser
                     size={18}
@@ -130,7 +130,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 <Link
                   href="/cart"
                   prefetch={false}
-                  className="common-transition relative flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                  className="trans-200 relative flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
                   <FaCartShopping
                     size={18}
@@ -150,7 +150,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               >
                 <Link
                   href="/user/order-history"
-                  className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                  className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
                   <FaHistory
                     size={18}
@@ -165,7 +165,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
               >
                 <a
                   href="https://www.messenger.com/t/170660996137305"
-                  className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                  className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                 >
                   <FaPhone
                     size={18}
@@ -185,7 +185,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                         ? '/admin/order/all'
                         : '/admin/summary/all'
                     }
-                    className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                    className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                   >
                     <FaUserSecret
                       size={18}
@@ -203,7 +203,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 onClick={() => setOpen(false)}
               >
                 <button
-                  className="common-transition flex w-full items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                  className="trans-200 flex w-full items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
                   onClick={() => signOut()}
                 >
                   <TbLogout
@@ -224,7 +224,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             >
               <Link
                 href="/cart"
-                className="common-transition relative flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                className="trans-200 relative flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
                 <FaCartShopping
                   size={18}
@@ -244,7 +244,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             >
               <a
                 href="https://www.messenger.com/t/170660996137305"
-                className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
                 <FaPhone
                   size={18}
@@ -259,7 +259,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             >
               <Link
                 href="/auth/login"
-                className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
                 <FiLogIn
                   size={18}
@@ -274,7 +274,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
             >
               <Link
                 href="/auth/register"
-                className="common-transition flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
+                className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
               >
                 <FaUserPlus
                   size={18}

@@ -399,7 +399,7 @@ function EditVoucherPage() {
           />
           <label
             className={
-              'common-transition cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white'
+              'trans-200 cursor-pointer select-none rounded-lg border border-green-500 bg-white px-4 py-2 text-green-500 peer-checked:bg-green-500 peer-checked:text-white'
             }
             htmlFor="active"
           >
@@ -409,7 +409,7 @@ function EditVoucherPage() {
 
         {/* MARK: Save Button */}
         <LoadingButton
-          className="common-transition mt-4 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+          className="trans-200 mt-4 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
           text="Save"
           isLoading={isLoading}

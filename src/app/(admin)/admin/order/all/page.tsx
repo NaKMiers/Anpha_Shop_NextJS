@@ -431,7 +431,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedOrders(selectedOrders.length > 0 ? [] : orders.map(order => order._id))
             }
@@ -443,7 +443,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           {!!selectedOrders.length &&
             selectedOrders.every(id => orders.find(order => order._id === id)?.status === 'pending') && (
               <button
-                className="common-transition rounded-lg border border-slate-300 px-3 py-2 hover:bg-slate-300 hover:text-white"
+                className="trans-200 rounded-lg border border-slate-300 px-3 py-2 hover:bg-slate-300 hover:text-white"
                 onClick={() => handleCancelOrders(selectedOrders)}
               >
                 Cancel
@@ -453,7 +453,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
           {/* Delete Many Button */}
           {!!selectedOrders.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => setIsOpenConfirmModal(true)}
             >
               Delete

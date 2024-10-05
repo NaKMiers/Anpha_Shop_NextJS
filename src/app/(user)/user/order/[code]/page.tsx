@@ -60,11 +60,11 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
 
       {/* MARK: Info */}
       <div className="grid grid-cols-1 items-start gap-2 md:grid-cols-2">
-        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           <span className="font-semibold">Ngày mua: </span>
           {order && <span className="">{formatTime(order.createdAt)}</span>}
         </div>
-        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           <span className="font-semibold">Trạng thái: </span>
           <span
             className={`${
@@ -82,16 +82,16 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
                 : 'Đã hủy'}
           </span>
         </div>
-        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           <span className="font-semibold">Email: </span>
           <span className="text-sky-500">{order?.email}</span>
         </div>
-        <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+        <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
           <span className="font-semibold">Tổng tiền: </span>
           <span className="font-semibold text-green-500">{formatPrice(order?.total)}</span>
         </div>
         {order?.voucherApplied && (
-          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
             <span className="font-semibold">Voucher: </span>
             <span
               className="font-semibold text-slate-400"
@@ -102,7 +102,7 @@ function OrderDetailPage({ params: { code } }: { params: { code: string } }) {
           </div>
         )}
         {!!order?.discount && (
-          <div className="common-transition rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
+          <div className="trans-200 rounded-xl px-4 py-2 shadow-lg hover:tracking-wide">
             <span className="font-semibold">Giảm giá: </span>
             <span className="font-semibold text-secondary">{formatPrice(order?.discount)}</span>
           </div>

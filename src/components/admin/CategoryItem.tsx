@@ -33,7 +33,7 @@ function CategoryItem({
   return (
     <>
       <div
-        className={`common-transition flex cursor-pointer flex-col rounded-lg p-4 text-dark shadow-lg ${
+        className={`trans-200 flex cursor-pointer flex-col rounded-lg p-4 text-dark shadow-lg ${
           selectedCategories.includes(data._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         onClick={() =>

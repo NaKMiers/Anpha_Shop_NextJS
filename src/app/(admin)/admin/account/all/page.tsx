@@ -291,7 +291,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         {/* Type Selection */}
         <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:col-span-8 md:max-h-[152px] lg:max-h-[152px]">
           <div
-            className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+            className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
               types.length === selectedTypes.length
                 ? 'border-dark-100 bg-dark-100 text-white'
                 : 'border-slate-300'
@@ -306,7 +306,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {Object.keys(groupTypes).map(key => (
             <Fragment key={key}>
               <div
-                className={`common-transition ml-2 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+                className={`trans-200 ml-2 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                   checkAllTypesOfCategorySelected(groupTypes[key])
                     ? 'border-dark-100 bg-dark-100 text-white'
                     : 'border-slate-300 bg-slate-200'
@@ -326,7 +326,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
               </div>
               {groupTypes[key].map(type => (
                 <div
-                  className={`common-transition h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+                  className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
                     selectedTypes.includes(type._id)
                       ? 'border-secondary bg-secondary text-white'
                       : 'border-slate-300'
@@ -492,7 +492,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             title="Alt + A"
             onClick={() =>
               setSelectedAccounts(
@@ -506,7 +506,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Activate Many Button */}
           {selectedAccounts.some(id => !accounts.find(account => account._id === id)?.active) && (
             <button
-              className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+              className="trans-200 rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
               onClick={() => handleActivateAccounts(selectedAccounts, true)}
             >
               Activate
@@ -516,7 +516,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Deactivate Many Button */}
           {selectedAccounts.some(id => accounts.find(account => account._id === id)?.active) && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => handleActivateAccounts(selectedAccounts, false)}
             >
               Deactivate
@@ -526,7 +526,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {/* Delete Many Button */}
           {!!selectedAccounts.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               title="Alt + Delete"
               onClick={() => setIsOpenConfirmModal(true)}
             >

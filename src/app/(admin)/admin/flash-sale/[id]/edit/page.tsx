@@ -302,7 +302,7 @@ function EditFlashSalePage() {
         <div className="mb-5 flex max-h-[300px] flex-wrap gap-2 overflow-y-auto rounded-lg bg-white p-3">
           {products.map(product => (
             <div
-              className={`common-transition flex max-w-[250px] cursor-pointer items-center gap-2 rounded-lg border-2 border-slate-300 px-2 py-1 ${
+              className={`trans-200 flex max-w-[250px] cursor-pointer items-center gap-2 rounded-lg border-2 border-slate-300 px-2 py-1 ${
                 selectedProducts.includes(product._id)
                   ? 'border-white bg-secondary text-white'
                   : product.flashsale
@@ -333,7 +333,7 @@ function EditFlashSalePage() {
 
         {/* MARK: Save Button */}
         <LoadingButton
-          className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+          className="trans-200 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
           onClick={handleSubmit(onSubmit)}
           text="Save"
           isLoading={isLoading}

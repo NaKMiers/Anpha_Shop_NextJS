@@ -153,7 +153,7 @@ function SecurityPage() {
 
           {isLocalAuth && (
             <LoadingButton
-              className="common-transition rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
+              className="trans-200 rounded-lg bg-secondary px-4 py-2 font-semibold text-white hover:bg-primary"
               onClick={handleSubmit(onSubmit)}
               text="Lưu"
               isLoading={isLoading}

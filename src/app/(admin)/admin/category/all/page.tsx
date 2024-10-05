@@ -278,7 +278,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() =>
               setSelectedCategories(selectedCategories.length > 0 ? [] : categories.map(tag => tag._id))
             }
@@ -289,7 +289,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
           {/* Delete Many Button */}
           {!!selectedCategories.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => setIsOpenConfirmModal(true)}
             >
               Delete

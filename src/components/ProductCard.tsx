@@ -280,7 +280,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       {/* MARK: Action Buttons */}
       <div className="mt-2 flex items-center justify-end gap-2 md:justify-start">
         <button
-          className={`common-transition text-nowrap rounded-md bg-secondary px-2 py-[5px] font-body font-semibold tracking-wider text-white hover:bg-primary ${
+          className={`trans-200 text-nowrap rounded-md bg-secondary px-2 py-[5px] font-body font-semibold tracking-wider text-white hover:bg-primary ${
             isDisabled ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleBuyNow}
@@ -289,7 +289,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
           MUA NGAY
         </button>
         <button
-          className={`hover:bg-primary-600 common-transition group rounded-md bg-primary px-3 py-2 hover:bg-secondary ${
+          className={`hover:bg-primary-600 trans-200 group rounded-md bg-primary px-3 py-2 hover:bg-secondary ${
             isDisabled ? 'pointer-events-none bg-slate-200' : ''
           }`}
           onClick={handleAddToCart}
@@ -310,7 +310,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         {['admin', 'editor'].includes(curUser?.role) && (
           <Link
             href={`/admin/product/all?_id=${product?._id}`}
-            className="hover:bg-primary-600 common-transition group flex h-[34px] items-center justify-center rounded-md border border-yellow-400 px-3"
+            className="hover:bg-primary-600 trans-200 group flex h-[34px] items-center justify-center rounded-md border border-yellow-400 px-3"
           >
             <MdEdit
               size={18}

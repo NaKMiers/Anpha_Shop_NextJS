@@ -353,7 +353,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
           {/* Select All Button */}
           <button
-            className="common-transition rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
+            className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
             onClick={() => setSelectedTags(selectedTags.length > 0 ? [] : tags.map(tag => tag._id))}
           >
             {selectedTags.length > 0 ? 'Unselect All' : 'Select All'}
@@ -363,7 +363,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
             <>
               {/* Save Many Button */}
               <button
-                className="common-transition rounded-lg border border-green-500 px-3 py-2 text-green-500 hover:bg-green-500 hover:text-white"
+                className="trans-200 rounded-lg border border-green-500 px-3 py-2 text-green-500 hover:bg-green-500 hover:text-white"
                 onClick={() =>
                   handleSaveEditingTags(editingValues.filter(value => selectedTags.includes(value._id)))
                 }
@@ -372,7 +372,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
               </button>
               {/* Cancel Many Button */}
               <button
-                className="common-transition rounded-lg border border-slate-400 px-3 py-2 text-slate-400 hover:bg-slate-400 hover:text-white"
+                className="trans-200 rounded-lg border border-slate-400 px-3 py-2 text-slate-400 hover:bg-slate-400 hover:text-white"
                 onClick={() => {
                   // cancel editing values are selected
                   setEditingTags(editingTags.filter(id => !selectedTags.includes(id)))
@@ -388,7 +388,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           {!!selectedTags.length &&
             selectedTags.some(id => !tags.find(tag => tag._id === id)?.isFeatured) && (
               <button
-                className="common-transition rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
+                className="trans-200 rounded-lg border border-green-400 px-3 py-2 text-green-400 hover:bg-green-400 hover:text-white"
                 onClick={() => handleFeatureTags(selectedTags, true)}
               >
                 Mark
@@ -399,7 +399,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           {!!selectedTags.length &&
             selectedTags.some(id => tags.find(tag => tag._id === id)?.isFeatured) && (
               <button
-                className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+                className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
                 onClick={() => handleFeatureTags(selectedTags, false)}
               >
                 Unmark
@@ -409,7 +409,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
           {/* Delete Many Button */}
           {!!selectedTags.length && (
             <button
-              className="common-transition rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
               onClick={() => setIsOpenConfirmModal(true)}
             >
               Delete
