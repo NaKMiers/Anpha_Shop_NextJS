@@ -60,7 +60,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       setTimeout(() => {
         setOpenAds(false)
       }, 10000)
-    }, 60000)
+    }, 30000)
   }, [])
 
   // MARK: Side Effects
@@ -221,11 +221,14 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         href="https://monaedu.com"
         target="_blank"
         rel="noreferrer"
-        className={`${openAds ? 'max-h-6 py-0.5' : 'max-h-0 py-0'} trans-300 group flex h-6 w-full items-center justify-center overflow-hidden bg-yellow-400 px-21 text-center font-body text-sm tracking-wider text-dark`}
+        className={`${openAds ? 'max-h-12 py-0.5 md:max-h-6' : 'max-h-0 py-0'} trans-300 group block h-12 w-full overflow-hidden bg-yellow-400 px-21 text-center font-body text-sm tracking-wider text-dark md:h-6`}
+        title='Giảm đến 100.000đ hoặc 50% khi nhập mã "BIGSALE50" học tại monaedu.com'
       >
-        Giảm đến 100.000đ hoặc 50% khi nhập mã{' '}
-        <span className="wiggle-0 inline-block font-semibold">&quot;BIGSALE50&quot;</span> khi mua khóa
-        học tại monaedu.com
+        <p className="line-clamp-2 text-ellipsis">
+          Giảm đến 100.000đ hoặc 50% khi nhập mã{' '}
+          <span className="wiggle-0 inline-block font-semibold">&quot;BIGSALE50&quot;</span> khi mua khóa
+          học tại monaedu.com
+        </p>
       </Link>
 
       {/* Main Header */}
