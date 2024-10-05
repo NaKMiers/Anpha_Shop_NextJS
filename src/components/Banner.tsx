@@ -3,6 +3,7 @@
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
+import { getMoviesList } from '@/requests'
 import Image from 'next/image'
 import Link from 'next/link'
 import { memo, useEffect, useState } from 'react'
@@ -24,6 +25,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
   // states
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
   const [width, setWidth] = useState<number>(0)
+  const [movies, setMovies] = useState<any[]>([])
 
   // set width
   useEffect(() => {
@@ -40,6 +42,22 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
     // remove event listener
     return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // get popular movie
+  useEffect(() => {
+    const getMovies = async () => {
+      try {
+        const { results: movies } = await getMoviesList('popular', { page: 1 })
+        setMovies(movies.slice(0, 5))
+
+        console.log('movies', movies)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getMovies()
   }, [])
 
   return (
@@ -94,107 +112,64 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               mobile={width < 576 && width > 0}
               thumbs={
                 width < 576 && width > 0
-                  ? [
-                      '/banners/office-365-mobile.jpg',
-                      '/banners/netflix-random-mobile.jpg',
-                      '/banners/grammarly-mobile.jpg',
-                      '/banners/canva-mobile.jpg',
-                      '/banners/spotify-mobile.jpg',
-                    ]
-                  : [
-                      '/banners/office-365.jpg',
-                      '/banners/netflix-random.jpg',
-                      '/banners/grammarly.jpg',
-                      '/banners/canva.jpg',
-                      '/banners/spotify.jpg',
-                    ]
+                  ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.poster_path}`)
+                  : movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`)
               }
             >
-              <Link href="/category?ctg=microsoft-office">
-                <Image
-                  className="transition-all duration-700 hover:scale-105"
-                  src={
-                    width < 576 && width > 0
-                      ? '/banners/office-365-mobile.jpg'
-                      : '/banners/office-365.jpg'
-                  }
-                  alt="netflix"
-                  width={1200}
-                  height={768}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Link>
-              <Link href="/random-netflix-van-may-se-thay-ban-tra-tien">
-                <Image
-                  className="transition-all duration-700 hover:scale-105"
-                  src={
-                    width < 576 && width > 0
-                      ? '/banners/netflix-random-mobile.jpg'
-                      : '/banners/netflix-random.jpg'
-                  }
-                  alt="netflix"
-                  width={1200}
-                  height={768}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Link>
-              <Link href="/grammarly-premium-1-thang-danh-bai-loi-ngu-phap-voi-uu-dai-dac-biet">
-                <Image
-                  className="transition-all duration-700 hover:scale-105"
-                  src={
-                    width < 576 && width > 0 ? '/banners/grammarly-mobile.jpg' : '/banners/grammarly.jpg'
-                  }
-                  alt="grammarly"
-                  width={1200}
-                  height={768}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Link>
-              <Link href="/category?ctg=canva">
-                <Image
-                  className="transition-all duration-700 hover:scale-105"
-                  src={width < 576 && width > 0 ? '/banners/canva-mobile.jpg' : '/banners/canva.jpg'}
-                  alt="canva"
-                  width={1200}
-                  height={768}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Link>
-              <Link href="/category?ctg=spotify">
-                <Image
-                  className="transition-all duration-700 hover:scale-105"
-                  src={width < 576 && width > 0 ? '/banners/spotify-mobile.jpg' : '/banners/spotify.jpg'}
-                  alt="spotify"
-                  width={1200}
-                  height={768}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Link>
+              {movies.length > 0 ? (
+                movies.map((movie, index) => (
+                  <Link
+                    className="relative"
+                    href="/category?ctg=microsoft-office"
+                    key={movie.id}
+                  >
+                    <Image
+                      className="transition-all duration-700 hover:scale-105"
+                      src={
+                        width < 576 && width > 0
+                          ? `https://image.tmdb.org/t/p/original/${movie?.poster_path}`
+                          : `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`
+                      }
+                      alt="netflix"
+                      width={1200}
+                      height={768}
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                    <div
+                      className={`absolute ${index % 2 !== 0 ? 'left-2' : 'right-2'} top-2 rounded-3xl border-2 border-dark bg-white px-3 py-1 text-dark`}
+                    >
+                      <p className="md:-text-base text-center font-body text-sm font-semibold tracking-wider drop-shadow-md">
+                        {movie.title}
+                      </p>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <Link href="/category?ctg=microsoft-office">
+                  <Image
+                    className="transition-all duration-700 hover:scale-105"
+                    src={
+                      width < 576 && width > 0
+                        ? '/banners/office-365-mobile.jpg'
+                        : '/banners/office-365.jpg'
+                    }
+                    alt="netflix"
+                    width={1200}
+                    height={768}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </Link>
+              )}
             </Slider>
 
             {/* Category */}

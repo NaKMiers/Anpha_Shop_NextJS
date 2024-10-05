@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { RiAdvertisementFill } from 'react-icons/ri'
 
@@ -34,31 +34,6 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // auto show ads
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem('openAds') || '{"timeLeft": 4}').timeLeft > 0) {
-      setTimeout(() => {
-        setOpenAds(true)
-      }, 10000)
-    }
-  }, [])
-
-  // handle close ads
-  const handleCloseAds = useCallback(() => {
-    const string = localStorage.getItem('openAds')
-    if (string) {
-      const data = JSON.parse(string)
-      if (data.timeLeft > 0) {
-        data.timeLeft = data.timeLeft - 1
-        localStorage.setItem('openAds', JSON.stringify(data))
-      }
-    } else {
-      localStorage.setItem('openAds', JSON.stringify({ timeLeft: 4 }))
-    }
-
-    setOpenAds(false)
-  }, [])
-
   return (
     <>
       <div
@@ -87,7 +62,7 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
             className="fixed bottom-0 left-0 right-0 top-0 z-[60] flex select-none items-center justify-center bg-black bg-opacity-50 p-10"
-            onClick={handleCloseAds}
+            onClick={() => setOpenAds(false)}
           >
             <motion.div
               initial={{ scale: 0 }}
@@ -99,7 +74,7 @@ function FloatingButtons({ className = '' }: FloatingButtonsProps) {
                 className="group absolute right-0 top-12 text-light"
                 onClick={e => {
                   e.stopPropagation()
-                  handleCloseAds()
+                  setOpenAds(false)
                 }}
               >
                 <IoCloseSharp

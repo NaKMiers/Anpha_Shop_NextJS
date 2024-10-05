@@ -28,6 +28,11 @@ const nextConfig = {
         hostname: 'api.qrserver.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+        pathname: '**',
+      },
     ],
   },
 }
