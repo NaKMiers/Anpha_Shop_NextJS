@@ -49,7 +49,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
     const getMovies = async () => {
       try {
         const { results: movies } = await getMoviesList('popular', { page: 1 })
-        setMovies(movies.slice(0, 5))
+        setMovies(movies.slice(0, 4))
 
         console.log('movies', movies)
       } catch (error) {
