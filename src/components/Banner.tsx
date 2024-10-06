@@ -24,7 +24,7 @@ interface BannerProps {
 function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerProps) {
   // states
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
-  const [width, setWidth] = useState<number>(0)
+  const [width, setWidth] = useState<number>(-1)
   const [movies, setMovies] = useState<any[]>([])
 
   // set width
@@ -81,7 +81,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             {/* Tag */}
             <ul className="hidden min-w-[200px] overflow-y-auto rounded-lg bg-white p-2 pt-0 lg:block">
               <h5 className="sticky top-0 bg-white pt-2 text-center text-[20px] font-semibold text-dark">
-                Tag
+                Thẻ
               </h5>
 
               {tags?.map(tag => (
@@ -107,11 +107,15 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
             {/* Slider */}
             <Slider
               time={5000}
-              mobile={width < 576 && width > 0}
+              mobile={width < 576}
               thumbs={
-                width < 576 && width > 0
-                  ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.poster_path}`)
-                  : movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`)
+                width < 576
+                  ? movies.length > 0
+                    ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.poster_path}`)
+                    : ['/banners/netflix-random-mobile.jpg']
+                  : movies.length > 0
+                    ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`)
+                    : ['/banners/netflix-random.jpg']
               }
             >
               {movies.length > 0 ? (
@@ -124,7 +128,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                     <Image
                       className="transition-all duration-700 hover:scale-105"
                       src={
-                        width < 576 && width > 0
+                        width < 576
                           ? `https://image.tmdb.org/t/p/original/${movie?.poster_path}`
                           : `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`
                       }
@@ -148,15 +152,13 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                   </Link>
                 ))
               ) : (
-                <Link href="/category?ctg=microsoft-office">
+                <Link href="/category?ctg=netflix">
                   <Image
                     className="transition-all duration-700 hover:scale-105"
                     src={
-                      width < 576 && width > 0
-                        ? '/banners/office-365-mobile.jpg'
-                        : '/banners/office-365.jpg'
+                      width < 576 ? '/banners/netflix-random-mobile.jpg' : '/banners/netflix-random.jpg'
                     }
-                    alt="netflix"
+                    alt="grammarly"
                     width={1200}
                     height={768}
                     style={{

@@ -45,7 +45,7 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
           onClick={e => e.stopPropagation()}
         >
           <h5 className="sticky top-0 z-10 bg-white pt-2 text-center text-[20px] font-semibold text-dark">
-            Tags
+            Thẻ
           </h5>
 
           {tags?.map(tag => (
