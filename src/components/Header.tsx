@@ -38,7 +38,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const lastScrollTop = useRef<number>(0)
   const [cartLength, setCartLength] = useState<number>(0)
   const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
-  const [openAds, setOpenAds] = useState<boolean>(false)
+  const [openAds, setOpenAds] = useState<boolean>(true)
 
   // search
   const [openSearch, setOpenSearch] = useState<boolean>(false)
@@ -54,13 +54,32 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
 
   // MARK: ADS
   useEffect(() => {
-    setInterval(() => {
-      setOpenAds(true)
+    const showTime = 12000
+    const interval = 30000
 
-      setTimeout(() => {
-        setOpenAds(false)
-      }, 10000)
-    }, 30000)
+    setTimeout(() => {
+      setOpenAds(false)
+
+      setInterval(() => {
+        setOpenAds(true)
+
+        setTimeout(() => {
+          setOpenAds(false)
+        }, showTime)
+      }, interval)
+    }, showTime)
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        setOpenAds(prev => !prev)
+      }
+    }
+
+    window.addEventListener('keypress', handleKeyPress)
+
+    return () => {
+      window.removeEventListener('keypress', handleKeyPress)
+    }
   }, [])
 
   // MARK: Side Effects
@@ -221,13 +240,18 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         href="https://monaedu.com"
         target="_blank"
         rel="noreferrer"
-        className={`${openAds ? 'max-h-12 py-0.5 md:max-h-6' : 'max-h-0 py-0'} trans-300 group block h-12 w-full overflow-hidden bg-yellow-400 px-21 text-center font-body text-sm tracking-wider text-dark md:h-6`}
+        className={`${openAds ? 'max-h-[200px] py-0.5 sm:max-h-12 md:max-h-6' : 'max-h-0 py-0'} trans-300 group block w-full overflow-hidden bg-gradient-to-t from-[#2f2e3e] to-primary px-3 text-center font-body text-sm tracking-wider text-light`}
         title='Giảm đến 100.000đ hoặc 50% khi nhập mã "BIGSALE50" học tại monaedu.com'
       >
-        <p className="line-clamp-2 text-ellipsis">
-          Giảm đến 100.000đ hoặc 50% khi nhập mã{' '}
-          <span className="wiggle-0 inline-block font-semibold">&quot;BIGSALE50&quot;</span> khi mua khóa
-          học tại monaedu.com
+        <p className="">
+          Nhập voucher{' '}
+          <span className="wiggle-0 inline-block font-semibold text-yellow-300">
+            &quot;BIGSALE50&quot;
+          </span>{' '}
+          giảm ngay <span className="font-semibold">50%</span> khi mua khóa học tại{' '}
+          <span className="trans-200 font-semibold text-orange-400 underline underline-offset-1 group-hover:text-orange-500">
+            monaedu.com
+          </span>
         </p>
       </Link>
 

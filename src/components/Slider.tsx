@@ -188,7 +188,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
           } trans-200 bottom-[6%] left-1/2 flex -translate-x-1/2 items-center justify-center group-hover:bottom-[6%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full`}
         >
           <p className="xs:block absolute -top-10 left-1/2 hidden -translate-x-1/2 rounded-3xl border-2 border-light bg-dark-100 bg-opacity-50 px-3 py-1 text-center text-xs font-semibold text-light drop-shadow-md md:-top-10 md:text-base lg:-top-12 lg:text-lg">
-            Phim Hay Netflix
+            Phim Xu Hướng
           </p>
 
           {thumbs.map((src, index) => {

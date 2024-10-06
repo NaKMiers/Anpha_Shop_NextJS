@@ -3,7 +3,7 @@
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
-import { getMoviesList } from '@/requests'
+import { getTrendingMovies } from '@/requests'
 import Image from 'next/image'
 import Link from 'next/link'
 import { memo, useEffect, useState } from 'react'
@@ -48,7 +48,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const { results: movies } = await getMoviesList('popular', { page: 1 })
+        const { results: movies } = await getTrendingMovies({ page: 1, language: 'vi-VN' })
         setMovies(movies.slice(0, 4))
       } catch (error) {
         console.log(error)
@@ -142,7 +142,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                       className={`absolute ${index % 2 !== 0 ? 'left-2' : 'right-2'} top-2 rounded-3xl border-2 border-dark bg-white px-3 py-1 text-dark`}
                     >
                       <p className="md:-text-base text-center font-body text-sm font-semibold tracking-wider drop-shadow-md">
-                        {movie.title}
+                        {movie.title || movie.name}
                       </p>
                     </div>
                   </Link>
