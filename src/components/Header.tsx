@@ -54,8 +54,8 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
 
   // MARK: ADS
   useEffect(() => {
-    const showTime = 12000
-    const interval = 30000
+    const showTime = 10000
+    const interval = 60000
 
     setTimeout(() => {
       setOpenAds(false)
