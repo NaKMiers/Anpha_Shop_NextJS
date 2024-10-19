@@ -37,7 +37,7 @@ export * from './cartRequest'
 export * from './adminRequest'
 
 export const getTrendingMovies = async (params: any) => {
-  const url = `https://api.themoviedb.org/3/trending/all/day?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&${new URLSearchParams(params)}`
+  const url = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&${new URLSearchParams(params)}`
   const response = await fetch(url)
 
   if (!response.ok) {

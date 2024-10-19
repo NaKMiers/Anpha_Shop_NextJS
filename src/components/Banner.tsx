@@ -49,7 +49,9 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
     const getMovies = async () => {
       try {
         const { results: movies } = await getTrendingMovies({ page: 1, language: 'vi-VN' })
+        console.log(movies)
         setMovies(movies.slice(0, 4))
+        console.log(movies)
       } catch (error) {
         console.log(error)
       }
@@ -111,7 +113,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               thumbs={
                 width < 576
                   ? movies.length > 0
-                    ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.poster_path}`)
+                    ? movies.map(
+                        movie =>
+                          `https://image.tmdb.org/t/p/original/${movie?.known_for[0]?.poster_path}`
+                      )
                     : ['/banners/netflix-random-mobile.jpg']
                   : movies.length > 0
                     ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`)
@@ -123,7 +128,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                   <Link
                     className="relative"
                     href="/category?ctg=microsoft-office"
-                    key={movie.id}
+                    key={index}
                   >
                     <Image
                       className="transition-all duration-700 hover:scale-105"
