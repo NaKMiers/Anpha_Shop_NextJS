@@ -127,7 +127,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                 movies.map((movie, index) => (
                   <Link
                     className="relative"
-                    href="/category?ctg=microsoft-office"
+                    href="/category?ctg=netflix"
                     key={index}
                   >
                     <Image
