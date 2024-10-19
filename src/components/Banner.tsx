@@ -49,9 +49,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
     const getMovies = async () => {
       try {
         const { results: movies } = await getTrendingMovies({ page: 1, language: 'vi-VN' })
-        console.log(movies)
         setMovies(movies.slice(0, 4))
-        console.log(movies)
       } catch (error) {
         console.log(error)
       }
