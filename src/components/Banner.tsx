@@ -111,10 +111,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
               thumbs={
                 width < 576
                   ? movies.length > 0
-                    ? movies.map(
-                        movie =>
-                          `https://image.tmdb.org/t/p/original/${movie?.known_for[0]?.poster_path}`
-                      )
+                    ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.poster_path}`)
                     : ['/banners/netflix-random-mobile.jpg']
                   : movies.length > 0
                     ? movies.map(movie => `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`)
