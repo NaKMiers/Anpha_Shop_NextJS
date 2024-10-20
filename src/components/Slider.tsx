@@ -11,9 +11,18 @@ interface SliderProps {
   hideControls?: boolean
   thumbs?: string[]
   mobile?: boolean
+  movies?: any[]
 }
 
-function Slider({ time, hideControls, children, thumbs = [], mobile, className = '' }: SliderProps) {
+function Slider({
+  time,
+  hideControls,
+  children,
+  thumbs = [],
+  mobile,
+  movies = [],
+  className = '',
+}: SliderProps) {
   // states
   const [slide, setSlide] = useState<number>(1)
   const [isSliding, setIsSliding] = useState<boolean>(false)
@@ -185,8 +194,8 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
         <div
           className={`trans-200 absolute bottom-[6%] left-1/2 z-10 flex w-full -translate-x-1/2 justify-center px-21 group-hover:bottom-[6%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full`}
         >
-          <p className="absolute -top-10 left-1/2 hidden -translate-x-1/2 rounded-3xl border-2 border-light bg-dark-100 bg-opacity-50 px-3 py-1 text-center text-xs font-semibold text-light drop-shadow-md xs:block md:-top-10 md:text-base lg:-top-12 lg:text-lg">
-            Phim Xu Hướng
+          <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 text-center font-semibold text-light drop-shadow-md">
+            {movies[slide - 1]?.title || movies[slide - 1]?.name}
           </p>
 
           <div className="no-scrollbar flex w-[90%] flex-shrink-0 gap-1 overflow-x-auto">
@@ -194,7 +203,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
               return (
                 <button
                   className={`${
-                    mobile ? 'aspect-[9/16]' : 'aspect-video'
+                    mobile ? 'aspect-[9/16] w-[40px]' : 'aspect-video'
                   } trans-200 flex-shrink-0 overflow-hidden rounded-lg border-2 border-white shadow-md ${
                     slide === index + 1 ? 'opacity-100' : 'opacity-35 hover:opacity-50'
                   }`}

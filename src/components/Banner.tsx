@@ -106,6 +106,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
             {/* Slider */}
             <Slider
+              movies={movies}
               time={5000}
               mobile={width < 576}
               thumbs={
@@ -142,15 +143,6 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                         objectFit: 'cover',
                       }}
                     />
-                    <div
-                      className={`absolute right-2 ${
-                        navigator.userAgent.toLowerCase().includes('firefox') ? 'top-6' : 'top-2'
-                      } rounded-3xl border-2 border-dark bg-white px-3 py-1 text-dark sm:flex-nowrap`}
-                    >
-                      <p className="md:-text-base text-nowrap text-center font-body text-sm font-semibold tracking-wider drop-shadow-md">
-                        {movie.title || movie.name}
-                      </p>
-                    </div>
                   </Link>
                 ))
               ) : (
