@@ -195,7 +195,7 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
                 <button
                   className={`${
                     mobile ? 'aspect-[9/16]' : 'aspect-video'
-                  } trans-200 max-w-[65px] flex-shrink-0 overflow-hidden rounded-lg border-2 border-white shadow-md md:max-w-[80px] ${
+                  } trans-200 flex-shrink-0 overflow-hidden rounded-lg border-2 border-white shadow-md ${
                     slide === index + 1 ? 'opacity-100' : 'opacity-35 hover:opacity-50'
                   }`}
                   onClick={() => setSlide(index + 1)}
@@ -204,8 +204,8 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
                   <Image
                     className="h-full w-full object-cover"
                     src={src}
-                    width={mobile ? 65 : 80}
-                    height={mobile ? 80 : 65}
+                    width={mobile ? 40 : 80}
+                    height={mobile ? 80 : 40}
                     alt="slide-thumb"
                     loading="lazy"
                   />
