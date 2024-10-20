@@ -49,7 +49,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
     const getMovies = async () => {
       try {
         const { results: movies } = await getTrendingMovies({ page: 1, language: 'vi-VN' })
-        setMovies(movies.slice(0, 4))
+        setMovies(movies.slice(0, 10))
       } catch (error) {
         console.log(error)
       }
@@ -143,9 +143,11 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                       }}
                     />
                     <div
-                      className={`absolute ${index % 2 !== 0 ? 'left-2' : 'right-2'} top-2 rounded-3xl border-2 border-dark bg-white px-3 py-1 text-dark`}
+                      className={`absolute right-2 ${
+                        navigator.userAgent.toLowerCase().includes('firefox') ? 'top-6' : 'top-2'
+                      } rounded-3xl border-2 border-dark bg-white px-3 py-1 text-dark sm:flex-nowrap`}
                     >
-                      <p className="md:-text-base text-center font-body text-sm font-semibold tracking-wider drop-shadow-md">
+                      <p className="md:-text-base text-nowrap text-center font-body text-sm font-semibold tracking-wider drop-shadow-md">
                         {movie.title || movie.name}
                       </p>
                     </div>

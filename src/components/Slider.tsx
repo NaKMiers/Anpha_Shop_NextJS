@@ -183,35 +183,36 @@ function Slider({ time, hideControls, children, thumbs = [], mobile, className =
       {/* MARK: Indicators */}
       {thumbs.length >= 2 && (
         <div
-          className={`absolute z-10 w-full px-21 ${
-            mobile ? 'gap-2.5' : 'gap-5'
-          } trans-200 bottom-[6%] left-1/2 flex -translate-x-1/2 items-center justify-center group-hover:bottom-[6%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full`}
+          className={`trans-200 absolute bottom-[6%] left-1/2 z-10 flex w-full -translate-x-1/2 justify-center px-21 group-hover:bottom-[6%] group-hover:translate-y-0 md:bottom-0 md:translate-y-full`}
         >
           <p className="absolute -top-10 left-1/2 hidden -translate-x-1/2 rounded-3xl border-2 border-light bg-dark-100 bg-opacity-50 px-3 py-1 text-center text-xs font-semibold text-light drop-shadow-md xs:block md:-top-10 md:text-base lg:-top-12 lg:text-lg">
             Phim Xu Hướng
           </p>
 
-          {thumbs.map((src, index) => {
-            return (
-              <button
-                className={`${
-                  mobile ? 'aspect-[9/16]' : 'aspect-video'
-                } trans-200 overflow-hidden rounded-lg border-2 border-white shadow-md hover:-translate-y-1 hover:scale-105 hover:opacity-100 ${
-                  slide === index + 1 ? 'opacity-100' : 'opacity-60'
-                }`}
-                onClick={() => setSlide(index + 1)}
-                key={src}
-              >
-                <Image
-                  className="h-full w-full object-cover"
-                  src={src}
-                  width={mobile ? 40 : 70}
-                  height={mobile ? 70 : 40}
-                  alt="slide-thumb"
-                />
-              </button>
-            )
-          })}
+          <div className="no-scrollbar flex w-[90%] flex-shrink-0 gap-1 overflow-x-auto">
+            {thumbs.map((src, index) => {
+              return (
+                <button
+                  className={`${
+                    mobile ? 'aspect-[9/16]' : 'aspect-video'
+                  } trans-200 max-w-[65px] flex-shrink-0 overflow-hidden rounded-lg border-2 border-white shadow-md md:max-w-[80px] ${
+                    slide === index + 1 ? 'opacity-100' : 'opacity-35 hover:opacity-50'
+                  }`}
+                  onClick={() => setSlide(index + 1)}
+                  key={src}
+                >
+                  <Image
+                    className="h-full w-full object-cover"
+                    src={src}
+                    width={mobile ? 65 : 80}
+                    height={mobile ? 80 : 65}
+                    alt="slide-thumb"
+                    loading="lazy"
+                  />
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
       {childrenAmount >= 2 && thumbs.length <= 0 && (
