@@ -3,8 +3,8 @@ import type { Config } from 'tailwindcss'
 export const theme = {
   extend: {
     colors: {
-      primary: '#01dbe5',
-      secondary: '#7655e6',
+      primary: '#F7E360',
+      secondary: '#01dbe5',
       dark: '#333',
       light: '#fff',
       loading: '#334155',

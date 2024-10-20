@@ -9,7 +9,7 @@ function Background({ noBeta }: { noBeta?: boolean }) {
 
       {!noBeta && (
         <div className="fixed left-0 top-0 -z-10 flex h-screen w-screen items-center justify-center font-semibold">
-          <p className="bg-gradient-to-b from-[#01dae5] to-[#01dbe510] bg-clip-text text-center text-[80px] text-transparent drop-shadow-lg">
+          <p className="bg-gradient-to-b from-[#F7E360] to-[#F7E36010] bg-clip-text text-center text-[80px] text-transparent drop-shadow-lg">
             Anpha Shop
           </p>
           <ParticlesContainer />
