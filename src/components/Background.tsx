@@ -1,13 +1,18 @@
 import { memo } from 'react'
+import ParticlesContainer from './ParticlesContainer'
 
 function Background({ noBeta }: { noBeta?: boolean }) {
   return (
     <>
-      <div className="background-app fixed left-0 top-0 -z-10 h-screen w-screen" />
+      <div className="fixed left-0 top-0 -z-10 h-screen w-screen bg-[#333]" />
+      <div className="background-app fixed left-0 top-0 -z-10 h-screen w-screen opacity-80" />
 
       {!noBeta && (
-        <div className="fixed left-0 top-0 -z-10 flex h-screen w-screen items-center justify-center text-9xl font-semibold md:text-[175px] lg:text-[256px]">
-          {/* <p className='text-primary drop-shadow-lg'>Beta</p> */}
+        <div className="fixed left-0 top-0 -z-10 flex h-screen w-screen items-center justify-center font-semibold">
+          <p className="bg-gradient-to-b from-[#01dae5] to-[#01dbe510] bg-clip-text text-center text-[80px] text-transparent drop-shadow-lg">
+            Anpha Shop
+          </p>
+          <ParticlesContainer />
         </div>
       )}
     </>
