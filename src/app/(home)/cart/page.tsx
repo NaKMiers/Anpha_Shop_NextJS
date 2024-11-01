@@ -232,15 +232,11 @@ function CartPage() {
       }
     }
 
+    console.log('total', total)
+
     // total = 0 but not apply voucher
     if ((!total || total <= 0) && !voucher) {
       toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
-      return
-    }
-
-    // not in black list
-    if (blackEmails.includes(curUser.email) || blackEmails.includes(getValues('email'))) {
-      toast.error('Không thể thực hiện giao dịch này')
       return
     }
 
@@ -251,6 +247,12 @@ function CartPage() {
   // handle checkout
   const handleCheckout = useCallback(
     async (type: string) => {
+      // not in black list
+      if (blackEmails.includes(getValues('email'))) {
+        toast.error('Không thể thực hiện giao dịch này')
+        return
+      }
+
       // validate before checkout
       if (!handleValidateBeforeCheckout()) return
 
@@ -326,6 +328,12 @@ function CartPage() {
     // not enough money
     if (curUser && curUser.balance < total) {
       toast.error('Số dư không đủ để thực hiện giao dịch này')
+      return
+    }
+
+    // not in black list
+    if (blackEmails.includes(curUser?.email)) {
+      toast.error('Không thể thực hiện giao dịch này')
       return
     }
 
