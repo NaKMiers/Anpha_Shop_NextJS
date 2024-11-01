@@ -41,6 +41,11 @@ export async function POST(req: NextRequest) {
       // get user balance
       const user: IUser | null = await UserModel.findById(userId).lean()
 
+      // check valid total
+      if (total <= 0) {
+        return NextResponse.json({ message: 'Số tiền thanh toán không hợp lệ' }, { status: 400 })
+      }
+
       // check user balance
       if ((user?.balance || 0) < total) {
         return NextResponse.json(
