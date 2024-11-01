@@ -310,6 +310,12 @@ function CartPage() {
       return
     }
 
+    // not enough money
+    if (curUser.balance < total) {
+      toast.error('Số dư không đủ để thực hiện giao dịch này')
+      return
+    }
+
     // validate before checkout
     if (!handleValidateBeforeCheckout()) return
 
