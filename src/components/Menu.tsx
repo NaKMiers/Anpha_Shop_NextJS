@@ -25,11 +25,11 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
   const curUser: any = session?.user
 
   // states
-  const [cartLength, setCartlength] = useState<number>(0)
+  const [cartLength, setCartLength] = useState<number>(0)
 
   // get cart length
   useEffect(() => {
-    setCartlength(
+    setCartLength(
       curUser
         ? cartItems.reduce((total, item) => total + item.quantity, 0)
         : cartLocalItems.reduce((total, item) => total + item.quantity, 0)

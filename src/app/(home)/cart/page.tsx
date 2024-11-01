@@ -4,6 +4,7 @@ import { CartItemToAdd } from '@/app/api/cart/add/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Input from '@/components/Input'
+import { blackEmails } from '@/constansts/blackList'
 import { commonEmailMistakes } from '@/constansts/mistakes'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
@@ -48,7 +49,7 @@ function CartPage() {
   const [subTotal, setSubTotal] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
-  const [cartLength, setCartlength] = useState<number>(0)
+  const [cartLength, setCartLength] = useState<number>(0)
   const [items, setItems] = useState<ICartItem[]>([])
   const [localItems, setLocalItems] = useState<ICartItem[]>([])
 
@@ -78,11 +79,11 @@ function CartPage() {
     dispatch(setPageLoading(false))
 
     if (curUser) {
-      setCartlength(cartItems.reduce((total, item) => total + item.quantity, 0))
+      setCartLength(cartItems.reduce((total, item) => total + item.quantity, 0))
       setItems(cartItems)
       setLocalItems(localCartItems)
     } else {
-      setCartlength(localCartItems.reduce((total, item) => total + item.quantity, 0))
+      setCartLength(localCartItems.reduce((total, item) => total + item.quantity, 0))
       setItems(localCartItems)
     }
   }, [cartItems, localCartItems, curUser, dispatch])
@@ -231,8 +232,20 @@ function CartPage() {
       }
     }
 
+    // total = 0 but not apply voucher
+    if ((!total || total <= 0) && !voucher) {
+      toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')
+      return
+    }
+
+    // not in black list
+    if (blackEmails.includes(curUser.email) || blackEmails.includes(getValues('email'))) {
+      toast.error('Không thể thực hiện giao dịch này')
+      return
+    }
+
     return isValid
-  }, [curUser, getValues, selectedItems.length, setError, total])
+  }, [curUser, getValues, selectedItems.length, setError, total, voucher])
 
   // MARK: Checkout
   // handle checkout
@@ -302,7 +315,7 @@ function CartPage() {
     ]
   )
 
-  // handle buy with balance
+  // MARK: Buy with balance
   const handleBuyWithBalance = useCallback(async () => {
     // check user
     if (!curUser) {
@@ -311,7 +324,7 @@ function CartPage() {
     }
 
     // not enough money
-    if (curUser.balance < total) {
+    if (curUser && curUser.balance < total) {
       toast.error('Số dư không đủ để thực hiện giao dịch này')
       return
     }

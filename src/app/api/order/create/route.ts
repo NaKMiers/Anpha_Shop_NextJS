@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     // save new order
     await newOrder.save()
 
-    // if user logined => cart is database cart => Delete cart items
+    // if user logged in => cart is database cart => Delete cart items
     let removedCartItems = []
     if (userId) {
       // delete cart items from database
