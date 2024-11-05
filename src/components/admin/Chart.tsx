@@ -231,7 +231,7 @@ function Chart({ by, chart, chunk, className = '' }: ChartProps) {
                 return [`Quantity: ${value}`]
               }
             }}
-            labelStyle={{ color: '#F7E360' }}
+            labelStyle={{ color: '#01dbe5' }}
             contentStyle={{
               background: '#fff',
               borderRadius: 8,
