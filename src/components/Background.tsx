@@ -12,7 +12,7 @@ function Background({ noBeta }: { noBeta?: boolean }) {
           <p className="bg-gradient-to-b from-[#01dbe5] to-[#01dbe510] bg-clip-text text-center text-[80px] text-transparent drop-shadow-lg">
             Anpha Shop
           </p>
-          <ParticlesContainer />
+          {/* <ParticlesContainer /> */}
         </div>
       )}
     </>
