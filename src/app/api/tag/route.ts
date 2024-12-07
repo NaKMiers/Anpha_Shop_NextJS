@@ -6,10 +6,10 @@ import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Product, Tag, Flashsale
-import '@/models/FlashsaleModel'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 import '@/models/TagModel'
-import { IFlashsale } from '@/models/FlashsaleModel'
+import { IFlashsale } from '@/models/FlashSaleModel'
 
 export const dynamic = 'force-dynamic'
 

@@ -1,47 +1,48 @@
 import { connectDatabase } from '@/config/database'
-import OrderModel, { IOrder } from '@/models/OrderModel'
+import ReviewModel from '@/models/ReviewModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import momentTZ from 'moment-timezone'
-import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Order, Voucher
-import '@/models/OrderModel'
-import '@/models/VoucherModel'
+// Models: Review
+import '@/models/ReviewModel'
 
 export const dynamic = 'force-dynamic'
 
-// [GET]: /admin/order/all
-export async function GET(req: NextRequest) {
-  console.log('- Get Order History -')
+// [GET]: /review/:productId
+export async function GET(
+  req: NextRequest,
+  { params: { productId } }: { params: { productId: string; status: 'show' } }
+) {
+  console.log('- Get Product Reviews -')
 
   try {
     // connect to database
     await connectDatabase()
-
-    // get userId to get user's order history
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-    const userId = token?._id
-    const email = token?.email
-
-    // check if userId not exist
-    if (!userId) {
-      return NextResponse.json({ message: 'Người dùng không tồn tại' }, { status: 401 })
-    }
 
     // get query params
     const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
 
     // options
     let skip = 0
-    let itemPerPage = 6
-    const filter: { [key: string]: any } = {}
-    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
+    let itemPerPage = 10
+    const filter: { [key: string]: any } = { productId, status: 'show' }
+    let sort: { [key: string]: any } = { createdAt: -1 } // default sort
 
     // build filter
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         // Special Cases ---------------------
+        if (key === 'limit') {
+          if (params[key][0] === 'no-limit') {
+            itemPerPage = Number.MAX_SAFE_INTEGER
+            skip = 0
+          } else {
+            itemPerPage = +params[key][0]
+          }
+          continue
+        }
+
         if (key === 'page') {
           const page = +params[key][0]
           skip = (page - 1) * itemPerPage
@@ -49,7 +50,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (key === 'search') {
-          const searchFields = ['code', 'email', 'status', 'paymentMethod']
+          const searchFields = ['content']
 
           filter.$or = searchFields.map(field => ({
             [field]: { $regex: params[key][0], $options: 'i' },
@@ -61,17 +62,6 @@ export async function GET(req: NextRequest) {
           sort = {
             [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
           }
-          continue
-        }
-
-        if (key === 'total') {
-          filter[key] = { $lte: +params[key][0] }
-          continue
-        }
-
-        if (['userId', 'voucherApplied'].includes(key)) {
-          filter[key] =
-            params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
           continue
         }
 
@@ -101,39 +91,28 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // get amount of account
-    const amount = await OrderModel.countDocuments({
-      email,
-      ...filter,
-    })
-
-    // get all order from database
-    const orders: IOrder[] = await OrderModel.find({
-      email,
-      ...filter,
-    })
+    // get all review of product
+    const reviews = await ReviewModel.find(filter)
       .populate({
-        path: 'voucherApplied',
-        select: 'code desc',
+        path: 'userId',
+        select: 'firstname lastname username avatar',
       })
       .sort(sort)
       .skip(skip)
       .limit(itemPerPage)
       .lean()
 
-    // get all order without filter
-    const chops = await OrderModel.aggregate([
-      {
-        $group: {
-          _id: null,
-          minTotal: { $min: '$total' },
-          maxTotal: { $max: '$total' },
-        },
-      },
+    // calculate amount of each rating
+    const [five, four, three, two, one] = await Promise.all([
+      ReviewModel.countDocuments({ ...filter, rating: 5 }),
+      ReviewModel.countDocuments({ ...filter, rating: 4 }),
+      ReviewModel.countDocuments({ ...filter, rating: 3 }),
+      ReviewModel.countDocuments({ ...filter, rating: 2 }),
+      ReviewModel.countDocuments({ ...filter, rating: 1 }),
     ])
 
-    // retunr all orders
-    return NextResponse.json({ orders, amount, chops: chops[0] }, { status: 200 })
+    // return response
+    return NextResponse.json({ reviews, stars: [five, four, three, two, one] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

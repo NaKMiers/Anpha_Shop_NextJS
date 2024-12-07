@@ -7,11 +7,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaEye, FaEyeSlash, FaRocket, FaSyncAlt, FaTrash } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaRocket, FaStar, FaStreetView, FaSyncAlt, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { PiLightningFill, PiLightningSlashFill } from 'react-icons/pi'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import { FaUsersViewfinder } from 'react-icons/fa6'
+import { Rating } from '@mui/material'
 
 interface ProductItemProps {
   data: IProduct
@@ -27,7 +29,7 @@ interface ProductItemProps {
   handleActivateProducts: (ids: string[], active: boolean) => void
   handleBootProducts: (ids: string[], value: boolean) => void
   handleSyncProducts: (ids: string[]) => void
-  hanldeRemoveApplyingFlashsales: (ids: string[]) => void
+  handleRemoveApplyingFlashSales: (ids: string[]) => void
   handleDeleteProducts: (ids: string[]) => void
 }
 
@@ -43,7 +45,7 @@ function ProductItem({
   handleActivateProducts,
   handleBootProducts,
   handleSyncProducts,
-  hanldeRemoveApplyingFlashsales,
+  handleRemoveApplyingFlashSales,
   handleDeleteProducts,
 }: ProductItemProps) {
   // states
@@ -177,6 +179,14 @@ function ProductItem({
               <p className="text-sm text-slate-500 line-through">{formatPrice(data.oldPrice)}</p>
             )}
           </div>
+          {/* Rating */}
+          {data.rating && (
+            <Rating
+              size="small"
+              readOnly
+              value={data.rating}
+            />
+          )}
 
           <div className="flex w-full items-center gap-3">
             {/* Sold */}
@@ -302,6 +312,19 @@ function ProductItem({
             )}
           </button>
 
+          {/* Review */}
+          <Link
+            href={`/admin/product/${data._id}/reviews`}
+            className="group block"
+            onClick={e => e.stopPropagation()}
+            title="Review"
+          >
+            <FaStar
+              size={18}
+              className="wiggle text-yellow-500"
+            />
+          </Link>
+
           {/* Boot Button */}
           <button
             className="group block"
@@ -404,7 +427,7 @@ function ProductItem({
           confirmType === 'deactivate'
             ? handleActivateProducts([data._id], false)
             : confirmType === 'Remove Flash Sale'
-              ? hanldeRemoveApplyingFlashsales([data._id])
+              ? handleRemoveApplyingFlashSales([data._id])
               : handleDeleteProducts([data._id])
         }
         isLoading={loadingProducts.includes(data._id)}

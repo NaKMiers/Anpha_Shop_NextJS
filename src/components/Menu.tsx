@@ -92,7 +92,6 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                     : curUser?.firstname + ' ' + curUser?.lastname}
                 </span>
               </Link>
-
               <li className="trans-200 flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
                 <span className="font-semibold">Số dư: </span>
                 <span>{formatPrice(curUser?.balance)}</span>
@@ -107,7 +106,6 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                   />
                 </Link>
               </li>
-
               <li
                 className="group"
                 onClick={() => setOpen(false)}
@@ -174,30 +172,6 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                   <span className="font-body text-[15px] tracking-wide">Liên hệ</span>
                 </a>
               </li>
-              {curUser?.role !== 'user' && (
-                <li
-                  className="group"
-                  onClick={() => setOpen(false)}
-                >
-                  <Link
-                    href={
-                      ['admin', 'editor'].includes(curUser?.role)
-                        ? '/admin/order/all'
-                        : '/admin/summary/all'
-                    }
-                    className="trans-200 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary"
-                  >
-                    <FaUserSecret
-                      size={18}
-                      className="wiggle w-[22px]"
-                    />
-                    <span className="font-body text-[15px] tracking-wide text-primary">
-                      {/* {curUser?.role.charAt(0).toUpperCase() + curUser?.role.slice(1)} */}
-                      {['admin', 'editor'].includes(curUser?.role) ? 'Orders' : 'Collaborator'}
-                    </span>
-                  </Link>
-                </li>
-              )}
               <li
                 className="group"
                 onClick={() => setOpen(false)}
@@ -213,6 +187,85 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                   <span className="font-body text-[15px] tracking-wide text-yellow-500">Đăng xuất</span>
                 </button>
               </li>
+              {['admin', 'editor'].includes(curUser?.role) && (
+                <div
+                  className="no-scrollbar items-center5 flex gap-0.5 overflow-x-auto"
+                  onClick={() => setOpen(false)}
+                >
+                  <Link
+                    href="/admin"
+                    className="trans-200 group flex flex-shrink-0 items-center gap-2 rounded-lg px-3 py-2 hover:bg-white hover:text-dark"
+                  >
+                    <Image
+                      src="/icons/dashboard-icon.png"
+                      className="wiggle"
+                      width={30}
+                      height={30}
+                      alt="dashboard"
+                    />
+                  </Link>
+                  <Link
+                    href="/admin/order/all"
+                    className="trans-200 group flex flex-shrink-0 items-center gap-2 rounded-lg px-3 py-2 hover:bg-white hover:text-dark"
+                  >
+                    <Image
+                      src="/icons/order-icon.png"
+                      className="wiggle"
+                      width={30}
+                      height={30}
+                      alt="orders"
+                    />
+                  </Link>
+                  <Link
+                    href="/admin/account/all"
+                    className="trans-200 group flex flex-shrink-0 items-center gap-2 rounded-lg px-3 py-2 hover:bg-white hover:text-dark"
+                  >
+                    <Image
+                      src="/icons/account-icon.png"
+                      className="wiggle"
+                      width={26}
+                      height={26}
+                      alt="accounts"
+                    />
+                  </Link>
+                  <Link
+                    href="/admin/user/all"
+                    className="trans-200 group flex flex-shrink-0 items-center gap-2 rounded-lg px-3 py-2 hover:bg-white hover:text-dark"
+                  >
+                    <Image
+                      src="/icons/user-icon.png"
+                      className="wiggle"
+                      width={30}
+                      height={30}
+                      alt="users"
+                    />
+                  </Link>
+                  <Link
+                    href="/admin/product/all"
+                    className="trans-200 group flex flex-shrink-0 items-center gap-2 rounded-lg px-3 py-2 hover:bg-white hover:text-dark"
+                  >
+                    <Image
+                      src="/icons/product-icon.png"
+                      className="wiggle"
+                      width={30}
+                      height={30}
+                      alt="products"
+                    />
+                  </Link>
+                  <Link
+                    href="/admin/voucher/all"
+                    className="trans-200 group flex flex-shrink-0 items-center gap-2 rounded-lg px-3 py-2 hover:bg-white hover:text-dark"
+                  >
+                    <Image
+                      src="/icons/voucher-icon.png"
+                      className="wiggle"
+                      width={30}
+                      height={30}
+                      alt="products"
+                    />
+                  </Link>
+                </div>
+              )}
             </>
           )
         ) : (

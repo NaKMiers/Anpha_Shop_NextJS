@@ -1,11 +1,11 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashsaleModel'
+import FlashsaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Product, Flash Sale
-import '@/models/FlashsaleModel'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'

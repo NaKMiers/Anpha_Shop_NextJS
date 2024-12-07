@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { IProduct } from './ProductModel'
 const Schema = mongoose.Schema
 
-const FlashsaleSchema = new Schema(
+const FlashSaleSchema = new Schema(
   {
     type: {
       type: String,
@@ -45,10 +45,10 @@ const FlashsaleSchema = new Schema(
   { timestamps: true }
 )
 
-const FlashsaleModel = mongoose.models.flashsale || mongoose.model('flashsale', FlashsaleSchema)
-export default FlashsaleModel
+const FlashSaleModel = mongoose.models.flashsale || mongoose.model('flashsale', FlashSaleSchema)
+export default FlashSaleModel
 
-export interface IFlashsale {
+export interface IFlashSale {
   _id: string
   type: 'fixed-reduce' | 'fixed' | 'percentage'
   value: string

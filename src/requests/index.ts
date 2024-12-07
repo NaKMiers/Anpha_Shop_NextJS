@@ -32,6 +32,10 @@ export * from './flashSaleRequest'
 export * from './cartRequest'
 
 // Comment
+export * from './commentRequest'
+
+// Reviews
+export * from './reviewRequest'
 
 // Admin
 export * from './adminRequest'

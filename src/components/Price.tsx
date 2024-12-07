@@ -1,6 +1,6 @@
 'use client'
 
-import { IFlashsale } from '@/models/FlashsaleModel'
+import { IFlashsale } from '@/models/FlashSaleModel'
 import { countPercent, formatPrice } from '@/utils/number'
 import { memo, useEffect, useState } from 'react'
 import CounterItem from './item/CounterItem'

@@ -232,8 +232,6 @@ function CartPage() {
       }
     }
 
-    console.log('total', total)
-
     // total = 0 but not apply voucher
     if ((!total || total <= 0) && !voucher) {
       toast.error('Hãy chọn sản phẩm để tiến hành thanh toán')

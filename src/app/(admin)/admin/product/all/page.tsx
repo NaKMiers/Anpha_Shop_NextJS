@@ -217,8 +217,8 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     }
   }, [])
 
-  // remove applying flashsales
-  const hanldeRemoveApplyingFlashsales = useCallback(async (ids: string[]) => {
+  // remove applying flash sales
+  const handleRemoveApplyingFlashSales = useCallback(async (ids: string[]) => {
     try {
       // send request to server
       const { updatedProducts, message } = await removeApplyingFlashSalesApi(ids)
@@ -671,7 +671,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
               <button
                 className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
                 onClick={() => {
-                  hanldeRemoveApplyingFlashsales(selectedProducts)
+                  handleRemoveApplyingFlashSales(selectedProducts)
                 }}
               >
                 Remove Flash Sale
@@ -720,7 +720,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             handleActivateProducts={handleActivateProducts}
             handleBootProducts={handleBootProducts}
             handleSyncProducts={handleSyncProducts}
-            hanldeRemoveApplyingFlashsales={hanldeRemoveApplyingFlashsales}
+            handleRemoveApplyingFlashSales={handleRemoveApplyingFlashSales}
             handleDeleteProducts={handleDeleteProducts}
             key={product._id}
           />

@@ -1,14 +1,13 @@
 import BuyActionWithQuantity from '@/components/BuyActionWithQuantity'
 import ChooseMe from '@/components/ChooseMe'
-import Comment from '@/components/Comment'
 import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
+import ReviewContainer from '@/components/loading/ReviewContainer'
 import Price from '@/components/Price'
 import Slider from '@/components/Slider'
 import { ICategory } from '@/models/CategoryModel'
-import { IComment } from '@/models/CommentModel'
-import { IFlashsale } from '@/models/FlashsaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { getProductPageApi } from '@/requests'
@@ -30,7 +29,6 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
   // Data
   let product: IProduct | null = null
   let relatedProducts: IProduct[] = []
-  let comments: IComment[] = []
 
   // MARK: Get Data
   try {
@@ -39,7 +37,6 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
     product = data.product
     relatedProducts = data.relatedProducts
-    comments = data.comments
   } catch (err: any) {
     return notFound()
   }
@@ -183,7 +180,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             price={product?.price || 0}
             oldPrice={product?.oldPrice}
             stock={product?.stock || 0}
-            flashSale={product?.flashsale as IFlashsale}
+            flashSale={product?.flashsale as IFlashSale}
             big
           />
 
@@ -662,16 +659,14 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
       <Divider size={9} />
 
-      {/* MARK: Comment */}
-      <section className="mx-auto max-w-1200 rounded-medium bg-white p-21 shadow-medium">
-        <h3 className="text-[24px] font-semibold text-dark">Bình luận gần đây</h3>
+      {/* MARK: Reviews */}
+      {product && (
+        <section className="mx-auto max-w-1200 rounded-medium bg-white p-21 shadow-medium">
+          <h3 className="mb-3 text-center text-[24px] font-semibold text-dark md:text-left">Đánh giá</h3>
 
-        <Comment
-          comments={comments}
-          productId={product?._id}
-          className="mt-4"
-        />
-      </section>
+          <ReviewContainer product={product} />
+        </section>
+      )}
     </div>
   )
 }

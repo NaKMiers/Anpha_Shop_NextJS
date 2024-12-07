@@ -1,4 +1,4 @@
-import { FaTicketAlt } from 'react-icons/fa'
+import { FaStar, FaTicketAlt } from 'react-icons/fa'
 import { FaBoltLightning, FaCubes, FaGift, FaListCheck, FaTags, FaUser } from 'react-icons/fa6'
 import { MdCategory, MdSpaceDashboard } from 'react-icons/md'
 import { RiBillFill } from 'react-icons/ri'

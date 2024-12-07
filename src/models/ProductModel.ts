@@ -1,6 +1,6 @@
 import { generateSlug } from '@/utils'
 import mongoose from 'mongoose'
-import { IFlashsale } from './FlashsaleModel'
+import { IFlashSale } from './FlashSaleModel'
 import { ITag } from './TagModel'
 import { ICategory } from './CategoryModel'
 const Schema = mongoose.Schema
@@ -78,6 +78,17 @@ const ProductSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    rating: {
+      type: Number,
+      default: 5,
+      min: 1,
+      max: 5,
+    },
+    reviewAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   {
     timestamps: true,
@@ -103,7 +114,7 @@ export interface IProduct {
   oldPrice?: number
   price: number
   description: string
-  flashsale?: string | IFlashsale
+  flashsale?: string | IFlashSale
   tags: string[] | ITag[]
   category: string | ICategory
   images: string[]
@@ -112,6 +123,8 @@ export interface IProduct {
   slug: string
   active: boolean
   booted: boolean
+  rating: number
+  reviewAmount: number
   createdAt: string
   updatedAt: string
 }

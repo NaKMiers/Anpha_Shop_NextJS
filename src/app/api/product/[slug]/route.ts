@@ -1,15 +1,15 @@
 import { connectDatabase } from '@/config/database'
-import CommentModel from '@/models/CommentModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
+import ReviewModel from '@/models/ReviewModel'
 
-// Models: Product, Tag, Category, Flashsale, Comment, User,
+// Models: Product, Tag, Category, Flash Sale, User, Review
 import '@/models/CategoryModel'
-import '@/models/CommentModel'
-import '@/models/FlashsaleModel'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 import '@/models/TagModel'
 import '@/models/UserModel'
+import '@/models/ReviewModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
       return NextResponse.json({ message: 'Product not found' }, { status: 404 })
     }
 
-    // get relatedProducts from database
+    // get relatedProducts
     const relatedProducts: IProduct[] = await ProductModel.find({
       _id: { $ne: product._id },
       active: true,
@@ -45,34 +45,8 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
       .populate('flashsale')
       .lean()
 
-    // get comment of the current product
-    let comments = await CommentModel.find({
-      productId: product._id,
-    })
-      .populate('userId')
-      .populate({
-        path: 'replied',
-        populate: {
-          path: 'userId',
-        },
-        options: { sort: { likes: -1, createdAt: -1 }, limit: 6 },
-      })
-      .sort({ likes: -1, createdAt: -1 })
-      .limit(12)
-      .lean()
-
-    comments = comments.map(comment => ({
-      ...comment,
-      userId: comment.userId._id,
-      user: comment.userId,
-      replied: comment.replied.map((reply: any) => ({
-        ...reply,
-        userId: reply.userId._id,
-        user: reply.userId,
-      })),
-    }))
-
-    return NextResponse.json({ product, relatedProducts, comments }, { status: 200 })
+    // return response
+    return NextResponse.json({ product, relatedProducts }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

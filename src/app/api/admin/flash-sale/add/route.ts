@@ -1,10 +1,10 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashsaleModel'
+import FlashsaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Flash Sale, Product
-import '@/models/FlashsaleModel'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
 // [POST]: /admin/flash-sale/add

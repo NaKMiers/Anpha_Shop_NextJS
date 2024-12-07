@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { addCartItem, addLocalCartItem } from '@/libs/reducers/cartReducer'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
-import { IFlashsale } from '@/models/FlashsaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { addToCartApi } from '@/requests'
 import { applyFlashSalePrice, countPercent } from '@/utils/number'
@@ -20,6 +20,7 @@ import { FaCircleCheck } from 'react-icons/fa6'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import Price from './Price'
+import { Rating } from '@mui/material'
 
 interface ProductCardProps {
   product: IProduct
@@ -239,7 +240,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         <div className="absolute -left-2 -top-2 z-10 max-w-10 rounded-br-lg rounded-tl-lg bg-yellow-400 p-1 text-center font-body text-[13px] font-semibold leading-4 text-white">
           Giảm{' '}
           {countPercent(
-            applyFlashSalePrice(product.flashsale as IFlashsale, product.price),
+            applyFlashSalePrice(product.flashsale as IFlashSale, product.price),
             product.oldPrice
           )}
         </div>
@@ -262,7 +263,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
       <Price
         price={product.price}
         oldPrice={product.oldPrice}
-        flashSale={product.flashsale as IFlashsale}
+        flashSale={product.flashsale as IFlashSale}
         stock={product.stock}
         className="mb-2"
       />
