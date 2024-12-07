@@ -3,16 +3,18 @@ import ReviewModel from '@/models/ReviewModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import momentTZ from 'moment-timezone'
 import { NextRequest, NextResponse } from 'next/server'
+import ProductModel from '@/models/ProductModel'
 
-// Models: Review
+// Models: Review, Product
 import '@/models/ReviewModel'
+import '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'
 
 // [GET]: /review/:productId
 export async function GET(
   req: NextRequest,
-  { params: { productId } }: { params: { productId: string; status: 'show' } }
+  { params: { productId } }: { params: { productId: string; status: 'show' | 'hide' } }
 ) {
   console.log('- Get Product Reviews -')
 
@@ -25,8 +27,8 @@ export async function GET(
 
     // options
     let skip = 0
-    let itemPerPage = 10
-    const filter: { [key: string]: any } = { productId, status: 'show' }
+    let itemPerPage = 50
+    const filter: { [key: string]: any } = { productId }
     let sort: { [key: string]: any } = { createdAt: -1 } // default sort
 
     // build filter
@@ -92,7 +94,13 @@ export async function GET(
     }
 
     // calculate amount of each rating
-    const [reviews, five, four, three, two, one] = await Promise.all([
+    const [product, amount, reviews, five, four, three, two, one] = await Promise.all([
+      // get product
+      ProductModel.findById(productId).lean(),
+
+      // get amount of reviews
+      ReviewModel.countDocuments(filter),
+
       // get all review of product
       ReviewModel.find(filter)
         .populate({
@@ -103,15 +111,24 @@ export async function GET(
         .skip(skip)
         .limit(itemPerPage)
         .lean(),
+
+      // 5 star reviews
       ReviewModel.countDocuments({ ...filter, rating: 5 }),
+      // 4 star reviews
       ReviewModel.countDocuments({ ...filter, rating: 4 }),
+      // 3 star reviews
       ReviewModel.countDocuments({ ...filter, rating: 3 }),
+      // 2 star reviews
       ReviewModel.countDocuments({ ...filter, rating: 2 }),
+      // 1 star reviews
       ReviewModel.countDocuments({ ...filter, rating: 1 }),
     ])
 
     // return response
-    return NextResponse.json({ reviews, stars: [five, four, three, two, one] }, { status: 200 })
+    return NextResponse.json(
+      { product, reviews, amount, stars: [five, four, three, two, one] },
+      { status: 200 }
+    )
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

@@ -25,6 +25,16 @@ const ReviewSchema = new Schema(
       enum: ['show', 'hide'],
       default: 'show',
     },
+    image: {
+      type: String,
+    },
+    reviewDate: {
+      type: Date,
+      default: Date.now,
+    },
+    displayName: {
+      type: String,
+    },
   },
   { timestamps: true }
 )
@@ -39,6 +49,9 @@ export interface IReview {
   rating: number
   content: string
   status: 'show' | 'hide'
+  image: string
+  reviewDate: string
+  displayName: string
   createdAt: string
   updatedAt: string
 }

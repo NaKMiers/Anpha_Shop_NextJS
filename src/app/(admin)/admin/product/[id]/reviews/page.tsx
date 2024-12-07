@@ -6,18 +6,17 @@ import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
 import AdminMeta from '@/components/admin/AdminMeta'
 import ReviewItem from '@/components/admin/ReviewItem'
-import ReviewModal from '@/components/admin/ReviewModal'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
 import { IReview } from '@/models/ReviewModel'
-import { deleteReviewsApi, getAllProductReviewsApi } from '@/requests'
+import { changeReviewStatusApi, deleteReviewsApi, getForceAllProductReviewsApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaSort } from 'react-icons/fa'
+import { FaSearch, FaSort, FaStar } from 'react-icons/fa'
 
 function AllProductReviewsPage({
   params: { id: productId },
@@ -32,9 +31,15 @@ function AllProductReviewsPage({
   const router = useRouter()
 
   // states
+  const [product, setProduct] = useState<IProduct | null>(null)
   const [reviews, setReviews] = useState<IReview[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedReviews, setSelectedReviews] = useState<string[]>([])
+  const [stars, setStarts] = useState<number[]>([])
+  const [starShowed, setStarShowed] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
+  const [sts, setSts] = useState<number[]>([5, 4, 3, 2, 1])
+  const [selectedFilterStars, setSelectedFilterStars] = useState<number[]>([])
 
   // loading and confirming
   const [openAddReviewModal, setOpenAddReviewModal] = useState<boolean>(false)
@@ -47,8 +52,10 @@ function AllProductReviewsPage({
   // Form
   const defaultValues = useMemo<FieldValues>(
     () => ({
-      sort: 'updatedAt|-1',
+      search: '',
+      sort: 'createdAt|-1',
       status: '',
+      rating: '',
     }),
     []
   )
@@ -75,13 +82,20 @@ function AllProductReviewsPage({
 
       try {
         // send request to server to get all product reviews
-        const { reviews, amount } = await getAllProductReviewsApi(productId, query)
+        const { product, reviews, amount, stars } = await getForceAllProductReviewsApi(productId, query)
 
-        // set products to state
-        setReviews(reviews)
+        // update states
+        setProduct(product)
         setAmount(amount)
+        setReviews(prev => (page > 1 ? [...prev, ...reviews] : reviews))
+        setStarts(stars)
 
         // sync search params with states
+        setSelectedFilterStars(
+          []
+            .concat((searchParams?.rating || [5, 4, 3, 2, 1].map((star: number) => star)) as [])
+            .map(rating => +rating)
+        )
         setValue('sort', searchParams?.sort || getValues('sort'))
         setValue('status', searchParams?.status || getValues('status'))
       } catch (err: any) {
@@ -93,7 +107,33 @@ function AllProductReviewsPage({
       }
     }
     getAllProductReviews()
-  }, [dispatch, setValue, getValues, searchParams, productId])
+  }, [dispatch, setValue, getValues, searchParams, productId, page, starShowed, sts])
+
+  // change review status
+  const handleChangeReviewStatus = useCallback(async (ids: string[], status: 'hide' | 'show') => {
+    try {
+      // change status
+      const { message } = await changeReviewStatusApi(ids, status)
+
+      // update review status
+      setReviews(prev =>
+        prev.map(review =>
+          ids.includes(review._id)
+            ? {
+                ...review,
+                status,
+              }
+            : review
+        )
+      )
+
+      // show success message
+      toast.success(message)
+    } catch (err: any) {
+      toast.error(err.message)
+      console.log(err)
+    }
+  }, [])
 
   // delete reviews
   const handleDeleteReviews = useCallback(
@@ -145,9 +185,10 @@ function AllProductReviewsPage({
 
       return {
         ...data,
+        rating: selectedFilterStars.length === sts.length ? [] : selectedFilterStars,
       }
     },
-    [searchParams, defaultValues]
+    [searchParams, defaultValues, selectedFilterStars, sts.length]
   )
 
   // handle submit filter
@@ -198,6 +239,8 @@ function AllProductReviewsPage({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleFilter, handleResetFilter, reviews, handleSubmit])
 
+  if (!product) return null
+
   return (
     <div className="w-full">
       {/* Top & Pagination */}
@@ -216,6 +259,55 @@ function AllProductReviewsPage({
         handleFilter={handleSubmit(handleFilter)}
         handleResetFilter={handleResetFilter}
       >
+        {/* Search */}
+        <div className="col-span-12 flex flex-col md:col-span-6">
+          <Input
+            id="search"
+            className="md:max-w-[450px]"
+            label="Search"
+            disabled={false}
+            register={register}
+            errors={errors}
+            type="text"
+            icon={FaSearch}
+            onFocus={() => clearErrors('search')}
+          />
+        </div>
+
+        {/* Star Selection */}
+        <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:col-span-6 md:max-h-[152px] lg:max-h-[152px]">
+          <div
+            className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+              5 === selectedFilterStars.length
+                ? 'border-dark-100 bg-dark-100 text-white'
+                : 'border-slate-300'
+            }`}
+            title="All Types"
+            onClick={() => setSelectedFilterStars(5 === selectedFilterStars.length ? [] : sts)}
+          >
+            All
+          </div>
+          {sts.map(star => (
+            <div
+              className={`trans-200 flex h-[34px] max-w-60 cursor-pointer select-none items-center gap-1 overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+                selectedFilterStars.includes(star)
+                  ? 'border-secondary bg-secondary text-white'
+                  : 'border-slate-300'
+              }`}
+              title={star + ''}
+              key={star}
+              onClick={
+                selectedFilterStars.includes(star)
+                  ? () => setSelectedFilterStars(prev => prev.filter(s => s !== star))
+                  : () => setSelectedFilterStars(prev => [...prev, star])
+              }
+            >
+              {star} <FaStar className="-mt-0.5" />
+              <span className="text-xs font-semibold text-slate-300">({stars[5 - star]})</span>
+            </div>
+          ))}
+        </div>
+
         {/* Select Filter */}
         <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
           {/* Sort */}
@@ -290,6 +382,32 @@ function AllProductReviewsPage({
             {selectedReviews.length > 0 ? 'Unselect All' : 'Select All'}
           </button>
 
+          {/* Show Many Reviews */}
+          {!!selectedReviews.length &&
+            selectedReviews.some(
+              id => reviews.find((review: any) => review._id === id)?.status !== 'show'
+            ) && (
+              <button
+                className="trans-200 rounded-lg border border-green-300 px-3 py-2 text-green-300 hover:bg-green-300 hover:text-white"
+                onClick={() => handleChangeReviewStatus(selectedReviews, 'show')}
+              >
+                Show
+              </button>
+            )}
+
+          {/* Show Many Reviews */}
+          {!!selectedReviews.length &&
+            selectedReviews.some(
+              id => reviews.find((review: any) => review._id === id)?.status !== 'hide'
+            ) && (
+              <button
+                className="trans-200 rounded-lg border border-orange-300 px-3 py-2 text-orange-300 hover:bg-orange-300 hover:text-white"
+                onClick={() => handleChangeReviewStatus(selectedReviews, 'hide')}
+              >
+                Hide
+              </button>
+            )}
+
           {/* Delete Many Button */}
           {!!selectedReviews.length && (
             <button
@@ -314,35 +432,21 @@ function AllProductReviewsPage({
 
       {/* Amount */}
       <div className="flex items-center justify-between gap-21">
-        <button
-          className="rounded-md bg-yellow-500 px-2 py-1 text-sm font-semibold text-dark shadow-md"
-          onClick={() => setOpenAddReviewModal(true)}
-        >
-          Add Review
-        </button>
-
         <div className="p-3 text-right text-sm font-semibold text-white">
           {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} review
           {amount > 1 ? 's' : ''}
         </div>
       </div>
 
-      {/* Add Review */}
-      <ReviewModal
-        open={openAddReviewModal}
-        setOpen={setOpenAddReviewModal}
-        productId={productId}
-        setReviews={setReviews}
-      />
-
       {/* MAIN LIST */}
-      <div className="flex flex-col gap-2">
+      <div className="mt-4 flex flex-col gap-2">
         {reviews.map(review => (
           <ReviewItem
             data={review}
             loadingReviews={loadingReviews}
             selectedReviews={selectedReviews}
             setSelectedReviews={setSelectedReviews}
+            handleChangeReviewStatus={handleChangeReviewStatus}
             handleDeleteReviews={handleDeleteReviews}
             key={review._id}
           />

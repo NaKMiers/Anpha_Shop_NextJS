@@ -21,6 +21,22 @@ export const getAllProductReviewsApi = async (
   return await res.json()
 }
 
+// [GET]: /admin/review/:productId
+export const getForceAllProductReviewsApi = async (
+  productId: string,
+  query: string = '',
+  option: RequestInit = { cache: 'no-store' }
+) => {
+  const res = await fetch(`/api/admin/review/${productId}${query}`, option)
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [GET]: /review/:productId/check-user-reviewed
 export const checkUserReviewedApi = async (
   productId: string,
@@ -57,6 +73,40 @@ export const editReviewApi = async (productId: string, reviewId: string, review:
   const res = await fetch(`/api/review/${productId}/${reviewId}/edit`, {
     method: 'PUT',
     body: JSON.stringify(review),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [PUT]: /admin/review/:reviewId/edit
+export const editForceReviewApi = async (
+  productId: string,
+  reviewId: string,
+  review: { image: string; displayName: string; rating: number; content: string; reviewDate: Date }
+) => {
+  const res = await fetch(`/api/admin/review/${productId}/${reviewId}/edit`, {
+    method: 'PUT',
+    body: JSON.stringify(review),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [PATCH]: /admin/review/change-status
+export const changeReviewStatusApi = async (ids: string[], status: 'hide' | 'show') => {
+  const res = await fetch(`/api/admin/review/change-status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ ids, status }),
   })
 
   // check status

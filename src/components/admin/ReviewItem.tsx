@@ -1,11 +1,13 @@
 'use client'
 
 import { IReview } from '@/models/ReviewModel'
-import { editReviewApi } from '@/requests'
+import { changeReviewStatusApi, editForceReviewApi } from '@/requests'
+import { getUserName } from '@/utils/string'
 import { Rating } from '@mui/material'
+import moment from 'moment'
 import { useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
-import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react'
+import Image from 'next/image'
+import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaSave, FaTrash } from 'react-icons/fa'
@@ -25,6 +27,7 @@ interface ReviewItemProps {
   setSelectedReviews: Dispatch<SetStateAction<string[]>>
 
   // functions
+  handleChangeReviewStatus: (ids: string[], status: 'hide' | 'show') => void
   handleDeleteReviews: (ids: string[]) => void
 }
 
@@ -38,6 +41,7 @@ function ReviewItem({
   setSelectedReviews,
 
   // functions
+  handleChangeReviewStatus,
   handleDeleteReviews,
 }: ReviewItemProps) {
   // hook
@@ -52,6 +56,10 @@ function ReviewItem({
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
   const [confirmType, setConfirmType] = useState<'deactivate' | 'delete'>('delete')
 
+  useEffect(() => {
+    setReview(data)
+  }, [data])
+
   // form
   const {
     register,
@@ -65,6 +73,9 @@ function ReviewItem({
     defaultValues: {
       rating: review.rating,
       content: review.content,
+      reviewDate: moment(review.reviewDate).local().format('YYYY-MM-DD'),
+      image: review.image,
+      displayName: review.displayName || (review.userId ? getUserName(data.userId as any) : ''),
     },
   })
 
@@ -72,10 +83,6 @@ function ReviewItem({
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       // nothing change
-      if (data.rating === review.rating && data.content === review.content) {
-        setEditMode(false)
-        return
-      }
       if (!editMode) return
 
       // start editing
@@ -83,9 +90,12 @@ function ReviewItem({
 
       try {
         // edit review
-        const { updatedReview, message } = await editReviewApi(review.productId, review._id, {
+        const { updatedReview, message } = await editForceReviewApi(review.productId, review._id, {
+          displayName: data.displayName,
+          image: data.image,
           rating: data.rating,
           content: data.content,
+          reviewDate: data.reviewDate,
         })
 
         // update review list
@@ -110,7 +120,7 @@ function ReviewItem({
   return (
     <>
       <div
-        className={`trans-200 relative flex cursor-pointer items-start justify-between gap-2 rounded-lg p-4 shadow-lg ${
+        className={`trans-200 relative flex cursor-pointer items-start justify-between gap-2 rounded-lg p-2 shadow-lg ${
           selectedReviews.includes(review._id) ? '-translate-y-1 bg-violet-50' : 'bg-white'
         } ${className}`}
         onClick={() =>
@@ -119,23 +129,95 @@ function ReviewItem({
           )
         }
       >
+        <div className="flex-shrink-0">
+          {!editMode ? (
+            <div className="flex cursor-pointer items-center gap-2">
+              <Image
+                className="wiggle-0 aspect-square h-full w-full rounded-full object-cover shadow-md"
+                src={
+                  review.image ||
+                  (review.userId as any)?.avatar ||
+                  process.env.NEXT_PUBLIC_DEFAULT_AVATAR!
+                }
+                width={40}
+                height={40}
+                alt="avatar"
+              />
+            </div>
+          ) : (
+            <Input
+              id="image"
+              label="Image"
+              disabled={false}
+              register={register}
+              errors={errors}
+              type="url"
+              onFocus={() => clearErrors('image')}
+              className="w-full max-w-[100px]"
+              onClick={e => e.stopPropagation()}
+            />
+          )}
+        </div>
+
         <div className="flex w-full flex-col gap-1.5">
           {/* Rating */}
-          {editMode ? (
-            <Rating
-              size="medium"
-              name="half-rating"
-              value={rating}
-              onChange={(_, newValue) => {
-                setRating(newValue as number)
-                setValue('rating', newValue)
-              }}
-            />
+          <div className="flex flex-col gap-x-2 gap-y-1 md:flex-row md:items-center">
+            {!editMode ? (
+              <span className="text-sm font-semibold">
+                {review.displayName || (review.userId ? getUserName(review.userId as any) : '')}
+              </span>
+            ) : (
+              <Input
+                id="displayName"
+                label="Display Name"
+                disabled={false}
+                register={register}
+                errors={errors}
+                type="text"
+                onFocus={() => clearErrors('displayName')}
+                className="w-full max-w-[150px]"
+                onClick={e => e.stopPropagation()}
+              />
+            )}{' '}
+            {editMode ? (
+              <Rating
+                size="medium"
+                name="half-rating"
+                value={rating}
+                onChange={(_, newValue) => {
+                  setRating(newValue as number)
+                  setValue('rating', newValue)
+                }}
+              />
+            ) : (
+              <Rating
+                size="medium"
+                readOnly
+                value={review.rating}
+              />
+            )}
+          </div>
+
+          {/* Created At */}
+          {!editMode ? (
+            <p className="-mt-1.5 text-xs text-slate-500">
+              {review.reviewDate
+                ? moment(review.reviewDate).format('DD/MM/YYYY')
+                : moment(review.updatedAt).format('DD/MM/YYYY')}
+            </p>
           ) : (
-            <Rating
-              size="medium"
-              readOnly
-              value={review.rating}
+            <Input
+              id="reviewDate"
+              label="Review Date"
+              disabled={false}
+              register={register}
+              errors={errors}
+              required
+              type="date"
+              maxDate={moment().format('YYYY-MM-DD')}
+              onFocus={() => clearErrors('reviewDate')}
+              className="w-full max-w-[150px]"
+              onClick={e => e.stopPropagation()}
             />
           )}
 
@@ -203,6 +285,16 @@ function ReviewItem({
                 className="wiggle text-sky-500"
               />
             </button>
+
+            {/* Status */}
+            <select
+              className="rounded-md border border-slate-300 text-xs outline-none"
+              onChange={e => handleChangeReviewStatus([review._id], e.target.value as 'hide' | 'show')}
+              value={review.status}
+            >
+              <option value="show">Show</option>
+              <option value="hide">Hide</option>
+            </select>
 
             {/* Delete Button */}
             <button

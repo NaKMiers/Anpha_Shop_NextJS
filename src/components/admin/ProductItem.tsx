@@ -179,8 +179,9 @@ function ProductItem({
               <p className="text-sm text-slate-500 line-through">{formatPrice(data.oldPrice)}</p>
             )}
           </div>
+
           {/* Rating */}
-          {data.rating && (
+          {data.rating > 0 && (
             <Rating
               size="small"
               readOnly

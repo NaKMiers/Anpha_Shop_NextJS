@@ -142,7 +142,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
   // activate product
   const handleActivateProducts = useCallback(async (ids: string[], value: boolean) => {
     try {
-      // senred request to server
+      // send request to server
       const { updatedProducts, message } = await activateProductsApi(ids, value)
 
       // update products from state
@@ -165,7 +165,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
   // boot product
   const handleBootProducts = useCallback(async (ids: string[], value: boolean) => {
     try {
-      // senred request to server
+      // send request to server
       const { updatedProducts, message } = await bootProductsApi(ids, value)
 
       // update products from state
@@ -191,7 +191,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       // start syncing products
       setSyncingProducts(ids)
 
-      // senred request to server
+      // send request to server
       const { syncedProducts, message } = await syncProductsApi(ids)
 
       // update products from state
@@ -245,7 +245,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     setLoadingProducts(ids)
 
     try {
-      // senred request to server
+      // send request to server
       const { deletedProducts, message } = await deleteProductsApi(ids)
 
       // remove deleted products from state
@@ -266,7 +266,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     }
   }, [])
 
-  // handle opimize filter
+  // handle optimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
       // reset page

@@ -54,7 +54,7 @@ function ReviewContainer({ product, className = '' }: ReviewContainerProps) {
     if (curUser?._id) {
       checkUserReviewed()
     }
-  }, [curUser])
+  }, [curUser, product._id])
 
   // get all product reviews
   useEffect(() => {
@@ -83,7 +83,7 @@ function ReviewContainer({ product, className = '' }: ReviewContainerProps) {
     }
 
     getAllProductReviews()
-  }, [starShowed, page])
+  }, [starShowed, page, product._id])
 
   return (
     <div>

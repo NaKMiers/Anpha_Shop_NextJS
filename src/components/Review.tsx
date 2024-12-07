@@ -12,6 +12,8 @@ import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from './ConfirmDialog'
 import Input from './Input'
 import Image from 'next/image'
+import { getUserName } from '@/utils/string'
+import moment from 'moment'
 
 interface ReviewItemProps {
   data: IReview
@@ -58,32 +60,35 @@ function ReviewItem({
   })
 
   // delete reviews
-  const handleDeleteReviews = useCallback(async (ids: string[]) => {
-    if (!review?.productId) return
+  const handleDeleteReviews = useCallback(
+    async (ids: string[]) => {
+      if (!review?.productId) return
 
-    // start deleting
-    setDeleting(true)
+      // start deleting
+      setDeleting(true)
 
-    try {
-      // send request to server
-      const { message } = await deleteReviewsApi(review.productId, ids)
+      try {
+        // send request to server
+        const { message } = await deleteReviewsApi(review.productId, ids)
 
-      // remove deleted products from state
-      setReview(null)
-      setPrevReview(null)
-      setReviews((prev: any) => prev.filter((review: any) => !ids.includes(review._id)))
-      setIsReviewed(false)
+        // remove deleted products from state
+        setReview(null)
+        setPrevReview(null)
+        setReviews((prev: any) => prev.filter((review: any) => !ids.includes(review._id)))
+        setIsReviewed(false)
 
-      // show success message
-      toast.success(message)
-    } catch (err: any) {
-      console.log(err)
-      toast.error(err.message)
-    } finally {
-      // stop deleting
-      setDeleting(false)
-    }
-  }, [])
+        // show success message
+        toast.success(message)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop deleting
+        setDeleting(false)
+      }
+    },
+    [setIsReviewed, setPrevReview, setReviews, review?.productId]
+  )
 
   // MARK: Edit Review
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
@@ -135,8 +140,12 @@ function ReviewItem({
           <div className="flex-shrink-0">
             <div className="flex cursor-pointer items-center gap-2">
               <Image
-                className="wiggle-0 aspect-square rounded-full shadow-md"
-                src={(data.userId as any)?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
+                className="wiggle-0 aspect-square h-full w-full rounded-full object-cover shadow-md"
+                src={
+                  review.image ||
+                  (review.userId as any)?.avatar ||
+                  process.env.NEXT_PUBLIC_DEFAULT_AVATAR!
+                }
                 width={40}
                 height={40}
                 alt="avatar"
@@ -149,9 +158,7 @@ function ReviewItem({
               {/* Rating */}
               <div className="flex flex-col gap-x-2 gap-y-1 md:flex-row md:items-center">
                 <span className="text-sm font-semibold">
-                  {(data.userId as any)?.authType === 'local'
-                    ? (data.userId as any)?.username
-                    : (data.userId as any)?.firstname + ' ' + (data.userId as any)?.lastname}
+                  {review.displayName || (review.userId ? getUserName(review.userId as any) : '')}
                 </span>{' '}
                 {editMode ? (
                   <Rating
@@ -171,6 +178,13 @@ function ReviewItem({
                   />
                 )}
               </div>
+
+              {/* Created At */}
+              <p className="-mt-1.5 text-xs text-slate-500">
+                {review.reviewDate
+                  ? moment(review.reviewDate).format('DD/MM/YYYY')
+                  : moment(review.updatedAt).format('DD/MM/YYYY')}
+              </p>
 
               {/* Content */}
               {editMode ? (
@@ -197,7 +211,7 @@ function ReviewItem({
 
             {/* MARK: Action Buttons */}
             {(['admin', 'editor'].includes(curUser?.role) ||
-              curUser?._id?.toString() === review?.userId?.toString()) && (
+              (curUser && curUser?._id.toString() === review?.userId?.toString())) && (
               <div className="flex flex-col gap-3 rounded-lg text-dark sm:flex-row">
                 {/* Save Button */}
                 {editMode && (
