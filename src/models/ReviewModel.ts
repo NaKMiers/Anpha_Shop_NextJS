@@ -22,7 +22,7 @@ const ReviewSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['show', 'hide'],
+      enum: ['show', 'hide', 'pinned'],
       default: 'show',
     },
     image: {
@@ -48,7 +48,7 @@ export interface IReview {
   productId: string
   rating: number
   content: string
-  status: 'show' | 'hide'
+  status: 'show' | 'hide' | 'pinned'
   image: string
   reviewDate: string
   displayName: string

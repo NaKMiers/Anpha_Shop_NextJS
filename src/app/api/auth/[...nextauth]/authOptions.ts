@@ -9,6 +9,11 @@ import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import TwitterProvider from 'next-auth/providers/twitter'
 
+const sanitizeUser = (userDB: IUser) => {
+  const { password, ...otherDetails } = userDB
+  return JSON.parse(JSON.stringify(otherDetails))
+}
+
 const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
   session: {
@@ -100,11 +105,22 @@ const authOptions = {
       }
 
       if (user) {
+        console.log('- User -')
         const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()
         if (userDB) {
           const { password: _, ...otherDetails } = userDB
 
           token = { ...token, ...otherDetails }
+        }
+
+        return token
+      }
+
+      if (token.email) {
+        console.log('- OH -')
+        const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
+        if (userDB) {
+          token = { ...token, ...sanitizeUser(userDB) }
         }
       }
 

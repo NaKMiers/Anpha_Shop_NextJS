@@ -49,9 +49,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
 
-  // refs
-  const isUpdated = useRef<boolean>(false)
-
   // MARK: ADS
   useEffect(() => {
     const showTime = 5000
@@ -81,18 +78,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       window.removeEventListener('keypress', handleKeyPress)
     }
   }, [])
-
-  // MARK: Side Effects
-  // update user session after load page
-  useEffect(() => {
-    const updateUser = async () => {
-      isUpdated.current = true
-      await update()
-    }
-    if (!isUpdated.current) {
-      updateUser()
-    }
-  }, [update])
 
   // get cart length
   useEffect(() => {

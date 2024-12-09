@@ -80,7 +80,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
           <div className="flex h-2/3 flex-grow justify-between gap-21">
             {/* Tag */}
             <ul className="hidden min-w-[200px] overflow-y-auto rounded-lg bg-white p-2 pt-0 lg:block">
-              <h5 className="sticky top-0 bg-white pt-2 text-center text-[20px] font-semibold text-dark">
+              <h5 className="sticky top-0 bg-white pt-2 text-center text-[18px] font-semibold text-dark">
                 Thẻ
               </h5>
 
@@ -95,10 +95,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                     className="flex items-center px-[10px] py-[6px]"
                   >
                     <FaTag
-                      size={16}
+                      size={13}
                       className="wiggle"
                     />
-                    <span className="ms-2">{tag.title}</span>
+                    <span className="ms-2 text-sm">{tag.title}</span>
                   </Link>
                 </li>
               ))}
@@ -168,7 +168,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
             {/* Category */}
             <ul className="hidden min-w-[200px] overflow-y-auto rounded-lg bg-white p-2 lg:block">
-              <h5 className="ml-2 text-center text-[20px] font-semibold text-dark">Thể loại</h5>
+              <h5 className="ml-2 text-center text-[18px] font-semibold text-dark">Thể loại</h5>
 
               <li className="trans-200 group rounded-extra-small text-dark hover:bg-primary">
                 <Link
@@ -177,10 +177,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                   className="flex items-center gap-2 px-[10px] py-[6px]"
                 >
                   <FaBoltLightning
-                    size={16}
+                    size={14}
                     className="wiggle text-secondary"
                   />
-                  <span className="font-bold text-secondary">FLASHSALES</span>
+                  <span className="text-sm font-bold text-secondary">FLASHSALES</span>
                 </Link>
               </li>
 
@@ -195,10 +195,10 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
                     className="flex items-center px-[10px] py-[6px]"
                   >
                     <BiSolidCategoryAlt
-                      size={17}
+                      size={15}
                       className="wiggle"
                     />
-                    <span className="ms-2">{category.title}</span>
+                    <span className="ms-2 text-sm">{category.title}</span>
                   </Link>
                 </li>
               ))}

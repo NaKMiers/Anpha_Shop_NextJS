@@ -81,7 +81,7 @@ async function HomePage() {
       <Divider size={28} />
 
       {/* MARK: Top #10 */}
-      <h2 className="mx-auto my-11 flex w-full max-w-1200 items-center justify-between gap-4 text-nowrap text-center font-sans text-4xl font-light tracking-wide text-white before:h-[1.5px] before:w-full before:bg-white after:h-[1.5px] after:w-full after:bg-white sm:text-nowrap">
+      <h2 className="mx-auto my-11 w-full max-w-1200 gap-4 text-center font-sans text-4xl font-semibold italic tracking-wide text-white sm:text-nowrap md:text-nowrap">
         Top <span className="box- text-5xl font-semibold italic text-orange-500">#10</span>
       </h2>
 

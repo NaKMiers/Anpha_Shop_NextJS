@@ -19,12 +19,6 @@ export async function PUT(
     // get data to edit review
     const { displayName, rating, content, image, reviewDate } = await req.json()
 
-    console.log('displayName', displayName)
-    console.log('rating', rating)
-    console.log('content', content)
-    console.log('image', image)
-    console.log('reviewDate', new Date(reviewDate))
-
     // update review
     const updatedReview = await ReviewModel.findByIdAndUpdate(
       reviewId,

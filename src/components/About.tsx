@@ -17,8 +17,8 @@ function About() {
               alt="banner"
             />
           </div>
-          <div className="w-full pb-16 md:w-1/3 md:pb-0 md:pl-21">
-            <p className="text-center font-body text-[20px] text-dark">
+          <div className="flex w-full items-center pb-16 md:w-1/3 md:pb-0 md:pl-21">
+            <p className="font-body text-[18px] text-dark">
               Sử dụng các phần mềm, ứng dụng bản Crack gián tiếp gây ra rất nhiều vụ lộ dữ liệu nguy hiểm
               trong thời gian gần đây. Mặt khác, trải nghiệm người dùng của bản crack cũng không thể đầy
               đủ được như bản chính hãng. Do đó, Anpha Shop ra đời với mong muốn giúp người Việt tiếp cận
@@ -39,8 +39,8 @@ function About() {
               alt="banner"
             />
           </div>
-          <div className="w-full pb-16 md:w-1/3 md:pb-0 md:pl-21">
-            <p className="text-center font-body text-[20px] text-dark">
+          <div className="flex w-full items-center pb-16 md:w-1/3 md:pb-0 md:pl-21">
+            <p className="font-body text-[18px] text-dark">
               <span className="font-semibold text-primary">Anpha Shop</span> - Đối tác{' '}
               <span className="font-semibold text-green-400">Spotify</span> chính hãng với giá cực kỳ hấp
               dẫn, giảm đến 90%. Tận hưởng âm nhạc không giới hạn với trải nghiệm an toàn và tiết kiệm.
@@ -61,8 +61,8 @@ function About() {
               alt="banner"
             />
           </div>
-          <div className="w-full pb-16 md:w-1/3 md:pb-0 md:pl-21">
-            <p className="text-center font-body text-[20px] text-dark">
+          <div className="flex w-full items-center pb-16 md:w-1/3 md:pb-0 md:pl-21">
+            <p className="font-body text-[18px] text-dark">
               Dành cho người yêu thưởng thức nội dung trên{' '}
               <span className="font-semibold text-red-600">YouTube</span> . Chúng tôi mang đến ưu đãi
               siêu hấp dẫn với YouTube Premium, giảm giá đến 90%. Trải nghiệm xem video không quảng cáo,

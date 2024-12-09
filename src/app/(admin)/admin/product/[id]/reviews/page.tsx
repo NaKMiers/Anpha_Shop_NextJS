@@ -3,6 +3,7 @@
 import ConfirmDialog from '@/components/ConfirmDialog'
 import Input from '@/components/Input'
 import Pagination from '@/components/Pagination'
+import AddReview from '@/components/admin/AddReview'
 import AdminHeader from '@/components/admin/AdminHeader'
 import AdminMeta from '@/components/admin/AdminMeta'
 import ReviewItem from '@/components/admin/ReviewItem'
@@ -10,13 +11,19 @@ import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { IProduct } from '@/models/ProductModel'
 import { IReview } from '@/models/ReviewModel'
-import { changeReviewStatusApi, deleteReviewsApi, getForceAllProductReviewsApi } from '@/requests'
+import {
+  changeReviewStatusApi,
+  deleteReviewsApi,
+  getForceAllProductReviewsApi,
+  syncProductReviewsApi,
+} from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
+import { Rating } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaSearch, FaSort, FaStar } from 'react-icons/fa'
+import { FaSearch, FaSort, FaStar, FaSyncAlt } from 'react-icons/fa'
 
 function AllProductReviewsPage({
   params: { id: productId },
@@ -42,7 +49,8 @@ function AllProductReviewsPage({
   const [selectedFilterStars, setSelectedFilterStars] = useState<number[]>([])
 
   // loading and confirming
-  const [openAddReviewModal, setOpenAddReviewModal] = useState<boolean>(false)
+  const [openAddReview, setOpenAddReview] = useState<boolean>(false)
+  const [syncing, setSyncing] = useState<boolean>(false)
   const [loadingReviews, setLoadingReviews] = useState<string[]>([])
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
@@ -110,30 +118,56 @@ function AllProductReviewsPage({
   }, [dispatch, setValue, getValues, searchParams, productId, page, starShowed, sts])
 
   // change review status
-  const handleChangeReviewStatus = useCallback(async (ids: string[], status: 'hide' | 'show') => {
-    try {
-      // change status
-      const { message } = await changeReviewStatusApi(ids, status)
+  const handleChangeReviewStatus = useCallback(
+    async (ids: string[], status: 'show' | 'hide' | 'pinned') => {
+      try {
+        // change status
+        const { message } = await changeReviewStatusApi(ids, status)
 
-      // update review status
-      setReviews(prev =>
-        prev.map(review =>
-          ids.includes(review._id)
-            ? {
-                ...review,
-                status,
-              }
-            : review
+        // update review status
+        setReviews(prev =>
+          prev.map(review =>
+            ids.includes(review._id)
+              ? {
+                  ...review,
+                  status,
+                }
+              : review
+          )
         )
-      )
+
+        // show success message
+        toast.success(message)
+      } catch (err: any) {
+        toast.error(err.message)
+        console.log(err)
+      }
+    },
+    []
+  )
+
+  // handle sync review
+  const handleSyncReview = useCallback(async () => {
+    // start syncing
+    setSyncing(true)
+
+    try {
+      // send request to server
+      const { syncedProduct, message } = await syncProductReviewsApi(productId)
+
+      // update product
+      setProduct(syncedProduct)
 
       // show success message
       toast.success(message)
     } catch (err: any) {
-      toast.error(err.message)
       console.log(err)
+      toast.error(err.message)
+    } finally {
+      // stop syncing
+      setSyncing(false)
     }
-  }, [])
+  }, [productId])
 
   // delete reviews
   const handleDeleteReviews = useCallback(
@@ -213,6 +247,12 @@ function AllProductReviewsPage({
     reset()
     router.push(pathname)
   }, [reset, router, pathname])
+
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Copied: ' + text)
+  }, [])
 
   // keyboard event
   useEffect(() => {
@@ -431,7 +471,49 @@ function AllProductReviewsPage({
       />
 
       {/* Amount */}
-      <div className="flex items-center justify-between gap-21">
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 px-3 py-3 text-light md:justify-between">
+        <div className="flex items-center gap-3">
+          <button
+            className="trans-200 group block rounded-md bg-yellow-500 px-2 py-1.5 text-xs font-semibold text-dark shadow-lg hover:bg-secondary hover:text-light"
+            onClick={_ => setOpenAddReview(prev => !prev)}
+            disabled={syncing}
+            title="Add Review"
+          >
+            Add
+          </button>
+
+          <button
+            className="group block"
+            onClick={e => handleSyncReview()}
+            disabled={syncing}
+            title="Sync"
+          >
+            <FaSyncAlt
+              size={16}
+              className={`wiggle ${syncing ? 'animate-spin text-slate-300' : 'text-yellow-300'}`}
+            />
+          </button>
+          <h1
+            className="cursor-pointer text-xl font-semibold"
+            onClick={() => handleCopy(product._id)}
+          >
+            {product.title}
+          </h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <p className="text-3xl font-semibold">
+            {(Math.round(product.rating * 100) / 100).toFixed(1) || 5}
+          </p>
+          <Rating
+            size="small"
+            readOnly
+            value={4.85}
+          />
+          <p className="text-sm text-slate-200">
+            {product.reviewAmount < 0 ? 0 : product.reviewAmount} reviews
+          </p>
+        </div>
+
         <div className="p-3 text-right text-sm font-semibold text-white">
           {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} review
           {amount > 1 ? 's' : ''}
@@ -439,7 +521,13 @@ function AllProductReviewsPage({
       </div>
 
       {/* MAIN LIST */}
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
+        <AddReview
+          open={openAddReview}
+          setOpen={setOpenAddReview}
+          setReviews={setReviews}
+        />
+
         {reviews.map(review => (
           <ReviewItem
             data={review}

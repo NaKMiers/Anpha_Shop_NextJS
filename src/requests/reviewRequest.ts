@@ -68,7 +68,32 @@ export const addReviewApi = async (productId: string, review: ReviewForm) => {
   return await res.json()
 }
 
-// [PUT]: /review/:reviewId/edit
+// [POST]: /admin/review/:productId/add
+export const addFakeReviewApi = async (
+  productId: string,
+  review: {
+    image: string
+    displayName: string
+    rating: number
+    content: string
+    reviewDate: Date
+    status: 'show' | 'hide' | 'pinned'
+  }
+) => {
+  const res = await fetch(`/api/admin/review/${productId}/add`, {
+    method: 'POST',
+    body: JSON.stringify(review),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [PUT]: /review/:productId/:reviewId/edit
 export const editReviewApi = async (productId: string, reviewId: string, review: ReviewForm) => {
   const res = await fetch(`/api/review/${productId}/${reviewId}/edit`, {
     method: 'PUT',
@@ -83,7 +108,7 @@ export const editReviewApi = async (productId: string, reviewId: string, review:
   return await res.json()
 }
 
-// [PUT]: /admin/review/:reviewId/edit
+// [PUT]: /admin/review/:productId/:reviewId/edit
 export const editForceReviewApi = async (
   productId: string,
   reviewId: string,
@@ -103,10 +128,24 @@ export const editForceReviewApi = async (
 }
 
 // [PATCH]: /admin/review/change-status
-export const changeReviewStatusApi = async (ids: string[], status: 'hide' | 'show') => {
+export const changeReviewStatusApi = async (ids: string[], status: 'show' | 'hide' | 'pinned') => {
   const res = await fetch(`/api/admin/review/change-status`, {
     method: 'PATCH',
     body: JSON.stringify({ ids, status }),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [PATCH]: /admin/review/:productId
+export const syncProductReviewsApi = async (productId: string) => {
+  const res = await fetch(`/api/admin/review/${productId}/sync`, {
+    method: 'PATCH',
   })
 
   // check status

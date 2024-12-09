@@ -2,10 +2,10 @@ import Divider from '@/components/Divider'
 import Slider from '@/components/Slider'
 import LoadingBuyActionWithQuantity from '@/components/loading/LoadingBuyActionWithQuantity'
 import LoadingChooseMe from '@/components/loading/LoadingChooseMe'
-import LoadingComment from '@/components/loading/LoadingComment'
 import LoadingGroupProducts from '@/components/loading/LoadingGroupProducts'
 import LoadingLinkBar from '@/components/loading/LoadingLinkBar'
 import LoadingPrice from '@/components/loading/LoadingPrice'
+import LoadingReviewContainer from '@/components/loading/LoadingReviewContainer'
 import { FaCircleCheck, FaTags } from 'react-icons/fa6'
 import { MdCategory } from 'react-icons/md'
 import { TbPackages } from 'react-icons/tb'
@@ -146,10 +146,11 @@ async function LoadingProductPage() {
 
       <Divider size={9} />
 
-      {/* MARK: Comment */}
+      {/* MARK: Reviews */}
       <section className="mx-auto max-w-1200 rounded-medium bg-white p-21 shadow-medium">
-        <h3 className="text-[24px] font-semibold text-dark">Bình luận gần đây</h3>
-        <LoadingComment className="mt-4" />
+        <div className="loading h-5 w-[120px] rounded-lg" />
+
+        <LoadingReviewContainer />
       </section>
     </div>
   )

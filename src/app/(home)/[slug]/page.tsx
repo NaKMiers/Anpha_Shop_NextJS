@@ -3,8 +3,8 @@ import ChooseMe from '@/components/ChooseMe'
 import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
-import ReviewContainer from '@/components/loading/ReviewContainer'
 import Price from '@/components/Price'
+import ReviewContainer from '@/components/ReviewContainer'
 import Slider from '@/components/Slider'
 import { ICategory } from '@/models/CategoryModel'
 import { IFlashSale } from '@/models/FlashSaleModel'
@@ -60,8 +60,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     },
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: 5.0,
-      reviewCount: 7,
+      ratingValue: (product?.rating ?? 0) < 4.5 ? 4.5 : (product?.rating ?? 5),
+      reviewCount: product?.reviewAmount ?? 50,
     },
     review: [
       {
@@ -660,13 +660,13 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
       <Divider size={9} />
 
       {/* MARK: Reviews */}
-      {product && (
+      {/* {product && (
         <section className="mx-auto max-w-1200 rounded-medium bg-white p-21 shadow-medium">
           <h3 className="mb-3 text-center text-[24px] font-semibold text-dark md:text-left">Đánh giá</h3>
 
           <ReviewContainer product={product} />
         </section>
-      )}
+      )} */}
     </div>
   )
 }

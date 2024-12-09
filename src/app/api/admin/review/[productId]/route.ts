@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 // [GET]: /review/:productId
 export async function GET(
   req: NextRequest,
-  { params: { productId } }: { params: { productId: string; status: 'show' | 'hide' } }
+  { params: { productId } }: { params: { productId: string; status: 'show' | 'hide' | 'pinned' } }
 ) {
   console.log('- Get Product Reviews -')
 
@@ -28,8 +28,8 @@ export async function GET(
     // options
     let skip = 0
     let itemPerPage = 50
-    const filter: { [key: string]: any } = { productId }
-    let sort: { [key: string]: any } = { createdAt: -1 } // default sort
+    const filter: { [key: string]: any } = { productId, status: 'show' }
+    let sort: { [key: string]: any } = { reviewDate: -1 } // default sort
 
     // build filter
     for (const key in params) {

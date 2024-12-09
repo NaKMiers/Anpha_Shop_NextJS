@@ -15,7 +15,7 @@ import Image from 'next/image'
 import { getUserName } from '@/utils/string'
 import moment from 'moment'
 
-interface ReviewItemProps {
+interface ReviewProps {
   data: IReview
   className?: string
   setPrevReview?: any
@@ -23,13 +23,7 @@ interface ReviewItemProps {
   setIsReviewed?: any
 }
 
-function ReviewItem({
-  data,
-  setReviews,
-  setPrevReview,
-  setIsReviewed,
-  className = '',
-}: ReviewItemProps) {
+function Review({ data, setReviews, setPrevReview, setIsReviewed, className = '' }: ReviewProps) {
   // hook
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -138,9 +132,9 @@ function ReviewItem({
           className={`trans-200 relative flex cursor-pointer gap-3 rounded-lg px-4 py-2 shadow-lg ${className}`}
         >
           <div className="flex-shrink-0">
-            <div className="flex cursor-pointer items-center gap-2">
+            <div className="flex aspect-square max-w-10 cursor-pointer items-center gap-2 overflow-hidden rounded-full shadow-lg">
               <Image
-                className="wiggle-0 aspect-square h-full w-full rounded-full object-cover shadow-md"
+                className="wiggle-0 h-full w-full object-cover shadow-md"
                 src={
                   review.image ||
                   (review.userId as any)?.avatar ||
@@ -201,7 +195,7 @@ function ReviewItem({
                 />
               ) : (
                 <p
-                  className="inline max-h-[60px] overflow-y-auto px-1 font-body text-sm tracking-wider"
+                  className="inline max-h-[60px] overflow-y-auto font-body text-sm tracking-wider"
                   title={review.content}
                 >
                   {review.content}
@@ -211,7 +205,7 @@ function ReviewItem({
 
             {/* MARK: Action Buttons */}
             {(['admin', 'editor'].includes(curUser?.role) ||
-              (curUser && curUser?._id.toString() === review?.userId?.toString())) && (
+              (curUser && curUser?._id.toString() === (review?.userId as any)?._id.toString())) && (
               <div className="flex flex-col gap-3 rounded-lg text-dark sm:flex-row">
                 {/* Save Button */}
                 {editMode && (
@@ -249,24 +243,26 @@ function ReviewItem({
                 </button>
 
                 {/* Delete Button */}
-                <button
-                  className="group block"
-                  disabled={editing}
-                  title="Delete"
-                  onClick={() => setIsOpenConfirmModal(true)}
-                >
-                  {deleting ? (
-                    <RiDonutChartFill
-                      size={18}
-                      className="animate-spin text-slate-300"
-                    />
-                  ) : (
-                    <FaTrash
-                      size={18}
-                      className="wiggle text-rose-500"
-                    />
-                  )}
-                </button>
+                {['admin', 'editor'].includes(curUser?.role) && (
+                  <button
+                    className="group block"
+                    disabled={editing}
+                    title="Delete"
+                    onClick={() => setIsOpenConfirmModal(true)}
+                  >
+                    {deleting ? (
+                      <RiDonutChartFill
+                        size={18}
+                        className="animate-spin text-slate-300"
+                      />
+                    ) : (
+                      <FaTrash
+                        size={18}
+                        className="wiggle text-rose-500"
+                      />
+                    )}
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -286,4 +282,4 @@ function ReviewItem({
   )
 }
 
-export default memo(ReviewItem)
+export default memo(Review)

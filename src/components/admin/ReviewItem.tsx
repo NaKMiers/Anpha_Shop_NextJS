@@ -27,7 +27,7 @@ interface ReviewItemProps {
   setSelectedReviews: Dispatch<SetStateAction<string[]>>
 
   // functions
-  handleChangeReviewStatus: (ids: string[], status: 'hide' | 'show') => void
+  handleChangeReviewStatus: (ids: string[], status: 'show' | 'hide' | 'pinned') => void
   handleDeleteReviews: (ids: string[]) => void
 }
 
@@ -131,9 +131,9 @@ function ReviewItem({
       >
         <div className="flex-shrink-0">
           {!editMode ? (
-            <div className="flex cursor-pointer items-center gap-2">
+            <div className="flex aspect-square max-w-10 cursor-pointer items-center gap-2 overflow-hidden rounded-full shadow-lg">
               <Image
-                className="wiggle-0 aspect-square h-full w-full rounded-full object-cover shadow-md"
+                className="wiggle-0 h-full w-full object-cover shadow-md"
                 src={
                   review.image ||
                   (review.userId as any)?.avatar ||
@@ -198,7 +198,7 @@ function ReviewItem({
             )}
           </div>
 
-          {/* Created At */}
+          {/* Review Date */}
           {!editMode ? (
             <p className="-mt-1.5 text-xs text-slate-500">
               {review.reviewDate
@@ -289,11 +289,14 @@ function ReviewItem({
             {/* Status */}
             <select
               className="rounded-md border border-slate-300 text-xs outline-none"
-              onChange={e => handleChangeReviewStatus([review._id], e.target.value as 'hide' | 'show')}
+              onChange={e =>
+                handleChangeReviewStatus([review._id], e.target.value as 'show' | 'hide' | 'pinned')
+              }
               value={review.status}
             >
               <option value="show">Show</option>
               <option value="hide">Hide</option>
+              <option value="pinned">Pinned</option>
             </select>
 
             {/* Delete Button */}

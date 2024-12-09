@@ -1,7 +1,7 @@
 import { connectDatabase } from '@/config/database'
-import ReviewModel from '@/models/ReviewModel'
-import { NextRequest, NextResponse } from 'next/server'
+import ReviewModel, { IReview } from '@/models/ReviewModel'
 import { getToken } from 'next-auth/jwt'
+import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Review
 import '@/models/ReviewModel'
@@ -23,12 +23,24 @@ export async function PUT(
 
     // check if userId is not found
     if (!userId) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 })
+      return NextResponse.json({ message: 'Hãy đăng nhập để thực hiện tính năng này' }, { status: 404 })
     }
 
-    // check role (only admin can delete reviews)
-    if (token?.role !== 'admin') {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    // get review to check author
+    const review: IReview | null = await ReviewModel.findById(reviewId).lean()
+
+    // check if review is not found
+    if (!review) {
+      return NextResponse.json({ message: 'Đánh giá không tồn tại' }, { status: 404 })
+    }
+
+    // real review
+    if (review?.userId && review.userId.toString() !== userId && token?.role !== 'admin') {
+      return NextResponse.json({ message: 'Bạn không có quyền chỉnh sửa đánh giá này' }, { status: 403 })
+    }
+    // fake review
+    if (!review?.userId && token?.role !== 'admin') {
+      return NextResponse.json({ message: 'Bạn không có quyền chỉnh sửa đánh giá này' }, { status: 403 })
     }
 
     // get data to edit review
