@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Models: CartItem, Product, Flash Sale
 import '@/models/CartItemModel'
-import '@/models/FlashSaleModelxxx'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
 export type CartItemToAdd = {

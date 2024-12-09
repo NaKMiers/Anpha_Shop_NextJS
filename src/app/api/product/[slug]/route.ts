@@ -5,7 +5,7 @@ import ReviewModel from '@/models/ReviewModel'
 
 // Models: Product, Tag, Category, Flash Sale, User, Review
 import '@/models/CategoryModel'
-import '@/models/FlashSaleModelxxx'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 import '@/models/TagModel'
 import '@/models/UserModel'

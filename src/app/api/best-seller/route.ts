@@ -4,7 +4,7 @@ import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Product, Flash Sale
-import '@/models/FlashSaleModelxxx'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'

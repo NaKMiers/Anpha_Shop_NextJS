@@ -3,10 +3,10 @@ import ProductModel, { IProduct } from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
-import { IFlashSale } from '@/models/FlashSaleModelxxx'
+import { IFlashSale } from '@/models/FlashSaleModel'
 
 // Models: Product, Tag, Category, Flash Sale
-import '@/models/FlashSaleModelxxx'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
 // [GET]: /search?search=...

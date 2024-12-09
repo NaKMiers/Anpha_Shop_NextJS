@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 
 // Models: Product, Tag, Category, Flash Sale
 import '@/models/CategoryModel'
-import '@/models/FlashSaleModelxxx'
+import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 import '@/models/TagModel'
 

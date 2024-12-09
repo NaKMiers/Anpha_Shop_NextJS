@@ -4,7 +4,7 @@ import { connectDatabase } from '@/config/database'
 
 // Models: Product, Flash Sale
 import '@/models/ProductModel'
-import '@/models/FlashSaleModelxxx'
+import '@/models/FlashSaleModel'
 
 // [POST]: /cart/update-local-cart
 export async function POST(req: NextRequest) {
