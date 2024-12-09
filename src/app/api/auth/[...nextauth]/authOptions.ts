@@ -116,14 +116,6 @@ const authOptions = {
         return token
       }
 
-      if (token.email) {
-        console.log('- OH -')
-        const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
-        if (userDB) {
-          token = { ...token, ...sanitizeUser(userDB) }
-        }
-      }
-
       return token
     },
 
