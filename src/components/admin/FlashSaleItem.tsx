@@ -1,4 +1,4 @@
-import { IFlashSale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModelxxx'
 import { IProduct } from '@/models/ProductModel'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'

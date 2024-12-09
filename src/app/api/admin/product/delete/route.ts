@@ -1,7 +1,7 @@
 import { connectDatabase } from '@/config/database'
 import AccountModel from '@/models/AccountModel'
 import CategoryModel from '@/models/CategoryModel'
-import FlashSaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModelxxx'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import TagModel from '@/models/TagModel'
 import { deleteFile } from '@/utils/uploadFile'
@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // Models: Product, Category, Tag, Flash Sale, Account
 import '@/models/AccountModel'
 import '@/models/CategoryModel'
-import '@/models/FlashSaleModel'
+import '@/models/FlashSaleModelxxx'
 import '@/models/ProductModel'
 import '@/models/TagModel'
 

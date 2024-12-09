@@ -9,7 +9,7 @@ import {
   updateLocalCartItemQuantity,
 } from '@/libs/reducers/cartReducer'
 import { ICartItem } from '@/models/CartItemModel'
-import { IFlashSale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModelxxx'
 import { IProduct } from '@/models/ProductModel'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/number'

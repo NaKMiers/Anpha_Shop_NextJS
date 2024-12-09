@@ -1,4 +1,4 @@
-import { IFlashSale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModelxxx'
 
 export const formatPrice = (price: number = 0) => {
   return Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)

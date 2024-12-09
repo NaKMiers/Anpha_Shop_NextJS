@@ -1,6 +1,6 @@
 import { connectDatabase } from '@/config/database'
 import CategoryModel, { ICategory } from '@/models/CategoryModel'
-import '@/models/FlashSaleModel'
+import '@/models/FlashSaleModelxxx'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
@@ -8,9 +8,9 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Product, Flash Sale, Category
 import '@/models/CategoryModel'
-import '@/models/FlashSaleModel'
+import '@/models/FlashSaleModelxxx'
 import '@/models/ProductModel'
-import { IFlashSale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModelxxx'
 
 export const dynamic = 'force-dynamic'
 

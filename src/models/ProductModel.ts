@@ -1,6 +1,6 @@
 import { generateSlug } from '@/utils'
 import mongoose from 'mongoose'
-import { IFlashSale } from './FlashSaleModel'
+import { IFlashSale } from './FlashSaleModelxxx'
 import { ITag } from './TagModel'
 import { ICategory } from './CategoryModel'
 const Schema = mongoose.Schema
