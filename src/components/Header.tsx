@@ -49,6 +49,9 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
 
+  // refs
+  const isUpdated = useRef<boolean>(false)
+
   // MARK: ADS
   useEffect(() => {
     const showTime = 5000
@@ -78,6 +81,19 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
       window.removeEventListener('keypress', handleKeyPress)
     }
   }, [])
+
+  // MARK: Side Effects
+  // update user session after load page
+  useEffect(() => {
+    const updateUser = async () => {
+      isUpdated.current = true
+      console.log('update user session')
+      await update()
+    }
+    if (!isUpdated.current) {
+      updateUser()
+    }
+  }, [update])
 
   // get cart length
   useEffect(() => {
@@ -355,7 +371,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                       alt="product"
                     />
 
-                    {product.flashSale && (
+                    {product.flashsale && (
                       <PiLightningFill
                         className="absolute -top-1.5 left-1 animate-bounce text-yellow-400"
                         size={16}
