@@ -95,7 +95,7 @@ function CartPage() {
 
       return (
         total +
-        (item?.quantity ?? 0) * (applyFlashSalePrice(item?.product.flashsale, item?.product.price) ?? 0)
+        (item?.quantity ?? 0) * (applyFlashSalePrice(item?.product.flashSale, item?.product.price) ?? 0)
       )
     }, 0)
     setSubTotal(subTotal)

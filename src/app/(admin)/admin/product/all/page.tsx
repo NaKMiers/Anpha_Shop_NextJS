@@ -66,7 +66,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     () => ({
       sort: 'updatedAt|-1',
       active: '',
-      flashsale: '',
+      flashSale: '',
     }),
     []
   )
@@ -114,7 +114,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
         // sync search params with states
         setValue('sort', searchParams?.sort || getValues('sort'))
         setValue('active', searchParams?.active || getValues('active'))
-        setValue('flashsale', searchParams?.flashsale || getValues('flashsale'))
+        setValue('flashSale', searchParams?.flashSale || getValues('flashSale'))
 
         // get min - max
         setMinPrice(chops.minPrice)
@@ -227,7 +227,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
       setProducts(prev =>
         prev.map(product =>
           updatedProducts.map((product: IProduct) => product._id).includes(product._id)
-            ? { ...product, flashsale: undefined }
+            ? { ...product, flashSale: undefined }
             : product
         )
       )
@@ -570,14 +570,14 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Flash Sale */}
           <Input
-            id="flashsale"
+            id="flashSale"
             label="Flash Sale"
             disabled={false}
             register={register}
             errors={errors}
             icon={FaSort}
             type="select"
-            onFocus={() => clearErrors('flashsale')}
+            onFocus={() => clearErrors('flashSale')}
             options={[
               {
                 value: '',
@@ -667,7 +667,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
 
           {/* Remove Flash Sale Many Button */}
           {!!selectedProducts.length &&
-            selectedProducts.some(id => products.find(product => product._id === id)?.flashsale) && (
+            selectedProducts.some(id => products.find(product => product._id === id)?.flashSale) && (
               <button
                 className="trans-200 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white"
                 onClick={() => {

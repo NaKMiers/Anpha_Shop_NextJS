@@ -42,7 +42,7 @@ function AddFlashSalePage() {
     defaultValues: {
       type: 'percentage',
       value: '',
-      begin: moment().local().format('YYYY-MM-DD'),
+      begin: moment().local().format('YYYY-MM-DDTHH:mm'),
       expire: '',
       timeType: 'loop',
       duration: 120,
@@ -214,8 +214,8 @@ function AddFlashSalePage() {
           register={register}
           errors={errors}
           required
-          type="date"
-          minDate={moment().local().format('YYYY-MM-DD')}
+          type="datetime-local"
+          minDate={moment().local().format('YYYY-MM-DDTHH:mm')}
           icon={FaPlay}
           className="mb-5"
           onFocus={() => clearErrors('begin')}
@@ -274,7 +274,7 @@ function AddFlashSalePage() {
               register={register}
               errors={errors}
               required
-              type="date"
+              type="datetime-local"
               icon={FaPause}
               onFocus={() => clearErrors('expire')}
             />
@@ -290,7 +290,7 @@ function AddFlashSalePage() {
               className={`trans-200 flex max-w-[250px] cursor-pointer items-center gap-2 rounded-lg border-2 border-slate-300 px-2 py-1 ${
                 selectedProducts.includes(product._id)
                   ? 'border-white bg-secondary text-white'
-                  : product.flashsale
+                  : product.flashSale
                     ? 'bg-slate-200'
                     : ''
               }`}

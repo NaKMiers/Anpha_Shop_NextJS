@@ -79,7 +79,7 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
 
           <li className="trans-200 group rounded-extra-small text-dark hover:bg-primary">
             <Link
-              href="/flashsale"
+              href="/flash-sale"
               prefetch={false}
               className="flex items-center gap-2 px-[10px] py-[6px]"
             >
@@ -87,7 +87,7 @@ function BannerMenu({ open, setOpen, categories, tags }: BannerMenuProps) {
                 size={16}
                 className="wiggle text-secondary"
               />
-              <span className="font-bold text-secondary">FLASHSALES</span>
+              <span className="font-bold text-secondary">FLASH SALES</span>
             </Link>
           </li>
 

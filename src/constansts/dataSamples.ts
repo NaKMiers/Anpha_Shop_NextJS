@@ -58,7 +58,7 @@ export const sampleProducts = [
     updatedAt: '2024-04-19T17:54:11.359Z',
     slug: 'spotify-premium-9-thang-am-nhac-chat-luong-cham-den-tan-cung-cam-xuc',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   {
     _id: '660952732dd375770d13fe33',
@@ -119,7 +119,7 @@ export const sampleProducts = [
     updatedAt: '2024-04-27T09:33:24.321Z',
     slug: 'spotify-premium-1-tuan-trai-nghiem-am-nhac-chat-luong-cao',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   {
     _id: '66094de74651cbd877647422',
@@ -180,7 +180,7 @@ export const sampleProducts = [
     updatedAt: '2024-04-19T17:54:19.560Z',
     slug: 'spotify-premium-3-thang-am-nhac-chat-luong-cao-cho-cam-xuc-thang-hoa',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
 ]
 
@@ -244,7 +244,7 @@ export const carouselProductSamples = [
     updatedAt: '2024-05-04T21:13:33.883Z',
     slug: 'birds-v',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   {
     _id: '661bd87aebb0b300ac10e2a6',
@@ -305,7 +305,7 @@ export const carouselProductSamples = [
     updatedAt: '2024-04-27T10:48:51.675Z',
     slug: 'netflix-1-day',
     __v: 0,
-    flashsale: {
+    flashSale: {
       _id: '661d67a52f50e6a738f725ac',
       type: 'fixed-reduce',
       value: '-1000',
@@ -376,7 +376,7 @@ export const carouselProductSamples = [
     updatedAt: '2024-04-27T09:33:24.327Z',
     slug: 'chatgpt-tai-khoan-viet-nam-co-san-dollar5',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   {
     _id: '6616c4a9cfdc10598ab611bb',
@@ -436,7 +436,7 @@ export const carouselProductSamples = [
     updatedAt: '2024-05-04T19:08:47.403Z',
     slug: 'ak2',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   {
     _id: '660955e3f684239396a29ae2',
@@ -477,7 +477,7 @@ export const carouselProductSamples = [
     updatedAt: '2024-04-19T17:54:43.563Z',
     slug: 'canva-pro-1-tuan-kham-pha-cong-cu-sang-tao-vo-han',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   {
     _id: '66094d054651cbd8776473ac',
@@ -547,7 +547,7 @@ export const carouselProductSamples = [
     updatedAt: '2024-04-27T09:33:24.324Z',
     slug: 'youtube-premium-youtube-music-no-ads-3-thang-giai-tri-lien-tuc-khong-quang-cao',
     __v: 0,
-    flashsale: {
+    flashSale: {
       _id: '661d601158f9aa4b9ed58d14',
       type: 'percentage',
       value: '-10%',

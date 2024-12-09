@@ -1,6 +1,6 @@
 'use client'
 
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 import { countPercent, formatPrice } from '@/utils/number'
 import { memo, useEffect, useState } from 'react'
 import CounterItem from './item/CounterItem'
@@ -11,7 +11,7 @@ interface PriceProps {
   className?: string
   stock: number
   big?: boolean
-  flashSale: IFlashsale | undefined
+  flashSale: IFlashSale | undefined
 }
 
 function Price({ price, oldPrice, stock, flashSale, big, className = '' }: PriceProps) {
@@ -23,7 +23,7 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
   // MARK: Effects
   // count down
   useEffect(() => {
-    // check flahsale
+    // check flash sale
     if (!flashSale) return
 
     let interval: NodeJS.Timeout

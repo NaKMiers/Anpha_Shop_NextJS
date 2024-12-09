@@ -8,7 +8,7 @@ import AdminMeta from '@/components/admin/AdminMeta'
 import FlashSaleItem from '@/components/admin/FlashSaleItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { deleteFlashSalesApi, getAllFlashSalesApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
@@ -25,7 +25,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
   const router = useRouter()
 
   // states
-  const [flashSales, setFlashSales] = useState<IFlashsale[]>([])
+  const [flashSales, setFlashSales] = useState<IFlashSale[]>([])
   const [amount, setAmount] = useState<number>(0)
   const [selectedFlashSales, setSelectedFlashSales] = useState<string[]>([])
 
@@ -116,7 +116,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
         setFlashSales(prev =>
           prev.filter(
             flashSale =>
-              !deletedFlashSales.map((flashSale: IFlashsale) => flashSale._id).includes(flashSale._id)
+              !deletedFlashSales.map((flashSale: IFlashSale) => flashSale._id).includes(flashSale._id)
           )
         )
 

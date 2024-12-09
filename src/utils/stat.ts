@@ -367,21 +367,21 @@ export const rankAccountRevenue = (orders: any[], categories: ICategory[]) => {
 
     items.forEach(item => {
       const { product } = item
-      const { flashsale } = product
+      const { flashSale } = product
 
       let price = product.price
-      if (flashsale) {
-        switch (flashsale.type) {
+      if (flashSale) {
+        switch (flashSale.type) {
           case 'fixed-reduce': {
-            price = price + +flashsale.value >= 0 ? price + +flashsale.value : 0
+            price = price + +flashSale.value >= 0 ? price + +flashSale.value : 0
             break
           }
           case 'fixed': {
-            price = +flashsale.value
+            price = +flashSale.value
             break
           }
           case 'percentage': {
-            price = price + Math.floor((price * parseFloat(flashsale.value)) / 100)
+            price = price + Math.floor((price * parseFloat(flashSale.value)) / 100)
             break
           }
         }

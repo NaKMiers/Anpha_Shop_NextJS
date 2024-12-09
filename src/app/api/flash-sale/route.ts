@@ -8,11 +8,11 @@ import { NextRequest, NextResponse } from 'next/server'
 // Models: Product, Flash Sale
 import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 
 export const dynamic = 'force-dynamic'
 
-// [GET]: /flashsale
+// [GET]: /flash-sale
 export async function GET(req: NextRequest) {
   console.log('- Get Flash Sale Products -')
 
@@ -74,16 +74,16 @@ export async function GET(req: NextRequest) {
     if (params.price) {
       // get all products from database
       products = await ProductModel.find({
-        flashsale: { $exists: true, $ne: null },
+        flashSale: { $exists: true, $ne: null },
         ...filter,
       })
-        .populate('flashsale')
+        .populate('flashSale')
         .sort(sort)
         .lean()
 
       products = products
         .map(product => {
-          const appliedPrice = applyFlashSalePrice(product.flashsale as IFlashsale, product.price)
+          const appliedPrice = applyFlashSalePrice(product.flashSale as IFlashSale, product.price)
           return { ...product, price: appliedPrice }
         })
         .filter(product => product.price <= +params.price[0])
@@ -93,10 +93,10 @@ export async function GET(req: NextRequest) {
     } else {
       // get all products
       products = await ProductModel.find({
-        flashsale: { $exists: true, $ne: null },
+        flashSale: { $exists: true, $ne: null },
         ...filter,
       })
-        .populate('flashsale')
+        .populate('flashSale')
         .sort(sort)
         .skip(skip)
         .limit(itemPerPage)
@@ -104,7 +104,7 @@ export async function GET(req: NextRequest) {
 
       // get amount of account
       amount = await ProductModel.countDocuments({
-        flashsale: { $exists: true, $ne: null },
+        flashSale: { $exists: true, $ne: null },
         ...filter,
       })
     }
@@ -122,7 +122,7 @@ export async function GET(req: NextRequest) {
       },
     ])
 
-    // return flashsale products
+    // return flash sale products
     return NextResponse.json({ products, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })

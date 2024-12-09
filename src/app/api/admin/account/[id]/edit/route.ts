@@ -20,23 +20,38 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     await connectDatabase()
 
     // get data to edit account
-    const { usingUser, type, info, renew, expire, active, days, hours, minutes, seconds, notify, message } =
-      await req.json()
+    const {
+      usingUser,
+      type,
+      info,
+      renew,
+      expire,
+      active,
+      days,
+      hours,
+      minutes,
+      seconds,
+      notify,
+      message,
+    } = await req.json()
     const times = getTimes(+days, +hours, +minutes, +seconds)
+
+    const set: any = {
+      type,
+      info,
+      renew,
+      times,
+      active,
+    }
+
+    if (expire) {
+      set.expire = momentTZ.tz(expire, 'Asia/Ho_Chi_Minh').toDate()
+    }
 
     // update account
     const updatedAccount: IAccount | null = await AccountModel.findByIdAndUpdate(
       id,
-      {
-        $set: {
-          type,
-          info,
-          renew,
-          expire: momentTZ.tz(expire, 'Asia/Ho_Chi_Minh').toDate(),
-          times,
-          active,
-        },
-      },
+      { $set: set },
       { new: true }
     )
 

@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
           continue
         }
 
-        if (key === 'flashsale') {
+        if (key === 'flashSale') {
           filter[key] =
             params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
           continue

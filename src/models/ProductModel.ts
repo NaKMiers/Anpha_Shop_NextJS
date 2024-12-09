@@ -29,9 +29,9 @@ const ProductSchema = new Schema(
     description: {
       type: String,
     },
-    flashsale: {
+    flashSale: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'flashsale',
+      ref: 'flashSale',
     },
     tags: {
       type: [
@@ -114,7 +114,7 @@ export interface IProduct {
   oldPrice?: number
   price: number
   description: string
-  flashsale?: string | IFlashSale
+  flashSale?: string | IFlashSale
   tags: string[] | ITag[]
   category: string | ICategory
   images: string[]

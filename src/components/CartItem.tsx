@@ -9,7 +9,7 @@ import {
   updateLocalCartItemQuantity,
 } from '@/libs/reducers/cartReducer'
 import { ICartItem } from '@/models/CartItemModel'
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { addToCartApi, deleteCartItemApi, updateCartQuantityApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
@@ -406,7 +406,7 @@ function CartItem({
               price={(cartItem.product as IProduct).price}
               oldPrice={(cartItem.product as IProduct).oldPrice}
               stock={(cartItem.product as IProduct).stock}
-              flashSale={(cartItem.product as IProduct).flashsale as IFlashsale}
+              flashSale={(cartItem.product as IProduct).flashSale as IFlashSale}
               big
             />
             <div className="mt-2 flex items-center gap-1 text-[16px]">

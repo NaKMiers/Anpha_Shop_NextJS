@@ -7,6 +7,7 @@ import AddAccountForm from '@/components/admin/forms/AddAccountForm'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { getForceAllProductsApi } from '@/requests'
+import moment from 'moment'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -22,8 +23,8 @@ function AddAccountPage() {
       id: new Date().getTime(),
       type: '',
       info: '',
-      renew: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
-      days: 1,
+      renew: moment().add(1, 'months').local().format('YYYY-MM-DD'),
+      days: 7,
       hours: 0,
       minutes: 0,
       seconds: 0,

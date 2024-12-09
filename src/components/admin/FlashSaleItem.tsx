@@ -1,4 +1,4 @@
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
@@ -11,7 +11,7 @@ import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
 
 interface FlashSaleItemProps {
-  data: IFlashsale
+  data: IFlashSale
   loadingFlashSales: string[]
   className?: string
 

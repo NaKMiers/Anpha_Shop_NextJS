@@ -172,7 +172,7 @@ function Banner({ carouselProducts = [], categories = [], tags = [] }: BannerPro
 
               <li className="trans-200 group rounded-extra-small text-dark hover:bg-primary">
                 <Link
-                  href="/flashsale"
+                  href="/flash-sale"
                   prefetch={false}
                   className="flex items-center gap-2 px-[10px] py-[6px]"
                 >

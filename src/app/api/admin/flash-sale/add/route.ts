@@ -1,5 +1,5 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
     // get data to create flash sale
     const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
 
-    // create new flash sale in databasee
-    const newFlashSale = new FlashsaleModel({
+    // create new flash sale in database
+    const newFlashSale = new FlashSaleModel({
       type,
       value,
       begin,
@@ -31,17 +31,17 @@ export async function POST(req: NextRequest) {
     // save new flash sale to database
     await newFlashSale.save()
 
-    // update flashsale field for all products in applyProducts
+    // update flash sale field for all products in applyProducts
     await ProductModel.updateMany(
       { _id: { $in: appliedProducts } }, // Match products by their IDs
-      { $set: { flashsale: newFlashSale._id } } // Set the flashsale field
+      { $set: { flashSale: newFlashSale._id } } // Set the flash sale field
     )
 
     // get productQuantity of the products have just applied flash sale
-    const productQuantity = await ProductModel.countDocuments({ flashsale: newFlashSale._id })
+    const productQuantity = await ProductModel.countDocuments({ flashSale: newFlashSale._id })
 
     // update flash sale quantity
-    await FlashsaleModel.findByIdAndUpdate(newFlashSale._id, { $set: { productQuantity } })
+    await FlashSaleModel.findByIdAndUpdate(newFlashSale._id, { $set: { productQuantity } })
 
     // return new flash sale
     return NextResponse.json(

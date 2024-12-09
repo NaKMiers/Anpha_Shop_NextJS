@@ -1,5 +1,5 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -19,13 +19,13 @@ export async function DELETE(req: NextRequest) {
     const { ids, productIds } = await req.json()
 
     // get delete flash sales
-    const deletedFlashSales = await FlashsaleModel.find({ _id: { $in: ids } }).lean()
+    const deletedFlashSales = await FlashSaleModel.find({ _id: { $in: ids } }).lean()
 
     // delete voucher from database
-    await FlashsaleModel.deleteMany({ _id: { $in: ids } })
+    await FlashSaleModel.deleteMany({ _id: { $in: ids } })
 
-    // remove flashsale of all products which are applying the deleted flash sales
-    await ProductModel.updateMany({ _id: { $in: productIds } }, { $set: { flashsale: null } })
+    // remove flash sale of all products which are applying the deleted flash sales
+    await ProductModel.updateMany({ _id: { $in: productIds } }, { $set: { flashSale: null } })
 
     // return response
     return NextResponse.json(

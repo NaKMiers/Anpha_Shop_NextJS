@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import '@/models/CategoryModel'
 import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -95,15 +95,15 @@ export async function GET(req: NextRequest) {
         category: { $in: categoryIds },
         ...filter,
       })
-        .populate('category flashsale')
+        .populate('category flashSale')
         .sort(sort)
         .lean()
 
       products = products
         .map(product => {
-          if (!product.flashsale) return product
+          if (!product.flashSale) return product
 
-          const appliedPrice = applyFlashSalePrice(product.flashsale as IFlashsale, product.price)
+          const appliedPrice = applyFlashSalePrice(product.flashSale as IFlashSale, product.price)
           return { ...product, price: appliedPrice }
         })
         .filter(product => product.price <= +params.price[0])
@@ -116,7 +116,7 @@ export async function GET(req: NextRequest) {
         category: { $in: categoryIds },
         ...filter,
       })
-        .populate('flashsale')
+        .populate('flashSale')
         .sort(sort)
         .skip(skip)
         .limit(itemPerPage)

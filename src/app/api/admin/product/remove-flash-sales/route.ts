@@ -1,9 +1,9 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Product, Flashsale
+// Models: Product, Flash Sale
 import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
@@ -19,7 +19,7 @@ export async function PATCH(req: NextRequest) {
     const { ids } = await req.json()
 
     // update products from database
-    await ProductModel.updateMany({ _id: { $in: ids } }, { $set: { flashsale: null } })
+    await ProductModel.updateMany({ _id: { $in: ids } }, { $set: { flashSale: null } })
 
     // get updated products
     const updatedProducts = await ProductModel.find({ _id: { $in: ids } }).lean()
@@ -29,8 +29,8 @@ export async function PATCH(req: NextRequest) {
     }
 
     // update flash sale product quantity
-    await FlashsaleModel.updateMany(
-      { _id: { $in: updatedProducts.map(product => product.flashsale) } },
+    await FlashSaleModel.updateMany(
+      { _id: { $in: updatedProducts.map(product => product.flashSale) } },
       { $inc: { productQuantity: -1 } }
     )
 

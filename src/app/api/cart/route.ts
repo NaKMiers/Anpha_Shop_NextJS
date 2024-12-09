@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
     const userId = token?._id
 
-    // checkt if user logged in
+    // check if user logged in
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
@@ -33,8 +33,8 @@ export async function GET(req: NextRequest) {
       .populate({
         path: 'productId',
         populate: {
-          path: 'flashsale',
-          model: 'flashsale',
+          path: 'flashSale',
+          model: 'flashSale',
         },
       })
       .sort({ createdAt: -1 })

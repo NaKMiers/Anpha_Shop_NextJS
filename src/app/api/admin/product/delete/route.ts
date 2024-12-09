@@ -1,13 +1,13 @@
 import { connectDatabase } from '@/config/database'
 import AccountModel from '@/models/AccountModel'
 import CategoryModel from '@/models/CategoryModel'
-import FlashsaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModel'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 import TagModel from '@/models/TagModel'
 import { deleteFile } from '@/utils/uploadFile'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Product, Category, Tag, Flashsale, Account
+// Models: Product, Category, Tag, Flash Sale, Account
 import '@/models/AccountModel'
 import '@/models/CategoryModel'
 import '@/models/FlashSaleModel'
@@ -35,7 +35,7 @@ export async function DELETE(req: NextRequest) {
       _id: { $in: ids },
     })
 
-    // decrease product quantity filed in related categories, tags, and flashsales, and delete the images associated with each product
+    // decrease product quantity filed in related categories, tags, and flash sales, and delete the images associated with each product
     await Promise.all(
       products.map(async product => {
         // decrease related categories product quantity
@@ -58,10 +58,10 @@ export async function DELETE(req: NextRequest) {
           }
         )
 
-        // decrease related flashsales product quantity
-        if (product.flashsale) {
-          await FlashsaleModel.updateOne(
-            { _id: product.flashsale },
+        // decrease related flash sales product quantity
+        if (product.flashSale) {
+          await FlashSaleModel.updateOne(
+            { _id: product.flashSale },
             {
               $inc: {
                 productQuantity: -1,

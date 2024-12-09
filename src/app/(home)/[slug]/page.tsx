@@ -4,7 +4,6 @@ import Divider from '@/components/Divider'
 import GroupProducts from '@/components/GroupProducts'
 import LinkBar from '@/components/LinkBar'
 import Price from '@/components/Price'
-import ReviewContainer from '@/components/ReviewContainer'
 import Slider from '@/components/Slider'
 import { ICategory } from '@/models/CategoryModel'
 import { IFlashSale } from '@/models/FlashSaleModel'
@@ -180,7 +179,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             price={product?.price || 0}
             oldPrice={product?.oldPrice}
             stock={product?.stock || 0}
-            flashSale={product?.flashsale as IFlashSale}
+            flashSale={product?.flashSale as IFlashSale}
             big
           />
 

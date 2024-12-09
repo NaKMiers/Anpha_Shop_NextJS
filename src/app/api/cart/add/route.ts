@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       _id: { $in: products.map((product: any) => product.productId) },
       active: true,
     })
-      .populate('flashsale')
+      .populate('flashSale')
       .lean()
 
     // no product to add

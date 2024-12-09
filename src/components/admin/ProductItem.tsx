@@ -148,7 +148,7 @@ function ProductItem({
           </Link>
 
           {/* Flash sale */}
-          {data.flashsale && (
+          {data.flashSale && (
             <PiLightningFill
               className="absolute -top-1.5 left-1 animate-bounce text-yellow-400"
               size={25}
@@ -361,8 +361,8 @@ function ProductItem({
             />
           </button>
 
-          {/* Remove Flashsale Button */}
-          {data.flashsale && (
+          {/* Remove Flash Sale Button */}
+          {data.flashSale && (
             <button
               className="group block"
               onClick={e => {

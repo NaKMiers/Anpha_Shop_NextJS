@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
     })
       .populate('tags')
       .populate('category')
-      .populate('flashsale')
+      .populate('flashSale')
       .lean()
 
     // check if product is not found
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest, { params: { slug } }: { params: { sl
       active: true,
       category: product.category,
     })
-      .populate('flashsale')
+      .populate('flashSale')
       .lean()
 
     // return response

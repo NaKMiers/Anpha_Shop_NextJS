@@ -51,7 +51,7 @@ function EditAccountPage() {
     defaultValues: {
       type: '',
       info: '',
-      renew: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+      renew: '',
       expire: '',
       days: 1,
       hours: 0,
@@ -74,14 +74,18 @@ function EditAccountPage() {
       try {
         const { account } = await getAccountApi(id) // no-cache
 
+        console.log('account', account)
+
         // set account to state
         setAccount(account)
 
         // set value to form
         setValue('type', account.type)
         setValue('info', account.info)
-        setValue('renew', moment(account.expire).local().format('YYYY-MM-DD'))
-        setValue('expire', moment(account.expire).local().format('YYYY-MM-DDTHH:mm'))
+        setValue('renew', moment(account.renew).local().format('YYYY-MM-DD'))
+        if (account.expire) {
+          setValue('expire', moment(account.expire).local().format('YYYY-MM-DDTHH:mm'))
+        }
         setValue('days', account.times.days)
         setValue('hours', account.times.hours)
         setValue('minutes', account.times.minutes)

@@ -9,7 +9,7 @@ import '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'
 
-// [GET]: /flashsale
+// [GET]: /flash-sale
 export async function GET(req: NextRequest) {
   console.log('- Get Flash Sale Products -')
 
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 
     // get all products from database
     const products = await ProductModel.find(filter)
-      .populate('flashsale')
+      .populate('flashSale')
       .sort(sort)
       .limit(itemPerPage)
       .lean()
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
     // get amount of account
     const amount = await ProductModel.countDocuments(filter)
 
-    // return flashsale products
+    // return flash sale products
     return NextResponse.json({ products, amount }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })

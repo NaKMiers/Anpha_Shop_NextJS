@@ -1,5 +1,5 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -18,8 +18,8 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     // get data to create flash sale
     const { type, value, begin, timeType, duration, expire, appliedProducts } = await req.json()
 
-    // update flashsale
-    const updatedFlashSale = await FlashsaleModel.findByIdAndUpdate(id, {
+    // update Flash Sale
+    const updatedFlashSale = await FlashSaleModel.findByIdAndUpdate(id, {
       $set: {
         type,
         value,
@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     })
 
     // get products that have been applied by the updated flash sale before
-    const originalAppliedProducts = await ProductModel.find({ flashsale: updatedFlashSale._id }).select(
+    const originalAppliedProducts = await ProductModel.find({ flashSale: updatedFlashSale._id }).select(
       '_id'
     )
 
@@ -39,16 +39,16 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     const removedProducts = originalAppliedProducts.filter(id => !appliedProducts.includes(id))
     const setProducts = appliedProducts.filter((id: string) => !originalAppliedProducts.includes(id))
 
-    await ProductModel.updateMany({ _id: { $in: removedProducts } }, { $set: { flashsale: null } })
+    await ProductModel.updateMany({ _id: { $in: removedProducts } }, { $set: { flashSale: null } })
     await ProductModel.updateMany(
       { _id: { $in: setProducts } },
-      { $set: { flashsale: updatedFlashSale._id } }
+      { $set: { flashSale: updatedFlashSale._id } }
     )
 
-    const productQuantity = await ProductModel.countDocuments({ flashsale: updatedFlashSale._id })
+    const productQuantity = await ProductModel.countDocuments({ flashSale: updatedFlashSale._id })
 
     // update flash sale quantity
-    await FlashsaleModel.findByIdAndUpdate(updatedFlashSale._id, { $set: { productQuantity } })
+    await FlashSaleModel.findByIdAndUpdate(updatedFlashSale._id, { $set: { productQuantity } })
 
     // return new flash sale
     return NextResponse.json(

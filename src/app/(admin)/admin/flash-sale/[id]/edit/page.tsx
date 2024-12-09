@@ -28,7 +28,7 @@ function EditFlashSalePage() {
 
   // states
   const [products, setProducts] = useState<IProduct[]>([])
-  const [selectedProducts, setSelectedProducts] = useState<string[]>([])
+  const [selectedFlashSales, setSelectedFlashSales] = useState<string[]>([])
   const [timeType, setTimeType] = useState<'loop' | 'once'>('loop')
 
   // form
@@ -43,7 +43,7 @@ function EditFlashSalePage() {
     defaultValues: {
       type: 'percentage',
       value: '',
-      begin: moment().local().format('YYYY-MM-DD'),
+      begin: moment().local().format('YYYY-MM-DDTHH:mm'),
       expire: '',
       timeType: 'loop',
       duration: 120,
@@ -53,27 +53,30 @@ function EditFlashSalePage() {
   // MARK: Get Data
   // get flash sale by id
   useEffect(() => {
-    const getProduct = async () => {
+    const getFlashSale = async () => {
       try {
         // send request to server to get flash sale
         const { flashSale } = await getFlashSaleApi(id) // cache: no-store
 
-        // // set value to form
+        // set value to form
         setValue('type', flashSale.type)
         setValue('value', flashSale.value)
-        setValue('begin', moment().local().format('YYYY-MM-DD'))
-        setValue('expire', flashSale.expire ? moment().local().format('YYYY-MM-DD') : '')
+        setValue('begin', moment(flashSale.begin).local().format('YYYY-MM-DDTHH:mm'))
+        setValue(
+          'expire',
+          flashSale.expire ? moment(flashSale.expire).local().format('YYYY-MM-DDTHH:mm') : ''
+        )
         setValue('duration', flashSale.duration || 120)
         setValue('timeType', flashSale.timeType)
         setTimeType(flashSale.timeType)
 
-        setSelectedProducts(flashSale.products.map((product: IProduct) => product._id))
+        setSelectedFlashSales(flashSale.products.map((product: IProduct) => product._id))
       } catch (err: any) {
         console.log(err)
         toast.error(err.message)
       }
     }
-    getProduct()
+    getFlashSale()
   }, [id, setValue])
 
   // get all products to apply
@@ -156,7 +159,7 @@ function EditFlashSalePage() {
 
     try {
       // send request to server
-      const { message } = await updateFlashSaleApi(id, data, selectedProducts)
+      const { message } = await updateFlashSaleApi(id, data, selectedFlashSales)
 
       // show success message
       toast.success(message)
@@ -233,7 +236,7 @@ function EditFlashSalePage() {
           register={register}
           errors={errors}
           required
-          type="date"
+          type="datetime-local"
           icon={FaPlay}
           className="mb-5"
           onFocus={() => clearErrors('begin')}
@@ -290,7 +293,7 @@ function EditFlashSalePage() {
               register={register}
               errors={errors}
               required
-              type="date"
+              type="datetime-local"
               icon={FaPause}
               onFocus={() => clearErrors('expire')}
             />
@@ -303,17 +306,17 @@ function EditFlashSalePage() {
           {products.map(product => (
             <div
               className={`trans-200 flex max-w-[250px] cursor-pointer items-center gap-2 rounded-lg border-2 border-slate-300 px-2 py-1 ${
-                selectedProducts.includes(product._id)
+                selectedFlashSales.includes(product._id)
                   ? 'border-white bg-secondary text-white'
-                  : product.flashsale
+                  : product.flashSale
                     ? 'bg-slate-200'
                     : ''
               }`}
               title={product.title}
               onClick={() =>
-                selectedProducts.includes(product._id)
-                  ? setSelectedProducts(prev => prev.filter(id => id !== product._id))
-                  : setSelectedProducts(prev => [...prev, product._id])
+                selectedFlashSales.includes(product._id)
+                  ? setSelectedFlashSales(prev => prev.filter(id => id !== product._id))
+                  : setSelectedFlashSales(prev => [...prev, product._id])
               }
               key={product._id}
             >

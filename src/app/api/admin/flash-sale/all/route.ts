@@ -1,5 +1,5 @@
 import { connectDatabase } from '@/config/database'
-import FlashsaleModel from '@/models/FlashSaleModel'
+import FlashSaleModel from '@/models/FlashSaleModel'
 import ProductModel from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
@@ -71,15 +71,15 @@ export async function GET(req: NextRequest) {
     }
 
     // get amount of account
-    const amount = await FlashsaleModel.countDocuments(filter)
+    const amount = await FlashSaleModel.countDocuments(filter)
 
     // Get all flash sales from database
-    const flashSales = await FlashsaleModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
+    const flashSales = await FlashSaleModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
     // get products associated with each flash sale
     const flashSalesWithProducts = await Promise.all(
       flashSales.map(async flashSale => {
-        const products = await ProductModel.find({ flashsale: flashSale._id })
+        const products = await ProductModel.find({ flashSale: flashSale._id })
           .select('title images')
           .lean()
         return { ...flashSale, products }

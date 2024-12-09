@@ -105,7 +105,7 @@ export const order = {
         updatedAt: '2024-04-19T17:53:48.792Z',
         slug: 'birds-v',
         __v: 0,
-        flashsale: null,
+        flashSale: null,
       },
       quantity: 1,
       accounts: [
@@ -187,7 +187,7 @@ export const order = {
         updatedAt: '2024-04-19T17:53:41.829Z',
         slug: 'ak2',
         __v: 0,
-        flashsale: null,
+        flashSale: null,
       },
       quantity: 1,
       accounts: [
@@ -366,7 +366,7 @@ export const updateInfoData = {
     updatedAt: '2024-04-19T17:53:48.792Z',
     slug: 'birds-v',
     __v: 0,
-    flashsale: null,
+    flashSale: null,
   },
   oldInfo: {
     _id: '6622afaa13c9a6df523bacba',

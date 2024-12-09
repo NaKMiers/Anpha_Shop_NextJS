@@ -5,11 +5,11 @@ import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Product, Tag, Flashsale
+// Models: Product, Tag, Flash Sale
 import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 import '@/models/TagModel'
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -91,15 +91,15 @@ export async function GET(req: NextRequest) {
     if (params.price) {
       // find products by tag ids
       products = await ProductModel.find({ tags: { $in: tagIds }, ...filter })
-        .populate('tags flashsale')
+        .populate('tags flashSale')
         .sort(sort)
         .lean()
 
       products = products
         .map(product => {
-          if (!product.flashsale) return product
+          if (!product.flashSale) return product
 
-          const appliedPrice = applyFlashSalePrice(product.flashsale as IFlashsale, product.price)
+          const appliedPrice = applyFlashSalePrice(product.flashSale as IFlashSale, product.price)
           return { ...product, price: appliedPrice }
         })
         .filter(product => product.price <= +params.price[0])
@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
     } else {
       // find products by tag ids
       products = await ProductModel.find({ tags: { $in: tagIds }, ...filter })
-        .populate('flashsale')
+        .populate('flashSale')
         .sort(sort)
         .skip(skip)
         .limit(itemPerPage)

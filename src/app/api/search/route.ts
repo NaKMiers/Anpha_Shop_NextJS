@@ -3,9 +3,9 @@ import ProductModel, { IProduct } from '@/models/ProductModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { applyFlashSalePrice } from '@/utils/number'
 import { NextRequest, NextResponse } from 'next/server'
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 
-// Models: Product, Tag, Category, FlashSale
+// Models: Product, Tag, Category, Flash Sale
 import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
 
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
 
     // find products by category base on search params
     let products: IProduct[] = await ProductModel.find(filter)
-      .populate('flashsale')
+      .populate('flashSale')
       .sort(sort)
       .skip(skip)
       .limit(itemPerPage)
@@ -107,9 +107,9 @@ export async function GET(req: NextRequest) {
     if (params.price) {
       products = products
         .map(product => {
-          if (!product.flashsale) return product
+          if (!product.flashSale) return product
 
-          const appliedPrice = applyFlashSalePrice(product.flashsale as IFlashsale, product.price)
+          const appliedPrice = applyFlashSalePrice(product.flashSale as IFlashSale, product.price)
           return { ...product, price: appliedPrice }
         })
         .filter(product => product.price <= +params.price[0])

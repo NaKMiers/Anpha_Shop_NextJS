@@ -27,7 +27,7 @@ export const handleQuery = (
         'expire',
         'renew',
         'role',
-        'flashsale',
+        'flashSale',
         'isFeatured',
         'type',
         'timesLeft',

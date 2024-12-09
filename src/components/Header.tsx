@@ -355,7 +355,7 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                       alt="product"
                     />
 
-                    {product.flashsale && (
+                    {product.flashSale && (
                       <PiLightningFill
                         className="absolute -top-1.5 left-1 animate-bounce text-yellow-400"
                         size={16}

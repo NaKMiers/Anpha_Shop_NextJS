@@ -1,4 +1,4 @@
-// Flashsale
+// Flash Sale
 
 // [GET]
 export const getAllFlashSalesApi = async (query: string) => {

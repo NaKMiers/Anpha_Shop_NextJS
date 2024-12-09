@@ -5,7 +5,7 @@ import { ITag } from '@/models/TagModel'
 import { shuffleArray } from '@/utils'
 import { NextResponse } from 'next/server'
 
-// Models: Product, Tag, Category, Flashsale
+// Models: Product, Tag, Category, Flash Sale
 import '@/models/CategoryModel'
 import '@/models/FlashSaleModel'
 import '@/models/ProductModel'
@@ -25,7 +25,7 @@ export async function GET() {
     const products: IProduct[] = await ProductModel.find({ active: true })
       .populate('tags')
       .populate('category')
-      .populate('flashsale')
+      .populate('flashSale')
       .lean()
 
     // get all categories from products to make sure that no category with empty products

@@ -1,4 +1,4 @@
-import { IFlashsale } from '@/models/FlashSaleModel'
+import { IFlashSale } from '@/models/FlashSaleModel'
 
 export const formatPrice = (price: number = 0) => {
   return Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
@@ -13,12 +13,12 @@ export const calcPercentage = (percentageString: string, number: number) => {
   return result
 }
 
-export const applyFlashSalePrice = (flashSale: IFlashsale, price: number): number => {
+export const applyFlashSalePrice = (flashSale: IFlashSale, price: number): number => {
   const now = new Date()
 
   if (!flashSale) return price
 
-  // check flashsale is valid
+  // check flash sale is valid
   let isValid = false
 
   if (now > new Date(flashSale.begin)) {
@@ -30,7 +30,7 @@ export const applyFlashSalePrice = (flashSale: IFlashsale, price: number): numbe
       isValid = true
     }
 
-    // if invalid flashsale
+    // if invalid flash sale
     if (!isValid) {
       return price
     }
