@@ -89,7 +89,7 @@ function ReviewContainer({ product, className = '' }: ReviewContainerProps) {
     <div>
       <div className="flex flex-col gap-3 text-center md:flex-row">
         <div className="flex w-full flex-col items-center justify-center gap-2 md:max-w-[200px]">
-          <p className="text-3xl font-semibold">{product.rating.toFixed(1) || 5}</p>
+          <p className="text-3xl font-semibold">{(product.rating || 5).toFixed(1)}</p>
           <Rating
             size="small"
             readOnly

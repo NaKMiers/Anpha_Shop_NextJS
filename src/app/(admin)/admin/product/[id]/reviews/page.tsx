@@ -501,7 +501,7 @@ function AllProductReviewsPage({
           </h1>
         </div>
         <div className="flex items-center gap-3">
-          <p className="text-3xl font-semibold">{product.rating.toFixed(1) || 5}</p>
+          <p className="text-3xl font-semibold">{(product.rating || 5).toFixed(1)}</p>
           <Rating
             size="small"
             readOnly

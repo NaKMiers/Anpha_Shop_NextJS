@@ -183,7 +183,7 @@ function ProductItem({
           {/* Rating */}
           {data.rating > 0 && (
             <div className="flex items-center gap-1">
-              <span className="font-semibold text-yellow-500">{data.rating.toFixed(1)}</span>
+              <span className="font-semibold text-yellow-500">{(data.rating || 5).toFixed(1)}</span>
               <Rating
                 size="small"
                 readOnly
