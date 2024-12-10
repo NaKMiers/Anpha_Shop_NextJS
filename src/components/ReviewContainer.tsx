@@ -1,14 +1,14 @@
 'use client'
 
+import { IProduct } from '@/models/ProductModel'
 import { IReview } from '@/models/ReviewModel'
 import { checkUserReviewedApi, getAllProductReviewsApi } from '@/requests'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Rating } from '@mui/material'
+import { useSession } from 'next-auth/react'
+import { memo, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaStar } from 'react-icons/fa'
 import { RiDonutChartFill } from 'react-icons/ri'
-import { IProduct } from '@/models/ProductModel'
-import toast from 'react-hot-toast'
-import { useSession } from 'next-auth/react'
 import Divider from './Divider'
 import Review from './Review'
 import ReviewModal from './admin/ReviewModal'
@@ -89,14 +89,12 @@ function ReviewContainer({ product, className = '' }: ReviewContainerProps) {
     <div>
       <div className="flex flex-col gap-3 text-center md:flex-row">
         <div className="flex w-full flex-col items-center justify-center gap-2 md:max-w-[200px]">
-          <p className="text-3xl font-semibold">
-            {' '}
-            {product?.rating ? (Math.round(product.rating * 100) / 100).toFixed(1) : 5}
-          </p>
+          <p className="text-3xl font-semibold">{product.rating.toFixed(1) || 5}</p>
           <Rating
             size="small"
             readOnly
-            value={4.85}
+            precision={0.1}
+            value={product?.rating || 5}
           />
           <p className="text-sm text-slate-500">
             {product.reviewAmount < 0 ? 0 : product.reviewAmount} đánh giá

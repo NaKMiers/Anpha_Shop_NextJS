@@ -182,11 +182,16 @@ function ProductItem({
 
           {/* Rating */}
           {data.rating > 0 && (
-            <Rating
-              size="small"
-              readOnly
-              value={data.rating}
-            />
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-yellow-500">{data.rating.toFixed(1)}</span>
+              <Rating
+                size="small"
+                readOnly
+                precision={0.1}
+                value={data.rating}
+              />
+              <span className="text-xs text-slate-500">({data.reviewAmount})</span>
+            </div>
           )}
 
           <div className="flex w-full items-center gap-3">
