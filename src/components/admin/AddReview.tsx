@@ -74,6 +74,7 @@ function AddReview({ open, setOpen, setReviews, className = '' }: AddReviewProps
 
         // reset form
         reset()
+        setRating(5)
       } catch (err: any) {
         toast.error(err.message)
         console.log(err)
