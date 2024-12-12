@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
+import { FaCopy } from 'react-icons/fa6'
 import { IoIosHelpCircle } from 'react-icons/io'
 
 function RechargePage() {
@@ -121,24 +122,30 @@ function RechargePage() {
           </p>
 
           <div className="mb-1 rounded-md border border-slate-400 px-4 py-2">
-            <p>
+            <div>
               Số tài khoản Momo:{' '}
-              <span
-                className="cursor-pointer font-semibold text-[#a1396c]"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-[#a1396c]"
                 onClick={() => handleCopy(admin.momo.account)}
               >
-                {admin.momo.account}
-              </span>
-            </p>
-            <p>
+                <span className="px-2 py-0.5">{admin.momo.account}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
+            <div className="mt-0.5">
               Nội dung chuyển khoản:{' '}
-              <span
-                className="cursor-pointer text-orange-600"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-orange-600"
                 onClick={() => handleCopy(content)}
               >
-                {content}
-              </span>
-            </p>
+                <span className="px-2 py-0.5">{content}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
           </div>
           <p className="mb-1 flex items-center gap-1 text-slate-500">
             <IoIosHelpCircle size={20} /> Ấn để sao chép
@@ -235,33 +242,42 @@ function RechargePage() {
           </p>
 
           <div className="mb-1 rounded-md border border-slate-400 px-4 py-2">
-            <p>
+            <div>
               Ngân hàng:{' '}
-              <span
-                className="cursor-pointer font-semibold text-[#399162]"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-[#399162]"
                 onClick={() => handleCopy(admin.banking.name)}
               >
-                {admin.banking.name}
-              </span>
-            </p>
-            <p>
+                <span className="px-2 py-0.5">{admin.banking.name}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
+            <div className="mt-0.5">
               Số tài khoản:{' '}
-              <span
-                className="cursor-pointer font-semibold text-secondary"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-secondary"
                 onClick={() => handleCopy(admin.banking.account)}
               >
-                {admin.banking.account}
-              </span>
-            </p>
-            <p>
+                <span className="px-2 py-0.5">{admin.banking.account}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
+            <div className="mt-0.5">
               Nội dung chuyển khoản:{' '}
-              <span
-                className="cursor-pointer text-orange-600"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-orange-600"
                 onClick={() => handleCopy(content)}
               >
-                {content}
-              </span>
-            </p>
+                <span className="px-2 py-0.5">{content}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
           </div>
           <p className="mb-1 flex items-center gap-1 text-slate-500">
             <IoIosHelpCircle size={20} /> Ấn để sao chép

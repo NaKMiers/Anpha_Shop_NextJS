@@ -2,9 +2,15 @@
 
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setCartItems, setLocalCartItems } from '@/libs/reducers/cartReducer'
+import { setUserBalance } from '@/libs/reducers/userReducer'
 import { ICartItem } from '@/models/CartItemModel'
 import { IProduct } from '@/models/ProductModel'
-import { getCartApi, searchProductsApi, updateProductsInLocalCartApi } from '@/requests'
+import {
+  getCartApi,
+  refreshUserBalanceApi,
+  searchProductsApi,
+  updateProductsInLocalCartApi,
+} from '@/requests'
 import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -27,10 +33,13 @@ interface HeaderProps {
 function Header({ isStatic, hideSearch }: HeaderProps) {
   // hooks
   const dispatch = useAppDispatch()
-  const cartItems = useAppSelector(state => state.cart.items)
-  const localCartItems = useAppSelector(state => state.cart.localItems)
-  const { data: session, update } = useSession()
+  const { data: session } = useSession()
   const curUser: any = session?.user
+
+  // store
+  const balance = useAppSelector(state => state.user.balance)
+  const localCartItems = useAppSelector(state => state.cart.localItems)
+  const cartItems = useAppSelector(state => state.cart.items)
 
   // states
   const [isShow, setIsShow] = useState<boolean>(false)
@@ -48,9 +57,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const searchTimeout = useRef<any>(null)
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
-
-  // refs
-  const isUpdated = useRef<boolean>(false)
 
   // MARK: ADS
   useEffect(() => {
@@ -82,18 +88,26 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
     }
   }, [])
 
-  // MARK: Side Effects
-  // update user session after load page
+  // refresh user balance
   useEffect(() => {
-    const updateUser = async () => {
-      isUpdated.current = true
-      console.log('update user session')
-      await update()
+    const refreshUserBalance = async () => {
+      try {
+        // send request to refresh user balance
+        const { balance } = await refreshUserBalanceApi()
+
+        console.log('Balance:', balance)
+
+        // update balance
+        dispatch(setUserBalance(balance))
+      } catch (err: any) {
+        console.log(err)
+      }
     }
-    if (!isUpdated.current) {
-      updateUser()
+
+    if (curUser?._id) {
+      refreshUserBalance()
     }
-  }, [update])
+  }, [dispatch, curUser?._id])
 
   // get cart length
   useEffect(() => {
@@ -440,9 +454,11 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
                   height={40}
                   alt="avatar"
                 />
-                <div className="font-body text-[18px] underline-offset-2 hover:underline">
-                  {formatPrice(curUser?.balance)}
-                </div>
+                {balance >= 0 && (
+                  <div className="font-body text-[18px] underline-offset-2 hover:underline">
+                    {formatPrice(balance)}
+                  </div>
+                )}
                 <IoChevronDown
                   size={22}
                   className="trans-200 wiggle"

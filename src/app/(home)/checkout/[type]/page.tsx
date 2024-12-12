@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaBookOpen } from 'react-icons/fa'
+import { FaCopy } from 'react-icons/fa6'
 import { IoIosHelpCircle, IoMdArrowRoundBack } from 'react-icons/io'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
@@ -86,55 +87,74 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
         <div className="rounded-md border border-slate-400 px-4 py-2">
           {type === 'banking' && (
-            <p>
+            <div>
               Ngân hàng:{' '}
-              <span
-                className="cursor-pointer font-semibold text-[#399162]"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-[#399162]"
                 onClick={() => handleCopy(admin.banking.name)}
               >
-                {admin.banking.name}
-              </span>
-            </p>
+                <span className="px-2 py-0.5">{admin.banking.name}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
           )}
           {type === 'momo' ? (
-            <p>
+            <div>
               Số tài khoản Momo:{' '}
-              <span
-                className="cursor-pointer font-semibold text-[#a1396c]"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-[#a1396c]"
                 onClick={() => handleCopy(admin.momo.account)}
               >
-                {admin.momo.account}
-              </span>
-            </p>
+                <span className="px-2 py-0.5">{admin.momo.account}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
           ) : (
-            <p>
+            <div className="mt-0.5">
               Số tài khoản:{' '}
-              <span
-                className="cursor-pointer font-semibold text-secondary"
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-secondary"
                 onClick={() => handleCopy(admin.banking.account)}
               >
-                {admin.banking.account}
-              </span>
-            </p>
+                <span className="px-2 py-0.5">{admin.banking.account}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
           )}
-          <p>
-            Số tiền chuyển:{' '}
-            <span
-              className="cursor-pointer font-semibold text-green-500"
-              onClick={() => handleCopy(checkout?.total)}
-            >
-              {formatPrice(checkout?.total)}
-            </span>
-          </p>
-          <p>
-            Nội dung chuyển khoản:{' '}
-            <span
-              className="cursor-pointer font-semibold text-yellow-500 underline-offset-1"
-              onClick={() => handleCopy(checkout?.code)}
-            >
-              {checkout?.code}
-            </span>
-          </p>
+          {checkout?.total >= 0 && (
+            <div className="mt-0.5">
+              Số tiền chuyển:{' '}
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-green-500"
+                onClick={() => handleCopy(checkout?.total)}
+              >
+                <span className="px-2 py-0.5">{formatPrice(checkout?.total)}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
+          )}
+          {checkout?.code && (
+            <div className="mt-0.5">
+              Nội dung chuyển khoản:{' '}
+              <div
+                className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-yellow-500"
+                onClick={() => handleCopy(checkout?.code)}
+              >
+                <span className="px-2 py-0.5">{checkout?.code}</span>
+                <div className="flex items-center justify-center bg-dark-100 px-1.5 py-0.5 text-light">
+                  <FaCopy size={14} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <p className="mb-1 flex items-center gap-1 text-slate-500">
           <IoIosHelpCircle size={20} /> Ấn để sao chép

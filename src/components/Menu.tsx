@@ -6,7 +6,7 @@ import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { memo, useEffect, useState } from 'react'
-import { FaHistory, FaPhone, FaPlus, FaUser, FaUserPlus, FaUserSecret } from 'react-icons/fa'
+import { FaHistory, FaPhone, FaPlus, FaUser, FaUserPlus } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 import { FiLogIn } from 'react-icons/fi'
 import { TbLogout } from 'react-icons/tb'
@@ -19,10 +19,13 @@ interface MenuProps {
 
 function Menu({ open, setOpen, className = '' }: MenuProps) {
   // hooks
-  const cartItems = useAppSelector(state => state.cart.items)
-  const cartLocalItems = useAppSelector(state => state.cart.localItems)
   const { data: session } = useSession()
   const curUser: any = session?.user
+
+  // store
+  const balance = useAppSelector(state => state.user.balance)
+  const cartItems = useAppSelector(state => state.cart.items)
+  const cartLocalItems = useAppSelector(state => state.cart.localItems)
 
   // states
   const [cartLength, setCartLength] = useState<number>(0)
@@ -92,20 +95,22 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                     : curUser?.firstname + ' ' + curUser?.lastname}
                 </span>
               </Link>
-              <li className="trans-200 flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
-                <span className="font-semibold">Số dư: </span>
-                <span>{formatPrice(curUser?.balance)}</span>
-                <Link
-                  className="trans-200 group ml-1 flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110"
-                  href="/recharge"
-                  onClick={() => setOpen(false)}
-                >
-                  <FaPlus
-                    size={11}
-                    className="trans-200 text-primary"
-                  />
-                </Link>
-              </li>
+              {balance >= 0 && (
+                <li className="trans-200 flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
+                  <span className="font-semibold">Số dư: </span>
+                  <span>{formatPrice(balance)}</span>
+                  <Link
+                    className="trans-200 group ml-1 flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110"
+                    href="/recharge"
+                    onClick={() => setOpen(false)}
+                  >
+                    <FaPlus
+                      size={11}
+                      className="trans-200 text-primary"
+                    />
+                  </Link>
+                </li>
+              )}
               <li
                 className="group"
                 onClick={() => setOpen(false)}

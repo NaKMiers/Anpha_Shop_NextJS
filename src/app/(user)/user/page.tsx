@@ -25,11 +25,14 @@ import { MdDateRange, MdWork } from 'react-icons/md'
 function UserPage() {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.modal.isLoading)
   const { data: session, update } = useSession()
   const queryParams = useSearchParams()
   const router = useRouter()
   const user: any = session?.user
+
+  // store
+  const balance = useAppSelector(state => state.user.balance)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
 
   // states
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -361,7 +364,7 @@ function UserPage() {
           <div className="col-span-12 mb-3 md:col-span-6">
             <p className="font-semibold">Số dư tài khoản</p>
             <div className="flex items-center justify-center gap-2 sm:justify-normal">
-              {user?.balance >= 0 && <p className="text-green-500">{formatPrice(user?.balance)}</p>}
+              {balance >= 0 && <p className="text-green-500">{formatPrice(balance)}</p>}
               <Link
                 className="trans-200 group flex-shrink-0 rounded-full border-2 border-primary p-[2px] hover:scale-110 hover:border-secondary"
                 href="/recharge"

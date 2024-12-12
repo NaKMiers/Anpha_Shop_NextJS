@@ -39,6 +39,19 @@ export const getRankUsersApi = async () => {
   return await res.json()
 }
 
+// [GET]: /api/user/refresh-balance
+export const refreshUserBalanceApi = async () => {
+  // no-store to bypass cache
+  const res = await fetch('/api/user/refresh-balance', { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [PUT]
 export const updateProfileApi = async (data: any) => {
   const res = await fetch('/api/user/update-profile', {

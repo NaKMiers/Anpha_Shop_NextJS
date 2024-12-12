@@ -34,14 +34,17 @@ import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
 function CartPage() {
   // hooks
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(state => state.modal.isLoading)
-  let localCartItems = useAppSelector(state => state.cart.localItems)
-  let cartItems = useAppSelector(state => state.cart.items)
-  const selectedItems = useAppSelector(state => state.cart.selectedItems)
   const queryParams = useSearchParams()
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
+
+  // store
+  const balance = useAppSelector(state => state.user.balance)
+  const isLoading = useAppSelector(state => state.modal.isLoading)
+  let localCartItems = useAppSelector(state => state.cart.localItems)
+  let cartItems = useAppSelector(state => state.cart.items)
+  const selectedItems = useAppSelector(state => state.cart.selectedItems)
 
   // states
   const [voucher, setVoucher] = useState<IVoucher | null>(null)
@@ -324,7 +327,7 @@ function CartPage() {
     }
 
     // not enough money
-    if (curUser && curUser.balance < total) {
+    if (curUser && balance < total) {
       toast.error('Số dư không đủ để thực hiện giao dịch này')
       return
     }
@@ -385,6 +388,7 @@ function CartPage() {
     total,
     voucher?._id,
     discount,
+    balance,
   ])
 
   return (
@@ -629,7 +633,14 @@ function CartPage() {
                 />
               )}
               <span className="ml-1 font-semibold group-hover:text-white">
-                Mua bằng số dư {curUser?._id ? `(${formatPrice(curUser.balance || 0)})` : ''}
+                Mua bằng số dư{' '}
+                {curUser?._id && balance >= 0 ? (
+                  <span className="text-xs tracking-tight text-secondary">
+                    (hiện có {formatPrice(balance || 0)})
+                  </span>
+                ) : (
+                  ''
+                )}
               </span>
             </button>
 

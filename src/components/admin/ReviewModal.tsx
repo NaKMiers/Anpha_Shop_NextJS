@@ -114,7 +114,7 @@ function ReviewModal({ open, setOpen, productId, setReviews, className = '' }: C
         setIsLoading(false)
       }
     },
-    [setOpen, setReviews, reset, productId]
+    [setOpen, setReviews, reset, productId, curUser]
   )
 
   // keyboard event
