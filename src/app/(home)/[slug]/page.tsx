@@ -60,8 +60,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
     },
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: (product?.rating ?? 0) < 4.5 ? 4.5 : (product?.rating ?? 5),
-      reviewCount: product?.reviewAmount ?? 50,
+      ratingValue: (product?.rating || 0) < 4.5 ? 4.5 : product?.rating || 5,
+      reviewCount: product?.reviewAmount || 50,
     },
     review: [
       {
