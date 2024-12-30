@@ -50,17 +50,16 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
 
             <Row className="p-4">
               <Column className="font">
-                <h1 className="text-center text-2xl font-bold">Hi👋 </h1>
-                <h2 className="text-center text-xl font-semibold">
-                  Bạn có đơn hàng từ Anpha Shop kìa.
-                  <br />
-                  Mau giao hàng thôi nào!
-                </h2>
+                <h1 className="text-center text-2xl font-bold">Giao hàng thôi👋 </h1>
 
                 <div className="mt-8 text-sm">
                   <p>
                     <b>Mã đơn hàng: </b>
                     <span className="font-semibold tracking-wider text-secondary">{order.code}</span>
+                  </p>
+                  <p>
+                    <b>Email: </b>
+                    <span className="text-[#0a82ed]">{order.email}</span>
                   </p>
                   <p>
                     <b>Ngày đặt hàng: </b>
@@ -73,16 +72,8 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
                       .replace('lúc', '')}
                   </p>
                   <p>
-                    <b>Trạng thái: </b>
-                    <span className="text-yellow-500">Chờ xử lí</span>
-                  </p>
-                  <p>
                     <b>Tổng tiền: </b>
                     <b>{formatPrice(order.total)}</b>
-                  </p>
-                  <p>
-                    <b>Email: </b>
-                    <span className="text-[#0a82ed]">{order.email}</span>
                   </p>
                 </div>
 
