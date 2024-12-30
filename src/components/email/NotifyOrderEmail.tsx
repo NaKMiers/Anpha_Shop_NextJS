@@ -12,29 +12,6 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
     >
       <Body className="font-sans text-dark">
         <Container className="bg-white p-4">
-          <Section className="mx-auto inline-block">
-            <Row className="mb-3 w-full">
-              <Column>
-                <a href="https://anpha.shop">
-                  <Img
-                    className="aspect-square rounded-full"
-                    src={`${'https://anpha.shop'}/images/logo.jpg`}
-                    width={35}
-                    height={35}
-                  />
-                </a>
-              </Column>
-              <Column>
-                <a
-                  href="https://anpha.shop"
-                  className="text-2xl font-bold tracking-[0.3px] text-dark no-underline"
-                >
-                  .AnphaShop
-                </a>
-              </Column>
-            </Row>
-          </Section>
-
           <Section
             className="overflow-hidden rounded-lg"
             style={{
