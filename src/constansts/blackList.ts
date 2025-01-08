@@ -7,4 +7,5 @@ export const blackEmails = [
   'cjv82451@msssg.com',
   'oas13087@kisoq.com',
   'rna82010@bcooq.com',
+  'qey56972@bcooq.com',
 ]
