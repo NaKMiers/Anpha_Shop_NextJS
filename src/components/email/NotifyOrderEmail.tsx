@@ -16,7 +16,7 @@ export function NotifyOrderEmail({ order = orderSample }: { order?: any }) {
             className="overflow-hidden rounded-lg"
             style={{
               border: '1px solid rgb(0, 0, 0, 0.1)',
-            }}
+            }}9
           >
             <div>
               <Img
