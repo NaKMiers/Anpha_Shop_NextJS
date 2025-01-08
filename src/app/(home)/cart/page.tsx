@@ -4,7 +4,7 @@ import { CartItemToAdd } from '@/app/api/cart/add/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Input from '@/components/Input'
-import { blackEmails } from '@/constansts/blackList'
+import { blackDomains, blackEmails } from '@/constansts/blackList'
 import { commonEmailMistakes } from '@/constansts/mistakes'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
@@ -248,8 +248,11 @@ function CartPage() {
   // handle checkout
   const handleCheckout = useCallback(
     async (type: string) => {
-      // not in black list
-      if (blackEmails.includes(getValues('email'))) {
+      // not in black list and not in black domains
+      if (
+        blackEmails.includes(getValues('email')) ||
+        blackDomains.some(domain => getValues('email').endsWith(domain))
+      ) {
         toast.error('Không thể thực hiện giao dịch này')
         return
       }
