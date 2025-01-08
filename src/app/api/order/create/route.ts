@@ -1,4 +1,5 @@
 import { connectDatabase } from '@/config/database'
+import { blackDomains, blackEmails } from '@/constants/blackList'
 import CartItemModel, { ICartItem } from '@/models/CartItemModel'
 import OrderModel from '@/models/OrderModel'
 import UserModel, { IUser } from '@/models/UserModel'
@@ -22,8 +23,15 @@ export async function POST(req: NextRequest) {
     await connectDatabase()
 
     // get data to create order
-    const code = await generateOrderCode(5)
     const { email, total, voucherApplied, discount, items, paymentMethod } = await req.json()
+
+    // check if email is blacklist or black domains
+    if (blackEmails.includes(email) || blackDomains.some(domain => email.endsWith(domain))) {
+      return NextResponse.json({ message: 'Không thể thực hiện giao dịch này' }, { status: 400 })
+    }
+
+    // generate order code
+    const code = await generateOrderCode(5)
 
     // get user id
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })

@@ -1,6 +1,6 @@
 'use client'
 
-import { carouselProductSamples } from '@/constansts/dataSamples'
+import { carouselProductSamples } from '@/constants/dataSamples'
 import { memo, useEffect, useRef } from 'react'
 import CarouselProduct from './item/CarouselItem'
 

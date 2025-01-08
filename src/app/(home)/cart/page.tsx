@@ -4,8 +4,8 @@ import { CartItemToAdd } from '@/app/api/cart/add/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Input from '@/components/Input'
-import { blackDomains, blackEmails } from '@/constansts/blackList'
-import { commonEmailMistakes } from '@/constansts/mistakes'
+import { blackDomains, blackEmails } from '@/constants/blackList'
+import { commonEmailMistakes } from '@/constants/mistakes'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import {
   addCartItem,
@@ -228,7 +228,7 @@ function CartPage() {
         setError('email', { message: 'Email không hợp lệ' })
         isValid = false
       } else {
-        if (commonEmailMistakes.some(mistake => email.toLowerCase().endsWith(mistake))) {
+        if (commonEmailMistakes.some((mistake: string) => email.toLowerCase().endsWith(mistake))) {
           setError('email', { message: 'Email không hợp lệ' })
           isValid = false
         }
@@ -251,7 +251,7 @@ function CartPage() {
       // not in black list and not in black domains
       if (
         blackEmails.includes(getValues('email')) ||
-        blackDomains.some(domain => getValues('email').endsWith(domain))
+        blackDomains.some((domain: string) => getValues('email').endsWith(domain))
       ) {
         toast.error('Không thể thực hiện giao dịch này')
         return
@@ -305,6 +305,10 @@ function CartPage() {
         router.push(`/checkout/${type}`)
       } catch (err: any) {
         console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop page loading
+        dispatch(setPageLoading(false))
       }
     },
     [
@@ -336,7 +340,10 @@ function CartPage() {
     }
 
     // not in black list
-    if (blackEmails.includes(curUser?.email)) {
+    if (
+      blackEmails.includes(curUser?.email) ||
+      blackDomains.some((domain: string) => curUser?.email.endsWith(domain))
+    ) {
       toast.error('Không thể thực hiện giao dịch này')
       return
     }

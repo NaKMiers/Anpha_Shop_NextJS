@@ -1,6 +1,6 @@
 'use client'
 
-import { adminLinks } from '@/constansts'
+import { adminLinks } from '@/constants'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'

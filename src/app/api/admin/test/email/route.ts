@@ -1,4 +1,4 @@
-import { order, summary, updateInfoData } from '@/constansts/emailDataSamples'
+import { order, summary, updateInfoData } from '@/constants/emailDataSamples'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import {
   notifyAccountUpdated,

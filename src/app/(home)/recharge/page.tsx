@@ -1,7 +1,7 @@
 'use client'
 
 import Divider from '@/components/Divider'
-import { admins } from '@/constansts'
+import { admins } from '@/constants'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'

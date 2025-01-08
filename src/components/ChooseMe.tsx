@@ -1,4 +1,4 @@
-import { chooseMeList } from '@/constansts'
+import { chooseMeList } from '@/constants'
 import Image from 'next/image'
 import { memo } from 'react'
 

@@ -1,4 +1,4 @@
-import { commentData } from '@/constansts/emailDataSamples'
+import { commentData } from '@/constants/emailDataSamples'
 import { Body, Column, Container, Img, Row, Section, Tailwind } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 

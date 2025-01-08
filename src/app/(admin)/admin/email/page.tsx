@@ -1,7 +1,7 @@
 'use client'
 
 import LoadingButton from '@/components/LoadingButton'
-import { order, summary, updateInfoData } from '@/constansts/emailDataSamples'
+import { order, summary, updateInfoData } from '@/constants/emailDataSamples'
 import { useCallback, useState } from 'react'
 
 const types = [

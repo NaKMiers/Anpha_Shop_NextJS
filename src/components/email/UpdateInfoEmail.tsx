@@ -1,7 +1,7 @@
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 import { formatPrice } from '@/utils/number'
-import { updateInfoData } from '@/constansts/emailDataSamples'
+import { updateInfoData } from '@/constants/emailDataSamples'
 
 export function UpdateInfoEmail({ data = updateInfoData }: { data?: any }) {
   return (

@@ -1,4 +1,4 @@
-import { chooseMeList } from '@/constansts'
+import { chooseMeList } from '@/constants'
 import { memo } from 'react'
 
 function LoadingChooseMe({ className = '' }: { className?: string }) {

@@ -1,7 +1,7 @@
 'use client'
 
 import Input from '@/components/Input'
-import { commonEmailMistakes } from '@/constansts/mistakes'
+import { commonEmailMistakes } from '@/constants/mistakes'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { registerApi } from '@/requests'

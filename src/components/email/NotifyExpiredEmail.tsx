@@ -1,4 +1,4 @@
-import { expiredData } from '@/constansts/emailDataSamples'
+import { expiredData } from '@/constants/emailDataSamples'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
 

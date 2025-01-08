@@ -1,7 +1,7 @@
 import { formatPrice } from '@/utils/number'
 import { Body, Column, Container, Img, Row, Section, Tailwind, Text } from '@react-email/components'
 import { theme } from '../../../tailwind.config'
-import { summary as summarySample } from '@/constansts/emailDataSamples'
+import { summary as summarySample } from '@/constants/emailDataSamples'
 
 export function SummaryEmail({ summary = summarySample }: { summary?: any }) {
   const { collaborator: user, vouchers, income } = summary

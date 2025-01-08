@@ -2,7 +2,7 @@
 
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
-import { admins } from '@/constansts'
+import { admins } from '@/constants'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICartItem } from '@/models/CartItemModel'
