@@ -4,12 +4,14 @@ import { formatPrice } from '@/utils/number'
 import { formatDate, formatTime } from '@/utils/time'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { memo, useCallback, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaPlus, FaPlusCircle, FaTrash } from 'react-icons/fa'
 import { GrUpgrade } from 'react-icons/gr'
 import { HiLightningBolt } from 'react-icons/hi'
+import { MdEdit } from 'react-icons/md'
 import { RiCheckboxMultipleBlankLine, RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
 import Input from '../Input'
@@ -180,6 +182,12 @@ function UserItem({
     }
   }, [data._id, reset])
 
+  // handle copy
+  const handleCopy = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Đã sao chép: ' + text)
+  }, [])
+
   return (
     <>
       <div
@@ -207,20 +215,32 @@ function UserItem({
             title={userData._id}
           />
 
-          {/* Infomation */}
+          {/* Information */}
           <div className="absolute -left-2 -top-2 z-30 select-none rounded-lg bg-secondary px-2 py-[2px] font-body text-xs text-yellow-300 shadow-md">
             {userData.role}
           </div>
           <p
-            className="line-clamp-1 block text-ellipsis font-body text-[18px] font-semibold tracking-wide text-secondary"
+            className="line-clamp-1 block cursor-pointer text-ellipsis font-body text-[18px] font-semibold tracking-wide text-secondary"
             title={userData.email}
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(userData.email)
+            }}
           >
             {userData.email}
           </p>
           <div className="flex items-center gap-2 text-sm">
             <p>
               <span className="font-semibold">Balance: </span>
-              <span className="text-green-500">{formatPrice(userData.balance)}</span>
+              <span
+                className="cursor-pointer text-green-500"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(`${userData.balance}`)
+                }}
+              >
+                {formatPrice(userData.balance)}
+              </span>
             </p>
             <button
               className="trans-200 group flex-shrink-0 rounded-full border-2 border-dark p-[2px] hover:scale-110 hover:border-primary"
@@ -235,50 +255,110 @@ function UserItem({
           </div>
           <p className="text-sm">
             <span className="font-semibold">Accumulated: </span>
-            <span>{formatPrice(userData.accumulated)}</span>
+            <span
+              className="cursor-pointer"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(`${userData.accumulated}`)
+              }}
+            >
+              {formatPrice(userData.accumulated)}
+            </span>
           </p>
           {userData.username && (
             <p className="text-sm">
               <span className="font-semibold">Username: </span>
-              <span>{userData.username}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(userData.username as string)
+                }}
+              >
+                {userData.username}
+              </span>
             </p>
           )}
           {(userData.firstname || userData.lastname) && (
             <p className="text-sm">
               <span className="font-semibold">Fullname: </span>
-              <span>{userData.firstname + ' ' + userData.lastname}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(userData.firstname + ' ' + userData.lastname)
+                }}
+              >
+                {userData.firstname + ' ' + userData.lastname}
+              </span>
             </p>
           )}
           {userData.birthday && (
             <p className="text-sm">
               <span className="font-semibold">Birthday: </span>
-              <span>{formatDate(userData.birthday)}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(formatDate(userData.birthday as any))
+                }}
+              >
+                {formatDate(userData.birthday)}
+              </span>
             </p>
           )}
           {userData.phone && (
             <p className="text-sm">
               <span className="font-semibold">Phone: </span>
-              <span>{userData.phone}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(userData.phone as string)
+                }}
+              >
+                {userData.phone}
+              </span>
             </p>
           )}
           {userData.address && (
             <p className="text-sm">
               <span className="font-semibold">Address: </span>
-              <span>{userData.address}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(userData.address as string)
+                }}
+              >
+                {userData.address}
+              </span>
             </p>
           )}
           {userData.job && (
             <p className="text-sm">
               <span className="font-semibold">Job: </span>
-              <span>{userData.job}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(userData.job as string)
+                }}
+              >
+                {userData.job}
+              </span>
             </p>
           )}
           <p className="text-sm">
             <span className="font-semibold">Created At: </span>
             <span
-              className={`${
+              className={`cursor-pointer ${
                 +new Date() - +new Date(data.createdAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
               }`}
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(formatTime(userData.createdAt))
+              }}
             >
               {formatTime(userData.createdAt)}
             </span>
@@ -286,9 +366,13 @@ function UserItem({
           <p className="text-sm">
             <span className="font-semibold">Updated At: </span>
             <span
-              className={`${
+              className={`cursor-pointer ${
                 +new Date() - +new Date(data.updatedAt) <= 60 * 60 * 1000 ? 'text-yellow-500' : ''
               }`}
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(formatTime(userData.updatedAt))
+              }}
             >
               {formatTime(userData.updatedAt)}
             </span>
@@ -389,9 +473,9 @@ function UserItem({
         )}
 
         {/* MARK: Action Buttons*/}
-        {!isCurUser && (
-          <div className="flex flex-col gap-4 rounded-lg border border-dark px-2 py-3 text-dark">
-            {/* Promote User Button */}
+        <div className="flex flex-col gap-4 rounded-lg border border-dark px-2 py-3 text-dark">
+          {/* Promote User Button */}
+          {!isCurUser && (
             <button
               className="group block"
               onClick={e => {
@@ -417,24 +501,39 @@ function UserItem({
                 />
               )}
             </button>
+          )}
 
-            {/* Add Balance Button */}
-            <button
-              className="group block"
-              onClick={e => {
-                e.stopPropagation()
-                setIsOpenRecharge(true)
-              }}
-              disabled={loadingUsers.includes(userData._id) || isDemoting}
-              title="Recharge"
-            >
-              <FaPlusCircle
-                size={18}
-                className="wiggle"
-              />
-            </button>
+          {/* Add Balance Button */}
+          <button
+            className="group block"
+            onClick={e => {
+              e.stopPropagation()
+              setIsOpenRecharge(true)
+            }}
+            disabled={loadingUsers.includes(userData._id) || isDemoting}
+            title="Recharge"
+          >
+            <FaPlusCircle
+              size={18}
+              className="wiggle"
+            />
+          </button>
 
-            {/* Delete Button */}
+          {/* Edit Button */}
+          <Link
+            href={`/admin/user/${userData._id}/edit`}
+            className="group block"
+            title="Edit"
+            onClick={e => e.stopPropagation()}
+          >
+            <MdEdit
+              size={18}
+              className="wiggle"
+            />
+          </Link>
+
+          {/* Delete Button */}
+          {!isCurUser && !['admin', 'editor'].includes(userData?.role) && (
             <button
               className="group block"
               onClick={e => {
@@ -456,8 +555,8 @@ function UserItem({
                 />
               )}
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Confirm Delete Dialog */}

@@ -43,7 +43,7 @@ function EditVoucherPage() {
     defaultValues: {
       code: '',
       desc: '',
-      begin: '',
+      begin: moment().local().format('YYYY-MM-DDTHH:mm'),
       expire: '',
       minTotal: 0,
       maxReduce: '',
@@ -69,9 +69,9 @@ function EditVoucherPage() {
         // set value to form
         setValue('code', voucher.code)
         setValue('desc', voucher.desc)
-        setValue('begin', moment().local().format('YYYY-MM-DD'))
+        setValue('begin', moment(voucher.begin).local().format('YYYY-MM-DDTHH:mm'))
         if (voucher.expire) {
-          setValue('expire', moment().local().format('YYYY-MM-DD'))
+          setValue('expire', moment(voucher.expire).local().format('YYYY-MM-DDTHH:mm'))
         }
         setValue('minTotal', voucher.minTotal)
         setValue('maxReduce', voucher.maxReduce)
@@ -278,7 +278,7 @@ function EditVoucherPage() {
             register={register}
             errors={errors}
             required
-            type="date"
+            type="datetime-local"
             icon={FaPlay}
             onFocus={() => clearErrors('begin')}
           />
@@ -290,7 +290,7 @@ function EditVoucherPage() {
             disabled={isLoading}
             register={register}
             errors={errors}
-            type="date"
+            type="datetime-local"
             icon={FaPause}
             onFocus={() => clearErrors('expire')}
           />

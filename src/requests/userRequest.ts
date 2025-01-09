@@ -1,5 +1,18 @@
 // User -------------------------------------
 
+// [GET]: /admin/user/:id
+export const getUserApi = async (userId: string, query: string = '') => {
+  // no-store to bypass cache
+  const res = await fetch(`/api/admin/user/${userId}${query}`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [GET]
 export const getAllUsersApi = async (query: string = '') => {
   // no-store to bypass cache
@@ -55,6 +68,21 @@ export const refreshUserBalanceApi = async () => {
 // [PUT]
 export const updateProfileApi = async (data: any) => {
   const res = await fetch('/api/user/update-profile', {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
+// [PUT]: /admin/user/:id/edit
+export const editUserApi = async (userId: string, data: any) => {
+  const res = await fetch(`/api/admin/user/${userId}/edit`, {
     method: 'PUT',
     body: JSON.stringify(data),
   })

@@ -69,7 +69,7 @@ const UserSchema = new Schema(
       default: 'user',
     },
 
-    // Infomation
+    // Information
     avatar: {
       type: String,
       default: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,

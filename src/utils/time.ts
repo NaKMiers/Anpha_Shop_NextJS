@@ -25,17 +25,27 @@ export const isToday = (date: Date): boolean => {
 export const getTimeRemaining = (
   expireDate: Date | string,
   isReturnObject: boolean = false
-): string | { day: number; hour: number; minute: number } => {
+): string | { years: number; months: number; day: number; hour: number; minute: number } => {
   const now = moment()
   const expirationDate = moment(expireDate)
 
   const diff = moment.duration(expirationDate.diff(now))
 
+  const years = diff.years()
+  const months = diff.months()
   const days = diff.days()
   const hours = diff.hours()
   const minutes = diff.minutes()
 
   let timeRemaining = ''
+
+  if (years > 0) {
+    timeRemaining += `${years}y:`
+  }
+
+  if (months > 0) {
+    timeRemaining += `${months}m:`
+  }
 
   if (days > 0) {
     timeRemaining += `${days}d:`
@@ -56,6 +66,8 @@ export const getTimeRemaining = (
 
   return isReturnObject
     ? {
+        years: +years,
+        months: +months,
         day: +days,
         hour: +hours,
         minute: +minutes,
