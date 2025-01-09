@@ -360,6 +360,10 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
             onFocus={() => clearErrors('info')}
             options={[
               {
+                value: 'expire|1',
+                label: 'Expire',
+              },
+              {
                 value: 'createdAt|-1',
                 label: 'Newest',
               },
