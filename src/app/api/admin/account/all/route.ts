@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     let skip = 0
     let itemPerPage = 9
     const filter: { [key: string]: any } = { active: true, usingUser: { $exists: true, $ne: null } }
-    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
+    let sort: { [key: string]: any } = { expire: 1 } // default sort
 
     // build filter
     for (const key in params) {

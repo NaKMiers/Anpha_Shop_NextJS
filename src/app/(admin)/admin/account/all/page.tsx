@@ -45,7 +45,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
   const defaultValues = useMemo<FieldValues>(() => {
     return {
       search: '',
-      sort: 'updatedAt|-1',
+      sort: 'expire|1',
       active: 'true',
       usingUser: 'true',
       expire: '',
@@ -378,7 +378,6 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
               {
                 value: 'updatedAt|-1',
                 label: 'Latest',
-                selected: true,
               },
               {
                 value: 'updatedAt|1',

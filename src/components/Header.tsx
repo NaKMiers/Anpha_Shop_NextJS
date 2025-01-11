@@ -24,6 +24,7 @@ import { IoChevronDown, IoClose } from 'react-icons/io5'
 import { PiLightningFill } from 'react-icons/pi'
 import { RiDonutChartFill } from 'react-icons/ri'
 import Menu from './Menu'
+import AnnouncementBar from './AnnouncementBar'
 
 interface HeaderProps {
   isStatic?: boolean
@@ -47,7 +48,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const lastScrollTop = useRef<number>(0)
   const [cartLength, setCartLength] = useState<number>(0)
   const [isLocalCartUpdated, setIsLocalCartUpdated] = useState<boolean>(false)
-  const [openAds, setOpenAds] = useState<boolean>(true)
 
   // search
   const [openSearch, setOpenSearch] = useState<boolean>(false)
@@ -57,36 +57,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
   const searchTimeout = useRef<any>(null)
   const [enableHideHeader, setEnableHideHeader] = useState<boolean>(true)
   const [openResults, setOpenResults] = useState<boolean>(false)
-
-  // MARK: ADS
-  useEffect(() => {
-    const showTime = 5000
-    const interval = 60000
-
-    setTimeout(() => {
-      setOpenAds(false)
-
-      setInterval(() => {
-        setOpenAds(true)
-
-        setTimeout(() => {
-          setOpenAds(false)
-        }, showTime)
-      }, interval)
-    }, showTime)
-
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        setOpenAds(prev => !prev)
-      }
-    }
-
-    window.addEventListener('keypress', handleKeyPress)
-
-    return () => {
-      window.removeEventListener('keypress', handleKeyPress)
-    }
-  }, [])
 
   // refresh user balance
   useEffect(() => {
@@ -250,26 +220,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         isShow ? 'top-0' : 'top-[-100%]'
       }`}
     >
-      {/* Ads */}
-      <Link
-        href="https://monaedu.com"
-        target="_blank"
-        rel="noreferrer"
-        className={`${openAds ? 'max-h-[200px] py-0.5 sm:max-h-12 md:max-h-6' : 'max-h-0 py-0'} trans-300 group block w-full overflow-hidden bg-gradient-to-t from-[#2f2e3e] to-primary px-3 text-center font-body text-sm tracking-wider text-light`}
-        title='Giảm đến 100.000đ hoặc 50% khi nhập mã "BIGSALE50" học tại monaedu.com'
-      >
-        <p className="">
-          Nhập voucher{' '}
-          <span className="wiggle-0 inline-block font-semibold text-yellow-300">
-            &quot;BIGSALE50&quot;
-          </span>{' '}
-          giảm ngay <span className="font-semibold">50%</span> khi mua khóa học tại{' '}
-          <span className="trans-200 font-semibold text-orange-400 underline underline-offset-1 group-hover:text-orange-500">
-            monaedu.com
-          </span>
-        </p>
-      </Link>
-
       {/* Main Header */}
       <div className="relative m-auto flex h-[72px] w-full max-w-1200 items-center justify-between px-21">
         {/* MARK: Brand */}
