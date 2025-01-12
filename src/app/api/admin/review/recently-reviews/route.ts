@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
     // options
     let skip = 0
     let itemPerPage = 9
-    const filter: { [key: string]: any } = { status: 'show' } // default filter
-    let sort: { [key: string]: any } = { createdAt: -1 } // default sort
+    const filter: { [key: string]: any } = {}
+    let sort: { [key: string]: any } = {}
 
     // build filter
     for (const key in params) {
