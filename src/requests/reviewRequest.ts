@@ -53,6 +53,21 @@ export const checkUserReviewedApi = async (
   return await res.json()
 }
 
+// [GET]: /admin/review/recently-reviews
+export const getRecentlyReviewsApi = async (
+  query: string = '',
+  option: RequestInit = { cache: 'no-store' }
+) => {
+  const res = await fetch(`/api/admin/review/recently-reviews${query}`, option)
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [POST]: /review/:productId/add
 export const addReviewApi = async (productId: string, review: ReviewForm) => {
   const res = await fetch(`/api/review/${productId}/add`, {

@@ -288,15 +288,30 @@ function ReviewItem({
 
             {/* Status */}
             <select
-              className="rounded-md border border-slate-300 text-xs outline-none"
+              className={`rounded-md border text-xs outline-none ${review.status === 'show' ? 'border-green-500 text-green-500' : review.status === 'hide' ? 'border-rose-500 text-rose-500' : 'border-slate-300'}`}
               onChange={e =>
                 handleChangeReviewStatus([review._id], e.target.value as 'show' | 'hide' | 'pinned')
               }
               value={review.status}
             >
-              <option value="show">Show</option>
-              <option value="hide">Hide</option>
-              <option value="pinned">Pinned</option>
+              <option
+                value="show"
+                className="text-green-500"
+              >
+                Show
+              </option>
+              <option
+                value="hide"
+                className="text-rose-500"
+              >
+                Hide
+              </option>
+              <option
+                value="pinned"
+                className="text-slate-500"
+              >
+                Pinned
+              </option>
             </select>
 
             {/* Delete Button */}

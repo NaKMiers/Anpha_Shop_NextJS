@@ -21,21 +21,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     // get data to edit user
     const data = await req.json()
 
-    const {
-      username,
-      email,
-      phone,
-      authType,
-      firstname,
-      lastname,
-      birthday,
-      address,
-      job,
-      balance,
-      accumulated,
-      totalIncome,
-      commission,
-    }: IUser = data
+    const { username, email, phone }: IUser = data
 
     // add exist key-value to object
     const set: any = {}

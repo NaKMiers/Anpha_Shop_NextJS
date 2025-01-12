@@ -125,7 +125,7 @@ export async function GET(req: NextRequest) {
       },
     ])
 
-    // retunr all orders
+    // return all orders
     return NextResponse.json({ orders, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })

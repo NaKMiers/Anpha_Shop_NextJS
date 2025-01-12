@@ -6,6 +6,7 @@ import Pagination from '@/components/Pagination'
 import AdminHeader from '@/components/admin/AdminHeader'
 import AdminMeta from '@/components/admin/AdminMeta'
 import ProductItem from '@/components/admin/ProductItem'
+import RecentlyReviews from '@/components/admin/RecentlyReviews'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
@@ -689,6 +690,9 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
           )}
         </div>
       </AdminMeta>
+
+      {/* Recently Reviews */}
+      <RecentlyReviews className="mt-3" />
 
       {/* Confirm Dialog */}
       <ConfirmDialog
