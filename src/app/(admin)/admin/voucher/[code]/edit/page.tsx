@@ -8,6 +8,7 @@ import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { IVoucher } from '@/models/VoucherModel'
 import { getRoleUsersApi, getVoucherApi, updateVoucherApi } from '@/requests'
+import { toUTC } from '@/utils/time'
 import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -179,7 +180,11 @@ function EditVoucherPage() {
 
       try {
         // send request to server to add voucher
-        const { message } = await updateVoucherApi(code, data)
+        const { message } = await updateVoucherApi(code, {
+          ...data,
+          begin: toUTC(data.begin),
+          expire: data.expire ? toUTC(data.expire) : '',
+        })
 
         // show success message
         toast.success(message)

@@ -8,6 +8,7 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { addVoucherApi, getRoleUsersApi } from '@/requests'
 import { generateRandomString } from '@/utils/generate'
+import { toUTC } from '@/utils/time'
 import moment from 'moment'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -165,7 +166,11 @@ function AddVoucherPage() {
 
       try {
         // send request to server to add voucher
-        const { message } = await addVoucherApi(data)
+        const { message } = await addVoucherApi({
+          ...data,
+          begin: toUTC(data.begin),
+          expire: data.expire ? toUTC(data.expire) : null,
+        })
 
         // show success message
         toast.success(message)
@@ -263,7 +268,7 @@ function AddVoucherPage() {
             register={register}
             errors={errors}
             required
-            type="date"
+            type="datetime-local"
             minDate={moment().local().format('YYYY-MM-DD')}
             icon={FaPlay}
             onFocus={() => clearErrors('begin')}
@@ -276,7 +281,7 @@ function AddVoucherPage() {
             disabled={isLoading}
             register={register}
             errors={errors}
-            type="date"
+            type="datetime-local"
             icon={FaPause}
             onFocus={() => clearErrors('expire')}
           />

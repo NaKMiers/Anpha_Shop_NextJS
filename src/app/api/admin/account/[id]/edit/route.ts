@@ -84,7 +84,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
       }
     }
 
-    // notify to user about the change of account infomation
+    // notify to user about the change of account information
     if (notify && updatedAccount && new Date(updatedAccount.expire || '') > new Date()) {
       // get order from database to update account
       if (!order) {
@@ -95,7 +95,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
 
       // check if order exists
       if (order) {
-        // get account infomation
+        // get account information
         let accountInfo: any = null
         let itemIndex: any = undefined
         let accountIndex: any = undefined

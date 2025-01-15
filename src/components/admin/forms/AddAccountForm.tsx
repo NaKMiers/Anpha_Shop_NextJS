@@ -10,6 +10,7 @@ import { ImClock } from 'react-icons/im'
 
 import { GroupTypes } from '@/app/(admin)/admin/account/add/page'
 import { addAccountApi } from '@/requests'
+import { toUTC } from '@/utils/time'
 import moment from 'moment'
 import toast from 'react-hot-toast'
 import { MdCategory } from 'react-icons/md'
@@ -155,7 +156,10 @@ ${data.additionalInfo}`
 
       try {
         // add new account here
-        const { message } = await addAccountApi(data)
+        const { message } = await addAccountApi({
+          ...data,
+          renew: toUTC(data.renew),
+        })
 
         // show success message
         toast.success(message)

@@ -9,7 +9,7 @@ import { IOrder } from '@/models/OrderModel'
 import { IVoucher } from '@/models/VoucherModel'
 import { editOrderApi, getOrderApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { formatTime } from '@/utils/time'
+import { formatTime, toUTC } from '@/utils/time'
 import moment from 'moment'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -91,9 +91,13 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
         setIsSaving(true)
 
         try {
-          const { updatedOrder, message } = await editOrderApi(order?._id, { ...order, ...data })
+          const { updatedOrder, message } = await editOrderApi(order?._id, {
+            ...order,
+            ...data,
+            createdAt: toUTC(data.createdAt),
+          })
 
-          // updated order staet
+          // updated order state
           setOrder(updatedOrder)
 
           // show success

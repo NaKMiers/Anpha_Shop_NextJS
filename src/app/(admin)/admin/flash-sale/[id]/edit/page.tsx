@@ -8,6 +8,7 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { getFlashSaleApi, getForceAllProductsApi, updateFlashSaleApi } from '@/requests'
+import { toUTC } from '@/utils/time'
 import moment from 'moment'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
@@ -159,7 +160,15 @@ function EditFlashSalePage() {
 
     try {
       // send request to server
-      const { message } = await updateFlashSaleApi(id, data, selectedFlashSales)
+      const { message } = await updateFlashSaleApi(
+        id,
+        {
+          ...data,
+          begin: toUTC(data.begin),
+          expire: data.expire ? toUTC(data.expire) : null,
+        },
+        selectedFlashSales
+      )
 
       // show success message
       toast.success(message)

@@ -9,6 +9,8 @@ import { IOrder } from '@/models/OrderModel'
 import { getOrderHistoryApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
+import { toUTC } from '@/utils/time'
+import moment from 'moment-timezone'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -17,7 +19,7 @@ import { BiReset } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
 import { FaCalendar, FaFilter, FaSearch, FaSort } from 'react-icons/fa'
 
-function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: string | string[] } }) {
   // hooks
   const dispatch = useAppDispatch()
   const pathname = usePathname()
@@ -49,6 +51,8 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    getValues,
     clearErrors,
   } = useForm<FieldValues>({
     defaultValues,
@@ -75,6 +79,22 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
         setMinTotal(chops.minTotal)
         setMaxTotal(chops.maxTotal)
         setTotal(searchParams?.total ? +searchParams.total : chops.maxTotal)
+
+        // sync search params to form
+        setValue('search', searchParams?.search || getValues('search'))
+        setValue('sort', searchParams?.sort || getValues('sort'))
+        setValue(
+          'from',
+          searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[0]
+            ? moment((searchParams['from-to'] as string).split('|')[0]).format('YYYY-MM-DDTHH:mm')
+            : getValues('from')
+        )
+        setValue(
+          'to',
+          searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[1]
+            ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
+            : getValues('to')
+        )
       } catch (err: any) {
         toast.error(err.message)
       } finally {
@@ -83,7 +103,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
       }
     }
     getOrderHistory()
-  }, [dispatch, searchParams])
+  }, [searchParams, dispatch, getValues, setValue])
 
   // MARK: Handlers
   // handle opimize filter
@@ -107,7 +127,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
 
       // from | to
       const { from, to, ...rest } = data
-      const fromTo = (from || '') + '|' + (to || '')
+      const fromTo = (from ? toUTC(from) : '') + '|' + (to ? toUTC(to) : '')
       if (fromTo !== '|') {
         rest['from-to'] = fromTo
       }
@@ -229,7 +249,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               disabled={false}
               register={register}
               errors={errors}
-              type="date"
+              type="datetime-local"
               icon={FaCalendar}
               className="w-full"
               onFocus={() => clearErrors('from')}
@@ -241,7 +261,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
               disabled={false}
               register={register}
               errors={errors}
-              type="date"
+              type="datetime-local"
               icon={FaCalendar}
               className="w-full"
               onFocus={() => clearErrors('to')}

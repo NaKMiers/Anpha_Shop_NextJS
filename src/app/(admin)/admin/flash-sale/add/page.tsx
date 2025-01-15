@@ -8,6 +8,7 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { addFlashSaleApi, getAllProductsApi, getForceAllProductsApi } from '@/requests'
+import { toUTC } from '@/utils/time'
 import moment from 'moment'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
@@ -132,6 +133,8 @@ function AddFlashSalePage() {
       const { message } = await addFlashSaleApi({
         ...data,
         appliedProducts: selectedProducts,
+        begin: toUTC(data.begin),
+        expire: data.expire ? toUTC(data.expire) : null,
       })
 
       // show success message

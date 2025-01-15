@@ -2,7 +2,7 @@ import { connectDatabase } from '@/config/database'
 import OrderModel from '@/models/OrderModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
 import { NextRequest, NextResponse } from 'next/server'
-import momentTZ from 'moment-timezone'
+import { toUTC } from '@/utils/time'
 
 // Models: Order, Voucher,
 import '@/models/OrderModel'
@@ -79,16 +79,16 @@ export async function GET(req: NextRequest) {
 
           if (dates[0] && dates[1]) {
             filter.createdAt = {
-              $gte: momentTZ.tz(dates[0], 'Asia/Ho_Chi_Minh').toDate(),
-              $lt: momentTZ.tz(dates[1], 'Asia/Ho_Chi_Minh').toDate(),
+              $gte: toUTC(dates[0]),
+              $lt: toUTC(dates[1]),
             }
           } else if (dates[0]) {
             filter.createdAt = {
-              $gte: momentTZ.tz(dates[0], 'Asia/Ho_Chi_Minh').toDate(),
+              $gte: toUTC(dates[0]),
             }
           } else if (dates[1]) {
             filter.createdAt = {
-              $lt: momentTZ.tz(dates[1], 'Asia/Ho_Chi_Minh').toDate(),
+              $lt: toUTC(dates[1]),
             }
           }
 

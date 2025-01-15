@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading } from '@/libs/reducers/modalReducer'
 import { changeAvatarApi, updateProfileApi, verifyEmailApi, verifyPhoneApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
-import { formatDate } from '@/utils/time'
+import { formatDate, toUTC } from '@/utils/time'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -108,7 +108,10 @@ function UserPage() {
 
     try {
       // send request to server to update profile
-      const { message } = await updateProfileApi(data)
+      const { message } = await updateProfileApi({
+        ...data,
+        birthday: data.birthday ? toUTC(data.birthday) : null,
+      })
 
       // update user session
       await update()
@@ -464,7 +467,7 @@ function UserPage() {
                 icon={MdDateRange}
                 type="date"
                 maxDate={moment().local().format('YYYY-MM-DD')}
-                minDate="1900-01-01"
+                minDate="1910-01-01"
                 onFocus={() => clearErrors('birthday')}
               />
             ) : (

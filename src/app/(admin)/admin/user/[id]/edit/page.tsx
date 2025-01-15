@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/libs/hooks'
 import { setLoading, setPageLoading } from '@/libs/reducers/modalReducer'
 import { IUser } from '@/models/UserModel'
 import { editUserApi, getUserApi } from '@/requests'
+import { toUTC } from '@/utils/time'
 import moment from 'moment'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -144,7 +145,10 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
     dispatch(setLoading(true))
 
     try {
-      const { message } = await editUserApi(id, data)
+      const { message } = await editUserApi(id, {
+        ...data,
+        birthday: data.birthday ? toUTC(data.birthday) : null,
+      })
 
       // show success message
       toast.success(message)
@@ -346,6 +350,8 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
             register={register}
             errors={errors}
             type="date"
+            min={moment('01/01/1910').format('YYYY-MM-DD')}
+            max={moment().format('YYYY-MM-DD')}
             icon={FaCalendarAlt}
             onFocus={() => clearErrors('birthday')}
           />

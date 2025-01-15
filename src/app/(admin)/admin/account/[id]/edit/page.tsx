@@ -9,7 +9,7 @@ import { IAccount } from '@/models/AccountModel'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
 import { getAccountApi, getForceAllProductsApi, updateAccountApi } from '@/requests'
-import { formatTime, getColorClass, getTimeRemaining, usingPercentage } from '@/utils/time'
+import { formatTime, getColorClass, getTimeRemaining, toUTC, usingPercentage } from '@/utils/time'
 import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -173,7 +173,11 @@ function EditAccountPage() {
     dispatch(setLoading(true))
 
     try {
-      const { message } = await updateAccountApi(id, data)
+      const { message } = await updateAccountApi(id, {
+        ...data,
+        expire: data.expire ? toUTC(data.expire) : null,
+        renew: toUTC(data.renew),
+      })
 
       // show success message
       toast.success(message)

@@ -12,13 +12,15 @@ import { IOrder } from '@/models/OrderModel'
 import { cancelOrdersApi, deletedOrdersApi, getAllOrdersApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { formatPrice } from '@/utils/number'
+import { toUTC } from '@/utils/time'
+import moment from 'moment-timezone'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FaCalendar, FaSearch, FaSort } from 'react-icons/fa'
 
-function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: string | string[] } }) {
   // store
   const dispatch = useAppDispatch()
   const pathname = usePathname()
@@ -89,6 +91,18 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         setValue('voucherApplied', searchParams?.voucherApplied || getValues('voucherApplied'))
         setValue('status', searchParams?.status || getValues('status'))
         setValue('paymentMethod', searchParams?.paymentMethod || getValues('paymentMethod'))
+        setValue(
+          'from',
+          searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[0]
+            ? moment((searchParams['from-to'] as string).split('|')[0]).format('YYYY-MM-DDTHH:mm')
+            : getValues('from')
+        )
+        setValue(
+          'to',
+          searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[1]
+            ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
+            : getValues('to')
+        )
 
         // set min - max - total
         setMinTotal(chops.minTotal)
@@ -174,7 +188,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
 
       // from | to
       const { from, to, ...rest } = data
-      const fromTo = (from || '') + '|' + (to || '')
+      const fromTo = (from ? toUTC(from) : '') + '|' + (to ? toUTC(to) : '')
       if (fromTo !== '|') {
         rest['from-to'] = fromTo
       }

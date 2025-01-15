@@ -20,6 +20,9 @@ interface InputProps {
   maxDate?: string
   onClick?: (e?: any) => void
   onFocus?: (e?: any) => void
+
+  // rest
+  [key: string]: any
 }
 
 function Input({
@@ -39,6 +42,7 @@ function Input({
   minDate,
   maxDate,
   className = '',
+  ...rest
 }: InputProps) {
   // states
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
@@ -98,6 +102,7 @@ function Input({
               disabled={disabled}
               rows={rows || 4}
               {...register(id, { required })}
+              {...rest}
             />
           ) : type === 'select' ? (
             <select
@@ -108,6 +113,7 @@ function Input({
               {...register(id, { required })}
               onChange={onChange}
               defaultValue={options?.find(option => option.selected)?.value}
+              {...rest}
             >
               {options?.map((option, index) => (
                 <option
@@ -129,6 +135,7 @@ function Input({
               type={type === 'password' ? (isShowPassword ? 'text' : 'password') : type}
               {...register(id, { required })}
               onWheel={e => e.currentTarget.blur()}
+              {...rest}
             />
           )}
 
