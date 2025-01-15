@@ -39,7 +39,7 @@ function AddVoucherPage() {
       code: generateRandomString(5).toUpperCase(),
       description: '',
       // default begin is today
-      begin: moment().local().format('YYYY-MM-DD'),
+      begin: moment().local().format('YYYY-MM-DDTHH:mm'),
       expire: '',
       minTotal: 0,
       maxReduce: '',
