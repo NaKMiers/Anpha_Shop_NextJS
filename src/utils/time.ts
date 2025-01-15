@@ -5,7 +5,7 @@ export const formatTime = (time: string): string => {
   return moment(time).format('DD/MM/YYYY HH:mm:ss')
 }
 
-export const toUTC = (time: string): string => {
+export const toUTC = (time: Date | string): string => {
   return momentTZ(time).utc().format('YYYY-MM-DDTHH:mm:ss[Z]')
 }
 

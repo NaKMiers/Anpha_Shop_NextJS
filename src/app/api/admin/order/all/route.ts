@@ -103,7 +103,7 @@ export async function GET(req: NextRequest) {
     // get amount of account
     const amount = await OrderModel.countDocuments(filter)
 
-    // get all order from database
+    // get all orders from database
     const orders = await OrderModel.find(filter)
       .populate({
         path: 'voucherApplied',

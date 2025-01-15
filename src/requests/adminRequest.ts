@@ -1,11 +1,12 @@
 // Admin
 
 // [GET] // get admin page
-export const getFullDataApi = async () => {
+export const getDashboardApi = async (
+  query: string = '',
+  option: RequestInit = { cache: 'no-store' }
+) => {
   // no cache for filter
-  const res = await fetch(`/api/admin`, {
-    cache: 'no-store',
-  })
+  const res = await fetch(`/api/admin${query}`, option)
 
   // check status
   if (!res.ok) {

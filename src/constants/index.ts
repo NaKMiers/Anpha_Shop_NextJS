@@ -186,3 +186,6 @@ export const chooseMeList = [
     image: '/images/choose-me-4.jpg',
   },
 ]
+
+// MARK: Regular Expressions
+export const EXTRACT_EMAIL_REGEX = /([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/g

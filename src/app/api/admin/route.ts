@@ -1,51 +1,170 @@
 import { connectDatabase } from '@/config/database'
+import { EXTRACT_EMAIL_REGEX } from '@/constants'
+import CategoryModel, { ICategory } from '@/models/CategoryModel'
+import OrderModel from '@/models/OrderModel'
+import { IProduct } from '@/models/ProductModel'
+import TagModel, { ITag } from '@/models/TagModel'
+import UserModel from '@/models/UserModel'
+import { searchParamsToObject } from '@/utils/handleQuery'
+import { toUTC } from '@/utils/time'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Models: User, Account, Voucher, Category, Tag, Order, Product
-import '@/models/AccountModel'
-import '@/models/CategoryModel'
-import '@/models/OrderModel'
-import '@/models/ProductModel'
-import '@/models/TagModel'
-import '@/models/UserModel'
-import '@/models/VoucherModel'
 
 export const dynamic = 'force-dynamic'
 
+// Models:
+
+export type BlocksType = {
+  revenue: number
+  orders: number
+  accounts: number
+  customers: number
+  users: number
+  nonUsers: number
+  potentialUsers: number
+  vouchers: number
+  voucherDiscount: number
+}
+
+export type OrderChartType = {
+  total: number
+  createdAt: string
+  quantity: number
+  categories: ICategory[]
+  tags: ITag[]
+  product: IProduct[]
+  accounts: string[]
+}
+
 export async function GET(req: NextRequest) {
-  console.log('- Get Full Data - ')
+  console.log('- Get Dashboard - ')
 
   try {
     // connect to database
     await connectDatabase()
 
-    // // get all done orders
-    // const orders = await OrderModel.find({ status: 'done' }).sort({ createdAt: -1 }).lean()
+    // get query params
+    const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
 
-    // // ranks
-    // const spentUsers: any[] = await rankCustomersByTotalSpent(orders)
+    // options
+    // let skip = 0
+    // let itemPerPage = 9
+    const filter: { [key: string]: any } = { status: 'done' }
+    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
 
-    // data
-    // const categories: ICategory[] = await CategoryModel.find().lean()
+    // build filter
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        if (key === 'sort') {
+          sort = {
+            [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
+          }
+          continue
+        }
 
-    return NextResponse.json(
-      {
-        // stats
-        // revenueStat,
-        // newOrderStat,
-        // newAccountSoldStat,
-        // newUserStat,
-        // newUsedVoucherStat,
-        // rank
-        // rankCategories,
-        // rankTags,
-        // spentUsers,
-        // data
-        // orders,
-        // categories,
-      },
-      { status: 200 }
-    )
+        if (key === 'from-to') {
+          const dates = params[key][0].split('|')
+
+          if (dates[0] && dates[1]) {
+            filter.createdAt = {
+              $gte: toUTC(dates[0]),
+              $lt: toUTC(dates[1]),
+            }
+          } else if (dates[0]) {
+            filter.createdAt = {
+              $gte: toUTC(dates[0]),
+            }
+          } else if (dates[1]) {
+            filter.createdAt = {
+              $lt: toUTC(dates[1]),
+            }
+          }
+
+          continue
+        }
+
+        // Normal Cases ---------------------
+        filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
+      }
+    }
+
+    console.log('Filter:', filter)
+
+    // get all orders from database
+    const orders = await OrderModel.find(filter).sort(sort).lean()
+
+    // MARK: Blocks
+    // get list of emails from users in database
+    const emails = await UserModel.find({ createdAt: filter.createdAt }).distinct('email').lean()
+    const orderEmails = orders.map(order => order.email)
+    const uniqueEmails = Array.from(new Set([...emails, ...orderEmails]))
+    const potentialEmails = emails.filter(email => !orderEmails.includes(email))
+
+    const blocks: BlocksType = {
+      revenue: orders.reduce((total, order) => total + order.total, 0),
+      orders: orders.length,
+      accounts: orders.reduce(
+        (total, order) =>
+          total + order.items.reduce((total: number, item: any) => total + (+item.quantity || 0), 0),
+        0
+      ),
+      customers: uniqueEmails.length,
+      users: emails.length,
+      nonUsers: uniqueEmails.length - emails.length,
+      potentialUsers: potentialEmails.length,
+      vouchers: orders.reduce((total, order) => total + (order.voucherApplied ? 1 : 0), 0),
+      voucherDiscount: Math.abs(orders.reduce((total, order) => total + (order.discount || 0), 0)),
+    }
+
+    // get all categories and tags to reference in orders
+    const categories = await CategoryModel.find().lean()
+    const tags = await TagModel.find().lean()
+
+    // MARK: Custom Orders
+    const customOrders: OrderChartType[] = orders.map(order => {
+      let cates = order.items.map((item: any) => item.product.category)
+
+      // some cate is ICategory, some is string, so if it is string, find it in categories
+      cates = cates.map((cate: any) => {
+        if (typeof cate === 'string') {
+          return categories.find((category: any) => category._id.toString() === cate)
+        }
+        return cate
+      })
+
+      console.log('cates:', cates)
+
+      let tgs = order.items.map((item: any) => item.product.tags).flat()
+
+      // some tag is ITag, some is string, so if it is string, find it in tags
+      tgs = tgs.map((tag: any) => {
+        if (typeof tag === 'string') {
+          return tags.find((tg: any) => tg._id.toString() === tag)
+        }
+        return tag
+      })
+
+      return {
+        total: order.total,
+        createdAt: order.createdAt,
+        quantity: order.items.reduce((total: number, item: any) => total + (+item.quantity || 0), 0),
+        categories: cates,
+        tags: tgs,
+        product: order.items.map(({ product }: any) => ({
+          title: product.title,
+          price: product.price,
+          slug: product.slug,
+          images: product.images,
+        })),
+        accounts: order.items
+          .map((item: any) =>
+            item.accounts.map((account: any) => account.info.match(EXTRACT_EMAIL_REGEX)).flat()
+          )
+          .flat(),
+      }
+    })
+
+    // return response
+    return NextResponse.json({ orders: customOrders, blocks }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
