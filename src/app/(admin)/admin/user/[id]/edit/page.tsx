@@ -65,8 +65,6 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
       try {
         const { user } = await getUserApi(id) // no-cache
 
-        console.log('user', user)
-
         // set user to state
         setUser(user)
 

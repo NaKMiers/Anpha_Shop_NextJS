@@ -9,6 +9,7 @@ import momentTZ from 'moment-timezone'
 import '@/models/AccountModel'
 import '@/models/CategoryModel'
 import '@/models/ProductModel'
+import { toUTC } from '@/utils/time'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +35,12 @@ export async function GET(req: NextRequest) {
       if (params.hasOwnProperty(key)) {
         // Special Cases ---------------------
         if (key === 'limit') {
-          itemPerPage = +params[key][0]
+          if (params[key][0] === 'no-limit') {
+            itemPerPage = Number.MAX_SAFE_INTEGER
+            skip = 0
+          } else {
+            itemPerPage = +params[key][0]
+          }
           continue
         }
 
@@ -96,6 +102,27 @@ export async function GET(req: NextRequest) {
               { [key]: { $exists: false } },
             ]
           }
+          continue
+        }
+
+        if (key === 'from-to') {
+          const dates = params[key][0].split('|')
+
+          if (dates[0] && dates[1]) {
+            filter.begin = {
+              $gte: toUTC(dates[0]),
+              $lt: toUTC(dates[1]),
+            }
+          } else if (dates[0]) {
+            filter.begin = {
+              $gte: toUTC(dates[0]),
+            }
+          } else if (dates[1]) {
+            filter.begin = {
+              $lt: toUTC(dates[1]),
+            }
+          }
+
           continue
         }
 

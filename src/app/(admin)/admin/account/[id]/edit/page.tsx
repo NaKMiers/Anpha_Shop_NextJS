@@ -74,8 +74,6 @@ function EditAccountPage() {
       try {
         const { account } = await getAccountApi(id) // no-cache
 
-        console.log('account', account)
-
         // set account to state
         setAccount(account)
 

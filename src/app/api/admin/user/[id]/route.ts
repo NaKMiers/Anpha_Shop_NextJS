@@ -13,8 +13,6 @@ export async function GET(req: NextRequest, { params: { id } }: { params: { id: 
     // connect to database
     await connectDatabase()
 
-    console.log('user id', id)
-
     // get user
     const user: IUser | null = await UserModel.findById(id).lean()
 

@@ -16,9 +16,6 @@ export async function PATCH(req: NextRequest) {
     // get data to edit review
     const { ids, status } = await req.json()
 
-    console.log('ids:', ids)
-    console.log('status:', status)
-
     // update review
     await ReviewModel.updateMany({ _id: { $in: ids } }, { $set: { status } }, { new: true })
       .populate({

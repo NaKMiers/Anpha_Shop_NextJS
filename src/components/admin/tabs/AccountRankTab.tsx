@@ -1,119 +1,87 @@
-import Divider from '@/components/Divider'
-import { getAllOrdersApi, getForceAllCagetoriesApi } from '@/requests'
+import { ChartOrderType } from '@/app/api/admin/route'
+import { ICategory } from '@/models/CategoryModel'
 import { formatPrice } from '@/utils/number'
-import { rankAccountRevenue } from '@/utils/stat'
-import moment from 'moment'
-import { memo, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { FaCircleNotch } from 'react-icons/fa'
+import { memo } from 'react'
+
+export type AccountRankGroupType = {
+  email: string
+  revenue: number
+  category: ICategory
+}
 
 interface AccountRankTabProps {
+  orders: ChartOrderType[]
+  loading: boolean
   className?: string
 }
 
-function AccountRankTab({ className = '' }: AccountRankTabProps) {
-  // states
-  const [loading, setLoading] = useState<boolean>(false)
-  const [accounts, setAccounts] = useState<any[]>([])
-  const [by, setBy] = useState<'day' | 'month' | 'year'>('day')
+function AccountRankTab({ orders, loading, className = '' }: AccountRankTabProps) {
+  // groups order by emails in order.accounts
+  const groupOrdersByEmail = (orders: ChartOrderType[]): AccountRankGroupType[] => {
+    const emailMap: Map<string, { revenue: number; categoryCount: Map<ICategory, number> }> = new Map()
 
-  useEffect(() => {
-    const getOrders = async () => {
-      // start loading
-      setLoading(true)
-
-      try {
-        let from: string = ''
-        const currentTime = moment()
-        if (by === 'day') {
-          from = currentTime.startOf('day').format('YYYY-MM-DD HH:mm:ss')
-        } else if (by === 'month') {
-          from = currentTime.startOf('month').format('YYYY-MM-DD HH:mm:ss')
-        } else if (by === 'year') {
-          from = currentTime.startOf('year').format('YYYY-MM-DD HH:mm:ss')
+    // Process each order
+    orders.forEach(order => {
+      order.accounts.forEach(email => {
+        // Initialize email entry if not present
+        if (!emailMap.has(email)) {
+          emailMap.set(email, { revenue: 0, categoryCount: new Map() })
         }
 
-        const query = `?limit=no-limit&status=done&sort=createdAt|-1&from-to=${from}|`
-        const { orders } = await getAllOrdersApi(query)
+        // Update revenue
+        const emailData = emailMap.get(email)!
+        emailData.revenue += order.total
 
-        const { categories } = await getForceAllCagetoriesApi()
-        const accounts = rankAccountRevenue(orders, categories)
-        setAccounts(accounts)
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
-      } finally {
-        // stop loading
-        setLoading(false)
-      }
-    }
+        // Update category counts
+        order.categories.forEach(category => {
+          emailData.categoryCount.set(category, (emailData.categoryCount.get(category) || 0) + 1)
+        })
+      })
+    })
 
-    getOrders()
-  }, [by])
+    // Transform map into AccountRankGroupType array
+    const result: AccountRankGroupType[] = []
+    emailMap.forEach((data, email) => {
+      // Find the most frequent category
+      const mostFrequentCategory = Array.from(data.categoryCount.entries()).reduce(
+        (prev, curr) => (curr[1] > prev[1] ? curr : prev),
+        [null, 0] as [ICategory | null, number]
+      )[0]
+
+      result.push({
+        email,
+        revenue: data.revenue,
+        category: mostFrequentCategory!,
+      })
+    })
+
+    return result
+  }
+
+  const groupedData = groupOrdersByEmail(orders)
 
   return (
-    <div className={`${className}`}>
-      {!loading ? (
-        <>
-          <select
-            className="peer cursor-pointer appearance-none rounded-lg bg-dark-100 p-2.5 text-xs font-semibold text-white focus:outline-none focus:ring-0"
-            value={by}
-            onChange={e => setBy(e.target.value as never)}
-          >
-            <option
-              className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
-              value="day"
+    <div className={`${className} ${loading ? 'animate-pulse' : ''}`}>
+      {groupedData.map((aEmail, index) => (
+        <div
+          className="mb-3 flex flex-col items-start gap-1"
+          key={index}
+        >
+          <p className="rounded-lg bg-slate-700 px-2 py-[2px] text-sm text-white">{aEmail.email}</p>
+          <div className="flex gap-2">
+            <span className="text-sm font-semibold text-green-500">{formatPrice(aEmail.revenue)}</span>
+            <span
+              className="tex-dark rounded-md border-2 bg-white px-1 text-[11px]"
+              style={{
+                color: aEmail.category.color,
+                borderColor: aEmail.category.color,
+              }}
             >
-              By Day
-            </option>
-            <option
-              className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
-              value="month"
-            >
-              By Month
-            </option>
-            <option
-              className="bg-dark-100 p-5 font-body font-semibold tracking-wider text-white"
-              value="year"
-            >
-              By Year
-            </option>
-          </select>
-
-          <Divider size={4} />
-
-          {accounts.map((account, index) => (
-            <div
-              className="mb-3 flex flex-col items-start gap-1"
-              key={index}
-            >
-              <p className="rounded-lg bg-slate-700 px-2 py-[2px] text-sm text-white">{account.email}</p>
-              <div className="flex gap-2">
-                <span className="text-sm font-semibold text-green-500">
-                  {formatPrice(account.revenue)}
-                </span>
-                <span
-                  className={`select-none rounded-md px-1 py-[3px] font-body text-xs shadow-md`}
-                  style={{
-                    background: account.category.color,
-                  }}
-                >
-                  <span className="tex-dark rounded-md bg-white px-1 text-[11px]">
-                    {account.category.title}
-                  </span>
-                </span>
-              </div>
-            </div>
-          ))}
-        </>
-      ) : (
-        <div className="flex items-center justify-center">
-          <FaCircleNotch
-            size={18}
-            className="animate-spin text-slate-400"
-          />
+              {aEmail.category.title}
+            </span>
+          </div>
         </div>
-      )}
+      ))}
     </div>
   )
 }

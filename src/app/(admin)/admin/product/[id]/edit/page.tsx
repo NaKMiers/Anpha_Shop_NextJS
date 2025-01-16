@@ -8,7 +8,7 @@ import { setLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
 import { ITag } from '@/models/TagModel'
 import {
-  getForceAllCagetoriesApi,
+  getForceAllCategoriesApi,
   getForceAllTagsApi,
   getProductApi,
   updateProductApi,
@@ -101,7 +101,7 @@ function AddProductPage() {
     const getCategories = async () => {
       try {
         // send request to server to get all categories
-        const { categories } = await getForceAllCagetoriesApi() // cache: no-store
+        const { categories } = await getForceAllCategoriesApi() // cache: no-store
         setCategories(categories)
       } catch (err: any) {
         console.log(err)

@@ -9,9 +9,13 @@ import { searchParamsToObject } from '@/utils/handleQuery'
 import { toUTC } from '@/utils/time'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+// Models: Order, User, Category, Tag
+import '@/models/CategoryModel'
+import '@/models/OrderModel'
+import '@/models/TagModel'
+import '@/models/UserModel'
 
-// Models:
+export const dynamic = 'force-dynamic'
 
 export type BlocksType = {
   revenue: number
@@ -25,14 +29,15 @@ export type BlocksType = {
   voucherDiscount: number
 }
 
-export type OrderChartType = {
+export type ChartOrderType = {
   total: number
   createdAt: string
   quantity: number
   categories: ICategory[]
   tags: ITag[]
-  product: IProduct[]
+  products: (IProduct & { color: string })[]
   accounts: string[]
+  isVoucher: boolean
 }
 
 export async function GET(req: NextRequest) {
@@ -87,8 +92,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('Filter:', filter)
-
     // get all orders from database
     const orders = await OrderModel.find(filter).sort(sort).lean()
 
@@ -120,28 +123,38 @@ export async function GET(req: NextRequest) {
     const tags = await TagModel.find().lean()
 
     // MARK: Custom Orders
-    const customOrders: OrderChartType[] = orders.map(order => {
+    const customOrders: ChartOrderType[] = orders.map((order, index) => {
       let cates = order.items.map((item: any) => item.product.category)
-
       // some cate is ICategory, some is string, so if it is string, find it in categories
-      cates = cates.map((cate: any) => {
-        if (typeof cate === 'string') {
-          return categories.find((category: any) => category._id.toString() === cate)
-        }
-        return cate
-      })
-
-      console.log('cates:', cates)
+      cates = cates.map((cate: any) =>
+        typeof cate === 'string'
+          ? categories.find((category: any) => category._id.toString() === cate)
+          : cate
+      )
 
       let tgs = order.items.map((item: any) => item.product.tags).flat()
-
       // some tag is ITag, some is string, so if it is string, find it in tags
-      tgs = tgs.map((tag: any) => {
-        if (typeof tag === 'string') {
-          return tags.find((tg: any) => tg._id.toString() === tag)
-        }
-        return tag
-      })
+      tgs = tgs.map((tag: any) =>
+        typeof tag === 'string' ? tags.find((tg: any) => tg._id.toString() === tag) : tag
+      )
+
+      const prods = order.items.map(({ product }: any) => ({
+        _id: product._id,
+        title: product.title,
+        price: product.price,
+        slug: product.slug,
+        images: product.images,
+        color:
+          typeof product.category === 'string'
+            ? categories.find((cate: any) => cate._id.toString() === product.category)?.color
+            : product.category.color,
+      }))
+
+      const acts = order.items
+        .map((item: any) =>
+          item.accounts.map((account: any) => account.info.match(EXTRACT_EMAIL_REGEX)).flat()
+        )
+        .flat()
 
       return {
         total: order.total,
@@ -149,17 +162,9 @@ export async function GET(req: NextRequest) {
         quantity: order.items.reduce((total: number, item: any) => total + (+item.quantity || 0), 0),
         categories: cates,
         tags: tgs,
-        product: order.items.map(({ product }: any) => ({
-          title: product.title,
-          price: product.price,
-          slug: product.slug,
-          images: product.images,
-        })),
-        accounts: order.items
-          .map((item: any) =>
-            item.accounts.map((account: any) => account.info.match(EXTRACT_EMAIL_REGEX)).flat()
-          )
-          .flat(),
+        products: prods,
+        accounts: acts,
+        isVoucher: !!order.voucherApplied,
       }
     })
 

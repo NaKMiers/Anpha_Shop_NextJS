@@ -140,7 +140,7 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
       <div className="flex-1 overflow-y-scroll">
         {(search.trim() ? showSearchResults : showUsers).map((user, index) => (
           <div
-            className="mb-4 flex gap-3"
+            className="mb-2 flex gap-3"
             key={index}
           >
             <Link
@@ -150,8 +150,8 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
               <Image
                 className="rounded-lg"
                 src={user.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR}
-                width={45}
-                height={45}
+                width={34}
+                height={34}
                 alt="thumbnail"
               />
               {index < 10 && (
@@ -163,11 +163,11 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
               )}
             </Link>
             <div className="font-body tracking-wider">
-              <p className="font-semibold">
+              <p className="text-sm font-semibold">
                 {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username}{' '}
                 <span className="text-sm text-slate-400">({user.email})</span>
               </p>
-              <p className="text-yellow-500">{formatPrice(user.spent)}</p>
+              <p className="text-sm text-yellow-500">{formatPrice(user.spent)}</p>
             </div>
           </div>
         ))}

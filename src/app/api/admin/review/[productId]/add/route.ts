@@ -20,8 +20,6 @@ export async function POST(
     const data = await req.json()
     const { displayName, rating, reviewDate, content, status } = data
 
-    console.log('data', data)
-
     // add review
     const review = await ReviewModel.create({
       productId,
@@ -31,8 +29,6 @@ export async function POST(
       content,
       status,
     })
-
-    console.log('review', review)
 
     // return response
     return NextResponse.json({ review, message: 'Add Review Successfully' }, { status: 200 })
