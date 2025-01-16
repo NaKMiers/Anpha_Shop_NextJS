@@ -216,7 +216,7 @@ function GroupFilters({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="absolute left-0 top-[calc(100%+10.5px)] z-10 flex max-w-[calc(100vw-2*21px)] flex-col gap-0.5 overflow-auto rounded-md bg-white shadow-md"
+              className="absolute left-0 top-[calc(100%+10.5px)] z-10 flex max-h-[400px] max-w-[calc(100vw-2*21px)] flex-col gap-0.5 overflow-y-auto rounded-md bg-white shadow-md"
             >
               <button
                 className={`trans-200 trans-200 px-3 py-1 text-left font-body text-xs font-semibold tracking-wider hover:bg-slate-100 ${

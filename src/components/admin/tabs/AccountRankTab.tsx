@@ -6,7 +6,7 @@ import { memo } from 'react'
 export type AccountRankGroupType = {
   email: string
   revenue: number
-  category: ICategory
+  categories: ICategory[]
 }
 
 interface AccountRankTabProps {
@@ -16,46 +16,35 @@ interface AccountRankTabProps {
 }
 
 function AccountRankTab({ orders, loading, className = '' }: AccountRankTabProps) {
-  // groups order by emails in order.accounts
   const groupOrdersByEmail = (orders: ChartOrderType[]): AccountRankGroupType[] => {
-    const emailMap: Map<string, { revenue: number; categoryCount: Map<ICategory, number> }> = new Map()
+    const emailGroups: Record<string, AccountRankGroupType> = {}
 
-    // Process each order
     orders.forEach(order => {
-      order.accounts.forEach(email => {
-        // Initialize email entry if not present
-        if (!emailMap.has(email)) {
-          emailMap.set(email, { revenue: 0, categoryCount: new Map() })
+      const { accounts, total, categories } = order
+
+      accounts.forEach(email => {
+        if (!emailGroups[email]) {
+          emailGroups[email] = {
+            email,
+            revenue: 0,
+            categories: [],
+          }
         }
 
-        // Update revenue
-        const emailData = emailMap.get(email)!
-        emailData.revenue += order.total
+        // Increment revenue for the email
+        emailGroups[email].revenue += total
 
-        // Update category counts
-        order.categories.forEach(category => {
-          emailData.categoryCount.set(category, (emailData.categoryCount.get(category) || 0) + 1)
-        })
+        // Add unique categories to the email
+        const existingCategories = emailGroups[email].categories
+        const uniqueCategories = categories.filter(
+          category => !existingCategories.some(c => c._id === category._id)
+        )
+        emailGroups[email].categories.push(...uniqueCategories)
       })
     })
 
-    // Transform map into AccountRankGroupType array
-    const result: AccountRankGroupType[] = []
-    emailMap.forEach((data, email) => {
-      // Find the most frequent category
-      const mostFrequentCategory = Array.from(data.categoryCount.entries()).reduce(
-        (prev, curr) => (curr[1] > prev[1] ? curr : prev),
-        [null, 0] as [ICategory | null, number]
-      )[0]
-
-      result.push({
-        email,
-        revenue: data.revenue,
-        category: mostFrequentCategory!,
-      })
-    })
-
-    return result
+    // Convert the record to an array
+    return Object.values(emailGroups)
   }
 
   const groupedData = groupOrdersByEmail(orders)
@@ -64,21 +53,25 @@ function AccountRankTab({ orders, loading, className = '' }: AccountRankTabProps
     <div className={`${className} ${loading ? 'animate-pulse' : ''}`}>
       {groupedData.map((aEmail, index) => (
         <div
-          className="mb-3 flex flex-col items-start gap-1"
+          className="mb-3 flex flex-col items-start gap-2"
           key={index}
         >
+          {/* Render email */}
           <p className="rounded-lg bg-slate-700 px-2 py-[2px] text-sm text-white">{aEmail.email}</p>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-1.5">
             <span className="text-sm font-semibold text-green-500">{formatPrice(aEmail.revenue)}</span>
-            <span
-              className="tex-dark rounded-md border-2 bg-white px-1 text-[11px]"
-              style={{
-                color: aEmail.category.color,
-                borderColor: aEmail.category.color,
-              }}
-            >
-              {aEmail.category.title}
-            </span>
+            {aEmail.categories.map((category, index) => (
+              <span
+                className="tex-dark rounded-md border-2 bg-white px-1 text-[11px]"
+                style={{
+                  color: category.color,
+                  borderColor: category.color,
+                }}
+                key={index}
+              >
+                {category.title}
+              </span>
+            ))}
           </div>
         </div>
       ))}
