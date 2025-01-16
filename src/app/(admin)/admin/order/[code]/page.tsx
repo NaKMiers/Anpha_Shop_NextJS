@@ -4,6 +4,7 @@ import CartItem from '@/components/CartItem'
 import Input from '@/components/Input'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import useUtils from '@/libs/useUtils'
 import { IAccount } from '@/models/AccountModel'
 import { IOrder } from '@/models/OrderModel'
 import { IVoucher } from '@/models/VoucherModel'
@@ -22,6 +23,7 @@ import { RiCheckboxMultipleBlankLine, RiDonutChartFill } from 'react-icons/ri'
 function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }) {
   // hooks
   const dispatch = useAppDispatch()
+  const { handleCopy } = useUtils()
 
   // states
   const [order, setOrder] = useState<IOrder | null>(null)
@@ -139,12 +141,6 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
           items: prev.items.filter((item: any) => item._id !== removeItem._id),
         }) as IOrder
     )
-  }, [])
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Đã sao chép: ' + text)
   }, [])
 
   return (

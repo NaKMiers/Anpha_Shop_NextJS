@@ -1,3 +1,4 @@
+import useUtils from '@/libs/useUtils'
 import { IFlashSale } from '@/models/FlashSaleModel'
 import { IProduct } from '@/models/ProductModel'
 import { formatPrice } from '@/utils/number'
@@ -31,6 +32,9 @@ function FlashSaleItem({
   // functions
   handleDeleteFlashSales,
 }: FlashSaleItemProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
@@ -54,12 +58,25 @@ function FlashSaleItem({
         >
           <span
             title="Value"
-            className="mr-2 font-semibold text-primary"
+            className="mr-2 cursor-pointer font-semibold text-primary"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(data.value)
+            }}
           >
             {data.type === 'percentage' ? data.value : formatPrice(+data.value)}
           </span>
 
-          <span title="Time Type">{data.timeType}</span>
+          <span
+            title="Time Type"
+            className="cursor-pointer"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(data.timeType)
+            }}
+          >
+            {data.timeType}
+          </span>
         </div>
 
         {/* Type - Duration */}
@@ -68,15 +85,23 @@ function FlashSaleItem({
           title="netflix"
         >
           <span
-            className="mr-2"
+            className="mr-2 cursor-pointer"
             title="Type"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(data.type)
+            }}
           >
             {data.type}
           </span>
           {data.timeType === 'loop' && (
             <span
-              className="font-semobold text-secondary"
+              className="font-semibold text-secondary"
               title="duration"
+              onClick={e => {
+                e.stopPropagation()
+                data.duration && handleCopy(data.duration.toString())
+              }}
             >
               {data.duration}
             </span>
@@ -85,7 +110,16 @@ function FlashSaleItem({
 
         {/* Begin - Expire */}
         <div>
-          <span title="Begin (d/m/y)">{formatTime(data.begin)}</span>
+          <span
+            title="Begin (d/m/y)"
+            className="cursor-pointer"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(formatTime(data.begin))
+            }}
+          >
+            {formatTime(data.begin)}
+          </span>
           {data.timeType === 'once' && data.expire && (
             <span title="Expire (d/m/y)">
               {' - '} {formatTime(data.expire)}
@@ -95,7 +129,16 @@ function FlashSaleItem({
 
         {/* Product Quantity */}
         <p className="font-semibold">
-          <span>Product Quantity:</span> <span className="text-primary">{data.productQuantity}</span>
+          <span>Product Quantity:</span>{' '}
+          <span
+            className="cursor-pointer text-primary"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(data.productQuantity.toString())
+            }}
+          >
+            {data.productQuantity}
+          </span>
         </p>
 
         {/* Applying Products */}

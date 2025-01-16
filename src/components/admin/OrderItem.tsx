@@ -1,3 +1,4 @@
+import useUtils from '@/libs/useUtils'
 import { IOrder } from '@/models/OrderModel'
 import { IVoucher } from '@/models/VoucherModel'
 import { deliverOrderApi, reDeliverOrder } from '@/requests'
@@ -47,6 +48,9 @@ function OrderItem({
   setValue,
   handleFilter,
 }: OrderItemProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [confirmType, setConfirmType] = useState<'deliver' | 're-deliver' | 'delete'>('delete')
@@ -65,12 +69,6 @@ function OrderItem({
       message: '',
     },
   })
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Đã sao chép: ' + text)
-  }, [])
 
   // handle deliver order
   const handleDeliverOrder = useCallback(async () => {

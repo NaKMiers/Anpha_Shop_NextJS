@@ -5,13 +5,14 @@ import Divider from '@/components/Divider'
 import { admins } from '@/constants'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import useUtils from '@/libs/useUtils'
 import { ICartItem } from '@/models/CartItemModel'
 import { formatPrice } from '@/utils/number'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaBookOpen } from 'react-icons/fa'
 import { FaCopy } from 'react-icons/fa6'
@@ -20,6 +21,7 @@ import { IoIosHelpCircle, IoMdArrowRoundBack } from 'react-icons/io'
 function CheckoutPage({ params }: { params: { type: string } }) {
   // hooks
   const dispatch = useAppDispatch()
+  const { handleCopy } = useUtils()
   const router = useRouter()
   const { data: session } = useSession()
   const curUser: any = session?.user
@@ -48,12 +50,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
       setCheckout(checkout)
     }
   }, [router, dispatch])
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Đã sao chép: ' + text)
-  }, [])
 
   return (
     <div className="mt-20 grid grid-cols-1 gap-8 overflow-x-auto rounded-medium bg-white p-8 pb-16 text-dark shadow-medium lg:grid-cols-12">

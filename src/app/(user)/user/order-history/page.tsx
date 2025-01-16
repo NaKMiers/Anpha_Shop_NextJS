@@ -106,7 +106,7 @@ function OrderHistoryPage({ searchParams }: { searchParams?: { [key: string]: st
   }, [searchParams, dispatch, getValues, setValue])
 
   // MARK: Handlers
-  // handle opimize filter
+  // handle optimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
       // reset page

@@ -177,7 +177,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
     }
   }, [])
 
-  // handle opimize filter
+  // handle optimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
       // reset page

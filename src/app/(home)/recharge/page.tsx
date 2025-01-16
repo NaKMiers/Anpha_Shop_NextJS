@@ -2,6 +2,7 @@
 
 import Divider from '@/components/Divider'
 import { admins } from '@/constants'
+import useUtils from '@/libs/useUtils'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -14,15 +15,10 @@ function RechargePage() {
   // hooks
   const { data: session } = useSession()
   const curUser: any = session?.user
+  const { handleCopy } = useUtils()
 
   // values
   const admin: any = admins[(process.env.NEXT_PUBLIC_ADMIN! as keyof typeof admins) || 'KHOA']
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Đã sao chép: ' + text)
-  }, [])
 
   const content = 'NAP ' + curUser?.email.split('@')[0]
 

@@ -1,3 +1,4 @@
+import useUtils from '@/libs/useUtils'
 import { getRankUsersApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
 import Image from 'next/image'
@@ -11,6 +12,9 @@ interface UserSpendingRankTabProps {
 }
 
 function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [loading, setLoading] = useState<boolean>(false)
   const [chunk, setChunk] = useState<number>(20)
@@ -144,7 +148,7 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
             key={index}
           >
             <Link
-              href="/"
+              href={`/admin/user/all?email=${user.email}`}
               className="relative aspect-square flex-shrink-0 text-white"
             >
               <Image
@@ -165,9 +169,19 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
             <div className="font-body tracking-wider">
               <p className="text-sm font-semibold">
                 {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username}{' '}
-                <span className="text-sm text-slate-400">({user.email})</span>
+                <span
+                  className="cursor-pointer text-sm text-slate-400"
+                  onClick={() => handleCopy(user.email)}
+                >
+                  ({user.email})
+                </span>
               </p>
-              <p className="text-sm text-yellow-500">{formatPrice(user.spent)}</p>
+              <p
+                className="cursor-pointer text-sm text-yellow-500"
+                onClick={() => handleCopy(formatPrice(user.spent))}
+              >
+                {formatPrice(user.spent)}
+              </p>
             </div>
           </div>
         ))}

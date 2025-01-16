@@ -10,6 +10,7 @@ import { FaCheck, FaCopy, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import useUtils from '@/libs/useUtils'
 
 interface AccountItemProps {
   data: IAccount
@@ -34,14 +35,11 @@ function AccountItem({
   handleActivateAccounts,
   handleDeleteAccounts,
 }: AccountItemProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Đã sao chép: ' + text)
-  }, [])
 
   return (
     <>

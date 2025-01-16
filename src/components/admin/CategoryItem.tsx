@@ -1,3 +1,4 @@
+import useUtils from '@/libs/useUtils'
 import { ICategory } from '@/models/CategoryModel'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -27,6 +28,9 @@ function CategoryItem({
   setSelectedCategories,
   handleDeleteCategories,
 }: CategoryItemProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
@@ -59,8 +63,12 @@ function CategoryItem({
 
           <div className="">
             <p
-              className="font-semibold"
               title={data.slug}
+              className="cursor-pointer font-semibold"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(data.title)
+              }}
             >
               {data.title}
             </p>
@@ -70,7 +78,16 @@ function CategoryItem({
               className="mb-2 font-semibold"
               title={`Product Quantity: ${data.productQuantity}`}
             >
-              <span>Pr.Q:</span> <span className="text-primary">{data.productQuantity}</span>
+              <span>Pr.Q:</span>{' '}
+              <span
+                className="cursor-pointer text-primary"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(data.productQuantity.toString())
+                }}
+              >
+                {data.productQuantity}
+              </span>
             </p>
           </div>
         </div>

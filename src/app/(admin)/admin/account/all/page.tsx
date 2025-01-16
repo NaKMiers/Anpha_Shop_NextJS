@@ -174,7 +174,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     [router]
   )
 
-  // handle opimize filter
+  // handle optimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
       // reset page

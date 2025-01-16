@@ -128,7 +128,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
     }
   }, [])
 
-  // handle opimize filter
+  // handle optimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
       // reset page

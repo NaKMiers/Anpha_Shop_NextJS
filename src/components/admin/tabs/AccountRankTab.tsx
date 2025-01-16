@@ -1,4 +1,5 @@
 import { ChartOrderType } from '@/app/api/admin/route'
+import useUtils from '@/libs/useUtils'
 import { ICategory } from '@/models/CategoryModel'
 import { formatPrice } from '@/utils/number'
 import { memo } from 'react'
@@ -16,6 +17,10 @@ interface AccountRankTabProps {
 }
 
 function AccountRankTab({ orders, loading, className = '' }: AccountRankTabProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
+  // group orders by emails order.accounts
   const groupOrdersByEmail = (orders: ChartOrderType[]): AccountRankGroupType[] => {
     const emailGroups: Record<string, AccountRankGroupType> = {}
 
@@ -57,9 +62,19 @@ function AccountRankTab({ orders, loading, className = '' }: AccountRankTabProps
           key={index}
         >
           {/* Render email */}
-          <p className="rounded-lg bg-slate-700 px-2 py-[2px] text-sm text-white">{aEmail.email}</p>
+          <p
+            className="cursor-pointer rounded-lg bg-slate-700 px-2 py-[2px] text-sm text-white"
+            onClick={() => handleCopy(aEmail.email)}
+          >
+            {aEmail.email}
+          </p>
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-semibold text-green-500">{formatPrice(aEmail.revenue)}</span>
+            <span
+              className="cursor-pointer text-sm font-semibold text-green-500"
+              onClick={() => handleCopy(formatPrice(aEmail.revenue))}
+            >
+              {formatPrice(aEmail.revenue)}
+            </span>
             {aEmail.categories.map((category, index) => (
               <span
                 className="tex-dark rounded-md border-2 bg-white px-1 text-[11px]"

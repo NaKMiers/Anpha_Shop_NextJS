@@ -1,9 +1,10 @@
+import useUtils from '@/libs/useUtils'
 import { IUser } from '@/models/UserModel'
 import { IVoucher } from '@/models/VoucherModel'
 import { formatPrice } from '@/utils/number'
 import { formatTime } from '@/utils/time'
 import Link from 'next/link'
-import React, { memo, useState } from 'react'
+import React, { Fragment, memo, useState } from 'react'
 import { FaCheck, FaTrash } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
@@ -32,6 +33,9 @@ function VoucherItem({
   handleActivateVouchers,
   handleDeleteVouchers,
 }: VoucherItemProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
@@ -52,24 +56,36 @@ function VoucherItem({
           <div className="flex items-center gap-3">
             {/* Code */}
             <p
-              className="font-semibold text-secondary"
+              className="cursor-pointer font-semibold text-secondary"
               title="code"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(data.code)
+              }}
             >
               {data.code}
             </p>
 
             {/* Value */}
             <p
-              className="font-semibold text-primary"
+              className="font-semibold uppercase text-primary"
               title="value"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(data.value)
+              }}
             >
               {data.type === 'percentage' ? data.value : formatPrice(+data.value)}
             </p>
 
             {/* Times Left */}
             <p
-              className="font-semibold text-slate-400"
+              className="cursor-pointer font-semibold text-slate-400"
               title="timesLeft"
+              onClick={e => {
+                e.stopPropagation()
+                data.timesLeft && handleCopy(data.timesLeft.toString())
+              }}
             >
               {data.timesLeft}
             </p>
@@ -84,7 +100,15 @@ function VoucherItem({
               >
                 Min Total:{' '}
               </span>
-              {formatPrice(data.minTotal)}
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(formatPrice(data.minTotal))
+                }}
+              >
+                {formatPrice(data.minTotal)}
+              </span>
             </p>
 
             {/* Max Reduce */}
@@ -95,7 +119,15 @@ function VoucherItem({
               >
                 Max Reduce:{' '}
               </span>
-              {formatPrice(data.maxReduce)}
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(formatPrice(data.maxReduce))
+                }}
+              >
+                {formatPrice(data.maxReduce)}
+              </span>
             </p>
           </div>
 
@@ -105,7 +137,15 @@ function VoucherItem({
             title="begin (d/m/y)"
           >
             <span className="font-semibold">Begin: </span>
-            <span>{formatTime(data.begin)}</span>
+            <span
+              className="cursor-pointer"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(formatTime(data.begin))
+              }}
+            >
+              {formatTime(data.begin)}
+            </span>
           </p>
 
           {/* Expire */}
@@ -115,7 +155,15 @@ function VoucherItem({
               title="expire (d/m/y)"
             >
               <span className="font-semibold">Expire: </span>
-              <span>{formatTime(data.expire)}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  data.expire && handleCopy(formatTime(data.expire))
+                }}
+              >
+                {formatTime(data.expire)}
+              </span>
             </p>
           )}
 
@@ -126,7 +174,15 @@ function VoucherItem({
               title="desc"
             >
               <span className="font-semibold">Desc: </span>
-              <span>{data.desc}</span>
+              <span
+                className="cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleCopy(data.desc)
+                }}
+              >
+                {data.desc}
+              </span>
             </p>
           )}
 
@@ -136,7 +192,15 @@ function VoucherItem({
             title="owner"
           >
             <span className="font-semibold">Owner: </span>
-            <span>{(data.owner as IUser)?.firstname + ' ' + (data.owner as IUser)?.lastname}</span>
+            <span
+              className="cursor-pointer"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy((data.owner as IUser)?.firstname + ' ' + (data.owner as IUser)?.lastname)
+              }}
+            >
+              {(data.owner as IUser)?.firstname + ' ' + (data.owner as IUser)?.lastname}
+            </span>
           </p>
 
           {/* Used Users */}
@@ -147,9 +211,19 @@ function VoucherItem({
             >
               <span className="font-semibold">Used users: </span>
               {data.usedUsers.map((email, index) => (
-                <span key={email}>
-                  {email} {index < data.usedUsers.length - 1 && ', '}
-                </span>
+                <Fragment key={email}>
+                  <span
+                    className="cursor-pointer"
+                    onClick={e => {
+                      e.stopPropagation()
+                      handleCopy(email)
+                    }}
+                    key={email}
+                  >
+                    {email}
+                  </span>
+                  {index < data.usedUsers.length - 1 && ', '}
+                </Fragment>
               ))}
             </p>
           )}
@@ -160,7 +234,15 @@ function VoucherItem({
             title="accumulated"
           >
             <span>Accumulated: </span>
-            <span className="text-rose-700">{formatPrice(data.accumulated)}</span>
+            <span
+              className="cursor-pointer text-rose-700"
+              onClick={e => {
+                e.stopPropagation()
+                handleCopy(formatPrice(data.accumulated))
+              }}
+            >
+              {formatPrice(data.accumulated)}
+            </span>
           </p>
         </div>
 

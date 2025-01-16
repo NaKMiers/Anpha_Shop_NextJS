@@ -1,7 +1,7 @@
 'use client'
 
+import useUtils from '@/libs/useUtils'
 import { memo, useCallback, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { FaCheck, FaCopy } from 'react-icons/fa6'
 
 interface LinkBarProps {
@@ -12,16 +12,15 @@ interface LinkBarProps {
 function LinkBar({ link, className = '' }: LinkBarProps) {
   // states
   const [isCopied, setIsCopied] = useState<boolean>(false)
+  const { handleCopy: copy } = useUtils()
 
   // handle copy
   const handleCopy = useCallback(() => {
     if (!isCopied) {
-      navigator.clipboard.writeText(link)
-      toast.success('Đã sao chép: ' + link)
-
+      copy(link)
       setIsCopied(true)
     }
-  }, [link, isCopied])
+  }, [link, copy, isCopied])
 
   return (
     <button

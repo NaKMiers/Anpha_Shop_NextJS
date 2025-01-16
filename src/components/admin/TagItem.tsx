@@ -4,6 +4,7 @@ import { FaCheck, FaSave, FaTrash } from 'react-icons/fa'
 import { MdCancel, MdEdit } from 'react-icons/md'
 import { RiDonutChartFill } from 'react-icons/ri'
 import ConfirmDialog from '../ConfirmDialog'
+import useUtils from '@/libs/useUtils'
 
 interface TagItemProps {
   data: ITag
@@ -42,6 +43,9 @@ function TagItem({
   handleDeleteTags,
   handleFeatureTags,
 }: TagItemProps) {
+  // hooks
+  const { handleCopy } = useUtils()
+
   // states
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
@@ -76,8 +80,12 @@ function TagItem({
         ) : (
           // Tag Title
           <p
-            className="font-semibold"
             title={data.slug}
+            className="cursor-pointer font-semibold"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(data.title)
+            }}
           >
             {data.title}
           </p>
@@ -88,7 +96,16 @@ function TagItem({
           className="mb-2 font-semibold"
           title={`Product Quantity: ${data.productQuantity}`}
         >
-          <span>Pr.Q:</span> <span className="text-primary">{data.productQuantity}</span>
+          <span>Pr.Q:</span>{' '}
+          <span
+            className="cursor-pointer text-primary"
+            onClick={e => {
+              e.stopPropagation()
+              handleCopy(data.productQuantity.toString())
+            }}
+          >
+            {data.productQuantity}
+          </span>
         </p>
 
         {/* MARK: Action Buttons */}

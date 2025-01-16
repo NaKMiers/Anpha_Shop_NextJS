@@ -9,6 +9,7 @@ import AdminMeta from '@/components/admin/AdminMeta'
 import ReviewItem from '@/components/admin/ReviewItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
+import useUtils from '@/libs/useUtils'
 import { IProduct } from '@/models/ProductModel'
 import { IReview } from '@/models/ReviewModel'
 import {
@@ -32,10 +33,11 @@ function AllProductReviewsPage({
   params: { id: string }
   searchParams?: { [key: string]: string[] | string }
 }) {
-  // store
+  // hooks
   const dispatch = useAppDispatch()
   const pathname = usePathname()
   const router = useRouter()
+  const { handleCopy } = useUtils()
 
   // states
   const [product, setProduct] = useState<IProduct | null>(null)
@@ -247,12 +249,6 @@ function AllProductReviewsPage({
     reset()
     router.push(pathname)
   }, [reset, router, pathname])
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Copied: ' + text)
-  }, [])
 
   // keyboard event
   useEffect(() => {

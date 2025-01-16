@@ -1,3 +1,4 @@
+import useUtils from '@/libs/useUtils'
 import { IUser } from '@/models/UserModel'
 import { demoteCollaboratorApi, rechargeUserApi, setCollaboratorApi } from '@/requests'
 import { formatPrice } from '@/utils/number'
@@ -39,6 +40,7 @@ function UserItem({
   handleDeleteUsers,
 }: UserItemProps) {
   // hooks
+  const { handleCopy } = useUtils()
   const { data: session } = useSession()
   const curUser: any = session?.user
 
@@ -50,7 +52,7 @@ function UserItem({
   const [isLoadingSetCollaborator, setIsLoadingSetCollaborator] = useState<boolean>(false)
   const [isDemoting, setIsDemoting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
-  const [isOpenDemoteCollboratorConfirmationDialog, setIsOpenDemoteCollboratorConfirmationDialog] =
+  const [isOpenDemoteCollaboratorConfirmationDialog, setIsOpenDemoteCollaboratorConfirmationDialog] =
     useState<boolean>(false)
 
   // values
@@ -181,12 +183,6 @@ function UserItem({
       setIsDemoting(false)
     }
   }, [data._id, reset])
-
-  // handle copy
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Đã sao chép: ' + text)
-  }, [])
 
   return (
     <>
@@ -481,7 +477,7 @@ function UserItem({
               onClick={e => {
                 e.stopPropagation()
                 userData.role === 'collaborator'
-                  ? setIsOpenDemoteCollboratorConfirmationDialog(true)
+                  ? setIsOpenDemoteCollaboratorConfirmationDialog(true)
                   : setIsOpenSetCollaborator(true)
               }}
               disabled={loadingUsers.includes(userData._id) || isDemoting}
@@ -571,8 +567,8 @@ function UserItem({
 
       {/* Confirm Demote Collaborator Dialog */}
       <ConfirmDialog
-        open={isOpenDemoteCollboratorConfirmationDialog}
-        setOpen={setIsOpenDemoteCollboratorConfirmationDialog}
+        open={isOpenDemoteCollaboratorConfirmationDialog}
+        setOpen={setIsOpenDemoteCollaboratorConfirmationDialog}
         title="Demote Collaborator"
         content="Are you sure that you want to  this collaborator?"
         onAccept={handleDemoteCollaborator}

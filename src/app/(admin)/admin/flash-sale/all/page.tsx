@@ -159,7 +159,7 @@ function AllFlashSalesPage({ searchParams }: { searchParams?: { [key: string]: s
     [flashSales]
   )
 
-  // handle opimize filter
+  // handle optimize filter
   const handleOptimizeFilter: SubmitHandler<FieldValues> = useCallback(
     data => {
       // reset page
