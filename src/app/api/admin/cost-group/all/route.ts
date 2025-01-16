@@ -1,18 +1,17 @@
 import { connectDatabase } from '@/config/database'
-import OrderModel from '@/models/OrderModel'
+import CostGroupModel from '@/models/CostGroupModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
-import { NextRequest, NextResponse } from 'next/server'
 import { toUTC } from '@/utils/time'
+import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Order, Voucher
-import '@/models/OrderModel'
-import '@/models/VoucherModel'
+// Models: Cost Group
+import '@/models/CostGroupModel'
 
 export const dynamic = 'force-dynamic'
 
-// [GET]: /admin/order/all
+// [GET]: /admin/cost-group/all
 export async function GET(req: NextRequest) {
-  console.log('- Get All Orders -')
+  console.log('- Get All Cost Groups -')
 
   try {
     // connect to database
@@ -48,7 +47,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (key === 'search') {
-          const searchFields = ['code', 'email', 'status', 'paymentMethod']
+          const searchFields = ['title']
 
           filter.$or = searchFields.map(field => ({
             [field]: { $regex: params[key][0], $options: 'i' },
@@ -60,17 +59,6 @@ export async function GET(req: NextRequest) {
           sort = {
             [params[key][0].split('|')[0]]: +params[key][0].split('|')[1],
           }
-          continue
-        }
-
-        if (key === 'total') {
-          filter[key] = { $lte: +params[key][0] }
-          continue
-        }
-
-        if (['userId', 'voucherApplied'].includes(key)) {
-          filter[key] =
-            params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
           continue
         }
 
@@ -100,33 +88,14 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // get amount of orders
-    const amount = await OrderModel.countDocuments(filter)
+    // get amount of cost groups
+    const amount = await CostGroupModel.countDocuments(filter)
 
-    // get all orders from database
-    const orders = await OrderModel.find(filter)
-      .populate({
-        path: 'voucherApplied',
-        select: 'code desc',
-      })
-      .sort(sort)
-      .skip(skip)
-      .limit(itemPerPage)
-      .lean()
+    // get all cost groups from database
+    const costGroups = await CostGroupModel.find(filter).sort(sort).skip(skip).limit(itemPerPage).lean()
 
-    // get all order without filter
-    const chops = await OrderModel.aggregate([
-      {
-        $group: {
-          _id: null,
-          minTotal: { $min: '$total' },
-          maxTotal: { $max: '$total' },
-        },
-      },
-    ])
-
-    // return all orders
-    return NextResponse.json({ orders, amount, chops: chops[0] }, { status: 200 })
+    // return all cost groups
+    return NextResponse.json({ costGroups, amount }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

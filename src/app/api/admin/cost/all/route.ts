@@ -1,18 +1,18 @@
 import { connectDatabase } from '@/config/database'
-import OrderModel from '@/models/OrderModel'
+import CostModel from '@/models/CostModel'
 import { searchParamsToObject } from '@/utils/handleQuery'
-import { NextRequest, NextResponse } from 'next/server'
 import { toUTC } from '@/utils/time'
+import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Order, Voucher
-import '@/models/OrderModel'
-import '@/models/VoucherModel'
+// Models: Cost, Cost Group
+import '@/models/CostGroupModel'
+import '@/models/CostModel'
 
 export const dynamic = 'force-dynamic'
 
-// [GET]: /admin/order/all
+// [GET]: /admin/cost/all
 export async function GET(req: NextRequest) {
-  console.log('- Get All Orders -')
+  console.log('- Get All Costs -')
 
   try {
     // connect to database
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     let skip = 0
     let itemPerPage = 9
     const filter: { [key: string]: any } = {}
-    let sort: { [key: string]: any } = { updatedAt: -1 } // default sort
+    let sort: { [key: string]: any } = { createdAt: -1 } // default sort
 
     // build filter
     for (const key in params) {
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (key === 'search') {
-          const searchFields = ['code', 'email', 'status', 'paymentMethod']
+          const searchFields = ['desc', 'status']
 
           filter.$or = searchFields.map(field => ({
             [field]: { $regex: params[key][0], $options: 'i' },
@@ -63,14 +63,8 @@ export async function GET(req: NextRequest) {
           continue
         }
 
-        if (key === 'total') {
+        if (key === 'amount') {
           filter[key] = { $lte: +params[key][0] }
-          continue
-        }
-
-        if (['userId', 'voucherApplied'].includes(key)) {
-          filter[key] =
-            params[key][0] === 'true' ? { $exists: true, $ne: null } : { $exists: false, $eq: null }
           continue
         }
 
@@ -78,16 +72,16 @@ export async function GET(req: NextRequest) {
           const dates = params[key][0].split('|')
 
           if (dates[0] && dates[1]) {
-            filter.createdAt = {
+            filter.date = {
               $gte: toUTC(dates[0]),
               $lt: toUTC(dates[1]),
             }
           } else if (dates[0]) {
-            filter.createdAt = {
+            filter.date = {
               $gte: toUTC(dates[0]),
             }
           } else if (dates[1]) {
-            filter.createdAt = {
+            filter.date = {
               $lt: toUTC(dates[1]),
             }
           }
@@ -100,33 +94,33 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // get amount of orders
-    const amount = await OrderModel.countDocuments(filter)
+    // get amount of costs
+    const amount = await CostModel.countDocuments(filter)
 
-    // get all orders from database
-    const orders = await OrderModel.find(filter)
+    // get all costs from database
+    const costs = await CostModel.find(filter)
       .populate({
-        path: 'voucherApplied',
-        select: 'code desc',
+        path: 'costGroup',
+        select: 'title',
       })
       .sort(sort)
       .skip(skip)
       .limit(itemPerPage)
       .lean()
 
-    // get all order without filter
-    const chops = await OrderModel.aggregate([
+    // get all costs without filter
+    const chops = await CostModel.aggregate([
       {
         $group: {
           _id: null,
-          minTotal: { $min: '$total' },
-          maxTotal: { $max: '$total' },
+          minAmount: { $min: '$amount' },
+          maxAmount: { $max: '$amount' },
         },
       },
     ])
 
-    // return all orders
-    return NextResponse.json({ orders, amount, chops: chops[0] }, { status: 200 })
+    // return all costs
+    return NextResponse.json({ costs, amount, chops: chops[0] }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

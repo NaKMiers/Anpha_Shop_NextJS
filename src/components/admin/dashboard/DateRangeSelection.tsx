@@ -117,8 +117,8 @@ function DateRangeSelection({
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 50 }}
-                    className="absolute left-0 top-0 z-10 h-full w-full md:hidden"
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="absolute left-0 top-0 z-10 h-full w-full md:hidden"
                     onClick={() => setOpenOptions(false)}
                   >
                     <div

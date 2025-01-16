@@ -206,7 +206,7 @@ function GroupFilters({
           className="trans-200 rounded-md px-2 py-1.5 text-xs font-semibold shadow-md hover:bg-slate-100"
           onClick={() => list.length > 0 && setOpen(!open)}
         >
-          {selectedList.length} {selectedList.length !== 0 ? pluralNoun : singleNoun}
+          {selectedList.length} {selectedList.length !== 1 ? pluralNoun : singleNoun}
         </button>
 
         <AnimatePresence>

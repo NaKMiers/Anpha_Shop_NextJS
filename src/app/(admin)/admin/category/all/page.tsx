@@ -9,7 +9,7 @@ import CategoryItem from '@/components/admin/CategoryItem'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { ICategory } from '@/models/CategoryModel'
-import { deleteCategoriesApi, getAllCagetoriesApi } from '@/requests'
+import { deleteCategoriesApi, getAllCategoriesApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -74,7 +74,7 @@ function AllCategoriesPage({ searchParams }: { searchParams?: { [key: string]: s
 
       try {
         // sent request to server
-        const { categories, amount, chops } = await getAllCagetoriesApi(query) // cache: no-store
+        const { categories, amount, chops } = await getAllCategoriesApi(query) // cache: no-store
 
         // set to states
         setCategories(categories)

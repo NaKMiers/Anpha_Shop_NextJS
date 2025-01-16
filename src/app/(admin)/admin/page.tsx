@@ -5,9 +5,7 @@ import Blocks from '@/components/admin/dashboard/Blocks'
 import Chart, { ChartDatum } from '@/components/admin/dashboard/Chart'
 import DateRangeSelection from '@/components/admin/dashboard/DateRangeSelection'
 import GroupFilters from '@/components/admin/dashboard/GroupFilters'
-import AccountRankTab from '@/components/admin/tabs/AccountRankTab'
-import RecentlySaleTab from '@/components/admin/tabs/RecentlySaleTab'
-import UserSpendingRank from '@/components/admin/tabs/UserSpendingRank'
+import CostSheet from '@/components/CostSheet'
 import { useAppDispatch } from '@/libs/hooks'
 import { ICategory } from '@/models/CategoryModel'
 import { IProduct } from '@/models/ProductModel'
@@ -23,6 +21,8 @@ import 'react-date-range/dist/theme/default.css'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
+import { TbReload } from 'react-icons/tb'
+import { VscLayoutSidebarRight } from 'react-icons/vsc'
 
 export type ActiveBlockType = 'revenue' | 'orders' | 'accounts' | 'customers' | 'vouchers'
 
@@ -57,6 +57,8 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
   const [aEmails, setAEmails] = useState<string[]>([])
   const [selectedAEmails, setSelectedAEmails] = useState<string[]>([])
 
+  const [openCost, setOpenCost] = useState<boolean>(true)
+
   // chart data
   const [data, setData] = useState<ChartDatum[]>([])
 
@@ -72,89 +74,89 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     defaultValues,
   })
 
-  // get dashboard
-  useEffect(() => {
-    const getDashboard = async () => {
-      // add from-to to search params
-      if (searchParams) {
-        searchParams['from-to'] =
-          searchParams['from-to'] ||
-          `${toUTC(momentTZ(defaultValues.from).startOf('day').toDate())}|${toUTC(momentTZ(defaultValues.from).endOf('day').toDate())}`
-      }
+  // // get dashboard
+  // useEffect(() => {
+  //   const getDashboard = async () => {
+  //     // add from-to to search params
+  //     if (searchParams) {
+  //       searchParams['from-to'] =
+  //         searchParams['from-to'] ||
+  //         `${toUTC(momentTZ(defaultValues.from).startOf('day').toDate())}|${toUTC(momentTZ(defaultValues.from).endOf('day').toDate())}`
+  //     }
 
-      let query = handleQuery(searchParams)
+  //     let query = handleQuery(searchParams)
 
-      // start loading
-      setLoading(true)
+  //     // start loading
+  //     setLoading(true)
 
-      try {
-        // send request
-        const { orders, blocks } = await getDashboardApi(query)
+  //     try {
+  //       // send request
+  //       const { orders, blocks } = await getDashboardApi(query)
 
-        setOrders(orders)
-        setBlocks(blocks)
+  //       setOrders(orders)
+  //       setBlocks(blocks)
 
-        // extract products
-        const products = orders.map((order: ChartOrderType) => order.products).flat()
-        const uniqueProducts: any[] = Array.from(
-          new Map(products.map((product: IProduct) => [product._id, product])).values()
-        )
-        setProducts(uniqueProducts)
-        setSelectedProds(uniqueProducts)
+  //       // extract products
+  //       const products = orders.map((order: ChartOrderType) => order.products).flat()
+  //       const uniqueProducts: any[] = Array.from(
+  //         new Map(products.map((product: IProduct) => [product._id, product])).values()
+  //       )
+  //       setProducts(uniqueProducts)
+  //       setSelectedProds(uniqueProducts)
 
-        // extract categories
-        const categories = orders.map((order: ChartOrderType) => order.categories).flat()
-        const uniqueCategories: any[] = Array.from(
-          new Map(categories.map((category: ICategory) => [category._id, category])).values()
-        )
-        setCategories(uniqueCategories)
-        setSelectedCats(uniqueCategories)
+  //       // extract categories
+  //       const categories = orders.map((order: ChartOrderType) => order.categories).flat()
+  //       const uniqueCategories: any[] = Array.from(
+  //         new Map(categories.map((category: ICategory) => [category._id, category])).values()
+  //       )
+  //       setCategories(uniqueCategories)
+  //       setSelectedCats(uniqueCategories)
 
-        // extract tags
-        const tags = orders.map((order: ChartOrderType) => order.tags).flat()
-        const uniqueTags: any[] = Array.from(new Map(tags.map((tag: ITag) => [tag._id, tag])).values())
-        setTags(uniqueTags)
-        setSelectedTags(uniqueTags)
+  //       // extract tags
+  //       const tags = orders.map((order: ChartOrderType) => order.tags).flat()
+  //       const uniqueTags: any[] = Array.from(new Map(tags.map((tag: ITag) => [tag._id, tag])).values())
+  //       setTags(uniqueTags)
+  //       setSelectedTags(uniqueTags)
 
-        // extract account emails
-        const aEmails = orders.map((order: ChartOrderType) => order.accounts).flat()
-        const uniqueAEmails: any[] = Array.from(
-          new Map(aEmails.map((aEmail: string) => [aEmail, aEmail])).values()
-        )
-        setAEmails(uniqueAEmails)
-        setSelectedAEmails(uniqueAEmails)
+  //       // extract account emails
+  //       const aEmails = orders.map((order: ChartOrderType) => order.accounts).flat()
+  //       const uniqueAEmails: any[] = Array.from(
+  //         new Map(aEmails.map((aEmail: string) => [aEmail, aEmail])).values()
+  //       )
+  //       setAEmails(uniqueAEmails)
+  //       setSelectedAEmails(uniqueAEmails)
 
-        // sync search params with states
-        const from =
-          searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[0]
-            ? moment((searchParams['from-to'] as string).split('|')[0]).format('YYYY-MM-DDTHH:mm')
-            : getValues('from')
-        setValue('from', from)
-        const to =
-          searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[1]
-            ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
-            : getValues('to')
-        setValue('to', to)
+  //       // sync search params with states
+  //       const from =
+  //         searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[0]
+  //           ? moment((searchParams['from-to'] as string).split('|')[0]).format('YYYY-MM-DDTHH:mm')
+  //           : getValues('from')
+  //       setValue('from', from)
+  //       const to =
+  //         searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[1]
+  //           ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
+  //           : getValues('to')
+  //       setValue('to', to)
 
-        // sync range with states
-        setRange([
-          {
-            startDate: momentTZ(from).toDate() || new Date(),
-            endDate: momentTZ(to).toDate() || new Date(),
-            key: 'selection',
-          },
-        ])
-      } catch (err: any) {
-        console.log(err)
-        toast.error(err.message)
-      } finally {
-        // stop loading
-        setLoading(false)
-      }
-    }
+  //       // sync range with states
+  //       setRange([
+  //         {
+  //           startDate: momentTZ(from).toDate() || new Date(),
+  //           endDate: momentTZ(to).toDate() || new Date(),
+  //           key: 'selection',
+  //         },
+  //       ])
+  //     } catch (err: any) {
+  //       console.log(err)
+  //       toast.error(err.message)
+  //     } finally {
+  //       // stop loading
+  //       setLoading(false)
+  //     }
+  //   }
 
-    getDashboard()
-  }, [getValues, setValue, searchParams, defaultValues])
+  //   getDashboard()
+  // }, [getValues, setValue, searchParams, defaultValues])
 
   // auto update chart data
   useEffect(() => {
@@ -340,25 +342,52 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
       {/* Statistical */}
       <h1 className="text-xl font-semibold">Dashboard</h1>
 
-      {/* MARK: Date Range */}
-      <div className="mt-5 flex flex-wrap gap-21/2 gap-y-2">
-        <DateRangeSelection
-          range={range}
-          setRange={setRange}
-          setValue={setValue}
-          handleFilter={handleSubmit(handleFilter)}
-        />
-
-        <button
-          className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
-          onClick={handleResetFilter}
-        >
-          <span className="text-xs font-semibold">Reset</span>
-          <BiReset
-            size={14}
-            className="wiggle"
+      <div className="mt-5 flex flex-wrap justify-between gap-x-21 gap-y-2">
+        {/* MARK: Date Range */}
+        <div className="flex flex-wrap gap-21/2 gap-y-2">
+          <DateRangeSelection
+            range={range}
+            setRange={setRange}
+            setValue={setValue}
+            handleFilter={handleSubmit(handleFilter)}
           />
-        </button>
+
+          <button
+            className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
+            onClick={handleResetFilter}
+          >
+            <span className="text-xs font-semibold">Reset</span>
+            <BiReset
+              size={14}
+              className="wiggle"
+            />
+          </button>
+        </div>
+
+        {/* Costs */}
+        <div className="flex flex-wrap gap-21/2 gap-y-2">
+          <button
+            className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
+            onClick={() => setOpenCost(!openCost)}
+          >
+            <span className="text-xs font-semibold">Cost Sheet</span>
+            <VscLayoutSidebarRight
+              size={14}
+              className="wiggle"
+            />
+          </button>
+
+          <button
+            className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
+            onClick={() => router.refresh()}
+          >
+            <span className="text-xs font-semibold">Refresh</span>
+            <TbReload
+              size={14}
+              className="wiggle"
+            />
+          </button>
+        </div>
       </div>
 
       {/* MARK: Blocks */}
@@ -400,8 +429,14 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         className="mt-2 rounded-lg p-21/2 shadow-lg"
       />
 
+      {/* MARK: Cost Sheet */}
+      <CostSheet
+        open={openCost}
+        setOpen={setOpenCost}
+      />
+
       {/* Ranks */}
-      <div className="mt-5 grid grid-cols-12 items-start gap-21/2 md:gap-21">
+      {/* <div className="mt-5 grid grid-cols-12 items-start gap-21/2 md:gap-21">
         <div className="col-span-12 rounded-lg p-21 shadow-lg md:col-span-5">
           <h2 className="font-semibold">Sales</h2>
 
@@ -426,7 +461,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
 
           <UserSpendingRank className="mt-4 max-h-[500px] overflow-y-auto" />
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
