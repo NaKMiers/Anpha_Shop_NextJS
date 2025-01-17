@@ -6,11 +6,12 @@ interface ConfirmDialogProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   title: string
   content: string
-  acceeptLabel?: string
+  acceptLabel?: string
   cancelLabel?: string
   onAccept: () => void
   isLoading?: boolean
   color?: string
+  containerClassName?: string
   className?: string
 }
 
@@ -19,11 +20,12 @@ function ConfirmDialog({
   setOpen,
   title,
   content,
-  acceeptLabel,
+  acceptLabel,
   cancelLabel,
   onAccept,
   isLoading = false,
   color = 'rose',
+  containerClassName = '',
   className = '',
 }: ConfirmDialogProps) {
   // ref
@@ -84,7 +86,7 @@ function ConfirmDialog({
 
   return (
     <div
-      className="fixed left-0 top-0 z-40 hidden h-screen w-screen items-center justify-center bg-black bg-opacity-10 p-21 text-dark opacity-0 transition-all duration-300"
+      className={`fixed left-0 top-0 z-40 hidden h-screen w-screen items-center justify-center bg-black bg-opacity-10 p-21 text-dark opacity-0 transition-all duration-300 ${containerClassName}`}
       ref={modalRef}
       onClick={() => setOpen(false)}
     >
@@ -126,7 +128,7 @@ function ConfirmDialog({
                 className="animate-spin text-slate-300"
               />
             ) : (
-              acceeptLabel || 'Đồng ý'
+              acceptLabel || 'Đồng ý'
             )}
           </button>
         </div>

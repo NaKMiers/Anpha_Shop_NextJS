@@ -14,10 +14,10 @@ export const getAllCostGroupsApi = async (query: string = '') => {
 }
 
 // [POST]
-export const addCostGroupApi = async (data: FormData) => {
+export const addCostGroupApi = async (data: any) => {
   const res = await fetch('/api/admin/cost-group/add', {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   })
 
   // check status
@@ -29,10 +29,10 @@ export const addCostGroupApi = async (data: FormData) => {
 }
 
 // [PUT]
-export const updateCostGroupApi = async (id: string, data: FormData) => {
+export const updateCostGroupApi = async (id: string, data: any) => {
   const res = await fetch(`/api/admin/cost-group/${id}/edit`, {
     method: 'PUT',
-    body: data,
+    body: JSON.stringify(data),
   })
 
   // check status

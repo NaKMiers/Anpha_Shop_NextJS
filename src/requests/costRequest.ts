@@ -14,10 +14,10 @@ export const getAllCostsApi = async (query: string = '') => {
 }
 
 // [POST]
-export const addCostApi = async (data: FormData) => {
+export const addCostApi = async (data: any) => {
   const res = await fetch('/api/admin/cost/add', {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   })
 
   // check status
@@ -29,10 +29,10 @@ export const addCostApi = async (data: FormData) => {
 }
 
 // [PUT]
-export const updateCostApi = async (id: string, data: FormData) => {
+export const updateCostApi = async (id: string, data: any) => {
   const res = await fetch(`/api/admin/cost/${id}/edit`, {
     method: 'PUT',
-    body: data,
+    body: JSON.stringify(data),
   })
 
   // check status

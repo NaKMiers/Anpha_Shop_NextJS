@@ -1,10 +1,14 @@
 import { ICostGroup } from '@/models/CostGroupModel'
 import { ICost } from '@/models/CostModel'
+import { getAllCostGroupsApi, getAllCostsApi } from '@/requests'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { FaFilter } from 'react-icons/fa'
+import CostGroupArea from './CostGroupArea'
+import CostList from './CostList'
 
 interface CostSheetProps {
   open: boolean
@@ -41,10 +45,8 @@ const sortOptions = [
 ]
 
 function CostSheet({ open, setOpen, className = '' }: CostSheetProps) {
-  // states
-  const [openCostGroup, setOpenCostGroup] = useState<boolean>(false)
+  // cost groups
   const [costGroups, setCostGroups] = useState<ICostGroup[]>([])
-  const [selectedCostGroups, setSelectedCostGroups] = useState<ICostGroup[]>([])
 
   // states
   const [costs, setCosts] = useState<ICost[]>([])
@@ -81,6 +83,45 @@ function CostSheet({ open, setOpen, className = '' }: CostSheetProps) {
   } = useForm<FieldValues>({
     defaultValues,
   })
+
+  // get all cost groups
+  useEffect(() => {
+    const getCostGroups = async () => {
+      try {
+        const { costGroups } = await getAllCostGroupsApi()
+        setCostGroups(costGroups)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      }
+    }
+
+    getCostGroups()
+  }, [])
+
+  // get all costs
+  useEffect(() => {
+    // start loading
+    // setLoading(true)
+
+    const getCosts = async () => {
+      try {
+        // send request to server
+        const { costs } = await getAllCostsApi()
+
+        // set costs
+        setCosts(costs)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop loading
+        // setLoading(false)
+      }
+    }
+
+    getCosts()
+  }, [])
 
   return (
     <>
@@ -153,60 +194,10 @@ function CostSheet({ open, setOpen, className = '' }: CostSheetProps) {
               </div>
 
               <div className="flex items-center justify-between gap-21/2">
-                <div className="relative">
-                  <button
-                    className="trans-200 rounded-md px-2 py-1.5 text-xs font-semibold shadow-md hover:bg-slate-100"
-                    onClick={() => setOpenCostGroup(!openCostGroup)}
-                  >
-                    {selectedCostGroups.length} {selectedCostGroups.length !== 1 ? 'groups' : 'group'}
-                  </button>
-
-                  <AnimatePresence>
-                    {openCostGroup && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 50 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="absolute left-0 top-[calc(100%+10.5px)] z-10 flex max-h-[400px] max-w-[calc(100vw-2*21px)] flex-col gap-0.5 overflow-y-auto rounded-md bg-white shadow-md"
-                      >
-                        <button
-                          className={`trans-200 trans-200 px-3 py-1 text-left font-body text-xs font-semibold tracking-wider hover:bg-slate-100 ${
-                            selectedCostGroups.length === costGroups.length
-                              ? 'border-l-2 border-primary pl-2'
-                              : ''
-                          }`}
-                          onClick={() =>
-                            selectedCostGroups.length === costGroups.length
-                              ? setSelectedCostGroups([])
-                              : setSelectedCostGroups(costGroups)
-                          }
-                        >
-                          <span className="text-nowrap">All</span>
-                        </button>
-                        {costGroups.map((group, index) => (
-                          <button
-                            className={`trans-200 trans-200 px-3 py-1 text-left font-body text-xs font-semibold tracking-wider hover:bg-slate-100 ${
-                              selectedCostGroups.some(g => g._id.toString() === group._id.toString())
-                                ? 'border-l-2 border-primary pl-2'
-                                : ''
-                            }`}
-                            onClick={() =>
-                              setSelectedCostGroups((prev: any) =>
-                                prev.some((g: any) => g._id.toString() === group._id.toString())
-                                  ? prev.filter((g: any) => g._id.toString() !== group._id.toString())
-                                  : [...prev, group]
-                              )
-                            }
-                            key={index}
-                          >
-                            <p className="text-nowrap">{group.title}</p>
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                <CostGroupArea
+                  costGroups={costGroups}
+                  setCostGroups={setCostGroups}
+                />
 
                 <div className="flex gap-21/2">
                   <button className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light">
@@ -225,6 +216,13 @@ function CostSheet({ open, setOpen, className = '' }: CostSheetProps) {
                   </button>
                 </div>
               </div>
+
+              <CostList
+                costs={costs}
+                setCosts={setCosts}
+                costGroups={costGroups}
+                className="mt-5"
+              />
             </div>
           </motion.div>
         )}

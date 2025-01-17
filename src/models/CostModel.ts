@@ -32,10 +32,11 @@ export default CostModel
 
 export interface ICost {
   _id: string
-  costGroup: string
+  costGroup: ICostGroup | string
   amount: number
   desc: string
   status: string
+  date: string
   createdAt: string
   updatedAt: string
 }

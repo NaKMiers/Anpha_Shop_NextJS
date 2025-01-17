@@ -4,9 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Cost
 import '@/models/CostModel'
+import { toUTC } from '@/utils/time'
 
-// [POST]: /admin/cost/:id/edit
-export async function POST(req: NextRequest, { params: { id } }: { params: { id: string } }) {
+// [PUT]: /admin/cost/:id/edit
+export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
   console.log('- Edit Cost - ')
 
   try {
@@ -15,6 +16,13 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
 
     // get data to create cost
     const { costGroup, amount, desc, status, date } = await req.json()
+
+    console.log('id', id)
+    console.log('costGroup', costGroup)
+    console.log('amount', amount)
+    console.log('desc', desc)
+    console.log('status', status)
+    console.log('date', date)
 
     // create cost
     const updatedCost = await CostModel.findByIdAndUpdate(
@@ -25,7 +33,7 @@ export async function POST(req: NextRequest, { params: { id } }: { params: { id:
           amount,
           desc,
           status,
-          date: date || null,
+          date: date ? toUTC(date) : null,
         },
       },
       { new: true }

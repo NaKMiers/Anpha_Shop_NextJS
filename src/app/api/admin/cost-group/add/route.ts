@@ -16,6 +16,8 @@ export async function POST(req: NextRequest) {
     // get data to create cost group
     const { title } = await req.json()
 
+    console.log('title:', title)
+
     // create cost group
     const costGroup = await CostGroupModel.create({ title })
 
