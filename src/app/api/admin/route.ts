@@ -1,6 +1,7 @@
 import { connectDatabase } from '@/config/database'
 import { EXTRACT_EMAIL_REGEX } from '@/constants'
 import CategoryModel, { ICategory } from '@/models/CategoryModel'
+import CostModel, { ICost } from '@/models/CostModel'
 import OrderModel from '@/models/OrderModel'
 import { IProduct } from '@/models/ProductModel'
 import TagModel, { ITag } from '@/models/TagModel'
@@ -9,16 +10,20 @@ import { searchParamsToObject } from '@/utils/handleQuery'
 import { toUTC } from '@/utils/time'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Order, User, Category, Tag
+// Models: Order, User, Category, Tag, Cost, Cost Group
 import '@/models/CategoryModel'
+import '@/models/CostGroupModel'
+import '@/models/CostModel'
 import '@/models/OrderModel'
 import '@/models/TagModel'
 import '@/models/UserModel'
+import { ICostGroup } from '@/models/CostGroupModel'
 
 export const dynamic = 'force-dynamic'
 
 export type BlocksType = {
   revenue: number
+  costs: number
   orders: number
   accounts: number
   customers: number
@@ -40,6 +45,13 @@ export type ChartOrderType = {
   isVoucher: boolean
 }
 
+export type ChartCostType = {
+  amount: number
+  date: string
+  costGroup: ICostGroup
+}
+
+// [GET]: /admin
 export async function GET(req: NextRequest) {
   console.log('- Get Dashboard - ')
 
@@ -93,7 +105,12 @@ export async function GET(req: NextRequest) {
     }
 
     // get all orders from database
-    const orders = await OrderModel.find(filter).sort(sort).lean()
+    const orders: any[] = await OrderModel.find(filter).sort(sort).lean()
+
+    // get all costs from database
+    const { createdAt, status, ...restFilter } = filter
+    const costFilter = { ...restFilter, date: createdAt }
+    const costs: ICost[] = await CostModel.find(costFilter).populate('costGroup').sort(sort).lean()
 
     // MARK: Blocks
     // get list of emails from users in database
@@ -104,6 +121,7 @@ export async function GET(req: NextRequest) {
 
     const blocks: BlocksType = {
       revenue: orders.reduce((total, order) => total + order.total, 0),
+      costs: costs.reduce((total, cost) => total + cost.amount, 0),
       orders: orders.length,
       accounts: orders.reduce(
         (total, order) =>
@@ -123,7 +141,7 @@ export async function GET(req: NextRequest) {
     const tags = await TagModel.find().lean()
 
     // MARK: Custom Orders
-    const customOrders: ChartOrderType[] = orders.map((order, index) => {
+    const customOrders: ChartOrderType[] = orders.map(order => {
       let cates = order.items.map((item: any) => item.product.category)
       // some cate is ICategory, some is string, so if it is string, find it in categories
       cates = cates.map((cate: any) =>
@@ -168,8 +186,15 @@ export async function GET(req: NextRequest) {
       }
     })
 
+    // MARK: Custom Costs
+    const customCosts: ChartCostType[] = costs.map(cost => ({
+      amount: cost.amount,
+      date: cost.date,
+      costGroup: cost.costGroup,
+    }))
+
     // return response
-    return NextResponse.json({ orders: customOrders, blocks }, { status: 200 })
+    return NextResponse.json({ orders: customOrders, costs: customCosts, blocks }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

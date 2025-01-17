@@ -1,5 +1,3 @@
-'use client'
-
 import { IAccount } from '@/models/AccountModel'
 import { IProduct } from '@/models/ProductModel'
 import { getAllAccountsApi } from '@/requests'

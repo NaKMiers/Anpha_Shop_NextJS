@@ -1,7 +1,15 @@
-import { ActiveBlockType } from '@/app/(admin)/admin/page'
 import { BlocksType } from '@/app/api/admin/route'
 import { formatPrice } from '@/utils/number'
 import { Dispatch, memo, ReactNode, SetStateAction, useCallback } from 'react'
+
+export type ActiveBlockType =
+  | 'revenue'
+  | 'profit'
+  | 'costs'
+  | 'orders'
+  | 'accounts'
+  | 'customers'
+  | 'vouchers'
 
 interface BlocksProps {
   activeBlock: ActiveBlockType
@@ -39,6 +47,33 @@ function Blocks({ blocks, activeBlock, setActiveBlock, loading, className = '' }
           )}
         </>,
         'revenue'
+      )}
+
+      {/* Profit */}
+      {renderBlock(
+        <>
+          <span className="font-bold tracking-wider">Profit</span>
+          {blocks && !loading ? (
+            <span className="mt-1 font-semibold">{formatPrice(blocks.revenue - blocks.costs)}</span>
+          ) : (
+            <div className="loading mt-1 h-4 w-full max-w-[100px] rounded-md shadow-sm shadow-light" />
+          )}
+        </>,
+        'profit',
+        true
+      )}
+
+      {/* Costs */}
+      {renderBlock(
+        <>
+          <span className="font-bold tracking-wider">Costs</span>
+          {blocks && !loading ? (
+            <span className="mt-1 font-semibold">{formatPrice(blocks.costs)}</span>
+          ) : (
+            <div className="loading mt-1 h-4 w-full max-w-[100px] rounded-md shadow-sm shadow-light" />
+          )}
+        </>,
+        'costs'
       )}
 
       {/* Orders */}

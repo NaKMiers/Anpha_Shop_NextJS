@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { ICostGroup } from './CostGroupModel'
 const Schema = mongoose.Schema
 
 const CostSchema = new Schema(
@@ -15,13 +16,9 @@ const CostSchema = new Schema(
     desc: {
       type: String,
     },
-    status: {
-      type: String,
-      enum: ['pending', 'approved', 'rejected'],
-      default: 'pending',
-    },
     date: {
       type: Date,
+      required: true,
     },
   },
   { timestamps: true }
@@ -32,10 +29,9 @@ export default CostModel
 
 export interface ICost {
   _id: string
-  costGroup: ICostGroup | string
+  costGroup: ICostGroup
   amount: number
   desc: string
-  status: string
   date: string
   createdAt: string
   updatedAt: string

@@ -1,10 +1,11 @@
 import { connectDatabase } from '@/config/database'
 import CostModel from '@/models/CostModel'
+import { toUTC } from '@/utils/time'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Models: Cost
+// Models: Cost, Cost Group
+import '@/models/CostGroupModel'
 import '@/models/CostModel'
-import { toUTC } from '@/utils/time'
 
 // [PUT]: /admin/cost/:id/edit
 export async function PUT(req: NextRequest, { params: { id } }: { params: { id: string } }) {
@@ -15,14 +16,7 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
     await connectDatabase()
 
     // get data to create cost
-    const { costGroup, amount, desc, status, date } = await req.json()
-
-    console.log('id', id)
-    console.log('costGroup', costGroup)
-    console.log('amount', amount)
-    console.log('desc', desc)
-    console.log('status', status)
-    console.log('date', date)
+    const { costGroup, amount, desc, date } = await req.json()
 
     // create cost
     const updatedCost = await CostModel.findByIdAndUpdate(
@@ -32,12 +26,13 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
           costGroup,
           amount,
           desc,
-          status,
-          date: date ? toUTC(date) : null,
+          date: toUTC(date),
         },
       },
       { new: true }
-    ).lean()
+    )
+      .populate('costGroup')
+      .lean()
 
     // return response
     return NextResponse.json({ updatedCost, message: 'Cost has been updated' }, { status: 200 })

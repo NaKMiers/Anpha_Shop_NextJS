@@ -1,9 +1,10 @@
 import { connectDatabase } from '@/config/database'
-import { NextRequest, NextResponse } from 'next/server'
 import CostModel from '@/models/CostModel'
+import { NextRequest, NextResponse } from 'next/server'
 
 // Models: Cost
 import '@/models/CostModel'
+import { toUTC } from '@/utils/time'
 
 // [POST]: /admin/cost/add
 export async function POST(req: NextRequest) {
@@ -14,19 +15,21 @@ export async function POST(req: NextRequest) {
     await connectDatabase()
 
     // get data to create cost
-    const { costGroup, amount, desc, status, date } = await req.json()
+    const { costGroup, amount, desc, date } = await req.json()
 
     // create cost
     const cost = await CostModel.create({
       costGroup,
       amount,
       desc,
-      status,
-      date: date || null,
+      date: toUTC(date),
     })
 
+    // get just created cost to populate cost group
+    const newCost = await CostModel.findById(cost._id).populate('costGroup').lean()
+
     // return response
-    return NextResponse.json({ cost, message: 'Create cost successfully' }, { status: 200 })
+    return NextResponse.json({ cost: newCost, message: 'Create cost successfully' }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

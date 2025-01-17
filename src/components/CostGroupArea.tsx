@@ -1,7 +1,12 @@
 import { ICostGroup } from '@/models/CostGroupModel'
-import { addCostGroupApi, deleteCostGroupsApi, updateCostGroupApi } from '@/requests'
+import {
+  addCostGroupApi,
+  deleteCostGroupsApi,
+  getAllCostGroupsApi,
+  updateCostGroupApi,
+} from '@/requests'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaPlus, FaSave, FaTrash } from 'react-icons/fa'
 import { MdCancel, MdEdit } from 'react-icons/md'
@@ -17,7 +22,7 @@ interface CostGroupAreaProps {
 function CostGroupArea({ costGroups, setCostGroups, className = '' }: CostGroupAreaProps) {
   // states
   const [openCostGroup, setOpenCostGroup] = useState<boolean>(false)
-  const [selectedCostGroups, setSelectedCostGroups] = useState<ICostGroup[]>(costGroups)
+  const [selectedCostGroups, setSelectedCostGroups] = useState<ICostGroup[]>([])
 
   const [title, setTitle] = useState<string>('')
   const [adding, setAdding] = useState<boolean>(false)
@@ -27,8 +32,26 @@ function CostGroupArea({ costGroups, setCostGroups, className = '' }: CostGroupA
   const [deleting, setDeleting] = useState<boolean>(false)
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
+  // get all cost groups
+  useEffect(() => {
+    const getCostGroups = async () => {
+      try {
+        const { costGroups } = await getAllCostGroupsApi()
+        setCostGroups(costGroups)
+        setSelectedCostGroups(costGroups)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      }
+    }
+
+    getCostGroups()
+  }, [setCostGroups])
+
   // handle add new cost group
   const handleAddCostGroup = useCallback(async () => {
+    if (!title.trim()) return
+
     // start adding
     setAdding(true)
 
@@ -254,20 +277,20 @@ function CostGroupArea({ costGroups, setCostGroups, className = '' }: CostGroupA
             </motion.div>
           )}
         </AnimatePresence>
-
-        <ConfirmDialog
-          open={isOpenConfirmModal}
-          setOpen={setIsOpenConfirmModal}
-          title={`Delete ${deleteCostGroup?.title} group`}
-          content={`Are you sure that you want to delete this group?`}
-          onAccept={handleDeleteCostGroup}
-          isLoading={deleting}
-          color="rose"
-          containerClassName="!h-full !w-full"
-          cancelLabel="Cancel"
-          acceptLabel="Delete"
-        />
       </div>
+
+      <ConfirmDialog
+        open={isOpenConfirmModal}
+        setOpen={setIsOpenConfirmModal}
+        title={`Delete ${deleteCostGroup?.title} group`}
+        content={`Are you sure that you want to delete this group?`}
+        onAccept={handleDeleteCostGroup}
+        isLoading={deleting}
+        color="rose"
+        containerClassName="absolute !h-full !w-full"
+        cancelLabel="Cancel"
+        acceptLabel="Delete"
+      />
     </>
   )
 }

@@ -36,6 +36,8 @@ export const handleQuery = (
         'expireFrom',
         'expireTo',
         'timeType',
+        'limit',
+        'page',
       ].includes(key)
     ) {
       if (Array.isArray(searchParams[key]) && searchParams[key].length > 1) {

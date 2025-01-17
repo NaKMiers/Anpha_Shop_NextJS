@@ -1,10 +1,10 @@
 'use client'
 
-import { ActiveBlockType } from '@/app/(admin)/admin/page'
 import { formatPrice } from '@/utils/number'
 import { capitalize } from '@/utils/string'
 import { memo } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { ActiveBlockType } from './Blocks'
 
 export type ChartDatum = {
   name: string
@@ -58,7 +58,9 @@ function Chart({ activeBlock, data = [], className = '' }: ChartProps) {
             animationEasing="ease-in-out"
             animationDuration={200}
             formatter={value => {
-              const formattedValue = activeBlock === 'revenue' ? formatPrice(+value) : value
+              const formattedValue = ['revenue', 'costs'].includes(activeBlock)
+                ? formatPrice(+value)
+                : value
               return [`${capitalize(activeBlock)}: ${formattedValue}`]
             }}
             labelStyle={{ color: '#01dbe5' }}

@@ -1,6 +1,6 @@
-import { ActiveBlockType } from '@/app/(admin)/admin/page'
-import { ChartOrderType } from '@/app/api/admin/route'
+import { ChartCostType, ChartOrderType } from '@/app/api/admin/route'
 import { ICategory } from '@/models/CategoryModel'
+import { ICostGroup } from '@/models/CostGroupModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { formatPrice } from '@/utils/number'
@@ -8,9 +8,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
+import { ActiveBlockType } from './Blocks'
 
 interface GroupFiltersProps {
   orders: ChartOrderType[]
+  costs: ChartCostType[]
   activeBlock: ActiveBlockType
   className?: string
 
@@ -33,10 +35,16 @@ interface GroupFiltersProps {
   aEmails: string[]
   selectedAEmails: string[]
   setSelectedAEmails: Dispatch<SetStateAction<string[]>>
+
+  // cost group
+  costGroups: ICostGroup[]
+  selectedCostGroups: ICostGroup[]
+  setSelectedCostGroups: Dispatch<SetStateAction<ICostGroup[]>>
 }
 
 function GroupFilters({
   orders,
+  costs,
   activeBlock,
   className = '',
 
@@ -59,12 +67,18 @@ function GroupFilters({
   aEmails,
   selectedAEmails,
   setSelectedAEmails,
+
+  // cost group
+  costGroups,
+  selectedCostGroups,
+  setSelectedCostGroups,
 }: GroupFiltersProps) {
   // states
   const [openProd, setOpenProd] = useState<boolean>(false)
   const [openCat, setOpenCat] = useState<boolean>(false)
   const [openTag, setOpenTag] = useState<boolean>(false)
   const [openAEmail, setOpenAEmail] = useState<boolean>(false)
+  const [openCostGroup, setOpenCostGroup] = useState<boolean>(false)
 
   // calculate value by active block of each product
   const handleCalcProdValue = useCallback(
@@ -188,6 +202,20 @@ function GroupFilters({
     [orders, activeBlock]
   )
 
+  // calculate value by active block of each cost group
+  const handleCalcCostGroupValue = useCallback(
+    (costGroup: ICostGroup) => {
+      // filter costs of cost group
+      const filteredCosts: ChartCostType[] = costs.filter(
+        cost => cost.costGroup._id.toString() === costGroup._id.toString()
+      )
+
+      let totalValue: number | string = filteredCosts.reduce((sum, cost) => sum + cost.amount, 0)
+      return formatPrice(totalValue)
+    },
+    [costs]
+  )
+
   // render filter group
   const renderFilterGroup = useCallback(
     (
@@ -271,7 +299,7 @@ function GroupFilters({
 
   return (
     <div className={`${className}`}>
-      {(openProd || openCat || openTag || openAEmail) && (
+      {(openProd || openCat || openTag || openAEmail || openCostGroup) && (
         <div
           className="fixed left-0 top-0 z-10 h-screen w-screen"
           onClick={() => {
@@ -279,61 +307,80 @@ function GroupFilters({
             setOpenCat(false)
             setOpenTag(false)
             setOpenAEmail(false)
+            setOpenCostGroup(false)
           }}
         />
       )}
 
       {/* MARK: Products */}
-      {renderFilterGroup(
-        openProd,
-        setOpenProd,
-        products,
-        selectedProds,
-        setSelectedProds,
-        handleCalcProdValue,
-        true,
-        'products',
-        'product'
-      )}
+      {activeBlock !== 'costs' &&
+        renderFilterGroup(
+          openProd,
+          setOpenProd,
+          products,
+          selectedProds,
+          setSelectedProds,
+          handleCalcProdValue,
+          true,
+          'products',
+          'product'
+        )}
 
       {/* MARK: Categories */}
-      {renderFilterGroup(
-        openCat,
-        setOpenCat,
-        categories,
-        selectedCats,
-        setSelectedCats,
-        handleCalcCateValue,
-        true,
-        'categories',
-        'category'
-      )}
+      {activeBlock !== 'costs' &&
+        renderFilterGroup(
+          openCat,
+          setOpenCat,
+          categories,
+          selectedCats,
+          setSelectedCats,
+          handleCalcCateValue,
+          true,
+          'categories',
+          'category'
+        )}
 
       {/* MARK: Tags */}
-      {renderFilterGroup(
-        openTag,
-        setOpenTag,
-        tags,
-        selectedTags,
-        setSelectedTags,
-        handleCalcTagValue,
-        true,
-        'tags',
-        'tag'
-      )}
+      {activeBlock !== 'costs' &&
+        renderFilterGroup(
+          openTag,
+          setOpenTag,
+          tags,
+          selectedTags,
+          setSelectedTags,
+          handleCalcTagValue,
+          true,
+          'tags',
+          'tag'
+        )}
 
       {/* MARK: Account Email */}
-      {renderFilterGroup(
-        openAEmail,
-        setOpenAEmail,
-        aEmails,
-        selectedAEmails,
-        setSelectedAEmails,
-        handleCalcAEmailValue,
-        false,
-        'emails',
-        'email'
-      )}
+      {activeBlock !== 'costs' &&
+        renderFilterGroup(
+          openAEmail,
+          setOpenAEmail,
+          aEmails,
+          selectedAEmails,
+          setSelectedAEmails,
+          handleCalcAEmailValue,
+          false,
+          'emails',
+          'email'
+        )}
+
+      {/* MARK: Cost Group */}
+      {activeBlock === 'costs' &&
+        renderFilterGroup(
+          openCostGroup,
+          setOpenCostGroup,
+          costGroups,
+          selectedCostGroups,
+          setSelectedCostGroups,
+          handleCalcCostGroupValue,
+          true,
+          'cost groups',
+          'cost group'
+        )}
     </div>
   )
 }

@@ -65,8 +65,6 @@ function Header({ isStatic, hideSearch }: HeaderProps) {
         // send request to refresh user balance
         const { balance } = await refreshUserBalanceApi()
 
-        console.log('Balance:', balance)
-
         // update balance
         dispatch(setUserBalance(balance))
       } catch (err: any) {

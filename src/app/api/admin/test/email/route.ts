@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 
 // [GET]: /admin/test/email?type=...
 export async function GET(req: NextRequest) {
-  console.log(`- Test Email -`)
+  console.log('- Test Email -')
 
   // get query params
   const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)

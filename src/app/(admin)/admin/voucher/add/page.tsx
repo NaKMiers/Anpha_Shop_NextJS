@@ -179,7 +179,7 @@ function AddVoucherPage() {
         setValue('code', generateRandomString(5).toUpperCase())
         const adminUser = roleUsers.find((user: IUser) => user.role === 'admin')
         if (adminUser) {
-          setValue('onwer', adminUser._id)
+          setValue('owner', adminUser._id)
         }
       } catch (err: any) {
         console.log(err)
@@ -269,7 +269,7 @@ function AddVoucherPage() {
             errors={errors}
             required
             type="datetime-local"
-            minDate={moment().local().format('YYYY-MM-DD')}
+            minDate={moment().local().format('YYYY-MM-DDTHH:mm')}
             icon={FaPlay}
             onFocus={() => clearErrors('begin')}
           />

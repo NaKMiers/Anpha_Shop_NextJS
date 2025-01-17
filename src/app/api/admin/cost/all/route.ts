@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
 
     // options
     let skip = 0
-    let itemPerPage = 9
+    let itemPerPage = 100
     const filter: { [key: string]: any } = {}
-    let sort: { [key: string]: any } = { createdAt: -1 } // default sort
+    let sort: { [key: string]: any } = { date: -1 } // default sort
 
     // build filter
     for (const key in params) {
@@ -108,19 +108,8 @@ export async function GET(req: NextRequest) {
       .limit(itemPerPage)
       .lean()
 
-    // get all costs without filter
-    const chops = await CostModel.aggregate([
-      {
-        $group: {
-          _id: null,
-          minAmount: { $min: '$amount' },
-          maxAmount: { $max: '$amount' },
-        },
-      },
-    ])
-
     // return all costs
-    return NextResponse.json({ costs, amount, chops: chops[0] }, { status: 200 })
+    return NextResponse.json({ costs, amount }, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

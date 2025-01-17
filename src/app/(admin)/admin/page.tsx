@@ -1,13 +1,14 @@
 'use client'
 
-import { BlocksType, ChartOrderType } from '@/app/api/admin/route'
-import Blocks from '@/components/admin/dashboard/Blocks'
+import { BlocksType, ChartCostType, ChartOrderType } from '@/app/api/admin/route'
+import Blocks, { ActiveBlockType } from '@/components/admin/dashboard/Blocks'
 import Chart, { ChartDatum } from '@/components/admin/dashboard/Chart'
 import DateRangeSelection from '@/components/admin/dashboard/DateRangeSelection'
 import GroupFilters from '@/components/admin/dashboard/GroupFilters'
 import CostSheet from '@/components/CostSheet'
 import { useAppDispatch } from '@/libs/hooks'
 import { ICategory } from '@/models/CategoryModel'
+import { ICostGroup } from '@/models/CostGroupModel'
 import { IProduct } from '@/models/ProductModel'
 import { ITag } from '@/models/TagModel'
 import { getDashboardApi } from '@/requests'
@@ -23,8 +24,6 @@ import toast from 'react-hot-toast'
 import { BiReset } from 'react-icons/bi'
 import { TbReload } from 'react-icons/tb'
 import { VscLayoutSidebarRight } from 'react-icons/vsc'
-
-export type ActiveBlockType = 'revenue' | 'orders' | 'accounts' | 'customers' | 'vouchers'
 
 function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | string[] } }) {
   // hooks
@@ -44,6 +43,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
 
   // blocks
   const [orders, setOrders] = useState<ChartOrderType[]>([])
+  const [costs, setCosts] = useState<ChartCostType[]>([])
   const [blocks, setBlocks] = useState<BlocksType | null>(null)
   const [activeBlock, setActiveBlock] = useState<ActiveBlockType>('revenue')
 
@@ -56,8 +56,10 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
   const [selectedTags, setSelectedTags] = useState<ITag[]>([])
   const [aEmails, setAEmails] = useState<string[]>([])
   const [selectedAEmails, setSelectedAEmails] = useState<string[]>([])
+  const [costGroups, setCostGroups] = useState<ICostGroup[]>([])
+  const [selectedCostGroups, setSelectedCostGroups] = useState<ICostGroup[]>([])
 
-  const [openCost, setOpenCost] = useState<boolean>(true)
+  const [openCostSheet, setOpenCostSheet] = useState<boolean>(false)
 
   // chart data
   const [data, setData] = useState<ChartDatum[]>([])
@@ -74,89 +76,98 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     defaultValues,
   })
 
-  // // get dashboard
-  // useEffect(() => {
-  //   const getDashboard = async () => {
-  //     // add from-to to search params
-  //     if (searchParams) {
-  //       searchParams['from-to'] =
-  //         searchParams['from-to'] ||
-  //         `${toUTC(momentTZ(defaultValues.from).startOf('day').toDate())}|${toUTC(momentTZ(defaultValues.from).endOf('day').toDate())}`
-  //     }
+  // get dashboard
+  useEffect(() => {
+    const getDashboard = async () => {
+      // add from-to to search params
+      if (searchParams) {
+        searchParams['from-to'] =
+          searchParams['from-to'] ||
+          `${toUTC(momentTZ(defaultValues.from).startOf('day').toDate())}|${toUTC(momentTZ(defaultValues.from).endOf('day').toDate())}`
+      }
 
-  //     let query = handleQuery(searchParams)
+      // sync search params with states
+      const from =
+        searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[0]
+          ? moment((searchParams['from-to'] as string).split('|')[0]).format('YYYY-MM-DDTHH:mm')
+          : getValues('from')
+      setValue('from', from)
+      const to =
+        searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[1]
+          ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
+          : getValues('to')
+      setValue('to', to)
 
-  //     // start loading
-  //     setLoading(true)
+      // sync range with states
+      setRange([
+        {
+          startDate: momentTZ(from).toDate() || new Date(),
+          endDate: momentTZ(to).toDate() || new Date(),
+          key: 'selection',
+        },
+      ])
 
-  //     try {
-  //       // send request
-  //       const { orders, blocks } = await getDashboardApi(query)
+      let query = handleQuery(searchParams)
 
-  //       setOrders(orders)
-  //       setBlocks(blocks)
+      // start loading
+      setLoading(true)
 
-  //       // extract products
-  //       const products = orders.map((order: ChartOrderType) => order.products).flat()
-  //       const uniqueProducts: any[] = Array.from(
-  //         new Map(products.map((product: IProduct) => [product._id, product])).values()
-  //       )
-  //       setProducts(uniqueProducts)
-  //       setSelectedProds(uniqueProducts)
+      try {
+        // send request
+        const { orders, costs, blocks } = await getDashboardApi(query)
 
-  //       // extract categories
-  //       const categories = orders.map((order: ChartOrderType) => order.categories).flat()
-  //       const uniqueCategories: any[] = Array.from(
-  //         new Map(categories.map((category: ICategory) => [category._id, category])).values()
-  //       )
-  //       setCategories(uniqueCategories)
-  //       setSelectedCats(uniqueCategories)
+        setOrders(orders)
+        setCosts(costs)
+        setBlocks(blocks)
 
-  //       // extract tags
-  //       const tags = orders.map((order: ChartOrderType) => order.tags).flat()
-  //       const uniqueTags: any[] = Array.from(new Map(tags.map((tag: ITag) => [tag._id, tag])).values())
-  //       setTags(uniqueTags)
-  //       setSelectedTags(uniqueTags)
+        // extract products
+        const products = orders.map((order: ChartOrderType) => order.products).flat()
+        const uniqueProducts: any[] = Array.from(
+          new Map(products.map((product: IProduct) => [product._id, product])).values()
+        )
+        setProducts(uniqueProducts)
+        setSelectedProds(uniqueProducts)
 
-  //       // extract account emails
-  //       const aEmails = orders.map((order: ChartOrderType) => order.accounts).flat()
-  //       const uniqueAEmails: any[] = Array.from(
-  //         new Map(aEmails.map((aEmail: string) => [aEmail, aEmail])).values()
-  //       )
-  //       setAEmails(uniqueAEmails)
-  //       setSelectedAEmails(uniqueAEmails)
+        // extract categories
+        const categories = orders.map((order: ChartOrderType) => order.categories).flat()
+        const uniqueCategories: any[] = Array.from(
+          new Map(categories.map((category: ICategory) => [category._id, category])).values()
+        )
+        setCategories(uniqueCategories)
+        setSelectedCats(uniqueCategories)
 
-  //       // sync search params with states
-  //       const from =
-  //         searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[0]
-  //           ? moment((searchParams['from-to'] as string).split('|')[0]).format('YYYY-MM-DDTHH:mm')
-  //           : getValues('from')
-  //       setValue('from', from)
-  //       const to =
-  //         searchParams?.['from-to'] && (searchParams?.['from-to'] as string).split('|')[1]
-  //           ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
-  //           : getValues('to')
-  //       setValue('to', to)
+        // extract tags
+        const tags = orders.map((order: ChartOrderType) => order.tags).flat()
+        const uniqueTags: any[] = Array.from(new Map(tags.map((tag: ITag) => [tag._id, tag])).values())
+        setTags(uniqueTags)
+        setSelectedTags(uniqueTags)
 
-  //       // sync range with states
-  //       setRange([
-  //         {
-  //           startDate: momentTZ(from).toDate() || new Date(),
-  //           endDate: momentTZ(to).toDate() || new Date(),
-  //           key: 'selection',
-  //         },
-  //       ])
-  //     } catch (err: any) {
-  //       console.log(err)
-  //       toast.error(err.message)
-  //     } finally {
-  //       // stop loading
-  //       setLoading(false)
-  //     }
-  //   }
+        // extract account emails
+        const aEmails = orders.map((order: ChartOrderType) => order.accounts).flat()
+        const uniqueAEmails: any[] = Array.from(
+          new Map(aEmails.map((aEmail: string) => [aEmail, aEmail])).values()
+        )
+        setAEmails(uniqueAEmails)
+        setSelectedAEmails(uniqueAEmails)
 
-  //   getDashboard()
-  // }, [getValues, setValue, searchParams, defaultValues])
+        // extract cost groups
+        const costGroups = costs.map((cost: ChartCostType) => cost.costGroup)
+        const uniqueCostGroups: any[] = Array.from(
+          new Map(costGroups.map((costGroup: ICostGroup) => [costGroup._id, costGroup])).values()
+        )
+        setCostGroups(uniqueCostGroups)
+        setSelectedCostGroups(uniqueCostGroups)
+      } catch (err: any) {
+        console.log(err)
+        toast.error(err.message)
+      } finally {
+        // stop loading
+        setLoading(false)
+      }
+    }
+
+    getDashboard()
+  }, [getValues, setValue, searchParams, defaultValues])
 
   // auto update chart data
   useEffect(() => {
@@ -184,6 +195,13 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     filteredOrders = filteredOrders.filter(
       order => order.accounts.some(email => selectedAEmails.includes(email)) // filter by account emails
     )
+
+    // --------------------------------------
+    let filterCosts = costs
+    filterCosts = filterCosts.filter(
+      cost => selectedCostGroups.some(costGroup => costGroup._id === cost.costGroup._id) // filter by cost groups
+    )
+
     // split data into columns
     // x = end date - start date
     // x > 1 years -> split charts into cols of years
@@ -226,22 +244,32 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         return orderDate.isBetween(colStart, colEnd, undefined, '[)')
       })
 
-      let totalValue = chunkOrders.reduce((sum, order) => sum + order.total, 0)
+      // Filter costs in this range
+      const chunkCosts = filterCosts.filter(cost => {
+        const costDate = momentTZ(cost.date).utc()
+        return costDate.isBetween(colStart, colEnd, undefined, '[)')
+      })
+
+      // Calculate total value
+      let totalOrderValue = chunkOrders.reduce((sum, order) => sum + order.total, 0)
       switch (activeBlock) {
         case 'revenue':
           break
         case 'orders':
-          totalValue = chunkOrders.length
+          totalOrderValue = chunkOrders.length
           break
         case 'accounts':
-          totalValue = chunkOrders.reduce((total, order) => total + order.quantity, 0)
+          totalOrderValue = chunkOrders.reduce((total, order) => total + order.quantity, 0)
           break
         case 'vouchers':
-          totalValue = chunkOrders.filter(order => order.isVoucher).length
+          totalOrderValue = chunkOrders.filter(order => order.isVoucher).length
           break
         default:
           break
       }
+
+      // Calculate total cost
+      let totalCostValue = chunkCosts.reduce((sum, cost) => sum + cost.amount, 0)
 
       let dateFormat = 'DD'
       switch (splitGranularity) {
@@ -263,7 +291,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
 
       groupedData.push({
         name: colStart.format(dateFormat),
-        value: totalValue,
+        value: activeBlock === 'costs' ? totalCostValue : totalOrderValue,
       })
 
       iterator.add(1, splitGranularity as moment.unitOfTime.DurationConstructor)
@@ -277,10 +305,12 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     dispatch,
     getValues,
     orders,
+    costs,
     selectedProds,
     selectedCats,
     selectedTags,
     selectedAEmails,
+    selectedCostGroups,
     activeBlock,
   ])
 
@@ -368,7 +398,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         <div className="flex flex-wrap gap-21/2 gap-y-2">
           <button
             className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
-            onClick={() => setOpenCost(!openCost)}
+            onClick={() => setOpenCostSheet(!openCostSheet)}
           >
             <span className="text-xs font-semibold">Cost Sheet</span>
             <VscLayoutSidebarRight
@@ -402,6 +432,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
       {/* MARK: Filters */}
       <GroupFilters
         orders={orders}
+        costs={costs}
         activeBlock={activeBlock}
         className="mt-5 flex flex-wrap gap-2"
         // product
@@ -420,6 +451,10 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         aEmails={aEmails}
         selectedAEmails={selectedAEmails}
         setSelectedAEmails={setSelectedAEmails}
+        // cost group
+        costGroups={costGroups}
+        selectedCostGroups={selectedCostGroups}
+        setSelectedCostGroups={setSelectedCostGroups}
       />
 
       {/* MARK: Chart */}
@@ -431,8 +466,9 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
 
       {/* MARK: Cost Sheet */}
       <CostSheet
-        open={openCost}
-        setOpen={setOpenCost}
+        open={openCostSheet}
+        setOpen={setOpenCostSheet}
+        searchParams={searchParams}
       />
 
       {/* Ranks */}
