@@ -93,7 +93,7 @@ function CostItem({ cost, setCosts, costGroups, setIsAddingCost, className = '' 
         })
 
         // update costs
-        setCosts(prevCosts => [...prevCosts, cost])
+        setCosts(prevCosts => [cost, ...prevCosts])
 
         // reset form
         clearErrors()

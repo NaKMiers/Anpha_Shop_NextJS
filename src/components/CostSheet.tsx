@@ -223,7 +223,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
                   />
                   <select
                     id="sort"
-                    className="h-8 rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
+                    className="h-8 flex-shrink-0 rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
                     style={{ WebkitAppearance: 'none' }}
                     disabled={loading}
                     {...register('sort')}
@@ -243,7 +243,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
 
                 <div className="flex items-center justify-between gap-21/2">
                   <select
-                    className="h-8 rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
+                    className="h-8 flex-shrink-0 rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
                     style={{ WebkitAppearance: 'none' }}
                     disabled={loading}
                     defaultValue="Today"
@@ -289,7 +289,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
                   />
                   <select
                     id="page"
-                    className="h-8 rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
+                    className="h-8 flex-shrink-0 rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
                     style={{ WebkitAppearance: 'none' }}
                     disabled={loading}
                     {...register('page')}
