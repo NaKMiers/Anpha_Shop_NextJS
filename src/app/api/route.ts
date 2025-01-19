@@ -45,8 +45,8 @@ export async function GET() {
     // sort category by sequence
     const sequenceCategory = process.env.SEQUENCE_CATEGORIES!.split(' ')
     categories = categories.sort((a, b) => {
-      const indexA = sequenceCategory.indexOf(a.title.toLowerCase())
-      const indexB = sequenceCategory.indexOf(b.title.toLowerCase())
+      const indexA = sequenceCategory.indexOf(a.slug)
+      const indexB = sequenceCategory.indexOf(b.slug)
 
       return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB)
     })
@@ -86,11 +86,11 @@ export async function GET() {
         }
       })
       .filter(category => category.products.length) // remove category with empty product
-      .sort(
-        (a, b) =>
-          b.products.reduce((total, product) => total + product.sold, 0) -
-          a.products.reduce((total, product) => total + product.sold, 0)
-      )
+    // .sort(
+    //   (a, b) =>
+    //     b.products.reduce((total, product) => total + product.sold, 0) -
+    //     a.products.reduce((total, product) => total + product.sold, 0)
+    // )
 
     // shuffle products to get random
     const shuffledProducts = shuffleArray([...products.filter(product => product.stock > 0)])
