@@ -5,6 +5,9 @@ import Blocks, { ActiveBlockType } from '@/components/admin/dashboard/Blocks'
 import Chart, { ChartDatum } from '@/components/admin/dashboard/Chart'
 import DateRangeSelection from '@/components/admin/dashboard/DateRangeSelection'
 import GroupFilters from '@/components/admin/dashboard/GroupFilters'
+import AccountRankTab from '@/components/admin/tabs/AccountRankTab'
+import RecentlySaleTab from '@/components/admin/tabs/RecentlySaleTab'
+import UserSpendingRank from '@/components/admin/tabs/UserSpendingRank'
 import CostSheet from '@/components/CostSheet'
 import { useAppDispatch } from '@/libs/hooks'
 import { ICategory } from '@/models/CategoryModel'
@@ -472,7 +475,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
       />
 
       {/* Ranks */}
-      {/* <div className="mt-5 grid grid-cols-12 items-start gap-21/2 md:gap-21">
+      <div className="mt-5 grid grid-cols-12 items-start gap-21/2 md:gap-21">
         <div className="col-span-12 rounded-lg p-21 shadow-lg md:col-span-5">
           <h2 className="font-semibold">Sales</h2>
 
@@ -497,7 +500,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
 
           <UserSpendingRank className="mt-4 max-h-[500px] overflow-y-auto" />
         </div>
-      </div> */}
+      </div>
     </div>
   )
 }
