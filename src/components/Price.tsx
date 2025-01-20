@@ -165,29 +165,29 @@ function Price({ price, oldPrice, stock, flashSale, big, className = '' }: Price
       >
         <div
           className={`text-secondary ${
-            big ? 'text-[30px] tracking-wide' : 'text-[18px] tracking-wider'
+            big ? 'text-[30px] tracking-wide' : 'text-[18px] tracking-wider sm:text-[22px]'
           } leading-7`}
         >
           {formatPrice(newPrice)}
         </div>
         {oldPrice && (
           <div
-            className={`text-gray-400 ${
-              big ? 'text-[16px] tracking-wider' : 'text-[12px]'
+            className={`text-gray-500 ${
+              big ? 'text-[16px] tracking-wider' : 'text-[12px] sm:text-[14px]'
             } line-through`}
           >
             {formatPrice(oldPrice)}
           </div>
         )}
-        {/* {oldPrice && (
+        {oldPrice && (
           <div
-            className={`bg-yellow-400 ${
+            className={`hidden bg-yellow-400 sm:block ${
               big ? 'text-[16px]' : 'text-[13px]'
             } rounded-md px-1 py-[2px] font-sans font-semibold text-white`}
           >
             -{countPercent(newPrice, oldPrice)}
           </div>
-        )} */}
+        )}
       </div>
     </div>
   )

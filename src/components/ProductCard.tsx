@@ -301,7 +301,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
             <FaCartPlus className="wiggle text-[16px] text-white md:text-[18px]" />
           )}
         </button>
-        {/* {['admin', 'editor'].includes(curUser?.role) && (
+        {['admin', 'editor'].includes(curUser?.role) && (
           <Link
             href={`/admin/product/all?_id=${product?._id}`}
             className={`trans-200 group flex h-7 items-center justify-center rounded-md border-2 border-yellow-400 px-2 md:h-8 md:text-base ${
@@ -310,7 +310,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
           >
             <MdEdit className="wiggle text-[16px] text-yellow-400 md:text-[18px]" />
           </Link>
-        )} */}
+        )}
       </div>
     </div>
   )
