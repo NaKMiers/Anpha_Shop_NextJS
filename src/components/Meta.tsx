@@ -173,10 +173,10 @@ function Meta({
       className={`no-scrollbar w-full self-end overflow-auto rounded-medium bg-white p-21 text-dark shadow-md transition-all duration-300 ${className}`}
     >
       {/* MARK: Title */}
-      <h2 className="mb-21 text-2xl font-semibold">{title}</h2>
+      <h2 className="mb-4 text-xl font-semibold">{title}</h2>
 
       {/* MARK: Filter */}
-      <div className="grid grid-cols-12 gap-21">
+      <div className="grid grid-cols-12 gap-21/2">
         {/* Search */}
         {!hideSearch && (
           <div className="col-span-12 flex flex-col md:col-span-4">
@@ -216,7 +216,7 @@ function Meta({
         )}
 
         {/* Stock */}
-        {!hideStock && (
+        {/* {!hideStock && (
           <div className="col-span-12 flex flex-col md:col-span-4">
             <label htmlFor="stock">
               <span className="font-bold">Còn lại: </span>
@@ -234,49 +234,10 @@ function Meta({
               onChange={e => setStock(+e.target.value)}
             />
           </div>
-        )}
-
-        {/* MARK: Item Selection */}
-        {!!items.length && (
-          <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:max-h-[152px] lg:max-h-[152px]">
-            <div
-              className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
-                items.length === selectedFilterItems.length
-                  ? 'border-dark-100 bg-dark-100 text-white'
-                  : 'border-slate-300 bg-slate-200'
-              }`}
-              title="All Types"
-              onClick={() =>
-                setSelectedFilterItems(
-                  items.length === selectedFilterItems.length ? [] : items.map(tag => tag.slug)
-                )
-              }
-            >
-              Tất cả
-            </div>
-            {items.map(item => (
-              <div
-                className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
-                  selectedFilterItems.includes(item.slug)
-                    ? 'border-secondary bg-secondary text-white'
-                    : 'border-slate-300'
-                }`}
-                title={item.title}
-                key={item.slug}
-                onClick={
-                  selectedFilterItems.includes(item.slug)
-                    ? () => setSelectedFilterItems(prev => prev.filter(id => id !== item.slug))
-                    : () => setSelectedFilterItems(prev => [...prev, item.slug])
-                }
-              >
-                {item.title}
-              </div>
-            ))}
-          </div>
-        )}
+        )} */}
 
         {/* MARK: Select Filter */}
-        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-8">
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-3 md:col-span-4">
           {/* Sort */}
           <Input
             id="sort"
@@ -309,8 +270,47 @@ function Meta({
           />
         </div>
 
+        {/* MARK: Item Selection */}
+        {!!items.length && (
+          <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:max-h-[152px] lg:max-h-[152px]">
+            <div
+              className={`trans-200 h-[28px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 text-xs leading-[28px] ${
+                items.length === selectedFilterItems.length
+                  ? 'border-dark-100 bg-dark-100 text-white'
+                  : 'border-slate-300 bg-slate-200'
+              }`}
+              title="All Types"
+              onClick={() =>
+                setSelectedFilterItems(
+                  items.length === selectedFilterItems.length ? [] : items.map(tag => tag.slug)
+                )
+              }
+            >
+              Tất cả
+            </div>
+            {items.map(item => (
+              <div
+                className={`trans-200 h-[28px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 text-xs leading-[28px] ${
+                  selectedFilterItems.includes(item.slug)
+                    ? 'border-secondary bg-secondary text-white'
+                    : 'border-slate-300'
+                }`}
+                title={item.title}
+                key={item.slug}
+                onClick={
+                  selectedFilterItems.includes(item.slug)
+                    ? () => setSelectedFilterItems(prev => prev.filter(id => id !== item.slug))
+                    : () => setSelectedFilterItems(prev => [...prev, item.slug])
+                }
+              >
+                {item.title}
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* MARK: Filter Buttons */}
-        <div className="col-span-12 flex items-center justify-end gap-2 md:col-span-4">
+        <div className="col-span-12 flex items-center justify-end gap-2">
           {/* Filter Button */}
           <button
             className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"

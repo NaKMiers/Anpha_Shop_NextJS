@@ -85,7 +85,7 @@ async function HomePage() {
         Top <span className="box- text-5xl font-semibold italic text-orange-500">#10</span>
       </h2>
 
-      <section className="mx-auto max-w-1200 px-4">
+      <section className="mx-auto max-w-1200 px-1.5">
         <GroupProducts
           products={bestSellerProducts}
           bestSeller
@@ -96,7 +96,7 @@ async function HomePage() {
 
       {/* MARK: Products */}
       <Heading title="Sản phẩm" />
-      <section className="mx-auto max-w-1200 px-4">
+      <section className="mx-auto max-w-1200 px-1.5">
         {productsByCategoryGroups.map((group, index) => (
           <GroupProducts
             category={group.category}

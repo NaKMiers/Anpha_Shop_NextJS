@@ -18,7 +18,7 @@ interface GroupProductsProps {
 
 function GroupProducts({ category, products, hideTop, bestSeller, className = '' }: GroupProductsProps) {
   // states
-  const [isExpaned, setIsExpaned] = useState<boolean>(false)
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isMedium, setIsMedium] = useState<boolean>(false)
   const [isDragging, setIsDragging] = useState<boolean>(false)
 
@@ -28,11 +28,11 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
   // MARK: Handlers
   const handleDraging = useCallback(
     (e: React.MouseEvent) => {
-      if (isDragging && !isExpaned && slideTrackRef.current) {
+      if (isDragging && !isExpanded && slideTrackRef.current) {
         slideTrackRef.current.scrollLeft -= e.movementX
       }
     },
-    [isDragging, isExpaned]
+    [isDragging, isExpanded]
   )
 
   // prev slide
@@ -78,7 +78,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
       {!hideTop && (
         <div className={`flex ${!bestSeller ? 'justify-between' : 'justify-end'} px-6`}>
           {!bestSeller && (
-            <div className="group flex items-center gap-2 rounded-t-xl border-b-2 bg-white px-3 py-2 opacity-90">
+            <div className="group flex items-center gap-2 rounded-t-lg border-b-2 bg-white px-3 py-1 opacity-90">
               <div className="aspect-square h-6 w-6 items-center">
                 <Image
                   className="wiggle"
@@ -88,16 +88,16 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
                   alt={category?.title || 'icon'}
                 />
               </div>
-              <span className="font-semibold">{category?.title}</span>
+              <span className="text-sm font-semibold">{category?.title}</span>
             </div>
           )}
-          <div className="flex items-center gap-2 rounded-t-xl border-b-2 bg-white px-3 py-2 opacity-90">
+          <div className="flex items-center gap-2 rounded-t-lg border-b-2 bg-white px-3 py-1 text-sm opacity-90">
             {isMedium ? (
               <button
                 className="text-sky-600"
-                onClick={() => setIsExpaned(prev => !prev)}
+                onClick={() => setIsExpanded(prev => !prev)}
               >
-                {isExpaned ? 'Thu lại' : 'Tất cả'}
+                {isExpanded ? 'Thu lại' : 'Tất cả'}
               </button>
             ) : (
               <Link
@@ -113,33 +113,27 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
       )}
 
       {/* MARK: Next - Previous */}
-      {!isExpaned && (
+      {!isExpanded && (
         <>
           <button
-            className="trans-200 group absolute -left-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-l-small bg-white bg-opacity-80 shadow-md hover:bg-opacity-100"
+            className="trans-200 group absolute -left-[13px] top-1/2 z-10 flex h-8 w-7 -translate-y-1/2 items-center justify-center rounded-l-md bg-white bg-opacity-80 shadow-md hover:bg-opacity-100 md:-left-21 md:h-11 md:w-10"
             onClick={prevSlide}
           >
-            <FaChevronLeft
-              size={18}
-              className="wiggle text-dark"
-            />
+            <FaChevronLeft className="wiggle text-[16px] text-dark md:text-[18px]" />
           </button>
           <button
-            className="trans-200 group absolute -right-21 top-1/2 z-10 flex h-11 w-10 -translate-y-1/2 items-center justify-center rounded-r-small bg-white bg-opacity-80 shadow-md hover:bg-opacity-100"
+            className="trans-200 group absolute -right-[13px] top-1/2 z-10 flex h-8 w-7 -translate-y-1/2 items-center justify-center rounded-r-md bg-white bg-opacity-80 shadow-md hover:bg-opacity-100 md:-right-21 md:h-11 md:w-10"
             onClick={nextSlide}
           >
-            <FaChevronRight
-              size={18}
-              className="wiggle text-dark"
-            />
+            <FaChevronRight className="wiggle text-[16px] text-dark md:text-[18px]" />
           </button>
         </>
       )}
 
       {/* MARK: Slider */}
-      <div className="flex min-h-[490px] flex-wrap rounded-medium bg-white bg-opacity-90 px-21/2 shadow-medium">
+      <div className="flex min-h-[360px] flex-wrap rounded-medium bg-white bg-opacity-90 px-1.5 shadow-medium md:px-21/2">
         <div
-          className={`flex ${isExpaned ? 'flex-wrap gap-y-21' : ''} w-full overflow-x-auto py-21 ${
+          className={`flex ${isExpanded ? 'flex-wrap gap-y-21' : ''} w-full overflow-x-auto pb-21/2 pt-4 ${
             !isDragging ? 'snap-x snap-mandatory' : ''
           }`}
           ref={slideTrackRef}
@@ -154,7 +148,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
             return (
               <div
                 key={product._id}
-                className={`relative w-full flex-shrink-0 px-21/2 sm:w-1/2 md:w-1/3 lg:w-1/4 ${
+                className={`relative w-1/2 flex-shrink-0 px-1 md:w-1/3 md:px-21/2 lg:w-1/4 ${
                   !isDragging ? 'snap-start' : ''
                 }`}
               >

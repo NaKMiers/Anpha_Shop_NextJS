@@ -5,7 +5,7 @@ import { IProduct } from '@/models/ProductModel'
 import { getFlashSalePageApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 
-async function TagPage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
+async function FlashSalePage({ searchParams }: { searchParams?: { [key: string]: string[] } }) {
   // Data
   let products: IProduct[] = []
   let amount: number = 0
@@ -78,7 +78,7 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
       </div>
 
       {/* MARK: MAIN LIST */}
-      <div className="grid grid-cols-1 gap-21 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-21/2 md:grid-cols-4 md:gap-y-21">
         {products.map(product => (
           <ProductCard
             product={product}
@@ -98,4 +98,4 @@ async function TagPage({ searchParams }: { searchParams?: { [key: string]: strin
   )
 }
 
-export default TagPage
+export default FlashSalePage

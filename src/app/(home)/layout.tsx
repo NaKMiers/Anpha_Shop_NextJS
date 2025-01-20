@@ -1,5 +1,4 @@
 import ContactFloating from '@/components/ContactFloating'
-import FloatingButtons from '@/components/FloatingButtons'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
@@ -17,7 +16,7 @@ export default async function RootLayout({
       <ContactFloating />
 
       {/* Main */}
-      <main className="px-21">
+      <main className="px-21/2 md:px-21">
         <div className="mx-auto max-w-1200">{children}</div>
       </main>
 

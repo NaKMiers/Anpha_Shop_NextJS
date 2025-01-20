@@ -57,13 +57,13 @@ async function BestSellerPage({ searchParams }: { searchParams?: { [key: string]
 
       {/* Heading */}
       <h2
-        className={`mx-auto my-11 w-full max-w-1200 text-center font-sans text-4xl font-light tracking-wide text-white sm:text-nowrap md:text-nowrap`}
+        className={`mx-auto mb-6 mt-11 w-full max-w-1200 text-center font-sans text-xl font-semibold tracking-wide text-white sm:text-nowrap md:text-nowrap`}
       >
         Danh Sách Bán Chạy
       </h2>
 
       {/* MARK: MAIN LIST */}
-      <div className="mt-12 grid grid-cols-1 gap-21 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-21 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map(product => (
           <ProductCard
             product={product}

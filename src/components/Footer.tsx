@@ -35,7 +35,7 @@ function Footer() {
   }, [])
 
   return (
-    <div className="mb-10 mt-36 px-21">
+    <div className="mb-10 mt-36 px-21/2 md:px-21">
       <div className="mx-auto max-w-1200 rounded-medium bg-dark-100 text-white shadow-medium">
         <div className="p-21">
           {/* MARK: Top */}

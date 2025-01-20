@@ -9,8 +9,8 @@ import { NextRequest, NextResponse } from 'next/server'
 // Models: Product, Flash Sale, Category
 import '@/models/CategoryModel'
 import '@/models/FlashSaleModel'
-import '@/models/ProductModel'
 import { IFlashSale } from '@/models/FlashSaleModel'
+import '@/models/ProductModel'
 
 export const dynamic = 'force-dynamic'
 

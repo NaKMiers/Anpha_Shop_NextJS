@@ -126,7 +126,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <section className="flex flex-col gap-x-21 gap-y-21/2 rounded-medium bg-white p-8 shadow-medium md:flex-row">
+      <section className="flex flex-col gap-x-21 gap-y-21/2 rounded-medium bg-white p-21 shadow-medium md:flex-row md:p-8">
         {/* MARK: Thumbnails */}
         <div className="w-full md:w-[45%] md:max-w-[500px]">
           <div className="relative aspect-video overflow-hidden rounded-md shadow-xl">
@@ -169,7 +169,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
         <div className="md:w-[55%]">
           {/* Title */}
           <h1
-            className="mb-3 text-[28px] font-semibold leading-8 text-dark"
+            className="mb-3 text-xl font-semibold text-dark md:text-[28px] md:leading-8"
             title={product?.title}
           >
             {product?.title}
@@ -184,7 +184,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
             big
           />
 
-          <div className="mt-5 flex flex-col gap-3 font-body text-xl tracking-wide">
+          <div className="mt-5 flex flex-col gap-1.5 font-body text-base tracking-wide md:gap-3 md:text-xl">
             {/* Category */}
             <div className="flex flex-wrap items-center gap-1">
               <MdCategory
@@ -245,7 +245,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
       {/* MARK: Related Products */}
       {!!relatedProducts.length && (
-        <section className="mx-auto mb-9 max-w-1200 overflow-hidden rounded-medium border-4 border-white bg-dark-100 p-8 shadow-medium">
+        <section className="-mx-21/2 mb-9 overflow-hidden border-b-2 border-t-2 border-light bg-dark-100 p-4 shadow-medium md:mx-auto md:max-w-1200 md:rounded-lg md:p-8">
           <GroupProducts
             products={relatedProducts}
             hideTop
@@ -256,11 +256,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
       {/* MARK: Detail */}
       <section className="mx-auto max-w-1200 rounded-medium bg-white p-8 shadow-medium">
         {/* MARK: Introduction */}
-        <h3 className="text-[28px] text-dark">Giới thiệu sản phẩm</h3>
+        <h3 className="text-xl font-semibold text-dark">Giới thiệu sản phẩm</h3>
         <div className="-mx-21/2 flex w-full flex-wrap">
           {(product?.category as ICategory).slug === 'netflix' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="/https://www.netflix.com"
@@ -270,7 +270,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 </a>{' '}
                 - Ứng dụng giải trí số 1 thế giới!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Khám phá thế giới phim và series truyền hình độc đáo, đỉnh cao với{' '}
                 <a
                   href="/https://www.netflix.com"
@@ -294,7 +294,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'capcut' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="https://www.capcut.com"
@@ -304,7 +304,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 </a>{' '}
                 - Ứng dụng chỉnh sửa video hàng đầu!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Khám phá thế giới của sáng tạo video với{' '}
                 <a
                   href="https://www.capcut.com"
@@ -328,7 +328,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'chatgpt' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="https://chat.openai.com"
@@ -338,7 +338,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 </a>{' '}
                 - Trợ lý thông minh của bạn! 🌟💬
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Khám phá thế giới của việc trò chuyện một cách tự nhiên và linh hoạt với Khám phá thế
                 <a
                   href="https://chat.openai.com"
@@ -355,7 +355,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 </a>{' '}
                 sẽ là đối tác tin cậy của bạn. 🤖🗨️
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Dễ dàng sử dụng và luôn sẵn lòng hỗ trợ, ChatGPT là công cụ độc đáo để giải quyết mọi
                 tình huống. Bắt đầu cuộc trò chuyện ngay bây giờ và khám phá sức mạnh của trí tuệ nhân
                 tạo ngay trên đầu ngón tay của bạn! 💻🌐✨
@@ -365,7 +365,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'youtube' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="https://www.youtube.com"
@@ -376,11 +376,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 - Nền tảng giải trí vượt trội, nơi bạn sẽ khám phá thế giới qua những video độc đáo và
                 thú vị hơn mọi khi!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Tận hưởng trải nghiệm xem video mượt mà, dễ dàng tìm kiếm, và khám phá những nội dung mới
                 mẻ. 🎥✨
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Hãy tham gia{' '}
                 <a
                   href="https://www.youtube.com"
@@ -396,7 +396,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'spotify' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="https://open.spotify.com"
@@ -407,11 +407,11 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 - Nền tảng âm nhạc tuyệt vời, nơi bạn sẽ khám phá âm nhạc với trải nghiệm nghe nhạc độc
                 đáo và thú vị hơn mọi khi!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Tận hưởng âm thanh chất lượng cao, tìm kiếm và khám phá hàng triệu bản nhạc, playlist và
                 podcast. 🎶✨
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Hãy tham gia{' '}
                 <a
                   href="https://open.spotify.com"
@@ -426,7 +426,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'grammarly' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="https://www.grammarly.com"
@@ -437,7 +437,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 - Trợ lý văn bản thông minh, nơi bạn sẽ trải nghiệm công nghệ kiểm tra và cải thiện ngôn
                 ngữ một cách nhanh chóng và hiệu quả!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Với{' '}
                 <a
                   href="https://www.grammarly.com"
@@ -448,7 +448,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 , việc viết sẽ trở nên dễ dàng hơn bao giờ hết. Hãy để chúng tôi giúp bạn tạo ra văn bản
                 hoàn hảo và chuyên nghiệp. 🚀📚
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Hãy tham gia{' '}
                 <a
                   href="https://www.grammarly.com"
@@ -463,7 +463,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'canva' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với{' '}
                 <a
                   href="https://www.canva.com"
@@ -474,7 +474,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 - Nền tảng thiết kế sáng tạo, nơi bạn có thể biến ý tưởng thành hình ảnh và thiết kế độc
                 đáo một cách dễ dàng!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Sử dụng{' '}
                 <a
                   href="https://www.canva.com"
@@ -485,7 +485,7 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
                 để tạo hình ảnh, thiệp mời, poster, và nhiều nội dung sáng tạo khác mà không cần kỹ năng
                 thiết kế chuyên sâu. 🌈💻
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Hãy tham gia{' '}
                 <a
                   href="https://www.canva.com"
@@ -500,21 +500,21 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
 
           {(product?.category as ICategory).slug === 'microsoft-office' && (
             <div className="mb-12 w-full px-21/2">
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Chào mừng bạn đến với <span className="text-[#04bdcc]">Microsoft Office 365 ✨🚀</span> -
                 Nền tảng sáng tạo và năng suất hàng đầu thế giới!
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Khám phá một thế giới làm việc hoàn toàn mới với{' '}
                 <span className="text-[#04bdcc]">Office 365</span>, nơi mọi công việc trở nên dễ dàng và
                 hiệu quả hơn bao giờ hết
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Với <span className="text-[#04bdcc]">Office 365</span> 🎉📈, bạn không chỉ đơn thuần là
                 làm việc mà còn sáng tạo theo cách của riêng bạn. Trải nghiệm các công cụ văn phòng đỉnh
                 cao 🛠️, linh hoạt trên mọi thiết bị 📱💻, giúp bạn làm việc mọi lúc, mọi nơi ⏰🌍
               </p>
-              <p className="font-body text-lg font-semibold">
+              <p className="font-body">
                 Hãy bắt đầu hành trình để nâng tầm năng suất và sáng tạo ngay hôm nay, và khám phá những
                 tính năng độc đáo chỉ có tại <span className="text-[#04bdcc]">Office 365</span>. 🌟💡🖋️
               </p>
@@ -522,9 +522,9 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           )}
 
           <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
-            <h3 className="text-[28px] text-dark">Mô tả sản phẩm</h3>
+            <h3 className="text-xl font-semibold text-dark">Mô tả sản phẩm</h3>
 
-            {handleLines(product?.description || '')}
+            <div className="font-body text-base">{handleLines(product?.description || '')}</div>
 
             <p>
               <span>Lưu ý: </span>
@@ -535,8 +535,8 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           </div>
 
           <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
-            <h3 className="text-[28px] text-dark">Cách thức mua hàng</h3>
-            <ul>
+            <h3 className="text-xl font-semibold text-dark">Cách thức mua hàng</h3>
+            <ul className="font-body">
               <li className="mb-4">
                 <span className="font-semibold">Cách 1: </span>
                 <div>- Mua hàng thông qua Momo</div>
@@ -562,67 +562,69 @@ async function ProductPage({ params: { slug } }: { params: { slug: string } }) {
           </div>
 
           <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
-            <h3 className="text-[28px] text-dark">Bảo hành & Đền bù</h3>
-            <p>
-              <span className="font-semibold">Thời gian bảo hành: </span>
-              <span>
-                bằng thời gian sử dụng của tài khoản (Ví dụ: mua Canva 1 năm thì hạn bảo hành sẽ là 1
-                năm)
-              </span>
-            </p>
-            <p className="font-semibold">Hình thức bảo hành:</p>
-            <ul className="list-decimal pl-10">
-              <li>
-                Nếu không thể đăng nhập:
-                <ul className="list-disc pl-6">
-                  <li>Tài khoản sẽ được sửa chữa trong 2h.</li>
-                  <li>Được cấp tài khoản thay để dùng tạm thời trong thời gian sửa lỗi.</li>
-                  <li>
-                    Nếu thời gian sửa lỗi vượt 2h bạn sẽ được cấp tài khoản mới và được tặng voucher giảm
-                    10% cho lần mua tiếp theo.
-                  </li>
-                </ul>
-              </li>
-              <li>
-                Được cấp lại tài khoản mới:
-                <ul className="list-disc pl-6">
-                  <li>Lỗi không thể sửa được.</li>
-                  <li>
-                    Tài khoản hết hạn trước 80% thời gian sử dụng (Ví dụ: mua Netflix 30 ngày nhưng lại
-                    hết hạn trước ngày 24)
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <p className="font-semibold">Chính sách đền bù:</p>
-            <ul className="list-disc pl-10">
-              <li>Nếu dùng dưới 80% thời gian: cấp mới tài khoản</li>
-              <li>Thời gian sữa lỗi quá 2h: cấp mới tài khoản + voucher giảm 10%</li>
-            </ul>
-            <p className="font-semibold">Miễn trừ trách nhiệm:</p>
-            <ul className="list-disc pl-10">
-              <li>Chúng tôi không có chính sách miễn trừ trách nhiệm.</li>
-              <li>
-                Chúng tôi luôn cố gắng hết sức đảm bảo quyền lợi của khách hàng dưới bất kì hình thức
-                nào.
-              </li>
-            </ul>
-            <p>
-              - Liên hệ người bán tại{' '}
-              <a
-                href="https://m.me/anphashopacc"
-                className="text-sky-5000 text-pink-500 underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Messenger
-              </a>{' '}
-            </p>
+            <h3 className="text-xl font-semibold text-dark">Bảo hành & Đền bù</h3>
+            <div className="font-body">
+              <p>
+                <span className="font-semibold">Thời gian bảo hành: </span>
+                <span>
+                  bằng thời gian sử dụng của tài khoản (Ví dụ: mua Canva 1 năm thì hạn bảo hành sẽ là 1
+                  năm)
+                </span>
+              </p>
+              <p className="font-semibold">Hình thức bảo hành:</p>
+              <ul className="list-decimal pl-10">
+                <li>
+                  Nếu không thể đăng nhập:
+                  <ul className="list-disc pl-6">
+                    <li>Tài khoản sẽ được sửa chữa trong 2h.</li>
+                    <li>Được cấp tài khoản thay để dùng tạm thời trong thời gian sửa lỗi.</li>
+                    <li>
+                      Nếu thời gian sửa lỗi vượt 2h bạn sẽ được cấp tài khoản mới và được tặng voucher
+                      giảm 10% cho lần mua tiếp theo.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Được cấp lại tài khoản mới:
+                  <ul className="list-disc pl-6">
+                    <li>Lỗi không thể sửa được.</li>
+                    <li>
+                      Tài khoản hết hạn trước 80% thời gian sử dụng (Ví dụ: mua Netflix 30 ngày nhưng lại
+                      hết hạn trước ngày 24)
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <p className="font-semibold">Chính sách đền bù:</p>
+              <ul className="list-disc pl-10">
+                <li>Nếu dùng dưới 80% thời gian: cấp mới tài khoản</li>
+                <li>Thời gian sữa lỗi quá 2h: cấp mới tài khoản + voucher giảm 10%</li>
+              </ul>
+              <p className="font-semibold">Miễn trừ trách nhiệm:</p>
+              <ul className="list-disc pl-10">
+                <li>Chúng tôi không có chính sách miễn trừ trách nhiệm.</li>
+                <li>
+                  Chúng tôi luôn cố gắng hết sức đảm bảo quyền lợi của khách hàng dưới bất kì hình thức
+                  nào.
+                </li>
+              </ul>
+              <p>
+                - Liên hệ người bán tại{' '}
+                <a
+                  href="https://m.me/anphashopacc"
+                  className="text-sky-5000 text-pink-500 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Messenger
+                </a>{' '}
+              </p>
+            </div>
           </div>
 
           <div className="mb-12 inline-block w-full px-21/2 md:w-1/2">
-            <h3 className="text-[28px] text-dark">Các câu hỏi thường gặp:</h3>
-            <ul className="list-decimal pl-10">
+            <h3 className="text-xl font-semibold text-dark">Các câu hỏi thường gặp:</h3>
+            <ul className="list-decimal pl-10 font-body">
               <li>
                 <p className="font-semibold">Có thể đổi mã pin profile được không?</p>
                 <p>
