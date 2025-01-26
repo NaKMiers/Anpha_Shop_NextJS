@@ -69,6 +69,7 @@ export const handleQuery = (
 
 // valid params
 const validParams: string[] = [
+  'from-to',
   'accumulated',
   'active',
   'address',
