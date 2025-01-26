@@ -64,12 +64,23 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
   // loading and confirming
   const [loading, setLoading] = useState<boolean>(false)
 
-  const limit = 100
-  const pageOptions = Array.from({ length: Math.ceil(amount / limit) }).map((_, index) => ({
-    value: index + 1,
-    label: `Page ${index + 1}`,
-    selected: index === 0,
-  }))
+  const [limit, setLimit] = useState<number>(100)
+  const [pageOptions, setPageOptions] = useState<{ value: number; label: string; selected: boolean }[]>(
+    []
+  )
+
+  console.log('amount:', amount)
+  console.log('limit:', limit)
+
+  useEffect(() => {
+    setPageOptions(
+      Array.from({ length: Math.ceil(amount / limit) }).map((_, index) => ({
+        value: index + 1,
+        label: `Page ${index + 1}`,
+        selected: index === 0,
+      }))
+    )
+  }, [limit, amount])
 
   // Form
   const defaultValues: FieldValues = useMemo<FieldValues>(
@@ -79,8 +90,8 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
       status: '',
       from: '',
       to: '',
+      limit: 100,
       page: 1,
-      limit,
     }),
     []
   )
@@ -171,9 +182,13 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
     [handleOptimizeFilter, getCosts]
   )
 
+  // submit when open
   useEffect(() => {
-    handleSubmit(handleFilter)()
-  }, [handleSubmit, handleFilter])
+    if (open) {
+      console.log('open:', open)
+      handleSubmit(handleFilter)()
+    }
+  }, [open, handleSubmit, handleFilter])
 
   // handle reset filter
   const handleResetFilter = useCallback(() => {
@@ -182,6 +197,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
       from: fromRef.current,
       to: toRef.current,
     })
+    setLimit(100)
     handleSubmit(handleFilter)()
   }, [reset, handleFilter, handleSubmit, defaultValues])
 
@@ -190,7 +206,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
       {/* Overlay */}
       {open && (
         <div
-          className="fixed left-0 top-0 h-full w-full"
+          className="fixed left-0 top-0 z-10 h-full w-full"
           onClick={() => setOpen(false)}
         />
       )}
@@ -204,7 +220,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
             exit={{ opacity: 0, x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             onClick={() => setOpen(false)}
-            className={`fixed right-0 top-0 flex h-full w-full justify-end pl-10 ${className}`}
+            className={`fixed right-0 top-0 z-20 flex h-full w-full justify-end pl-10 ${className}`}
           >
             <div
               className="relative w-full max-w-[700px] overflow-y-auto rounded-l-xl border-l-2 border-dark bg-white px-21/2 py-21 shadow-lg md:px-21"
@@ -286,6 +302,12 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
                     className="h-8 max-w-[70px] rounded-md border-b-2 border-dark px-3 text-xs text-dark shadow-md outline-none"
                     disabled={loading}
                     {...register('limit')}
+                    onChange={e => {
+                      const limit = +e.target.value
+                      setValue('page', 1)
+                      setLimit(limit)
+                      setValue('limit', limit)
+                    }}
                   />
                   <select
                     id="page"

@@ -36,6 +36,11 @@ interface GroupFiltersProps {
   selectedAEmails: string[]
   setSelectedAEmails: Dispatch<SetStateAction<string[]>>
 
+  // payment method
+  paymentMethods: string[]
+  selectedPaymentMethods: string[]
+  setSelectedPaymentMethods: Dispatch<SetStateAction<string[]>>
+
   // cost group
   costGroups: ICostGroup[]
   selectedCostGroups: ICostGroup[]
@@ -68,6 +73,11 @@ function GroupFilters({
   selectedAEmails,
   setSelectedAEmails,
 
+  // payment method
+  paymentMethods,
+  selectedPaymentMethods,
+  setSelectedPaymentMethods,
+
   // cost group
   costGroups,
   selectedCostGroups,
@@ -78,7 +88,10 @@ function GroupFilters({
   const [openCat, setOpenCat] = useState<boolean>(false)
   const [openTag, setOpenTag] = useState<boolean>(false)
   const [openAEmail, setOpenAEmail] = useState<boolean>(false)
+  const [openPaymentMethod, setOpenPaymentMethod] = useState<boolean>(false)
   const [openCostGroup, setOpenCostGroup] = useState<boolean>(false)
+
+  console.log('payments', paymentMethods)
 
   // calculate value by active block of each product
   const handleCalcProdValue = useCallback(
@@ -91,6 +104,7 @@ function GroupFilters({
       let totalValue: number | string = filteredOrders.reduce((sum, order) => sum + order.total, 0)
       switch (activeBlock) {
         case 'revenue':
+        case 'profit':
           totalValue = formatPrice(totalValue)
           break
         case 'orders':
@@ -122,6 +136,7 @@ function GroupFilters({
       let totalValue: number | string = filteredOrders.reduce((sum, order) => sum + order.total, 0)
       switch (activeBlock) {
         case 'revenue':
+        case 'profit':
           totalValue = formatPrice(totalValue)
           break
         case 'orders':
@@ -153,6 +168,7 @@ function GroupFilters({
       let totalValue: number | string = filteredOrders.reduce((sum, order) => sum + order.total, 0)
       switch (activeBlock) {
         case 'revenue':
+        case 'profit':
           totalValue = formatPrice(totalValue)
           break
         case 'orders':
@@ -182,6 +198,37 @@ function GroupFilters({
       let totalValue: number | string = filteredOrders.reduce((sum, order) => sum + order.total, 0)
       switch (activeBlock) {
         case 'revenue':
+        case 'profit':
+          totalValue = formatPrice(totalValue)
+          break
+        case 'orders':
+          totalValue = filteredOrders.length
+          break
+        case 'accounts':
+          totalValue = filteredOrders.reduce((total, order) => total + order.quantity, 0)
+          break
+        case 'vouchers':
+          totalValue = filteredOrders.filter(order => order.isVoucher).length
+          break
+        default:
+          break
+      }
+
+      return totalValue
+    },
+    [orders, activeBlock]
+  )
+
+  // calculate value by active block of each payment method
+  const handleCalcPaymentMethodValue = useCallback(
+    (method: string) => {
+      // filter orders of account email
+      const filteredOrders: ChartOrderType[] = orders.filter(order => order.paymentMethod === method)
+
+      let totalValue: number | string = filteredOrders.reduce((sum, order) => sum + order.total, 0)
+      switch (activeBlock) {
+        case 'revenue':
+        case 'profit':
           totalValue = formatPrice(totalValue)
           break
         case 'orders':
@@ -299,7 +346,7 @@ function GroupFilters({
 
   return (
     <div className={`${className}`}>
-      {(openProd || openCat || openTag || openAEmail || openCostGroup) && (
+      {(openProd || openCat || openTag || openAEmail || openPaymentMethod || openCostGroup) && (
         <div
           className="fixed left-0 top-0 z-10 h-screen w-screen"
           onClick={() => {
@@ -307,6 +354,7 @@ function GroupFilters({
             setOpenCat(false)
             setOpenTag(false)
             setOpenAEmail(false)
+            setOpenPaymentMethod(false)
             setOpenCostGroup(false)
           }}
         />
@@ -366,6 +414,20 @@ function GroupFilters({
           false,
           'emails',
           'email'
+        )}
+
+      {/* MARK: Payment Method */}
+      {activeBlock !== 'costs' &&
+        renderFilterGroup(
+          openPaymentMethod,
+          setOpenPaymentMethod,
+          paymentMethods,
+          selectedPaymentMethods,
+          setSelectedPaymentMethods,
+          handleCalcPaymentMethodValue,
+          false,
+          'methods',
+          'method'
         )}
 
       {/* MARK: Cost Group */}

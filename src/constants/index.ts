@@ -274,6 +274,26 @@ export const getRangeOptions = () => [
     ],
   },
   {
+    label: 'This year',
+    range: [
+      {
+        startDate: momentTZ().startOf('year').toDate(),
+        endDate: momentTZ().endOf('year').toDate(),
+        key: 'selection',
+      },
+    ],
+  },
+  {
+    label: 'Last year',
+    range: [
+      {
+        startDate: momentTZ().subtract(1, 'year').startOf('year').toDate(),
+        endDate: momentTZ().subtract(1, 'year').endOf('year').toDate(),
+        key: 'selection',
+      },
+    ],
+  },
+  {
     label: 'Week to date',
     range: [
       {

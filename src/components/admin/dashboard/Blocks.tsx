@@ -59,8 +59,7 @@ function Blocks({ blocks, activeBlock, setActiveBlock, loading, className = '' }
             <div className="loading mt-1 h-4 w-full max-w-[100px] rounded-md shadow-sm shadow-light" />
           )}
         </>,
-        'profit',
-        true
+        'profit'
       )}
 
       {/* Costs */}

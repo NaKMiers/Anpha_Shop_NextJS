@@ -27,6 +27,8 @@ export async function GET(req: NextRequest) {
     const filter: { [key: string]: any } = {}
     let sort: { [key: string]: any } = { date: -1 } // default sort
 
+    console.log('params:', params)
+
     // build filter
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
@@ -37,6 +39,7 @@ export async function GET(req: NextRequest) {
             skip = 0
           } else {
             itemPerPage = +params[key][0]
+            console.log('itemPerPage:', itemPerPage)
           }
           continue
         }
@@ -93,6 +96,10 @@ export async function GET(req: NextRequest) {
         filter[key] = params[key].length === 1 ? params[key][0] : { $in: params[key] }
       }
     }
+
+    console.log('filter:', filter)
+    console.log('sort:', sort)
+    console.log('skip:', skip)
 
     // get amount of costs
     const amount = await CostModel.countDocuments(filter)

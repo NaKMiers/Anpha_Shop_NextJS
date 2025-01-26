@@ -38,6 +38,7 @@ export type ChartOrderType = {
   total: number
   createdAt: string
   quantity: number
+  paymentMethod: string
   categories: ICategory[]
   tags: ITag[]
   products: (IProduct & { color: string })[]
@@ -178,6 +179,7 @@ export async function GET(req: NextRequest) {
         total: order.total,
         createdAt: order.createdAt,
         quantity: order.items.reduce((total: number, item: any) => total + (+item.quantity || 0), 0),
+        paymentMethod: order.paymentMethod,
         categories: cates,
         tags: tgs,
         products: prods,

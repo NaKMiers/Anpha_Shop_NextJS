@@ -36,7 +36,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false)
 
   // values
-  const itemPerPage = 9
+  const [itemPerPage, setItemPerPage] = useState<number>(9)
   const [minTotal, setMinTotal] = useState<number>(0)
   const [maxTotal, setMaxTotal] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
@@ -52,6 +52,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       paymentMethod: '',
       from: '',
       to: '',
+      limit: '9',
     }),
     []
   )
@@ -103,6 +104,8 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             ? moment((searchParams['from-to'] as string).split('|')[1]).format('YYYY-MM-DDTHH:mm')
             : getValues('to')
         )
+        setValue('limit', searchParams?.limit || getValues('limit'))
+        setItemPerPage(+(searchParams?.limit ?? 9))
 
         // set min - max - total
         setMinTotal(chops.minTotal)
@@ -418,7 +421,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
             errors={errors}
             icon={FaSort}
             type="select"
-            onFocus={() => clearErrors('')}
+            onFocus={() => clearErrors('status')}
             options={[
               {
                 value: '',
@@ -438,6 +441,19 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
                 label: 'Cancel',
               },
             ]}
+          />
+          {/* Limit */}
+          <Input
+            id="limit"
+            label="Limit"
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type="number"
+            className="max-w-[100px]"
+            onFocus={() => clearErrors('limit')}
+            onChange={e => setItemPerPage(+e.target.value)}
           />
         </div>
 
@@ -487,9 +503,18 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
       />
 
       {/* MARK: Amount */}
-      <div className="p-3 text-right text-sm font-semibold text-white">
-        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} order
-        {amount > 1 ? 's' : ''}
+      <div className="flex items-center justify-between gap-21">
+        <button
+          className="rounded-md border border-dark bg-white px-2 py-1 text-xs font-semibold text-dark"
+          onClick={() => toast(formatPrice(orders.reduce((total, order) => total + order.total, 0)))}
+        >
+          Calculate Total
+        </button>
+
+        <div className="p-3 text-right text-sm font-semibold text-white">
+          {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} order
+          {amount > 1 ? 's' : ''}
+        </div>
       </div>
 
       {/* MARK: MAIN LIST */}

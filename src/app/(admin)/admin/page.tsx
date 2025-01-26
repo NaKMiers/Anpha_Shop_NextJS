@@ -59,6 +59,8 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
   const [selectedTags, setSelectedTags] = useState<ITag[]>([])
   const [aEmails, setAEmails] = useState<string[]>([])
   const [selectedAEmails, setSelectedAEmails] = useState<string[]>([])
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([])
+  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([])
   const [costGroups, setCostGroups] = useState<ICostGroup[]>([])
   const [selectedCostGroups, setSelectedCostGroups] = useState<ICostGroup[]>([])
 
@@ -153,6 +155,12 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         setAEmails(uniqueAEmails)
         setSelectedAEmails(uniqueAEmails)
 
+        // extract payment methods
+        const paymentMethods = orders.map((order: ChartOrderType) => order.paymentMethod)
+        const uniquePaymentMethods: any[] = Array.from(new Set(paymentMethods))
+        setPaymentMethods(uniquePaymentMethods)
+        setSelectedPaymentMethods(uniquePaymentMethods)
+
         // extract cost groups
         const costGroups = costs.map((cost: ChartCostType) => cost.costGroup)
         const uniqueCostGroups: any[] = Array.from(
@@ -198,6 +206,9 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     filteredOrders = filteredOrders.filter(
       order => order.accounts.some(email => selectedAEmails.includes(email)) // filter by account emails
     )
+
+    // filter order by payment methods
+    filteredOrders = filteredOrders.filter(order => selectedPaymentMethods.includes(order.paymentMethod)) // filter by payment methods
 
     // --------------------------------------
     let filterCosts = costs
@@ -253,10 +264,16 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         return costDate.isBetween(colStart, colEnd, undefined, '[)')
       })
 
+      // Calculate total cost
+      let totalCostValue = chunkCosts.reduce((sum, cost) => sum + cost.amount, 0)
+
       // Calculate total value
       let totalOrderValue = chunkOrders.reduce((sum, order) => sum + order.total, 0)
       switch (activeBlock) {
         case 'revenue':
+          break
+        case 'profit':
+          totalOrderValue = totalOrderValue - totalCostValue
           break
         case 'orders':
           totalOrderValue = chunkOrders.length
@@ -270,9 +287,6 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         default:
           break
       }
-
-      // Calculate total cost
-      let totalCostValue = chunkCosts.reduce((sum, cost) => sum + cost.amount, 0)
 
       let dateFormat = 'DD'
       switch (splitGranularity) {
@@ -313,6 +327,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     selectedCats,
     selectedTags,
     selectedAEmails,
+    selectedPaymentMethods,
     selectedCostGroups,
     activeBlock,
   ])
@@ -454,6 +469,10 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
         aEmails={aEmails}
         selectedAEmails={selectedAEmails}
         setSelectedAEmails={setSelectedAEmails}
+        // payment method
+        paymentMethods={paymentMethods}
+        selectedPaymentMethods={selectedPaymentMethods}
+        setSelectedPaymentMethods={setSelectedPaymentMethods}
         // cost group
         costGroups={costGroups}
         selectedCostGroups={selectedCostGroups}
