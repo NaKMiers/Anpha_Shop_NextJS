@@ -122,6 +122,7 @@ const validParams: string[] = [
   'paymentMethod',
   'phone',
   'price',
+  'product',
   'productId',
   'productQuantity',
   'quantity',
