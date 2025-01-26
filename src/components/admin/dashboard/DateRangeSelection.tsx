@@ -83,7 +83,7 @@ function DateRangeSelection({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="absolute left-0 top-[calc(100%+10.5px)] z-10 overflow-hidden rounded-lg bg-white shadow-lg"
+            className="absolute left-0 top-[calc(100%+10.5px)] z-20 overflow-hidden rounded-lg bg-white shadow-lg"
           >
             <div className="flex flex-col gap-21/2 p-21/2 md:flex-row md:p-0">
               {/* Options */}
