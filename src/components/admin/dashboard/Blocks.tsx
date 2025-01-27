@@ -13,25 +13,34 @@ export type ActiveBlockType =
 
 interface BlocksProps {
   activeBlock: ActiveBlockType
+  selectedBlocks: ActiveBlockType[]
   setActiveBlock: Dispatch<SetStateAction<ActiveBlockType>>
   blocks: BlocksType | null
   loading: boolean
   className?: string
 }
 
-function Blocks({ blocks, activeBlock, setActiveBlock, loading, className = '' }: BlocksProps) {
+function Blocks({
+  blocks,
+  activeBlock,
+  selectedBlocks,
+  setActiveBlock,
+  loading,
+  className = '',
+}: BlocksProps) {
   // render block
   const renderBlock = useCallback(
-    (children: ReactNode, name: ActiveBlockType, disabled: boolean = false) => (
-      <button
-        className={`${activeBlock === name ? 'bg-dark-100 text-white' : ''} trans-200 flex flex-col rounded-lg px-21 py-3 text-sm shadow-lg`}
-        disabled={loading || disabled}
-        onClick={() => setActiveBlock(name)}
-      >
-        {children}
-      </button>
-    ),
-    [activeBlock, loading, setActiveBlock]
+    (children: ReactNode, name: ActiveBlockType, disabled: boolean = false) =>
+      selectedBlocks.includes(name) && (
+        <button
+          className={`${activeBlock === name ? 'bg-dark-100 text-white' : ''} trans-200 flex flex-col rounded-lg px-21 py-3 text-sm shadow-lg`}
+          disabled={loading || disabled}
+          onClick={() => setActiveBlock(name)}
+        >
+          {children}
+        </button>
+      ),
+    [setActiveBlock, activeBlock, selectedBlocks, loading]
   )
 
   return (

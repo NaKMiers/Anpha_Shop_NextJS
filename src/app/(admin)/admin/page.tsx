@@ -17,6 +17,8 @@ import { ITag } from '@/models/TagModel'
 import { getDashboardApi } from '@/requests'
 import { handleQuery } from '@/utils/handleQuery'
 import { toUTC } from '@/utils/time'
+import { capitalize } from '@mui/material'
+import { AnimatePresence, motion } from 'framer-motion'
 import { default as moment, default as momentTZ } from 'moment-timezone'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -63,8 +65,20 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([])
   const [costGroups, setCostGroups] = useState<ICostGroup[]>([])
   const [selectedCostGroups, setSelectedCostGroups] = useState<ICostGroup[]>([])
-
   const [openCostSheet, setOpenCostSheet] = useState<boolean>(false)
+
+  // values
+  const allBlocks: ActiveBlockType[] = [
+    'revenue',
+    'profit',
+    'costs',
+    'orders',
+    'accounts',
+    'customers',
+    'vouchers',
+  ]
+  const [openBlocks, setOpenBlocks] = useState<boolean>(false)
+  const [selectedBlocks, setSelectedBlocks] = useState<ActiveBlockType[]>(allBlocks)
 
   // chart data
   const [data, setData] = useState<ChartDatum[]>([])
@@ -400,6 +414,65 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
             handleFilter={handleSubmit(handleFilter)}
           />
 
+          <div className="relative flex flex-wrap gap-21/2">
+            <button
+              className="group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md"
+              onClick={() => setOpenBlocks(!openBlocks)}
+            >
+              <span className="text-xs font-semibold">
+                {selectedBlocks.length} block{selectedBlocks.length === 1 ? '' : 's'}
+              </span>
+            </button>
+
+            {/* overlay */}
+            {openBlocks && (
+              <div
+                className="fixed left-0 top-0 z-10 h-screen w-screen"
+                onClick={() => setOpenBlocks(false)}
+              />
+            )}
+
+            <AnimatePresence>
+              {openBlocks && (
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  className="absolute left-0 top-[calc(100%+10.5px)] z-10 flex max-h-[400px] max-w-[calc(100vw-2*21px)] flex-col gap-0.5 overflow-y-auto rounded-md bg-white shadow-md"
+                >
+                  <button
+                    className={`trans-200 trans-200 px-3 py-1 text-left font-body text-xs font-semibold tracking-wider hover:bg-slate-100 ${
+                      selectedBlocks.length === allBlocks.length ? 'border-l-2 border-primary pl-2' : ''
+                    }`}
+                    onClick={() =>
+                      selectedBlocks.length === allBlocks.length
+                        ? setSelectedBlocks([])
+                        : setSelectedBlocks(allBlocks)
+                    }
+                  >
+                    <span className="text-nowrap">All</span>
+                  </button>
+                  {allBlocks.map((block, index) => (
+                    <button
+                      className={`trans-200 trans-200 px-3 py-1 text-left font-body text-xs font-semibold tracking-wider hover:bg-slate-100 ${
+                        selectedBlocks.includes(block) ? 'border-l-2 border-primary pl-2' : ''
+                      }`}
+                      onClick={() =>
+                        setSelectedBlocks(prev =>
+                          prev.includes(block) ? prev.filter(b => b !== block) : [...prev, block]
+                        )
+                      }
+                      key={index}
+                    >
+                      <p className="text-nowrap">{capitalize(block)}</p>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <button
             className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
             onClick={handleResetFilter}
@@ -441,6 +514,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
       {/* MARK: Blocks */}
       <Blocks
         blocks={blocks}
+        selectedBlocks={selectedBlocks}
         activeBlock={activeBlock}
         setActiveBlock={setActiveBlock}
         loading={loading}
