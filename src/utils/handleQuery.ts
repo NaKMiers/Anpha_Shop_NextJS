@@ -158,6 +158,9 @@ const validParams: string[] = [
   'verifiedEmail',
   'verifiedPhone',
   'voucherApplied',
+  '_id',
+  'createdAt',
+  'updatedAt',
 ]
 
 export const searchParamsToObject = (searchParams: URLSearchParams): { [key: string]: string[] } => {
