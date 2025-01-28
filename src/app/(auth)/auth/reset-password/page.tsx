@@ -4,6 +4,8 @@ import Input from '@/components/Input'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { resetPassword } from '@/requests'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -97,9 +99,22 @@ function ResetPasswordPage() {
   return (
     <div className="relative min-h-screen w-full">
       <div className="absolute left-1/2 top-1/2 w-full max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-medium bg-white px-8 py-21 pb-10 shadow-medium">
-        <h1 className="mb-4 font-body text-[40px] font-semibold tracking-wide text-secondary">
-          Đặt lại mật khẩu
-        </h1>
+        <div className="mb-6 flex items-center gap-21/2">
+          <Link
+            href="/"
+            prefetch={false}
+            className="trans-200 spin hidden shrink-0 rounded-full sm:block"
+          >
+            <Image
+              className="aspect-square rounded-full"
+              src="/images/logo.jpg"
+              width={40}
+              height={40}
+              alt="logo"
+            />
+          </Link>
+          <h1 className="text-2xl font-semibold tracking-wide text-secondary">Đặt lại mật khẩu</h1>
+        </div>
 
         <Input
           id="newPassword"

@@ -89,6 +89,7 @@ const authOptions = {
     async jwt({ token, user, trigger, session }: any) {
       console.log('- JWT -')
 
+      // when user is updated
       if (trigger === 'update' && token.email) {
         console.log('- Update Token -')
         const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
@@ -97,8 +98,18 @@ const authOptions = {
 
           return { ...token, ...otherDetails }
         }
+      } else if (token.email) {
+        // when refresh token
+        console.log('- Refresh Token -')
+        const userDB: IUser | null = await UserModel.findOne({ email: token.email }).lean()
+        if (userDB) {
+          const { password: _, ...otherDetails } = userDB
+
+          return { ...token, ...otherDetails }
+        }
       }
 
+      // when user is logged in
       if (user) {
         console.log('- User -')
         const userDB: IUser | null = await UserModel.findOne({ email: user.email }).lean()

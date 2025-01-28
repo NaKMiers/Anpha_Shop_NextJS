@@ -7,6 +7,7 @@ import { setPageLoading } from '@/libs/reducers/modalReducer'
 import { registerApi } from '@/requests'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -15,7 +16,7 @@ import { FaEyeSlash } from 'react-icons/fa'
 import { FaCircleNotch, FaCircleUser } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 
-function ResgiterPage() {
+function RegisterPage() {
   // hooks
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -89,7 +90,7 @@ function ResgiterPage() {
     [setError]
   )
 
-  // MARK: Register Submition
+  // MARK: Register Submission
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       // validate form
@@ -150,9 +151,22 @@ function ResgiterPage() {
   return (
     <div className="relative min-h-screen w-full">
       <div className="absolute left-1/2 top-1/2 w-full max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-medium bg-white px-8 py-21 pb-10 shadow-medium">
-        <h1 className="mb-4 font-body text-[40px] font-semibold tracking-wide text-secondary">
-          Đăng ký
-        </h1>
+        <div className="mb-6 flex items-center gap-21/2">
+          <Link
+            href="/"
+            prefetch={false}
+            className="trans-200 spin hidden shrink-0 rounded-full sm:block"
+          >
+            <Image
+              className="aspect-square rounded-full"
+              src="/images/logo.jpg"
+              width={40}
+              height={40}
+              alt="logo"
+            />
+          </Link>
+          <h1 className="text-2xl font-semibold tracking-wide text-secondary">Đăng ký</h1>
+        </div>
 
         <Input
           id="username"
@@ -290,4 +304,4 @@ function ResgiterPage() {
   )
 }
 
-export default ResgiterPage
+export default RegisterPage
