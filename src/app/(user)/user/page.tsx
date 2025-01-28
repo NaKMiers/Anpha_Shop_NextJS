@@ -68,8 +68,8 @@ function UserPage() {
   useEffect(() => {
     const getCurUser = async () => {
       // set form values
-      setValue('firstName', user?.firstName)
-      setValue('lastName', user?.lastName)
+      setValue('firstName', user?.firstName || user?.firstname)
+      setValue('lastName', user?.lastName || user?.lastname)
       setValue('birthday', moment(user?.birthday).local().format('YYYY-MM-DD'))
       setValue('job', user?.job)
       setValue('address', user?.address)
