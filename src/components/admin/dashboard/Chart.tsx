@@ -53,8 +53,16 @@ function Chart({ activeBlock, data = [], className = '' }: ChartProps) {
 
   return (
     <div className={`relative ${className}`}>
+      {/* overlay */}
+      {open && (
+        <div
+          className="fixed left-0 top-0 z-20 h-screen w-screen"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
       {/* Chart Selection */}
-      <div className="absolute right-2 top-0 z-10">
+      <div className="absolute right-2 top-0 z-20">
         <button
           className="trans-200 rounded-md bg-dark-100 px-2 py-1.5 text-xs font-semibold text-light shadow-md hover:bg-slate-700"
           onClick={() => setOpen(!open)}

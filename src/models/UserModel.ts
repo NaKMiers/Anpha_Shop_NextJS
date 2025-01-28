@@ -74,11 +74,11 @@ const UserSchema = new Schema(
       type: String,
       default: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,
     },
-    firstname: {
+    firstName: {
       type: String,
       default: '',
     },
-    lastname: {
+    lastName: {
       type: String,
       default: '',
     },
@@ -148,8 +148,8 @@ export interface IUser {
   accumulated: number
   role: 'admin' | 'user' | 'editor' | 'collaborator'
   avatar: string
-  firstname?: string
-  lastname?: string
+  firstName?: string
+  lastName?: string
   birthday?: string
   phone?: string
   address?: string

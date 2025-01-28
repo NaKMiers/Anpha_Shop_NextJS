@@ -17,6 +17,7 @@ function StoreProvider({ children, session }: { children: React.ReactNode; sessi
       <SessionProvider
         session={session}
         refetchOnWindowFocus={false}
+        refetchInterval={60}
       >
         {children}
       </SessionProvider>

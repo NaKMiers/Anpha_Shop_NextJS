@@ -164,7 +164,7 @@ function CommentItem({ comment, setCmts, className = '' }: CommentItemProps) {
         {/* MARK: Headline */}
         <div className="">
           <span className="font-semibold">
-            {user?.firstname && user?.lastname ? `${user?.firstname} ${user?.lastname}` : user?.username}
+            {user?.firstName && user?.lastName ? `${user?.firstName} ${user?.lastName}` : user?.username}
           </span>{' '}
           - <span className="text-sm text-slate-500">{format(comment.createdAt)}</span>{' '}
           {curUser?.role !== 'user' && (

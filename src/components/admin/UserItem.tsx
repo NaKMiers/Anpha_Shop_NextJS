@@ -275,17 +275,17 @@ function UserItem({
               </span>
             </p>
           )}
-          {(userData.firstname || userData.lastname) && (
+          {(userData.firstName || userData.lastName) && (
             <p className="text-sm">
               <span className="font-semibold">Fullname: </span>
               <span
                 className="cursor-pointer"
                 onClick={e => {
                   e.stopPropagation()
-                  handleCopy(userData.firstname + ' ' + userData.lastname)
+                  handleCopy(userData.firstName + ' ' + userData.lastName)
                 }}
               >
-                {userData.firstname + ' ' + userData.lastname}
+                {userData.firstName + ' ' + userData.lastName}
               </span>
             </p>
           )}

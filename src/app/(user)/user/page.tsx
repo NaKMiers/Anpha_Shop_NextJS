@@ -55,8 +55,8 @@ function UserPage() {
     clearErrors,
   } = useForm<FieldValues>({
     defaultValues: {
-      firstname: '',
-      lastname: '',
+      firstName: '',
+      lastName: '',
       birthday: '',
       job: '',
       address: '',
@@ -68,8 +68,8 @@ function UserPage() {
   useEffect(() => {
     const getCurUser = async () => {
       // set form values
-      setValue('firstname', user?.firstname)
-      setValue('lastname', user?.lastname)
+      setValue('firstName', user?.firstName)
+      setValue('lastName', user?.lastName)
       setValue('birthday', moment(user?.birthday).local().format('YYYY-MM-DD'))
       setValue('job', user?.job)
       setValue('address', user?.address)
@@ -418,7 +418,7 @@ function UserPage() {
           <div className="col-span-1">
             {isEditing ? (
               <Input
-                id="lastname"
+                id="lastName"
                 className="mt-2"
                 label="Họ"
                 disabled={false}
@@ -426,19 +426,19 @@ function UserPage() {
                 errors={errors}
                 icon={IoText}
                 type="text"
-                onFocus={() => clearErrors('lastname')}
+                onFocus={() => clearErrors('lastName')}
               />
             ) : (
               <>
                 <span className="font-semibold">Họ: </span>
-                <span className={!user?.lastname ? 'text-slate-400' : ''}>{user?.lastname}</span>
+                <span className={!user?.lastName ? 'text-slate-400' : ''}>{user?.lastName}</span>
               </>
             )}
           </div>
           <div className="col-span-1">
             {isEditing ? (
               <Input
-                id="firstname"
+                id="firstName"
                 className="mt-2"
                 label="Tên"
                 disabled={false}
@@ -446,12 +446,12 @@ function UserPage() {
                 errors={errors}
                 icon={IoText}
                 type="text"
-                onFocus={() => clearErrors('firstname')}
+                onFocus={() => clearErrors('firstName')}
               />
             ) : (
               <>
                 <span className="font-semibold">Tên: </span>
-                <span className={!user?.firstname ? 'text-slate-400' : ''}>{user?.firstname}</span>
+                <span className={!user?.firstName ? 'text-slate-400' : ''}>{user?.firstName}</span>
               </>
             )}
           </div>

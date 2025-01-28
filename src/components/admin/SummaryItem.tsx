@@ -53,8 +53,8 @@ function SummaryItem({
             title="Collaborator"
             className="mr-2 font-semibold text-secondary"
           >
-            {data.firstname && data.lastname
-              ? `${data.firstname} ${data.lastname}`
+            {data.firstName && data.lastName
+              ? `${data.firstName} ${data.lastName}`
               : data.username || 'No name'}
           </span>
           <span

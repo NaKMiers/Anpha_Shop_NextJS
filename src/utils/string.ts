@@ -7,16 +7,16 @@ export const capitalize = (str: string) => {
 export const getUserName = (user?: IUser, exclude?: string) => {
   if (!user) return
 
-  if (user.firstname && user.lastname) {
-    return user.firstname + ' ' + user.lastname
+  if (user.firstName && user.lastName) {
+    return user.firstName + ' ' + user.lastName
   }
 
-  if (user.firstname && !user.lastname) {
-    return user.firstname
+  if (user.firstName && !user.lastName) {
+    return user.firstName
   }
 
-  if (!user.firstname && user.lastname) {
-    return user.lastname
+  if (!user.firstName && user.lastName) {
+    return user.lastName
   }
 
   if (user.username) {

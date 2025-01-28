@@ -196,10 +196,10 @@ function VoucherItem({
               className="cursor-pointer"
               onClick={e => {
                 e.stopPropagation()
-                handleCopy((data.owner as IUser)?.firstname + ' ' + (data.owner as IUser)?.lastname)
+                handleCopy((data.owner as IUser)?.firstName + ' ' + (data.owner as IUser)?.lastName)
               }}
             >
-              {(data.owner as IUser)?.firstname + ' ' + (data.owner as IUser)?.lastname}
+              {(data.owner as IUser)?.firstName + ' ' + (data.owner as IUser)?.lastName}
             </span>
           </p>
 

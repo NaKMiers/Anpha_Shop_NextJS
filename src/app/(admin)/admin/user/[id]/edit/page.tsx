@@ -43,8 +43,8 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
       email: user?.email,
       phone: user?.phone,
       authType: user?.authType,
-      firstname: user?.firstname,
-      lastname: user?.lastname,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
       birthday: user?.birthday,
       address: user?.address,
       job: user?.job,
@@ -73,8 +73,8 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
         setValue('email', user.email)
         setValue('phone', user.phone)
         setValue('authType', user.authType)
-        setValue('firstname', user.firstname)
-        setValue('lastname', user.lastname)
+        setValue('firstName', user.firstName)
+        setValue('lastName', user.lastName)
         setValue('birthday', moment(user.birthday).format('YYYY-MM-DD'))
         setValue('address', user.address)
         setValue('job', user.job)
@@ -112,8 +112,8 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
       if (data.email !== user.email) countChanges++
       if (data.phone !== user.phone) countChanges++
       if (data.authType !== user.authType) countChanges++
-      if (data.firstname !== user.firstname) countChanges++
-      if (data.lastname !== user.lastname) countChanges++
+      if (data.firstName !== user.firstName) countChanges++
+      if (data.lastName !== user.lastName) countChanges++
       if (data.birthday !== moment(user.birthday).format('YYYY-MM-DD')) countChanges++
       if (data.address !== user.address) countChanges++
       if (data.job !== user.job) countChanges++
@@ -197,7 +197,7 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
           <div className="flex w-full flex-col gap-2">
             <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
               <Input
-                id="firstname"
+                id="firstName"
                 label="First Name"
                 disabled={isLoading}
                 register={register}
@@ -205,10 +205,10 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
                 required
                 type="text"
                 icon={IoText}
-                onFocus={() => clearErrors('firstname')}
+                onFocus={() => clearErrors('firstName')}
               />
               <Input
-                id="lastname"
+                id="lastName"
                 label="Last Name"
                 disabled={isLoading}
                 register={register}
@@ -216,7 +216,7 @@ function EditUserPage({ params: { id } }: { params: { id: string } }) {
                 required
                 type="text"
                 icon={IoText}
-                onFocus={() => clearErrors('lastname')}
+                onFocus={() => clearErrors('lastName')}
               />
               <Input
                 id="authType"

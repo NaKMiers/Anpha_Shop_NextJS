@@ -235,7 +235,7 @@ function AddVoucherPage() {
             onFocus={() => clearErrors('owner')}
             options={roleUsers.map(user => ({
               value: user._id,
-              label: `${user.firstname} ${user.lastname} - (${
+              label: `${user.firstName} ${user.lastName} - (${
                 user.role.charAt(0).toUpperCase() + user.role.slice(1)
               })`,
               selected: user.role === 'admin',

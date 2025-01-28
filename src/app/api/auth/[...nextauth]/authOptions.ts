@@ -79,7 +79,7 @@ const authOptions = {
         const { password: _, avatar: image, ...otherDetails } = user
 
         // return to session callback
-        return { ...otherDetails, image, name: user.firstname + ' ' + user.lastname }
+        return { ...otherDetails, image, name: user.firstName + ' ' + user.lastName }
       },
     }),
 
@@ -136,15 +136,15 @@ const authOptions = {
           // get data for authentication
           const email = user.email
           const avatar = user.image
-          let firstname: string = ''
-          let lastname: string = ''
+          let firstName: string = ''
+          let lastName: string = ''
 
           if (account.provider === 'google') {
-            firstname = profile.given_name
-            lastname = profile.family_name
+            firstName = profile.given_name
+            lastName = profile.family_name
           } else if (account.provider === 'github') {
-            firstname = profile.name
-            lastname = ''
+            firstName = profile.name
+            lastName = ''
           }
 
           // get user from database to check exist
@@ -163,8 +163,8 @@ const authOptions = {
           const newUser = new UserModel({
             email,
             avatar,
-            firstname,
-            lastname,
+            firstName,
+            lastName,
             authType: account.provider,
             verifiedEmail: true,
           })

@@ -92,7 +92,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                 <span className="text-xl font-semibold">
                   {curUser?.authType === 'local'
                     ? curUser?.username
-                    : curUser?.firstname + ' ' + curUser?.lastname}
+                    : curUser?.firstName + ' ' + curUser?.lastName}
                 </span>
               </Link>
               {balance >= 0 && (

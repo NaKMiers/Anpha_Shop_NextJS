@@ -399,14 +399,16 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
     router.push(pathname)
   }, [reset, router, pathname])
 
+  console.log('openBlocks', openBlocks)
+
   return (
     <div className="-mx-21 -my-20 bg-white px-21/2 py-21 text-dark md:px-21">
       {/* Statistical */}
       <h1 className="text-xl font-semibold">Dashboard</h1>
 
       <div className="mt-5 flex flex-wrap justify-between gap-x-21 gap-y-2">
-        {/* MARK: Date Range */}
         <div className="flex flex-wrap gap-21/2 gap-y-2">
+          {/* MARK: Date Range */}
           <DateRangeSelection
             range={range}
             setRange={setRange}
@@ -414,10 +416,11 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
             handleFilter={handleSubmit(handleFilter)}
           />
 
+          {/* Selected Blocks */}
           <div className="relative flex flex-wrap gap-21/2">
             <button
               className="group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md"
-              onClick={() => setOpenBlocks(!openBlocks)}
+              onClick={() => setOpenBlocks(prev => !prev)}
             >
               <span className="text-xs font-semibold">
                 {selectedBlocks.length} block{selectedBlocks.length === 1 ? '' : 's'}
@@ -473,6 +476,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
             </AnimatePresence>
           </div>
 
+          {/* Reset */}
           <button
             className="trans-200 group flex items-center justify-center gap-1 rounded-md p-1.5 shadow-md hover:bg-dark-100 hover:text-light"
             onClick={handleResetFilter}

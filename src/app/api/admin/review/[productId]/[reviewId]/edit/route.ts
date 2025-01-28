@@ -35,7 +35,7 @@ export async function PUT(
     )
       .populate({
         path: 'userId',
-        select: 'firstname lastname username avatar',
+        select: 'firstName lastName username avatar',
       })
       .lean()
 

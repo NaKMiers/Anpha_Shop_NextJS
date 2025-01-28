@@ -458,7 +458,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2 text-sm">
           {/* Select All Button */}
           <button
             className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"

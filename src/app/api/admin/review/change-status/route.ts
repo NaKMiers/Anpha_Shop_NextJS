@@ -20,7 +20,7 @@ export async function PATCH(req: NextRequest) {
     await ReviewModel.updateMany({ _id: { $in: ids } }, { $set: { status } }, { new: true })
       .populate({
         path: 'userId',
-        select: 'firstname lastname username avatar',
+        select: 'firstName lastName username avatar',
       })
       .lean()
 

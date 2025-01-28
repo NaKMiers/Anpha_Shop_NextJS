@@ -160,7 +160,7 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
               />
               {index < 10 && (
                 <span
-                  className={`absolute -right-1.5 top-0 flex h-5 min-w-5 items-center justify-center rounded-full bg-dark-100 px-1.5 text-sm font-semibold italic text-${colors[index]}`}
+                  className={`absolute -right-1.5 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-dark-100 px-1.5 text-xs font-semibold italic text-${colors[index]}`}
                 >
                   {index + 1 <= 10 ? index + 1 : ''}
                 </span>
@@ -168,7 +168,7 @@ function UserSpendingRankTab({ className = '' }: UserSpendingRankTabProps) {
             </Link>
             <div className="font-body tracking-wider">
               <p className="text-sm font-semibold">
-                {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username}{' '}
+                {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username}{' '}
                 <span
                   className="cursor-pointer text-sm text-slate-400"
                   onClick={() => handleCopy(user.email)}

@@ -32,7 +32,7 @@ export async function GET(
     const review = await ReviewModel.findOne({ userId, productId })
       .populate({
         path: 'userId',
-        select: 'firstname lastname username avatar',
+        select: 'firstName lastName username avatar',
       })
       .lean()
 

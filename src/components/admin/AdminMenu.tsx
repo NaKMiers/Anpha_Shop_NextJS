@@ -53,7 +53,7 @@ function AdminMenu() {
 
       {/* MARK: Main */}
       <div
-        className={`fixed top-[20%] z-${
+        className={`fixed top-[20%] text-sm font-semibold z-${
           open ? 30 : 20
         } trans-200 right-0 w-full max-w-[300px] rounded-bl-medium rounded-tl-medium bg-dark-100 p-4 text-white shadow-md shadow-primary ${
           open ? 'opacity-1 translate-x-0' : 'translate-x-full opacity-10'
@@ -66,13 +66,13 @@ function AdminMenu() {
           <Image
             className="wiggle-0 rounded-full shadow-md"
             src={curUser?.avatar || process.env.NEXT_PUBLIC_DEFAULT_AVATAR!}
-            height={40}
-            width={40}
+            height={32}
+            width={32}
             alt="avatar"
           />
-          <span className="font-body text-xl font-semibold tracking-wide">
-            {curUser?.firstname && curUser?.lastname
-              ? `${curUser.firstname} ${curUser.lastname}`
+          <span className="font-body text-lg font-semibold tracking-wide">
+            {curUser?.firstName && curUser?.lastName
+              ? `${curUser.firstName} ${curUser.lastName}`
               : curUser?.username}
           </span>
         </Link>
@@ -101,11 +101,11 @@ function AdminMenu() {
               {links[1] && (
                 <Link
                   href={links[1].href}
-                  className="trans-200 group flex flex-shrink-0 items-center justify-center rounded-full border-2 border-white p-[3px] hover:scale-110 hover:border-primary"
+                  className="trans-200 group flex flex-shrink-0 items-center justify-center rounded-full p-[3px] hover:scale-110 hover:border-primary"
                   onClick={() => setOpen(false)}
                 >
                   <FaPlus
-                    size={10}
+                    size={12}
                     className="wiggle group-hover:text-primary"
                   />
                 </Link>

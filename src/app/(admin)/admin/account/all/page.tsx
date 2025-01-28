@@ -222,6 +222,14 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
     router.push(pathname)
   }, [reset, router, pathname])
 
+  // quick open edit pages
+  const quickEditAll = useCallback(() => {
+    let urls = accounts.map(account => `/admin/account/${account._id}/edit`)
+    urls.forEach(function (url) {
+      window.open(url, '_blank')
+    })
+  }, [accounts])
+
   // keyboard event
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -238,6 +246,12 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         e.preventDefault()
         setIsOpenConfirmModal(true)
       }
+
+      // Alt + Q (Quick Edit)
+      if (e.altKey && e.key === 'q') {
+        e.preventDefault()
+        quickEditAll()
+      }
     }
 
     // Add the event listener
@@ -245,7 +259,15 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
 
     // Remove the event listener on cleanup
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [accounts, selectedAccounts, handleDeleteAccounts, handleFilter, handleSubmit, handleResetFilter])
+  }, [
+    quickEditAll,
+    handleDeleteAccounts,
+    handleFilter,
+    handleSubmit,
+    handleResetFilter,
+    accounts,
+    selectedAccounts,
+  ])
 
   // check all types of category selected
   const checkAllTypesOfCategorySelected = useCallback(
@@ -289,9 +311,9 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* Type Selection */}
-        <div className="col-span-12 flex max-h-[228px] flex-wrap items-end justify-end gap-1 overflow-auto md:col-span-8 md:max-h-[152px] lg:max-h-[152px]">
+        <div className="col-span-12 flex max-h-[230px] flex-wrap items-end justify-end gap-1 overflow-auto md:col-span-8 md:max-h-[152px] lg:max-h-[152px]">
           <div
-            className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+            className={`trans-200 h-[30px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 text-sm leading-[30px] ${
               types.length === selectedTypes.length
                 ? 'border-dark-100 bg-dark-100 text-white'
                 : 'border-slate-300'
@@ -306,7 +328,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
           {Object.keys(groupTypes).map(key => (
             <Fragment key={key}>
               <div
-                className={`trans-200 ml-2 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+                className={`trans-200 ml-2 h-[30px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 text-sm leading-[30px] ${
                   checkAllTypesOfCategorySelected(groupTypes[key])
                     ? 'border-dark-100 bg-dark-100 text-white'
                     : 'border-slate-300 bg-slate-200'
@@ -326,7 +348,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
               </div>
               {groupTypes[key].map(type => (
                 <div
-                  className={`trans-200 h-[34px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 leading-[34px] ${
+                  className={`trans-200 h-[30px] max-w-60 cursor-pointer select-none overflow-hidden text-ellipsis text-nowrap rounded-md border px-2 text-sm leading-[30px] ${
                     selectedTypes.includes(type._id)
                       ? 'border-secondary bg-secondary text-white'
                       : 'border-slate-300'
@@ -496,7 +518,7 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
         </div>
 
         {/* MARK: Action Buttons */}
-        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2">
+        <div className="col-span-12 flex flex-wrap items-center justify-end gap-2 text-sm">
           {/* Select All Button */}
           <button
             className="trans-200 rounded-lg border border-sky-400 px-3 py-2 text-sky-400 hover:bg-sky-400 hover:text-white"
@@ -554,8 +576,20 @@ function AllAccountsPage({ searchParams }: { searchParams?: { [key: string]: str
       />
 
       {/* MARK: Amount */}
-      <div className="p-3 text-right text-sm font-semibold text-white">
-        {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} account{amount > 1 && 's'}
+      <div className="mb-2 flex items-center justify-between gap-21">
+        <button
+          className="rounded-md border border-dark bg-white px-2 py-1 text-xs font-semibold text-dark"
+          title="Alt + Q"
+          onClick={quickEditAll}
+        >
+          Quick Edit All
+        </button>
+
+        <div className="p-3 text-right text-sm font-semibold text-white">
+          {Math.min(itemPerPage * +(searchParams?.page || 1), amount)}/{amount} account
+          {amount > 1 && 's'}
+          {amount > 1 ? 's' : ''}
+        </div>
       </div>
 
       {/* MARK: MAIN LIST */}

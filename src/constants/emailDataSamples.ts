@@ -272,8 +272,8 @@ export const summary = {
     role: 'editor',
     avatar:
       'https://lh3.googleusercontent.com/a/ACg8ocKgTiu7wSX_TaEdFmfIQQNS39LMQHA90zgcKjDsgCkDdG7HfQw=s96-c',
-    firstname: 'Trâm',
-    lastname: 'Hồ Thị Ngọc',
+    firstName: 'Trâm',
+    lastName: 'Hồ Thị Ngọc',
     authType: 'google',
     authGoogleId: '108371762362393845253',
     authFacebookId: null,

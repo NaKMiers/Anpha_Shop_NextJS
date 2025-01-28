@@ -98,7 +98,7 @@ export async function GET(
       ReviewModel.find(filter)
         .populate({
           path: 'userId',
-          select: 'firstname lastname username avatar',
+          select: 'firstName lastName username avatar',
         })
         .sort(sort)
         .skip(skip)

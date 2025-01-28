@@ -45,26 +45,26 @@ function AdminMeta({ handleFilter, handleResetFilter, className = '', children }
         <div className="col-span-12 flex items-center justify-end gap-2 md:col-span-4">
           {/* Filter Button */}
           <button
-            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-[16px] font-semibold text-white hover:bg-secondary"
+            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-secondary"
             title="Alt + Enter"
             onClick={handleFilter}
           >
             Filter
             <FaFilter
-              size={14}
+              size={12}
               className="wiggle ml-[6px]"
             />
           </button>
 
           {/* Reset Button */}
           <button
-            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-[16px] font-semibold text-white hover:bg-slate-800"
+            className="trans-200 group flex cursor-pointer items-center text-nowrap rounded-md bg-slate-600 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800"
             title="Alt + R"
             onClick={handleResetFilter}
           >
             Reset
             <BiReset
-              size={22}
+              size={18}
               className="wiggle ml-1"
             />
           </button>
