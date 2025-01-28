@@ -103,7 +103,7 @@ function ResetPasswordPage() {
           <Link
             href="/"
             prefetch={false}
-            className="trans-200 spin hidden shrink-0 rounded-full sm:block"
+            className="trans-200 spin shrink-0 rounded-full"
           >
             <Image
               className="aspect-square rounded-full"
