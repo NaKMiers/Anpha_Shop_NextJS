@@ -2,6 +2,7 @@
 
 import { useAppSelector } from '@/libs/hooks'
 import { formatPrice } from '@/utils/number'
+import { getUserName } from '@/utils/string'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -89,11 +90,7 @@ function Menu({ open, setOpen, className = '' }: MenuProps) {
                   width={40}
                   alt="avatar"
                 />
-                <span className="text-xl font-semibold">
-                  {curUser?.authType === 'local'
-                    ? curUser?.username
-                    : curUser?.firstName + ' ' + curUser?.lastName}
-                </span>
+                <span className="text-xl font-semibold">{getUserName(curUser)}</span>
               </Link>
               {balance >= 0 && (
                 <li className="trans-200 flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-secondary">
