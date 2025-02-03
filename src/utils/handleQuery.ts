@@ -161,6 +161,8 @@ const validParams: string[] = [
   '_id',
   'createdAt',
   'updatedAt',
+  'ctg',
+  'tag',
 ]
 
 export const searchParamsToObject = (searchParams: URLSearchParams): { [key: string]: string[] } => {
