@@ -414,6 +414,7 @@ function AdminPage({ searchParams }: { searchParams?: { [key: string]: string | 
             setRange={setRange}
             setValue={setValue}
             handleFilter={handleSubmit(handleFilter)}
+            className="z-30"
           />
 
           {/* Selected Blocks */}

@@ -304,9 +304,7 @@ function ProductCard({ product, className = '' }: ProductCardProps) {
         {['admin', 'editor'].includes(curUser?.role) && (
           <Link
             href={`/admin/product/all?_id=${product?._id}`}
-            className={`trans-200 group flex h-7 items-center justify-center rounded-md border-2 border-yellow-400 px-2 md:h-8 md:text-base ${
-              isDisabled ? 'pointer-events-none bg-slate-200' : ''
-            }`}
+            className="trans-200 group flex h-7 items-center justify-center rounded-md border-2 border-yellow-400 px-2 md:h-8 md:text-base"
           >
             <MdEdit className="wiggle text-[16px] text-yellow-400 md:text-[18px]" />
           </Link>
