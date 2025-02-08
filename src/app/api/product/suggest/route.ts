@@ -2,8 +2,9 @@ import { connectDatabase } from '@/config/database'
 import { NextRequest, NextResponse } from 'next/server'
 import ProductModel, { IProduct } from '@/models/ProductModel'
 
-// Models: Product
+// Models: Product, Flash Sale
 import '@/models/ProductModel'
+import '@/models/FlashSaleModel'
 
 export const dynamic = 'force-dynamic'
 
