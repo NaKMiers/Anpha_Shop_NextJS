@@ -26,7 +26,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
   const slideTrackRef = useRef<HTMLDivElement>(null)
 
   // MARK: Handlers
-  const handleDraging = useCallback(
+  const handleDragging = useCallback(
     (e: React.MouseEvent) => {
       if (isDragging && !isExpanded && slideTrackRef.current) {
         slideTrackRef.current.scrollLeft -= e.movementX
@@ -55,7 +55,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
     }
   }, [])
 
-  // expaned group
+  // expanded group
   useEffect(() => {
     const handleResize = () => {
       setIsMedium(window.innerWidth >= 768)
@@ -138,7 +138,7 @@ function GroupProducts({ category, products, hideTop, bestSeller, className = ''
           }`}
           ref={slideTrackRef}
           onMouseDown={() => setIsDragging(true)}
-          onMouseMove={handleDraging}
+          onMouseMove={handleDragging}
           onMouseUp={() => setIsDragging(false)}
         >
           {products.map((product, index) => {

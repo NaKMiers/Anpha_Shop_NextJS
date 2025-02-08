@@ -67,6 +67,7 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
     () => ({
       sort: 'updatedAt|-1',
       active: '',
+      booted: '',
       flashSale: '',
     }),
     []
@@ -569,6 +570,34 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             className="min-w-[104px]"
           />
 
+          {/* Boot */}
+          <Input
+            id="booted"
+            label="Boot"
+            disabled={false}
+            register={register}
+            errors={errors}
+            icon={FaSort}
+            type="select"
+            onFocus={() => clearErrors('booted')}
+            options={[
+              {
+                value: '',
+                label: 'All',
+                selected: true,
+              },
+              {
+                value: 'true',
+                label: 'On',
+              },
+              {
+                value: 'false',
+                label: 'Off',
+              },
+            ]}
+            className="min-w-[104px]"
+          />
+
           {/* Flash Sale */}
           <Input
             id="flashSale"
@@ -632,13 +661,13 @@ function AllProductsPage({ searchParams }: { searchParams?: { [key: string]: str
             </button>
           )}
 
-          {/* Deboot Many Button */}
+          {/* Unboot Many Button */}
           {!!selectedProducts.length && (
             <button
               className="trans-200 rounded-lg border border-purple-400 px-3 py-2 text-purple-400 hover:bg-purple-400 hover:text-white"
               onClick={() => handleBootProducts(selectedProducts, false)}
             >
-              Deboot
+              Unboot
             </button>
           )}
 

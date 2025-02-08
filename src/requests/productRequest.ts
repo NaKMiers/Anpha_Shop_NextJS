@@ -68,6 +68,22 @@ export const searchProductsApi = async (search: string) => {
   return await res.json()
 }
 
+// [GET]: /product/suggest
+export const getSuggestedProductsApi = async (
+  query: string = '',
+  option: RequestInit = { cache: 'no-store' }
+) => {
+  // no-store to avoid cache
+  const res = await fetch(`/api/product/suggest${query}`, option)
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [POST]
 export const addProductApi = async (data: FormData) => {
   const res = await fetch('/api/admin/product/add', {

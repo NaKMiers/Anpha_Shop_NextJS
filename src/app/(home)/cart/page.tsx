@@ -4,6 +4,7 @@ import { CartItemToAdd } from '@/app/api/cart/add/route'
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Input from '@/components/Input'
+import CartSuggestions from '@/components/CartSuggestions'
 import { blackDomains, blackEmails } from '@/constants/blackList'
 import { commonEmailMistakes } from '@/constants/mistakes'
 import { useAppDispatch, useAppSelector } from '@/libs/hooks'
@@ -26,7 +27,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FaArrowCircleDown, FaPlusSquare } from 'react-icons/fa'
+import { FaArrowCircleDown, FaLightbulb, FaPlusSquare, FaRegLightbulb } from 'react-icons/fa'
 import { FaCartShopping } from 'react-icons/fa6'
 import { MdEmail } from 'react-icons/md'
 import { RiCoupon2Fill, RiDonutChartFill } from 'react-icons/ri'
@@ -403,6 +404,7 @@ function CartPage() {
 
   return (
     <div className="mt-20 grid grid-cols-3 gap-21 rounded-medium bg-white p-8 pb-16 text-dark shadow-medium">
+      {/* Items */}
       <div className="col-span-3 lg:col-span-2">
         <h1 className="flex items-center gap-2 font-body text-3xl font-semibold">
           <FaCartShopping
@@ -689,6 +691,21 @@ function CartPage() {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Suggestions */}
+      <div className="col-span-full mt-8">
+        <h1 className="flex items-center gap-2 font-body text-2xl font-semibold">
+          <FaLightbulb
+            size={24}
+            className="wiggle text-dark"
+          />
+          <span>Đề xuất</span>
+        </h1>
+
+        <Divider size={6} />
+
+        <CartSuggestions />
       </div>
     </div>
   )
