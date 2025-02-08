@@ -404,7 +404,7 @@ function CartPage() {
 
   return (
     <>
-      <div className="mt-20 grid grid-cols-3 gap-21 rounded-t-medium bg-white px-3 py-8 pb-16 text-dark shadow-medium md:px-8">
+      <div className="mt-20 grid grid-cols-3 gap-21 rounded-t-medium bg-white px-3 py-8 pb-10 text-dark shadow-medium md:px-8">
         {/* Items */}
         <div className="col-span-3 lg:col-span-2">
           <h1 className="flex items-center gap-2 font-body text-3xl font-semibold">
@@ -696,7 +696,7 @@ function CartPage() {
       </div>
 
       {/* Suggestions */}
-      <div className="rounded-b-medium bg-white px-1 pt-4 md:px-0 md:pt-0">
+      <div className="rounded-b-medium bg-white px-1 pb-1 pt-4 md:px-0 md:pb-0 md:pt-0">
         <h1 className="flex items-center gap-2 px-3 font-body text-2xl font-semibold text-dark md:px-8">
           <FaLightbulb
             size={24}
@@ -705,7 +705,7 @@ function CartPage() {
           <span>Đề xuất</span>
         </h1>
 
-        <Divider size={3} />
+        <Divider size={1} />
 
         <CartSuggestions />
       </div>
