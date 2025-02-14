@@ -67,7 +67,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
 
         // set form values
         reset({
-          createdAt: moment(order.createdAt).local().format('YYYY-MM-DDTHH:mm'),
+          createdAt: moment(order.createdAt).format('YYYY-MM-DDTHH:mm'),
           email: order.email,
           status: order.status,
           total: order.total,
@@ -86,7 +86,7 @@ function AdminOrderDetailPage({ params: { code } }: { params: { code: string } }
     }
   }, [dispatch, reset, code])
 
-  // MARK: Save Order Submition
+  // MARK: Save Order Submission
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       if (order) {

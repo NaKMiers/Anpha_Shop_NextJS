@@ -44,7 +44,7 @@ function ResetPasswordPage() {
     }
   }, [queryParams, router])
 
-  // MARK: Reset Password Submition
+  // MARK: Reset Password Submission
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async data => {
       setIsLoading(true)

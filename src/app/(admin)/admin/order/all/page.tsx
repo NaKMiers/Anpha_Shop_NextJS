@@ -45,7 +45,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
   const defaultValues: FieldValues = useMemo<FieldValues>(
     () => ({
       search: '',
-      sort: 'updatedAt|-1',
+      sort: 'createdAt|-1',
       userId: '',
       voucherApplied: '',
       status: '',
@@ -339,6 +339,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
               {
                 value: 'createdAt|-1',
                 label: 'Newest',
+                selected: true,
               },
               {
                 value: 'createdAt|1',
@@ -347,7 +348,6 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
               {
                 value: 'updatedAt|-1',
                 label: 'Latest',
-                selected: true,
               },
               {
                 value: 'updatedAt|1',

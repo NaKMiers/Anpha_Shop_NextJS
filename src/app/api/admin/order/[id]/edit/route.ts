@@ -1,8 +1,10 @@
 // Models: Order
 import { connectDatabase } from '@/config/database'
-import '@/models/OrderModel'
 import OrderModel from '@/models/OrderModel'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Models: Order
+import '@/models/OrderModel'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,11 +24,11 @@ export async function PUT(req: NextRequest, { params: { id } }: { params: { id: 
       id,
       {
         $set: {
-          createdAt,
           email,
           status,
           total,
           items,
+          createdAt,
         },
       },
       { new: true }
