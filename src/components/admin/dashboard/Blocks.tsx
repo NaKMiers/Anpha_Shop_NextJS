@@ -33,7 +33,7 @@ function Blocks({
     (children: ReactNode, name: ActiveBlockType, disabled: boolean = false) =>
       selectedBlocks.includes(name) && (
         <button
-          className={`${activeBlock === name ? 'bg-dark-100 text-white' : ''} trans-200 flex flex-col rounded-lg px-21 py-3 text-sm shadow-lg`}
+          className={`${activeBlock === name ? 'bg-dark-100 text-white' : ''} trans-200 flex flex-col rounded-lg px-21 py-3 text-left text-sm shadow-lg`}
           disabled={loading || disabled}
           onClick={() => setActiveBlock(name)}
         >

@@ -220,7 +220,7 @@ function CostSheet({ open, setOpen, searchParams, className = '' }: CostSheetPro
             exit={{ opacity: 0, x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             onClick={() => setOpen(false)}
-            className={`fixed right-0 top-0 z-20 flex h-full w-full justify-end pl-10 ${className}`}
+            className={`fixed right-0 top-0 z-30 flex h-full w-full justify-end pl-10 ${className}`}
           >
             <div
               className="relative w-full max-w-[700px] overflow-y-auto rounded-l-xl border-l-2 border-dark bg-white px-21/2 py-21 shadow-lg md:px-21"
