@@ -310,7 +310,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         <div className="col-span-12 flex flex-col md:col-span-6">
           <label htmlFor="minTotal">
             <span className="font-bold">Min Total: </span>
-            <span>{formatPrice(minTotal || maxMinTotal)}</span> - <span>{formatPrice(maxMinTotal)}</span>
+            <span>{formatPrice(minMinTotal)}</span> - <span>{formatPrice(minTotal)}</span>
           </label>
           <input
             id="minTotal"
@@ -329,8 +329,7 @@ function AllVouchersPage({ searchParams }: { searchParams?: { [key: string]: str
         <div className="col-span-12 flex flex-col md:col-span-6">
           <label htmlFor="maxReduce">
             <span className="font-bold">Max Reduce: </span>
-            <span>{formatPrice(maxReduce || maxMaxReduce)}</span> -{' '}
-            <span>{formatPrice(maxMaxReduce)}</span>
+            <span>{formatPrice(minMaxReduce)}</span> - <span>{formatPrice(maxReduce)}</span>
           </label>
           <input
             id="maxReduce"

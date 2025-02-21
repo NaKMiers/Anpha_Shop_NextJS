@@ -272,7 +272,7 @@ function AllTagsPage({ searchParams }: { searchParams?: { [key: string]: string[
         <div className="col-span-12 flex flex-col md:col-span-4">
           <label htmlFor="productQuantity">
             <span className="font-bold">Product Quantity: </span>
-            <span>{productQuantity}</span> - <span>{maxPQ}</span>
+            <span>{minPQ}</span> - <span>{productQuantity}</span>
           </label>
           <input
             id="productQuantity"

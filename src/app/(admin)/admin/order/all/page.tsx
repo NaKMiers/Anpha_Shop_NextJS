@@ -281,7 +281,7 @@ function AllOrdersPage({ searchParams }: { searchParams?: { [key: string]: strin
         <div className="col-span-12 flex flex-col md:col-span-6">
           <label htmlFor="total">
             <span className="font-bold">Total: </span>
-            <span>{formatPrice(total)}</span> - <span>{formatPrice(maxTotal)}</span>
+            <span>{formatPrice(minTotal)}</span> - <span>{formatPrice(total)}</span>
           </label>
           <input
             id="total"

@@ -45,10 +45,8 @@ function Meta({
 
   // values
   const minPrice: number = chops?.minPrice || 0
-  const maxPrice: number = chops?.maxPrice || 0
-  const [price, setPrice] = useState<number>(
-    searchParams?.price ? +searchParams.price : chops?.maxPrice || 0
-  )
+  const maxPrice: number = Math.min(chops?.maxPrice || 1000000, 1000000)
+  const [price, setPrice] = useState<number>(searchParams?.price ? +searchParams.price : maxPrice || 0)
   const minStock: number = chops?.minStock || 0
   const maxStock: number = chops?.maxStock || 0
   const [stock, setStock] = useState<number>(
@@ -199,7 +197,7 @@ function Meta({
           <div className="col-span-12 flex flex-col md:col-span-4">
             <label htmlFor="price">
               <span className="font-bold">Giá: </span>
-              <span>{formatPrice(price)}</span> - <span>{formatPrice(maxPrice)}</span>
+              <span>{formatPrice(minPrice)}</span> - <span>{formatPrice(price)}</span>
             </label>
             <input
               id="price"
