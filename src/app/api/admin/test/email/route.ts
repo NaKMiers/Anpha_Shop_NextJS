@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   const params: { [key: string]: string[] } = searchParamsToObject(req.nextUrl.searchParams)
   const type = params.type[0]
 
-  const email = 'diwas118151@gmail.com'
+  const email = 'anphashop92@gmail.com'
 
   switch (type) {
     case 'order': {

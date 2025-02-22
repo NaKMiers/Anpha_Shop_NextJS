@@ -58,7 +58,7 @@ function EmailPage() {
       <div className="grid cursor-pointer grid-cols-7 gap-21">
         {types.map(type => (
           <div
-            className="shaodow-lg flex flex-col items-center rounded-lg bg-sky-50 p-3"
+            className="flex flex-col items-center rounded-lg bg-sky-50 p-3 shadow-lg"
             key={type.type}
             onClick={() => setSelectedSample(type.sample)}
           >

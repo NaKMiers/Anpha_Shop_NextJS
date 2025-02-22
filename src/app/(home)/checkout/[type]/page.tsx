@@ -156,7 +156,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           <IoIosHelpCircle size={20} /> Ấn để sao chép
         </p>
 
-        <p className="">
+        <p className="font-body">
           Tài khoản sẽ được gửi cho bạn qua email:{' '}
           <span
             className="cursor-pointer text-green-500 underline"
@@ -165,6 +165,10 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             {checkout?.email}
           </span>{' '}
           sau khi đã thanh toán.
+        </p>
+        <p className="font-body">
+          Hãy kiểm tra mục <span className="font-semibold text-rose-500">Spam/Thư Rác</span> nếu không
+          tìm thấy email.
         </p>
 
         <div className="mt-6 flex justify-center">

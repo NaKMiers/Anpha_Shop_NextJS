@@ -27,9 +27,9 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
               <Column>
                 <a
                   href="https://anpha.shop"
-                  className="text-2xl font-bold tracking-[0.3px] text-dark no-underline"
+                  className="ml-2 text-2xl font-bold tracking-[0.3px] text-dark no-underline"
                 >
-                  .AnphaShop
+                  Anpha Shop
                 </a>
               </Column>
             </Row>
@@ -50,10 +50,8 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
 
             <Row className="p-4">
               <Column className="font">
-                <h1 className="text-center text-2xl font-bold">Hi👋 </h1>
-                <h2 className="text-center text-xl font-semibold">
-                  Cảm ơn bạn đã mua hàng, chúc bạn một ngày tốt lành!
-                </h2>
+                <h1 className="text-center text-2xl font-bold">Hello👋 </h1>
+                <h2 className="text-center text-xl font-semibold">Chúc bạn một ngày tốt lành!</h2>
 
                 <div className="mt-8 text-sm">
                   <p>
@@ -88,12 +86,31 @@ export function OrderEmail({ order = orderSample }: { order?: any }) {
                     <b>Email: </b>
                     <span className="text-[#0a82ed]">{order.email}</span>
                   </p>
+
+                  <div className="mt-2 text-center">
+                    <h3 className="text-xl">
+                      <b>Liên hệ shop</b>
+                    </h3>
+                    <a
+                      href="https://www.messenger.com/t/170660996137305"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="ml-2 inline-block"
+                    >
+                      <Img
+                        src={`${'https://anpha.shop'}/images/messenger.jpg`}
+                        width={35}
+                        height={35}
+                        alt="messenger"
+                      />
+                    </a>
+                  </div>
                 </div>
 
                 {/* Message From Admin */}
                 {order.message && typeof order.message === 'string' && order.message.trim() && (
                   <div
-                    className="rounded-lg px-21 py-21/2"
+                    className="mt-2 rounded-lg px-21 py-21/2"
                     style={{
                       border: '1px solid rgb(0, 0, 0, 0.1)',
                     }}

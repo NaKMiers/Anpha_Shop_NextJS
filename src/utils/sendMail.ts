@@ -24,6 +24,14 @@ const transporter = nodeMailer.createTransport({
   },
 })
 
+// get admin and editor emails
+async function getAdminEmails() {
+  const admins: any[] = await UserModel.find({
+    role: { $in: ['admin', 'editor'] },
+  }).lean()
+  return [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
+}
+
 export async function sendMail(to: string | string[], subject: string, html: string) {
   console.log('- Send Mail -')
 
@@ -40,11 +48,7 @@ export async function notifyNewOrderToAdmin(newOrder: any) {
   console.log('- Notify New Order To Admin -')
 
   try {
-    // get admin and editor mails
-    const admins: any[] = await UserModel.find({
-      role: { $in: ['admin', 'editor'] },
-    }).lean()
-    let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
+    const emails = await getAdminEmails()
 
     const html = render(NotifyOrderEmail({ order: newOrder }))
     await sendMail(
@@ -62,11 +66,7 @@ export async function notifyShortageAccount(message: any) {
   console.log('- Notify Shortage Account -')
 
   try {
-    // get admin and editor mails
-    const admins: any[] = await UserModel.find({
-      role: { $in: ['admin', 'editor'] },
-    }).lean()
-    let emails: string[] = [...admins.map(admin => admin.email), process.env.NEXT_PUBLIC_MAIL]
+    const emails = await getAdminEmails()
 
     // render template with new order data
     const html = render(ShortageAccountEmail({ message }))
