@@ -1,10 +1,11 @@
 import { connectDatabase } from '@/config/database'
 import CostModel from '@/models/CostModel'
 import { NextRequest, NextResponse } from 'next/server'
+import { toUTC } from '@/utils/time'
 
 // Models: Cost
 import '@/models/CostModel'
-import { toUTC } from '@/utils/time'
+import '@/models/CostGroupModel'
 
 // [POST]: /admin/cost/add
 export async function POST(req: NextRequest) {
