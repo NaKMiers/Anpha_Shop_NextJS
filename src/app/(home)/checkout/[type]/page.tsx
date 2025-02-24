@@ -238,6 +238,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <div className="mt-8 flex items-center justify-center gap-21/2 md:gap-21">
           <a
             href={process.env.NEXT_PUBLIC_MESSENGER}
+            target="_blank"
             className="flex items-center justify-center gap-2 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg md:min-w-[160px]"
           >
             <Image
@@ -250,6 +251,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </a>
           <a
             href={`mailto:${process.env.NEXT_PUBLIC_MAIL}`}
+            target="_blank"
             className="flex items-center justify-center gap-2 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg md:min-w-[160px]"
           >
             <Image
