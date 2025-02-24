@@ -125,7 +125,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           )}
           {checkout?.total >= 0 && (
             <div className="mt-0.5">
-              Số tiền chuyển:{' '}
+              Số tiền:{' '}
               <div
                 className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-green-500"
                 onClick={() => handleCopy(checkout?.total)}
@@ -139,7 +139,7 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           )}
           {checkout?.code && (
             <div className="mt-0.5">
-              Nội dung chuyển khoản:{' '}
+              Nội dung:{' '}
               <div
                 className="inline-flex cursor-pointer overflow-hidden rounded-md border border-dark text-yellow-500"
                 onClick={() => handleCopy(checkout?.code)}
@@ -169,6 +169,23 @@ function CheckoutPage({ params }: { params: { type: string } }) {
         <p className="font-body">
           Hãy kiểm tra mục <span className="font-semibold text-rose-500">Spam/Thư Rác</span> nếu không
           tìm thấy email.
+        </p>
+        <p className="font-body">
+          Sau 5 phút không nhận được email, hãy{' '}
+          <a
+            href={process.env.NEXT_PUBLIC_MESSENGER}
+            className="font-semibold text-sky-500 underline underline-offset-1"
+          >
+            liên hệ
+          </a>{' '}
+          shop{' '}
+          <a
+            href={process.env.NEXT_PUBLIC_MESSENGER}
+            className="font-semibold text-sky-500 underline underline-offset-1"
+          >
+            tại đây
+          </a>{' '}
+          để được hỗ trợ ngay. Cảm ơn bạn!
         </p>
 
         <div className="mt-6 flex justify-center">
@@ -216,6 +233,33 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               </>
             )}
           </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-21">
+          <a
+            href={process.env.NEXT_PUBLIC_MESSENGER}
+            className="flex items-center justify-center gap-3 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg"
+          >
+            <Image
+              src="/images/messenger.jpg"
+              width={32}
+              height={32}
+              alt="messenger"
+            />
+            <p>Messenger</p>
+          </a>
+          <a
+            href={`mailto:${process.env.NEXT_PUBLIC_MESSENGER}`}
+            className="flex items-center justify-center gap-3 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg"
+          >
+            <Image
+              src="/images/gmail.jpg"
+              width={32}
+              height={32}
+              alt="gmail"
+            />
+            <p>Gmail</p>
+          </a>
         </div>
 
         {/* MARK: Action Buttons */}
