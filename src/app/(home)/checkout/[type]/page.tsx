@@ -191,7 +191,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
             href="/cart"
             className="trans-200 group flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
             title="Quay lại giỏ hàng"
-            onClick={() => localStorage.removeItem('checkout')}
           >
             <IoMdArrowRoundBack
               size={18}
