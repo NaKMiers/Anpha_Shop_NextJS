@@ -235,30 +235,30 @@ function CheckoutPage({ params }: { params: { type: string } }) {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-21">
+        <div className="mt-8 flex items-center justify-center gap-21/2 md:gap-21">
           <a
             href={process.env.NEXT_PUBLIC_MESSENGER}
-            className="flex items-center justify-center gap-3 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg md:min-w-[160px]"
           >
             <Image
               src="/images/messenger.jpg"
-              width={32}
-              height={32}
+              width={24}
+              height={24}
               alt="messenger"
             />
-            <p>Messenger</p>
+            <p className="text-sm md:text-base">Messenger</p>
           </a>
           <a
-            href={`mailto:${process.env.NEXT_PUBLIC_MESSENGER}`}
-            className="flex items-center justify-center gap-3 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg"
+            href={`mailto:${process.env.NEXT_PUBLIC_MAIL}`}
+            className="flex items-center justify-center gap-2 rounded-md border border-slate-200/30 px-3 py-2 font-semibold shadow-lg md:min-w-[160px]"
           >
             <Image
               src="/images/gmail.jpg"
-              width={32}
-              height={32}
+              width={24}
+              height={24}
               alt="gmail"
             />
-            <p>Gmail</p>
+            <p className="text-sm md:text-base">Gmail</p>
           </a>
         </div>
 
