@@ -46,6 +46,19 @@ export const getOrderApi = async (code: string) => {
   return await res.json()
 }
 
+// [GET]: /order/check/:id
+export const checkOrderApi = async (id: string) => {
+  // no-store to bypass cache
+  const res = await fetch(`/api/order/check/${id}`, { cache: 'no-store' })
+
+  // check status
+  if (!res.ok) {
+    throw new Error((await res.json()).message)
+  }
+
+  return await res.json()
+}
+
 // [GET]
 export const generateOrderCodeApi = async () => {
   // no cache

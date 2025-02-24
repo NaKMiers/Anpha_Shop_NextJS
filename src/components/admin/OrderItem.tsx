@@ -355,7 +355,7 @@ function OrderItem({
             </button>
           )}
 
-          {/* Add Messsage To Deliver Button */}
+          {/* Add Message To Deliver Button */}
           <button
             className="group block"
             disabled={loadingOrders.includes(data._id) || isLoading}

@@ -67,8 +67,11 @@ export interface IOrder {
   voucherApplied?: string | IVoucher
   discount: number
   items: any[]
-  status: 'pending' | 'done' | 'cancel'
-  paymentMethod: string
+  status: TOrderStatus
+  paymentMethod: TPaymentMethod
   createdAt: string
   updatedAt: string
 }
+
+export type TOrderStatus = 'pending' | 'done' | 'cancel'
+export type TPaymentMethod = 'momo' | 'banking' | 'balance'

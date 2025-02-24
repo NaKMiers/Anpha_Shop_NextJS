@@ -273,7 +273,7 @@ function CartPage() {
         }))
 
         // send request to server to create order
-        const { code } = await createOrderApi(
+        const { order } = await createOrderApi(
           curUser?.email || getValues('email'),
           total,
           voucher?._id,
@@ -284,12 +284,14 @@ function CartPage() {
 
         // create checkout
         const checkout = {
+          orderId: order._id,
           items,
-          code,
-          email: curUser?.email || getValues('email'),
+          code: order.code,
+          email: order.email,
           voucher,
           discount,
           total,
+          createdAt: order.createdAt,
         }
         localStorage.setItem('checkout', JSON.stringify(checkout))
 

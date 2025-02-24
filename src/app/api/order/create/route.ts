@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     // create new order
-    const newOrder = new OrderModel({
+    const newOrder = await OrderModel.create({
       code,
       userId,
       email,
@@ -74,8 +74,6 @@ export async function POST(req: NextRequest) {
       items,
       paymentMethod,
     })
-    // save new order
-    await newOrder.save()
 
     // if user logged in => cart is database cart => Delete cart items
     let removedCartItems = []
@@ -102,7 +100,7 @@ export async function POST(req: NextRequest) {
     // notify new order to admin
     await notifyNewOrderToAdmin(newOrder)
 
-    return NextResponse.json({ code, removedCartItems, message }, { status: 201 })
+    return NextResponse.json({ order: newOrder, removedCartItems, message }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
