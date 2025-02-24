@@ -36,6 +36,7 @@ function Gateway({ checkout, type, className = '' }: GatewayProps) {
   // values
   const admin = admins[(process.env.NEXT_PUBLIC_ADMIN! as keyof typeof admins) || 'KHOA']
   const gatewayTime = 10 // minutes
+  const refetchTime = 7000 // milliseconds
 
   useEffect(() => {
     const addedTime = moment(checkout.createdAt).add(gatewayTime, 'minutes').toDate()
@@ -77,10 +78,25 @@ function Gateway({ checkout, type, className = '' }: GatewayProps) {
       } else {
         checkOrder()
       }
-    }, 5000)
+    }, refetchTime)
 
     return () => clearInterval(interval)
   }, [checkout.orderId, stopped, order])
+
+  // Ask before leave page
+  useEffect(() => {
+    const handler: any = (e: any) => {
+      if (!order && !stopped) {
+        e.preventDefault()
+      }
+    }
+
+    window.addEventListener('beforeunload', handler)
+
+    return () => {
+      window.removeEventListener('beforeunload', handler)
+    }
+  }, [order, stopped])
 
   return initialLoaded ? (
     <div className={`flex flex-col items-center ${className}`}>

@@ -3,21 +3,19 @@
 import CartItem from '@/components/CartItem'
 import Divider from '@/components/Divider'
 import Gateway from '@/components/Gateway'
-import { admins } from '@/constants'
 import { useAppDispatch } from '@/libs/hooks'
 import { setPageLoading } from '@/libs/reducers/modalReducer'
 import useUtils from '@/libs/useUtils'
 import { ICartItem } from '@/models/CartItemModel'
 import { TPaymentMethod } from '@/models/OrderModel'
 import { formatPrice } from '@/utils/number'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaBookOpen, FaChevronDown } from 'react-icons/fa'
+import { FaChevronDown } from 'react-icons/fa'
 import { IoMdArrowRoundBack } from 'react-icons/io'
+import { IoChatbox } from 'react-icons/io5'
 import { TbLoader2 } from 'react-icons/tb'
 
 function CheckoutPage({ params }: { params: { type: string } }) {
@@ -25,17 +23,13 @@ function CheckoutPage({ params }: { params: { type: string } }) {
   const dispatch = useAppDispatch()
   const { handleCopy } = useUtils()
   const router = useRouter()
-  const { data: session } = useSession()
-  const curUser: any = session?.user
 
   // states
   const [checkout, setCheckout] = useState<any>(null)
   const [openProducts, setOpenProducts] = useState<boolean>(false)
 
   // values
-  const admin = admins[(process.env.NEXT_PUBLIC_ADMIN! as keyof typeof admins) || 'KHOA']
   const type: string = params.type
-  const gatewayTime = 10 // minutes
 
   // MARK: Get Data
   // get checkout from local storage
@@ -54,19 +48,6 @@ function CheckoutPage({ params }: { params: { type: string } }) {
       setCheckout(checkout)
     }
   }, [router, dispatch])
-
-  // ask before leave page
-  useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault()
-    }
-
-    window.addEventListener('beforeunload', handler)
-
-    return () => {
-      window.removeEventListener('beforeunload', handler)
-    }
-  }, [])
 
   return (
     <div className="mt-20 grid grid-cols-1 gap-8 overflow-x-auto rounded-medium bg-white p-3 pb-16 pt-5 text-dark shadow-medium md:p-8 lg:grid-cols-12">
@@ -206,28 +187,9 @@ function CheckoutPage({ params }: { params: { type: string } }) {
 
         {/* MARK: Action Buttons */}
         <div className="mt-6 hidden flex-wrap justify-center gap-x-21 gap-y-21/2 font-body tracking-wide sm:flex">
-          <Link
-            href={`/user/order/${checkout?.code}`}
-            className="trans-200 group flex items-center justify-center gap-2 rounded-lg bg-primary px-21 py-3 hover:bg-secondary hover:text-white"
-            onClick={e => {
-              if (!curUser?._id) {
-                e.preventDefault()
-                toast.error('Bạn cần có tài khoản để có thể xem thông tin đơn hàng ngay khi mua')
-              } else {
-                localStorage.removeItem('checkout')
-              }
-            }}
-            title="Xem đơn hàng ngay"
-          >
-            <FaBookOpen
-              size={18}
-              className="wiggle mb-[-2px] flex-shrink-0"
-            />
-            <span className="line-clamp-1 text-ellipsis">Xem đơn hàng ngay</span>
-          </Link>
           <a
-            href={`/cart`}
-            className="trans-200 group flex items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
+            href="/cart"
+            className="trans-200 group flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-300 px-21 py-3 hover:bg-secondary hover:text-white"
             title="Quay lại giỏ hàng"
             onClick={() => localStorage.removeItem('checkout')}
           >
@@ -236,6 +198,19 @@ function CheckoutPage({ params }: { params: { type: string } }) {
               className="wiggle mb-[-2px] flex-shrink-0"
             />
             <span className="line-clamp-1 text-ellipsis">Quay lại giỏ hàng</span>
+          </a>
+
+          <a
+            href={process.env.NEXT_PUBLIC_MESSENGER}
+            className="trans-200 group flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-21 py-3 hover:bg-secondary hover:text-white"
+            title="Liên hệ messenger"
+            target="_blank"
+          >
+            <IoChatbox
+              size={18}
+              className="wiggle mb-[-2px] flex-shrink-0"
+            />
+            <span className="line-clamp-1 text-ellipsis">Liên hệ</span>
           </a>
         </div>
       </div>
