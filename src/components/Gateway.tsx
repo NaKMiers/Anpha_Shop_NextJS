@@ -111,7 +111,7 @@ function Gateway({ checkout, type, className = '' }: GatewayProps) {
             <span>Thanh toán thành công</span>
           ) : (
             <>
-              <span>Đơn hàng hạn sau:</span>
+              <span>Thanh toán hết hạn sau:</span>
               {loaded && (
                 <Countdown
                   minutes={timeLeft[1]}

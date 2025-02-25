@@ -52,7 +52,7 @@ function Countdown({
   return (
     <div className={`flex shrink-0 gap-1 ${className}`}>
       {/* Hours */}
-      {hours >= 0 && (
+      {hours > 0 && (
         <>
           <div className="flex items-center rounded-sm pl-[2px] pr-[1px]">
             <CounterItem
