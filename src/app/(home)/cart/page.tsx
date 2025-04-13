@@ -251,7 +251,7 @@ function CartPage() {
     async (type: string) => {
       // not in black list and not in black domains
       if (
-        blackEmails.includes(getValues('email')) ||
+        blackEmails.some(value => getValues('email').includes(value)) ||
         blackDomains.some((domain: string) => getValues('email').endsWith(domain))
       ) {
         toast.error('Không thể thực hiện giao dịch này')

@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
     const { email, total, voucherApplied, discount, items, paymentMethod } = await req.json()
 
     // check if email is blacklist or black domains
-    if (blackEmails.includes(email) || blackDomains.some(domain => email.endsWith(domain))) {
+    if (
+      blackEmails.some(value => email.includes(value)) ||
+      blackDomains.some(domain => email.endsWith(domain))
+    ) {
       return NextResponse.json({ message: 'Không thể thực hiện giao dịch này' }, { status: 400 })
     }
 
